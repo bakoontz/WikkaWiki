@@ -11,8 +11,8 @@ if ($phrase = $_REQUEST["phrase"])
 	print("<br />");
 	$total_results = count($results);
 	$match_str = $total_results <> 1 ? " matches" : " match";
-	print("Search results: <strong>".$total_results.$match_str."</strong> for <strong>$phrase</strong><br /><br />\n");
-	if ($results) 
+	print("Search results: <strong>".$total_results.$match_str."</strong> for <strong>".$this->htmlspecialchars_ent($phrase)."</strong><br /><br />\n");
+	if ($results)
 	{
 		foreach ($results as $i => $page)
 		{
