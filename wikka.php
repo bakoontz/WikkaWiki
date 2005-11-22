@@ -480,7 +480,7 @@ class Wakka
 			$formatting_tags = array("**", "//", "__", "##", "''", "++", "#%", "@@", "\"\"");
 			$title = str_replace($formatting_tags, "", $title[2]);
 		}
-		if ($title) return $title;
+		if ($title) return strip_tags($this->Format($title));				# fix for forced links in heading
 		else return $this->GetPageTag();
 	}
 	/**
