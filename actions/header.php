@@ -15,6 +15,13 @@
 	<meta name="description" content="<?php echo $this->GetConfigValue("meta_description") ?>" />
 	<link rel="stylesheet" type="text/css" href="css/<?php echo $this->GetConfigValue("stylesheet") ?>" />
 	<link rel="stylesheet" type="text/css" href="css/print.css" media="print" /> 
+<?php
+if ($this->GetMethod() != 'edit') {
+	$rsslink  = '	<link rel="alternate" type="application/rss+xml" title="'.$this->GetWakkaName().': revisions for '.$this->tag.' (RSS)" href="'.$this->Href('revisions.xml', $this->tag).'" />'."\n";
+	$rsslink .= '	<link rel="alternate" type="application/rss+xml" title="'.$this->GetWakkaName().': recently edited pages (RSS)" href="'.$this->Href('recentchanges.xml', $this->tag).'" />'."\n";
+	echo $rsslink;	
+}
+?>
 </head>
 <body <?php echo $message ? "onLoad=\"alert('".$message."');\" " : "" ?> >
 <div class="header">
