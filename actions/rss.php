@@ -1,7 +1,17 @@
 <?php
+// @@@ JW should use makeList to generate the list; maybe better convert to using Magpie first, though
 
 // Action usage:
 // {{rss http://domain.com/feed.xml}} or {{rss url="http://domain.com/feed.xml" cachetime="30"}}
+
+// NOTE1 : in Onyx-RSS default is "debugMode" which results in all errors being printed
+//		this could be suppressed by turning debug mode off, but then we'd never have a
+//		clue about the cause of any error.
+//		A better (preliminary) approach seems to be to override the raiseError() method
+//		still providing the text of any error message, only within an HTML comment:
+//		that way normal display will look clean but you can look at the HTML source to
+//		find the cause of any problem.
+// NOTE 2: no solution for timeout problems with non-existing feeds yet...
 
 $max_items = 30; // set this to the maximum items the RSS action should ever display
 
@@ -22,6 +32,27 @@ $rss_path = $vars['url'];
 if ((!$rss_path) && $wikka_vars) $rss_path = $wikka_vars;
 $rss_path = $this->cleanUrl(trim($rss_path));
 
+// override
+if (preg_match("/^(http|https):\/\/([^\\s\"<>]+)$/i", $rss_path))
+{
+	include_once('3rdparty/plugins/onyx-rss/onyx-rss.php');
+	if (!class_exists(Wikka_Onyx))
+	{
+		class Wikka_Onyx extends ONYX_RSS
+		{
+			//private function raiseError($line, $err)
+			function raiseError($line, $err)
+			{
+				if ($this->debugMode)
+				{
+					$errortext = sprintf($this->error, $line, $err);
+					echo '<!-- '.$errortext.' -->'."\n";
+				}
+			}
+		}
+	}
+}
+
 if (preg_match("/^(http|https):\/\/([^\\s\"<>]+)$/i", $rss_path))
 {
 	if ($caching) {
@@ -29,9 +60,8 @@ if (preg_match("/^(http|https):\/\/([^\\s\"<>]+)$/i", $rss_path))
 		$rss_cache_file = md5($rss_path).".xml";
 	}
 
-	//Load the RSS Feed
-	include_once('3rdparty/plugins/onyx-rss/onyx-rss.php');
-	$rss =& new ONYX_RSS();
+	//Load the RSS Feed: workaround to hide error messages within HTML comments:
+	$rss =& new Wikka_Onyx();
 	$rss->setCachePath($rss_cache_path);
 	$rss->parse($rss_path, $rss_cache_file, $rss_cache_time);
 	$meta = $rss->getData(ONYX_META);
@@ -48,7 +78,7 @@ if (preg_match("/^(http|https):\/\/([^\\s\"<>]+)$/i", $rss_path))
 	$cached_output .= "</ul>\n";
 	echo $this->ReturnSafeHTML($cached_output);
 } else {
-	echo "<span class='error'><em>Error: Invalid RSS syntax. <br /> Proper usage: {{rss http://domain.com/feed.xml}} or {{rss url=\"http://domain.com/feed.xml\"}}</em></span>";
+	echo '<span class="error"><em>Error: Invalid RSS action syntax. <br /> Proper usage: {{rss http://domain.com/feed.xml}} or {{rss url="http://domain.com/feed.xml"}}</em></span>';
 }
 
 ?>
