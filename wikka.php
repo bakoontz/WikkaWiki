@@ -792,9 +792,9 @@ class Wakka
 	}
 	function Method($method)
 	{
-		if (strstr('/', $method))
+		if (strstr($method, '/'))
 		{
-			$method = substr($method, strrpos('/', $method));
+			$method = substr($method, strrpos($method, '/')+1);
 		}
 		if (!$handler = $this->page["handler"]) $handler = "page";
 		$methodLocation = $handler."/".$method.".php";
