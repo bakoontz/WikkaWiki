@@ -596,7 +596,17 @@ class Wakka
 	function SetSessionCookie($name, $value) { SetCookie($name, $value, 0, "/"); $_COOKIE[$name] = $value; }
 	function SetPersistentCookie($name, $value) { SetCookie($name, $value, time() + 90 * 24 * 60 * 60, "/"); $_COOKIE[$name] = $value; }
 	function DeleteCookie($name) { SetCookie($name, "", 1, "/"); $_COOKIE[$name] = ""; }
-	function GetCookie($name) { return $_COOKIE[$name]; }
+	function GetCookie($name)
+	{
+		if (isset($_COOKIE[$name]))
+		{
+			return $_COOKIE[$name];
+		}
+		else
+		{
+			return FALSE;
+		}
+	}
 
 	// HTTP/REQUEST/LINK RELATED
 
