@@ -59,11 +59,11 @@ else if ($user = $this->GetUser())
 		</tr>
 		<tr>
 			<td align="right">Doubleclick Editing:</td>
-			<td><input type="hidden" name="doubleclickedit" value="N"><input type="checkbox" name="doubleclickedit" value="Y" <?php echo $user["doubleclickedit"] == "Y" ? "checked=\"checked\"" : "" ?> /></td>
+			<td><input type="hidden" name="doubleclickedit" value="N" /><input type="checkbox" name="doubleclickedit" value="Y" <?php echo $user["doubleclickedit"] == "Y" ? "checked=\"checked\"" : "" ?> /></td>
 		</tr>
 		<tr>
 			<td align="right">Show comments by default:</td>
-			<td><input type="hidden" name="show_comments" value="N"><input type="checkbox" name="show_comments" value="Y" <?php echo $user["show_comments"] == "Y" ? "checked=\"checked\"" : "" ?> /></td>
+			<td><input type="hidden" name="show_comments" value="N" /><input type="checkbox" name="show_comments" value="Y" <?php echo $user["show_comments"] == "Y" ? "checked=\"checked\"" : "" ?> /></td>
 		</tr>
 		<tr>
 			<td align="right">RecentChanges display limit:</td>
