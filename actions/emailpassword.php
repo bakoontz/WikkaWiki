@@ -38,8 +38,8 @@ if (!$_POST["wikiname"] == "")
   echo "or you did not write the user name as a proper WikiName with capital letters. <br /><br />";
   echo "Try again:<br /><br /></font>";
 
-	$form  = "<form name=\"getwikiname\" action=\"\" method=\"post\">";
-	$form .= "<input type=\"text\" name=\"wikiname\" value=\"\"><br />";
+	$form  = "<form name=\"getwikiname\" action=\"".$this->href()."\" method=\"post\">";
+	$form .= "<input type=\"text\" name=\"wikiname\" value=\"\" /><br />";
 	$form .= "<input type=\"submit\" value=\"Send password\" /></form>";
 	echo $form;
   }
@@ -48,8 +48,8 @@ else
 {
 	echo "Enter your WikiName and a temporary password will be sent to the registered email address.<br /><br />";
 
-	$form  = "<form name=\"getwikiname\" action=\"\" method=\"post\">";
-	$form .= "<input type=\"text\" name=\"wikiname\" value=\"\"><br />";
+	$form  = "<form name=\"getwikiname\" action=\"".$this->href()."\" method=\"post\">";
+	$form .= "<input type=\"text\" name=\"wikiname\" value=\"\" /><br />";
 	$form .= "<input type=\"submit\" value=\"Send password\" /></form>";
 	echo $form;
 }
