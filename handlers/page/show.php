@@ -1,4 +1,4 @@
-<div class="page" <?php echo (!$user || ($user["doubleclickedit"] == 'Y')) && ($this->GetMethod() == "show") ? "ondblclick=\"document.location='".$this->href("edit")."';\" " : "" ?>>
+<div class="page" <?php echo (($user = $this->GetUser()) && ($user["doubleclickedit"] == 'N')) ? "" : "ondblclick=\"document.location='".$this->href("edit")."';\" " ?>>
 <?php
 if (!$this->HasAccess("read"))
 {
