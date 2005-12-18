@@ -775,28 +775,28 @@ class Wakka
 		if (is_int(strpos($action, ' ')))
 		{
 			// treat everything after the first whitespace as parameter
-			preg_match("/^([A-Za-z0-9]*)\s+(.*)$/", $action, $matches);
+			preg_match('/^([A-Za-z0-9]*)\s+(.*)$/', $action, $matches);
 			// extract $action and $vars_temp ("raw" attributes)
 			list(, $action, $vars_temp) = $matches;
 
 			if ($action) {
 				// match all attributes (key and value)
-				preg_match_all("/([A-Za-z0-9]*)=\"(.*)\"/U", $vars_temp, $matches);
+				preg_match_all('/([A-Za-z0-9]*)=("|\')(.*)\\2/U', $vars_temp, $matches);
 
 				// prepare an array for extract() to work with (in $this->IncludeBuffered())
-    				if (is_array($matches)) {
-        				for ($a = 0; $a < count($matches[0]); $a++) {
-            				$vars[$matches[1][$a]] = $matches[2][$a];
-	        			}
-    				}
-				$vars["wikka_vars"] = trim($vars_temp); // <<< add the buffered parameter-string to the array
+				if (is_array($matches)) {
+					for ($a = 0; $a < count($matches[0]); $a++) {
+						$vars[$matches[1][$a]] = $matches[3][$a];
+					}
+				}
+				$vars['wikka_vars'] = trim($vars_temp); // <<< add the buffered parameter-string to the array
 			} else {
-   				return "<span class='error'><em>Unknown action; the action name must not contain special characters.</em></span>"; // <<< the pattern ([A-Za-z0-9])\s+ didn't match!
+				return '<em class="error">Unknown action; the action name must not contain special characters.</em>'; // <<< the pattern ([A-Za-z0-9])\s+ didn't match!
 			}
 		}
-		if (!preg_match("/^[a-zA-Z0-9]+$/", $action)) return "<span class='error'><em>Unknown action; the action name must not contain special characters.</em></span>";
+		if (!preg_match('/^[a-zA-Z0-9]+$/', $action)) return '<em class="error">Unknown action; the action name must not contain special characters.</em>';
 		if (!$forceLinkTracking) $this->StopLinkTracking();
-		$result = $this->IncludeBuffered(strtolower($action).".php", "<em>Unknown action \"$action\"</em>", $vars, $this->config["action_path"]);
+		$result = $this->IncludeBuffered(strtolower($action).'.php', '<em class="error">Unknown action "'.$action.'"</em>', $vars, $this->config['action_path']);
 		$this->StartLinkTracking();
 		return $result;
 	}
