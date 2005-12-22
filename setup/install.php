@@ -97,7 +97,7 @@ case "0":
   			"KEY idx_time (time)".
 			") TYPE=MyISAM;", $dblink), "Already exists?", 0);
 
-  test("Adding admin user...", 
+    test("Adding admin user...", 
     @mysql_query("insert into ".$config["table_prefix"]."users set name = '".$config["admin_users"]."', password = md5('".mysql_real_escape_string($_POST["password"])."'), email = '".$config["admin_email"]."', signuptime = now()", $dblink), "Hmm!", 0);
 
 	test("Adding some pages...", 1);
@@ -123,6 +123,9 @@ case "0":
 	mysql_query("insert into ".$config["table_prefix"]."pages set tag = 'HighScores', body = '**Rankings based on quantity of OwnedPages*:**\n {{HighScores}}{{nocomments}}*//not quality.//\n\n\n----\nCategoryWiki', owner = '(Public)', user = 'WikkaInstaller', time = now(), latest = 'Y'", $dblink);
 	mysql_query("insert into ".$config["table_prefix"]."pages set tag = 'OwnedPages', body = '{{ownedpages}}{{nocomments}}These numbers merely reflect how many pages you have created, not how much content you have contributed or the quality of your contributions. To see how you rank with other members, you may be interested in checking out the HighScores. \n\n\n----\nCategoryWiki', owner = '(Public)', user = 'WikkaInstaller', time = now(), latest = 'Y'", $dblink);
 	mysql_query("insert into ".$config["table_prefix"]."pages set tag = 'SandBox', body = 'Test your formatting skills here.\n\n\n\n\n----\nCategoryWiki', owner = '(Public)', user = 'WikkaInstaller', time = now(), latest = 'Y'", $dblink);
+
+	test("Setting default ACL...", 1);
+	mysql_query("insert into ".$config["table_prefix"]."acls set page_tag = 'UserSettings', read_acl = '*', write_acl = '+', comment_acl = '+'", $dblink);
 
 	break;
 
@@ -267,7 +270,7 @@ case "1.1.5.3":
 	rmdirr("safehtml");
 	rmdirr("wikiedit2");
 	rmdirr("xml");
-case "1.1.6.0-beta4":
+case "1.1.6.0":
 
 }
 
