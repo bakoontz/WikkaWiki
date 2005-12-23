@@ -267,7 +267,7 @@ case "1.1.5.3":
 	rmdirr("safehtml");
 	rmdirr("wikiedit2");
 	rmdirr("xml");
-case "1.1.6.0-beta4":
+case "1.1.6.0":
 
 }
 
