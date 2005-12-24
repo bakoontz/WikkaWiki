@@ -1098,7 +1098,7 @@ $wakkaDefaultConfig = array(
 
 	"wikiping_server" 		=> "",
 
-	"default_write_acl"		=> "*",
+	"default_write_acl"		=> "+",
 	"default_read_acl"		=> "*",
 	"default_comment_acl"		=> "*");
 
