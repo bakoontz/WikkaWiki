@@ -1,7 +1,6 @@
 /*
 -----------------------------------------------
-Wikka Print Stylesheet
-Latest version: http://wikka.jsnx.com/css/print.css
+Wikka Default Stylesheet (print)
 ----------------------------------------------- */
 
 .header, .footer, .commentsheader, .copyright, .smallprint { display:none; }
