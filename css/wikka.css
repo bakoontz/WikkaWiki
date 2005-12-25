@@ -1,8 +1,22 @@
+/*
+-----------------------------------------------
+Wikka Default Stylesheet
+----------------------------------------------- */
+
+/* global styling */
+
 p, td, li, input, select, textarea {
 	font-family: Verdana, Tahoma, Arial, Helvetica, sans-serif;
 	line-height: 20px;
 	font-size: 13px;
 }
+
+form, h1, h2, h3, h4, h5 {
+	margin: 0px;
+	padding: 0px;
+}
+
+/* page layout */
 
 body {
 	font-family: Verdana, Tahoma, Arial, Helvetica, sans-serif;	font-size: 13px;
@@ -12,59 +26,9 @@ body {
 	background-color: #F8F8F8;
 }
 
-a {
-	color: #333399;
-	text-decoration: none;
-}
-
-a:visited {
-	text-decoration: none;
-}
-
-a:hover {
-	color: #993333;
-}
-
-a:active {
-	text-decoration: none;
-}
-
-
-ul, ol {
-	margin-top: 0px;
-	margin-bottom: 0px;
-	padding-top: 0px;
-	padding-bottom: 0px;
-}
-
-form, h1, h2, h3, h4, h5 {
-	margin: 0px;
-	padding: 0px;
-}
-
-img {border: 0px;}
-img.centre {display: block; text-align: center; margin: 5px auto;}
-img.center {display: block; text-align: center; margin: 5px auto;}
-img.left {margin: 5px 5px 5px -5px; float: left;}
-img.right {margin: 5px -5px 5px 5px; float: right;}
-
-.indent {
-	margin-left: 40px;
-}
-
-.error {
-	color: #CC3333; font-weight: bold;
-}
-
 .header {
 	padding: 10px;
 	padding-top: 0px;
-}
-
-.header a:hover {
-	color: #993333;
-	background: transparent;
-	border-bottom: 0px;
 }
 
 .page {
@@ -78,23 +42,6 @@ img.right {margin: 5px -5px 5px 5px; float: right;}
 	height: 100%;
 }
 
-.page a {
-	text-decoration: none;
-}
-
-.page a:hover {
-	color: #993333;
-	text-decoration: underline;
-}
-
-.missingpage {
-	/* background: #ccffff; */
-	text-decoration: none;
-	border-bottom-width: 1px;
-	border-bottom-color: #933;
-	border-bottom-style: dashed;
-}
-
 .footer {
 	clear: both;
 	background-color: #DDDDDD;
@@ -103,6 +50,8 @@ img.right {margin: 5px -5px 5px 5px; float: right;}
 	border-top: none;
 	border-top: 1px solid #CCCCCC;
 }
+
+/* comments */
 
 .commentsheader {
 	clear: both;
@@ -134,52 +83,128 @@ img.right {margin: 5px -5px 5px 5px; float: right;}
 	border-top: 1px solid #CCCCCC;
 }
 
-.code {
-	color: black;
-	background: #ffffee;
-	border: 1px solid #888;
+/* links */
+
+a {
+	color: #333399;
+	text-decoration: none;
+}
+
+a:visited {
+	text-decoration: none;
+}
+
+a:hover {
+	color: #993333;
+}
+
+a:active {
+	text-decoration: none;
+}
+
+a.ext {
+	color: #333399;
+}
+
+a.ext:hover {
+	color: #993333;
+}
+
+.exttail {
+	color: #999;
+	position: relative;
+	bottom: 0.5ex;
+}
+
+.header a:hover {
+	color: #993333;
+	background: transparent;
+	border-bottom: 0px;
+}
+
+.page a {
+	text-decoration: none;
+}
+
+.page a:hover {
+	color: #993333;
+	text-decoration: underline;
+}
+
+/* lists */
+
+ul, ol {
+	margin-top: 0px;
+	margin-bottom: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
+ul.thread {
+	list-style-type: none;
+	border-left: 2px #666 solid;
+	padding-left: 10px;
+	margin: 5px 0px;
+}
+
+ul.thread li {
+	color: #333;
 	font-size: 11px;
-	font-family: "Lucida Console", Monaco, monospace;
-	width: 95%;
-	margin: auto;
-	padding: 6px 3px 13px 3px;	/* padding-bottom solves hor. scrollbar hiding single line of code in IE6 but causes vert. scrollbar... */
-	text-align: left;			/* override justify on body */
-	overflow: auto;				/* allow scroll bar in case of long lines - goes together with white-space: nowrap! */
-	white-space: nowrap;		/* prevent line wrapping */
-}
-.code pre {
-	margin-top: 6px;
-	margin-bottom: 6px;			/* prevent vertical scroll bar in case of overflow */
-	font-size: 11px;
-	font-family: "Lucida Console", Monaco, monospace;
 }
 
-.notes {
-	color: #888800;
+/* images */
+
+img {
+	border: 0px;
 }
 
-.revisioninfo {
-	color: #AAAAAA;
-	padding-bottom: 20px;
+img.centre {
+	display: block; 
+	text-align: center; 
+	margin: 5px auto;
 }
 
-.copyright {
-	font-size: 11px;
-	color: #AAAAAA;
-	text-align: right;
+img.center {
+	display: block; 
+	text-align: center; 
+	margin: 5px auto;
 }
 
-.copyright a {
-	color: #AAAAAA;
+img.left {
+	margin: 5px 5px 5px -5px;
+	float: left;
 }
 
-.lastedit {
-	border:dotted 1px;
-	padding:3pt;
-	margin:8pt; color:#888;
-	font-size:8pt;
-	width:30%;
+img.right {
+	margin: 5px -5px 5px 5px; 
+	float: right;
 }
+
+/* floats */
+
+.floatl {
+	float: left;
+	text-align: left;
+	width: 46%;
+	margin-right: 15px;
+	padding: 4px;
+	background: #EEE;
+	border: 1px solid #CCC; 		
+}
+
+.floatr {
+	float: right;
+	text-align: left;
+	width: 46%;
+	margin-left: 15px;
+	padding: 4px;
+	background: #EEE;
+	border: 1px solid #CCC; 		
+}
+
+.clear {clear:both;}
+
+/* text formatting */
 
 h5 {
 	font-size: 10pt;
@@ -201,91 +226,19 @@ h1 {
 	font-size: 18pt;
 }
 
-a.ext {
-	color: #333399;
-}
-
-a.ext:hover {
-	color: #993333;
-}
-
-.exttail {
-	color: #999;
-	position: relative;
-	bottom: 0.5ex;
-}
-
-.searchbox {
-	/* border: none; */
-	border: 1px solid #CCCCAA;
-	padding: 0px;
-	margin: 0px;
-}
-
-.toolbar tr { background: ButtonFace; }
-.toolbar .btn-, .toolbar  .btn-hover,  .toolbar .btn-active,
-.toolbar .btn-pressed {
-	background: ButtonFace;
-	color: ButtonText;
-	border: 1px solid ButtonFace;
-	padding: 1px;
-	margin: 0px;
-	cursor: pointer;
-}
-.toolbar .btn- img  { width: 20px; height: 20px; }
-.toolbar .btn-hover { border-color: ButtonHighlight ButtonShadow ButtonShadow ButtonHighlight; }
-.toolbar .btn-active,
-.toolbar .btn-pressed { border-color: ButtonShadow ButtonHighlight ButtonHighlight ButtonShadow; }
-.toolbar .btn-pressed { background: ButtonHighlight; }
-.editornamecss { background-color:#CCCCFF; font-size: 18px; padding: 0 10px; }
-
-ul.thread {
-        list-style-type: none;
-        border-left: 2px #666 solid;
-        padding-left: 10px;
-        margin: 5px 0px;
-}
-
-ul.thread li {
-        color: #333;
-        font-size: 11px;
-}
-
-/*---Specific Styles ---*/
-
-.clear {clear:both;}
-
-.comments {display: none;}
-
-.floatl {float: left; width: 48%; margin: 0.5%; padding: 0.5%; background: #EEE;}
-
-.floatr {float: right; width: 48%; margin: 0.5%; padding: 0.5%; background: #EEE;}
-
-.previewhead {
-	margin: auto;
-	z-index:20;
-	position:fixed;
-	top: 40px;
-	left: 10px;
-	color: red;
-	font-size: xx-large;
-	font-weight: bold;
-	padding: 5px;
-}
-
 .highlight {color: red; background: #FFFFD0;}
 
 .strikethrough {color: #888; text-decoration: line-through;}
 
-.additions {background-color: #ccffcc;}
-
-.deletions {color: #876; background-color: #FFCC99;}
-
 .underline {text-decoration: underline;}
 
-.recentchanges {font-size: 0.9em;}
+.indent {
+	margin-left: 40px;
+}
 
-.pagenote {color: #888;}
+.notes {
+	color: #888800;
+}
 
 .centre {text-align: center;}
 
@@ -308,43 +261,106 @@ ul.thread li {
 	vertical-align: top;
 }
 
+/* code blocks */
+
+.code {
+	color: black;
+	background: #ffffee;
+	border: 1px solid #888;
+	font-size: 11px;
+	font-family: "Lucida Console", Monaco, monospace;
+	width: 95%;
+	margin: auto;
+	padding: 6px 3px 13px 3px;	/* padding-bottom solves hor. scrollbar hiding single line of code in IE6 but causes vert. scrollbar... */
+	text-align: left;			/* override justify on body */
+	overflow: auto;				/* allow scroll bar in case of long lines - goes together with white-space: nowrap! */
+	white-space: nowrap;		/* prevent line wrapping */
+}
+.code pre {
+	margin-top: 6px;
+	margin-bottom: 6px;			/* prevent vertical scroll bar in case of overflow */
+	font-size: 11px;
+	font-family: "Lucida Console", Monaco, monospace;
+}
+
+/* form elements */
+
+.searchbox {
+	/* border: none; */
+	border: 1px solid #CCCCAA;
+	padding: 0px;
+	margin: 0px;
+}
+
+/* system information */
+
+.missingpage {
+	/* background: #ccffff; */
+	text-decoration: none;
+	border-bottom-width: 1px;
+	border-bottom-color: #933;
+	border-bottom-style: dashed;
+}
+
+.error {
+	color: #CC3333; font-weight: bold;
+}
+
+.comments {display: none;}
+
+.revisioninfo {
+	color: #AAAAAA;
+	padding-bottom: 20px;
+}
+
+.copyright {
+	font-size: 11px;
+	color: #AAAAAA;
+	text-align: right;
+}
+
+.copyright a {
+	color: #AAAAAA;
+}
+
+.previewhead {
+	margin: auto;
+	z-index:20;
+	position:fixed;
+	top: 40px;
+	left: 10px;
+	color: red;
+	font-size: xx-large;
+	font-weight: bold;
+	padding: 5px;
+}
+
+.additions {background-color: #ccffcc;}
+
+.deletions {color: #876; background-color: #FFCC99;}
+
+.recentchanges {font-size: 0.9em;}
+
+.pagenote {color: #888;}
+
 .smallprint {font-size: 0.8em; color: #777; padding-right: 0.5%; text-align: right;}
 
 .smallprint a {
 	color: #987;
 }
 
-/* syntax highlighting code - GeSHi */
-.code ol {
-	margin-top: 6px;
-	margin-bottom: 6px;			/* prevent vertical scroll bar in case of overflow */
-}
-.code li {
-	font-size: 11px;
-	font-family: "Lucida Console", Monaco, monospace;
-}
-.code .br0	{ color: #66cc66; }
-.code .co1	{ color: #808080; font-style: italic; }
-.code .co2	{ color: #808080; font-style: italic; }
-.code .coMULTI	{ color: #808080; font-style: italic; }
-.code .es0	{ color: #000099; font-weight: bold; }
-.code .kw1	{ color: #b1b100; }
-.code .kw2	{ color: #000000; font-weight: bold; }
-.code .kw3	{ color: #000066; }
-.code .kw4	{ color: #993333; }
-.code .kw5	{ color: #0000ff; }
-.code .me0	{ color: #006600; }
-.code .nu0	{ color: #cc66cc; }
-.code .re0	{ color: #0000ff; }
-.code .re1	{ color: #0000ff; }
-.code .re2	{ color: #0000ff; }
-.code .re4	{ color: #009999; }
-.code .sc0	{ color: #00bbdd; }
-.code .sc1	{ color: #ddbb00; }
-.code .sc2	{ color: #009900; }
-.code .st0	{ color: #ff0000; }
+/* Action-related styling */
 
-/* Calendar styling - 2004-12-01 */
+.lastedit {
+	border:dotted 1px;
+	padding:3pt;
+	margin:8pt; color:#888;
+	font-size:8pt;
+	width:30%;
+}
+
+/* Calendar styling */
+
 /* general styling */
 table.calendar {
 	color: #000000;
@@ -412,3 +428,54 @@ table.calendar a:active {
 	color: #993333;
 	text-decoration: none;
 }
+
+/* 3rdparty-code related styling */
+
+/* syntax highlighting code - GeSHi */
+.code ol {
+	margin-top: 6px;
+	margin-bottom: 6px;			/* prevent vertical scroll bar in case of overflow */
+}
+.code li {
+	font-size: 11px;
+	font-family: "Lucida Console", Monaco, monospace;
+}
+.code .br0	{ color: #66cc66; }
+.code .co1	{ color: #808080; font-style: italic; }
+.code .co2	{ color: #808080; font-style: italic; }
+.code .coMULTI	{ color: #808080; font-style: italic; }
+.code .es0	{ color: #000099; font-weight: bold; }
+.code .kw1	{ color: #b1b100; }
+.code .kw2	{ color: #000000; font-weight: bold; }
+.code .kw3	{ color: #000066; }
+.code .kw4	{ color: #993333; }
+.code .kw5	{ color: #0000ff; }
+.code .me0	{ color: #006600; }
+.code .nu0	{ color: #cc66cc; }
+.code .re0	{ color: #0000ff; }
+.code .re1	{ color: #0000ff; }
+.code .re2	{ color: #0000ff; }
+.code .re4	{ color: #009999; }
+.code .sc0	{ color: #00bbdd; }
+.code .sc1	{ color: #ddbb00; }
+.code .sc2	{ color: #009900; }
+.code .st0	{ color: #ff0000; }
+
+/* wikiedit */
+
+.toolbar tr { background: ButtonFace; }
+.toolbar .btn-, .toolbar  .btn-hover,  .toolbar .btn-active,
+.toolbar .btn-pressed {
+	background: ButtonFace;
+	color: ButtonText;
+	border: 1px solid ButtonFace;
+	padding: 1px;
+	margin: 0px;
+	cursor: pointer;
+}
+.toolbar .btn- img  { width: 20px; height: 20px; }
+.toolbar .btn-hover { border-color: ButtonHighlight ButtonShadow ButtonShadow ButtonHighlight; }
+.toolbar .btn-active,
+.toolbar .btn-pressed { border-color: ButtonShadow ButtonHighlight ButtonHighlight ButtonShadow; }
+.toolbar .btn-pressed { background: ButtonHighlight; }
+.editornamecss { background-color:#CCCCFF; font-size: 18px; padding: 0 10px; }
