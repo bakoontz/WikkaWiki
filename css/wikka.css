@@ -261,6 +261,16 @@ h1 {
 	vertical-align: top;
 }
 
+acronym {
+	border-bottom: 1px dotted #333;
+	cursor: help;
+}
+
+abbrv {
+	border-bottom: 1px dotted #333;
+	cursor: help;
+}
+
 /* code blocks */
 
 .code {
