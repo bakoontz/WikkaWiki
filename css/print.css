@@ -3,7 +3,7 @@
 Wikka Default Stylesheet (print)
 ----------------------------------------------- */
 
-.header, .footer, .commentsheader, .copyright, .smallprint { display:none; }
+.header, .footer, .commentsheader, .copyright, .smallprint, .lastedit { display:none; }
 
 body {
 	margin-top: 0px; 
