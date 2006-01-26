@@ -107,7 +107,7 @@ case "0":
 	mysql_query("insert into ".$config["table_prefix"]."pages set tag = 'UserSettings', body = '{{UserSettings}}{{nocomments}}\n\n\n----\nCategoryWiki', owner = '(Public)', user = 'WikkaInstaller', time = now(), latest = 'Y'", $dblink);
 	mysql_query("insert into ".$config["table_prefix"]."pages set tag = 'PageIndex', body = '{{PageIndex}}{{nocomments}}\n\n\n----\nCategoryWiki', owner = '(Public)', user = 'WikkaInstaller', time = now(), latest = 'Y'", $dblink);
 	mysql_query("insert into ".$config["table_prefix"]."pages set tag = 'WikkaReleaseNotes', body = '{{wikkachanges}}{{nocomments}}\n\n\n----\nCategoryWiki', owner = '(Public)', user = 'WikkaInstaller', time = now(), latest = 'Y'", $dblink);
-	mysql_query("insert into ".$config["table_prefix"]."pages set tag = 'WikkaDocumentation' , body = '=====Wikka Documentation=====\n\nComprehensive and up-to-date documentation on Wikka Wiki can be found on the [[http://wikka.jsnx.com/WikkaDocumentation main Wikka server]].', owner = '(Public)', user = 'WikkaInstaller', time = now(), latest = 'Y'", $dblink);
+	mysql_query("insert into ".$config["table_prefix"]."pages set tag = 'WikkaDocumentation' , body = '=====Wikka Documentation=====\n\nComprehensive and up-to-date documentation on Wikka Wiki can be found on the [[http://wikkawiki.org/WikkaDocumentation main Wikka server]].', owner = '(Public)', user = 'WikkaInstaller', time = now(), latest = 'Y'", $dblink);
 	mysql_query("insert into ".$config["table_prefix"]."pages set tag = 'WantedPages', body = '{{WantedPages}}{{nocomments}}\n\n\n----\nCategoryWiki', owner = '(Public)', user = 'WikkaInstaller', time = now(), latest = 'Y'", $dblink);
 	mysql_query("insert into ".$config["table_prefix"]."pages set tag = 'OrphanedPages', body = '====Orphaned Pages====\n\nThe following list shows those pages held in the Wiki that are not linked to on any other pages.\n\n{{OrphanedPages}}{{nocomments}}\n\n\n----\nCategoryWiki', owner = '(Public)', user = 'WikkaInstaller', time = now(), latest = 'Y'", $dblink);
 	mysql_query("insert into ".$config["table_prefix"]."pages set tag = 'TextSearch', body = '{{TextSearch}}{{nocomments}}\n\n\n----\nCategoryWiki', owner = '(Public)', user = 'WikkaInstaller', time = now(), latest = 'Y'", $dblink);
@@ -259,7 +259,7 @@ case "1.1.5.3":
 	test("Adding WikkaReleaseNotes page...", 
 	mysql_query("insert into ".$config["table_prefix"]."pages set tag = 'WikkaReleaseNotes', body = '{{wikkachanges}}{{nocomments}}\n\n\n----\nCategoryWiki', owner = '(Public)', user = 'WikkaInstaller', time = now(), latest = 'Y'", $dblink), "Already done? OK!", 0);
 	test("Adding WikkaDocumentation page...", 
-	mysql_query("insert into ".$config["table_prefix"]."pages set tag = 'WikkaDocumentation' , body = '=====Wikka Documentation=====\n\nComprehensive and up-to-date documentation on Wikka Wiki can be found on the [[http://wikka.jsnx.com/WikkaDocumentation main Wikka server]].', owner = '(Public)', user = 'WikkaInstaller', time = now(), latest = 'Y'", $dblink), "Already done? OK!", 0);
+	mysql_query("insert into ".$config["table_prefix"]."pages set tag = 'WikkaDocumentation' , body = '=====Wikka Documentation=====\n\nComprehensive and up-to-date documentation on Wikka Wiki can be found on the [[http://wikkawiki.org/WikkaDocumentation main Wikka server]].', owner = '(Public)', user = 'WikkaInstaller', time = now(), latest = 'Y'", $dblink), "Already done? OK!", 0);
 	// cookie names have changed -- logout user and delete the old cookies
 	DeleteCookie("name");
 	DeleteCookie("password"); 
@@ -280,7 +280,7 @@ case "trunk": //latest development version from the SVN repository
 <p>
 In the next step, the installer will try to write the updated configuration file, <tt><?php echo $wakkaConfigLocation ?></tt>.
 Please make sure the web server has write access to the file, or you will have to edit it manually.
-Once again, see <a href="http://wikka.jsnx.com/WikkaInstallation" target="_blank">Wikka:WakkaInstallation</a> for details.
+Once again, see <a href="http://wikkawiki.org/WikkaInstallation" target="_blank">Wikka:WakkaInstallation</a> for details.
 </p>
 
 <form action="<?php echo myLocation(); ?>?installAction=writeconfig" method="POST">

@@ -15,8 +15,8 @@
  * @subpackage        
  * @name              clone
  *
- * @author            {@link http://wikka.jsnx.com/ChristianBarthelemy Christian Barthelemy} - original idea and code.
- * @author            {@link http://wikka.jsnx.com/DarTar Dario Taraborelli} - bugs fixed, code improved, removed popup alerts.  
+ * @author            {@link http://wikkawiki.org/ChristianBarthelemy Christian Barthelemy} - original idea and code.
+ * @author            {@link http://wikkawiki.org/DarTar Dario Taraborelli} - bugs fixed, code improved, removed popup alerts.  
  * @version           0.4
  * @since             Wikka 1.1.6.0
  *                      

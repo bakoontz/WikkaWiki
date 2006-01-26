@@ -45,7 +45,7 @@ Search: <input name="phrase" size="15" class="searchbox" />
 <div class="smallprint">
 <?php echo $this->Link("http://validator.w3.org/check/referer", "", "Valid XHTML 1.0 Transitional") ?> ::
 <?php echo $this->Link("http://jigsaw.w3.org/css-validator/check/referer", "", "Valid CSS") ?> ::
-Powered by <?php echo $this->Link("http://wikka.jsnx.com/", "", "Wikka Wakka Wiki ".$this->GetWakkaVersion()) ?>
+Powered by <?php echo $this->Link("http://wikkawiki.org/", "", "Wikka Wakka Wiki ".$this->GetWakkaVersion()) ?>
 </div>
 
 <?php

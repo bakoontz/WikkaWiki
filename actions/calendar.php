@@ -25,8 +25,8 @@
  * @subpackage	Date and Time
  * @name		Calendar
  *
- * @author		{@link http://wikka.jsnx.com/GmBowen GmBowen} (first draft)
- * @author		{@link http://wikka.jsnx.com/JavaWoman JavaWoman} (more modifications)
+ * @author		{@link http://wikkawiki.org/GmBowen GmBowen} (first draft)
+ * @author		{@link http://wikkawiki.org/JavaWoman JavaWoman} (more modifications)
  * @version		0.8
  * @since		Wikka 1.1.6.0
  *

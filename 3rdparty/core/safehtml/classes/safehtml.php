@@ -14,7 +14,7 @@
 
   For LICENSE see license.txt
 
-  Modifications by JavaWoman - http://wikka.jsnx.com/JavaWoman - 2005-01-20
+  Modifications by JavaWoman - http://wikkawiki.org/JavaWoman - 2005-01-20
   1) added 'callto' protocol to whitelist
   2) special handling for "dangerous" attributes id and name:
 		- id is validated by syntax

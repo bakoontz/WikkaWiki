@@ -5,8 +5,8 @@
  * @package		Actions
  * @name			Lastedit
  *
- * @author		{@link http://wikka.jsnx.com/DarTar Dario Taraborelli} (first draft)
- * @author		{@link http://wikka.jsnx.com/MinusF MinusF} (code cleanup and validation)
+ * @author		{@link http://wikkawiki.org/DarTar Dario Taraborelli} (first draft)
+ * @author		{@link http://wikkawiki.org/MinusF MinusF} (code cleanup and validation)
  * @version		0.2
  * @since		Wikka 1.1.6.X
  *

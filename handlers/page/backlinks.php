@@ -13,7 +13,7 @@
 * @name backlinks
 *
 * @author {@link http://wakkawiki.de/MartinBurger Martin Burger} - original idea and code.
-* @author {@link http://wikka.jsnx.com/DarTar Dario Taraborelli} - code rewritten, ExistsPage check added, removed links array. 
+* @author {@link http://wikkawiki.org/DarTar Dario Taraborelli} - code rewritten, ExistsPage check added, removed links array. 
 * @version 0.3
 * @since Wikka 1.1.6.X
 * 

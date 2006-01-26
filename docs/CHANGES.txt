@@ -99,7 +99,7 @@ Misc:
 
 # css/wikka.css modified to add style info for LastEdit and JwCalendar.
 # Removed file /actions/wakkabug.php. This file was pointing to wakkawiki.com -- which doesn't exist anymore.
-# Changed setup links that pointed to wakkawiki.com; they now point to http://wikka.jsnx.com/WikkaInstallation8.
+# Changed setup links that pointed to wakkawiki.com; they now point to http://wikkawiki.org/WikkaInstallation8.
 # Slightly updated files in /docs directory: INSTALL, readme, and UPGRADE.
 # Added note to bottom of RecentChanges if WikiPing is enabled, per suggestion from NilsLindenberg.
     * File modified: actions/recentchanges.php 

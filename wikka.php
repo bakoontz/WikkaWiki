@@ -190,7 +190,7 @@ class Wakka
 	 *
 	 * This method should be applied on any user-provided url in actions, handlers etc.
 	 *
-	 * @author		{@link http://wikka.jsnx.com/JavaWoman JavaWoman}
+	 * @author		{@link http://wikkawiki.org/JavaWoman JavaWoman}
 	 * @copyright	Copyright © 2004, Marjolein Katsma
 	 * @license		http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
 	 * @version		0.7
@@ -486,7 +486,7 @@ class Wakka
 	/**
 	 * Check by name if a page exists.
 	 *
-	 * @author		{@link http://wikka.jsnx.com/JavaWoman JavaWoman}
+	 * @author		{@link http://wikkawiki.org/JavaWoman JavaWoman}
 	 * @copyright	Copyright © 2004, Marjolein Katsma
 	 * @license		http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
 	 * @version		1.0
