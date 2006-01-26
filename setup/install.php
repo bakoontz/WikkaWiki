@@ -271,7 +271,8 @@ case "1.1.5.3":
 	rmdirr("wikiedit2");
 	rmdirr("xml");
 case "1.1.6.0":
-
+case "1.1.6.1":
+case "trunk": //latest development version from the SVN repository
 }
 
 ?>
