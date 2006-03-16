@@ -13,6 +13,9 @@
 //		find the cause of any problem.
 // NOTE 2: no solution for timeout problems with non-existing feeds yet...
 
+// constant section
+define('ERROR_RSS_WRONG_SYNTAX', 'Error: Invalid RSS action syntax. --- Proper usage: ""{{rss http://domain.com/feed.xml}}"" or ""{{rss url="http://domain.com/feed.xml"}}""'); // gets wikka-formatted
+
 $max_items = 30; // set this to the maximum items the RSS action should ever display
 
 $caching = true; // change this to false to disable caching
@@ -78,7 +81,7 @@ if (preg_match("/^(http|https):\/\/([^\\s\"<>]+)$/i", $rss_path))
 	$cached_output .= "</ul>\n";
 	echo $this->ReturnSafeHTML($cached_output);
 } else {
-	echo '<span class="error"><em>Error: Invalid RSS action syntax. <br /> Proper usage: {{rss http://domain.com/feed.xml}} or {{rss url="http://domain.com/feed.xml"}}</em></span>';
+	echo '<em class="error">'.$this->Format(ERROR_RSS_WRONG_SYNTAX).'</em>';
 }
 
 ?>

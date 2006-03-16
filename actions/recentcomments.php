@@ -1,5 +1,8 @@
 <?php
 
+//constant section
+define('NO_RECENT_COMMENTS', 'No recent comments');
+
 if ($comments = $this->LoadRecentComments())
 {
 	$curday = "";
@@ -27,6 +30,6 @@ if ($comments = $this->LoadRecentComments())
 }
 else
 {
-	print("<em>No recent comments.</em>");
+	print('<em>'.NO_RECENT_COMMENTS.'</em>');
 }
 ?>

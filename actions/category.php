@@ -1,11 +1,15 @@
 <?php
+//constants section
+define('CATEGORY_PAGES_HEADER', 'The following %b pages belong to %s:'); // %s - name of the page
+define('CATEGORY_NO_PAGES_FOUND', 'Sorry, no items found for %s.'); // %s - name of the page
+
 if ($cattag = $_REQUEST["wakka"])
 {
 	$str ="";
 	if (!isset($col)) $col=1;
 	if (!isset($compact)) $compact=0;
-	if (!isset($page)) $page=$this->getPageTag(); 
-	if ($page=="/") $page="CategoryCategory"; 
+	if (!isset($page)) $page=$this->getPageTag();
+	if ($page=="/") $page="CategoryCategory";
 
 //	$page= preg_replace( "/(\w+)\s(\w+)/", "$1$2",$page);
 	if (isset($class)) {
@@ -17,22 +21,22 @@ if ($cattag = $_REQUEST["wakka"])
 
 	if ($this->CheckMySQLVersion(4,0,1))
 	{
-    		$results = $this->FullCategoryTextSearch($page); 
+    		$results = $this->FullCategoryTextSearch($page);
 	}
 	else
 	{
-    		$results = $this->FullTextSearch($page); 
+    		$results = $this->FullTextSearch($page);
 	}
 
 	if ($results)
 	{
-		if (!$compact) $str .= ' pages belong to ' . $page . ': <br /><br /><table '.$class.' width="100%"><tr>';
+		if (!$compact) $str .= '<br /><br /><table '.$class.' width="100%"><tr>';
 		else $str .= '<div '.$class.'><ul>';
-		
-		$count = 0; 
+
+		$count = 0;
 		$pagecount = 0;
 		$list = array();
-		
+
 		foreach ($results as $i => $cpage) if($cpage['tag'] != $page) { array_push($list,$cpage['tag']);}
 		sort($list);
 		while (list($key, $val) = each($list)) {
@@ -42,10 +46,10 @@ if ($cattag = $_REQUEST["wakka"])
 			$count++;
 			$pagecount++;
 		}
-		$str = 'The following '.$pagecount.$str;
+		$str = sprintf(CATEGORY_PAGES_HEADER, $pagecount, $page).$str;
 		if (!$compact)  $str .= '</tr></table>'; else $str .= '</ul></div>';
 	}
-	else $str .= 'Sorry, no items found for ' . $page .'.';
+	else $str .= sprintf(CATEGORY_NO_PAGES_FOUND, $page);
 	print($str);
 }
 ?>

@@ -1,5 +1,7 @@
 <?php
 
+define('NO_ORPHANED_PAGES', 'No orphaned pages. Good!');
+
 if ($pages = $this->LoadOrphanedPages())
 {
 	foreach ($pages as $page)
@@ -9,7 +11,7 @@ if ($pages = $this->LoadOrphanedPages())
 }
 else
 {
-	print("<em>No orphaned pages. Good!</em>");
+	print('<em>'.NO_ORPHANED_PAGES.'</em>');
 }
 
 ?>

@@ -1,8 +1,12 @@
 <div class="page" <?php echo (($user = $this->GetUser()) && ($user["doubleclickedit"] == 'N')) ? "" : "ondblclick=\"document.location='".$this->href("edit")."';\" " ?>>
 <?php
+
+// constant section
+define('ERROR_NO_READ_ACCESS', 'You aren't allowed to read this page.');
+
 if (!$this->HasAccess("read"))
 {
-	print("<p><em>You aren't allowed to read this page.</em></p></div>");
+	print("<p><em>'.ERROR_NO_READ_ACCESS.'</em></p></div>");
 }
 else
 {
@@ -47,7 +51,7 @@ else
 			$tag = $this->GetPageTag();
 			if (!isset($_SESSION["show_comments"][$tag]))
 				$_SESSION["show_comments"][$tag] = ($this->UserWantsComments() ? "1" : "0");
-			if (isset($_REQUEST["show_comments"])){	
+			if (isset($_REQUEST["show_comments"])){
 				switch($_REQUEST["show_comments"])
 				{
 				case "0":
@@ -70,13 +74,13 @@ else
 				// display comments themselves
 				if ($comments)
 				{
-					$current_user = $this->GetUserName(); 
+					$current_user = $this->GetUserName();
 		 			foreach ($comments as $comment)
 					{
 						print("<div class=\"comment\">\n");
 						print("<span id=\"comment_".$comment["id"]."\"></span>".$comment["comment"]."\n");
 						print("\t<div class=\"commentinfo\">\n-- ".$this->Format($comment["user"])." (".$comment["time"].")\n");
-						$current_user = $this->GetUserName(); 
+						$current_user = $this->GetUserName();
      						if ($this->UserIsOwner() || $current_user == $comment["user"] || ($this->config['anony_delete_own_comments'] && $current_user == $comment["user"]) )
 						{
 						?>
@@ -132,4 +136,3 @@ else
 	}
 }
 ?>
-

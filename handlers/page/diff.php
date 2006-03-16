@@ -1,12 +1,12 @@
 <div class="page">
 <?php
 
-if ($this->HasAccess("read")) 
+if ($this->HasAccess("read"))
 {
 
 /* A php wdiff  (word diff) for wakka, adapted by David Delon
    based on wdiff and phpwiki diff (copyright below).
-   TODO : Since wdiff use only directive lines, all stuff in diff class 
+   TODO : Since wdiff use only directive lines, all stuff in diff class
    related to line and context display should be removed.
 
    This program is free software; you can redistribute it and/or modify
@@ -14,13 +14,13 @@ if ($this->HasAccess("read"))
    the Free Software Foundation; either version 2, or (at your option)
    any later version. */
 
-  
+
 /* A PHP diff engine for phpwiki.
-  
+
    Copyright (C) 2000, 2001 Geoffrey T. Dairiki <dairiki@dairiki.org>
    You may copy this code freely under the conditions of the GPL.
 */
- 
+
 /* wdiff -- front end to diff for comparing on a word per word basis.
    Copyright (C) 1992 Free Software Foundation, Inc.
    Francois Pinard <pinard@iro.umontreal.ca>.
@@ -32,92 +32,92 @@ if ($this->HasAccess("read"))
 
  */
 
-// If asked, call original diff 
+// If asked, call original diff
 
 	if ($_REQUEST["fastdiff"]) {
-	   
-		/* NOTE: This is a really cheap way to do it. I think it may be more intelligent to write the two pages to temporary files and run /usr/bin/diff over them. Then again, maybe not.        */ 
+
+		/* NOTE: This is a really cheap way to do it. I think it may be more intelligent to write the two pages to temporary files and run /usr/bin/diff over them. Then again, maybe not.        */
 		// load pages
 		  $pageA = $this->LoadPageById($_REQUEST["a"]);
 		  $pageB = $this->LoadPageById($_REQUEST["b"]);
-	
+
 		// prepare bodies
 		  $bodyA = explode("\n", $pageA["body"]);
 		  $bodyB = explode("\n", $pageB["body"]);
-	
+
 		  $added = array_diff($bodyA, $bodyB);
 		  $deleted = array_diff($bodyB, $bodyA);
-	
-		  $output .= "<b>Comparison of  <a href=\"".$this->Href("", "", "time=".urlencode($pageA["time"]))."\">".$pageA["time"]."</a> &amp; <a href=\"".$this->Href("", "", "time=".urlencode($pageB["time"]))."\">".$pageB["time"]."</a></b><br />\n";
-	
+
+		  $output .= "<b>Comparison of  <a href=\"".$this->Href("", "", "time=".urlencode($pageA["time"]))."\">".$pageA["time"]."</a> &amp; <a href=\"".$this->Href("", "", "time=".urlencode($pageB["time"]))."\">".$pageB["time"]."</a></b><br />\n"; #i18n
+
 		  if ($added)
 		  {
 			// remove blank lines
-			$output .= "<br />\n<b>Additions:</b><br />\n";
+			$output .= "<br />\n<b>Additions:</b><br />\n";   #i18n
 			$output .= "<span class=\"additions\">".$this->Format(implode("\n", $added))."</span>";
 		  }
-	
+
 		  if ($deleted)
 		  {
-			$output .= "<br />\n<b>Deletions:</b><br />\n";
+			$output .= "<br />\n<b>Deletions:</b><br />\n"; #i18n
 			$output .= "<span class=\"deletions\">".$this->Format(implode("\n", $deleted))."</span>";
 		  }
-	
+
 		  if (!$added && !$deleted)
 		  {
-			$output .= "<br />\nNo Differences.";
+			$output .= "<br />\nNo Differences."; #i18n
 		  }
 		  echo $output;
-	
+
 	}
-	
+
 	else {
-	
+
 	// load pages
-	
+
 		$pageA = $this->LoadPageById($_REQUEST["b"]);
 		$pageB = $this->LoadPageById($_REQUEST["a"]);
-	
+
 		// extract text from bodies
 		$textA = $pageA["body"];
 		$textB = $pageB["body"];
-	
+
 		$sideA = new Side($textA);
 		$sideB = new Side($textB);
-	
+
 		$bodyA='';
 		$sideA->split_file_into_words($bodyA);
-	
+
 		$bodyB='';
 		$sideB->split_file_into_words($bodyB);
-	
+
 		// diff on these two file
 		$diff = new Diff(split("\n",$bodyA),split("\n",$bodyB));
-	
+
 		// format output
 		$fmt = new DiffFormatter();
-	
+
 		$sideO = new Side($fmt->format($diff));
-	
+
 		$resync_left=0;
 		$resync_right=0;
-	
+
 		$count_total_right=$sideB->getposition() ;
-	
+
 		$sideA->init();
 		$sideB->init();
-	
+
 		echo "<b>Comparing <a href=\"".$this->Href("", "", "time=".urlencode($pageA["time"]))."\">".$pageA["time"]."</a> to <a href=\"".$this->Href("", "", "time=".urlencode($pageB["time"]))."\">".$pageB["time"]."</a></b> ";
-		echo "-- Highlighting Guide: <span class=\"additions\">addition</span> <span class=\"deletions\">deletion</span><p>";
+		echo "-- Highlighting Guide: <span class=\"additions\">addition</span> <span class=\"deletions\">deletion</span><p>"; #i18n
 		$output='';
 
 		  while (1) {
-		       
+
 		      $sideO->skip_line();
 		      if ($sideO->isend()) {
 			  break;
 		      }
-	
+
 		      if ($sideO->decode_directive_line()) {
 			$argument=$sideO->getargument();
 			$letter=$sideO->getdirective();
@@ -126,24 +126,24 @@ if ($this->HasAccess("read"))
 			      $resync_left = $argument[0];
 			      $resync_right = $argument[2] - 1;
 			      break;
-	
+
 			    case 'd':
 			      $resync_left = $argument[0] - 1;
 			      $resync_right = $argument[2];
 			      break;
-	
+
 			    case 'c':
 			      $resync_left = $argument[0] - 1;
 			      $resync_right = $argument[2] - 1;
 			      break;
-	
+
 			    }
-	
+
 			    $sideA->skip_until_ordinal($resync_left);
 			    $sideB->copy_until_ordinal($resync_right,$output);
-	  
+
 	// deleted word
-	
+
 			if (($letter=='d') || ($letter=='c')) {
 				$sideA->copy_whitespace($output);
 				$output .="&yen;&yen;";
@@ -151,7 +151,7 @@ if ($this->HasAccess("read"))
 				$sideA->copy_until_ordinal($argument[1],$output);
 				$output .=" &yen;&yen;";
 			}
-	
+
 	// inserted word
 			    if ($letter == 'a' || $letter == 'c') {
 				$sideB->copy_whitespace($output);
@@ -160,25 +160,25 @@ if ($this->HasAccess("read"))
 				$sideB->copy_until_ordinal($argument[3],$output);
 				$output .=" &pound;&pound;";
 			    }
-	
+
 		  }
-	
+
 		}
-	
+
 		  $sideB->copy_until_ordinal($count_total_right,$output);
 		  $sideB->copy_whitespace($output);
 		  $out=$this->Format($output);
 		  echo $out;
-	
+
 	}
 
 }
 else{
-	echo "<em>You are not authorized to view this page.</em>" ;
+	echo "<em>You are not authorized to view this page.</em>" ; #i18n
 }
-	
+
 	// Side : a string for wdiff
-	
+
 	class Side {
 	    var $position;
 	    var $cursor;
@@ -196,7 +196,7 @@ else{
 	       $this->argument=array();
 	       $this->length=strlen($this->content);
 	       $this->character=substr($this->content,0,1);
-	       
+
 	    }
 
 	    function getposition() {
@@ -216,7 +216,7 @@ else{
 	    }
 
 	    function nextchar() {
-	       $this->cursor++; 
+	       $this->cursor++;
 	       $this->character=substr($this->content,$this->cursor,1);
 	    }
 
@@ -244,14 +244,14 @@ else{
 		 $out .="\n";
 	       }
 	    }
-	    
+
 	    function init() {
 	       $this->position=0;
 	       $this->cursor=0;
 	       $this->directive='';
 	       $this->argument=array();
 	       $this->character=substr($this->content,0,1);
-	    }     
+	    }
 
 	    function isspace($char) {
 	       if (ereg('[[:space:]]',$char)) {
@@ -325,16 +325,16 @@ else{
 
 	 function decode_directive_line() {
 
-	  $value=0;                    
-	  $state=0;                   
-	  $error=0;                  
+	  $value=0;
+	  $state=0;
+	  $error=0;
 
 	  while (!$error && $state < 4) {
 	      if ($this->isdigit($this->character)) {
 		  $value = 0;
 		  while($this->isdigit($this->character)) {
 		      $value = 10 * $value + $this->character - '0';
-		      $this->nextchar(); 
+		      $this->nextchar();
 		  }
 	      }
 	      else if ($state != 1 && $state != 3)
@@ -401,7 +401,7 @@ else{
 	    var $type;
 	    var $orig;
 	    var $final;
-	    
+
 
 	    function norig() {
 		return $this->orig ? sizeof($this->orig) : 0;
@@ -414,7 +414,7 @@ else{
 
 	class _DiffOp_Copy extends _DiffOp {
 	    var $type = 'copy';
-	    
+
 	    function _DiffOp_Copy ($orig, $final = false) {
 		if (!is_array($final))
 		    $final = $orig;
@@ -426,7 +426,7 @@ else{
 
 	class _DiffOp_Delete extends _DiffOp {
 	    var $type = 'delete';
-	    
+
 	    function _DiffOp_Delete ($lines) {
 		$this->orig = $lines;
 		$this->final = false;
@@ -436,7 +436,7 @@ else{
 
 	class _DiffOp_Add extends _DiffOp {
 	    var $type = 'add';
-	    
+
 	    function _DiffOp_Add ($lines) {
 		$this->final = $lines;
 		$this->orig = false;
@@ -446,15 +446,15 @@ else{
 
 	class _DiffOp_Change extends _DiffOp {
 	    var $type = 'change';
-	    
+
 	    function _DiffOp_Change ($orig, $final) {
 		$this->orig = $orig;
 		$this->final = $final;
 	    }
 
 	}
-		
-	      
+
+
 	/**
 	 * Class used internally by Diff to actually compute the diffs.
 	 *
@@ -487,7 +487,7 @@ else{
 		unset($this->seq);
 		unset($this->in_seq);
 		unset($this->lcs);
-		 
+
 		// Skip leading common lines.
 		for ($skip = 0; $skip < $n_from && $skip < $n_to; $skip++) {
 		    if ($from_lines[$skip] != $to_lines[$skip])
@@ -501,7 +501,7 @@ else{
 			break;
 		    $this->xchanged[$xi] = $this->ychanged[$yi] = false;
 		}
-		
+
 		// Ignore lines which do not exist in both files.
 		for ($xi = $skip; $xi < $n_from - $endskip; $xi++)
 		    $xhash[$from_lines[$xi]] = 1;
@@ -553,7 +553,7 @@ else{
 		    $add = array();
 		    while ($yi < $n_to && $this->ychanged[$yi])
 			$add[] = $to_lines[$yi++];
-		    
+
 		    if ($delete && $add)
 			$edits[] = new _DiffOp_Change($delete, $add);
 		    elseif ($delete)
@@ -563,7 +563,7 @@ else{
 		}
 		return $edits;
 	    }
-	    
+
 
 	    /* Divide the Largest Common Subsequence (LCS) of the sequences
 	     * [XOFF, XLIM) and [YOFF, YLIM) into NCHUNKS approximately equally
@@ -583,7 +583,7 @@ else{
 	     */
 	    function _diag ($xoff, $xlim, $yoff, $ylim, $nchunks) {
 		$flip = false;
-		
+
 		if ($xlim - $xoff > $ylim - $yoff) {
 		    // Things seems faster (I'm not sure I understand why)
 		    // when the shortest sequence in X.
@@ -603,7 +603,7 @@ else{
 		$this->seq[0]= $yoff - 1;
 		$this->in_seq = array();
 		$ymids[0] = array();
-	    
+
 		$numer = $xlim - $xoff + $nchunks - 1;
 		$x = $xoff;
 		for ($chunk = 0; $chunk < $nchunks; $chunk++) {
@@ -770,14 +770,14 @@ else{
 		     */
 		    while ($j < $other_len && $other_changed[$j])
 			$j++;
-		    
+
 		    while ($i < $len && ! $changed[$i]) {
 			USE_ASSERTS && assert('$j < $other_len && ! $other_changed[$j]');
 			$i++; $j++;
 			while ($j < $other_len && $other_changed[$j])
 			    $j++;
 		    }
-		    
+
 		    if ($i == $len)
 			break;
 
@@ -859,7 +859,7 @@ else{
 	/**
 	 * Class representing a 'diff' between two sequences of strings.
 	 */
-	class Diff 
+	class Diff
 	{
 	    var $edits;
 
@@ -878,7 +878,7 @@ else{
 
 	}
 
-		    
+
 
 	/**
 	 * A class to format Diffs
@@ -963,13 +963,13 @@ else{
 
 		return $xbeg . ($xlen ? ($ylen ? 'c' : 'd') : 'a') . $ybeg;
 	    }
-	    
+
 	    function _start_block($header) {
 		echo $header."\n";
 	    }
 
 	}
-	
+
 
 ?>
 </div>

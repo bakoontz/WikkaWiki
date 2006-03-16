@@ -1,6 +1,21 @@
 <div class="page">
 <?php
 
+// constant section
+define('ACLS_UPDATED', 'Access control lists updated.');
+define('NO_PAGE_OWNER', '(Nobody)');
+define('PAGE_OWNERSHIP_CHANGED', "Ownership changed to %s");  // %s - name of the new owner
+define('NOT_PAGE_OWNER', "You're not the owner of this page.");
+define('ACL_CHANGE_FORM_HEADER', "Access Control Lists for %s"); // %s - name of the page
+define('READ_ACL_LABEL', 'Read ACL:');
+define('WRITE_ACL_LABEL', 'Write ACL:');
+define('COMMENT_ACL_LABEL', 'Comments ACL:');
+define('SET_PAGE_OWNER_LABEL', 'Set Page Owner:');
+define('SET_PAGE_OWNER_CURRENT_LABEL', '(Current Owner)');
+define('SET_PAGE_OWNER_PUBLIC_LABEL','(Public)');
+define('SET_NO_PAGE_OWNER_LABEL', '(Nobody - Set free)');
+define('ACL_SYNTAX_HELP', '===Syntax:=== ---* = Everyone ---+ = Registered users ---Or enter individual user ""WikiNames"", one per line ---""--------------------------------------"" ---Note: Any of these items can be negated with a ! ---!* = No one ---!+ = Anonymous users ---!""JohnDoe"" = ""JohnDoe"" will be denied access. --- --- //Be aware that the ACLs are tested in the order specified.// ---So be sure to specify * on a separate line ---**after** negating any users--not before.--- Otherwise, the * everyone condition will always give access ---before the list of users that should not have access is tested.'); // gets wiki-formatted
+
 if ($this->UserIsOwner())
 {
 	if ($_POST)
@@ -9,10 +24,10 @@ if ($this->UserIsOwner())
 		$default_read_acl = $this->GetConfigValue("default_read_acl");
 		$default_write_acl = $this->GetConfigValue("default_write_acl");
 		$default_comment_acl = $this->GetConfigValue("default_comment_acl");
-		$posted_read_acl = $_POST["read_acl"];			
-		$posted_write_acl = $_POST["write_acl"];			
-		$posted_comment_acl = $_POST["comment_acl"];	
-		$message = "";	
+		$posted_read_acl = $_POST["read_acl"];
+		$posted_write_acl = $_POST["write_acl"];
+		$posted_comment_acl = $_POST["comment_acl"];
+		$message = "";
 
 		// store lists only if ACLs have previously been defined,
 		// or if the posted values are different than the defaults
@@ -23,16 +38,16 @@ if ($this->UserIsOwner())
 			$this->SaveACL($this->GetPageTag(), "read", $this->TrimACLs($posted_read_acl));
 			$this->SaveACL($this->GetPageTag(), "write", $this->TrimACLs($posted_write_acl));
 			$this->SaveACL($this->GetPageTag(), "comment", $this->TrimACLs($posted_comment_acl));
-			$message = "Access control lists updated.";		
+			$message = ACLS_UPDATED;
 		}
 
 		// change owner?
 		$newowner = $_POST["newowner"];
 		if (($newowner <> "same") and ($this->GetPageOwner($this->GetPageTag()) <> $newowner))
 		{
-			if ($newowner == "") $newowner = "(Nobody)"; 
+			if ($newowner == "") $newowner = NO_PAGE_OWNER;
 			$this->SetPageOwner($this->GetPageTag(), $newowner);
-			$message .= "  Ownership changed to ".$newowner.".";
+			$message .= sprintf(PAGE_OWNERSHIP_CHANGED, $newowner);
 		}
 
 		// redirect back to page
@@ -42,22 +57,22 @@ if ($this->UserIsOwner())
 	{
 		// show form
 		?>
-		<h3>Access Control Lists for <?php echo $this->Link($this->GetPageTag()) ?></h3>
+		<h3> <?php printf(ACL_CHANGE_FORM_HEADER, $this->Link($this->GetPageTag())); ?></h3>
 		<br />
-		
+
 		<?php echo $this->FormOpen("acls") ?>
 		<table border="0" cellspacing="0" cellpadding="0">
 			<tr>
 				<td valign="top" style="padding-right: 20px">
-					<strong>Read ACL:</strong><br />
+					<strong><?php echo READ_ACL_LABEL ?></strong><br />
 					<textarea name="read_acl" rows="4" cols="20"><?php echo $this->ACLs["read_acl"] ?></textarea>
 				<td>
 				<td valign="top" style="padding-right: 20px">
-					<strong>Write ACL:</strong><br />
+					<strong><?php echo WRITE_ACL_LABEL ?></strong><br />
 					<textarea name="write_acl" rows="4" cols="20"><?php echo $this->ACLs["write_acl"] ?></textarea>
 				<td>
 				<td valign="top" style="padding-right: 20px">
-					<strong>Comments ACL:</strong><br />
+					<strong><?php echo COMMENT_ACL_LABEL ?></strong><br />
 					<textarea name="comment_acl" rows="4" cols="20"><?php echo $this->ACLs["comment_acl"] ?></textarea>
 				<td>
 			</tr>
@@ -68,11 +83,11 @@ if ($this->UserIsOwner())
 					<input type="button" value="Cancel" onclick="history.back();" style="width: 120px" />
 				</td>
 				<td colspan="3">
-					<strong>Set Page Owner:</strong><br />
+					<strong><?php echo SET_PAGE_OWNER_LABEL; ?></strong><br />
 					<select name="newowner">
-						<option value="same"><?php echo $this->GetPageOwner() ?> (Current Owner)</option>
-						<option value="(Public)">(Public)</option>
-						<option value="">(Nobody - Set free)</option>
+						<option value="same"><?php echo $this->GetPageOwner().' '.SET_PAGE_OWNER_CURRENT_LABEL; ?></option>
+						<option value="(Public)"><?php echo SET_PAGE_OWNER_PUBLIC_LABEL; ?></option>
+						<option value=""><?php echo SET_NO_PAGE_OWNER_LABEL; ?></option>
 						<?php
 						if ($users = $this->LoadUsers())
 						{
@@ -87,21 +102,7 @@ if ($this->UserIsOwner())
 			</tr>
 			<tr>
 				<td colspan="3">
-				<br /><h4>Syntax:</h4><br />
-					* = Everyone<br />
-					+ = Registered users<br />
-					Or enter individual user WikiNames, one per line<br />
-					--------------------------------------<br />
-					Note: Any of these items can be negated with a !<br />
-					!* = No one<br />
-					!+ = Anonymous users<br />
-					!JohnDoe = JohnDoe will be denied access.<br />
-					<br />
-					<em>Be aware that the ACLs are tested in the order specified.</em>
-					<br/ >So be sure to specify * on a separate line 
-					<br /><b>after</b> negating any users--not before.
-					<br/ >Otherwise, the * everyone condition will always give access 
-					<br/ >before the list of users that should not have access is tested. 
+				<br /><?php echo $this->Format(ACL_SYNTAX_HELP); ?>
 				<td>
 			</tr>
 		</table>
@@ -111,7 +112,7 @@ if ($this->UserIsOwner())
 }
 else
 {
-	print("<em>You're not the owner of this page.</em>");
+	print('<em>'.NOT_PAGE_OWNER.'</em>');
 }
 
 ?>

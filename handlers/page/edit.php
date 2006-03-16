@@ -1,7 +1,23 @@
 <div class="page">
 <?php
+
+// constant section
+define('ERROR_INVALID_PAGE_NAME', 'The page name is invalid. Valid page names must start with a letter and contain only letters and numbers.');
+define('ERROR_OVERWRITE_ALERT', 'OVERWRITE ALERT: This page was modified by someone else while you were editing it. --- Please copy your changes and re-edit this page.'); // gets wikka-formatted
+define('ERROR_NO_WRITE_ACCESS', "You don't have write access to this page. You might need to register an account to get write access.");
+//define('ERROR_PAGE_NAME_TOO_LONG', '');
+define('PAGE_EDIT_NOTE_FORM_LABEL', 'Please add a note on your edit.');
+define('PAGE_PREVIEW_LABEL', 'Preview');
+define('PAGE_PREVIEW_NOTE_FORM_LABEL', 'Note on your edit.');
+define('STORE_BUTTON', 'Store');
+define('PREVIEW_BUTTON', 'Preview');
+define('RE_EDIT_BUTTON', 'Re-Edit');
+define('CANCEL_BUTTON', 'Cancel');
+define('VIEW_FORMATTING_CODE_LINK_TITLE', 'View formatting code for this page');
+define('VIEW_FORMATTING_CODE_LINK_LABEL', 'Click to view page formatting code');
+
 if (!(preg_match("/^[A-Za-zÄÖÜßäöü]+[A-Za-z0-9ÄÖÜßäöü]*$/s", $this->tag))) {
-	echo '<em>The page name is invalid. Valid page names must start with a letter and contain only letters and numbers.</em>';
+	echo '<em>'.ERROR_INVALID_PAGE_NAME.'</em>';
 }
 elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 {
@@ -25,7 +41,7 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 			{
 				if ($this->page['id'] != $_POST['previous'])
 				{
-					$error = 'OVERWRITE ALERT: This page was modified by someone else while you were editing it.<br />'."\n".'Please copy your changes and re-edit this page.';
+					$error = $this->Format(OVERWRITE_ALERT);
 				}
 			}
 			// store
@@ -76,12 +92,12 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 			"<hr />\n".
 			// We need to escape ALL entity refs before display so we display them _as_ entities instead of interpreting them
 			// so we use htmlspecialchars on the edit note (as on the body)
-			'<input size="50" type="text" name="note" value="'.htmlspecialchars($note).'"/> Note on your edit.<br />'."\n".
-			'<input name="submit" type="submit" value="Store" accesskey="s" />'."\n".
-			'<input name="submit" type="submit" value="Re-Edit" accesskey="p" />'."\n".
-			'<input type="button" value="Cancel" onclick="document.location=\''.$this->href('').'\';" />'."\n";
+			'<input size="50" type="text" name="note" value="'.htmlspecialchars($note).'"/> '.PAGE_PREVIEW_NOTE_FORM_LABEL.'<br />'."\n".
+			'<input name="submit" type="submit" value="'.STORE_BUTTON.'" accesskey="s" />'."\n".
+			'<input name="submit" type="submit" value="'.RE_EDIT_BUTTON.'" accesskey="p" />'."\n".
+			'<input type="button" value="'.CANCEL_BUTTON.'" onclick="document.location=\''.$this->href('').'\';" />'."\n";
 
-		$output .= '<div class="previewhead">Preview</div>'."\n";
+		$output .= '<div class="previewhead">'.PAGE_PREVIEW_LABEL.'</div>'."\n";
 
 		$output .= $this->Format($body);
 
@@ -101,8 +117,8 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 	elseif (!$this->page && strlen($this->tag) > $maxtaglen)				# rename page
 	{
 		$this->tag = substr($this->tag, 0, $maxtaglen); // truncate tag to feed a backlinks-handler with the correct value. may be omited. it only works if the link to a backlinks-handler is built in the footer.
-		$output  = '<div class="error">Tag too long! $maxtaglen characters max.</div><br />'."\n";
-		$output .= 'FYI: Clicking on Rename will automatically truncate the tag to the correct size.<br /><br />'."\n";
+		$output  = '<div class="error">Tag too long! $maxtaglen characters max.</div><br />'."\n"; #i18n
+		$output .= 'FYI: Clicking on Rename will automatically truncate the tag to the correct size.<br /><br />'."\n"; #i18n
 		$output .= $this->FormOpen('edit');
 		$output .= '<input name="newtag" size="75" value="'.$this->htmlspecialchars_ent($this->tag).'" />';
 		$output .= '<input name="submit" type="submit" value="Rename" />'."\n";
@@ -131,9 +147,9 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 			//note add Edit
 			// We need to escape ALL entity refs before display so we display them _as_ entities instead of interpreting them
 			// so we use htmlspecialchars on the edit note (as on the body)
-			'<input size="40" type="text" name="note" value="'.htmlspecialchars($note).'" /> Please add a note on your edit.<br />'."\n".
+			'<input size="40" type="text" name="note" value="'.htmlspecialchars($note).'" /> '.PAGE_EDIT_NOTE_FORM_LABEL.'<br />'."\n".
 			//finish
-			'<input name="submit" type="submit" value="Store" accesskey="s" /> <input name="submit" type="submit" value="Preview" accesskey="p" /> <input type="button" value="Cancel" onclick="document.location=\''.$this->Href('').'\';" />'."\n".
+			'<input name="submit" type="submit" value="'.STORE_BUTTON.'" accesskey="s" /> <input name="submit" type="submit" value="'.PREVIEW_BUTTON.'" accesskey="p" /> <input type="button" value="'.CANCEL_BUTTON.'" onclick="document.location=\''.$this->Href('').'\';" />'."\n".
 			$this->FormClose();
 
 		if ($this->GetConfigValue('gui_editor') == 1) {
@@ -148,10 +164,10 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 }
 else
 {
-	$message =	'<em>You don\'t have write access to this page. You might need to register an account to get write access.</em><br />'."\n".
+	$message =	'<em>'.ERROR_NO_WRITE_ACCESS.'</em><br />'."\n".
 			"<br />\n".
-			'<a href="'.$this->Href('showcode').'" title="Click to view page formatting code">View formatting code for this page</a>'.
-			"<br />\n";
+			'<a href="'.$this->Href('showcode').'" title="'.VIEW_FORMATTING_CODE_LINK_LABEL.'">'.VIEW_FORMATTING_CODE_LINK_TITLE.'</a>'.
+			"<br />\n"; #i18n
 	echo $message;
 }
 ?>

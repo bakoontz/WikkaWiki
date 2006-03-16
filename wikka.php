@@ -55,6 +55,20 @@ if ( ! function_exists("mysql_real_escape_string") )
 	}
 }
 
+// constants
+define('WRONG_PHP_VERSION', '$_REQUEST[] not found. Wakka requires PHP 4.1.0 or higher!?');
+define('WIKI_UPGRADE', 'This site is currently being upgraded. Please try again later!');
+define('SETUP_INTERFACE_HEADER', ' %s Install/Upgrade Interface'); // %s - name of the wiki
+define('SETUP_FILE_MISSING', 'Installation/Upgrade cancelled. The file "%s".php could not be found!'); // %s - name of missing file
+define('NO_DATABASE_CONNECTION', 'The wiki is currently unavailable: Unable to connect to the database.');
+define('PAGE_GENERATION_TIME', 'Page was generated in %.4f seconds'); // %.4f - time
+
+// class constants
+define('ACTION_NOT_FOUND', 'Unknown action "%s".'); // %s - name of the action
+define('ACTION_NO_SPECIALCHARS', 'The action name must not contain special characters.');
+define('METHOD_NOT_FOUND', 'Unknown method "%s"'); // %s - path and name of the method
+define('FORMATTER_NOT_FOUND', 'Formatter %s not found!'); // %s - name of the formatter
+
 class Wakka
 {
 	var $config = array();
@@ -791,12 +805,12 @@ class Wakka
 				}
 				$vars['wikka_vars'] = trim($vars_temp); // <<< add the buffered parameter-string to the array
 			} else {
-				return '<em class="error">Unknown action; the action name must not contain special characters.</em>'; // <<< the pattern ([A-Za-z0-9])\s+ didn't match!
+				return '<em class="error">'.sprintf(ACTION_NOT_FOUND, $action).' '.ACTION_NO_SPECIALCHARS.'</em>'; // <<< the pattern ([A-Za-z0-9])\s+ didn't match!
 			}
 		}
-		if (!preg_match('/^[a-zA-Z0-9]+$/', $action)) return '<em class="error">Unknown action; the action name must not contain special characters.</em>';
+		if (!preg_match('/^[a-zA-Z0-9]+$/', $action)) return '<em class="error">'.sprintf(ACTION_NOT_FOUND, $action).' '.ACTION_NO_SPECIALCHARS.'</em>';
 		if (!$forceLinkTracking) $this->StopLinkTracking();
-		$result = $this->IncludeBuffered(strtolower($action).'.php', '<em class="error">Unknown action "'.$action.'"</em>', $vars, $this->config['action_path']);
+		$result = $this->IncludeBuffered(strtolower($action).'.php', '<em class="error">'.sprintf(ACTION_NOT_FOUND, $action).'</em>', $vars, $this->config['action_path']);
 		$this->StartLinkTracking();
 		return $result;
 	}
@@ -808,9 +822,9 @@ class Wakka
 		}
 		if (!$handler = $this->page["handler"]) $handler = "page";
 		$methodLocation = $handler."/".$method.".php";
-		return $this->IncludeBuffered($methodLocation, "<em>Unknown method \"$methodLocation\"</em>", "", $this->config["handler_path"]);
+                 return $this->IncludeBuffered($methodLocation, '<em>'.sprintf(METHOD_NOT_FOUND, $methodLocation).'</em>', "", $this->config["handler_path"]);
 	}
-	function Format($text, $formatter="wakka") { return $this->IncludeBuffered($formatter.".php", "<em>Formatter \"$formatter\" not found</em>", compact("text"), $this->config['wikka_formatter_path']); }
+	function Format($text, $formatter="wakka") { return $this->IncludeBuffered($formatter.".php", '<em>'.FORMATTER_NOT_FOUND.'</em>', compact("text"), $this->config['wikka_formatter_path']); }
 
 	// USERS
 	function LoadUser($name, $password = 0) { return $this->LoadSingle("select * from ".$this->config['table_prefix']."users where name = '".mysql_real_escape_string($name)."' ".($password === 0 ? "" : "and password = '".mysql_real_escape_string($password)."'")." limit 1"); }
@@ -1034,7 +1048,7 @@ class Wakka
 }
 
 // stupid version check
-if (!isset($_REQUEST)) die('$_REQUEST[] not found. Wakka requires PHP 4.1.0 or higher!');
+if (!isset($_REQUEST)) die(WRONG_PHP_VERSION);
 
 // workaround for the amazingly annoying magic quotes.
 function magicQuotesSuck(&$a)
@@ -1138,9 +1152,9 @@ if (file_exists("locked")) {
 	}
 
 	if ($ask) {
-		header("WWW-Authenticate: Basic realm=\"".$wakkaConfig["wakka_name"]." Install/Upgrade Interface\"");
+		header('WWW-Authenticate: Basic realm="'.sprintf(SETUP_INTERFACE_HEADER, $wakkaConfig["wakka_name"]).'"');
 		header("HTTP/1.0 401 Unauthorized");
-		print("This site is currently being upgraded. Please try again later.");
+                 print WIKI_UPGRADE;
 		exit;
     }
 }
@@ -1151,7 +1165,7 @@ if ($wakkaConfig["wakka_version"] != WAKKA_VERSION)
 	// start installer
 	if (!$installAction = trim($_REQUEST["installAction"])) $installAction = "default";
 	include("setup/header.php");
-	if (file_exists("setup/".$installAction.".php")) include("setup/".$installAction.".php"); else print("<em>Invalid action</em>");
+	if (file_exists("setup/".$installAction.".php")) include("setup/".$installAction.".php"); else printf('<em>'.SETUP_FILE_MISSING.'</em>',$installAction);
 	include("setup/footer.php");
 	exit;
 }
@@ -1174,7 +1188,7 @@ $wakka =& new Wakka($wakkaConfig);								# create object by reference
 // check for database access
 if (!$wakka->dblink)
 {
-	echo "<p>The wiki is currently unavailable. <br /><br />Error: Unable to connect to the MySQL database.</p>";
+	echo '<em>'.NO_DATABASE_CONNECTION.'</em>';
       exit;
 }
 
@@ -1188,7 +1202,7 @@ if (!preg_match("/(xml|raw|mm)$/", $method))
 	//Calculate the difference
 	    $totaltime = ($tend - $tstart);
 	//Output result
-	    printf ("<div class=\"smallprint\">Page was generated in %.4f seconds</div>\n</body>\n</html>", $totaltime);
+	    printf ('<div class="smallprint">'.PAGE_GENERATION_TIME."</div>\n</body>\n</html>", $totaltime);
 }
 
 $content =  ob_get_contents();

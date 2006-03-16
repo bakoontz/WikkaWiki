@@ -1,5 +1,8 @@
 <?php
 
+// constant section
+define(ERROR_DELETE_COMMENT_NOT_ALLOWED', "Sorry, you're not allowed to delete this comment!");
+
 //select comment and delete it
 $comment_id = intval(trim($_POST["comment_id"]));
 $comment = $this->LoadSingle("select user from ".$this->config["table_prefix"]."comments where id = '".$comment_id."' limit 1");
@@ -14,7 +17,7 @@ if ($this->UserIsOwner() || $comment["user"]==$current_user)
 }
 else
 {
-	print("<div class=\"page\"><em>Sorry, you're not allowed to delete this comment!</em></div>\n");
+	print('<div class="page"><em>'.ERROR_DELETE_COMMENT_NOT_ALLOWED."</em></div>\n");
 }
 
 ?>

@@ -1,5 +1,7 @@
 <?php
 
+define('CIRCULAR_REFERENCE_DETECTED', 'Circular reference detected');
+
 if (!$page) $page = $wikka_vars;
 $page = strtolower($page);
 if (!$this->config["includes"]) $this->config["includes"][] = strtolower($this->tag);
@@ -10,6 +12,6 @@ if (!in_array($page, $this->config["includes"]) && $page != $this->tag) {
         	$page = $this->LoadPage($page);
 		print $this->Format($page["body"]);
 	}
-} else print "<span class='error'>Circular reference detected</span>";
+} else print '<span class="error">'.CIRCULAR_REFERENCE_DETECTED.'</span>';
 
 ?>
