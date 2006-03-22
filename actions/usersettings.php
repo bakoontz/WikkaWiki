@@ -33,7 +33,7 @@ define('ERROR_EMAIL_ADDRESS_REQUIRED', "You must specify an email address.");
 define('ERROR_INVALID_EMAIL_ADDRESS', "That doesn't quite look like an email address.");
 define('REGISTERED_USER_LOGIN_LABEL', "If you're already a registered user, log in here!");
 define('REGISTER_HEADING', "===Login/Register===");
-define('WIKINAME_LABEL', "Your <abbrv title=\"A WikiName is formed by two or more capitalized words without space, e.g. JohnDoe\">WikiName</abbrv>:");
+define('WIKINAME_LABEL', "Your <abbr title=\"A WikiName is formed by two or more capitalized words without space, e.g. JohnDoe\">WikiName</abbr>:");
 define('PASSWORD_LABEL', "Password (min. %s chars):");
 define('LOGIN_BUTTON_LABEL', "Login");
 define('NEW_USER_REGISTER_LABEL', "Stuff you only need to fill in when you're logging in for the first time (and thus signing up as a new user on this site).");
