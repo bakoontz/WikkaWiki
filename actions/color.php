@@ -26,8 +26,8 @@
 *
 * @constraint    at least one valid parameter for $c (or $hex or $fg) or $bg is required
 *
-* @documentation  {@link http://wikkawiki.org/PatternValidColorInfo}
-* @documentation  {@link http://wikkawiki.org/ColorActionInfoFR}
+* @documentation  {@link http://wikkawiki.org/PatternValidColorInfoFR}
+* @documentation  {@link http://wikkawiki.org/ColorActionInfo}
 *
 * @todo     make it part of the formatter instead of using an action
 */
@@ -121,4 +121,3 @@ if (is_array($vars))
 }
 
 ?>
-

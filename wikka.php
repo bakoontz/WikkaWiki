@@ -1155,6 +1155,15 @@ if ($wakkaConfig["wakka_version"] != WAKKA_VERSION)
 	include("setup/footer.php");
 	exit;
 }
+#Fix lowercase mod_rewrite bug: Url rewritting lowercases the page name.
+if (strtolower($page) == $page)
+{
+ $pattern = preg_quote($page, '/');
+ if (preg_match("/($pattern)/i", urldecode($_SERVER['REQUEST_URI']), $match_url))
+ {
+  $page = $match_url[1];
+ }
+}
 
 // start session
 session_start();
