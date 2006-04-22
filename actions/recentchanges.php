@@ -1,4 +1,5 @@
 <?php
+if (!defined('PAGE_EDITOR_DIVIDER')) define ('PAGE_EDITOR_DIVIDER', '&#8594;');
 if ($pages = $this->LoadRecentlyChanged())
 {
 	$curday = "";
@@ -33,9 +34,9 @@ if ($pages = $this->LoadRecentlyChanged())
 			if ($page["note"]) $note=" <span class=\"pagenote\">[".$page["note"]."]</span>"; else $note ="";
 			$pagetag = $page["tag"];
 			if ($this->HasAccess("read", $pagetag)) {
-					print("&nbsp;&nbsp;&nbsp;&nbsp;(".$this->Link($pagetag, "revisions", $timeformatted, 0, 1, "View recent revisions list for ".$pagetag).") [".$this->Link($pagetag, "history", "history", 0, 1, "View edit history of ".$pagetag)."] - &nbsp;".$this->Link($pagetag, "", "", 0)." &rArr; $page_edited_by ".$note."<br />");
+					print("&nbsp;&nbsp;&nbsp;&nbsp;(".$this->Link($pagetag, "revisions", $timeformatted, 0, 1, "View recent revisions list for ".$pagetag).") [".$this->Link($pagetag, "history", "history", 0, 1, "View edit history of ".$pagetag)."] - &nbsp;".$this->Link($pagetag, "", "", 0).' '.PAGE_EDITOR_DIVIDER.' '.$page_edited_by.' '.$note."<br />");
 			} else {
-					print("&nbsp;&nbsp;&nbsp;&nbsp;($timeformatted) [history] - &nbsp;".$page["tag"]." &rArr; $page_edited_by ".$note."<br />");
+					print("&nbsp;&nbsp;&nbsp;&nbsp;($timeformatted) [history] - &nbsp;".$page["tag"].' '.PAGE_EDITOR_DIVIDER.' '.$page_edited_by.' '.$note."<br />");
 			}
 		}
 	}
