@@ -318,6 +318,19 @@ abbrv {
 	margin: 0px;
 }
 
+.grabcode {
+	float:right;
+	margin-right:20px;
+	margin-top:0px;
+	font-size: 10px;
+	color: #000;
+	font-weight: normal;
+	font-family: Verdana, Arial, sans-serif;
+	background-color: #DDD;
+	text-decoration: none;
+	height:18px;
+}
+
 /* system information */
 
 .missingpage {
