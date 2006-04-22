@@ -124,11 +124,13 @@ if (!function_exists("wakka2callback"))
 		else if (preg_match("/^([a-z]+:\/\/\S+?)([^[:alnum:]^\/])?$/", $thing, $matches))
 		{
 			$url = $matches[1];
-			if (preg_match("/^(.*)\.(gif|jpg|png)/si", $url)) {
-				return "<img src=\"$url\" alt=\"image\" />".$matches[2];
-			} else
+			/* Inline images are disabled for security reason, use {{image action}} #142
+			But if you still need this functionality, update this file like below
+			if (preg_match("/\.(gif|jpg|png|svg)$/si", $url)) {
+				return '<img src="'.$wakka->Link($url).'" alt="image" />'.$wakka->htmlspecialchars_ent($matches[2]);
+			} else */
 			// Mind Mapping Mod
-			if (preg_match("/^(.*)\.(mm)/si", $url)) {
+			if (preg_match("/\.(mm)$/si", $url)) { #145
 				return $wakka->Action("mindmap ".$url);
 			} else
 				return $wakka->Link($url).$matches[2];
@@ -190,14 +192,14 @@ if (!function_exists("wakka2callback"))
 		else if (preg_match("/^%%(.*?)%%$/s", $thing, $matches))
 		{
 			/*
-			 * Note: this routine is rewritten such that (new) language formatters
-			 * will automatically be found, whether they are GeSHi language config files
-			 * or "internal" Wikka formatters.
-			 * Path to GeSHi language files and Wikka formatters MUST be defined in config.
-			 * For line numbering (GeSHi only) a starting line can be specified after the language
-			 * code, separated by a ; e.g., %%(php;27)....%%.
-			 * Specifying >= 1 turns on line numbering if this is enabled in the configuration.
-			 */
+				* Note: this routine is rewritten such that (new) language formatters
+				* will automatically be found, whether they are GeSHi language config files
+				* or "internal" Wikka formatters.
+				* Path to GeSHi language files and Wikka formatters MUST be defined in config.
+				* For line numbering (GeSHi only) a starting line can be specified after the language
+				* code, separated by a ; e.g., %%(php;27)....%%.
+				* Specifying >= 1 turns on line numbering if this is enabled in the configuration.
+				*/
 			$code = $matches[1];
 			// if configuration path isn't set, make sure we'll get an invalid path so we
 			// don't match anything in the home directory

@@ -635,6 +635,9 @@ class Wakka
 		if (!$text) $text = $tag;
 		// escape text?
 		if ($escapeText) $text = $this->htmlspecialchars_ent($text);
+		$tag = $this->htmlspecialchars_ent($tag); #142 & #148
+		$method = $this->htmlspecialchars_ent($method);
+		$title = $this->htmlspecialchars_ent($title);
 		$url = '';
 
 		// is this an interwiki link?
@@ -1155,15 +1158,6 @@ if ($wakkaConfig["wakka_version"] != WAKKA_VERSION)
 	include("setup/footer.php");
 	exit;
 }
-#Fix lowercase mod_rewrite bug: Url rewritting lowercases the page name.
-if (strtolower($page) == $page)
-{
- $pattern = preg_quote($page, '/');
- if (preg_match("/($pattern)/i", urldecode($_SERVER['REQUEST_URI']), $match_url))
- {
-  $page = $match_url[1];
- }
-}
 
 // start session
 session_start();
@@ -1177,6 +1171,15 @@ $wakka = preg_replace("/^\//", "", $wakka);
 // split into page/method
 if (preg_match("#^(.+?)/(.*)$#", $wakka, $matches)) list(, $page, $method) = $matches;
 else if (preg_match("#^(.*)$#", $wakka, $matches)) list(, $page) = $matches;
+#Fix lowercase mod_rewrite bug: Url rewritting lowercases the page name. #135
+if (strtolower($page) == $page)
+{
+ $pattern = preg_quote($page, '/');
+ if (preg_match("/($pattern)/i", urldecode($_SERVER['REQUEST_URI']), $match_url))
+ {
+  $page = $match_url[1];
+ }
+}
 
 // create wakka object
 $wakka =& new Wakka($wakkaConfig);								# create object by reference
