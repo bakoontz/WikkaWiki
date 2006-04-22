@@ -1113,6 +1113,7 @@ $wakkaDefaultConfig = array(
 	'geshi_header' => 'div',				# 'div' (default) or 'pre' to surround code block
 	'geshi_line_numbers' => '1',			# disable line numbers (0), or enable normal (1) or fancy line numbers (2)
 	'geshi_tab_width' => '4',				# set tab width
+	'grabcode_button' => 1,				# allow code block downloading
 
 	"wikiping_server" 		=> "",
 

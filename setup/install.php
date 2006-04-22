@@ -273,6 +273,8 @@ case "1.1.5.3":
 case "1.1.6.0":
 case "1.1.6.1":
 case "trunk": //latest development version from the SVN repository
+	test("Adding a new option to the wikka.config file: grabcode_button", 1);
+	$config["grabcode_button"] = 1;
 }
 
 ?>
