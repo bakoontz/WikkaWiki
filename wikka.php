@@ -1021,6 +1021,11 @@ class Wakka
 			header("Content-type: text/plain");
 			print($this->Method($this->method));
 		}
+		// grabcode page handler
+		elseif ($this->method == "grabcode")
+		{
+			print($this->Method($this->method));
+		}
 		elseif (preg_match('/\.(gif|jpg|png)$/', $this->method))
 		{
 			header('Location: images/' . $this->method);
@@ -1194,7 +1199,7 @@ if (!$wakka->dblink)
 // go!
 if (!isset($method)) $method='';
 $wakka->Run($page, $method);
-if (!preg_match("/(xml|raw|mm)$/", $method))
+if (!preg_match("/(xml|raw|mm|grabcode)$/", $method))
 {
 	   $tend = getmicrotime();
 	//Calculate the difference

@@ -273,6 +273,22 @@ abbrv {
 
 /* code blocks */
 
+.code_header {
+	color: #333;
+	background: #DDD;
+	border-top: 1px solid #888;
+	border-right: 1px solid #888;
+	border-left: 1px solid #888;
+	border-bottom: none;
+	font-family: "Lucida Console", Monaco, monospace;
+	font-size: 9px;
+	padding: 0 3px;
+	width: 95%;
+	margin: 5px auto 0 auto;
+	text-align: left;
+	line-height: 15px;
+}
+
 .code {
 	color: black;
 	background: #ffffee;
