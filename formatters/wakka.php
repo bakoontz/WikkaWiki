@@ -190,7 +190,7 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 			}
 			else
 			{
-				return $this->htmlspecialchars_ent($matches[1]);
+				return $wakka->htmlspecialchars_ent($matches[1]);
 			}
 		}
 		// code text
