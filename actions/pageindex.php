@@ -1,25 +1,58 @@
 <?php
+/**
+* Display an alphabetical list of pages of the wiki.
+*
+* This action checks user read privileges and displays an index of read-accessible pages.
+*
+* @package    Actions
+* @name    pageindex
+*
+* @author    {@link http://wikkawiki.org/GiorgosKontopoulos GiorgosKontopoulos} (added ACL check, first code cleanup)
+* @author    {@link http://wikkawiki.org/DarTar DarTar} (adding doc header, minor code and layout refinements, i18n)
+*
+* @since    1.1.6.2
+*
+* @output   a list of pages accessible to the current user
+* @documentation  {@link http://wikkawiki.org/ColorActionInfo}
+*/
+
+// i18n strings
+define('PAGE_HEADING',"Page Index");
+define('INDEX_CAPTION',"This is an alphabetical list of pages you can read on this server.");
+define('ALL_PAGES',"All");
+define('PAGE_OWNER'," . . . . Owner: %s");
+define('OWNED_PAGES_CAPTION',"Items marked with a * indicate pages that you own.");
+define('ERROR_NO_PAGES_FOUND', "No pages found.");
+
 if ($pages = $this->LoadAllPages())
 {
-	if (isset($_REQUEST["letter"])) $requested_letter = $_REQUEST["letter"]; else $requested_letter = '';
+	// filter by letter
+	if (isset($_REQUEST['letter'])) $requested_letter = $_REQUEST['letter']; else $requested_letter = '';
 	if (!$requested_letter && isset($letter)) $requested_letter = strtoupper($letter); 
+
+	// get things started
 	$cached_username = $this->GetUserName();
 	$user_owns_pages = false;
-	$link = $this->href("", "", "letter=");
-	$index_header = "<strong><a href='$link'>All </a></strong>&nbsp;\n";
-	$index_output = "";
-	$current_character = "";
+	$link = $this->href('', '', 'letter=');
+	$alpha_bar = '<a href="'.$link.'">'.ALL_PAGES.'</a>&nbsp;'."\n";
+	$index_header = INDEX_CAPTION;
+	$index_output = '';
+	$current_character = '';
 	$character_changed = false;
 
+	// get page list
 	foreach ($pages as $page)
 	{
-		$page_owner = $page["owner"];
+		// check user read privileges
+		if (!$this->HasAccess('read', $page['tag'])) continue;
+
+		$page_owner = $page['owner'];
 		// $this->CachePage($page);
 
-		$firstChar = strtoupper($page["tag"][0]);
-		if (!preg_match("/[A-Za-z]/", $firstChar)) $firstChar = "#";
+		$firstChar = strtoupper($page['tag'][0]);
+		if (!preg_match('/[A-Za-z]/', $firstChar)) $firstChar = '#'; //TODO: Internationalization
 		if ($firstChar != $current_character) {
-			$index_header .= "<strong><a href='$link$firstChar'>$firstChar</a></strong>&nbsp;\n";
+			$alpha_bar .= '<a href="'.$link.$firstChar.'">'.$firstChar.'</a>&nbsp;'."\n";
 			$current_character = $firstChar;
 			$character_changed = true;
 		}
@@ -28,21 +61,22 @@ if ($pages = $this->LoadAllPages())
 				$index_output .= "<br />\n<strong>$firstChar</strong><br />\n";
 				$character_changed = false;
 			}
-			$index_output .= $this->Link($page["tag"]);
+			$index_output .= $this->Link($page['tag']);
 
 			if ($cached_username == $page_owner) {                       
-				$index_output .= "*";
+				$index_output .= '*';
 				$user_owns_pages = true;
 			} elseif ($page_owner != '(Public)' && $page_owner != '') {
-				$index_output .= " . . . . Owner: ".$page_owner;
+				$index_output .= sprintf(PAGE_OWNER, $page_owner);
 			}
 		     	$index_output .= "<br />\n";    
 		}
 	}
-	$index_header .= "<br />";
-	if ($user_owns_pages) $index_output .= "<br />\n* Indicates a page that you own.<br />\n";    
-	print $index_header.$index_output;
+	// generate page
+	$index_header .= ($user_owns_pages) ? '---'.OWNED_PAGES_CAPTION : '';
+	echo $this->Format('===='.PAGE_HEADING.'==== --- <<'.$index_header.'<< ::c:: ---'); 
+	echo "\n<strong>".$alpha_bar."</strong><br />\n".$index_output;
 } else {
-	print("<em>No pages found.</em>");
+	echo ERROR_NO_PAGES_FOUND;
 }
 ?>
