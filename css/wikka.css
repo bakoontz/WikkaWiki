@@ -402,6 +402,22 @@ abbrv {
 	color: #888800;
 }
 
+/* Textsearch &amp; textsearchexpanded */
+.tse_keywords
+{
+	font-weight: bold;
+	color: green;
+	background-color: antiquewhite;
+}
+.tse_odd
+{
+	background-color: #eee;
+}
+.tse_even
+{
+	background-color: #dfe;
+}
+
 /* Calendar styling */
 
 /* general styling */

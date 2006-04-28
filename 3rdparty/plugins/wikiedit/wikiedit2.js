@@ -170,7 +170,7 @@ WikiEdit.prototype._TSum = function (Text, Tag, Tag2, Skip)
  }
  else
  {
-  var w = new RegExp("^([ ]*)"+this.begin+"([ ]*)(([*]|([1-9][0-9]*|[a-zA-Z])([.]|[)]))( |))(.*)$");
+  var w = new RegExp("^([ ]*)"+this.begin+"( +|\t+)(([*]|([1-9][0-9]*|[a-zA-Z])([.]|[)]))( |))(.*)$");
   q = Text.match(w);
   if (Skip && q!=null)
   {
