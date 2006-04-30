@@ -34,6 +34,7 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 		static $trigger_l = array(-1, 0, 0, 0, 0, 0);
 		static $output = '';
 		static $valid_filename = '';
+		static $invalid = '';
 
 		global $wakka;
 
@@ -204,16 +205,18 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 			* For line numbering (GeSHi only) a starting line can be specified after the language
 			* code, separated by a ; e.g., %%(php;27)....%%.
 			* Specifying >= 1 turns on line numbering if this is enabled in the configuration.
+			* An optional filename can be specified as well, e.g. %%(php;27;myfile.php)....%%
+			* This filename will be used by the grabcode handler.			
 			*/
 			$code = $matches[1];
 			// if configuration path isn't set, make sure we'll get an invalid path so we
 			// don't match anything in the home directory
 			$geshi_hi_path = isset($wakka->config['geshi_languages_path']) ? $wakka->config['geshi_languages_path'] : '/:/';
 			$wikka_hi_path = isset($wakka->config['wikka_highlighters_path']) ? $wakka->config['wikka_highlighters_path'] : '/:/';
-			// check if a language (and starting line) has been specified
-			if (preg_match("/^\((.+?)(;([0-9]+))?(;(.*))??\)(.*)$/s", $code, $matches))
+			// check if a language (and an optional starting line or filename) has been specified
+			if (preg_match("/^\(([^;]+)(;(\d*?))?(;([^\)\x01-\x1f\*\?\"<>\|]*)(.*))?\)(.*)$/s", $code, $matches))
 			{
-				list(, $language, , $start, , $filename, $code) = $matches;
+				list(, $language, , $start, , $filename, $invalid, $code) = $matches;
 			}
 			// get rid of newlines at start and end (and preceding/following whitespace)
 			// Note: unlike trim(), this preserves any tabs at the start of the first "real" line
@@ -223,7 +226,7 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 			if (isset($language) && isset($wakka->config['geshi_path']) && file_exists($geshi_hi_path.'/'.$language.'.php'))
 			{
 				// check if specified filename is valid and generate code block header
-				if (isset($filename) && (preg_match('/\w[-.\w]*/', $filename))) # TODO: use central regex library for filename validation
+				if (isset($filename) && strlen($filename) > 0 && strlen($invalid) == 0) # TODO: use central regex library for filename validation
 				{
 					$valid_filename = $filename;
 					// create code block header
