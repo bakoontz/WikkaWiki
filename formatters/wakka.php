@@ -208,6 +208,7 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 			* An optional filename can be specified as well, e.g. %%(php;27;myfile.php)....%%
 			* This filename will be used by the grabcode handler.			
 			*/
+			$output = ''; //reinitialize variable
 			$code = $matches[1];
 			// if configuration path isn't set, make sure we'll get an invalid path so we
 			// don't match anything in the home directory
