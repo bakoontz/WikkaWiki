@@ -1,8 +1,8 @@
 <?php
 
 // i18n strings
-define('GRABCODE_BUTTON_VALUE', 'Grab');
-define('GRABCODE_BUTTON_TITLE', 'Download %s');
+if (!defined('GRABCODE_BUTTON_VALUE')) define('GRABCODE_BUTTON_VALUE', 'Grab');
+if (!defined('GRABCODE_BUTTON_TITLE')) define('GRABCODE_BUTTON_TITLE', 'Download %s');
 
 // Note: all possible formatting tags have to be in a single regular expression for this to work correctly.
 
