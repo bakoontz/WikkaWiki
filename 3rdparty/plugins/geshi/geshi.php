@@ -1391,6 +1391,7 @@ class GeSHi
 									$rest_of_comment = htmlentities(substr($part, $i + $com_len, $close_pos - $i), ENT_COMPAT, $this->encoding);
 									if ( ($this->lexic_permissions['COMMENTS']['MULTI'] || $test_str_match == GESHI_START_IMPORTANT) && ($this->line_numbers != GESHI_NO_LINE_NUMBERS || count($this->highlight_extra_lines) > 0) )
 									{
+										$rest_of_comment = preg_replace("/\n(?=\n)/", "\n ", $rest_of_comment); //Note: the replacement character is chr(13).chr(160) Wikka #109
 										// strreplace to put close span and open span around multiline newlines
 										$test_str .= str_replace("\n", "</span>\n<span$attributes>", $rest_of_comment);
 									}
