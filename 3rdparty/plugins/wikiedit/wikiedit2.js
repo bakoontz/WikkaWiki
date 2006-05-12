@@ -378,6 +378,25 @@ WikiEdit.prototype.keyDown = function (event) {
    if (sel)
     res = this.insTag("''", "''", 2);
   break;
+  case 2118: //Ctrl+Shift+F
+   if (event.shiftKey)
+   {
+    try 
+    {
+     if (typeof(sr_dlg) != 'undefined' && (typeof(sr_dlg.show) == 'function')) {sr_dlg.show();}
+     else 
+     {
+      sr_script = document.createElement('script');
+      sr_script.setAttribute('type', 'text/javascript');
+      sr_script.setAttribute('src', this.imagesPath+'x_wikiedit_sr.js');
+      document.body.appendChild(sr_script);
+      sr_launch = function() {setTimeout("(sr_dlg && (typeof(sr_dlg.show)=='function')) ? sr_dlg.show() : sr_launch();", 100);}
+      sr_launch();
+     }
+    }
+    catch (e) {}
+   }
+  break;
   case 4179: //Alt+S
     try {
       if (weSave!=null) weSave();
