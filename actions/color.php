@@ -33,8 +33,8 @@
 */
 
 // *** Constant section ***
-define('ERROR_NO_TEXT_GIVEN','There is no text to highlight!');
-define('ERROR_NO_COLOR_SPECIFIED', 'Sorry, but you did not specify a color for highlighting!');
+if (!defined('ERROR_NO_TEXT_GIVEN')) define('ERROR_NO_TEXT_GIVEN','There is no text to highlight!');
+if (!defined('ERROR_NO_COLOR_SPECIFIED')) define('ERROR_NO_COLOR_SPECIFIED', 'Sorry, but you did not specify a color for highlighting!');
 
 // ***Internal function to test if syntax is valid
 if (!function_exists('color_syntax_is_valid'))
@@ -42,7 +42,8 @@ if (!function_exists('color_syntax_is_valid'))
 	function color_syntax_is_valid($syntax)
 	{
 		//Todo: To be more strict, ensure that when using rgb(r, g, b) syntax, integer values for r, g, and b are less than 256, or if % is used, those values are not greater than 100%
-		define('PATTERN_VALID_COLOR', '/^(?>#(?>[\da-f]{3}){1,2}|rgb\(\s*\d+((?>\.\d*)?%)?\s*(?>,\s*\d+(?(1)(\.\d*)?%)\s*){2}\))$/i');
+		define('PATTERN_VALID_HEX_COLOR', '#(?>[\da-f]{3}){1,2}');
+		define('PATTERN_VALID_RGB_COLOR', 'rgb\(\s*\d+((?>\.\d*)?%)?\s*(?>,\s*\d+(?(1)(\.\d*)?%)\s*){2}\)');
 		$htlm_color_names = array('aliceblue', 'antiquewhite', 'aqua', 'aquamarine', 'azure', 'beige', 'bisque', 'black', 'blanchedalmond', 'blue',
 		'blueviolet', 'brown', 'burlywood', 'cadetblue', 'chartreuse', 'chocolate', 'coral', 'cornflower', 'cornsilk', 'crimson', 'cyan',
 		'darkblue', 'darkcyan', 'darkgoldenrod', 'darkgray', 'darkgreen', 'darkkhaki', 'darkmagenta', 'darkolivegreen', 'darkorange', 'darkorchid',
@@ -60,12 +61,12 @@ if (!function_exists('color_syntax_is_valid'))
 		'background', 'buttonface', 'buttonhighlight', 'buttonshadow', 'buttontext', 'captiontext', 'graytext', 'highlight', 'highlighttext',
 		'inactiveborder', 'inactivecaption', 'inactivecaptiontext', 'infobackground', 'infotext', 'menu', 'menutext', 'scrollbar',
 		'threeddarkshadow', 'threedface', 'threedhighlight', 'threedlightshadow', 'threedshadow', 'window', 'windowframe', 'windowtext');
-			$syntax = trim(strtolower($syntax));
+		$syntax = trim(strtolower($syntax));
 		if (in_array($syntax, $htlm_color_names))
 		{
 			return($syntax);
 		}
-		if (preg_match(PATTERN_VALID_COLOR, $syntax, $match))
+		if (preg_match('/^(?>'.PATTERN_VALID_HEX_COLOR.'|'.PATTERN_VALID_RGB_COLOR.')$/i', $syntax, $match))
 		{
 			return($match[0]);
 		}
