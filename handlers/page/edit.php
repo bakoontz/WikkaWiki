@@ -1,4 +1,13 @@
-<div class="page">
+<?php 
+	$ondblclick = ''; //#123
+	if (isset($_POST['submit']) && ($_POST['submit'] == 'Preview') && ($user = $this->GetUser()) && ($user['doubleclickedit'] != 'N'))
+	{
+		$ondblclick = ' ondblclick=\'document.getElementById("reedit_id").click();\''; //history.back() not working on IE. (changes are lost)
+		//however, history.back() works fine in FF, and this is the optimized choice
+		// Todo: Optimization: Look $_SERVER['HTTP_USER_AGENT'] and use history.back() for good browsers like FF.
+	}
+?>
+<div class="page"<?php echo $ondblclick;?>>
 <?php
 if (!(preg_match("/^[A-Za-zÄÖÜßäöü]+[A-Za-z0-9ÄÖÜßäöü]*$/s", $this->tag))) {
 	echo '<em>The page name is invalid. Valid page names must start with a letter and contain only letters and numbers.</em>';
@@ -78,7 +87,7 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 			// so we use htmlspecialchars on the edit note (as on the body)
 			'<input size="50" type="text" name="note" value="'.htmlspecialchars($note).'"/> Note on your edit.<br />'."\n".
 			'<input name="submit" type="submit" value="Store" accesskey="s" />'."\n".
-			'<input name="submit" type="submit" value="Re-Edit" accesskey="p" />'."\n".
+			'<input name="submit" type="submit" value="Re-Edit" accesskey="p" id="reedit_id" />'."\n".
 			'<input type="button" value="Cancel" onclick="document.location=\''.$this->href('').'\';" />'."\n";
 
 		$output .= '<div class="previewhead">Preview</div>'."\n";

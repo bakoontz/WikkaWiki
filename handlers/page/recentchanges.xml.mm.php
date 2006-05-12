@@ -1,4 +1,5 @@
 <?php
+/* TODO: i18n */
 header("Content-type: text/xml");
 
 $xml = "<map version=\"0.7.1\">\n";
@@ -23,9 +24,8 @@ if ($pages = $this->LoadRecentlyChanged())
 		$c++;
 		if (($c <= $max) || !$max)
 		{
-
-			$pageuser = $page["user"];
-			$pagetag = $page["tag"];
+			$pageuser = $this->htmlspecialchars_ent($page["user"], '', '', 'XML'); #Just in case...
+			$pagetag = $this->htmlspecialchars_ent($page["tag"], '', '', 'XML');
 
 			// day header
 			list($day, $time) = explode(" ", $page["time"]);
@@ -37,11 +37,11 @@ if ($pages = $this->LoadRecentlyChanged())
 				$curday = $day;
 			}
 
-			$pagelink = $this->config["base_url"].$pagetag;
-           		$xml .= "<node LINK=\"$pagelink\" TEXT=\"$pagetag\" FOLDED=\"true\">\n";
+			$pagelink = $this->config["base_url"].urlencode($page['tag']);
+			$xml .= "<node LINK=\"$pagelink\" TEXT=\"$pagetag\" FOLDED=\"true\">\n";
 			$timeformatted = date("H:i T", strtotime($page["time"]));
 			$xml .= "<node LINK=\"$pagelink/revisions\" TEXT=\"Revision time: $timeformatted\"/>\n";
-			if ($pagenote = $page["note"]) {
+			if ($pagenote = $this->htmlspecialchars_ent($page["note"], '', '', 'XML')) {
 				$xml .= "<node TEXT=\"$pageuser: $pagenote\"/>\n";
 			} else {
 				$xml .= "<node TEXT=\"Author: $pageuser\"/>\n";
@@ -49,7 +49,7 @@ if ($pages = $this->LoadRecentlyChanged())
 
 
 			$xml .= "<node LINK=\"$pagelink/history\" TEXT=\"View History\"/>\n";
-            	$xml .= "</node>\n";
+				$xml .= "</node>\n";
 				// $xml .= "<arrowlink ENDARROW=\"Default\" DESTINATION=\"Freemind_Link_".$page["user"]."\" STARTARROW=\"None\"/>\n";
 			if (is_array($users[$pageuser])) {
 				$u_count = count($users[$pageuser]);
@@ -63,8 +63,8 @@ if ($pages = $this->LoadRecentlyChanged())
 	}
 
 	$xml .= "</node></node><node TEXT=\"Author\" POSITION=\"left\">\n";
-    	foreach ($users as $user)
-    	{
+		foreach ($users as $user)
+		{
 			$start_loop = true;
 			foreach ($user as $user_page) {
 				if (!$start_loop) {
@@ -73,7 +73,7 @@ if ($pages = $this->LoadRecentlyChanged())
 					$xml .= "<node TEXT=\"$user_page\">\n";
 					$start_loop = false;
 				}
-			}				
+			}
 			$xml .= "</node>\n";
 		// $xml .= "<node ID=\"Freemind_Link_".$user["user"]."\" TEXT=\"".$page["user"]."\"/>\n";
 	}
@@ -81,11 +81,11 @@ if ($pages = $this->LoadRecentlyChanged())
 }
 else
 {
-    $xml .= "<item>\n";
-    $xml .= "<title>Error</title>\n";
-    $xml .= "<link>".$this->Href("show")."</link>\n";
-    $xml .= "<description>You're not allowed to access this information.</description>\n";
-    $xml .= "</item>\n";
+	$xml .= "<item>\n";
+	$xml .= "<title>Error</title>\n";
+	$xml .= "<link>".$this->Href("show")."</link>\n";
+	$xml .= "<description>You're not allowed to access this information.</description>\n";
+	$xml .= "</item>\n";
 }
 
 $xml .= "</node></node>\n";
@@ -93,4 +93,4 @@ $xml .= "</map>\n";
 
 print($xml);
 
-?> 
+?>

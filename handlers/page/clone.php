@@ -33,57 +33,70 @@
  * @todo              Use central library for valid pagenames.
  *        
  */
-
+// Variables
+define('CLONE_HEADER', '==== Clone current page ====');
+define('CLONE_SUCCESFUL', '""%s"" was succesfully created!');
+define('CLONE_X_TO', 'Clone %s to:');
+define('CLONED_FROM', 'Cloned from %s');
+define('EDIT_NOTE', 'Edit note:');
+define('ERROR_ACL_READ', ' //You are not allowed to read the source of this page.//');
+define('ERROR_ACL_WRITE', 'Sorry! You don\'t have write-access to %s');
+define('ERROR_INVALID_PAGENAME', 'You must specify a valid PageName');
+define('ERROR_PAGE_ALREADY_EXIST', 'Sorry, the destination page already exists');
+define('ERROR_PAGE_NOT_EXIST', ' Sorry, page %s does not exist.');
+define('LABEL_CLONE', 'Clone');
+define('LABEL_EDIT_OPTION', ' Edit after creation ');
+define('PLEASE_FILL_VALID_TARGET', 'Please fill in a valid target ""PageName"" and an (optional) edit note.');
 // set defaults
 $from = $this->tag;
 $to = $this->tag;
-$note = 'Cloned from '.$from; #i18n
+$note = sprintf(CLONED_FROM, $from);
 $editoption = ''; 
-$box = 'Please fill in a valid target ""PageName"" and an (optional) edit note.'; #i18n
+$box = PLEASE_FILL_VALID_TARGET;
 
 // print header
-echo $this->Format('==== Clone current page ====');
+echo $this->Format(CLONE_HEADER);
 
 // 1. check source page existence
 if (!$this->ExistsPage($from))
 {
 	// source page does not exist!
-	$box = ' Sorry, page '.$from.' does not exist.'; #i18n
+	$box = sprintf(ERROR_PAGE_NOT_EXIST, $from);
 } else 
 {
 	// 2. page exists - now check user's read-access to the source page
 	if (!$this->HasAccess('read', $from))
 	{
 		// user can't read source page!
-	  	$box = ' //You are not allowed to read the source of this page.//'; #i18n
+		$box = ERROR_ACL_READ;
 	} else
 	{
 		// page exists and user has read-access to the source - proceed
-		if ($_POST)
+		if (isset($_POST) && $_POST)
 		{
 			// get parameters
-			$to = ($_POST['to'])? $_POST['to'] : $to;
-			$note = ($_POST['note'])? $_POST['note'] : $note;
+			$to = isset($_POST['to']) && $_POST['to'] ? $_POST['to'] : $to;
+			$note = isset($_POST['note']) && $_POST['note'] ? $_POST['note'] : $note;
 			$editoption = (isset($_POST['editoption']))? 'checked="checked"' : '';
 		
 			// 3. check target pagename validity
 			if (!preg_match("/^[A-ZÄÖÜ]+[a-zßäöü]+[A-Z0-9ÄÖÜ][A-Za-z0-9ÄÖÜßäöü]*$/s", $to)) 
 			{
 				// invalid pagename!
-				$box = '""<div class="error">You must specify a valid PageName</div>""'; #i18n
+				$box = '""<div class="error">'.ERROR_INVALID_PAGENAME.'</div>""';
 			} else
 			{
 				// 4. target page name is valid - now check user's write-access
 				if (!$this->HasAccess('write', $to))  
 				{
-					$box = '""<div class="error">Sorry! You don\'t have write-access to '.$to.'</div>""'; #i18n
+					$box = '""<div class="error">'.sprintf(ERROR_ACL_WRITE, $to).'</div>""';
 				} else
 				{
 					// 5. check target page existence
 					if ($this->ExistsPage($to))
 					{ 
 						// page already exists!
-			          		$box = '""<div class="error">Sorry, the destination page already exists</div>""'; #i18n
+						$box = '""<div class="error">'.ERROR_PAGE_ALREADY_EXIST.'</div>""';
 					} else
 					{
 						// 6. Valid request - proceed to page cloning
@@ -97,7 +110,7 @@ if (!$this->ExistsPage($from))
 						} else
 						{
 							// show confirmation message
-							$box = '""'.$this->MiniHref('',$to).'"" was succesfully created!'; #i18n
+							$box = sprintf(CLONE_SUCCESFUL, '""'.$this->MiniHref('',$to).'""');
 						}
 					}
 				}
@@ -107,18 +120,18 @@ if (!$this->ExistsPage($from))
 		$form = $this->FormOpen('clone');
 		$form .= '<table class="clone">'.
 			'<tr>'.
-			'<td><strong>Clone '.$this->Link($this->GetPageTag()).' to:</strong></td>'.
-			'<td><input type="text" name="to" value="'.$to.'" size="37" /></td>'.
+			'<td><strong>'.sprintf(CLONE_X_TO, $this->Link($this->GetPageTag())).'</strong></td>'.
+			'<td><input type="text" name="to" value="'.$to.'" size="37" maxlength="75" /></td>'.
 			'</tr>'.
 			'<tr>'.
-			'<td><strong>Edit note:</strong></td>'.
-			'<td><input type="text" name="note" value="'.$note.'" size="37" /></td>'.
+			'<td><strong>'.EDIT_NOTE.'</strong></td>'.
+			'<td><input type="text" name="note" value="'.$note.'" size="37" maxlength="75" /></td>'.
 			'</tr>'.
 			'<tr>'.
 			'<td></td>'.
 			'<td>'.
-			'<input type="checkbox" name="editoption" '.$editoption.' /> Edit after creation '.
-			'<input type="submit" name="create" value="Clone" />'.
+			'<input type="checkbox" name="editoption" '.$editoption.' id="editoption" /><label for="editoption">'.LABEL_EDIT_OPTION.'</label>'.
+			'<input type="submit" name="create" value="'.LABEL_CLONE.'" />'.
 			'</td>'.
 			'</tr>'.
 			'</table>';

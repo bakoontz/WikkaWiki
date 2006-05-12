@@ -38,7 +38,7 @@ define('DIFF_LINK_TITLE', 'Show differences from last revision');
 
 if (!isset($show)) 
 {
-    $show = DEFAULT_SHOW;
+	$show = DEFAULT_SHOW;
 }
 
 if ($this->method == 'show') 
@@ -62,7 +62,7 @@ if ($this->method == 'show')
 
 		case 1:
 		$note = ($page['note']) ? ':<br/><span class="'.LASTEDIT_NOTES.'">'.
-		$page['note'].'</span>' : '';
+		$this->htmlspecialchars_ent($page['note']).'</span>' : '';
 
 		default:	
 	}

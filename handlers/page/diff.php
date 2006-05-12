@@ -21,7 +21,7 @@ if ($this->HasAccess("read"))
    any later version. */
 
 // looking for the diff-classes
-if (file_exists('libs/diff.inc.php')) require_once('libs/diff.inc.php');
+if (file_exists('libs/diff.lib.php')) require_once('libs/diff.lib.php');
 else die(ERROR_DIV_LIBRARY_MISSING);
 
 // If asked, call original diff 

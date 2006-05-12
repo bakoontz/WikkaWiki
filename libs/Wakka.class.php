@@ -184,6 +184,7 @@ class Wakka
 	 * @version	1.0
 	 * @todo	(later) support full range of situations where (in SGML) a terminating ; may legally
 	 *			be omitted (end, newline and tag are merely the most common ones).
+		* @todo (maybe) recognize valid html entities, thus transform &error; to &amp;error;
 	 *
 	 * @param	string	$text required: text to be converted
 	 * @param	integer	$quote_style optional: quoting style - can be ENT_COMPAT (default, escape
@@ -193,10 +194,18 @@ class Wakka
 	 *			(overriding PHP's default ISO-8859-1)
 	 * @return	string	converted string with escaped special characted but entity references intact
 	 */
-	function htmlspecialchars_ent($text,$quote_style=ENT_COMPAT,$charset='UTF-8')
+	function htmlspecialchars_ent($text,$quote_style=ENT_COMPAT,$charset='UTF-8',$doctype='HTML')
 	{
 		// define patterns
-		$alpha  = '[a-z]+';							# character entity reference
+		$alpha  = '[a-z]+';							# character entity reference todo: $alpha='eacute|egrave|ccirc|...'
+		$ignore_case = 'i';
+		if ($doctype == 'XML')
+		{
+			$alpha = 'lt|gt|quot|amp';
+			$ignore_case = '';
+			if ($quote_style === '') $quote_style = ENT_COMPAT;
+			if ($charset === '') $charset = 'UTF-8';
+		}
 		$numdec = '#[0-9]+';						# numeric character reference (decimal)
 		$numhex = '#x[0-9a-f]+';					# numeric character reference (hexadecimal)
 		$terminator = ';|(?=($|[\n<]|&lt;))';		# semicolon; or end-of-string, newline or tag
@@ -207,7 +216,7 @@ class Wakka
 		$output = htmlspecialchars($text,$quote_style,$charset);
 		// "repair" escaped entities
 		// modifiers: s = across lines, i = case-insensitive
-		$output = preg_replace('/'.$escaped_entity.'/si',"&$1;",$output);
+		$output = preg_replace('/'.$escaped_entity.'/s'.$ignore_case,"&$1;",$output);
 		// return output
 		return $output;
 	}
@@ -515,7 +524,7 @@ class Wakka
 				if ($ping["authorpage"]) $rpcRequest .= "<member>\n<name>authorpage</name>\n<value>".$ping["authorpage"]."</value>\n</member>\n";
 			}
 			if ($ping["history"]) $rpcRequest .= "<member>\n<name>history</name>\n<value>".$ping["history"]."</value>\n</member>\n";
-			if ($ping["changelog"]) $rpcRequest .= "<member>\n<name>changelog</name>\n<value>".$ping["changelog"]."</value>\n</member>\n";
+			if ($ping["changelog"]) $rpcRequest .= "<member>\n<name>changelog</name>\n<value>".$this->htmlspecialchars_ent($ping["changelog"], '', '', 'XML')."</value>\n</member>\n";
 			$rpcRequest .= "</struct>\n</value>\n</param>\n";
 			$rpcRequest .= "</params>\n";
 			$rpcRequest .= "</methodCall>\n";

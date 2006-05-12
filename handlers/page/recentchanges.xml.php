@@ -1,4 +1,10 @@
 <?php
+// i18n strings
+define('WHEN_BY_WHO', '%1$s by %2$s');
+define('ERROR_ACL_READ_INFO', 'You\'re not allowed to access this information.');
+define('LABEL_ERROR', 'Error');
+if (!defined('I18N_LANG')) define('I18N_LANG', 'en-us');
+
 header("Content-type: text/xml");
 
 $xml = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n";
@@ -8,35 +14,35 @@ $xml .= "<channel>\n";
 $xml .= "<title>".$this->GetConfigValue("wakka_name")." - ".$this->tag."</title>\n";
 $xml .= "<link>".$this->GetConfigValue("base_url")."</link>\n";
 $xml .= "<description>Recent changes of ".$this->GetConfigValue("wakka_name")."</description>\n";
-$xml .= "<language>en-us</language>\n";
+$xml .= '<language>'.I18N_LANG."</language>\n";
 
 if ($pages = $this->LoadRecentlyChanged())
 {
-    $max = $this->GetConfigValue("xml_recent_changes");
+	$max = $this->GetConfigValue("xml_recent_changes");
 
-    $c = 0;
-    foreach ($pages as $page)
-    {
-        $c++;
-        if (($c <= $max) || !$max)
-        {
-            $xml .= "<item>\n";
-            $xml .= "<title>".$page["tag"]."</title>\n";
-            $xml .= "<link>".$this->Href("show", $page["tag"], "time=".urlencode($page["time"]))."</link>\n";
-			$xml .= "\t<description>".$page["time"]." by ".$page["user"].($page["note"] ? " - ".$page["note"] : "")."</description>\n";
+	$c = 0;
+	foreach ($pages as $page)
+	{
+		$c++;
+		if (($c <= $max) || !$max)
+		{
+			$xml .= "<item>\n";
+			$xml .= "<title>".$this->htmlspecialchars_ent($page["tag"])."</title>\n";
+			$xml .= "<link>".$this->Href("show", $page["tag"], "time=".urlencode($page["time"]))."</link>\n";
+			$xml .= "\t<description>".sprintf(WHEN_BY_WHO, $page['time'], $this->htmlspecialchars_ent($page["user"], ENT_COMPAT, 'UTF-8', 'XML')).($page['note'] ? ' - '.$this->htmlspecialchars_ent($page['note'], ENT_COMPAT, 'UTF-8', 'XML') : '')."</description>\n";
 			//$xml .= "\t<guid>".$page["id"]."</guid>";
 			$xml .= "\t<pubDate>".date("r",strtotime($page["time"]))."</pubDate>\n";
-            $xml .= "</item>\n";
-        }
-    }
+			$xml .= "</item>\n";
+		}
+	}
 }
 else
 {
-    $xml .= "<item>\n";
-    $xml .= "<title>Error</title>\n";
-    $xml .= "<link>".$this->Href("show")."</link>\n";
-    $xml .= "<description>You're not allowed to access this information.</description>\n";
-    $xml .= "</item>\n";
+	$xml .= "<item>\n";
+	$xml .= '<title>'.LABEL_ERROR."</title>\n";
+	$xml .= "<link>".$this->Href("show")."</link>\n";
+	$xml .= '<description>'.ERROR_ACL_READ_INFO."</description>\n";
+	$xml .= "</item>\n";
 }
 
 $xml .= "</channel>\n";
