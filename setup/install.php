@@ -16,7 +16,7 @@ print("<br />\n");
 if (!$version = trim($wakkaConfig["wakka_version"])) $version = "0";
 
 // set upgrade note to be used when overwriting default pages
-$upgrade_note = 'Upgrading to '.$version;
+$upgrade_note = 'Upgrading from '.$version.' to '.WAKKA_VERSION;
 
 switch ($version)
 {
