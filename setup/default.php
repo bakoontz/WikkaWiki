@@ -3,7 +3,7 @@
 if (!$wakkaConfig["wakka_version"])
 {
 ?>
-<script language="JavaScript">
+<script type="text/javascript">
 function check() {
 var f = document.forms.form1;
 var re;
@@ -35,7 +35,7 @@ function check() {
 }
 </script>
 <?php } ?>
-<form action="<?php echo myLocation() ?>?installAction=install" name="form1" method="POST">
+<form action="<?php echo myLocation() ?>?installAction=install" name="form1" method="post">
 <table>
 
 	<tr><td></td><td><strong>Wikka Installation</strong></td></tr>
@@ -123,7 +123,7 @@ function check() {
 	<tr><td align="right" nowrap>Base URL:</td><td><input type="text" size="50" name="config[base_url]" value="<?php echo $wakkaConfig["base_url"] ?>" /></td></tr>
 
 	<tr><td></td><td>Rewrite mode should be enabled if you are using Wikka with URL rewriting.</td></tr>
-	<tr><td align="right" nowrap>Rewrite Mode:</td><td><input type="hidden" name="config[rewrite_mode]" value="0"><input type="checkbox" name="config[rewrite_mode]" value="1" <?php echo $wakkaConfig["rewrite_mode"] ? "checked" : "" ?> /> Enabled</td></tr>
+	<tr><td align="right" nowrap>Rewrite Mode:</td><td><input type="hidden" name="config[rewrite_mode]" value="0" /><input type="checkbox" name="config[rewrite_mode]" value="1" <?php echo $wakkaConfig["rewrite_mode"] ? "checked" : "" ?> /> Enabled</td></tr>
 
 	<?php
 	 }

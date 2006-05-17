@@ -293,7 +293,7 @@ Please make sure the web server has write access to the file, or you will have t
 Once again, see <a href="http://wikkawiki.org/WikkaInstallation" target="_blank">Wikka:WakkaInstallation</a> for details.
 </p>
 
-<form action="<?php echo myLocation(); ?>?installAction=writeconfig" method="POST">
+<form action="<?php echo myLocation(); ?>?installAction=writeconfig" method="post">
 <input type="hidden" name="config" value="<?php echo htmlspecialchars(serialize($config)) ?>" />
 <input type="submit" value="Continue" />
 </form>
