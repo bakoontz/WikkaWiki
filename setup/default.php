@@ -29,7 +29,7 @@ return true;
 }
 </script>
 <?php } else {?>
-<script language="JavaScript">
+<script type="text/javascript">
 function check() {
  return true;
 }
