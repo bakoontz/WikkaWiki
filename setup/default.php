@@ -118,7 +118,7 @@ function check() {
 
 	<tr><td></td><td><br /><h2>Wikka URL Configuration</h2><?php echo $wakkaConfig["wakka_version"] ? "" : "<span class=\"note\">Since this is a new installation, the installer tried to guess the proper values.<br />Change them only if you know what you're doing!</span>" ?></td></tr>
 
-	<tr><td></td><td>First you'll need to set you Wikka site's base URL. Page names get appended to it, so: <ul>
+	<tr><td></td><td>First you'll need to set up your Wikka site's base URL. Page names get appended to it, so: <ul>
 		<li>if Rewrite Mode is not available on your server, the base URL should include <tt>"?wakka="</tt><br />e.g. <tt>http://www.example.com/wikka.php?wakka=</tt></li>
 		<li>if Rewrite Mode is enabled, make sure the base URL ends with a slash "/",<br />e.g. <tt>http://www.example.com/</tt></li>
 		</ul></td>
