@@ -70,14 +70,16 @@ function DeleteCookie($name) { SetCookie($name, "", 1, "/"); $_COOKIE[$name] = "
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
 <head>
-  <title>Wikka Installation</title>
-  <style type="text/css">
-    P, BODY, TD, LI, INPUT, SELECT, TEXTAREA { font-family: Verdana; font-size: 13px; }
-    INPUT { color: #880000; }
-    .ok { color: #008800; font-weight: bold; }
-    .failed { color: #880000; font-weight: bold; }
-    A { color: #0000FF; }
-  </style>
+	<title>Wikka Installation</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+	<meta name="keywords" content="Wikka Wakka Wiki" />
+	<meta name="description" content="A WakkaWiki clone" />
+	<link rel="stylesheet" type="text/css" href="css/setup.css" media="screen" />
+	<link rel="icon" href="images/favicon.ico" type="image/x-icon" />
+	<link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon" />
 </head>
-
 <body>
+<div class="header">
+	<img src="images/wikka_logo.jpg" alt="wikka logo" title="Welcome to Wikka" />
+</div>
+<div class="page"><!--START page body -->

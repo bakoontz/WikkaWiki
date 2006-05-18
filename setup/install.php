@@ -7,7 +7,7 @@ $config = $_POST["config"];
 $config = array_merge($wakkaConfig, $config);
 
 // test configuration
-print("<strong>Testing Configuration</strong><br />\n");
+print("<h2>Testing Configuration</h2>\n");
 test("Testing MySQL connection settings...", $dblink = @mysql_connect($config["mysql_host"], $config["mysql_user"], $config["mysql_password"]));
 test("Looking for database...", @mysql_select_db($config["mysql_database"], $dblink), "The database you configured was not found. Remember, it needs to exist before you can install/upgrade Wakka!\n\nPress the Back button and reconfigure the settings.");
 print("<br />\n");
@@ -22,7 +22,7 @@ switch ($version)
 {
 // new installation
 case "0":
-	print("<strong>Installing Stuff</strong><br />\n");
+	print("<h2>Installing Stuff</h2>");
 	test("Creating page table...",
 		@mysql_query(
 			"CREATE TABLE ".$config["table_prefix"]."pages (".
@@ -290,7 +290,7 @@ case "trunk": //latest development version from the SVN repository - do not remo
 <p>
 In the next step, the installer will try to write the updated configuration file, <tt><?php echo $wakkaConfigLocation ?></tt>.
 Please make sure the web server has write access to the file, or you will have to edit it manually.
-Once again, see <a href="http://wikkawiki.org/WikkaInstallation" target="_blank">Wikka:WakkaInstallation</a> for details.
+Once again, see <a href="http://wikkawiki.org/WikkaInstallation" target="_blank">Wikka:WikkaInstallation</a> for details.
 </p>
 
 <form action="<?php echo myLocation(); ?>?installAction=writeconfig" method="post">
