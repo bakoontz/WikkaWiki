@@ -392,6 +392,7 @@ abbr {
 
 /* Action-related styling */
 
+/* Lastedit action */
 .lastedit {
 	border:dotted 1px;
 	padding:3pt;
@@ -404,23 +405,20 @@ abbr {
 	color: #888800;
 }
 
-/* Textsearch &amp; textsearchexpanded */
-.tse_keywords
-{
+/* TextSearch & TextSearchExpanded Actions*/
+.tse_keywords {
 	font-weight: bold;
 	color: green;
 	background-color: antiquewhite;
 }
-.tse_odd
-{
+.tse_odd {
 	background-color: #eee;
 }
-.tse_even
-{
+.tse_even {
 	background-color: #dfe;
 }
 
-/* Calendar styling */
+/* Calendar Action */
 
 /* general styling */
 table.calendar {
@@ -488,6 +486,10 @@ table.calendar a:hover {
 table.calendar a:active {
 	color: #993333;
 	text-decoration: none;
+}
+
+/* Usersettings action */
+table.usersettings {
 }
 
 /* 3rdparty-code related styling */
