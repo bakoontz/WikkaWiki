@@ -496,6 +496,12 @@ table.calendar a:active {
 table.usersettings {
 }
 
+/* Handler-related styling */
+
+/* Acls handler */
+table.acls {
+}
+
 /* 3rdparty-code related styling */
 
 /* syntax highlighting code - GeSHi */
