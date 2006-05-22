@@ -29,25 +29,27 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  * WakkaWiki Copyright (c) 2002, Hendrik Mans <hendrik@mans.de>
  */
 
-define ('ERROR_WAKKA_LIBRARY_MISSING','The necessary file "libs/Wakka.class.php" could not be found. To run Wikka, please make sure the file exists and is placed in the right directory!');
-define ('ERROR_WRONG_PHP_VERSION', '$_REQUEST[] not found. Wakka requires PHP 4.1.0 or higher!');
-define ('ERROR_SETUP_FILE_MISSING', 'A file of the installer/ upgrader was not found. Please install Wikka again!');
-define ('ERROR_SETUP_HEADER_MISSING', 'The file "setup/header.php" was not found. Please install Wikka again!');
-define ('ERROR_SETUP_FOOTER_MISSING', 'The file "setup/footer.php" was not found. Please install Wikka again!');
-define ('ERROR_NO_DB_ACCESS', 'The wiki is currently unavailable. <br /><br />Error: Unable to connect to the MySQL database.');
-define ('PAGE_GENERATION_TIME', 'Page was generated in %.4f seconds'); // %.4f - generation time in seconds with 4 digits after the dot   
-define ('WIKI_UPGRADE_NOTICE', 'This site is currently being upgraded. Please try again later.');
+if(!defined('ERROR_WAKKA_LIBRARY_MISSING')) define ('ERROR_WAKKA_LIBRARY_MISSING','The necessary file "libs/Wakka.class.php" could not be found. To run Wikka, please make sure the file exists and is placed in the right directory!');
+if(!defined('ERROR_WRONG_PHP_VERSION')) define ('ERROR_WRONG_PHP_VERSION', '$_REQUEST[] not found. Wakka requires PHP 4.1.0 or higher!');
+if(!defined('ERROR_SETUP_FILE_MISSING')) define ('ERROR_SETUP_FILE_MISSING', 'A file of the installer/ upgrader was not found. Please install Wikka again!');
+if(!defined('ERROR_SETUP_HEADER_MISSING')) define ('ERROR_SETUP_HEADER_MISSING', 'The file "setup/header.php" was not found. Please install Wikka again!');
+if(!defined('ERROR_SETUP_FOOTER_MISSING')) define ('ERROR_SETUP_FOOTER_MISSING', 'The file "setup/footer.php" was not found. Please install Wikka again!');
+if(!defined('ERROR_NO_DB_ACCESS')) define ('ERROR_NO_DB_ACCESS', 'The wiki is currently unavailable. <br /><br />Error: Unable to connect to the MySQL database.');
+if(!defined('PAGE_GENERATION_TIME')) define ('PAGE_GENERATION_TIME', 'Page was generated in %.4f seconds'); // %.4f - generation time in seconds with 4 digits after the dot   
+if(!defined('WIKI_UPGRADE_NOTICE')) define ('WIKI_UPGRADE_NOTICE', 'This site is currently being upgraded. Please try again later.');
 
 ob_start();
 
 //error_reporting(E_ALL);
 error_reporting (E_ALL ^ E_NOTICE);
 
-// Do not change the version number or you will have problems upgrading.
 /**
- * Defines current version.
+ * Defines current version. Do not change the version number or you will have problems upgrading.
  */
-define('WAKKA_VERSION', 'trunk');
+if (!defined('WAKKA_VERSION')) define('WAKKA_VERSION', 'trunk');
+
+if(!defined('BASIC_COOKIE_NAME')) define('BASIC_COOKIE_NAME', 'Wikkawiki');
+
 function getmicrotime() {
 	list($usec, $sec) = explode(" ", microtime());
 	return ((float)$usec + (float)$sec);
@@ -104,6 +106,7 @@ $wakkaDefaultConfig = array(
 	"wakka_name"			=> "MyWikkaSite",
 	"base_url"				=> "http://".$_SERVER["SERVER_NAME"].($_SERVER["SERVER_PORT"] != 80 ? ":".$_SERVER["SERVER_PORT"] : "").$_SERVER["REQUEST_URI"].(preg_match("/".preg_quote("wikka.php")."$/", $_SERVER["REQUEST_URI"]) ? "?wakka=" : ""),
 	"rewrite_mode"			=> (preg_match("/".preg_quote("wikka.php")."$/", $_SERVER["REQUEST_URI"]) ? "0" : "1"),
+	"wiki_suffix"			=> '@wikka',
 
 	"action_path"			=> "actions",
 	"handler_path"			=> "handlers",
@@ -181,10 +184,12 @@ if (file_exists("locked")) {
 }
 
 // compare versions, start installer if necessary
-if ($wakkaConfig["wakka_version"] != WAKKA_VERSION)
+if (!isset($wakkaConfig["wakka_version"])) $wakkaConfig["wakka_version"] = 0;
+if ($wakkaConfig["wakka_version"] !== WAKKA_VERSION)
 {
 	// start installer
-	if (!$installAction = trim($_REQUEST["installAction"])) $installAction = "default";
+	$installAction = "default";
+	if (isset($_REQUEST["installAction"])) $installAction = trim($_REQUEST["installAction"]);
 	if (file_exists("setup/header.php")) include("setup/header.php"); else print '<em>'.ERROR_SETUP_HEADER_MISSING.'</em>';
 	if (file_exists("setup/".$installAction.".php")) include("setup/".$installAction.".php"); else print '<em>'.ERROR_SETUP_FILE_MISSING.'</em>';
 	if (file_exists("setup/footer.php")) include("setup/footer.php"); else print '<em>'.ERROR_SETUP_FOOTER_MISSING.'</em>';
@@ -192,6 +197,7 @@ if ($wakkaConfig["wakka_version"] != WAKKA_VERSION)
 }
 
 // start session
+session_name(md5(BASIC_COOKIE_NAME.$wakkaConfig['wiki_suffix']));
 session_start();
 
 // fetch wakka location

@@ -1,5 +1,9 @@
 <?php
 
+// i18n section
+if (!defined('SITE_SUFFIX_INFO')) define ('SITE_SUFFIX_INFO', 'Suffix used for cookies and part of the session name. This allows you to run multiple Wikka installations on the same server by configuring them to use different wiki prefixes.');
+if (!defined('SITE_SUFFIX_LABEL')) define ('SITE_SUFFIX_LABEL', 'Your Wiki suffix:');
+
 if (!$wakkaConfig["wakka_version"])
 {
 ?>
@@ -76,6 +80,9 @@ function check() {
 
 	<tr><td></td><td>Your Wikka site's home page. Should be formatted as a <abbr title="A WikiName is formed by two or more capitalized words without space, e.g. JohnDoe">WikiName</abbr>.</td></tr>
 	<tr><td align="right" nowrap>Home page:</td><td><input type="text" size="50" name="config[root_page]" value="<?php echo $wakkaConfig["root_page"] ?>" /></td></tr>
+
+	<tr><td></td><td><?php echo SITE_SUFFIX_INFO; ?></td></tr>
+	<tr><td align="right" nowrap><?php echo SITE_SUFFIX_LABEL; ?></td><td><input type="text" size="50" name="config['wiki_suffix']" value="<?php echo $wakkaConfig["wiki_suffix"] ?>" /></td></tr>
 
 	<tr><td></td><td>META Keywords/Description that get inserted into the HTML headers.</td></tr>
 	<tr><td align="right" nowrap>Meta Keywords:</td><td><input type="text" size="50" name="config[meta_keywords]" value="<?php echo $wakkaConfig["meta_keywords"] ?>" /></td></tr>

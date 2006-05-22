@@ -1,5 +1,9 @@
 <?php
 
+// i18n section
+if (!defined('ADDING_CONFIG_ENTRY')) define('ADDING_CONFIG_ENTRY', 'Adding a new option to the wikka.config file: %s'); // %s - name of the config option
+if (!defined('DELETING_COOKIES')) define('DELETING_COOKIES', 'Deleting wikka cookies since their name has changed.');
+
 // fetch configuration
 $config = $_POST["config"];
 
@@ -167,7 +171,7 @@ case "1.0.3":
 case "1.0.4":
 // from 1.0.4 to 1.0.5
 	print("<strong>1.0.4 to 1.0.5 changes:</strong><br />\n");
-	test("Adding a new option to the wakka.config file: double_doublequote_html", 1);
+	test(sprintf(ADDING_CONFIG_ENTRY, 'double_doublequote_html'), 1);
 	$config["double_doublequote_html"] = 'safe';
 case "1.0.5":
 case "1.0.6":
@@ -245,7 +249,7 @@ case "1.1.3":
 case "1.1.3.1":
 case "1.1.3.2":
 	print("<strong>1.1.3.2 to 1.1.3.3 changes:</strong><br />\n");
-	test("Adding a new option to the wikka.config file: wikiping_server", 1);
+	test(sprintf(ADDING_CONFIG_ENTRY, 'wikiping_server'), 1);
 	$config["wikiping_server"] = '';
 case "1.1.3.3":
 case "1.1.3.4":
@@ -264,6 +268,7 @@ case "1.1.5.3":
 	test("Adding WikkaDocumentation page...", 
 	mysql_query("insert into ".$config["table_prefix"]."pages set tag = 'WikkaDocumentation' , body = '=====Wikka Documentation=====\n\nComprehensive and up-to-date documentation on Wikka Wiki can be found on the [[http://wikkawiki.org/WikkaDocumentation main Wikka server]].', owner = '(Public)', user = 'WikkaInstaller', time = now(), latest = 'Y'", $dblink), "Already done? OK!", 0);
 	// cookie names have changed -- logout user and delete the old cookies
+	test(DELETING_COOKIES, 1);
 	DeleteCookie("name");
 	DeleteCookie("password"); 
 	// delete files removed from previous version
@@ -275,8 +280,14 @@ case "1.1.5.3":
 	rmdirr("xml");
 case "1.1.6.0":
 case "1.1.6.1":
-	test("Adding a new option to the wikka.config file: grabcode_button", 1);
+	test(sprintf(ADDING_CONFIG_ENTRY, 'grabcode_button' ), 1);
 	$config["grabcode_button"] = '1';
+	test(sprintf(ADDING_CONFIG_ENTRY, 'wiki_suffix'), 1);
+	$config["wiki_suffix"] = '@wikka';
+	// cookie names have changed -- logout user and delete the old cookies
+	test(DELETING_COOKIES, 1);
+	DeleteCookie("wikka_user_name");
+	DeleteCookie("wikka_pass"); 
 	//updating FormattingRules page
 	test("Archiving latest FormattingRules revision...", 
 	mysql_query("update ".$config["table_prefix"]."pages set latest = 'N' where tag = 'FormattingRules'"), "Already done? OK!", 0);
