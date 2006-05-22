@@ -335,6 +335,12 @@ blockquote {
 	height:18px;
 }
 
+input.highlight {
+	font-weight: normal;
+	background-color: #FFEEEE;
+	color: #000;
+}
+
 /* system information */
 
 .missingpage {
@@ -345,8 +351,18 @@ blockquote {
 	border-bottom-style: dashed;
 }
 
-.error {
-	color: #CC3333; font-weight: bold;
+em.error {
+	color: #CC3333;
+	font-style: normal;
+	font-weight: bold;
+	font-size: 95%;
+}
+
+em.success {
+	color: #33CC33;
+	font-style: normal;
+	font-weight: bold;
+	font-size: 95%;
 }
 
 .comments {display: none;}
