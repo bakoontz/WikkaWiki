@@ -82,7 +82,7 @@ function check() {
 	<tr><td align="right" nowrap>Home page:</td><td><input type="text" size="50" name="config[root_page]" value="<?php echo $wakkaConfig["root_page"] ?>" /></td></tr>
 
 	<tr><td></td><td><?php echo SITE_SUFFIX_INFO; ?></td></tr>
-	<tr><td align="right" nowrap><?php echo SITE_SUFFIX_LABEL; ?></td><td><input type="text" size="50" name="config['wiki_suffix']" value="<?php echo $wakkaConfig["wiki_suffix"] ?>" /></td></tr>
+	<tr><td align="right" nowrap><?php echo SITE_SUFFIX_LABEL; ?></td><td><input type="text" size="50" name="config[wiki_suffix]" value="<?php echo $wakkaConfig["wiki_suffix"] ?>" /></td></tr>
 
 	<tr><td></td><td>META Keywords/Description that get inserted into the HTML headers.</td></tr>
 	<tr><td align="right" nowrap>Meta Keywords:</td><td><input type="text" size="50" name="config[meta_keywords]" value="<?php echo $wakkaConfig["meta_keywords"] ?>" /></td></tr>

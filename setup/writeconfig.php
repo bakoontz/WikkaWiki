@@ -13,10 +13,12 @@ unset($config["allow_doublequote_html"]);
 $config["wakka_version"] = WAKKA_VERSION;
 
 // convert config array into PHP code
+$double_backslash = '\\\\';
+$single_quote = '\'';
 $configCode = "<?php\n// wikka.config.php written at ".strftime("%c")."\n// do not change wikka_version manually!\n\n\$wakkaConfig = array(\n";
 foreach ($config as $k => $v)
 {
-	$entries[] = "\t\"".$k."\" => \"".$v."\"";
+	$entries[] = "\t'".$k."' => '".preg_replace('/['.$double_backslash.$single_quote.']/', $double_backslash.'$0', $v)."'"; // #5
 }
 $configCode .= implode(",\n", $entries).");\n?>";
 
