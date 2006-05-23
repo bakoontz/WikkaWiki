@@ -97,59 +97,58 @@ if (get_magic_quotes_gpc())
 
 // default configuration values
 $wakkaDefaultConfig = array(
-	"mysql_host"			=> "localhost",
-	"mysql_database"			=> "wikka",
-	"mysql_user"			=> "wikka",
-	"table_prefix"			=> "wikka_",
+	'mysql_host'				=> 'localhost',
+	'mysql_database'			=> 'wikka',
+	'mysql_user'				=> 'wikka',
+	'table_prefix'			=> 'wikka_',
 
-	"root_page"				=> "HomePage",
-	"wakka_name"			=> "MyWikkaSite",
-	"base_url"				=> "http://".$_SERVER["SERVER_NAME"].($_SERVER["SERVER_PORT"] != 80 ? ":".$_SERVER["SERVER_PORT"] : "").$_SERVER["REQUEST_URI"].(preg_match("/".preg_quote("wikka.php")."$/", $_SERVER["REQUEST_URI"]) ? "?wakka=" : ""),
-	"rewrite_mode"			=> (preg_match("/".preg_quote("wikka.php")."$/", $_SERVER["REQUEST_URI"]) ? "0" : "1"),
-	"wiki_suffix"			=> '@wikka',
+	'root_page'				=> 'HomePage',
+	'wakka_name'				=> 'MyWikkaSite',
+	'base_url'				=> 'http://'.$_SERVER['SERVER_NAME'].($_SERVER['SERVER_PORT'] != 80 ? ':'.$_SERVER['SERVER_PORT'] : '').$_SERVER['REQUEST_URI'].(preg_match('/'.preg_quote('wikka.php').'$/', $_SERVER['REQUEST_URI']) ? '?wakka=' : ''),
+	'rewrite_mode'			=> (preg_match('/'.preg_quote('wikka.php').'$/', $_SERVER['REQUEST_URI']) ? '0' : '1'),
+	'wiki_suffix'			=> '@wikka',
 
-	"action_path"			=> "actions",
-	"handler_path"			=> "handlers",
-	"gui_editor" 			=> 1,
-	"stylesheet"			=> "wikka.css",
+	'action_path'			=> 'actions',
+	'handler_path'			=> 'handlers',
+	'gui_editor'				=> '1',
+	'stylesheet'				=> 'wikka.css',
 
 	// formatter and code highlighting paths
-	'wikka_formatter_path' => 'formatters',		# (location of Wikka formatter - REQUIRED)
-	'wikka_highlighters_path' => 'formatters',		# (location of Wikka code highlighters - REQUIRED)
-	'geshi_path' => '3rdparty/plugins/geshi',				# (location of GeSHi package)
-	'geshi_languages_path' => '3rdparty/plugins/geshi/geshi',		# (location of GeSHi language highlighting files)
+	'wikka_formatter_path' 	=> 'formatters',		# (location of Wikka formatter - REQUIRED)
+	'wikka_highlighters_path'	=> 'formatters',		# (location of Wikka code highlighters - REQUIRED)
+	'geshi_path' 			=> '3rdparty/plugins/geshi',				# (location of GeSHi package)
+	'geshi_languages_path' 	=> '3rdparty/plugins/geshi/geshi',		# (location of GeSHi language highlighting files)
 
-	"header_action"			=> "header",
-	"footer_action"			=> "footer",
+	'header_action'			=> 'header',
+	'footer_action'			=> 'footer',
 
-	"navigation_links" => "[[CategoryCategory Categories]] :: PageIndex ::  RecentChanges :: RecentlyCommented :: [[UserSettings Login/Register]]",
-	"logged_in_navigation_links" => "[[CategoryCategory Categories]] :: PageIndex :: RecentChanges :: RecentlyCommented :: [[UserSettings Change settings/Logout]]",
+	'navigation_links'		=> '[[CategoryCategory Categories]] :: PageIndex ::  RecentChanges :: RecentlyCommented :: [[UserSettings Login/Register]]',
+	'logged_in_navigation_links' => '[[CategoryCategory Categories]] :: PageIndex :: RecentChanges :: RecentlyCommented :: [[UserSettings Change settings/Logout]]',
 
-	"referrers_purge_time"		=> 30,
-	"pages_purge_time"		=> 0,
-	"xml_recent_changes"		=> 10,
-	"hide_comments"			=> 0,
-	"anony_delete_own_comments"	=> 1,
-	"double_doublequote_html"	=> "safe",
-	"external_link_tail" 		=> "<span class='exttail'>&#8734;</span>",
-	"sql_debugging"			=> 0,
-	"admin_users" 			=> "",
-	"admin_email" 			=> "",
-	"upload_path" 			=> "uploads",
-	"mime_types" 			=> "mime_types.txt",
+	'referrers_purge_time'	=> '30',
+	'pages_purge_time'		=> '0',
+	'xml_recent_changes'		=> '10',
+	'hide_comments'			=> '0',
+	'anony_delete_own_comments'	=> '1',
+	'double_doublequote_html'	=> 'safe',
+	'external_link_tail' 		=> '<span class="exttail">&#8734;</span>',
+	'sql_debugging'			=> '0',
+	'admin_users' 			=> '',
+	'admin_email' 			=> '',
+	'upload_path' 			=> 'uploads',
+	'mime_types' 			=> 'mime_types.txt',
 
 	// code hilighting with GeSHi
-	'geshi_header' => 'div',				# 'div' (default) or 'pre' to surround code block
-	'geshi_line_numbers' => '1',			# disable line numbers (0), or enable normal (1) or fancy line numbers (2)
-	'geshi_tab_width' => '4',				# set tab width
-	'grabcode_button' => 1,				# allow code block downloading
+	'geshi_header'			=> 'div',				# 'div' (default) or 'pre' to surround code block
+	'geshi_line_numbers'		=> '1',			# disable line numbers (0), or enable normal (1) or fancy line numbers (2)
+	'geshi_tab_width'		=> '4',				# set tab width
+	'grabcode_button'		=> '1',				# allow code block downloading
 
-	"wikiping_server" 		=> "",
+	'wikiping_server' 		=> '',
 
-	"default_write_acl"		=> "+",
-	"default_read_acl"		=> "*",
-	"default_comment_acl"		=> "*");
-
+	'default_write_acl'		=> '+',
+	'default_read_acl'		=> '*',
+	'default_comment_acl'		=> '*');
 
 // load config
 $wakkaConfig = array();
