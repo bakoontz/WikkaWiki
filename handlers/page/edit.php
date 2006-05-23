@@ -9,7 +9,7 @@
 ?>
 <div class="page"<?php echo $ondblclick;?>>
 <?php
-if (!(preg_match("/^[A-Za-zÄÖÜßäöü]+[A-Za-z0-9ÄÖÜßäöü]*$/s", $this->tag))) {
+if (!(preg_match("/^[A-Za-zÄÖÜßäöü]+[A-Za-z0-9ÄÖÜßäöü]*$/s", $this->tag))) { //TODO use central regex library
 	echo '<em>The page name is invalid. Valid page names must start with a letter and contain only letters and numbers.</em>';
 }
 elseif ($this->HasAccess("write") && $this->HasAccess("read"))
@@ -34,8 +34,13 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 			{
 				if ($this->page['id'] != $_POST['previous'])
 				{
-					$error = 'OVERWRITE ALERT: This page was modified by someone else while you were editing it.<br />'."\n".'Please copy your changes and re-edit this page.';
+					$error = 'OVERWRITE ALERT: This page was modified by someone else while you were editing it.<br />'."\n".'Please copy your changes and re-edit this page.<br />';
 				}
+			}
+			// check for edit note
+			if (($this->config['require_edit_note'] == 1) && $_POST['note']=='')
+			{
+				$error .= 'MISSING EDIT NOTE: Please fill in an edit note!<br />'."\n";
 			}
 			// store
 			if (!$error)
@@ -82,11 +87,14 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 	if ($_POST['submit'] == 'Preview')										# preview page
 	{
 		$previewButtons =
-			"<hr />\n".
+			"<hr />\n";
 			// We need to escape ALL entity refs before display so we display them _as_ entities instead of interpreting them
 			// so we use htmlspecialchars on the edit note (as on the body)
-			'<input size="50" type="text" name="note" value="'.htmlspecialchars($note).'"/> Note on your edit.<br />'."\n".
-			'<input name="submit" type="submit" value="Store" accesskey="s" />'."\n".
+		if ($this->config['require_edit_note'] != 2) //check if edit_notes are enabled
+		{
+			$previewButtons .= '<input size="50" type="text" name="note" value="'.htmlspecialchars($note).'"/> Note on your edit.<br />'."\n";
+		}
+		$previewButtons .= '<input name="submit" type="submit" value="Store" accesskey="s" />'."\n".
 			'<input name="submit" type="submit" value="Re-Edit" accesskey="p" id="reedit_id" />'."\n".
 			'<input type="button" value="Cancel" onclick="document.location=\''.$this->href('').'\';" />'."\n";
 
@@ -122,7 +130,7 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 		// display form
 		if ($error)
 		{
-			$output .= '<div class="error">'.$error.'</div>'."\n";
+			$output .= '<em class="error">'.$error.'</em>'."\n";
 		}
 
 		// append a comment?
@@ -136,19 +144,22 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 			'<input type="hidden" name="previous" value="'.$previous.'" />'."\n".
 			// We need to escape ALL entity refs before display so we display them _as_ entities instead of interpreting them
 			// hence htmlspecialchars() instead of htmlspecialchars_ent() which UNescapes entities!
-			'<textarea id="body" name="body" style="width: 100%; height: 500px">'.htmlspecialchars($body).'</textarea><br />'."\n".
+			'<textarea id="body" name="body" style="width: 100%; height: 500px">'.htmlspecialchars($body).'</textarea><br />'."\n";
 			//note add Edit
 			// We need to escape ALL entity refs before display so we display them _as_ entities instead of interpreting them
 			// so we use htmlspecialchars on the edit note (as on the body)
-			'<input size="40" type="text" name="note" value="'.htmlspecialchars($note).'" /> Please add a note on your edit.<br />'."\n".
-			//finish
-			'<input name="submit" type="submit" value="Store" accesskey="s" /> <input name="submit" type="submit" value="Preview" accesskey="p" /> <input type="button" value="Cancel" onclick="document.location=\''.$this->Href('').'\';" />'."\n".
+		if ($this->config['require_edit_note'] != 2) //check if edit_notes are enabled
+		{
+			$output .= '<input size="40" type="text" name="note" value="'.htmlspecialchars($note).'" /> Please add a note on your edit.<br />'."\n";
+		}
+		//finish
+		$output .=	'<input name="submit" type="submit" value="Store" accesskey="s" /> <input name="submit" type="submit" value="Preview" accesskey="p" /> <input type="button" value="Cancel" onclick="document.location=\''.$this->Href('').'\';" />'."\n".
 			$this->FormClose();
 
-		if ($this->GetConfigValue('gui_editor') == 1) {
-			$output .=
-					'<script language="JavaScript" src="3rdparty/plugins/wikiedit/protoedit.js"></script>'."\n".
-					'<script language="JavaScript" src="3rdparty/plugins/wikiedit/wikiedit2.js"></script>'."\n";
+		if ($this->config['gui_editor'] == 1) 
+		{
+			$output .= '<script type="text/javascript" src="3rdparty/plugins/wikiedit/protoedit.js"></script>'."\n".
+					'<script type="text/javascript" src="3rdparty/plugins/wikiedit/wikiedit2.js"></script>'."\n";
 			$output .= '<script type="text/javascript">'."  wE = new WikiEdit(); wE.init('body','WikiEdit','editornamecss');".'</script>'."\n";
 		}
 	}

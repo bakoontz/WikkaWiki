@@ -284,6 +284,8 @@ case "1.1.6.1":
 	$config["grabcode_button"] = '1';
 	test(sprintf(ADDING_CONFIG_ENTRY, 'wiki_suffix'), 1);
 	$config["wiki_suffix"] = '@wikka';
+	test(sprintf(ADDING_CONFIG_ENTRY, 'require_edit_note'), 1);
+	$config["require_edit_note"] = '0';
 	// cookie names have changed -- logout user and delete the old cookies
 	test(DELETING_COOKIES, 1);
 	DeleteCookie("wikka_user_name");

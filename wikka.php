@@ -129,6 +129,7 @@ $wakkaDefaultConfig = array(
 	'pages_purge_time'		=> '0',
 	'xml_recent_changes'		=> '10',
 	'hide_comments'			=> '0',
+	'require_edit_note'		=> '0',		# edit note optional (0, default), edit note required (1) edit note disabled (2)
 	'anony_delete_own_comments'	=> '1',
 	'double_doublequote_html'	=> 'safe',
 	'external_link_tail' 		=> '<span class="exttail">&#8734;</span>',
