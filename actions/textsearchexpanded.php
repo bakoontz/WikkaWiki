@@ -63,7 +63,6 @@ if (isset($_REQUEST['phrase']) && ($phrase = $_REQUEST["phrase"]))
 			if ($this->HasAccess("read",$page["tag"]))
 			{
 				$total_results++;
-				$odd_even = $total_results%2 ? "tse_odd" : "tse_even";
 			 /* display portion of the matching body and highlight the search term */ 
 			 #Note that FullTextSearch finds phrase even if only tag contains phrase, and not body
 				preg_match_all("/(.{0,120})($phrase_re)(.{0,120})/is",$page['tag'].' :: '.$page['body'],$matchString);
@@ -78,8 +77,8 @@ if (isset($_REQUEST['phrase']) && ($phrase = $_REQUEST["phrase"]))
 			 #  $phrase contains `span'.
 				$highlightMatch = preg_replace('/('.$this->htmlspecialchars_ent($phrase_re).')/i','<<$1>>',$text,-1);
 				$matchText = "&hellip;".str_replace(array('<<', '>>'), array('<span class="tse_keywords">', '</span>'), $highlightMatch)."&hellip;";
-				$result_page_list .= "\n<p class='$odd_even'>".($i+1)." ".$this->Link($page["tag"])." &mdash; ".$page['time']."</p>";
-				$result_page_list .= "\n<blockquote class='$odd_even'>".$matchText."</blockquote>\n";
+				$result_page_list .= "\n<p>".($i+1)." ".$this->Link($page["tag"])." &mdash; ".$page['time']."</p>";
+				$result_page_list .= "\n<blockquote>".$matchText."</blockquote>\n";
 			}
 		}
 	}

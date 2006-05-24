@@ -1455,7 +1455,10 @@ class GeSHi
 										{
 											$test_str .= "</span>";
 										}
-										$test_str .= "\n";
+										if ( $close_pos != strlen($part) )
+										{
+											$test_str .= "\n";
+										}
 										$i = $close_pos;
 										// parse the rest
 										$result .= $this->parse_non_string_part( $stuff_to_parse );
