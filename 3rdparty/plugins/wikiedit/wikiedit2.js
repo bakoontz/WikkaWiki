@@ -29,6 +29,7 @@ var WikiEdit = function(){
  this.buttons = new Array();
 }
 var base_url = "";
+var long_base_url = "";
 
 WikiEdit.prototype = new ProtoEdit();
 WikiEdit.prototype.constructor = WikiEdit;
@@ -68,9 +69,11 @@ WikiEdit.prototype.init = function(id, name, nameClass, imgPath) {
     delete locarray[(locarray.length-2)];
     base_url = locarray.join("/");
     base_url = base_url.substr(0, base_url.length-1);
+    long_base_url = base_url;
   }
   else {
     base_url = mylocation.substring(0, base_till);
+    long_base_url = mylocation.replace(/=.*$/, '=');
   }
  if (isIE)
  {
@@ -107,7 +110,7 @@ WikiEdit.prototype.init = function(id, name, nameClass, imgPath) {
  this.addButton("help","Help & About","","document.getElementById('" + this.id + "')._owner.help");
  this.addButton("customhtml",'<td><div style="font:12px Arial;text-decoration:underline; padding:4px;" id="hilfe_' + this.id + '" onmouseover=\'this.className="btn-hover";\' '
             + 'onmouseout=\'this.className="btn-";\' class="btn-" '
-            + 'onclick="this.className=\'btn-pressed\';window.open(base_url+\'FormattingRules\');" '
+            + 'onclick="this.className=\'btn-pressed\';window.open(long_base_url+\'FormattingRules\');" '
             + ' title="Help on Wikka formatting">Help</a>'
             + '</div></td>');
  
@@ -656,6 +659,7 @@ WikiEdit.prototype.help = function ()
  s += " Ctrl+Shift+N - Ordered List\n";
  s += " Ctrl+Shift+O - Ordered List\n";
  s += " Ctrl+Shift+Minus - Horizontal line\n";
+ s += " Ctrl+Shift+F - Advanced search/replace\n";
 
  alert(s);
 }
