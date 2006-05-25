@@ -17,57 +17,57 @@
  */
 
 // defaults
-define('PASSWORD_MIN_LENGTH', "5");
-define('VALID_EMAIL_PATTERN', "/^.+?\@.+?\..+$/"); //TODO: Use central regex library
-define('REVISION_DISPLAY_LIMIT_MIN', "0"); // 0 means no limit, 1 is the minimum number of revisions
-define('REVISION_DISPLAY_LIMIT_MAX', "20"); // keep this value within a reasonable limit to avoid an unnecessary long lists
-define('RECENTCHANGES_DISPLAY_LIMIT_MIN', "0"); // 0 means no limit, 1 is the minimum number of changes
-define('RECENTCHANGES_DISPLAY_LIMIT_MAX', "50"); // keep this value within a reasonable limit to avoid an unnecessary long list
-define('INPUT_ERROR_STYLE', 'class="highlight"');
+if (!defined('PASSWORD_MIN_LENGTH')) define('PASSWORD_MIN_LENGTH', "5");
+if (!defined('VALID_EMAIL_PATTERN')) define('VALID_EMAIL_PATTERN', "/^.+?\@.+?\..+$/"); //TODO: Use central regex library
+if (!defined('REVISION_DISPLAY_LIMIT_MIN')) define('REVISION_DISPLAY_LIMIT_MIN', "0"); // 0 means no limit, 1 is the minimum number of revisions
+if (!defined('REVISION_DISPLAY_LIMIT_MAX')) define('REVISION_DISPLAY_LIMIT_MAX', "20"); // keep this value within a reasonable limit to avoid an unnecessary long lists
+if (!defined('RECENTCHANGES_DISPLAY_LIMIT_MIN')) define('RECENTCHANGES_DISPLAY_LIMIT_MIN', "0"); // 0 means no limit, 1 is the minimum number of changes
+if (!defined('RECENTCHANGES_DISPLAY_LIMIT_MAX')) define('RECENTCHANGES_DISPLAY_LIMIT_MAX', "50"); // keep this value within a reasonable limit to avoid an unnecessary long list
+if (!defined('INPUT_ERROR_STYLE')) define('INPUT_ERROR_STYLE', 'class="highlight"');
 
 // i18n strings
-define('USER_LOGGED_OUT', "You have successfully logged out.");
-define('USER_SETTINGS_STORED', "User settings stored!");
-define('ERROR_NO_BLANK', "Sorry, blanks are not permitted in the password.");
-define('ERROR_PASSWORD_TOO_SHORT', "Sorry, the password must contain at least %s characters.");
-define('PASSWORD_CHANGED', "Password successfully changed!");
-define('ERROR_OLD_PASSWORD_WRONG', "The old password you entered is wrong.");
-define('USER_EMAIL_LABEL', "Your email address:");
-define('DOUBLECLICK_LABEL', "Doubleclick Editing:");
-define('SHOW_COMMENTS_LABEL', "Show comments by default:");
-define('RECENTCHANGES_DISPLAY_LIMIT_LABEL', "RecentChanges display limit:");
-define('PAGEREVISION_LIST_LIMIT_LABEL', "Page revisions list limit:");
-define('UPDATE_SETTINGS_INPUT', "Update Settings");
-define('CHANGE_PASSWORD_LABEL', "Change your password:");
-define('CURRENT_PASSWORD_LABEL', "Your current password:");
-define('NEW_PASSWORD_LABEL', "Your new password:");
-define('CHANGE_BUTTON_LABEL', "Change");
-define('REGISTER_BUTTON_LABEL', "Register");
-define('QUICK_LINKS', "See a list of pages you own (MyPages) and pages you've edited (MyChanges).");
-define('ERROR_WRONG_PASSWORD', "Sorry, you entered the wrong password.");
-define('ERROR_EMPTY_USERNAME', "Please fill in your user name.");
-define('ERROR_RESERVED_PAGENAME', "Sorry, this name is reserved for a page. Please choose a different name.");
-define('ERROR_WIKINAME', "User name must be formatted as a ##\"\"WikiName\"\"##, e.g. ##\"\"JohnDoe\"\"##.");
-define('ERROR_EMPTY_PASSWORD', "Please fill in a password.");
-define('ERROR_EMPTY_CONFIRMATION_PASSWORD', "Please confirm your password in order to register a new account.");
-define('ERROR_EMPTY_NEW_PASSWORD', "You must also fill in a new password.");
-define('ERROR_PASSWORD_MATCH', "Passwords don't match.");
-define('ERROR_EMAIL_ADDRESS_REQUIRED', "Please specify an email address.");
-define('ERROR_INVALID_EMAIL_ADDRESS', "That doesn't quite look like an email address.");
-define('ERROR_INVALID_REVISION_DISPLAY_LIMIT', "The number of page revisions should not exceed %d.");
-define('ERROR_INVALID_RECENTCHANGES_DISPLAY_LIMIT', "The number of recently changed pages should not exceed %d.");
-define('REGISTRATION_SUCCEEDED', "You have successfully registered!");
-define('REGISTERED_USER_LOGIN_LABEL', "If you're already a registered user, log in here!");
-define('REGISTER_HEADING', "===Login/Register===");
-define('WIKINAME_LABEL', "Your <abbr title=\"A WikiName is formed by two or more capitalized words without space, e.g. JohnDoe\">WikiName</abbr>:");
-define('PASSWORD_LABEL', "Password (%s+ chars):");
-define('LOGIN_BUTTON_LABEL', "Login");
-define('LOGOUT_BUTTON_LABEL', "Logout");
-define('NEW_USER_REGISTER_LABEL', "Stuff you only need to fill in when you're logging in for the first time (and thus signing up as a new user on this site).");
-define('CONFIRM_PASSWORD_LABEL', "Confirm password:");
-define('RETRIEVE_PASSWORD_HEADING', "===Forgot your password?===");
-define('RETRIEVE_PASSWORD_MESSAGE', "Log in here with the temporary password. --- If you need a temporary password, click [[PasswordForgotten here]].");
-define('TEMP_PASSWORD_LABEL', "Your temp password:");
+if (!defined('USER_LOGGED_OUT')) define('USER_LOGGED_OUT', "You have successfully logged out.");
+if (!defined('USER_SETTINGS_STORED')) define('USER_SETTINGS_STORED', "User settings stored!");
+if (!defined('ERROR_NO_BLANK')) define('ERROR_NO_BLANK', "Sorry, blanks are not permitted in the password.");
+if (!defined('ERROR_PASSWORD_TOO_SHORT')) define('ERROR_PASSWORD_TOO_SHORT', "Sorry, the password must contain at least %s characters.");
+if (!defined('PASSWORD_CHANGED')) define('PASSWORD_CHANGED', "Password successfully changed!");
+if (!defined('ERROR_OLD_PASSWORD_WRONG')) define('ERROR_OLD_PASSWORD_WRONG', "The old password you entered is wrong.");
+if (!defined('USER_EMAIL_LABEL')) define('USER_EMAIL_LABEL', "Your email address:");
+if (!defined('DOUBLECLICK_LABEL')) define('DOUBLECLICK_LABEL', "Doubleclick Editing:");
+if (!defined('SHOW_COMMENTS_LABEL')) define('SHOW_COMMENTS_LABEL', "Show comments by default:");
+if (!defined('RECENTCHANGES_DISPLAY_LIMIT_LABEL')) define('RECENTCHANGES_DISPLAY_LIMIT_LABEL', "RecentChanges display limit:");
+if (!defined('PAGEREVISION_LIST_LIMIT_LABEL')) define('PAGEREVISION_LIST_LIMIT_LABEL', "Page revisions list limit:");
+if (!defined('UPDATE_SETTINGS_INPUT')) define('UPDATE_SETTINGS_INPUT', "Update Settings");
+if (!defined('CHANGE_PASSWORD_LABEL')) define('CHANGE_PASSWORD_LABEL', "Change your password:");
+if (!defined('CURRENT_PASSWORD_LABEL')) define('CURRENT_PASSWORD_LABEL', "Your current password:");
+if (!defined('NEW_PASSWORD_LABEL')) define('NEW_PASSWORD_LABEL', "Your new password:");
+if (!defined('CHANGE_BUTTON_LABEL')) define('CHANGE_BUTTON_LABEL', "Change");
+if (!defined('REGISTER_BUTTON_LABEL')) define('REGISTER_BUTTON_LABEL', "Register");
+if (!defined('QUICK_LINKS')) define('QUICK_LINKS', "See a list of pages you own (MyPages) and pages you've edited (MyChanges).");
+if (!defined('ERROR_WRONG_PASSWORD')) define('ERROR_WRONG_PASSWORD', "Sorry, you entered the wrong password.");
+if (!defined('ERROR_EMPTY_USERNAME')) define('ERROR_EMPTY_USERNAME', "Please fill in your user name.");
+if (!defined('ERROR_RESERVED_PAGENAME')) define('ERROR_RESERVED_PAGENAME', "Sorry, this name is reserved for a page. Please choose a different name.");
+if (!defined('ERROR_WIKINAME')) define('ERROR_WIKINAME', "User name must be formatted as a ##\"\"WikiName\"\"##, e.g. ##\"\"JohnDoe\"\"##.");
+if (!defined('ERROR_EMPTY_PASSWORD')) define('ERROR_EMPTY_PASSWORD', "Please fill in a password.");
+if (!defined('ERROR_EMPTY_CONFIRMATION_PASSWORD')) define('ERROR_EMPTY_CONFIRMATION_PASSWORD', "Please confirm your password in order to register a new account.");
+if (!defined('ERROR_EMPTY_NEW_PASSWORD')) define('ERROR_EMPTY_NEW_PASSWORD', "You must also fill in a new password.");
+if (!defined('ERROR_PASSWORD_MATCH')) define('ERROR_PASSWORD_MATCH', "Passwords don't match.");
+if (!defined('ERROR_EMAIL_ADDRESS_REQUIRED')) define('ERROR_EMAIL_ADDRESS_REQUIRED', "Please specify an email address.");
+if (!defined('ERROR_INVALID_EMAIL_ADDRESS')) define('ERROR_INVALID_EMAIL_ADDRESS', "That doesn't quite look like an email address.");
+if (!defined('ERROR_INVALID_REVISION_DISPLAY_LIMIT')) define('ERROR_INVALID_REVISION_DISPLAY_LIMIT', "The number of page revisions should not exceed %d.");
+if (!defined('ERROR_INVALID_RECENTCHANGES_DISPLAY_LIMIT')) define('ERROR_INVALID_RECENTCHANGES_DISPLAY_LIMIT', "The number of recently changed pages should not exceed %d.");
+if (!defined('REGISTRATION_SUCCEEDED')) define('REGISTRATION_SUCCEEDED', "You have successfully registered!");
+if (!defined('REGISTERED_USER_LOGIN_LABEL')) define('REGISTERED_USER_LOGIN_LABEL', "If you're already a registered user, log in here!");
+if (!defined('REGISTER_HEADING')) define('REGISTER_HEADING', "===Login/Register===");
+if (!defined('WIKINAME_LABEL')) define('WIKINAME_LABEL', "Your <abbr title=\"A WikiName is formed by two or more capitalized words without space, e.g. JohnDoe\">WikiName</abbr>:");
+if (!defined('PASSWORD_LABEL')) define('PASSWORD_LABEL', "Password (%s+ chars):");
+if (!defined('LOGIN_BUTTON_LABEL')) define('LOGIN_BUTTON_LABEL', "Login");
+if (!defined('LOGOUT_BUTTON_LABEL')) define('LOGOUT_BUTTON_LABEL', "Logout");
+if (!defined('NEW_USER_REGISTER_LABEL')) define('NEW_USER_REGISTER_LABEL', "Stuff you only need to fill in when you're logging in for the first time (and thus signing up as a new user on this site).");
+if (!defined('CONFIRM_PASSWORD_LABEL')) define('CONFIRM_PASSWORD_LABEL', "Confirm password:");
+if (!defined('RETRIEVE_PASSWORD_HEADING')) define('RETRIEVE_PASSWORD_HEADING', "===Forgot your password?===");
+if (!defined('RETRIEVE_PASSWORD_MESSAGE')) define('RETRIEVE_PASSWORD_MESSAGE', "Log in here with the temporary password. --- If you need a temporary password, click [[PasswordForgotten here]].");
+if (!defined('TEMP_PASSWORD_LABEL')) define('TEMP_PASSWORD_LABEL', "Your temp password:");
 
 //initialize variables
 $email = '';
@@ -78,6 +78,8 @@ $changescount = '';
 $password = '';
 $oldpass = '';
 $username_highlight = '';
+$username_temp_highlight = '';
+$password_temp_highlight = '';
 $email_highlight = '';
 $password_highlight = '';
 $password_confirm_highlight = '';
@@ -358,10 +360,14 @@ else // user is not logged in
 				case (strlen($email) == 0):
 					$error = ERROR_EMAIL_ADDRESS_REQUIRED;
 					$email_highlight = INPUT_ERROR_STYLE;
+					$password_highlight = INPUT_ERROR_STYLE;
+					$password_confirm_highlight = INPUT_ERROR_STYLE;
 					break;
 				case (!preg_match(VALID_EMAIL_PATTERN, $email)):
 					$error = ERROR_INVALID_EMAIL_ADDRESS;
 					$email_highlight = INPUT_ERROR_STYLE;
+					$password_highlight = INPUT_ERROR_STYLE;
+					$password_confirm_highlight = INPUT_ERROR_STYLE;
 					break;
 				default: //valid input, create user
 					$this->Query("INSERT INTO ".$this->config['table_prefix']."users SET ".
@@ -383,7 +389,7 @@ else // user is not logged in
 		if (!$this->IsWikiName($name))
 		{
 			$newerror = ERROR_WIKINAME;
-			$username_highlight = INPUT_ERROR_STYLE;
+			$username_temp_highlight = INPUT_ERROR_STYLE;
 		}
 		// if user name already exists, check password
 		elseif ($existingUser = $this->LoadUser($_POST['yourname']))   
@@ -397,7 +403,7 @@ else // user is not logged in
 			else
 			{
 				$newerror = ERROR_WRONG_PASSWORD;
-				$password_highlight = INPUT_ERROR_STYLE;
+				$password_temp_highlight = INPUT_ERROR_STYLE;
 			}
 		}
 	}
@@ -475,11 +481,11 @@ else // user is not logged in
 ?>
 	<tr>
 		<td align="right"><?php echo WIKINAME_LABEL ?></td>
-		<td><input <?php echo $username_highlight; ?> name="yourname" value="<?php if (isset($_POST['yourname'])){ echo $_POST["yourname"]; }?>" size="40" /></td>
+		<td><input <?php echo $username_temp_highlight; ?> name="yourname" value="<?php if (isset($_POST['yourname'])){ echo $_POST["yourname"]; }?>" size="40" /></td>
 	</tr>
 	<tr>
 		<td align="right"><?php echo TEMP_PASSWORD_LABEL ?></td>
-		<td><input <?php echo $password_highlight; ?> name="temppassword" size="40" /></td>
+		<td><input <?php echo $password_temp_highlight; ?> name="temppassword" size="40" /></td>
 	</tr>
 	<tr>
 		<td>&nbsp;</td>
