@@ -103,7 +103,7 @@ function check() {
 	<tr><td></td><td>GeSHi can add line numbers to code; if you enable this, users can "turn on" line numbers by setting a start line number.</td></tr>
 	<tr><td align="right">Disable line numbers (0), or enable normal (1) or fancy (2) line numbers:</td><td><input type="text" size="50" name="config[geshi_line_numbers]" value="<?php echo $wakkaConfig['geshi_line_numbers'] ?>" /></td></tr>
 	<tr><td></td><td>GeSHi assumes a tab width of 8 positions; for code, 4 is more usual though. You can define the tab width to be used below.</td></tr>
-	<tr><td align="right" nowrap>Tab width:</td><td><input type="text" size="50" name="config[geshi_tab width]" value="<?php echo $wakkaConfig['geshi_tab_width'] ?>" /></td></tr>
+	<tr><td align="right" nowrap>Tab width:</td><td><input type="text" size="50" name="config[geshi_tab_width]" value="<?php echo $wakkaConfig['geshi_tab_width'] ?>" /></td></tr>
 	<?php
 	 }
 	?>
