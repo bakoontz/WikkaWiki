@@ -82,7 +82,7 @@ else
 						?>
 <?php echo $this->FormOpen("delcomment"); ?>
    <input type="hidden" name="comment_id" value="<?php echo $comment["id"] ?>" />
-   <input type="submit" value="Delete Comment" accesskey="d" />
+   <input type="submit" value="Delete Comment" />
 <?php echo $this->FormClose(); ?>
 						<?php
 						}
