@@ -26,6 +26,7 @@ if (!defined('RECENTCHANGES_DISPLAY_LIMIT_MAX')) define('RECENTCHANGES_DISPLAY_L
 if (!defined('INPUT_ERROR_STYLE')) define('INPUT_ERROR_STYLE', 'class="highlight"');
 
 // i18n strings
+if (!defined('USER_SETTINGS_HEADING')) define('USER_SETTINGS_HEADING', "User settings");
 if (!defined('USER_LOGGED_OUT')) define('USER_LOGGED_OUT', "You have successfully logged out.");
 if (!defined('USER_SETTINGS_STORED')) define('USER_SETTINGS_STORED', "User settings stored!");
 if (!defined('ERROR_NO_BLANK')) define('ERROR_NO_BLANK', "Sorry, blanks are not permitted in the password.");
@@ -38,18 +39,23 @@ if (!defined('SHOW_COMMENTS_LABEL')) define('SHOW_COMMENTS_LABEL', "Show comment
 if (!defined('RECENTCHANGES_DISPLAY_LIMIT_LABEL')) define('RECENTCHANGES_DISPLAY_LIMIT_LABEL', "RecentChanges display limit:");
 if (!defined('PAGEREVISION_LIST_LIMIT_LABEL')) define('PAGEREVISION_LIST_LIMIT_LABEL', "Page revisions list limit:");
 if (!defined('UPDATE_SETTINGS_INPUT')) define('UPDATE_SETTINGS_INPUT', "Update Settings");
-if (!defined('CHANGE_PASSWORD_LABEL')) define('CHANGE_PASSWORD_LABEL', "Change your password:");
+if (!defined('CHANGE_PASSWORD_HEADING')) define('CHANGE_PASSWORD_HEADING', "Change your password:");
+if (!defined('CHANGE_PASSWORD_INSTRUCTIONS')) define('CHANGE_PASSWORD_INSTRUCTIONS', "To change password, please fill in your current password or the hash you received as a password reminder.");
 if (!defined('CURRENT_PASSWORD_LABEL')) define('CURRENT_PASSWORD_LABEL', "Your current password:");
 if (!defined('NEW_PASSWORD_LABEL')) define('NEW_PASSWORD_LABEL', "Your new password:");
-if (!defined('CHANGE_BUTTON_LABEL')) define('CHANGE_BUTTON_LABEL', "Change");
+if (!defined('NEW_PASSWORD_CONFIRM_LABEL')) define('NEW_PASSWORD_CONFIRM_LABEL', "Confirm new password:");
+if (!defined('CHANGE_BUTTON_LABEL')) define('CHANGE_BUTTON_LABEL', "Change password");
 if (!defined('REGISTER_BUTTON_LABEL')) define('REGISTER_BUTTON_LABEL', "Register");
+if (!defined('QUICK_LINKS_HEADING')) define('QUICK_LINKS_HEADING', "Quick links");
 if (!defined('QUICK_LINKS')) define('QUICK_LINKS', "See a list of pages you own (MyPages) and pages you've edited (MyChanges).");
 if (!defined('ERROR_WRONG_PASSWORD')) define('ERROR_WRONG_PASSWORD', "Sorry, you entered the wrong password.");
 if (!defined('ERROR_EMPTY_USERNAME')) define('ERROR_EMPTY_USERNAME', "Please fill in your user name.");
 if (!defined('ERROR_RESERVED_PAGENAME')) define('ERROR_RESERVED_PAGENAME', "Sorry, this name is reserved for a page. Please choose a different name.");
 if (!defined('ERROR_WIKINAME')) define('ERROR_WIKINAME', "User name must be formatted as a ##\"\"WikiName\"\"##, e.g. ##\"\"JohnDoe\"\"##.");
 if (!defined('ERROR_EMPTY_PASSWORD')) define('ERROR_EMPTY_PASSWORD', "Please fill in a password.");
+if (!defined('ERROR_EMPTY_PASSWORD_OR_HASH')) define('ERROR_EMPTY_PASSWORD_OR_HASH', "Please fill your password or hash.");
 if (!defined('ERROR_EMPTY_CONFIRMATION_PASSWORD')) define('ERROR_EMPTY_CONFIRMATION_PASSWORD', "Please confirm your password in order to register a new account.");
+if (!defined('ERROR_EMPTY_NEW_CONFIRMATION_PASSWORD')) define('ERROR_EMPTY_NEW_CONFIRMATION_PASSWORD', "Please confirm your new password in order to update your account.");
 if (!defined('ERROR_EMPTY_NEW_PASSWORD')) define('ERROR_EMPTY_NEW_PASSWORD', "You must also fill in a new password.");
 if (!defined('ERROR_PASSWORD_MATCH')) define('ERROR_PASSWORD_MATCH', "Passwords don't match.");
 if (!defined('ERROR_EMAIL_ADDRESS_REQUIRED')) define('ERROR_EMAIL_ADDRESS_REQUIRED', "Please specify an email address.");
@@ -66,8 +72,8 @@ if (!defined('LOGOUT_BUTTON_LABEL')) define('LOGOUT_BUTTON_LABEL', "Logout");
 if (!defined('NEW_USER_REGISTER_LABEL')) define('NEW_USER_REGISTER_LABEL', "Stuff you only need to fill in when you're logging in for the first time (and thus signing up as a new user on this site).");
 if (!defined('CONFIRM_PASSWORD_LABEL')) define('CONFIRM_PASSWORD_LABEL', "Confirm password:");
 if (!defined('RETRIEVE_PASSWORD_HEADING')) define('RETRIEVE_PASSWORD_HEADING', "===Forgot your password?===");
-if (!defined('RETRIEVE_PASSWORD_MESSAGE')) define('RETRIEVE_PASSWORD_MESSAGE', "Log in here with the temporary password. --- If you need a temporary password, click [[PasswordForgotten here]].");
-if (!defined('TEMP_PASSWORD_LABEL')) define('TEMP_PASSWORD_LABEL', "Your temp password:");
+if (!defined('RETRIEVE_PASSWORD_MESSAGE')) define('RETRIEVE_PASSWORD_MESSAGE', "If you need a password reminder, click [[PasswordForgotten here]]. --- You can login here using your password reminder.");
+if (!defined('TEMP_PASSWORD_LABEL')) define('TEMP_PASSWORD_LABEL', "Password reminder:");
 
 //initialize variables
 $email = '';
@@ -77,11 +83,13 @@ $revisioncount = '';
 $changescount = '';
 $password = '';
 $oldpass = '';
+$password_confirm = '';
 $username_highlight = '';
 $username_temp_highlight = '';
 $password_temp_highlight = '';
 $email_highlight = '';
 $password_highlight = '';
+$password_new_highlight = '';
 $password_confirm_highlight = '';
 $revisioncount_highlight = '';
 $changescount_highlight = '';
@@ -149,6 +157,7 @@ else if ($user = $this->GetUser())
 	}
 
 	// display user settings form
+	echo '<h3>'.USER_SETTINGS_HEADING.'</h3>';
 	echo $this->FormOpen();
 ?>
 	<input type="hidden" name="action" value="update" />
@@ -215,32 +224,46 @@ else if ($user = $this->GetUser())
 	if (isset($_POST['action']) && ($_POST['action'] == 'changepass'))
 	{
 		// check password
-		$oldpass = $_POST['oldpass'];
-		$password = $_POST['password'];			
+		$oldpass = $_POST['oldpass']; //can be current password or hash sent as password reminder
+		$password = $_POST['password'];
+		$password_confirm = $_POST['password_confirm'];
 		
 		switch (TRUE)
 		{
 			case (strlen($oldpass) == 0):
-				$passerror = ERROR_EMPTY_PASSWORD;
+				$passerror = ERROR_EMPTY_PASSWORD_OR_HASH;
 				$password_highlight = INPUT_ERROR_STYLE;
 				break;
-			case (md5($oldpass) != $user['password']):
+//			case (md5($oldpass) != $user['password']):
+			case (($user['password'] == md5($oldpass)) && !($user['password'] == $oldpass)):
 				$passerror = ERROR_WRONG_PASSWORD;
 				$password_highlight = INPUT_ERROR_STYLE;			
 				break;
 			case (strlen($password) == 0):
 				$passerror = ERROR_EMPTY_NEW_PASSWORD;
 				$password_highlight = INPUT_ERROR_STYLE;			
-				$password_confirm_highlight = INPUT_ERROR_STYLE;
+				$password_new_highlight = INPUT_ERROR_STYLE;
 				break;
 			case (preg_match("/ /", $password)):
 				$passerror = ERROR_NO_BLANK;
 				$password_highlight = INPUT_ERROR_STYLE;			
-				$password_confirm_highlight = INPUT_ERROR_STYLE;
-				break;	
+				$password_new_highlight = INPUT_ERROR_STYLE;
+				break;
 			case (strlen($password) < PASSWORD_MIN_LENGTH):
 				$passerror = sprintf(ERROR_PASSWORD_TOO_SHORT, PASSWORD_MIN_LENGTH);
 				$password_highlight = INPUT_ERROR_STYLE;			
+				$password_new_highlight = INPUT_ERROR_STYLE;
+				break;
+			case (strlen($password_confirm) == 0):
+				$passerror = ERROR_EMPTY_NEW_CONFIRMATION_PASSWORD;
+				$password_highlight = INPUT_ERROR_STYLE;			
+				$password_new_highlight = INPUT_ERROR_STYLE;
+				$password_confirm_highlight = INPUT_ERROR_STYLE;
+				break;
+			case ($password_confirm != $password):
+				$passerror = ERROR_PASSWORD_MATCH;
+				$password_highlight = INPUT_ERROR_STYLE;
+				$password_new_highlight = INPUT_ERROR_STYLE;			
 				$password_confirm_highlight = INPUT_ERROR_STYLE;
 				break;
 			default:
@@ -252,14 +275,13 @@ else if ($user = $this->GetUser())
 	}
 
 	//display password update form
+	echo '<hr />'."\n";
 	echo $this->FormOpen();
 ?>
 	<input type="hidden" name="action" value="changepass" />
+	<h5><?php echo CHANGE_PASSWORD_HEADING ?></h5>
+	<p><?php echo CHANGE_PASSWORD_INSTRUCTIONS; ?></p>
 	<table class="usersettings">
-		<tr>
-			<td align="left"><b><?php echo CHANGE_PASSWORD_LABEL ?></b></td>
-			<td><br /><br />&nbsp;</td>
-		</tr>
 <?php
 		if (isset($passerror))
 		{
@@ -267,20 +289,25 @@ else if ($user = $this->GetUser())
 		}
 ?>
 		<tr>
-			<td align="left"><?php echo CURRENT_PASSWORD_LABEL ?></td>
+			<td align="right"><?php echo CURRENT_PASSWORD_LABEL ?></td>
 			<td><input <?php echo $password_highlight; ?> type="password" name="oldpass" size="40" /></td>
 		</tr>
 		<tr>
-			<td align="left"><?php echo NEW_PASSWORD_LABEL ?></td>
-			<td><input  <?php echo $password_confirm_highlight; ?> type="password" name="password" size="40" /></td>
+			<td align="right"><?php echo NEW_PASSWORD_LABEL ?></td>
+			<td><input  <?php echo $password_new_highlight; ?> type="password" name="password" size="40" /></td>
+		</tr>
+		<tr>
+			<td align="right"><?php echo NEW_PASSWORD_CONFIRM_LABEL ?></td>
+			<td><input  <?php echo $password_confirm_highlight; ?> type="password" name="password_confirm" size="40" /></td>
 		</tr>
 		<tr>
 			<td></td>
 			<td><input type="submit" value="<?php echo CHANGE_BUTTON_LABEL ?>" size="40" /></td>
 		</tr>
 	</table>
-	<br />
 <?php
+	echo '<hr />'."\n";
+	echo '<h5>'.QUICK_LINKS_HEADING.'</h5>'."\n";
 	echo $this->Format(QUICK_LINKS);
 	print($this->FormClose());
 }
