@@ -13,7 +13,6 @@
  * @todo			-different actions for registration / login / user settings
  					-add documentation links or short explanations for each option
  					-error handler for displaying messages and highlighting invalid fields
- 					- give correct explanation of password retrieval procedure
  */
 
 // defaults
@@ -51,8 +50,9 @@ if (!defined('QUICK_LINKS')) define('QUICK_LINKS', "See a list of pages you own 
 if (!defined('ERROR_WRONG_PASSWORD')) define('ERROR_WRONG_PASSWORD', "Sorry, you entered the wrong password.");
 if (!defined('ERROR_WRONG_HASH')) define('ERROR_WRONG_HASH', "Sorry, you entered a wrong password reminder.");
 if (!defined('ERROR_EMPTY_USERNAME')) define('ERROR_EMPTY_USERNAME', "Please fill in your user name.");
+if (!defined('ERROR_NON_EXISTENT_USERNAME')) define('ERROR_NON_EXISTENT_USERNAME', "Sorry, this user name doesn't exist.");
 if (!defined('ERROR_RESERVED_PAGENAME')) define('ERROR_RESERVED_PAGENAME', "Sorry, this name is reserved for a page. Please choose a different name.");
-if (!defined('ERROR_WIKINAME')) define('ERROR_WIKINAME', "User name must be formatted as a ##\"\"WikiName\"\"##, e.g. ##\"\"JohnDoe\"\"##.");
+if (!defined('ERROR_WIKINAME')) define('ERROR_WIKINAME', "Username must be formatted as a ##\"\"WikiName\"\"##, e.g. ##\"\"JohnDoe\"\"##.");
 if (!defined('ERROR_EMPTY_PASSWORD')) define('ERROR_EMPTY_PASSWORD', "Please fill in a password.");
 if (!defined('ERROR_EMPTY_PASSWORD_OR_HASH')) define('ERROR_EMPTY_PASSWORD_OR_HASH', "Please fill your password or hash.");
 if (!defined('ERROR_EMPTY_CONFIRMATION_PASSWORD')) define('ERROR_EMPTY_CONFIRMATION_PASSWORD', "Please confirm your password in order to register a new account.");
@@ -423,15 +423,23 @@ else // user is not logged in
 	}
 	elseif  (isset($_POST['action']) && ($_POST['action'] == 'updatepass'))
 	{
-		// check if name is WikiName style
         $name = trim($_POST['yourname']);
-		if (!$this->IsWikiName($name))
+		if (strlen($name) == 0) // empty username	
+		{
+			$newerror = ERROR_EMPTY_USERNAME;
+			$username_temp_highlight = INPUT_ERROR_STYLE;
+		}
+		elseif (!$this->IsWikiName($name)) // check if name is WikiName style	
 		{
 			$newerror = ERROR_WIKINAME;
 			$username_temp_highlight = INPUT_ERROR_STYLE;
 		}
-		// if user name already exists, check password
-		elseif ($existingUser = $this->LoadUser($_POST['yourname']))   
+		elseif (!($this->LoadUser($_POST['yourname']))) //check if user exists
+		{
+			$newerror = ERROR_NON_EXISTENT_USERNAME;
+			$username_temp_highlight = INPUT_ERROR_STYLE;
+		}
+		elseif ($existingUser = $this->LoadUser($_POST['yourname']))  // if user name already exists, check password
 		{
 			// updatepassword
 			if ($existingUser['password'] == $_POST['temppassword'])
