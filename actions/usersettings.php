@@ -40,8 +40,8 @@ if (!defined('RECENTCHANGES_DISPLAY_LIMIT_LABEL')) define('RECENTCHANGES_DISPLAY
 if (!defined('PAGEREVISION_LIST_LIMIT_LABEL')) define('PAGEREVISION_LIST_LIMIT_LABEL', "Page revisions list limit:");
 if (!defined('UPDATE_SETTINGS_INPUT')) define('UPDATE_SETTINGS_INPUT', "Update Settings");
 if (!defined('CHANGE_PASSWORD_HEADING')) define('CHANGE_PASSWORD_HEADING', "Change your password:");
-if (!defined('CHANGE_PASSWORD_INSTRUCTIONS')) define('CHANGE_PASSWORD_INSTRUCTIONS', "To change password, please fill in your current password or the hash you received as a password reminder.");
 if (!defined('CURRENT_PASSWORD_LABEL')) define('CURRENT_PASSWORD_LABEL', "Your current password:");
+if (!defined('PASSWORD_REMINDER_LABEL')) define('PASSWORD_REMINDER_LABEL', "Password reminder:");
 if (!defined('NEW_PASSWORD_LABEL')) define('NEW_PASSWORD_LABEL', "Your new password:");
 if (!defined('NEW_PASSWORD_CONFIRM_LABEL')) define('NEW_PASSWORD_CONFIRM_LABEL', "Confirm new password:");
 if (!defined('CHANGE_BUTTON_LABEL')) define('CHANGE_BUTTON_LABEL', "Change password");
@@ -49,6 +49,7 @@ if (!defined('REGISTER_BUTTON_LABEL')) define('REGISTER_BUTTON_LABEL', "Register
 if (!defined('QUICK_LINKS_HEADING')) define('QUICK_LINKS_HEADING', "Quick links");
 if (!defined('QUICK_LINKS')) define('QUICK_LINKS', "See a list of pages you own (MyPages) and pages you've edited (MyChanges).");
 if (!defined('ERROR_WRONG_PASSWORD')) define('ERROR_WRONG_PASSWORD', "Sorry, you entered the wrong password.");
+if (!defined('ERROR_WRONG_HASH')) define('ERROR_WRONG_HASH', "Sorry, you entered a wrong password reminder.");
 if (!defined('ERROR_EMPTY_USERNAME')) define('ERROR_EMPTY_USERNAME', "Please fill in your user name.");
 if (!defined('ERROR_RESERVED_PAGENAME')) define('ERROR_RESERVED_PAGENAME', "Sorry, this name is reserved for a page. Please choose a different name.");
 if (!defined('ERROR_WIKINAME')) define('ERROR_WIKINAME', "User name must be formatted as a ##\"\"WikiName\"\"##, e.g. ##\"\"JohnDoe\"\"##.");
@@ -84,6 +85,8 @@ $changescount = '';
 $password = '';
 $oldpass = '';
 $password_confirm = '';
+$pw_selected = '';
+$hash_selected = '';
 $username_highlight = '';
 $username_temp_highlight = '';
 $password_temp_highlight = '';
@@ -227,6 +230,7 @@ else if ($user = $this->GetUser())
 		$oldpass = $_POST['oldpass']; //can be current password or hash sent as password reminder
 		$password = $_POST['password'];
 		$password_confirm = $_POST['password_confirm'];
+		$update_option = $_POST['update_option'];
 		
 		switch (TRUE)
 		{
@@ -234,9 +238,14 @@ else if ($user = $this->GetUser())
 				$passerror = ERROR_EMPTY_PASSWORD_OR_HASH;
 				$password_highlight = INPUT_ERROR_STYLE;
 				break;
-//			case (md5($oldpass) != $user['password']):
-			case (($user['password'] == md5($oldpass)) && !($user['password'] == $oldpass)):
+			case (($update_option == 'pw') && md5($oldpass) != $user['password']): //wrong password
 				$passerror = ERROR_WRONG_PASSWORD;
+				$pw_selected = 'selected="selected"';
+				$password_highlight = INPUT_ERROR_STYLE;			
+				break;
+			case (($update_option == 'hash') && $oldpass != $user['password']): //wrong hash
+				$passerror = ERROR_WRONG_HASH;
+				$hash_selected = 'selected="selected"';
 				$password_highlight = INPUT_ERROR_STYLE;			
 				break;
 			case (strlen($password) == 0):
@@ -280,7 +289,6 @@ else if ($user = $this->GetUser())
 ?>
 	<input type="hidden" name="action" value="changepass" />
 	<h5><?php echo CHANGE_PASSWORD_HEADING ?></h5>
-	<p><?php echo CHANGE_PASSWORD_INSTRUCTIONS; ?></p>
 	<table class="usersettings">
 <?php
 		if (isset($passerror))
@@ -289,7 +297,11 @@ else if ($user = $this->GetUser())
 		}
 ?>
 		<tr>
-			<td align="right"><?php echo CURRENT_PASSWORD_LABEL ?></td>
+			<td align="right">
+				<select name="update_option">
+					<option value="pw" <?php echo $pw_selected; ?>><?php echo CURRENT_PASSWORD_LABEL; ?></option>
+					<option value="hash" <?php echo $hash_selected; ?>><?php echo PASSWORD_REMINDER_LABEL; ?></option>
+			</select></td>
 			<td><input <?php echo $password_highlight; ?> type="password" name="oldpass" size="40" /></td>
 		</tr>
 		<tr>
