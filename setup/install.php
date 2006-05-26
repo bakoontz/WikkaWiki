@@ -4,9 +4,10 @@
 if (!defined('ADDING_CONFIG_ENTRY')) define('ADDING_CONFIG_ENTRY', 'Adding a new option to the wikka.config file: %s'); // %s - name of the config option
 if (!defined('DELETING_COOKIES')) define('DELETING_COOKIES', 'Deleting wikka cookies since their name has changed.');
 
+// initialization
+$config = array(); //required since PHP5, to avoid warning on array_merge #94
 // fetch configuration
 $config = $_POST["config"];
-
 // merge existing configuration with new one
 $config = array_merge($wakkaConfig, $config);
 
