@@ -4,10 +4,10 @@
  * -------
  * Author: Tux (tux@inmail.cz)
  * Copyright: (c) 2004 Tux (http://tux.a4.cz/), Nigel McNie (http://qbnz.com/highlighter)
- * Release Version: 1.0.2
- * CVS Revision Version: $Revision: 1.1 $
+ * Release Version: 1.0.7.10
+ * CVS Revision Version: $Revision: 1.14 $
  * Date Started: 2004/07/27
- * Last Modified: $Date: 2004/11/29 08:46:24 $
+ * Last Modified: $Date: 2006/05/19 11:40:15 $
  *
  * x86 Assembler language file for GeSHi.
  * Words are from SciTe configuration file (based on NASM syntax)
@@ -91,7 +91,7 @@ $language_data = array (
 		3 => array(
 			'ah','al','ax','bh','bl','bp','bx','ch','cl','cr0','cr2','cr3','cs','cx','dh','di','dl',
 			'dr0','dr1','dr2','dr3','dr6','dr7','ds','dx','eax','ebp','ebx','ecx','edi','edx',
-			 'es','esi','esp','fs','gs','si','sp','ss','st','tr3','tr4','tr5','tr6','tr7'
+			 'es','esi','esp','fs','gs','si','sp','ss','st','tr3','tr4','tr5','tr6','tr7', 'ah', 'bh', 'ch', 'dh'
 			),
 		/*Directive*/
 		4 => array(
@@ -187,7 +187,7 @@ $language_data = array (
 	'OBJECT_SPLITTERS' => array(
 		),
 	'REGEXPS' => array(
-		0 => '[0-9a-fA-F][0-9a-fA-F]*[hH]',
+		0 => '0[0-9a-fA-F][0-9a-fA-F]*[hH]',
 		1 => '[01][01]*[bB]'
 		),
 	'STRICT_MODE_APPLIES' => GESHI_NEVER,

@@ -4,10 +4,10 @@
  * -------
  * Author: Nigel McNie (oracle.shinoda@gmail.com)
  * Copyright: (c) 2004 Nigel McNie (http://qbnz.com/highlighter/)
- * Release Version: 1.0.3
- * CVS Revision Version: $Revision: 1.2 $
+ * Release Version: 1.0.7.10
+ * CVS Revision Version: $Revision: 1.14 $
  * Date Started: 2004/06/18
- * Last Modified: $Date: 2004/11/27 01:46:41 $
+ * Last Modified: $Date: 2006/05/19 11:40:16 $
  *
  * CSS language file for GeSHi.
  *
@@ -67,30 +67,31 @@ $language_data = array (
 			'border-right-style', 'border-right-width', 'border-top-color',
 			'border-top-style', 'border-top-width','border-bottom', 'border-collapse',
 			'border-left', 'border-width', 'border-color', 'border-spacing',
-			'border-style', 'border-top', 'border', 'caption-side',
-			'clear', 'clip', 'content', 'counter-increment', 'counter-reset',
+			'border-style', 'border-top', 'border',  'caption-side',
+			'clear', 'clip', 'color', 'content', 'counter-increment', 'counter-reset',
 			'cue-after', 'cue-before', 'cue', 'cursor', 'direction', 'display',
 			'elevation', 'empty-cells', 'float', 'font-family', 'font-size',
 			'font-size-adjust', 'font-stretch', 'font-style', 'font-variant',
-			'font-weight', 'font', 'letter-spacing', 'line-height',
+			'font-weight', 'font', 'height', 'letter-spacing', 'line-height',
 			'list-style', 'list-style-image', 'list-style-position', 'list-style-type',
 			'margin-bottom', 'margin-left', 'margin-right', 'margin-top', 'margin',
 			'marker-offset', 'marks', 'max-height', 'max-width', 'min-height',
-			'min-width', 'orphans', 'outline-color', 'outline-style',
+			'min-width', 'orphans', 'outline', 'outline-color', 'outline-style',
 			'outline-width', 'overflow', 'padding-bottom', 'padding-left',
-			'padding-right', 'padding-top', 'padding', 'page-break-after',
+			'padding-right', 'padding-top', 'padding', 'page', 'page-break-after',
 			'page-break-before', 'page-break-inside', 'pause-after', 'pause-before',
-			'pause', 'pitch-range',  'play-during', 'position', 'quotes',
+			'pause', 'pitch', 'pitch-range',  'play-during', 'position', 'quotes',
 			'richness', 'right', 'size', 'speak-header', 'speak-numeral', 'speak-punctuation',
 			'speak', 'speech-rate', 'stress', 'table-layout', 'text-align', 'text-decoration',
 			'text-indent', 'text-shadow', 'text-transform', 'top', 'unicode-bidi',
 			'vertical-align', 'visibility', 'voice-family', 'volume', 'white-space', 'widows',
-			'width', 'word-spacing', 'z-index', 'bottom', 'color', 'height', 'left', 'outline', 'page', 'pitch'
+			'width', 'word-spacing', 'z-index', 'bottom', 'left'
 			),
 		2 => array(
 			'above', 'absolute', 'always', 'armenian', 'aural', 'auto', 'avoid',
 			'baseline', 'behind', 'below', 'bidi-override', 'blink', 'block', 'bold', 'bolder', 'both',
-			'capitalize', 'center-left', 'center-right', 'center', 'circle', 'cjk-ideographic', 'close-quote', 'collapse', 'condensed', 'continuous', 'crop', 'crosshair', 'cross', 'cursive',
+			'capitalize', 'center-left', 'center-right', 'center', 'circle', 'cjk-ideographic', 
+            'close-quote', 'collapse', 'condensed', 'continuous', 'crop', 'crosshair', 'cross', 'cursive',
 			'dashed', 'decimal-leading-zero', 'decimal', 'default', 'digits', 'disc', 'dotted', 'double',
 			'e-resize', 'embed', 'extra-condensed', 'extra-expanded', 'expanded',
 			'fantasy', 'far-left', 'far-right', 'faster', 'fast', 'fixed', 'fuchsia',

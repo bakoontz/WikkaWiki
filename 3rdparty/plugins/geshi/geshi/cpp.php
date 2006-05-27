@@ -7,10 +7,10 @@
  *  - M. Uli Kusterer (witness.of.teachtext@gmx.net)
  *  - Jack Lloyd (lloyd@randombit.net)
  * Copyright: (c) 2004 Dennis Bayer, Nigel McNie (http://qbnz.com/highlighter)
- * Release Version: 1.0.2
- * CVS Revision Version: $Revision: 1.2 $
+ * Release Version: 1.0.7.10
+ * CVS Revision Version: $Revision: 1.14 $
  * Date Started: 2004/09/27
- * Last Modified: $Date: 2004/12/01 08:44:47 $
+ * Last Modified: $Date: 2006/05/19 11:40:10 $
  *
  * C++ language file for GeSHi.
  *
@@ -75,7 +75,7 @@ $language_data = array (
 			'EXIT_FAILURE', 'EXIT_SUCCESS', 'RAND_MAX', 'CLOCKS_PER_SEC',
 			'virtual', 'public', 'private', 'protected', 'template', 'using', 'namespace',
 			'try', 'catch', 'inline', 'dynamic_cast', 'const_cast', 'reinterpret_cast',
-			'static_cast', 'explicit', 'friend', 'wchar_t', 'typename', 'typeid'
+			'static_cast', 'explicit', 'friend', 'wchar_t', 'typename', 'typeid', 'class'
 			),
 		3 => array(
 			'cin', 'cerr', 'clog', 'cout', 'delete', 'new', 'this',
@@ -170,5 +170,3 @@ $language_data = array (
 );
 
 ?>
-
-

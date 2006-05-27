@@ -8,6 +8,3 @@ Differences from standard GeSHi distribution:
 	Visit the official GeSHi website to view documentation:
 	http://qbnz.com/highlighter/geshi-doc.html
 
-
-- geshi/css.php: keyword order modified.
-

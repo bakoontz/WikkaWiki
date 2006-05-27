@@ -4,10 +4,10 @@
  * ------
  * Author: Roberto Rossi (rsoftware@altervista.org)
  * Copyright: (c) 2004 Roberto Rossi (http://rsoftware.altervista.org), Nigel McNie (http://qbnz.com/highlighter)
- * Release Version: 1.0.1
- * CVS Revision Version: $Revision: 1.1 $
+ * Release Version: 1.0.7.10
+ * CVS Revision Version: $Revision: 1.13 $
  * Date Started: 2004/08/30
- * Last Modified: $Date: 2004/11/29 08:46:25 $
+ * Last Modified: $Date: 2006/05/19 11:40:09 $
  *
  * Visual Basic language file for GeSHi.
  *
@@ -121,7 +121,7 @@
 			0 => 'color: #cc66cc;'
 			),
 		'METHODS' => array(
-			0 => 'color: #66cc66;'
+			1 => 'color: #66cc66;'
 			),
 		'SYMBOLS' => array(
 			0 => 'color: #66cc66;'
