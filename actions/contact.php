@@ -3,6 +3,7 @@
  * Print a spam-safe mailto: link to the administrator's email address.
  *
  * Note: plain mailto links are a common source of spam.
+ * @version $Revision$
  */
 
 //constants section
