@@ -131,6 +131,7 @@ $wakkaDefaultConfig = array(
 	'hide_comments'			=> '0',
 	'require_edit_note'		=> '0',		# edit note optional (0, default), edit note required (1) edit note disabled (2)
 	'anony_delete_own_comments'	=> '1',
+	'public_sysinfo'			=> '0',		# enable or disable public display of system information in SysInfo
 	'double_doublequote_html'	=> 'safe',
 	'external_link_tail' 		=> '<span class="exttail">&#8734;</span>',
 	'sql_debugging'			=> '0',
