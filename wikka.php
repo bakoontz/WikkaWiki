@@ -5,6 +5,7 @@ This file is part of Wikka, a PHP wiki engine.
 
 Copyright (C) 2002, 2003 Hendrik Mans <hendrik@mans.de>
 Copyright (C) 2004, 2005 Jason Tourtelotte <wikka-admin@jsnx.com>
+Copyright (C) 2006 Wikka Development Team <dartar@wikkawiki.org>
 
 Wikka is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
