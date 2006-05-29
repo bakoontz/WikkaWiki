@@ -4,6 +4,14 @@
 if (!defined('GRABCODE_BUTTON_VALUE')) define('GRABCODE_BUTTON_VALUE', 'Grab');
 if (!defined('GRABCODE_BUTTON_TITLE')) define('GRABCODE_BUTTON_TITLE', 'Download %s');
 
+// code block patterns
+define('PATTERN_OPEN_BRACKET', '\(');
+define('PATTERN_FORMATTER', '([^;\)]+)');
+define('PATTERN_LINE_NUMBER', '(;(\d*?))?');
+define('PATTERN_FILENAME', '(;([^\)\x01-\x1f\*\?\"<>\|]*)([^\)]*))?');
+define('PATTERN_CLOSE_BRACKET', '\)');
+define('PATTERN_CODE', '(.*)');
+
 // Note: all possible formatting tags have to be in a single regular expression for this to work correctly.
 
 if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix!
@@ -215,7 +223,7 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 			$geshi_hi_path = isset($wakka->config['geshi_languages_path']) ? $wakka->config['geshi_languages_path'] : '/:/';
 			$wikka_hi_path = isset($wakka->config['wikka_highlighters_path']) ? $wakka->config['wikka_highlighters_path'] : '/:/';
 			// check if a language (and an optional starting line or filename) has been specified
-			if (preg_match("/^\(([^;]+)(;(\d*?))?(;([^\)\x01-\x1f\*\?\"<>\|]*)(.*))?\)(.*)$/s", $code, $matches))
+			if (preg_match('/^'.PATTERN_OPEN_BRACKET.PATTERN_FORMATTER.PATTERN_LINE_NUMBER.PATTERN_FILENAME.PATTERN_CLOSE_BRACKET.PATTERN_CODE.'$/s', $code, $matches))
 			{
 				list(, $language, , $start, , $filename, $invalid, $code) = $matches;
 			}
