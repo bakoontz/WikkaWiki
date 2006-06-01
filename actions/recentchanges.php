@@ -60,7 +60,7 @@ if ($pages = $this->LoadRecentlyChanged())
 
 				if ($curday)
 				{
-					echo '<br />'."\n";
+					echo '</span><br />'."\n";
 				}
 				echo '<strong>'.$dateformatted.':</strong><br />'."\n".'<span class="recentchanges">'."\n";
 				$curday = $day;
