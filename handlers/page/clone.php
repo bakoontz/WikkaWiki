@@ -33,21 +33,25 @@
  * @todo              Use central library for valid pagenames.
  *        
  */
-// Variables
+// defaults
+if(!defined('VALID_PAGENAME_PATTERN')) define ('VALID_PAGENAME_PATTERN', '/^[A-Za-zÄÖÜßäöü]+[A-Za-z0-9ÄÖÜßäöü]*$/s');
+
+// i18n
 define('CLONE_HEADER', '==== Clone current page ====');
-define('CLONE_SUCCESFUL', '""%s"" was succesfully created!');
+define('CLONE_SUCCESSFUL', '%s was succesfully created!');
 define('CLONE_X_TO', 'Clone %s to:');
 define('CLONED_FROM', 'Cloned from %s');
 define('EDIT_NOTE', 'Edit note:');
-define('ERROR_ACL_READ', ' //You are not allowed to read the source of this page.//');
+define('ERROR_ACL_READ', 'You are not allowed to read the source of this page.');
 define('ERROR_ACL_WRITE', 'Sorry! You don\'t have write-access to %s');
-define('ERROR_INVALID_PAGENAME', 'You must specify a valid PageName');
+define('ERROR_INVALID_PAGENAME', 'This page name is invalid. Valid page names must start with a letter and contain only letters and numbers.');
 define('ERROR_PAGE_ALREADY_EXIST', 'Sorry, the destination page already exists');
 define('ERROR_PAGE_NOT_EXIST', ' Sorry, page %s does not exist.');
 define('LABEL_CLONE', 'Clone');
 define('LABEL_EDIT_OPTION', ' Edit after creation ');
 define('PLEASE_FILL_VALID_TARGET', 'Please fill in a valid target ""PageName"" and an (optional) edit note.');
-// set defaults
+
+// initialization
 $from = $this->tag;
 $to = $this->tag;
 $note = sprintf(CLONED_FROM, $from);
@@ -80,23 +84,23 @@ if (!$this->ExistsPage($from))
 			$editoption = (isset($_POST['editoption']))? 'checked="checked"' : '';
 		
 			// 3. check target pagename validity
-			if (!preg_match("/^[A-ZÄÖÜ]+[a-zßäöü]+[A-Z0-9ÄÖÜ][A-Za-z0-9ÄÖÜßäöü]*$/s", $to)) 
+			if (!preg_match(VALID_PAGENAME_PATTERN, $to))  //TODO use central regex library
 			{
 				// invalid pagename!
-				$box = '""<div class="error">'.ERROR_INVALID_PAGENAME.'</div>""';
+				$box = '""<em class="error">'.ERROR_INVALID_PAGENAME.'</em>""';
 			} else
 			{
 				// 4. target page name is valid - now check user's write-access
 				if (!$this->HasAccess('write', $to))  
 				{
-					$box = '""<div class="error">'.sprintf(ERROR_ACL_WRITE, $to).'</div>""';
+					$box = '""<em class="error">'.sprintf(ERROR_ACL_WRITE, $to).'</em>""';
 				} else
 				{
 					// 5. check target page existence
 					if ($this->ExistsPage($to))
 					{ 
 						// page already exists!
-						$box = '""<div class="error">'.ERROR_PAGE_ALREADY_EXIST.'</div>""';
+						$box = '""<em class="error">'.ERROR_PAGE_ALREADY_EXIST.'</em>""';
 					} else
 					{
 						// 6. Valid request - proceed to page cloning
@@ -106,11 +110,11 @@ if (!$this->ExistsPage($from))
 						if ($editoption == 'checked="checked"')
 						{
 							// quick edit
-							$this->Redirect($this->href('edit',$to));
+							$this->Redirect($this->href('edit', $to));
 						} else
 						{
 							// show confirmation message
-							$box = sprintf(CLONE_SUCCESFUL, '""'.$this->MiniHref('',$to).'""');
+							$box = '""<em class="success">'.sprintf(CLONE_SUCCESSFUL, $to).'</em>""';
 						}
 					}
 				}
@@ -118,23 +122,23 @@ if (!$this->ExistsPage($from))
 		} 
 		// build form
 		$form = $this->FormOpen('clone');
-		$form .= '<table class="clone">'.
-			'<tr>'.
-			'<td><strong>'.sprintf(CLONE_X_TO, $this->Link($this->GetPageTag())).'</strong></td>'.
-			'<td><input type="text" name="to" value="'.$to.'" size="37" maxlength="75" /></td>'.
-			'</tr>'.
-			'<tr>'.
-			'<td><strong>'.EDIT_NOTE.'</strong></td>'.
-			'<td><input type="text" name="note" value="'.$note.'" size="37" maxlength="75" /></td>'.
-			'</tr>'.
-			'<tr>'.
-			'<td></td>'.
-			'<td>'.
-			'<input type="checkbox" name="editoption" '.$editoption.' id="editoption" /><label for="editoption">'.LABEL_EDIT_OPTION.'</label>'.
-			'<input type="submit" name="create" value="'.LABEL_CLONE.'" />'.
-			'</td>'.
-			'</tr>'.
-			'</table>';
+		$form .= '<table class="clone">'."\n".
+			'<tr>'."\n".
+			'<td>'.sprintf(CLONE_X_TO, $this->Link($this->GetPageTag())).'</td>'."\n".
+			'<td><input type="text" name="to" value="'.$to.'" size="37" maxlength="75" /></td>'."\n".
+			'</tr>'."\n".
+			'<tr>'."\n".
+			'<td>'.EDIT_NOTE.'</strong></td>'.
+			'<td><input type="text" name="note" value="'.$note.'" size="37" maxlength="75" /></td>'."\n".
+			'</tr>'."\n".
+			'<tr>'."\n".
+			'<td></td>'."\n".
+			'<td>'."\n".
+			'<input type="checkbox" name="editoption" '.$editoption.' id="editoption" /><label for="editoption">'.LABEL_EDIT_OPTION.'</label>'."\n".
+			'<input type="submit" name="create" value="'.LABEL_CLONE.'" />'."\n".
+			'</td>'."\n".
+			'</tr>'."\n".
+			'</table>'."\n";
 		$form .= $this->FormClose();
 	}
 }

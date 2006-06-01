@@ -315,6 +315,12 @@ blockquote {
 
 /* form elements */
 
+textarea#body{
+	width: 100%;
+	height: 500px;
+	padding: 2px;
+}
+
 .searchbox {
 	/* border: none; */
 	border: 1px solid #CCCCAA;
