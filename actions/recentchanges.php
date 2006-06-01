@@ -86,7 +86,7 @@ if ($pages = $this->LoadRecentlyChanged())
 	{
 		echo '<em>'.NO_READABLE_RECENTLY_CHANGED_PAGES.'</em>';
 	}
-	echo '</span'."\n";
+	echo '</span>'."\n";
 
 	//wikiping instructions
 	$wikipingserver = $this->config['wikiping_server'];
