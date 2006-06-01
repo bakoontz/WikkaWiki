@@ -391,7 +391,7 @@ WikiEdit.prototype.keyDown = function (event) {
      {
       sr_script = document.createElement('script');
       sr_script.setAttribute('type', 'text/javascript');
-      sr_script.setAttribute('src', this.imagesPath+'x_wikiedit_sr.js');
+	  sr_script.setAttribute('src', this.base_url+'3rdparty/plugins/wikiedit/wikiedit_sr.js');
       document.body.appendChild(sr_script);
       sr_launch = function() {setTimeout("(sr_dlg && (typeof(sr_dlg.show)=='function')) ? sr_dlg.show() : sr_launch();", 100);}
       sr_launch();

@@ -1,16 +1,22 @@
 /*
- *  License: See ../LICENSE.TXT
- *  Note: Css is not W3C compliant, but I preferred cross-browser semi-transparence.
- *  This script is still to be rearranged very soon: code are to be injected in wikiedit2.js, 
- *  css are to be written in wikiedit.css
- *  **UNDOCUMENTED**
- *  @link {http://wush.net/trac/wikka/ticket/125 #125}
- *  TODO: Ctrl+Z doesn't always work
- *  TODO: Documentation
- *  TODO: When the selection [the text to be replaced that is highlighted] is hidden [out of the 
-          scope of the textarea], no scrolling happens in Mozilla.
- *  TODO: Create a button in WikiEdit Toolbar
+ * Display a dialog for searching and replacing strings in the current edit screen.
+ *  
+ * Note: Cross-browser semi-transparence is not W3 compliant CSS.
+ *
+ * @package		3rdparty
+ * @name		Search&Replace
+ * @version		0.1
+ * @since		Wikka 1.1.6.2
+ * @author {http://wikkawiki.org/DotMG Mahefa Randimbisoa}
+ * @link {http://wush.net/trac/wikka/ticket/125 #125}
+ * @todo 	- css to be moved to wikiedit.css
+ *			- Ctrl+Z doesn't always work
+ *  			- Add Documentation
+ *  			- When the selection (the text to be replaced that is highlighted) is hidden (out of the 
+         	scope of the textarea), no scrolling happens in Mozilla.
+ *  			- Create a button in WikiEdit Toolbar
  */
+
 var sr_i18n_err;
 var sr_dlg=
 {
@@ -315,19 +321,19 @@ var sr_dlg=
    if (typeof(sr_i18n) == 'undefined')
    var sr_i18n = {
     title:"Search &amp; replace",
-    label_search:"Pattern/Text Search",
-    label_repl:"Replacement",
+    label_search:"Search for",
+    label_repl:"Replace with",
     regexp:"Regular expression",
-    prompt:"Prompt before replace",
+    prompt:"Prompt before replacing",
     icase:"Ignore case",
-    whole_word:"Whole word only",
-    globals:"Global search",
-    fws:"Forward search",
-    bws:"Backward search",
+    whole_word:"Whole word",
+    globals:"Wrap search",
+    fws:"Forward",
+    bws:"Backward",
     go:"Go",
-    reset:"reset",
+    reset:"Reset",
     next:"Next",
-    replace_by:"Replace by"
+    replace_by:"Replace with"
    };
    sr_i18n_err = {
     nodol9:"Error: You cannot use both $0 and $9 !",
@@ -343,14 +349,15 @@ var sr_dlg=
    _innerHTML = 
    '#replacediv'+
    '{'+
-     ' background: #ccc;'+
+     ' background: #eee;'+
      ' position: absolute;'+
      ' width: 530px;'+
      ' height: auto;'+
      ' left: 50;'+
      ' top: 50;'+
+     ' padding: 3px;'+
      opacity+
-     ' border: 2px solid #000;'+
+     ' border: 1px solid #666;'+
    '}'+
    '#replacediv, #replacediv * input'+
    '{'+
@@ -359,29 +366,28 @@ var sr_dlg=
    '}'+
    '#replacediv * td'+
    '{'+
-     ' padding-left: 3px;'+
-     ' padding-top: 3px;'+
+     ' padding: 3px;'+
      ' line-height: 1em;'+
    '}'+
-   '#replacediv #sr_menuline a, #replacediv #sr_menuline a:link, #replacediv #sr_menuline a:active, #replacediv #sr_menuline a:visited, #replacediv #sr_menuline a:hover'+
+   '#replacediv #sr_menuline a'+
    '{'+
      ' text-decoration: none;'+
-     ' border: 1px solid #aaf;'+
-     ' color: #faa;'+
-     ' margin: 0;'+
-     ' padding-left: 2px;'+
-     ' padding-right: 2px;'+
+     ' color: #FFF;'+
+     ' padding: 2px;'+
    '}'+
    '#replacediv #sr_menuline'+
    '{'+
+     ' font-size: 12px;'+
      ' text-align: right;'+
-     ' background: #000;'+
+     ' background: #666;'+
      ' color: #eff;'+
+     ' line-height: 1.2em;'+
+     ' padding: 0;'+
      ' cursor: move;'+
    '}'+
    '#replacediv * input[readonly], textarea[readonly], .IEreadonly'+
    '{'+
-     'background: #fbb;'+
+     'background: #eee;'+
    '}';
    if (isIE) 
    {
@@ -409,10 +415,18 @@ var sr_dlg=
      ' <tr><td>'+sr_i18n.label_search+':</td><td><input name="search" maxlength="70" /></td></tr>'+
      ' <tr><td>'+sr_i18n.label_repl+':</td><td><input name="replacement" id="replacement" maxlength="256" /></td></tr>'+
      ' <tr>'+
-     '  <td colspan="2">'+
-     '   <input id="is_regexp" name="is_regexp" type="checkbox" /><label for="is_regexp">'+sr_i18n.regexp+'</label> &nbsp; '+
-     '   <input type="checkbox" name="prompt" id="prompt" /><label for="prompt">'+sr_i18n.prompt+'</label> &nbsp; '+
-     '   <input name="ignore_case" id="ignore_case" type="checkbox" /><label for="ignore_case">'+sr_i18n.icase+'</label> &nbsp;'+
+     '  <td>'+
+     '   <input id="is_regexp" name="is_regexp" type="checkbox" /><label for="is_regexp">'+sr_i18n.regexp+'</label>'+
+     '  </td>'+
+     '  <td>'+
+     '   <input type="checkbox" name="prompt" checked="checked" id="prompt" /><label for="prompt">'+sr_i18n.prompt+'</label><br />'+
+     '  </td>'+
+     '  </tr>'+
+     '  <tr>'+
+     '  <td>'+
+     '   <input name="ignore_case" id="ignore_case" type="checkbox" /><label for="ignore_case">'+sr_i18n.icase+'</label>'+
+     '  </td>'+
+     '  <td>'+
      '   <input name="whole_word" id="whole_word" type="checkbox" /><label for="whole_word">'+sr_i18n.whole_word+'</label>'+
      '  </td>'+
      ' </tr>'+
@@ -448,4 +462,3 @@ var sr_dlg=
  }
 };
 loaded_x_wikiedit_sr_js = true;
-
