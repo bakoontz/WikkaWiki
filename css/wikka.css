@@ -321,7 +321,7 @@ blockquote {
 /* form elements */
 
 input[type=submit], input[type=button] {
-	padding: 0px;
+	padding: 0px 1px;
 	width: auto;
 	font-size: 9pt;
 	color:#fff;
