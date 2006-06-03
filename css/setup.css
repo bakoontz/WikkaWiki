@@ -26,17 +26,21 @@ a {
 	color: #880000;
 }
 
-input {
-	font-family: Verdana, Tahoma, Arial, Helvetica, sans-serif;
-	color: #880000;
-	font-size: 13px;
-}
-
 input[type=submit], input[type=button] {
-	color: #000;
-	background-color: #FEFEFE;
+	padding: 0px 1px;
+	width: auto;
+	font-size: 9pt;
+	color:#fff;
+	font-weight: bold;
+	font-family: Arial, Helvetica, sans-serif;
+	background: #6C6;
+	border-right: 2px solid #4A4;
+	border-bottom: 2px solid #4A4;
 }
 
+input[type=submit]:hover, input[type=button]:hover {
+	background-color: #7D7;
+}
 
 .ok {
 	color: #008800;

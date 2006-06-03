@@ -10,7 +10,6 @@ $cellpadding=1;
 $cellspacing=1;
 $border=1;
 $columns=1;
-// $style='border-spacing: 2px;border:2px outset #876;width:auto;margin:0 auto;';
 $style='';
 
 if (is_array($vars))
@@ -26,7 +25,7 @@ if (is_array($vars))
 		}             
 		if ($param == 'cells') $cells = split($delimiter, $value);
 	}
-	$cached_output = "<table cellpadding='".$cellpadding."' cellspacing='".$cellspacing."' border='".$border."' style='".$style."'>\n";
+	$cached_output = "<table class=\"wikka\" cellpadding='".$cellpadding."' cellspacing='".$cellspacing."' border='".$border."' style='".$style."'>\n";
 	foreach ($cells as $cell_item)
 	{
 		if ($row == 1) $cached_output .= "   <tr>\n";

@@ -101,6 +101,8 @@ WikiEdit.prototype.init = function(id, name, nameClass, imgPath) {
  this.addButton("indent","Indent","'\\t','',0,1");
  this.addButton("outdent","Outdent","","document.getElementById('" + this.id + "')._owner.unindent");
  this.addButton(" ");
+ this.addButton("find","Search &amp; replace","","document.getElementById('" + this.id + "')._owner.searchAndReplace");
+ this.addButton(" ");
 // this.addButton("quote","quote","'\\n<[',']>\\n',2");
  this.addButton("hr","Line","'','\\n----\\n',2");
  this.addButton("textred","Marked text","'\\'\\'','\\'\\'',2");
@@ -275,6 +277,24 @@ WikiEdit.prototype.MarkUp = function (Tag, Text, Tag2, onNewLine, expand, strip)
  return r;
 }
 
+WikiEdit.prototype.searchAndReplace = function () {
+ try 
+ {
+  if (typeof(sr_dlg) != 'undefined' && (typeof(sr_dlg.show) == 'function')) {sr_dlg.show();}
+  else if (typeof(sr_loaded) == 'undefined') 
+  {
+   sr_loaded = true;
+   sr_script = document.createElement('script');
+   sr_script.setAttribute('type', 'text/javascript');
+	  sr_script.setAttribute('src', base_url+'3rdparty/plugins/wikiedit/wikiedit_sr.js');
+   document.body.appendChild(sr_script);
+   sr_launch = function() {setTimeout("(sr_dlg && (typeof(sr_dlg.show)=='function')) ? sr_dlg.show() : sr_launch();", 100);}
+   sr_launch();
+  }
+ }
+ catch (e) { alert(e);}
+}
+
 WikiEdit.prototype.keyDown = function (event) {
 
   if (!this.enabled) return;
@@ -383,22 +403,7 @@ WikiEdit.prototype.keyDown = function (event) {
   break;
   case 2118: //Ctrl+Shift+F
    if (event.shiftKey)
-   {
-    try 
-    {
-     if (typeof(sr_dlg) != 'undefined' && (typeof(sr_dlg.show) == 'function')) {sr_dlg.show();}
-     else 
-     {
-      sr_script = document.createElement('script');
-      sr_script.setAttribute('type', 'text/javascript');
-      sr_script.setAttribute('src', this.imagesPath+'x_wikiedit_sr.js');
-      document.body.appendChild(sr_script);
-      sr_launch = function() {setTimeout("(sr_dlg && (typeof(sr_dlg.show)=='function')) ? sr_dlg.show() : sr_launch();", 100);}
-      sr_launch();
-     }
-    }
-    catch (e) {}
-   }
+    this.searchAndReplace();
   break;
   case 4179: //Alt+S
     try {

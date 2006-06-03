@@ -1,19 +1,18 @@
 <?php
 /**
-* Colors a given text.
+* Renders a string as colored text.
 *
-* You can specifiy either one of htmls defined names or hex-values
-* (with the former one takinge precedency). Same for the background-color.
+* You can specifiy either one of HTML defined names or hex-values (with the former one 
+* taking priority). An optional background color can also be specified.
 *
 * @package    Actions
 * @name    Color
 *
-* @author    ?, probably Hendrik Mans
-* @author    {@link http://wikkawiki.org/NilsLindenberg NilsLindenberg} (modifications)
-* @author    {@link http://wikkawiki.org/DotMG DotMG} (modification - RGB syntax)
+* @author    {@link http://www.mornography.de/ Hendrik Mans}
+* @author    {@link http://wikkawiki.org/NilsLindenberg Nils Lindenberg} (modifications)
+* @author    {@link http://wikkawiki.org/DotMG Mahefa Randimbisoa} (modification - RGB syntax)
 *
 * @version    1.3
-* @since    ?
 *
 * @input    string $text mandatory: the text which should be colored.    
 * @input    string $c optional: (html)name or hex-value of the color for the text;

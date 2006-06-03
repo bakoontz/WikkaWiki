@@ -6,7 +6,7 @@
 	if (!defined('SEARCH_N_MATCH')) define('SEARCH_N_MATCH', 'There was %d matches found');
 	if (!defined('SEARCH_RESULTS')) define('SEARCH_RESULTS', 'Search results');
 	if (!defined('SEARCH_MAX_SNIPPETS')) define('SEARCH_MAX_SNIPPETS', 3);
-	if (!defined('SEARCH_MYSQL_BOOLEAN_MODE')) define('SEARCH_MYSQL_BOOLEAN_MODE', 'aàáâã,eèéêë,iìîï,oòóôõ,uùúû,cç,nñ,yý');
+	if (!defined('SEARCH_MYSQL_IDENTICAL_CHARS')) define('SEARCH_MYSQL_IDENTICAL_CHARS', 'aàáâã,eèéêë,iìîï,oòóôõ,uùúû,cç,nñ,yý');
 	$result_page_list = '';
 ?>
 <?php echo $this->FormOpen("", "", "get"); ?>
@@ -47,8 +47,8 @@ if (isset($_REQUEST['phrase']) && ($phrase = $_REQUEST["phrase"]))
 		#We ensure we never replace the < and > characters
 		$phrase_re = preg_replace(array('/^ +| +$/', '/ \*/', '/\*/', '/ +/'), array('', '|', '[^\s<>]*', '|'), $phrase_re);
 		#Let preg_match find rêve when searching for reve
-		$pattern = '/['.str_replace(',', ']/i,/[', SEARCH_MYSQL_BOOLEAN_MODE).']/i';
-		$replacement = '['.str_replace(',', '],[', SEARCH_MYSQL_BOOLEAN_MODE).']';
+		$pattern = '/['.str_replace(',', ']/i,/[', SEARCH_MYSQL_IDENTICAL_CHARS).']/i';
+		$replacement = '['.str_replace(',', '],[', SEARCH_MYSQL_IDENTICAL_CHARS).']';
 		$phrase_re = preg_replace(explode(',', $pattern), explode(',', $replacement) , $phrase_re);
 		if ($phrase_re) 
 		{

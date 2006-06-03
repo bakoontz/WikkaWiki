@@ -1,16 +1,62 @@
-<?php 
-	$ondblclick = ''; //#123
-	if (isset($_POST['submit']) && ($_POST['submit'] == 'Preview') && ($user = $this->GetUser()) && ($user['doubleclickedit'] != 'N'))
-	{
-		$ondblclick = ' ondblclick=\'document.getElementById("reedit_id").click();\''; //history.back() not working on IE. (changes are lost)
-		//however, history.back() works fine in FF, and this is the optimized choice
-		// Todo: Optimization: Look $_SERVER['HTTP_USER_AGENT'] and use history.back() for good browsers like FF.
-	}
+<?php
+/**
+ * Display a form to edit the current page.
+ *
+ * @package		Handlers
+ * @name		Edit
+ *
+ * @author		{@link http://wikkawiki.org/JsnX Jason Tourtelotte} (original code)
+ * @author		{@link http://wikkawiki.org/Dartar Dario Taraborelli} (preliminary code cleanup, i18n)
+ * @author		{@link http://wikkawiki.org/DotMG Mahefa Randimbisoa} (bugfixes)
+ * @since		Wikka 1.1.6.2
+ *
+ * @todo		- move main <div> to templating class;
+ * 			- optimization using history.back();
+ * 			- use central regex library for validation;
+ */
+
+// defaults
+if(!defined('VALID_PAGENAME_PATTERN')) define ('VALID_PAGENAME_PATTERN', '/^[A-Za-zÄÖÜßäöü]+[A-Za-z0-9ÄÖÜßäöü]*$/s');
+if(!defined('MAX_TAG_LENGTH')) define ('MAX_TAG_LENGTH', 75);
+if(!defined('MAX_EDIT_NOTE_LENGTH')) define ('MAX_EDIT_NOTE_LENGTH', 50);
+
+//i18n
+if(!defined('PREVIEW_HEADER')) define('PREVIEW_HEADER', 'Preview');
+if(!defined('LABEL_EDIT_NOTE')) define('LABEL_EDIT_NOTE', 'Please add a note on your edit');
+if (!defined('INPUT_ERROR_STYLE')) define('INPUT_ERROR_STYLE', 'class="highlight"');
+if(!defined('ERROR_INVALID_PAGENAME')) define('ERROR_INVALID_PAGENAME', 'This page name is invalid. Valid page names must start with a letter and contain only letters and numbers.');
+if(!defined('ERROR_OVERWRITE_ALERT')) define('ERROR_OVERWRITE_ALERT', 'OVERWRITE ALERT: This page was modified by someone else while you were editing it.<br /> Please copy your changes and re-edit this page.');
+if(!defined('ERROR_MISSING_EDIT_NOTE')) define('ERROR_MISSING_EDIT_NOTE', 'MISSING EDIT NOTE: Please fill in an edit note!');
+if(!defined('ERROR_TAG_TOO_LONG')) define('ERROR_TAG_TOO_LONG', 'Tag too long! %d characters max.');
+if(!defined('ERROR_NO_WRITE_ACCESS')) define('ERROR_NO_WRITE_ACCESS', 'You don\'t have write access to this page. You might need to register an account to be able to edit this page.');
+if(!defined('MESSAGE_AUTO_RESIZE')) define('MESSAGE_AUTO_RESIZE', 'Clicking on %s will automatically truncate the tag to the correct size');
+if(!defined('INPUT_SUBMIT_PREVIEW')) define('INPUT_SUBMIT_PREVIEW', 'Preview');
+if(!defined('INPUT_SUBMIT_STORE')) define('INPUT_SUBMIT_STORE', 'Store');
+if(!defined('INPUT_SUBMIT_REEDIT')) define('INPUT_SUBMIT_REEDIT', 'Re-edit');
+if(!defined('INPUT_BUTTON_CANCEL')) define('INPUT_BUTTON_CANCEL', 'Cancel');
+if(!defined('INPUT_SUBMIT_RENAME')) define('INPUT_SUBMIT_RENAME', 'Rename');
+if(!defined('ACCESSKEY_STORE')) define('ACCESSKEY_STORE', 's');
+if(!defined('ACCESSKEY_REEDIT')) define('ACCESSKEY_REEDIT', 'r');
+if(!defined('ACCESSKEY_PREVIEW')) define('ACCESSKEY_PREVIEW', 'p');
+if(!defined('SHOWCODE_LINK')) define('SHOWCODE_LINK', 'View formatting code for this page');
+if(!defined('SHOWCODE_LINK_TITLE')) define('SHOWCODE_LINK_TITLE', 'Click to view page formatting code');
+
+//initialization
+$error = '';
+$highlight_note = '';
+$ondblclick = ''; //#123
+if (isset($_POST['submit']) && ($_POST['submit'] == 'Preview') && ($user = $this->GetUser()) && ($user['doubleclickedit'] != 'N'))
+{
+	$ondblclick = ' ondblclick=\'document.getElementById("reedit_id").click();\'';
+	//history.back() not working on IE. (changes are lost)
+	//however, history.back() works fine in FF, and this is the optimized choice
+	//TODO Optimization: Look $_SERVER['HTTP_USER_AGENT'] and use history.back() for good browsers like FF.
+}
 ?>
 <div class="page"<?php echo $ondblclick;?>>
 <?php
-if (!(preg_match("/^[A-Za-zÄÖÜßäöü]+[A-Za-z0-9ÄÖÜßäöü]*$/s", $this->tag))) { //TODO use central regex library
-	echo '<em>The page name is invalid. Valid page names must start with a letter and contain only letters and numbers.</em>';
+if (!(preg_match(VALID_PAGENAME_PATTERN, $this->tag))) { //TODO use central regex library
+	echo '<em>'.ERROR_INVALID_PAGENAME.'</em>';
 }
 elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 {
@@ -18,10 +64,10 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 	if ($_POST)
 	{
 		// strip CRLF line endings down to LF to achieve consistency ... plus it saves database space.
-		// Note: these codes must remain enclosed in double-quotes to work! -- JsnX
+		// Note: these codes must remain enclosed in double-quotes to work!
 		$body = str_replace("\r\n", "\n", $_POST['body']);
 
-		$body = preg_replace("/\n[ ]{4}/", "\n\t", $body);						# @@@ FIXME: misses first line and multiple sets of four spaces - JW 2005-01-16
+		$body = preg_replace("/\n[ ]{4}/", "\n\t", $body);	// @@@ FIXME: misses first line and multiple sets of four spaces
 
 		// we don't need to escape here, we do that just before display (i.e., treat note just like body!)
 		$note = trim($_POST['note']);
@@ -34,13 +80,14 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 			{
 				if ($this->page['id'] != $_POST['previous'])
 				{
-					$error = 'OVERWRITE ALERT: This page was modified by someone else while you were editing it.<br />'."\n".'Please copy your changes and re-edit this page.<br />';
+					$error = ERROR_OVERWRITE_ALERT;
 				}
 			}
 			// check for edit note
-			if (($this->config['require_edit_note'] == 1) && $_POST['note']=='')
+			if (($this->config['require_edit_note'] == 1) && $_POST['note'] == '')
 			{
-				$error .= 'MISSING EDIT NOTE: Please fill in an edit note!<br />'."\n";
+				$error .= ERROR_MISSING_EDIT_NOTE;
+				$highlight_note= INPUT_ERROR_STYLE;
 			}
 			// store
 			if (!$error)
@@ -71,7 +118,7 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 	// fetch fields
 	if (!$previous = $_POST['previous']) $previous = $this->page['id'];
 	if (!$body) $body = $this->page['body'];
-	$body = preg_replace("/\n[ ]{4}/", "\n\t", $body);						# @@@ FIXME: misses first line and multiple sets of four spaces - JW 2005-01-16
+	$body = preg_replace("/\n[ ]{4}/", "\n\t", $body);	// @@@ FIXME: misses first line and multiple sets of four spaces - JW 2005-01-16
 
 
 	if ($result = mysql_query("describe ".$this->config['table_prefix']."pages tag")) {
@@ -80,25 +127,23 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 	}
 	else
 	{
-		$maxtaglen = 75;
+		$maxtaglen = MAX_TAG_LENGTH;
 	}
 
-	// preview?
-	if ($_POST['submit'] == 'Preview')										# preview page
+	if ($_POST['submit'] == INPUT_SUBMIT_PREVIEW) # preview output
 	{
-		$previewButtons =
-			"<hr />\n";
-			// We need to escape ALL entity refs before display so we display them _as_ entities instead of interpreting them
-			// so we use htmlspecialchars on the edit note (as on the body)
+		$preview_buttons = '<hr />'."\n";
+		// We need to escape ALL entity refs before display so we display them _as_ entities instead of interpreting them
+		// so we use htmlspecialchars on the edit note (as on the body)
 		if ($this->config['require_edit_note'] != 2) //check if edit_notes are enabled
 		{
-			$previewButtons .= '<input size="50" type="text" name="note" value="'.htmlspecialchars($note).'"/> Note on your edit.<br />'."\n";
+			$preview_buttons .= '<input size="'.MAX_EDIT_NOTE_LENGTH.'" type="text" name="note" value="'.htmlspecialchars($note).'" '.$highlight_note.'/>'.LABEL_EDIT_NOTE.'<br />'."\n";
 		}
-		$previewButtons .= '<input name="submit" type="submit" value="Store" accesskey="s" />'."\n".
-			'<input name="submit" type="submit" value="Re-Edit" accesskey="p" id="reedit_id" />'."\n".
-			'<input type="button" value="Cancel" onclick="document.location=\''.$this->href('').'\';" />'."\n";
+		$preview_buttons .= '<input name="submit" type="submit" value="'.INPUT_SUBMIT_STORE.'" accesskey="'.ACCESSKEY_STORE.'" />'."\n".
+			'<input name="submit" type="submit" value="'.INPUT_SUBMIT_REEDIT.'" accesskey="'.ACCESSKEY_REEDIT.'" id="reedit_id" />'."\n".
+			'<input type="button" value="'.INPUT_BUTTON_CANCEL.'" onclick="document.location=\''.$this->href('').'\';" />'."\n";
 
-		$output .= '<div class="previewhead">Preview</div>'."\n";
+		$output .= '<div class="previewhead">'.PREVIEW_HEADER.'</div>'."\n";
 
 		$output .= $this->Format($body);
 
@@ -110,22 +155,19 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 			'<input type="hidden" name="body" value="'.htmlspecialchars($body).'" />'."\n";
 
 
-		$output .=
-			"<br />\n".
-			$previewButtons.
-			$this->FormClose()."\n";
+		$output .= "<br />\n".$preview_buttons.$this->FormClose()."\n";
 	}
-	elseif (!$this->page && strlen($this->tag) > $maxtaglen)				# rename page
+	elseif (!$this->page && strlen($this->tag) > $maxtaglen) # rename page
 	{
 		$this->tag = substr($this->tag, 0, $maxtaglen); // truncate tag to feed a backlinks-handler with the correct value. may be omited. it only works if the link to a backlinks-handler is built in the footer.
-		$output  = '<div class="error">Tag too long! $maxtaglen characters max.</div><br />'."\n";
-		$output .= 'FYI: Clicking on Rename will automatically truncate the tag to the correct size.<br /><br />'."\n";
+		$output  = '<em class="error">'.sprintf(ERROR_TAG_TOO_LONG, $maxtaglen).'</em><br />'."\n";
+		$output .= sprintf(MESSAGE_AUTO_RESIZE, INPUT_SUBMIT_RENAME).'<br /><br />'."\n";
 		$output .= $this->FormOpen('edit');
-		$output .= '<input name="newtag" size="75" value="'.$this->htmlspecialchars_ent($this->tag).'" />';
-		$output .= '<input name="submit" type="submit" value="Rename" />'."\n";
+		$output .= '<input name="newtag" size="'.MAX_TAG_LENGTH.'" value="'.$this->htmlspecialchars_ent($this->tag).'" />';
+		$output .= '<input name="submit" type="submit" value="'.INPUT_SUBMIT_RENAME.'" />'."\n";
 		$output .= $this->FormClose();
 	}
-	else																	# edit page
+	else	 # edit page
 	{
 		// display form
 		if ($error)
@@ -144,16 +186,16 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 			'<input type="hidden" name="previous" value="'.$previous.'" />'."\n".
 			// We need to escape ALL entity refs before display so we display them _as_ entities instead of interpreting them
 			// hence htmlspecialchars() instead of htmlspecialchars_ent() which UNescapes entities!
-			'<textarea id="body" name="body" style="width: 100%; height: 500px">'.htmlspecialchars($body).'</textarea><br />'."\n";
+			'<textarea id="body" name="body">'.htmlspecialchars($body).'</textarea><br />'."\n";
 			//note add Edit
 			// We need to escape ALL entity refs before display so we display them _as_ entities instead of interpreting them
 			// so we use htmlspecialchars on the edit note (as on the body)
 		if ($this->config['require_edit_note'] != 2) //check if edit_notes are enabled
 		{
-			$output .= '<input size="40" type="text" name="note" value="'.htmlspecialchars($note).'" /> Please add a note on your edit.<br />'."\n";
+			$output .= '<input size="'.MAX_EDIT_NOTE_LENGTH.'" type="text" name="note" value="'.htmlspecialchars($note).'" '.$highlight_note.'/> '.LABEL_EDIT_NOTE.'<br />'."\n";
 		}
 		//finish
-		$output .=	'<input name="submit" type="submit" value="Store" accesskey="s" /> <input name="submit" type="submit" value="Preview" accesskey="p" /> <input type="button" value="Cancel" onclick="document.location=\''.$this->Href('').'\';" />'."\n".
+		$output .=	'<input name="submit" type="submit" value="'.INPUT_SUBMIT_STORE.'" accesskey="'.ACCESSKEY_STORE.'" /> <input name="submit" type="submit" value="'.INPUT_SUBMIT_PREVIEW.'" accesskey="'.ACCESSKEY_PREVIEW.'" /> <input type="button" value="'.INPUT_BUTTON_CANCEL.'" onclick="document.location=\''.$this->Href('').'\';" />'."\n".
 			$this->FormClose();
 
 		if ($this->config['gui_editor'] == 1) 
@@ -168,9 +210,9 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 }
 else
 {
-	$message =	'<em>You don\'t have write access to this page. You might need to register an account to get write access.</em><br />'."\n".
+	$message =	'<em>'.ERROR_NO_WRITE_ACCESS.'</em><br />'."\n".
 			"<br />\n".
-			'<a href="'.$this->Href('showcode').'" title="Click to view page formatting code">View formatting code for this page</a>'.
+			'<a href="'.$this->Href('showcode').'" title="'.SHOWCODE_LINK_TITLE.'">'.SHOWCODE_LINK.'</a>'.
 			"<br />\n";
 	echo $message;
 }
