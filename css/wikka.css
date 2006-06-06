@@ -249,11 +249,11 @@ h1 {
 	font-size: 12px;
 	color:#FFF;
 	font-weight: bold;
-	background: #6C6;
+	background: #339;
 	border-top: 2px solid #FFF;
 	border-left: 2px solid #FFF;
-	border-right: 2px solid #4A4;
-	border-bottom: 2px solid #4A4;
+	border-right: 2px solid #AAC;
+	border-bottom: 2px solid #AAC;
 	text-align: center;
 	padding: 0.1em 0.3em;
 	line-height: 1.6em;
@@ -261,8 +261,7 @@ h1 {
 }
 
 .keys:hover {
-	background-color: #7D7;
-	cursor: pointer;
+	background-color: #66C;	
 }
 
 acronym {
@@ -284,7 +283,7 @@ blockquote {
 
 .code_header {
 	color: #FFF;
-	background: #6C6; 
+	background: #339;
 	border-top: 1px solid #CCC;
 	border-right: 1px solid #CCC;
 	border-left: 1px solid #CCC;
@@ -329,13 +328,13 @@ input[type=submit], input[type=button] {
 	color:#fff;
 	font-weight: bold;
 	font-family: Arial, Helvetica, sans-serif;
-	background: #6C6;
-	border-right: 2px solid #4A4;
-	border-bottom: 2px solid #4A4;
+	background: #339;
+	border-right: 2px solid #AAC;
+	border-bottom: 2px solid #AAC;
 }
 
 input[type=submit]:hover, input[type=button]:hover {
-	background-color: #7D7;
+	background-color: #66C; 
 }
 
 textarea#body{
@@ -375,14 +374,14 @@ input.highlight {
 }
 
 em.error {
-	color: #CC3333;
+	color: #AA3333; 
 	font-style: normal;
 	font-weight: bold;
 	font-size: 95%;
 }
 
 em.success {
-	color: #33CC33;
+	color: #33AA33; 
 	font-style: normal;
 	font-weight: bold;
 	font-size: 95%;
