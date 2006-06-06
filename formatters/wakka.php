@@ -5,12 +5,12 @@ if (!defined('GRABCODE_BUTTON_VALUE')) define('GRABCODE_BUTTON_VALUE', 'Grab');
 if (!defined('GRABCODE_BUTTON_TITLE')) define('GRABCODE_BUTTON_TITLE', 'Download %s');
 
 // code block patterns
-define('PATTERN_OPEN_BRACKET', '\(');
-define('PATTERN_FORMATTER', '([^;\)]+)');
-define('PATTERN_LINE_NUMBER', '(;(\d*?))?');
-define('PATTERN_FILENAME', '(;([^\)\x01-\x1f\*\?\"<>\|]*)([^\)]*))?');
-define('PATTERN_CLOSE_BRACKET', '\)');
-define('PATTERN_CODE', '(.*)');
+if (!defined('PATTERN_OPEN_BRACKET')) define('PATTERN_OPEN_BRACKET', '\(');
+if (!defined('PATTERN_FORMATTER')) define('PATTERN_FORMATTER', '([^;\)]+)');
+if (!defined('PATTERN_LINE_NUMBER')) define('PATTERN_LINE_NUMBER', '(;(\d*?))?');
+if (!defined('PATTERN_FILENAME')) define('PATTERN_FILENAME', '(;([^\)\x01-\x1f\*\?\"<>\|]*)([^\)]*))?');
+if (!defined('PATTERN_CLOSE_BRACKET')) define('PATTERN_CLOSE_BRACKET', '\)');
+if (!defined('PATTERN_CODE')) define('PATTERN_CODE', '(.*)');
 
 // Note: all possible formatting tags have to be in a single regular expression for this to work correctly.
 
