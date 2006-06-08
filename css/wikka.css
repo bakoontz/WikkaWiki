@@ -249,11 +249,11 @@ h1 {
 	font-size: 12px;
 	color:#FFF;
 	font-weight: bold;
-	background: #339;
+	background-color: #33A;
 	border-top: 2px solid #FFF;
 	border-left: 2px solid #FFF;
-	border-right: 2px solid #AAC;
-	border-bottom: 2px solid #AAC;
+	border-right: 2px solid #336;
+	border-bottom: 2px solid #336;
 	text-align: center;
 	padding: 0.1em 0.3em;
 	line-height: 1.6em;
@@ -261,7 +261,9 @@ h1 {
 }
 
 .keys:hover {
-	background-color: #66C;	
+	background-color: #66C;
+	border-right: 2px solid #668;
+	border-bottom: 2px solid #668;
 }
 
 acronym {
@@ -283,7 +285,7 @@ blockquote {
 
 .code_header {
 	color: #FFF;
-	background: #339;
+	background: #33A;
 	border-top: 1px solid #CCC;
 	border-right: 1px solid #CCC;
 	border-left: 1px solid #CCC;
@@ -322,19 +324,21 @@ blockquote {
 /* form elements */
 
 input[type=submit], input[type=button] {
+	font-family: Arial, Helvetica, sans-serif;
 	padding: 0px 1px;
 	width: auto;
 	font-size: 9pt;
 	color:#fff;
 	font-weight: bold;
-	font-family: Arial, Helvetica, sans-serif;
-	background: #339;
-	border-right: 2px solid #AAC;
-	border-bottom: 2px solid #AAC;
+	background-color: #33A;
+	border-right: 2px solid #336;
+	border-bottom: 2px solid #336;
 }
 
 input[type=submit]:hover, input[type=button]:hover {
-	background-color: #66C; 
+	background-color: #66C;
+	border-right: 2px solid #668;
+	border-bottom: 2px solid #668;
 }
 
 textarea#body{
@@ -354,12 +358,12 @@ input.grabcode {
 	float: right;
 	margin-right: 20px;
 	margin-top: 0px;
-	font-size: 8pt;
+	font-size: 90%;
 }
 
 input.highlight {
 	font-weight: normal;
-	background-color: #FFEEEE;
+	background-color: #FCC;
 	color: #000;
 }
 

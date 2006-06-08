@@ -23,32 +23,40 @@ div.page {
 	padding: 15px;
 }
 a {
-	color: #880000;
+	color: #800;
 }
 
 input[type=submit], input[type=button] {
+	font-family: Arial, Helvetica, sans-serif;
 	padding: 0px 1px;
 	width: auto;
 	font-size: 9pt;
 	color:#fff;
 	font-weight: bold;
-	font-family: Arial, Helvetica, sans-serif;
-	background: #6C6;
-	border-right: 2px solid #4A4;
-	border-bottom: 2px solid #4A4;
+	background: #33A;
+	border-right: 2px solid #336;
+	border-bottom: 2px solid #336;
 }
 
 input[type=submit]:hover, input[type=button]:hover {
-	background-color: #7D7;
+	background-color: #66C;
+	border-right: 2px solid #668;
+	border-bottom: 2px solid #668;
 }
 
+input[type=password], input[type=text] {
+	font-family: Verdana, Tahoma, Arial, Helvetica, sans-serif;
+	color: #800;
+}
+
+
 .ok {
-	color: #008800;
+	color: #080;
 	font-weight: bold;
 }
 
 .failed {
-	color: #880000;
+	color: #800;
 	font-weight: bold;
 }
 
