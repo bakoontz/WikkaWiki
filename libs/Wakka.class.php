@@ -575,12 +575,13 @@ class Wakka
 	function SetRedirectMessage($message) { $_SESSION["redirectmessage"] = $message; }
 	function GetRedirectMessage() { $message = $_SESSION["redirectmessage"]; $_SESSION["redirectmessage"] = ""; return $message; }
 	/**
-	 * Performs redirection to another page.
+	 * Performs a redirection to another page.
 	 *
 	 * On IIS server, and if the page had sent any cookies, the redirection must not be performed
-	 * by using the `Location:' header: We use meta http-equiv OR javascript OR link (Credits MarceloArmonas)
+	 * by using the 'Location:' header: We use meta http-equiv OR javascript OR link (Credits MarceloArmonas)
+	 * @author {@link http://wikkawiki.org/DotMG Mahefa Randimbisoa} (added IIS support)
 	 * @access	public
-	 * @since	wikka 1.1.6.2
+	 * @since	Wikka 1.1.6.2
 	 *
 	 * @param	string	$url: destination URL; if not specified redirect to the same page.
 	 * @param	string	$message: message that will show as alert in the destination URL
@@ -588,14 +589,14 @@ class Wakka
 	function Redirect($url='', $message='')
 	{
 		if ($message != '') $_SESSION["redirectmessage"] = $message;
-		$url = ($url == '' ) ? $this->Href() : $url;
+		$url = ($url == '' ) ? $this->config['base_url'].$this->tag : $url;
 		if ((eregi('IIS', $_SERVER["SERVER_SOFTWARE"])) && ($this->cookies_sent))
 		{
 			@ob_end_clean();
 			die('<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head><title>Redirected to '.$url.'</title>'.
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head><title>Redirected to '.$this->Href($url).'</title>'.
 '<meta http-equiv="refresh" content="0; url=\''.$url.'\'" /></head><body><div><script type="text/javascript">window.location.href="'.$url.'";</script>'.
-'</div><noscript><a href="'.$url.'">Redirected to '.$url.'</a></noscript></body></html>');
+'</div><noscript>If your browser does not redirect you, please follow <a href="'.$this->Href($url).'">this link</a></noscript></body></html>');
 		} 
 		else 
 		{
