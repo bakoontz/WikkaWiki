@@ -20,7 +20,7 @@ form, h1, h2, h3, h4, h5 {
 
 body {
 	font-family: Verdana, Tahoma, Arial, Helvetica, sans-serif;	font-size: 13px;
-	text-align: justify;
+/*	text-align: justify; */			/* comment out this line if you really need justified text */
 	line-height: 20px;
 	color: #000000;
 	background-color: #F8F8F8;
