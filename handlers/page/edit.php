@@ -60,7 +60,9 @@ if (!(preg_match(VALID_PAGENAME_PATTERN, $this->tag))) { //TODO use central rege
 }
 elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 {
-	if ($newtag = $_POST['newtag']) $this->Redirect($this->Href('edit', $newtag));
+	$newtag = $output = '';
+	if (isset($_POST['newtag'])) $newtag = $_POST['newtag'];
+	if ($newtag !== '') $this->Redirect($this->Href('edit', $newtag));
 	if ($_POST)
 	{
 		// strip CRLF line endings down to LF to achieve consistency ... plus it saves database space.
@@ -116,8 +118,9 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 	}
 
 	// fetch fields
-	if (!$previous = $_POST['previous']) $previous = $this->page['id'];
-	if (!$body) $body = $this->page['body'];
+	$previous = $this->page['id'];
+	if (isset($_POST['previous'])) $previous = $_POST['previous'];
+	if (!isset($body)) $body = $this->page['body'];
 	$body = preg_replace("/\n[ ]{4}/", "\n\t", $body);	// @@@ FIXME: misses first line and multiple sets of four spaces - JW 2005-01-16
 
 
@@ -130,7 +133,7 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 		$maxtaglen = MAX_TAG_LENGTH;
 	}
 
-	if ($_POST['submit'] == INPUT_SUBMIT_PREVIEW) # preview output
+	if (isset($_POST['submit']) && $_POST['submit'] == INPUT_SUBMIT_PREVIEW) # preview output
 	{
 		$preview_buttons = '<hr />'."\n";
 		// We need to escape ALL entity refs before display so we display them _as_ entities instead of interpreting them
@@ -176,7 +179,7 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 		}
 
 		// append a comment?
-		if ($_REQUEST['appendcomment'])
+		if (isset($_REQUEST['appendcomment']))
 		{
 			$body = trim($body)."\n\n----\n\n--".$this->GetUserName().' ('.strftime("%c").')';
 		}

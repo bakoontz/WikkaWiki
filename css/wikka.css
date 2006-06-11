@@ -249,11 +249,11 @@ h1 {
 	font-size: 12px;
 	color:#FFF;
 	font-weight: bold;
-	background: #6C6;
+	background-color: #33A;
 	border-top: 2px solid #FFF;
 	border-left: 2px solid #FFF;
-	border-right: 2px solid #4A4;
-	border-bottom: 2px solid #4A4;
+	border-right: 2px solid #336;
+	border-bottom: 2px solid #336;
 	text-align: center;
 	padding: 0.1em 0.3em;
 	line-height: 1.6em;
@@ -261,8 +261,9 @@ h1 {
 }
 
 .keys:hover {
-	background-color: #7D7;
-	cursor: pointer;
+	background-color: #66C;
+	border-right: 2px solid #668;
+	border-bottom: 2px solid #668;
 }
 
 acronym {
@@ -284,7 +285,7 @@ blockquote {
 
 .code_header {
 	color: #FFF;
-	background: #6C6; 
+	background: #33A;
 	border-top: 1px solid #CCC;
 	border-right: 1px solid #CCC;
 	border-left: 1px solid #CCC;
@@ -323,19 +324,21 @@ blockquote {
 /* form elements */
 
 input[type=submit], input[type=button] {
+	font-family: Arial, Helvetica, sans-serif;
 	padding: 0px 1px;
 	width: auto;
 	font-size: 9pt;
 	color:#fff;
 	font-weight: bold;
-	font-family: Arial, Helvetica, sans-serif;
-	background: #6C6;
-	border-right: 2px solid #4A4;
-	border-bottom: 2px solid #4A4;
+	background-color: #33A;
+	border-right: 2px solid #336;
+	border-bottom: 2px solid #336;
 }
 
 input[type=submit]:hover, input[type=button]:hover {
-	background-color: #7D7;
+	background-color: #66C;
+	border-right: 2px solid #668;
+	border-bottom: 2px solid #668;
 }
 
 textarea#body{
@@ -355,12 +358,12 @@ input.grabcode {
 	float: right;
 	margin-right: 20px;
 	margin-top: 0px;
-	font-size: 8pt;
+	font-size: 90%;
 }
 
 input.highlight {
 	font-weight: normal;
-	background-color: #FFEEEE;
+	background-color: #FCC;
 	color: #000;
 }
 
@@ -375,14 +378,14 @@ input.highlight {
 }
 
 em.error {
-	color: #CC3333;
+	color: #AA3333; 
 	font-style: normal;
 	font-weight: bold;
 	font-size: 95%;
 }
 
 em.success {
-	color: #33CC33;
+	color: #33AA33; 
 	font-style: normal;
 	font-weight: bold;
 	font-size: 95%;

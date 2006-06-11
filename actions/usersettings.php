@@ -3,16 +3,17 @@
  * Display a form to register, login and change user settings.
  *
  * @package		Actions
- * @name			UserSettings
+ * @name		UserSettings
  *
  * @author		{@link http://wikkawiki.org/MinusF MinusF} (code cleanup and validation)
  * @author		{@link http://wikkawiki.org/DarTar Dario Taraborelli} (further cleanup, i18n, replaced JS dialogs with server-generated messages)
  * @since		Wikka 1.1.6.2
  *
  * @input		none
- * @todo			-different actions for registration / login / user settings
- 					-add documentation links or short explanations for each option
- 					-error handler for displaying messages and highlighting invalid fields
+ * @todo			-use different actions for registration / login / user settings;
+ 					-add documentation links or short explanations for each option;
+ 					-use error handler for displaying messages and highlighting invalid input fields;
+ 					-remove useless redirections;
  */
 
 // defaults
@@ -77,6 +78,8 @@ if (!defined('RETRIEVE_PASSWORD_MESSAGE')) define('RETRIEVE_PASSWORD_MESSAGE', "
 if (!defined('TEMP_PASSWORD_LABEL')) define('TEMP_PASSWORD_LABEL', "Password reminder:");
 
 //initialize variables
+$params = '';
+$url = '';
 $email = '';
 $doubleclickedit = '';
 $show_comments = '';
@@ -97,11 +100,18 @@ $password_confirm_highlight = '';
 $revisioncount_highlight = '';
 $changescount_highlight = '';
 
+//create URL
+$url = $this->config['base_url'].$this->tag;
+
+// append URL params depending on rewrite_mode
+$params = ($this->config['rewrite_mode'] == 1)? '?' : '&';
+
 // is user trying to log out?
 if (isset($_REQUEST['action']) && ($_REQUEST['action'] == 'logout'))
 {
 	$this->LogoutUser();
-	$this->Redirect($this->href('','','out=true'));
+	$params .= 'out=true';
+	$this->Redirect($url.$params);
 }
 // user is still logged in
 else if ($user = $this->GetUser())
@@ -145,7 +155,8 @@ else if ($user = $this->GetUser())
 				$this->SetUser($this->LoadUser($user["name"]));
 			
 				// forward
-				$this->Redirect($this->href('','','stored=true'));
+				$params .= 'stored=true';
+				$this->Redirect($url.$params);
 		}
 	}
 	else //user just logged in
@@ -279,7 +290,8 @@ else if ($user = $this->GetUser())
 				$this->Query('UPDATE '.$this->config['table_prefix'].'users set '."password = md5('".mysql_real_escape_string($password)."') "."WHERE name = '".$user['name']."'");
 				$user['password'] = md5($password);
 				$this->SetUser($user);
-				$this->Redirect($this->href('','','newpassword=true'));
+				$params .= 'newpassword=true';
+				$this->Redirect($url.$params);
 		}
 	}
 
@@ -349,7 +361,7 @@ else // user is not logged in
 					break;
 				default:
 					$this->SetUser($existingUser);
-					$this->Redirect($this->href());
+					$this->Redirect($url, '');
 			}
 		}
 		else // otherwise, proceed to registration
@@ -417,7 +429,8 @@ else // user is not logged in
 
 					// log in
 					$this->SetUser($this->LoadUser($name));
-					$this->Redirect($this->href('', '', 'registered=true'));
+					$params .= 'registered=true';
+					$this->Redirect($url.$params);
 			}
 		}
 	}
@@ -444,8 +457,8 @@ else // user is not logged in
 			// updatepassword
 			if ($existingUser['password'] == $_POST['temppassword'])
 			{
-				$this->SetUser($existingUser, $_POST["remember"]);
-				$this->Redirect($this->href());
+				$this->SetUser($existingUser, $_POST['remember']);
+				$this->Redirect($url);
 			}
 			else
 			{
