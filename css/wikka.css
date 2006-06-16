@@ -438,12 +438,26 @@ em.success {
 
 /* Action-related styling */
 
-/* Table action */
+/* Tables */
 
 table.wikka {
 	border: 2px solid #CCC;
 	border-collapse: collapse;
 	border-spacing: 0;
+}
+
+table.wikka caption{
+	border: 1px dotted #BBB;
+	font-size: 90%;
+	color: #666;
+	margin:5px 0;
+	padding:2px;
+}
+
+table.wikka th {
+	border: 1px solid #CCC;
+	padding: .1em .25em;
+	background-color: #EEE;
 }
 
 table.wikka td {

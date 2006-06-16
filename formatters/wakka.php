@@ -1,4 +1,22 @@
 <?php
+/**
+ * Wikka Formatting Engine
+ * 
+ * This is the main formatting engine used by Wikka to parse wiki markup and render valid XHTML.
+ * 
+ * @package Formatters
+ * @name Wakka
+ *
+ * @author {@link http://wikkawiki.org/JsnX Jason Tourtelotte}
+ * @author {@link http://wikkawiki.org/DotMG Mahefa Randimbisoa}
+ * @author {@link http://wikkawiki.org/JavaWoman Marjolein Katsma}
+ * @author {@link http://wikkawiki.org/NilsLindenberg Nils Lindenberg} (code cleanup)
+ * @author {@link http://wikkawiki.org/DarTar Dario Taraborelli} (grab handler and filename support for codeblocks)
+ * @author {@link http://wikkawiki.org/TormodHaugen Tormod Haugen} (table formatter support)
+ * 
+ * @todo		- add support for formatter plugins;
+ * 			- use a central RegEx library #34;
+ */
 
 // i18n strings
 if (!defined('GRABCODE_BUTTON_VALUE')) define('GRABCODE_BUTTON_VALUE', 'Grab');
@@ -26,6 +44,7 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 		static $indentClosers = array();
 		static $newIndentSpace= array();
 		static $br = 1;
+		static $trigger_table = 0;
 		static $trigger_bold = 0;
 		static $trigger_italic = 0;
 		static $trigger_underline = 0;
@@ -48,6 +67,9 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 
 		if ((!is_array($things)) && ($things == 'closetags'))
 		{
+			if (2 < $trigger_table) echo ('</th></tr>');
+			else if (1 < $trigger_table) echo ('</td></tr>');
+			if (0 < $trigger_table) echo ('</table>');
 			if ($trigger_strike % 2) echo ('</span>');
 			if ($trigger_notes % 2) echo ('</span>');
 			if ($trigger_inserted % 2) echo ('</span>');
@@ -59,10 +81,67 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 			if ($trigger_bold % 2) echo('</strong>');
 			for ($i = 1; $i<=5; $i ++)
 				if ($trigger_l[$i] % 2) echo ("</h$i>");
-			$trigger_bold = $trigger_center = $trigger_floatl = $trigger_inserted = $trigger_deleted = $trigger_italic = $trigger_keys = 0;
+			$trigger_bold = $trigger_center = $trigger_floatl = $trigger_inserted = $trigger_deleted = $trigger_italic = $trigger_keys = $trigger_table = 0;
 			$trigger_l = array(-1, 0, 0, 0, 0, 0);
 			$trigger_monospace = $trigger_notes = $trigger_strike = $trigger_underline = 0;
 			return;
+		}
+		if ( preg_match("/^\|(\?)(.*?)?\|(\n)?$/", $thing, $matches) ) {
+			if ( $trigger_table == 0 ) {
+				$trigger_table = 1;
+				//TODO escape text for safety
+				return '<table class="wikka" summary="'.$matches[2].'">'."\n";
+			}
+		}
+		// table. trigger means: 0==no table, 1==in table no cell, 2==in table data cell, 3==in table header cell
+		else if ( preg_match("/^\|(=|!)?(\d*)?(?:,)?(\d*)?\|(\n)?$/", $thing, $matches) ) {
+			//First catch is header|caption|summary, second is colspan, third is rowspan, fourth is linebreak.
+			if ( $trigger_table == 0 )
+			{
+				$rs = "<table class=\"wikka\">\n";
+				if ($matches[1] == "!")	{
+					$trigger_table = 4;
+					return $rs."<caption>";
+				} else {
+					$rs .= "<tr>";
+				}
+			}
+			else if ( $trigger_table == 1 ) {
+				if ($matches[1] == "!") {
+					$trigger_table = 4;
+					return "<caption>";
+				} else {
+					$rs = "<tr>";
+				}
+			}
+			else if ( $trigger_table == 2 ) $rs = "</td>";
+			else if ( $trigger_table == 3 ) $rs = "</th>";
+			else if ( $trigger_table == 4 ) {
+				$trigger_table = 1;
+				return "</caption>\n";
+			}
+			
+			if ( $trigger_table > 1 && $matches[4] == "\n") {
+				$trigger_table = 1;
+				return $rs."</tr>\n";
+			}
+			
+			if ( $matches[1] == "=" ) {
+				$trigger_table = 3;
+				$rs .= "<th";
+			} else if ( $matches[1] == "" ) {
+				$trigger_table = 2;
+				$rs .= "<td";
+			}
+			if ( $matches[2] && $matches[2] > 1 ) $rs .= " colspan=\"$matches[2]\"";
+			if ( $matches[3] && $matches[3] > 1 ) $rs .= " rowspan=\"$matches[3]\"";
+			
+			return $rs.">";
+
+		} else if ( $trigger_table == 1 ) {
+			//Are in table, no cell - but not asked to open new: please close and parse again. ;)
+			$trigger_table = 0;
+			return "</table>\n".wakka2callback($things);
 		}
 		// convert HTML thingies
 		if ($thing == "<")
@@ -414,6 +493,7 @@ $text = preg_replace_callback(
 	"\*\*|\'\'|\#\#|\#\%|@@|::c::|\>\>|\<\<|&pound;&pound;|&yen;&yen;|\+\+|__|<|>|\/\/|".	# Wiki markup
 	"======|=====|====|===|==|".															# headings
 	"\n([\t~]+)(-|&|[0-9a-zA-Z]+\))?|".														# indents and lists
+	"\|[^\|]*?\|(?:\n)?|".																	# Simple Tables	
 	"\{\{.*?\}\}|".																			# action
 	"\b[A-ZÄÖÜ][A-Za-zÄÖÜßäöü]+[:](?![=_])\S*\b|".											# InterWiki link
 	"\b([A-ZÄÖÜ]+[a-zßäöü]+[A-Z0-9ÄÖÜ][A-Za-z0-9ÄÖÜßäöü]*)\b|".								# CamelWords
