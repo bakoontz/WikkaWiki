@@ -7,6 +7,7 @@
  *
  * @author		{@link http://wikkawiki.org/MinusF MinusF} (code cleanup and validation)
  * @author		{@link http://wikkawiki.org/DarTar Dario Taraborelli} (further cleanup, i18n, replaced JS dialogs with server-generated messages)
+ * @author		{@link http://wikkawiki.org/NilsLindenberg Nils Lindenberg} (possibility to restrict registration)
  * @since		Wikka 1.1.6.2
  *
  * @input		none
@@ -46,6 +47,7 @@ if (!defined('NEW_PASSWORD_LABEL')) define('NEW_PASSWORD_LABEL', "Your new passw
 if (!defined('NEW_PASSWORD_CONFIRM_LABEL')) define('NEW_PASSWORD_CONFIRM_LABEL', "Confirm new password:");
 if (!defined('CHANGE_BUTTON_LABEL')) define('CHANGE_BUTTON_LABEL', "Change password");
 if (!defined('REGISTER_BUTTON_LABEL')) define('REGISTER_BUTTON_LABEL', "Register");
+if (!defined('REGISTER_CODE_LABEL')) define('REGISTER_CODE_LABEL', "Register Code:");
 if (!defined('QUICK_LINKS_HEADING')) define('QUICK_LINKS_HEADING', "Quick links");
 if (!defined('QUICK_LINKS')) define('QUICK_LINKS', "See a list of pages you own (MyPages) and pages you've edited (MyChanges).");
 if (!defined('ERROR_WRONG_PASSWORD')) define('ERROR_WRONG_PASSWORD', "Sorry, you entered the wrong password.");
@@ -64,9 +66,13 @@ if (!defined('ERROR_EMAIL_ADDRESS_REQUIRED')) define('ERROR_EMAIL_ADDRESS_REQUIR
 if (!defined('ERROR_INVALID_EMAIL_ADDRESS')) define('ERROR_INVALID_EMAIL_ADDRESS', "That doesn't quite look like an email address.");
 if (!defined('ERROR_INVALID_REVISION_DISPLAY_LIMIT')) define('ERROR_INVALID_REVISION_DISPLAY_LIMIT', "The number of page revisions should not exceed %d.");
 if (!defined('ERROR_INVALID_RECENTCHANGES_DISPLAY_LIMIT')) define('ERROR_INVALID_RECENTCHANGES_DISPLAY_LIMIT', "The number of recently changed pages should not exceed %d.");
+if (!defined('ERROR_REGISTER_CODE_INCORRECT')) define ('ERROR_REGISTER_CODE_INCORRECT', "Sorry, the register-code you entered was not correct!");
+if (!defined('NO_REGISTRATION')) define('NO_REGISTRATION', "Registration on this wiki is not possible.");
 if (!defined('REGISTRATION_SUCCEEDED')) define('REGISTRATION_SUCCEEDED', "You have successfully registered!");
 if (!defined('REGISTERED_USER_LOGIN_LABEL')) define('REGISTERED_USER_LOGIN_LABEL', "If you're already a registered user, log in here!");
-if (!defined('REGISTER_HEADING')) define('REGISTER_HEADING', "===Login/Register===");
+// if (!defined('REGISTER_HEADING')) define('REGISTER_HEADING', "===Register==="); # to be used later for register-action
+if (!defined('LOGIN_HEADING')) define('LOGIN_HEADING', "===Login===");
+if (!defined('LOGIN_REGISTER_HEADING')) define('LOGIN_REGISTER_HEADING', "===Login/Register===");
 if (!defined('WIKINAME_LABEL')) define('WIKINAME_LABEL', "Your <abbr title=\"A WikiName is formed by two or more capitalized words without space, e.g. JohnDoe\">WikiName</abbr>:");
 if (!defined('PASSWORD_LABEL')) define('PASSWORD_LABEL', "Password (%s+ chars):");
 if (!defined('LOGIN_BUTTON_LABEL')) define('LOGIN_BUTTON_LABEL', "Login");
@@ -99,6 +105,7 @@ $password_new_highlight = '';
 $password_confirm_highlight = '';
 $revisioncount_highlight = '';
 $changescount_highlight = '';
+$registercode_highlight = '';
 
 //create URL
 $url = $this->config['base_url'].$this->tag;
@@ -106,6 +113,7 @@ $url = $this->config['base_url'].$this->tag;
 // append URL params depending on rewrite_mode
 $params = ($this->config['rewrite_mode'] == 1)? '?' : '&';
 
+// BEGIN *** Login/Logout ***
 // is user trying to log out?
 if (isset($_REQUEST['action']) && ($_REQUEST['action'] == 'logout'))
 {
@@ -113,6 +121,8 @@ if (isset($_REQUEST['action']) && ($_REQUEST['action'] == 'logout'))
 	$params .= 'out=true';
 	$this->Redirect($url.$params);
 }
+// END *** Login/Logout ***
+// BEGIN *** Usersettings ***
 // user is still logged in
 else if ($user = $this->GetUser())
 {
@@ -335,6 +345,8 @@ else if ($user = $this->GetUser())
 	echo $this->Format(QUICK_LINKS);
 	print($this->FormClose());
 }
+// END *** Usersettings ***
+// BEGIN *** LOGIN/LOGOUT ***
 else // user is not logged in
 {
 	// print confirmation message on successful logout
@@ -344,8 +356,10 @@ else // user is not logged in
 	}
 
 	// is user trying to log in or register?
+	$register = $this->GetConfigValue('allow_user_registration'); 
 	if (isset($_POST['action']) && ($_POST['action'] == 'login'))
 	{
+		print("hallo");
 		// if user name already exists, check password
 		if (isset($_POST['name']) && $existingUser = $this->LoadUser($_POST['name']))
 		{
@@ -364,7 +378,9 @@ else // user is not logged in
 					$this->Redirect($url, '');
 			}
 		}
-		else // otherwise, proceed to registration
+		// END *** Login/Logout ***
+		// BEGIN *** Register ***
+		else if ($register == '1' || $register == '2') // otherwise, proceed to registration
 		{
 			$name = trim($_POST['name']);
 			$email = trim($_POST['email']);
@@ -420,6 +436,10 @@ else // user is not logged in
 					$password_highlight = INPUT_ERROR_STYLE;
 					$password_confirm_highlight = INPUT_ERROR_STYLE;
 					break;
+				case ($register == '2' && $_POST['registercode'] !==  $this->GetConfigValue('registercode')):
+				    $error = ERROR_REGISTER_CODE_INCORRECT;
+                	$registercode_highlight = INPUT_ERROR_STYLE;
+                	break;
 				default: //valid input, create user
 					$this->Query("INSERT INTO ".$this->config['table_prefix']."users SET ".
 						"signuptime = now(), ".
@@ -433,7 +453,9 @@ else // user is not logged in
 					$this->Redirect($url.$params);
 			}
 		}
-	}
+	} 
+	// END *** Register ***
+	// BEGIN *** Usersettings ***
 	elseif  (isset($_POST['action']) && ($_POST['action'] == 'updatepass'))
 	{
         $name = trim($_POST['yourname']);
@@ -467,13 +489,15 @@ else // user is not logged in
 			}
 		}
 	}
-
+	// END *** Usersettings ***
+	// BEGIN *** Login/Logout *** 
+	// BEGIN ***  Register ***
 	print($this->FormOpen());
 ?>
 	<input type="hidden" name="action" value="login" />
 	<table class="usersettings">
    	<tr>
-   		<td colspan="2"><?php echo $this->Format(REGISTER_HEADING) ?></td>
+   		<td colspan="2"><?php  echo ($register == '1' || $register == '2') ? $this->Format(LOGIN_REGISTER_HEADING) : $this->Format(LOGIN_HEADING); ?></td>
    		<td>&nbsp;</td>
    	</tr>
 	<tr>
@@ -503,6 +527,12 @@ else // user is not logged in
 		<td>&nbsp;</td>
 		<td><input type="submit" value="<?php echo LOGIN_BUTTON_LABEL ?>" size="40" /></td>
 	</tr>
+<?php
+	// END *** Login/Logout ***
+	$register = $this->GetConfigValue('allow_user_registration');
+    if ($register == '1' || $register == '2')
+    {
+?>
 	<tr>
 		<td>&nbsp;</td>
 		<td width="500"><?php echo $this->Format(NEW_USER_REGISTER_LABEL); ?></td>
@@ -515,13 +545,26 @@ else // user is not logged in
 		<td align="right"><?php echo USER_EMAIL_LABEL ?></td>
 		<td><input <?php echo $email_highlight; ?> name="email" size="40" value="<?php if (isset($email)){ echo $email; }?>" /></td>
 	</tr>
+<?php
+	    if ($register == '2')
+	    {
+?>
+               <tr>
+                   <td align='right'><?php echo REGISTER_CODE_LABEL ?></td>
+                   <td><input <?php echo $registercode_highlight; ?> type='text' size='20' name='registercode' /></td>
+               </tr>
+<?php
+		}
+?>
 	<tr>
 		<td>&nbsp;</td>
 		<td><input type="submit" value="<?php echo REGISTER_BUTTON_LABEL ?>" size="40" /></td>
 	</tr>
-	</table>
+</table>
 <?php
+    }
 	print($this->FormClose());
+	// END *** Register ***
 	print($this->FormOpen());
 ?>
 	<input type="hidden" name="action" value="updatepass" />
