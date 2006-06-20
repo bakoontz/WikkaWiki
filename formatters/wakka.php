@@ -94,50 +94,49 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 			}
 		}
 		// table. trigger means: 0==no table, 1==in table no cell, 2==in table data cell, 3==in table header cell
-		else if ( preg_match("/^\|(=|!)?(\d*)?(?:,)?(\d*)?\|(\n)?$/", $thing, $matches) ) {
+		else if ( preg_match("/^\|(=|!)?(c|r)?(\d*)?(?:,)?(\d*)?\|(\n)?$/", $thing, $matches) ) {
 			//First catch is header|caption|summary, second is colspan, third is rowspan, fourth is linebreak.
-			if ( $trigger_table == 0 )
-			{
-				$rs = "<table class=\"wikka\">\n";
-				if ($matches[1] == "!")	{
-					$trigger_table = 4;
-					return $rs."<caption>";
-				} else {
-					$rs .= "<tr>";
-				}
-			}
-			else if ( $trigger_table == 1 ) {
-				if ($matches[1] == "!") {
-					$trigger_table = 4;
-					return "<caption>";
-				} else {
-					$rs = "<tr>";
-				}
-			}
-			else if ( $trigger_table == 2 ) $rs = "</td>";
-			else if ( $trigger_table == 3 ) $rs = "</th>";
-			else if ( $trigger_table == 4 ) {
+			if ( $trigger_table == 4 ) {
 				$trigger_table = 1;
-				return "</caption>\n";
+				return '</caption>'."\n"; //Can return here, it is closed.
 			}
+			else if ( $trigger_table == 3 ) $close_part = '</th>';
+			else if ( $trigger_table == 2 ) $close_part = '</td>';
+			else if ( $trigger_table == 1 ) $close_part = '';
+			else $close_part = '<table class="wikka">'."\n";
 			
-			if ( $trigger_table > 1 && $matches[4] == "\n") {
+			if ( $trigger_table > 1 && $matches[5] == "\n" ) {
 				$trigger_table = 1;
-				return $rs."</tr>\n";
+				return $close_part .= '</tr>'."\n"; //Can return here, it is closed-
 			}
-			
-			if ( $matches[1] == "=" ) {
-				$trigger_table = 3;
-				$rs .= "<th";
-			} else if ( $matches[1] == "" ) {
-				$trigger_table = 2;
-				$rs .= "<td";
-			}
-			if ( $matches[2] && $matches[2] > 1 ) $rs .= " colspan=\"$matches[2]\"";
-			if ( $matches[3] && $matches[3] > 1 ) $rs .= " rowspan=\"$matches[3]\"";
-			
-			return $rs.">";
 
+			if ( $matches[1] == '!' ) {
+				$trigger_table = 4;
+				$open_part = '<caption>';
+			} else {
+				if ( $trigger_table == 1 ) $open_part = '<tr>';
+				else $open_part = '';
+
+				if ( $matches[1] == '=' ) {
+					$trigger_table = 3;
+					$open_part .= '<th';
+					if ( $matches[2] ) {
+						if ( $matches[2] == 'c' ) $open_part .= ' scope="col"';
+						else if ( $matches[2] == 'r' ) $open_part .= ' scope="row"';
+					}
+				} else {
+					$trigger_table = 2;
+					$open_part .= '<td';
+				}
+				
+				if ( $matches[3] && $matches[3] > 1 ) $open_part .= ' colspan="'.$matches[3].'"';
+				if ( $matches[4] && $matches[4] > 1 ) $open_part .= ' rowspan="'.$matches[4].'"';
+
+				$open_part .= '>';
+			}
+
+			return $close_part . $open_part;
+			
 		} else if ( $trigger_table == 1 ) {
 			//Are in table, no cell - but not asked to open new: please close and parse again. ;)
 			$trigger_table = 0;
