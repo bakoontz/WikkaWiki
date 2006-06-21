@@ -49,13 +49,14 @@ Powered by <?php echo $this->Link("http://wikkawiki.org/", "", "Wikka Wakka Wiki
 </div>
 
 <?php
-	if ($this->GetConfigValue("sql_debugging"))
+	// display SQL debug information to admins
+	if ($this->config['sql_debugging'] == 1 && $this->IsAdmin())
 	{
-		print("<div class=\"smallprint\"><strong>Query log:</strong><br />\n");
+		echo '<div class="smallprint"><strong>Query log:</strong><br />'."\n";
 		foreach ($this->queryLog as $query)
 		{
-			print($query["query"]." (".$query["time"].")<br />\n");
+			echo $query['query'].' ('.$query['time'].')<br />'."\n";
 		}
-		print("</div>");
+		echo '</div>';
 	}
 ?>
