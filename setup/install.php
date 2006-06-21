@@ -306,6 +306,8 @@ case "1.1.6.2":
 	$config["allow_user_registration"] = '1';
 	test(sprintf(ADDING_CONFIG_ENTRY, 'registercode'), 1);
 	$config["registercode"] = '';
+	test(sprintf(ADDING_CONFIG_ENTRY, 'enable_user_host_lookup'), 1);
+	$config["enable_user_host_lookup"] = '1';	
 case "trunk": //latest development version from the SVN repository - do not remove
 	break;
 }
