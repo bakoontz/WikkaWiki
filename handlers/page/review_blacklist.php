@@ -2,8 +2,9 @@
 <?php
 
 $IsAdmin = $this->IsAdmin();
-if ($IsAdmin && ($whitelist = $_REQUEST["whitelist"]))
+if ($IsAdmin && isset($_REQUEST["whitelist"]))
 {
+	$whitelist = $_REQUEST["whitelist"];
 	$this->Query("DELETE FROM ".$this->config["table_prefix"]."referrer_blacklist WHERE spammer = '".mysql_real_escape_string($whitelist)."'");
 	$this->redirect($this->Href("review_blacklist"));
 }

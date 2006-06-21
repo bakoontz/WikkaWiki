@@ -39,9 +39,9 @@ if (isset($_REQUEST['phrase']) && ($phrase = $_REQUEST["phrase"]))
 	$phrase_re = stripslashes(trim($phrase)); 
 	if (!$phrase_re) return;
 	$results = $this->FullTextSearch($phrase_re);
+	$total_results = 0;
 	if ($results)
 	{
-		$total_results = 0;
 		foreach ($results as $i => $page)
 		{
 			if ($this->HasAccess("read",$page["tag"]))
@@ -51,19 +51,19 @@ if (isset($_REQUEST['phrase']) && ($phrase = $_REQUEST["phrase"]))
 			}
 		}
 	}
-switch ($total_results)
-{
-	case 0:
-		$match_str = SEARCH_ZERO_MATCH;
-		break;
-	case 1:
-		$match_str = SEARCH_ONE_MATCH;
-		break;
-	default:
-		$match_str = SEARCH_N_MATCH;
-		break;
-}
-printf(SEARCH_RESULTS.": <strong>".$match_str."</strong> for <strong>".$this->htmlspecialchars_ent($phrase)."</strong><br />\n", $total_results);
+	switch ($total_results)
+	{
+		case 0:
+			$match_str = SEARCH_ZERO_MATCH;
+			break;
+		case 1:
+			$match_str = SEARCH_ONE_MATCH;
+			break;
+		default:
+			$match_str = SEARCH_N_MATCH;
+			break;
+	}
+	printf(SEARCH_RESULTS.": <strong>".$match_str."</strong> for <strong>".$this->htmlspecialchars_ent($phrase)."</strong><br />\n", $total_results);
 	if ($total_results > 0)
 	{
 		print($result_page_list);

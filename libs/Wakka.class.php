@@ -573,7 +573,16 @@ class Wakka
 	// HTTP/REQUEST/LINK RELATED
 
 	function SetRedirectMessage($message) { $_SESSION["redirectmessage"] = $message; }
-	function GetRedirectMessage() { $message = $_SESSION["redirectmessage"]; $_SESSION["redirectmessage"] = ""; return $message; }
+	function GetRedirectMessage() 
+	{ 
+		$message = '';
+		if (isset($_SESSION["redirectmessage"]))
+		{
+			$message = $_SESSION["redirectmessage"]; 
+			$_SESSION["redirectmessage"] = "";
+		}
+		return $message; 
+	}
 	/**
 	 * Performs a redirection to another page.
 	 *
@@ -731,7 +740,7 @@ class Wakka
 	{
 		// fill values
 		if (!$tag = trim($tag)) $tag = $this->GetPageTag();
-		if (!$referrer = trim($referrer)) $referrer = $_SERVER["HTTP_REFERER"];
+		if (!$referrer = trim($referrer) && isset($_SERVER["HTTP_REFERER"])) $referrer = $_SERVER["HTTP_REFERER"];
 		$referrer = $this->cleanUrl($referrer);			# secured JW 2005-01-20
 
 		// check if it's coming from another site
@@ -911,6 +920,7 @@ class Wakka
 		if ($this->UserIsOwner($tag)) return true;
 
 		// see whether user is registered and logged in
+		$registered = FALSE;
 		if ($this->GetUser()) $registered = true;
 
 		// load acl

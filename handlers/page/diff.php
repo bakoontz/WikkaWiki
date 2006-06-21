@@ -1,11 +1,11 @@
 <div class="page">
 <?php
 
-define ('ERROR_DIV_LIBRARY_MISSING', 'The necessary file "libs/diff.lib.php" could not be found. Please make sure the file exists and is placed in the right directory!');
-define ('ERROR_NO_PAGE_ACCESS', 'You are not authorized to view this page.');
-define ('CONTENT_ADDITIONS_HEADER', 'Additions:');
-define ('CONTENT_DELETIONS_HEADER', 'Deletions:');
-define ('CONTENT_NO_DIFFERENCES', 'No Differences');
+define('ERROR_DIV_LIBRARY_MISSING', 'The necessary file "libs/diff.lib.php" could not be found. Please make sure the file exists and is placed in the right directory!');
+define('ERROR_NO_PAGE_ACCESS', 'You are not authorized to view this page.');
+define('CONTENT_ADDITIONS_HEADER', 'Additions:');
+define('CONTENT_DELETIONS_HEADER', 'Deletions:');
+define('CONTENT_NO_DIFFERENCES', 'No Differences');
 
 if ($this->HasAccess("read")) 
 {
@@ -40,7 +40,7 @@ else die(ERROR_DIV_LIBRARY_MISSING);
 		  $added = array_diff($bodyA, $bodyB);
 		  $deleted = array_diff($bodyB, $bodyA);
 	
-		  $output .= "<b>Comparison of  <a href=\"".$this->Href("", "", "time=".urlencode($pageA["time"]))."\">".$pageA["time"]."</a> &amp; <a href=\"".$this->Href("", "", "time=".urlencode($pageB["time"]))."\">".$pageB["time"]."</a></b><br />\n"; #i18n
+		  $output = "<b>Comparison of  <a href=\"".$this->Href("", "", "time=".urlencode($pageA["time"]))."\">".$pageA["time"]."</a> &amp; <a href=\"".$this->Href("", "", "time=".urlencode($pageB["time"]))."\">".$pageB["time"]."</a></b><br />\n"; #i18n
 	
 		  if ($added)
 		  {

@@ -44,6 +44,7 @@ if(!defined('SHOWCODE_LINK_TITLE')) define('SHOWCODE_LINK_TITLE', 'Click to view
 //initialization
 $error = '';
 $highlight_note = '';
+$note = '';
 $ondblclick = ''; //#123
 if (isset($_POST['submit']) && ($_POST['submit'] == 'Preview') && ($user = $this->GetUser()) && ($user['doubleclickedit'] != 'N'))
 {

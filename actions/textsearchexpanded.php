@@ -82,20 +82,20 @@ if (isset($_REQUEST['phrase']) && ($phrase = $_REQUEST["phrase"]))
 			}
 		}
 	}
+	switch ($total_results)
+	{
+		case 0:
+			$match_str = SEARCH_ZERO_MATCH;
+			break;
+		case 1:
+			$match_str = SEARCH_ONE_MATCH;
+			break;
+		default:
+			$match_str = SEARCH_N_MATCH;
+			break;
+	}
+	printf(SEARCH_RESULTS.": <strong>".$match_str."</strong> for <strong>".$this->htmlspecialchars_ent($phrase)."</strong><br />\n", $total_results);
+	$result_page_list = $this->ReturnSafeHtml($result_page_list);
+	echo $result_page_list;
 }
-switch ($total_results)
-{
-	case 0:
-		$match_str = SEARCH_ZERO_MATCH;
-		break;
-	case 1:
-		$match_str = SEARCH_ONE_MATCH;
-		break;
-	default:
-		$match_str = SEARCH_N_MATCH;
-		break;
-}
-printf(SEARCH_RESULTS.": <strong>".$match_str."</strong> for <strong>".$this->htmlspecialchars_ent($phrase)."</strong><br />\n", $total_results);
-$result_page_list = $this->ReturnSafeHtml($result_page_list);
-echo $result_page_list;
 ?>

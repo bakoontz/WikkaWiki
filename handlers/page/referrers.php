@@ -1,9 +1,10 @@
 <div class="page">
 <?php
-
+$global = '';
 $IsAdmin = $this->IsAdmin();
-if ($global = $_REQUEST["global"])
+if (isset($_REQUEST["global"]))
 {
+	$global = $_REQUEST["global"];
 	$title = "Sites linking to this wiki (<a href=\"".$this->Href("referrers_sites", "", "global=1")."\">see list of domains</a>):";
 	$referrers = $this->LoadReferrers();
 }
@@ -38,7 +39,7 @@ if ($this->GetUser()) {
 	print("<em>You need to login to see referring sites</em><br />\n");
 }
 
-if ($global)
+if ($global !== '')
 {
 	print("<br />[<a href=\"".$this->href("referrers_sites")."\">View referring sites for ".$this->GetPageTag()." only</a> | <a href=\"".$this->href("referrers")."\">View referrers for ".$this->GetPageTag()." only</a> | <a href=\"".$this->href("review_blacklist")."\">View referrer blacklist</a>]");
 }
