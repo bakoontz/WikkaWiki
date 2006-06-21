@@ -45,8 +45,11 @@ else
 			// store comments display in session
 			$tag = $this->GetPageTag();
 			if (!isset($_SESSION['show_comments'][$tag]))
-				$_SESSION['show_comments'][$tag] = ($this->UserWantsComments() ? '1' : '0');
-			if (isset($_REQUEST['show_comments'])){	
+			{
+				$_SESSION['show_comments'][$tag] = ($this->UserWantsComments) ? '1' : '0';
+			}
+			if (isset($_REQUEST['show_comments']))
+			{	
 				switch($_REQUEST['show_comments'])
 				{
 				case "0":
@@ -58,7 +61,7 @@ else
 				}
 			}
 			// display comments!
-			if ($_SESSION['show_comments'][$tag])
+			if ($_SESSION['show_comments'][$tag] == 1)
 			{
 				// display comments header
 ?>
@@ -107,30 +110,34 @@ else
 			}
 			else
 			{
-			?>
-				<div class="commentsheader">
-				<?php
+				echo '<div class="commentsheader">'."\n";
 				switch (count($comments))
 				{
 				case 0:
-					echo '<p>There are no comments on this page. ';
+					$comments_message = 'There are no comments on this page. ';
 					$showcomments_text = 'Add comment';
+					$comment_form_link  = ($this->HasAccess('comment')) ? 1 : 0;
 					break;
 				case 1:
-					echo '<p>There is one comment on this page. ';
+					$comments_message = 'There is one comment on this page. ';
 					$showcomments_text = 'Display comment';
+					$comment_form_link = 1;
 					break;
 				default:
-					echo '<p>There are '.count($comments).' comments on this page. ';
+					$comments_message = 'There are '.count($comments).' comments on this page. ';
 					$showcomments_text = 'Display comments';
+					$comment_form_link = 1;
 				}
-				?>
-				[<a href="<?php echo $this->Href('', '', 'show_comments=1#comments'); ?>"><?php echo $showcomments_text; ?></a>]</p>
-				</div>
-				<?php
+
+
+				echo $comments_message;
+				if ($comment_form_link == 1)
+				{
+					echo '[<a href="'.$this->Href('', '', 'show_comments=1#comments').'">'.$showcomments_text.'</a>]';
+				}
+				echo "\n".'</div>'."\n";
 			}
 		}
 	}
 }
 ?>
-
