@@ -286,7 +286,7 @@ WikiEdit.prototype.searchAndReplace = function () {
    sr_loaded = true;
    sr_script = document.createElement('script');
    sr_script.setAttribute('type', 'text/javascript');
-	  sr_script.setAttribute('src', base_url+'3rdparty/plugins/wikiedit/wikiedit_sr.js');
+   sr_script.setAttribute('src', base_url+'3rdparty/plugins/wikiedit/wikiedit_sr.js');
    document.body.appendChild(sr_script);
    sr_launch = function() {setTimeout("(sr_dlg && (typeof(sr_dlg.show)=='function')) ? sr_dlg.show() : sr_launch();", 100);}
    sr_launch();

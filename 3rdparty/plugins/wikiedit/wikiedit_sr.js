@@ -12,9 +12,6 @@
  * @todo 	- css to be moved to wikiedit.css
  *			- Ctrl+Z doesn't always work
  *  			- Add Documentation
- *  			- When the selection (the text to be replaced that is highlighted) is hidden (out of the 
-         	scope of the textarea), no scrolling happens in Mozilla.
- *  			- Create a button in WikiEdit Toolbar
  */
 
 var sr_i18n_err;
@@ -223,6 +220,15 @@ var sr_dlg=
   wE.undosels = wE.area.selectionStart;
   wE.undosele = wE.area.selectionEnd;
  },
+ MZscrollIntoView:function()
+ {
+  t=wE.area;
+  z=t.selectionStart;
+  alllines = wE.area.value.split('\n').length;
+  lines=wE.area.value.substr(0,z).split('\n').length;
+  new_scrollTop = parseInt((lines-5)*wE.area.scrollHeight/alllines);
+  wE.area.scrollTop = new_scrollTop > 0 ? new_scrollTop : 0;
+ },
  prep_repl:function()
  {
   sr_dlg.getDefines();
@@ -287,6 +293,7 @@ var sr_dlg=
    {
     sr_dlg.setAttrReadOnly(wE.area);
     wE.setAreaContent(sr_dlg.save_prev+matched+sr_dlg.save_next);
+    if (isMZ) this.MZscrollIntoView();
     sr_dlg.wE_getDefines();
     sr_dlg.cursS = wE.sel1;
     sr_dlg.cursE = wE.sel2;
@@ -305,6 +312,7 @@ var sr_dlg=
     sr_dlg.setAttrReadOnly(document.forms.replaceform.replacement, false);
     sr_dlg.dir_global_next = false;
     sr_dlg.setAttrReadOnly(wE.area, false);
+    wE.area.setSelectionRange(wE.area.selectionEnd, wE.area.selectionEnd);
    }
   }
   wE.area.focus();
