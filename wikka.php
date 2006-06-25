@@ -134,7 +134,7 @@ $wakkaDefaultConfig = array(
 	'public_sysinfo'			=> '0',		# enable or disable public display of system information in SysInfo
 	'require_edit_note'		=> '0',		# edit note optional (0, default), edit note required (1) edit note disabled (2)
 	'allow_user_registration'	=> '1',		# user registration disabled (0), enabled (1) or only possible with register code (2)
-	'registercode' 			=> '',		# used by 'allow_user_registration' => '2'
+	'invitation_code' 			=> '',		# used by 'allow_user_registration' => '2'
 	'enable_user_host_lookup'	=> '1',		#lookup of unregistered users' hostname from IP address can be enabled (1, default) or disabled (0) if too slow
 	'double_doublequote_html'	=> 'safe',
 	'external_link_tail' 		=> '<span class="exttail">&#8734;</span>',
