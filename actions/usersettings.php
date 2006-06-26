@@ -47,7 +47,7 @@ if (!defined('NEW_PASSWORD_LABEL')) define('NEW_PASSWORD_LABEL', "Your new passw
 if (!defined('NEW_PASSWORD_CONFIRM_LABEL')) define('NEW_PASSWORD_CONFIRM_LABEL', "Confirm new password:");
 if (!defined('CHANGE_BUTTON_LABEL')) define('CHANGE_BUTTON_LABEL', "Change password");
 if (!defined('REGISTER_BUTTON_LABEL')) define('REGISTER_BUTTON_LABEL', "Register");
-if (!defined('INVITATION_CODE_LABEL')) define('INVITATION_CODE_LABEL', "<abbr title=\"Your should have recieved this phrase from your wiki-admin so you can register here.\">Invitation Code</abbr>:");
+if (!defined('INVITATION_CODE_LABEL')) define('INVITATION_CODE_LABEL', "<abbr title=\"In order to register, you must fill in the invitation code sent by this website's administrator.\">Invitation Code</abbr>:");
 if (!defined('QUICK_LINKS_HEADING')) define('QUICK_LINKS_HEADING', "Quick links");
 if (!defined('QUICK_LINKS')) define('QUICK_LINKS', "See a list of pages you own (MyPages) and pages you've edited (MyChanges).");
 if (!defined('ERROR_WRONG_PASSWORD')) define('ERROR_WRONG_PASSWORD', "Sorry, you entered the wrong password.");
@@ -66,8 +66,8 @@ if (!defined('ERROR_EMAIL_ADDRESS_REQUIRED')) define('ERROR_EMAIL_ADDRESS_REQUIR
 if (!defined('ERROR_INVALID_EMAIL_ADDRESS')) define('ERROR_INVALID_EMAIL_ADDRESS', "That doesn't quite look like an email address.");
 if (!defined('ERROR_INVALID_REVISION_DISPLAY_LIMIT')) define('ERROR_INVALID_REVISION_DISPLAY_LIMIT', "The number of page revisions should not exceed %d.");
 if (!defined('ERROR_INVALID_RECENTCHANGES_DISPLAY_LIMIT')) define('ERROR_INVALID_RECENTCHANGES_DISPLAY_LIMIT', "The number of recently changed pages should not exceed %d.");
-if (!defined('ERROR_INVITATION_CODE_INCORRECT')) define ('ERROR_INVITATION_CODE_INCORRECT', "This is a private wiki, only invited members can register an account! Please contact your wiki-admin for an invitation.");
-if (!defined('NO_REGISTRATION')) define('NO_REGISTRATION', "Registration on this wiki is not possible.");
+if (!defined('ERROR_INVITATION_CODE_INCORRECT')) define ('ERROR_INVITATION_CODE_INCORRECT', "This is a private wiki, only invited members can register an account! Please contact the administrator of this website for an invitation code.");
+if (!defined('NO_REGISTRATION')) define('NO_REGISTRATION', "Registration on this wiki is disabled.");
 if (!defined('REGISTRATION_SUCCEEDED')) define('REGISTRATION_SUCCEEDED', "You have successfully registered!");
 if (!defined('REGISTERED_USER_LOGIN_LABEL')) define('REGISTERED_USER_LOGIN_LABEL', "If you're already a registered user, log in here!");
 // if (!defined('REGISTER_HEADING')) define('REGISTER_HEADING', "===Register==="); # to be used later for register-action
