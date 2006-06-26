@@ -436,10 +436,9 @@ em.success {
 	color: #987;
 }
 
-/* Action-related styling */
+/* ACTION-related styling */
 
 /* Tables */
-
 table.wikka {
 	border: 2px solid #CCC;
 	border-collapse: collapse;
@@ -509,8 +508,6 @@ table.wikka td {
 }
 
 /* Calendar Action */
-
-/* general styling */
 table.calendar {
 	color: #000;
 	background-color: #EEE;
@@ -539,8 +536,6 @@ table.calendar tbody.calnav {
 	background-color: #FFF;
 }
 
-/* styling for some specific elements */
-
 table.calendar thead th {
 	border: 1px solid #CCC;
 	padding: 1px;
@@ -556,10 +551,17 @@ table.calendar tbody.face td {
 
 table.calendar td.currentday {
 	color: #FFF;
-	background-color: #AAA;
+	background-color: #33A;
 }
 
-/* styling of calendar navigation */
+table.calendar tbody.face td:hover {
+	background-color: #DDD;
+}
+
+table.calendar tbody.face td.currentday:hover {
+	color: #FFF;
+	background-color: #66C;
+}
 
 table.calendar tbody.calnav {
 	font-weight: bold;
@@ -580,21 +582,21 @@ table.calendar td.nextmonth {
 }
 
 table.calendar a:link {
-	color: #993333;
+	color: #339;
 	text-decoration: none;
 }
 
 table.calendar a:visited {
-	color: #993333;
+	color: #339;
 	text-decoration: none;
 }
 
 table.calendar a:hover {
-	color: #993333;
+	color: #933;
 }
 
 table.calendar a:active {
-	color: #993333;
+	color: #339;
 	text-decoration: none;
 }
 
@@ -602,7 +604,7 @@ table.calendar a:active {
 table.usersettings {
 }
 
-/* Handler-related styling */
+/* HANDLER-related styling */
 
 /* Acls handler */
 table.acls {
