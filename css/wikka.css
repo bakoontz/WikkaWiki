@@ -512,67 +512,87 @@ table.wikka td {
 
 /* general styling */
 table.calendar {
-	color: #000000;
-	background-color: #CCCCCC;				/* comment out to have space between cells same color as page background */
-	/*border-collapse: collapse;*/			/* would make single-width borders, ignoring cell-spacing */
+	color: #000;
+	background-color: #EEE;
+	border-collapse: collapse;
 }
+
 table.calendar caption {
-	background-color: #CCCCCC;
-	font-weight: bold;
-	line-height: 1.6em;
+	border: 1px solid #CCC;
+	margin:5px 0;
+	font-size: 95%;
+	color: #666;
+	padding:2px;
 }
+
 table.calendar thead {
-	background-color: #CCCCCC;
+	border: 2px solid #CCC;
+	background-color: #DDD;
 }
+
 table.calendar tbody.face {
-	background-color: #CCCCCC;
+	background-color: #EEE;
+	border: 2px solid #CCC;
 }
+
 table.calendar tbody.calnav {
-	background-color: #CCCCCC;
+	background-color: #FFF;
 }
+
 /* styling for some specific elements */
+
 table.calendar thead th {
-	/*border: 1px solid #000000;*/			/* uncomment to have border around day name headers (will be page background if table background is undefined) */
+	border: 1px solid #CCC;
 	padding: 1px;
 	text-align: center;
 	font-size: 85%;
 	width: 26px;
 }
+
 table.calendar tbody.face td {
-	border: 1px solid #000000;
+	border: 1px solid #CCC;
 	text-align: right;
 }
+
 table.calendar td.currentday {
-	color: #993333;
-	background-color: #AAAAAA;
-	font-weight: bold;
+	color: #FFF;
+	background-color: #AAA;
 }
+
 /* styling of calendar navigation */
+
 table.calendar tbody.calnav {
 	font-weight: bold;
 }
+
 table.calendar td.prevmonth {
 	text-align: left;
 	font-size: 85%;
 }
+
 table.calendar td.curmonth {
 	text-align: center;
 }
+
 table.calendar td.nextmonth {
 	text-align: right;
 	font-size: 85%;
 }
+
 table.calendar a:link {
 	color: #993333;
 	text-decoration: none;
 }
+
 table.calendar a:visited {
 	color: #993333;
 	text-decoration: none;
 }
+
 table.calendar a:hover {
 	color: #993333;
 }
+
 table.calendar a:active {
 	color: #993333;
 	text-decoration: none;
