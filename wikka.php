@@ -132,6 +132,7 @@ $wakkaDefaultConfig = array(
 	'hide_comments'			=> '0',
 	'anony_delete_own_comments'	=> '1',
 	'public_sysinfo'			=> '0',		# enable or disable public display of system information in SysInfo
+	'enable_rss_autodiscovery' => '1',	# enable (1, default) or disable (0) RSS autodiscovery
 	'require_edit_note'		=> '0',		# edit note optional (0, default), edit note required (1) edit note disabled (2)
 	'allow_user_registration'	=> '1',		# user registration disabled (0), enabled (1) or only possible with register code (2)
 	'invitation_code' 			=> '',		# used by 'allow_user_registration' => '2'
