@@ -7,7 +7,7 @@
  *
  * @author		{@link http://wikkawiki.org/DarTar Dario Taraborelli}
  * @since		Wikka 1.1.6.2
- *
+ * @version		$Id$
  */
 
 // i18n

@@ -1,4 +1,25 @@
 <?php
+/**
+ * Shows the pages and subcategories belonging to a category.
+ * 
+ * See WikiCategory to understand how the system works.
+ * 
+ * @package		Actions
+ * @subpackage	Navigation
+ * @name		Category
+ * @version 	$Id$
+ * 
+ * @input	string $page optional: the category for which you want to display the pages and categories. Default: current page
+ * @input 	integer $compact optional: produces a columnar layout with a layout table; 1 produces output in the form of an unordered list. Default: 0
+ * @input	integer $col optional: number of columns (for compact=0). Default: 1
+ * @output	A html table with pages
+ * @uses	wakka::CheckMySQLVersion()
+ * @uses	wakka::FullCategoryTextSearch()
+ * @uses	wakka::FullTextSearch()
+ * @uses	wakka::Format()
+ * 
+ */
+ 
 if ($cattag = $_REQUEST["wakka"])
 {
 	$str ="";

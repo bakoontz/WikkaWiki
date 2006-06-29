@@ -1,4 +1,15 @@
 <?php
+/**
+ * Display a searchbox for searching google.
+ * 
+ * @package		Actions
+ * @name		Googleform
+ * @version		$Id$
+ * 
+ * @uses	wakka::ReturnSafeHTML()
+ * @uses	wakka::GetPageTag()
+ */
+
 
 if ($q) {
 	$q = $this->ReturnSafeHTML($q);

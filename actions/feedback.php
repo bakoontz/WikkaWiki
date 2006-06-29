@@ -1,7 +1,17 @@
 <?php
-
-// Displays a form to send feedback to the site administrator, as specified in wakka.config.php
-// It first validates the form, then sends it using the mail() function;
+/**
+ * Displays a form to send feedback to the site administrator, as specified in wikka.config.php
+ * 
+ * It first validates the form, then sends it using the mail() function;
+ * 
+ * @package		Actions
+ * @name		Feedback
+ * @version		$Id$
+ * 
+ * @uses	wakka::FormOpen()
+ * @uses	wakka::FormClose()
+ * @uses	wakka::GetConfigValue()
+ */
 
 $form = "<p>Fill in the form below to send us your comments:</p>".
             $this->FormOpen().
@@ -19,15 +29,15 @@ if ($_POST["mail"]=="result") {
 	list($user, $host) = sscanf($email, "%[a-zA-Z0-9._-]@%[a-zA-Z0-9._-]");
 	if (!$name) {
 		// a valid name must be entered
-		echo "<p class=\"error\">Please enter your name</p>";    
+		echo "<p class=\"error\">Please enter your name</p>";    #i18n
 		echo $form;    
 	} elseif (!$email || !strchr($email, "@") || !$user || !$host) {
 		// a valid email address must be entered
-		echo "<p class=\"error\">Please enter a valid email address</p>";    
+		echo "<p class=\"error\">Please enter a valid email address</p>"; #i18n  
 		echo $form;
 	} elseif (!$comments) {
 		// some text must be entered
-		echo "<p class=\"error\">Please enter some text</p>";    
+		echo "<p class=\"error\">Please enter some text</p>"; #i18n
 		echo $alert;
 		echo $form;
 	} else {
@@ -40,8 +50,8 @@ if ($_POST["mail"]=="result") {
 		$mailheaders = "From:".$email."\n";
 		$mailheaders .= "Reply-To:".$email;
 		mail($recipient, $subject, $msg, $mailheaders);
-		echo $this->Format("Thanks for your interest! Your feedback has been sent to [[".$recipient."]] ---");
-		echo $this->Format("Return to the [[".$this->GetConfigValue("root_page")." main page]]");
+		echo $this->Format("Thanks for your interest! Your feedback has been sent to [[".$recipient."]] ---"); #i18n
+		echo $this->Format("Return to the [[".$this->GetConfigValue("root_page")." main page]]"); #i18n
 		// optionally displays the feedback text
 		//echo $this->Format("---- **Name:** ".$name."---**Email:** ".$email."---**Comments:** ---".$comments);
 	}    

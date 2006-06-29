@@ -6,13 +6,12 @@
 * taking priority). An optional background color can also be specified.
 *
 * @package    Actions
-* @name    Color
+* @name		Color
+* @version    $Id$
 *
 * @author    {@link http://www.mornography.de/ Hendrik Mans}
 * @author    {@link http://wikkawiki.org/NilsLindenberg Nils Lindenberg} (modifications)
 * @author    {@link http://wikkawiki.org/DotMG Mahefa Randimbisoa} (modification - RGB syntax)
-*
-* @version    1.3
 *
 * @input    string $text mandatory: the text which should be colored.    
 * @input    string $c optional: (html)name or hex-value of the color for the text;

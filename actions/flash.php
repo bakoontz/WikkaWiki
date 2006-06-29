@@ -1,12 +1,14 @@
 <?php
-
-/*
-
-Syntax:
-   {{Flash url="http://example.com/example.swf" [width=x] [height=x]}}
-
-Width and Height are optional arguments.
-
+/**
+* Syntax: {{Flash url="http://example.com/example.swf" [width=x] [height=x]}}
+*
+* Width and Height are optional arguments.
+* 
+* @package 	Actions
+* @name		Flash
+* @version	$Id$
+* 
+* @uses		cleanUrl()
 */
 
 if (!$width) $width = 550;

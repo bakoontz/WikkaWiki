@@ -8,6 +8,14 @@
  * @license http://comawiki.martignier.net/LizenzenUndBedingungen
  * @email 	actions@martignier.net
  * 
+ * @package		Actions
+ * @name		Emailpassword
+ * @version		$Id$
+ *  
+ * @uses	wakka::Format()
+ * @uses	wakka::LoadUser()
+ * @uses	wakka::FormOpen()
+ * @uses	wakka::FormClose()
  */ 
 
 // *** constant section ***

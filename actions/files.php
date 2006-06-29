@@ -1,10 +1,28 @@
 <?php
+/**
+ * Allows admins to manage files (upload, deletion) and everyone to view a list of them or download them. 
+ * 
+ * Or it provides a download-link to a single file.
+ * 
+ * @package		Actions
+ * @name		Files
+ * @version		$Id$
+ *  
+ * @uses	wakka::href()
+ * @uses	wakka::GetPageTag()
+ * @uses	wakka::HasAccess()
+ * @uses	wakka::bytesToHumanReadableUsage()
+ * @uses	wakka::mkdir_r
+ * @uses	wakka::IsAdmin()
+ * @uses	wakka::MiniHref()
+ * @uses	wakka::FormClose()
+ */
 
 // $max_upload_size = "1048576"; // 1 Megabyte
 $max_upload_size = "2097152"; // 2 Megabyte
 
 if (! function_exists('mkdir_r')) {
-    function mkdir_r ($dir) {
+    function mkdir_r($dir) {
         if (strlen($dir) == 0) return 0;
         if (is_dir($dir)) return 1;
         elseif (dirname($dir) == $dir) return 1;
@@ -87,7 +105,7 @@ if ($download <> '') {
 		{
 				case 0:
 	  	  			if ($_FILES["file"]["size"] > $max_upload_size) {
-						echo "<b>Attempted file upload was too big.  Maximum allowed size is ".bytesToHumanReadableUsage($max_upload_size).".</b>"; 
+						echo "<b>Attempted file upload was too big.  Maximum allowed size is ".bytesToHumanReadableUsage($max_upload_size).".</b>"; #i18n
 			 	   		unlink($uploaded['tmp_name']);
 				      } else {	
 					  	$strippedname=str_replace("'","",$uploaded['name']);
@@ -99,16 +117,16 @@ if ($download <> '') {
 						{
 							if (move_uploaded_file($uploaded['tmp_name'], $destfile))
 							{
-								// echo("<b>File was successfully uploaded.</b><br />\n");
+								// echo("<b>File was successfully uploaded.</b><br />\n"); #i18n
 							}
 							else
 							{
-								echo("<b>There was an error uploading your file.</b><br />\n");
+								echo("<b>There was an error uploading your file.</b><br />\n"); #i18n
 							}
 						}
 						else
 						{
-							echo("<b>There is already a file named \"" . $strippedname . "\".</b> <br />\nPlease rename before uploading or delete the existing file below.<br />\n");
+							echo("<b>There is already a file named \"" . $strippedname . "\".</b> <br />\nPlease rename before uploading or delete the existing file below.<br />\n"); #i18n
 						}
 					}
 					break;
@@ -117,10 +135,10 @@ if ($download <> '') {
 					echo "<b>Attempted file upload was too big. Maximum allowed size is ".bytesToHumanReadableUsage($max_upload_size).".</b>"; 
 					break;
 				case 3:
-					echo("<b>File upload incomplete! Please try again.</b><br />\n");
+					echo("<b>File upload incomplete! Please try again.</b><br />\n"); #i18n
 					break;
 				case 4:
-					echo("<b>No file uploaded.</b><br />\n");
+					echo("<b>No file uploaded.</b><br />\n"); #i18n
 		}
 
     }

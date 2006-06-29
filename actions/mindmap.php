@@ -1,12 +1,22 @@
 <?php
+/**
+ * One solution to display a mindmap.
+ * 
+ * @package		Actions
+ * @name		Mindmap
+ * @version		$Id$
+ * 
+ * @uses	wakka::cleanUrl()
+ * @uses	wakka::htmlspecialchars_ent()
+ */
 
 $mindmap_url = $vars['url'];
 if ((!$mindmap_url && !$height) && $wikka_vars) $mindmap_url = $wikka_vars;
 $mindmap_url = $this->cleanUrl(trim($mindmap_url));
 $height = $this->htmlspecialchars_ent(trim($vars['height']));
 
-if ($mindmap_url) {
-
+if ($mindmap_url) 
+{
 	if (!$height) $height = "550";
 	$mindmap_url_fullscreen = "3rdparty/plugins/freemind/fullscreen.php?url=$mindmap_url";
 
@@ -38,12 +48,13 @@ if ($mindmap_url) {
 	"	<param name=\"selection_method\" value=\"selection_method_direct\" />\n".
 	"</applet>\n".
 	"<br />\n".
-	"<span class=\"floatr\"><a href=\"$mindmap_url\">Download this mind map</a> :: Use <a href=\"http://freemind.sourceforge.net/\">Freemind</a> to edit it :: <a href=\"$mindmap_url_fullscreen\" onclick=\"return popup(this,'fullmindmap')\">Open fullscreen</a></span><div style=\"clear:both;\"></div>\n";
+	"<span class=\"floatr\"><a href=\"$mindmap_url\">Download this mind map</a> :: Use <a href=\"http://freemind.sourceforge.net/\">Freemind</a> to edit it :: <a href=\"$mindmap_url_fullscreen\" onclick=\"return popup(this,'fullmindmap')\">Open fullscreen</a></span><div style=\"clear:both;\"></div>\n"; #i18n
 
 	print($output);
-
-} else {
-	echo "<span class='error'><em>Error: Invalid MindMap action syntax. <br /> Proper usage: {{mindmap http://domain.com/MapName/mindmap.mm}} or {{mindmap url=\"http://domain.com/MapName/mindmap.mm\"}}</em></span>";
+} 
+else 
+{
+	echo "<span class='error'><em>Error: Invalid MindMap action syntax. <br /> Proper usage: {{mindmap http://domain.com/MapName/mindmap.mm}} or {{mindmap url=\"http://domain.com/MapName/mindmap.mm\"}}</em></span>"; #i18n
 }
 
 ?>

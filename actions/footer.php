@@ -1,5 +1,25 @@
 <div class="footer">
-<?php 
+<?php
+/**
+ * Echos the footer for an xhtml 1.0 page.
+ * 
+ * @package		Template
+ * @subpackage	xHtml
+ * @name		Footer
+ * @version		$Id$
+ * 
+ * @uses	wakka::FormOpen()
+ * @uses	wakka::HasAccess()
+ * @uses	wakka::href()
+ * @uses	wakka::GetPageTime()
+ * @uses	wakka::GetPageOwner()
+ * @uses	wakka::IsAdmin()
+ * @uses	wakka::UserIsOwner()
+ * @uses	wakka::Link()
+ * @uses	wakka::FormClose()
+ * @uses	wakka::GetWakkaVersion()
+ */
+
 	echo $this->FormOpen("", "TextSearch", "get"); 
 	echo $this->HasAccess("write") ? "<a href=\"".$this->href("edit")."\" title=\"Click to edit this page\">Edit page</a> ::\n" : "";
 	echo "<a href=\"".$this->href("history")."\" title=\"Click to view recent edits to this page\">Page History</a> ::\n";
@@ -17,27 +37,27 @@
 			// if owner is current user
 			elseif ($this->UserIsOwner())
 			{
-           			if ($this->IsAdmin())
-           			{
-					print("Owner: ".$this->Link($owner, "", "", 0)." :: <a href=\"".$this->href("acls")."\">Edit ACLs</a> ::\n");
-            		} 
-            		else 
-            		{
-					print("You own this page. :: <a href=\"".$this->href("acls")."\">Edit ACLs</a> ::\n");
+           		if ($this->IsAdmin())
+           		{
+					print("Owner: ".$this->Link($owner, "", "", 0)." :: <a href=\"".$this->href("acls")."\">Edit ACLs</a> ::\n"); #i18n
+            	} 
+            	else 
+            	{
+					print("You own this page. :: <a href=\"".$this->href("acls")."\">Edit ACLs</a> ::\n"); #i18n
 				}
 			}
 			else
 			{
-				print("Owner: ".$this->Link($owner, "", "", 0)." ::\n");
+				print("Owner: ".$this->Link($owner, "", "", 0)." ::\n"); #i18n
 			}
 		}
 		else
 		{
-			print("Nobody".($this->GetUser() ? " (<a href=\"".$this->href("claim")."\">Take Ownership</a>) ::\n" : " ::\n"));
+			print("Nobody".($this->GetUser() ? " (<a href=\"".$this->href("claim")."\">Take Ownership</a>) ::\n" : " ::\n")); #i18n
 		}
 	}
 ?>
-<?php echo ($this->GetUser() ? "<a href='".$this->href("referrers")."' title='Click to view a list of URLs referring to this page.'>Referrers</a> :: " : "") ?> 
+<?php echo ($this->GetUser() ? "<a href='".$this->href("referrers")."' title='Click to view a list of URLs referring to this page.'>Referrers</a> :: " : "") #i18n ?> 
 Search: <input name="phrase" size="15" class="searchbox" />
 <?php echo $this->FormClose(); ?>
 </div>

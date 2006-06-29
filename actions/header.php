@@ -1,8 +1,26 @@
 <?php
-	$message = $this->GetRedirectMessage();
-	$user = $this->GetUser();
-      $site_base = $this->GetConfigValue("base_url");
-      if ( substr_count($site_base, 'wikka.php?wakka=') > 0 ) $site_base = substr($site_base,0,-16);
+/**
+ * Echos the header for an xhtml 1.0 page.
+ * 
+ * @package		Template
+ * @subpackage	xHtml
+ * @name		Header
+ * @version		$Id$
+ * 
+ * @uses	wakka::GetRedirectMessage()
+ * @uses	wakka::GetUser()
+ * @uses	wakka::GetConfigValue()
+ * @uses	wakka::GetWakkaName()
+ * @uses	wakka::PageTitle()
+ * @uses	wakka::GetMethod()
+ * @uses	wakka::Href()
+ * @uses	wakka::Format()
+ */
+
+$message = $this->GetRedirectMessage();
+$user = $this->GetUser();
+$site_base = $this->GetConfigValue("base_url");
+if ( substr_count($site_base, 'wikka.php?wakka=') > 0 ) $site_base = substr($site_base,0,-16);
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>

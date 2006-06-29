@@ -1,4 +1,16 @@
 <?php
+/**
+ * Display a list of newly registered users.
+ * 
+ * @package		Actions
+ * @name		Lastusers
+ * @version		$Id$
+ * 
+ * @uses	wakka::LoadAll()
+ * @uses	wakka::LoadSingle()
+ * @uses	wakka::Link()
+ */
+
 // ***** CONSTANTS section *****
 define('NAME', "Name");
 define('OWNED_PAGES', "Owned Pages");

@@ -3,6 +3,12 @@
  * Print a spam-safe mailto: link to the administrator's email address. 
  * 
  * Note: plain mailto links are a common source of spam.
+ * 
+ * @package		Actions
+ * @name		Contact
+ * @version		$Id$
+ * 
+ * @uses	wakka::GetConfigValue()
  */
 
 $email = $this->GetConfigValue("admin_email");

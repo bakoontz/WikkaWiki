@@ -1,15 +1,21 @@
 <?php
-/*
-	"image" action
-
-	Parameters:
-		url		- URL of image to be embedded
-		link		- target link for image (optional). Supports URL, WikiName links, InterWiki links etc.
-		title		- title text displayed when mouse hovers above image
-		class		- a class for the image
-		alt         - an alt text
-
-*/
+/**
+ * Display an image.
+ * 
+ * 	Parameters:
+ *		url		- URL of image to be embedded
+ *		link		- target link for image (optional). Supports URL, WikiName links, InterWiki links etc.
+ *		title		- title text displayed when mouse hovers above image
+ *		class		- a class for the image
+ *		alt         - an alt text
+ * 
+ * @package		Actions
+ * @name		Image
+ * @version		$Id$
+ * 
+ * @uses	wakka::Link()
+ * @uses	wakka::ReturnSafeHTML()
+ */
 
 $title = 'WikiImage';
 $class = $link = '';
