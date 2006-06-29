@@ -1,42 +1,47 @@
 <?php
-/*
-
-This file is part of Wikka, a PHP wiki engine.
-
-Copyright (C) 2002, 2003 Hendrik Mans <hendrik@mans.de>
-Copyright (C) 2004, 2005 Jason Tourtelotte <wikka-admin@jsnx.com>
-Copyright (C) 2006 Wikka Development Team <dartar@wikkawiki.org>
-
-Wikka is free software; you can redistribute it and/or
-modify it under the terms of the GNU General Public License
-as published by the Free Software Foundation; either version 2
-of the License, or (at your option) any later version.
-
-Wikka is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-
-*/
-
 /**
+ * The Wikka mainscript.
+ * 
+ * This file is called each time a request is made from the browser.
+ * Most of the core methods used by the engine are located in the Wakka class.
+ * @see Wakka
  * This file was originally written by Hendrik Mans for WakkaWiki
  * and released under the terms of the modified BSD license
- * (see docs/WakkaWiki.LICENSE).
- * WakkaWiki Copyright (c) 2002, Hendrik Mans <hendrik@mans.de>
+ * @see /docs/WakkaWiki.LICENSE
+ *
+ * @package Core
+ * @name Wikka
+ * @version $Id$
+ * 
+ * @author Hendrik Mans <hendrik@mans.de>
+ * @author Jason Tourtelotte <wikka-admin@jsnx.com>
+ * @author {@link http://wikkawiki.org/JavaWoman Marjolein Katsma}
+ * @author {@link http://wikkawiki.org/NilsLindenberg Nils Lindenberg}
+ * @author {@link http://wikkawiki.org/DotMG Mahefa Randimbisoa}
+ * @author {@link http://wikkawiki.org/DarTar Dario Taraborelli}
+ * 
+ * @copyright Copyright 2002-2003, Hendrik Mans <hendrik@mans.de>
+ * @copyright Copyright 2004-2005, Jason Tourtelotte <wikka-admin@jsnx.com>
+ * @copyright Copyright 2006, {@link http://wikkawiki.org/CreditsPage Wikka Development Team}
+ * 
+ * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
+ * @see /docs/Wikka.LICENSE
+ * 
+ * @todo use templating class for page generation;
+ * @todo add phpdoc documentation for configuration array elements;
  */
 
+//i18n
 if(!defined('ERROR_WAKKA_LIBRARY_MISSING')) define ('ERROR_WAKKA_LIBRARY_MISSING','The necessary file "libs/Wakka.class.php" could not be found. To run Wikka, please make sure the file exists and is placed in the right directory!');
 if(!defined('ERROR_WRONG_PHP_VERSION')) define ('ERROR_WRONG_PHP_VERSION', '$_REQUEST[] not found. Wakka requires PHP 4.1.0 or higher!');
 if(!defined('ERROR_SETUP_FILE_MISSING')) define ('ERROR_SETUP_FILE_MISSING', 'A file of the installer/ upgrader was not found. Please install Wikka again!');
 if(!defined('ERROR_SETUP_HEADER_MISSING')) define ('ERROR_SETUP_HEADER_MISSING', 'The file "setup/header.php" was not found. Please install Wikka again!');
 if(!defined('ERROR_SETUP_FOOTER_MISSING')) define ('ERROR_SETUP_FOOTER_MISSING', 'The file "setup/footer.php" was not found. Please install Wikka again!');
 if(!defined('ERROR_NO_DB_ACCESS')) define ('ERROR_NO_DB_ACCESS', 'The wiki is currently unavailable. <br /><br />Error: Unable to connect to the MySQL database.');
-if(!defined('PAGE_GENERATION_TIME')) define ('PAGE_GENERATION_TIME', 'Page was generated in %.4f seconds'); // %.4f - generation time in seconds with 4 digits after the dot   
+/**
+ * Displays page generation time in seconds with 4 decimals (%.4f)
+ */
+if(!defined('PAGE_GENERATION_TIME')) define ('PAGE_GENERATION_TIME', 'Page was generated in %.4f seconds');
 if(!defined('WIKI_UPGRADE_NOTICE')) define ('WIKI_UPGRADE_NOTICE', 'This site is currently being upgraded. Please try again later.');
 
 ob_start();
@@ -45,19 +50,29 @@ ob_start();
 error_reporting (E_ALL ^ E_NOTICE);
 
 /**
- * Defines current version. Do not change the version number or you will have problems upgrading.
+ * Defines the current Wikka version. Do not change the version number or you will have problems upgrading.
  */
 if (!defined('WAKKA_VERSION')) define('WAKKA_VERSION', 'trunk');
-
+/**
+ * Defines the default cookie name.
+ */
 if(!defined('BASIC_COOKIE_NAME')) define('BASIC_COOKIE_NAME', 'Wikkawiki');
-
+/**
+ * Calculate page generation time.
+ */
 function getmicrotime() {
 	list($usec, $sec) = explode(" ", microtime());
 	return ((float)$usec + (float)$sec);
 }
 
 $tstart = getmicrotime();
-
+/**
+ * Escape special characters in a string for use in a SQL statement.
+ * 
+ * This function is added for back-compatibility with MySQL 3.23.
+ * @param string $string the string to be escaped
+ * @return string a string with special characters escaped
+ */
 if ( ! function_exists("mysql_real_escape_string") )
 {
 	function mysql_real_escape_string($string)
@@ -66,14 +81,19 @@ if ( ! function_exists("mysql_real_escape_string") )
 	}
 }
 
-// check for main library 
+/**
+ * Include main library if it exists.
+ * @see /libs/Wakka.class.php
+ */
 if (file_exists('libs/Wakka.class.php')) require_once('libs/Wakka.class.php');
 else die(ERROR_WAKKA_LIBRARY_MISSING);
 
 // stupid version check
 if (!isset($_REQUEST)) die(ERROR_WRONG_PHP_VERSION);
 
-// workaround for the amazingly annoying magic quotes.
+/** 
+ * Workaround for the amazingly annoying magic quotes.
+ */
 function magicQuotesWorkaround(&$a)
 {
 	if (is_array($a))
@@ -95,8 +115,13 @@ if (get_magic_quotes_gpc())
 	magicQuotesWorkaround($_COOKIE);
 }
 
-
-// default configuration values
+/**
+ * Default configuration array.
+ * 
+ * The content of the default config file as generated on a fresh install.
+ * 
+ * @name $wakkaDefaultConfig
+ */
 $wakkaDefaultConfig = array(
 	'mysql_host'				=> 'localhost',
 	'mysql_database'			=> 'wikka',
@@ -157,24 +182,29 @@ $wakkaDefaultConfig = array(
 	'default_read_acl'		=> '*',
 	'default_comment_acl'		=> '*');
 
-// load config
-$wakkaConfig = array();
-if (file_exists("wakka.config.php")) rename("wakka.config.php", "wikka.config.php");
-if (!$configfile = GetEnv("WAKKA_CONFIG")) $configfile = "wikka.config.php";
+/**
+ * Load the configuration.
+ */
+ $wakkaConfig = array();
+if (file_exists('wakka.config.php')) rename('wakka.config.php', 'wikka.config.php');
+if (!$configfile = GetEnv('WAKKA_CONFIG')) $configfile = 'wikka.config.php';
 if (file_exists($configfile)) include($configfile);
 
 $wakkaConfigLocation = $configfile;
 $wakkaConfig = array_merge($wakkaDefaultConfig, $wakkaConfig);
 
-// check for locking
-if (file_exists("locked")) {
+/**
+ * Check for locking.
+ */
+if (file_exists('locked'))
+{
 	// read password from lockfile
-	$lines = file("locked");
+	$lines = file('locked');
 	$lockpw = trim($lines[0]);
 
 	// is authentification given?
-	if (isset($_SERVER["PHP_AUTH_USER"])) {
-		if (!(($_SERVER["PHP_AUTH_USER"] == "admin") && ($_SERVER["PHP_AUTH_PW"] == $lockpw))) {
+	if (isset($_SERVER['PHP_AUTH_USER'])) {
+		if (!(($_SERVER['PHP_AUTH_USER'] == 'admin') && ($_SERVER['PHP_AUTH_PW'] == $lockpw))) {
 			$ask = 1;
 		}
 	} else {
@@ -182,40 +212,52 @@ if (file_exists("locked")) {
 	}
 
 	if ($ask) {
-		header("WWW-Authenticate: Basic realm=\"".$wakkaConfig["wakka_name"]." Install/Upgrade Interface\"");
-		header("HTTP/1.0 401 Unauthorized");
+		header('WWW-Authenticate: Basic realm="'.$wakkaConfig['wakka_name'].' Install/Upgrade Interface"');
+		header('HTTP/1.0 401 Unauthorized');
 		print WIKI_UPGRADE_NOTICE;
 		exit;
     }
 }
 
-// compare versions, start installer if necessary
-if (!isset($wakkaConfig["wakka_version"])) $wakkaConfig["wakka_version"] = 0;
-if ($wakkaConfig["wakka_version"] !== WAKKA_VERSION)
+/**
+ * Compare versions, start installer if necessary.
+ */
+if (!isset($wakkaConfig['wakka_version'])) $wakkaConfig['wakka_version'] = 0;
+if ($wakkaConfig['wakka_version'] !== WAKKA_VERSION)
 {
-	// start installer
-	$installAction = "default";
-	if (isset($_REQUEST["installAction"])) $installAction = trim($_REQUEST["installAction"]);
-	if (file_exists("setup/header.php")) include("setup/header.php"); else print '<em>'.ERROR_SETUP_HEADER_MISSING.'</em>';
-	if (file_exists("setup/".$installAction.".php")) include("setup/".$installAction.".php"); else print '<em>'.ERROR_SETUP_FILE_MISSING.'</em>';
-	if (file_exists("setup/footer.php")) include("setup/footer.php"); else print '<em>'.ERROR_SETUP_FOOTER_MISSING.'</em>';
+	/**
+	 * Start installer.
+	 */
+	$installAction = 'default';
+	if (isset($_REQUEST['installAction'])) $installAction = trim($_REQUEST['installAction']);
+	if (file_exists('setup/header.php')) include('setup/header.php'); else print '<em>'.ERROR_SETUP_HEADER_MISSING.'</em>';
+	if (file_exists('setup/'.$installAction.'.php')) include('setup/'.$installAction.'.php'); else print '<em>'.ERROR_SETUP_FILE_MISSING.'</em>';
+	if (file_exists('setup/footer.php')) include('setup/footer.php'); else print '<em>'.ERROR_SETUP_FOOTER_MISSING.'</em>';
 	exit;
 }
 
-// start session
+/**
+ * Start session.
+ */
 session_name(md5(BASIC_COOKIE_NAME.$wakkaConfig['wiki_suffix']));
 session_start();
 
-// fetch wakka location
+/**
+ * Fetch wakka location
+ */
 $wakka = $_REQUEST["wakka"];
 
-// remove leading slash
+/**
+ * Remove leading slash.
+ */
 $wakka = preg_replace("/^\//", "", $wakka);
 
-// split into page/method
+/**
+ * Split into page/method
+ */
 if (preg_match("#^(.+?)/(.*)$#", $wakka, $matches)) list(, $page, $method) = $matches;
 else if (preg_match("#^(.*)$#", $wakka, $matches)) list(, $page) = $matches;
-#Fix lowercase mod_rewrite bug: Url rewritting lowercases the page name. #135
+//Fix lowercase mod_rewrite bug: URL rewriting makes pagename lowercase. #135
 if (strtolower($page) == $page)
 {
  $pattern = preg_quote($page, '/');
@@ -225,29 +267,38 @@ if (strtolower($page) == $page)
  }
 }
 
-// create wakka object
-$wakka =& new Wakka($wakkaConfig);								# create object by reference
-// check for database access
+/**
+ * Create Wakka object
+ */
+$wakka =& new Wakka($wakkaConfig);
+
+/** 
+ * Check for database access.
+ */
 if (!$wakka->dblink)
 {
 	echo '<em class="error">'.ERROR_NO_DB_ACCESS.'</em>';
       exit;
 }
 
-
-// go!
+/** 
+ * Run the engine.
+ */
 if (!isset($method)) $method='';
 $wakka->Run($page, $method);
-if (!preg_match("/(xml|raw|mm|grabcode)$/", $method))
+if (!preg_match('/(xml|raw|mm|grabcode)$/', $method))
 {
-	   $tend = getmicrotime();
-	//Calculate the difference
-	    $totaltime = ($tend - $tstart);
-	//Output result
-	    print '<div class="smallprint">'.sprintf(PAGE_GENERATION_TIME, $totaltime)."</div>\n</body>\n</html>";
+	$tend = getmicrotime();
+	//calculate the difference
+	$totaltime = ($tend - $tstart);
+	//output result
+	print '<div class="smallprint">'.sprintf(PAGE_GENERATION_TIME, $totaltime)."</div>\n</body>\n</html>";
 }
 
 $content =  ob_get_contents();
+/** 
+ * Use gzip compression if possible.
+ */
 if (strstr ($HTTP_SERVER_VARS['HTTP_ACCEPT_ENCODING'], 'gzip') && function_exists('gzencode') )
 {
    // Tell the browser the content is compressed with gzip
@@ -259,6 +310,9 @@ if (strstr ($HTTP_SERVER_VARS['HTTP_ACCEPT_ENCODING'], 'gzip') && function_exist
 	$page_length = strlen($page_output);
 }
 
+/** 
+ * Send HTTP headers.
+ */
 // header("Cache-Control: pre-check=0");
 header("Cache-Control: no-cache");
 // header("Pragma: ");
@@ -269,6 +323,9 @@ header('ETag: '.$etag);
 
 header('Content-Length: '.$page_length);
 ob_end_clean();
-echo $page_output;
 
+/** 
+ * Output the page.
+ */
+echo $page_output;
 ?>
