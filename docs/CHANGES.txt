@@ -1,91 +1,101 @@
+Wikka Changelog
+---------------
+
+Source: http://wikkawiki.org/WikkaReleaseNotes
+
+Note: To display detailed information on a specific bugfix/feature enhancement, append the ticket number to http://tracker.wikkawiki.org/ticket/
+e.g. Ticket:23  =>  http://tracker.wikkawiki.org/ticket/23
+
+-------------------
+
 Wikka 1.1.6.2
 
 Released on June 12, 2006 - Release name: bluebottle
 
 Many thanks to MinusF, Philipp A. Hartmann, Sakaru, GiorgosKontopoulos, WazoO, IceT, MasinAlDujaili, DbieL, NickDamoulakis, BrianKoontz.
 
-Feature additions
+Feature additions:
 
     * New grabcode handler.
-          o Code blocks can now be downloaded "on-the-fly" from wiki pages using the grab button. An optional and configurable extension (default: .txt) is appended to the filename for security reasons. The grab button can be disabled by setting the grabcode_button option to '0' in the Wikka Configuration file. Ticket:2?
+          o Code blocks can now be downloaded "on-the-fly" from wiki pages using the grab button. An optional and configurable extension (default: .txt) is appended to the filename for security reasons. The grab button can be disabled by setting the grabcode_button option to '0' in the Wikka Configuration file. Ticket:2
     * Added filename support for code blocks.
-          o An optional filename parameter can now be specified after the formatter and start line number, e.g. %%(php;15;testme.php) ... %%. This parameter is used to display a code block header (which can be switched off in the Wikka configuration file) and to name the code downloaded through the grabcode handler. Ticket:2?
+          o An optional filename parameter can now be specified after the formatter and start line number, e.g. %%(php;15;testme.php) ... %%. This parameter is used to display a code block header (which can be switched off in the Wikka configuration file) and to name the code downloaded through the grabcode handler. Ticket:2
     * New WikiEdit Search and Replace handler.
-          o A new handler has been added to the WikiEdit toolbar. It allows searching and replacing of specific strings within the current page. It supports regular expression search, case sensitive search, whole word search, prompting vs. automatic replacement. It can be called with a keyboard shortcut (ctrl+shift+f) or by clicking on the search and replace button in the toolbar. Ticket:125?
+          o A new handler has been added to the WikiEdit toolbar. It allows searching and replacing of specific strings within the current page. It supports regular expression search, case sensitive search, whole word search, prompting vs. automatic replacement. It can be called with a keyboard shortcut (ctrl+shift+f) or by clicking on the search and replace button in the toolbar. Ticket:125
     * New backlinks handler.
-          o Internal backlinks to the current page can now be displayed by appending /backlinks to the page name - Ticket:23?. Since 1.1.6.2 this handler replaces the TextSearch function when clicking on the page name in the header - Ticket:31?
+          o Internal backlinks to the current page can now be displayed by appending /backlinks to the page name - Ticket:23. Since 1.1.6.2 this handler replaces the TextSearch function when clicking on the page name in the header - Ticket:31
     * Added new SysInfo page, displaying system information. It uses the following new actions:
           o {{system}}: displays different types of system information. By default this information is accessible to Wikka Admins only, this option can be changed by setting public_sysinfo to '1' in the Wikka configuration file.
           o {{geshiversion}}: displays the currently installed version of GeSHi.
     * New UserSettings action.
-          o {{usersettings}}: general code cleanup, i18n strings, reordering of error messages, invalid input field highlighting, replaced javascript alerts with server-side generated messages, more accurate description of password retrieval procedure. Ticket:11?, Ticket:76?
+          o {{usersettings}}: general code cleanup, i18n strings, reordering of error messages, invalid input field highlighting, replaced javascript alerts with server-side generated messages, more accurate description of password retrieval procedure. Ticket:11, Ticket:76
     * New Color action.
-          o {{color}}: general code cleanup, parameter validation, i18n strings, support for background color through bg parameter. Ticket:40?
+          o {{color}}: general code cleanup, parameter validation, i18n strings, support for background color through bg parameter. Ticket:40
     * New EmailPassword action.
-          o {{emailpassword}}: general code cleanup, i18n strings, more accurate description of password retrieval procedure. Ticket:41?
+          o {{emailpassword}}: general code cleanup, i18n strings, more accurate description of password retrieval procedure. Ticket:41
     * Configurable edit notes.
-          o Edit notes can now be made mandatory, disabled or optional by changing the value of require_edit_note in the Wikka configuration file. Ticket:114?
+          o Edit notes can now be made mandatory, disabled or optional by changing the value of require_edit_note in the Wikka configuration file. Ticket:114
     * Disabled support for inline images to enforce accessibility.
-          o Using inline images automatically parsed from their URL raises accessibility issues. Images should be included through the {{image}} action. Inline images can be restored by commenting-out the dedicated lines in the formatter. Ticket:145?
+          o Using inline images automatically parsed from their URL raises accessibility issues. Images should be included through the {{image}} action. Inline images can be restored by commenting-out the dedicated lines in the formatter. Ticket:145
     * Improved installer.
           o New layout and more detailed instructions. Edit note added on default page upgrading.
     * Added option for configurable cookie names.
-          o Configurable cookie names allow multiple Wikka installs to run on the same server without producing session leakage. Ticket:81?
+          o Configurable cookie names allow multiple Wikka installs to run on the same server without producing session leakage. Ticket:81
     * Added RSS autodiscovery.
-          o Browsers supporting RSS autodiscovery display a RSS icon in the URL field allowing the user to subscribe to the page revision feed or the global feed for recent changes.Ticket:22?
+          o Browsers supporting RSS autodiscovery display a RSS icon in the URL field allowing the user to subscribe to the page revision feed or the global feed for recent changes.Ticket:22
     * Added support for new language formatters in GeSHI.
-          o The complete list of available formatters can be found in the enclosed FormattingRules. Ticket:111?
-    * Added favicon support. Ticket:149?
+          o The complete list of available formatters can be found in the enclosed FormattingRules. Ticket:111
+    * Added favicon support. Ticket:149
           o Admins can now set a custom favicon for their Wikka website.
     * Improved default FormattingRules.
-          o Added extensive description of formatting options and documentation for new formatting features. Ticket:65?, Ticket:107?
+          o Added extensive description of formatting options and documentation for new formatting features. Ticket:65, Ticket:107
     * Added a number of new CSS selectors
-          o wikka.css now includes action- and handler-related classes, default styling for abbr, acronym, blockquote, form buttons, edit textarea, styling for error messages and alerts and for invalid input, new styling for grabcode action and codeblock headers, new styling for action-generated tables, new styling for keys to match button styling. Ticket:202?
+          o wikka.css now includes action- and handler-related classes, default styling for abbr, acronym, blockquote, form buttons, edit textarea, styling for error messages and alerts and for invalid input, new styling for grabcode action and codeblock headers, new styling for action-generated tables, new styling for keys to match button styling. Ticket:202
 
 Bug fixes:
 
-    * Fixed security issue with Method(). Ticket:36?
-    * Preventing session leakage for wikis installed on the same server. Ticket:81?
-    * Fixed security issue caused by javascript not stripped from forced links. Ticket:142?
-    * Preventing displaying of confidential data in {{textsearch}}. Ticket:86?
-    * Fixed inconsistency in pagename validation patterns between page creation and page cloning. Ticket:199?
-    * Adding ACL permission check in {{pageindex}}, {{recentchanges}}, {{recentcomments}} and {{recentlycommented}}. Ticket:87?, Ticket:136?, Ticket:180?
-    * Fixed bug making login/logout impossible in Windosw IIS. Ticket:92?
-    * Fixed bug making wiki names not case sensitive on windows server. Ticket:131?
-    * Fixed installer issue with array_merge causing error in PHP5. Ticket:94?
-    * Fixed non-escaped &'s in forced links. Ticket:148?
-    * Fixed ctrl+5 executed twice in WikiEdit. Ticket:4?
-    * Fixed bug preventing the use of MySQL passwords containing $'s. Ticket:5?
-    * Fixed turning off of double-click editing. Ticket:3?
-    * Fixed bug in formatters generating fatal error (Call to a member function on a non-object). Ticket:7?
-    * RSS parsing errors are now encoded in HTML comments. Ticket:30?
-    * Fixed special characters encoding bug. Ticket:12?
-    * Fixed bug in GetCookie(). Ticket:37?
-    * Fixed {{emailpassword}} bug with Konqueror. Ticket:41?
-    * Fixed wrong order of error messages in {{usersettings}}. Ticket:76?
-    * Fixed erroneous parsing of titles generated from headings containing links. Ticket:32?
-    * Preventing email deletion after registration in {{usersettings}}. Ticket:47?
-    * Fixed WikiEdit bug with dates. Ticket:74?
-    * Fixed minor formatting error in comments. Ticket:84?
-    * Fixed WikiEdit bug with rewrite_mode. Ticket:91?
-    * Adding error message to showcode handler. Ticket:96?
-    * Fixed bug for edit notes not being passed through hmtlspecialchars. Ticket:99?
-    * Fixed XHTML validation in {{lastusers}},{{lastedit}}, {{usersettings}}, acls handler, installer. Ticket:52?, Ticket:103?, Ticket:112?, Ticket:132?, Ticket:45?, Ticket:172?
-    * Fixed unescaped & in interwiki.conf. Ticket:105?
-    * Fixing typo in the installer generating error in the config file option for GeSHi tab width. Ticket:185?
-    * Replacing right arrow sign (&arr;) in RecentChanges not correctly displayed in IE. Ticket:129?
+    * Fixed security issue with Method(). Ticket:36
+    * Preventing session leakage for wikis installed on the same server. Ticket:81
+    * Fixed security issue caused by javascript not stripped from forced links. Ticket:142
+    * Preventing displaying of confidential data in {{textsearch}}. Ticket:86
+    * Fixed inconsistency in pagename validation patterns between page creation and page cloning. Ticket:199
+    * Adding ACL permission check in {{pageindex}}, {{recentchanges}}, {{recentcomments}} and {{recentlycommented}}. Ticket:87, Ticket:136, Ticket:180
+    * Fixed bug making login/logout impossible in Windosw IIS. Ticket:92
+    * Fixed bug making wiki names not case sensitive on windows server. Ticket:131
+    * Fixed installer issue with array_merge causing error in PHP5. Ticket:94
+    * Fixed non-escaped &'s in forced links. Ticket:148
+    * Fixed ctrl+5 executed twice in WikiEdit. Ticket:4
+    * Fixed bug preventing the use of MySQL passwords containing $'s. Ticket:5
+    * Fixed turning off of double-click editing. Ticket:3
+    * Fixed bug in formatters generating fatal error (Call to a member function on a non-object). Ticket:7
+    * RSS parsing errors are now encoded in HTML comments. Ticket:30
+    * Fixed special characters encoding bug. Ticket:12
+    * Fixed bug in GetCookie(). Ticket:37
+    * Fixed {{emailpassword}} bug with Konqueror. Ticket:41
+    * Fixed wrong order of error messages in {{usersettings}}. Ticket:76
+    * Fixed erroneous parsing of titles generated from headings containing links. Ticket:32
+    * Preventing email deletion after registration in {{usersettings}}. Ticket:47
+    * Fixed WikiEdit bug with dates. Ticket:74
+    * Fixed minor formatting error in comments. Ticket:84
+    * Fixed WikiEdit bug with rewrite_mode. Ticket:91
+    * Adding error message to showcode handler. Ticket:96
+    * Fixed bug for edit notes not being passed through hmtlspecialchars. Ticket:99
+    * Fixed XHTML validation in {{lastusers}},{{lastedit}}, {{usersettings}}, acls handler, installer. Ticket:52, Ticket:103, Ticket:112, Ticket:132, Ticket:45, Ticket:172
+    * Fixed unescaped & in interwiki.conf. Ticket:105
+    * Fixing typo in the installer generating error in the config file option for GeSHi tab width. Ticket:185
+    * Replacing right arrow sign (&arr;) in RecentChanges not correctly displayed in IE. Ticket:129
 
 Misc:
 
-    * Upgraded GeSHi to version 1.0.7.10. Ticket:111?
-    * Moved classes to separate files in a libs/ folder. Ticket:161?
-    * Action parameters can now be enclosed either in single or doublequotes. Ticket:24?
-    * Removed default option for justified text in the stylesheet. Ticket:202?
-    * Added dedicated CSS class for error messages and notifications. Ticket:55?
-    * Removed useless accesskey for deleting comments. Ticket:77?
-    * Added wikka logo to installer and to default HomePage. Ticket:173?, Ticket:65?
+    * Upgraded GeSHi to version 1.0.7.10. Ticket:111
+    * Moved classes to separate files in a libs/ folder. Ticket:161
+    * Action parameters can now be enclosed either in single or doublequotes. Ticket:24
+    * Removed default option for justified text in the stylesheet. Ticket:202
+    * Added dedicated CSS class for error messages and notifications. Ticket:55
+    * Removed useless accesskey for deleting comments. Ticket:77
+    * Added wikka logo to installer and to default HomePage. Ticket:173, Ticket:65
     * Added semantically correct markup (<blockquote>) for comment preview in {{recentcomments}} and {{recentlycommented}}.
-    * Added error messages, formatting and link to raw version in showcode handler. Ticket:96?
+    * Added error messages, formatting and link to raw version in showcode handler. Ticket:96
     * Minor modifications to {{wikkachanges}} to match the styling of default HomePage.
 
 
