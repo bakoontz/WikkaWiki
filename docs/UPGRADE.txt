@@ -1,5 +1,7 @@
 UPGRADING FROM AN EARLIER VERSION:
 
+An upgrade is a great idea to back up your tables!
+
 Just unpack the new distribution archive wherever you need/want it; all you need from
 your old Wikka installation is wikka.config.php. You can also just copy the new files
 over the old ones, but be careful not to overwrite your old wikka.config.php or
