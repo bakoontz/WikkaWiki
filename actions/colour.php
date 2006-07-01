@@ -2,6 +2,10 @@
 /**
  * Synonym for color.php.
  * 
+ * @see			colour.php
+ * 
+ * @package		Actions
+ * @name		colour.php
  * @version		$Id$
  */
 

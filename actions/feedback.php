@@ -5,12 +5,12 @@
  * It first validates the form, then sends it using the mail() function;
  * 
  * @package		Actions
- * @name		Feedback
+ * @name		feedback.php
  * @version		$Id$
  * 
- * @uses	wakka::FormOpen()
- * @uses	wakka::FormClose()
- * @uses	wakka::GetConfigValue()
+ * @uses	Wakka::FormOpen()
+ * @uses	Wakka::FormClose()
+ * @uses	Wakka::GetConfigValue()
  */
 
 $form = "<p>Fill in the form below to send us your comments:</p>".

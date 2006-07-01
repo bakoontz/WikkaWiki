@@ -23,13 +23,14 @@
  *
  * @package		Actions
  * @subpackage	Date and Time
- * @name		Calendar
+ * @name		calendar.php
  *
  * @author		{@link http://wikkawiki.org/GmBowen GmBowen} (first draft)
  * @author		{@link http://wikkawiki.org/JavaWoman JavaWoman} (more modifications)
  * @version		$Id$
  * @since		Wikka 1.1.6.0
  *
+ * @uses		Wakka::Href()
  * @input		integer  $year  optional: 4-digit year of the month to be displayed;
  *				default: current year
  *				the default can be overridden by providing a URL parameter 'year'

@@ -3,7 +3,7 @@
  * Display a form to register, login and change user settings.
  *
  * @package		Actions
- * @name		UserSettings
+ * @name		usersettings.php
  *
  * @author		{@link http://wikkawiki.org/MinusF MinusF} (code cleanup and validation)
  * @author		{@link http://wikkawiki.org/DarTar Dario Taraborelli} (further cleanup, i18n, replaced JS dialogs with server-generated messages)

@@ -3,11 +3,20 @@
  * Display a list of recently changed pages.
  *
  * @package		Actions
- * @name			RecentChanges
+ * @name		recentchanges.php
  *
  * @author    	{@link http://www.mornography.de/ Hendrik Mans} (wakka code)
  * @author		{@link http://wikkawiki.org/DarTar Dario Taraborelli} (preliminary code cleanup)
- * @todo			- make datetime format configurable;
+ * @version		$Id$
+ * 
+ * @uses		Wakka::Format()
+ * @uses		Wakka::LoadRecentlyChanged()
+ * @uses		Wakka::href()
+ * @uses		Wakka::GetUser()
+ * @uses		Wakka::HasAccess()
+ * @uses		Wakka::LoadUser()
+ * 
+ * @todo		- make datetime format configurable;
  * 				- add configurable option for non-accessible pages {@link http://wush.net/trac/wikka/ticket/178 #178};
  * 				- added extensive logging of events such as page deletion, cloning, ACL change {@link http://wush.net/trac/wikka/ticket/143 #143};
  */

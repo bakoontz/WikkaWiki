@@ -1,4 +1,19 @@
 <?php
+/**
+ * Search for a phrase and show the results with their surrounding text.
+ * 
+ * @package	Actions
+ * @name	textsearchexpanded.php
+ * @version $Id$
+ * 
+ * @uses	Wakka::FormClose()
+ * @uses	Wakka::FormOpen()
+ * @uses	Wakka::FullTextSearch()
+ * @uses	Wakka::HasAccess()
+ * @uses	Wakka::htmlspecialchars_ent()
+ * @uses	Wakka::ReturnSafeHtml()
+ */
+
  //constants
 	if (!defined('SEARCH_FOR')) define('SEARCH_FOR', 'Search for');
 	if (!defined('SEARCH_ZERO_MATCH')) define('SEARCH_ZERO_MATCH', 'No matches');

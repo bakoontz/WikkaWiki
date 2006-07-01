@@ -3,12 +3,12 @@
  * Display a list of newly registered users.
  * 
  * @package		Actions
- * @name		Lastusers
+ * @name		lastusers.php
  * @version		$Id$
  * 
- * @uses	wakka::LoadAll()
- * @uses	wakka::LoadSingle()
- * @uses	wakka::Link()
+ * @uses	Wakka::LoadAll()
+ * @uses	Wakka::LoadSingle()
+ * @uses	Wakka::Link()
  */
 
 // ***** CONSTANTS section *****

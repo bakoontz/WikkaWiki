@@ -9,13 +9,13 @@
  * @email 	actions@martignier.net
  * 
  * @package		Actions
- * @name		Emailpassword
+ * @name		emailpassword.php
  * @version		$Id$
  *  
- * @uses	wakka::Format()
- * @uses	wakka::LoadUser()
- * @uses	wakka::FormOpen()
- * @uses	wakka::FormClose()
+ * @uses	Wakka::Format()
+ * @uses	Wakka::LoadUser()
+ * @uses	Wakka::FormOpen()
+ * @uses	Wakka::FormClose()
  */ 
 
 // *** constant section ***

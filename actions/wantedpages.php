@@ -1,4 +1,16 @@
 <?php
+/**
+ * Shows the name of nonexisting pages to which other pages are linking to.
+ * 
+ * @package	Actions
+ * @name	wantedpages.php
+ * @version $Id$
+ * 
+ * @uses	 Wakka::LoadPagesLinkingTo()
+ * @uses	 Wakka::Link()
+ * @uses	 Wakka::LoadWantedPages()
+ * @uses	 Wakka::href() 
+ */
 $linking_to = '';
 if (isset($_REQUEST["linking_to"]))
 {
@@ -13,7 +25,7 @@ if (isset($_REQUEST["linking_to"]))
 	}
 	else
 	{
-		print("<em>No page is linking to ".$this->Link($linking_to).".</em>");
+		print("<em>No page is linking to ".$this->Link($linking_to).".</em>"); # i18n
 	}
 }
 else
@@ -27,7 +39,7 @@ else
 	}
 	else
 	{
-		print("<em>No wanted pages. Good!</em>");
+		print("<em>No wanted pages. Good!</em>"); # i18n
 	}
 }
 

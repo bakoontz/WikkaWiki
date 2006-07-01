@@ -3,11 +3,16 @@
  * Display a list of recently commented pages.
  *
  * @package		Actions
- * @name			RecentlyCommented
+ * @name		recentlycommented.php
  *
  * @author		{@link http://wikkawiki.org/DarTar Dario Taraborelli} (preliminary code cleanup, ACL check)
  * @since		Wikka 1.1.6.2
+ * @version		$Id$
  *
+ * @uses		Wakka::Format()
+ * @uses		Wakka::LoadRecentlyCommented()
+ * @uses		Wakka::HasAccess()
+ * @uses		Wakka::LoadUser()
  * @input		none
  */
 //constants
@@ -29,7 +34,7 @@ if ($comments = $this->LoadRecentlyCommented())
 	$curday = '';
 	foreach ($comments as $comment)
 	{
-		if ($this->HasAccess('read', $comment[page_tag]))
+		if ($this->HasAccess('read', $comment['page_tag']))
 		{
 			$readable++;
 			// day header
@@ -49,10 +54,10 @@ if ($comments = $this->LoadRecentlyCommented())
 			$comment_preview = str_replace('<br />', '', $comment['comment']);
 			if (strlen($comment_preview) > COMMENT_SNIPPET_LENGTH)
 			{
-				$comment_spillover_link = '<a href="'.$this->href('', $comment['page_tag'], 'show_comments=1').'#comment_'.$comment['id'].'" title="View comment">[&#8230;]</a>';
+				$comment_spillover_link = '<a href="'.$this->href('', $comment['page_tag'], 'show_comments=1').'#comment_'.$comment['id'].'" title="View comment">[&#8230;]</a>'; # i18n
 				$comment_preview = substr($comment_preview, 0, COMMENT_SNIPPET_LENGTH).$comment_spillover_link;
 			}
-			$commentlink = '<a href="'.$this->href('', $comment['page_tag'], 'show_comments=1').'#comment_'.$comment['id'].'" title="View comment">'.$comment['page_tag'].'</a>';
+			$commentlink = '<a href="'.$this->href('', $comment['page_tag'], 'show_comments=1').'#comment_'.$comment['id'].'" title="View comment">'.$comment['page_tag'].'</a>'; # i18n
 			$comment_by = $comment['user'];
 			if (!$this->LoadUser($comment_by))
 			{

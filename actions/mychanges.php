@@ -1,8 +1,23 @@
 <?php
-
-// actions/mychanges.php
-// written by Carlo Zottmann
-// http://wakkawikki.com/CarloZottmann
+/**
+ * Shows a logged-in user a list of pages he has edited.
+ * 
+ * If a user is logged-in and has at least changed one page, the changed 
+ * page(s) are presented as a list, ordered either alpabetically or after 
+ * date and time (last edit first).
+ * 
+ * @package Actions
+ * @name	mychanges.php
+ * 
+ * @author Carlo Zottmann
+ * @version	$Id$
+ * 
+ * @uses	Wakka::GetUser()
+ * @uses	Wakka::LoadAll()
+ * @uses	Wakka::Link()
+ * @uses	Wakka::href()
+ * @uses	Wakka::GetUserName()
+ */
 
 if ($user = $this->GetUser())
 {
@@ -10,7 +25,7 @@ if ($user = $this->GetUser())
 
 	if ($_REQUEST["alphabetically"] == 1)
 	{
-		print("<strong>This is a list of pages you've edited, along with the time of your last change (<a href=\"".$this->href("", $tag)."\">order by date</a>).</strong><br /><br />\n");	
+		print("<strong>This is a list of pages you've edited, along with the time of your last change (<a href=\"".$this->href("", $tag)."\">order by date</a>).</strong><br /><br />\n");	#i18n
 
 		if ($pages = $this->LoadAll("SELECT tag, time FROM ".$this->config["table_prefix"]."pages WHERE user = '".mysql_real_escape_string($this->GetUserName())."' ORDER BY tag ASC, time DESC"))
 		{
@@ -38,17 +53,17 @@ if ($user = $this->GetUser())
 			
 			if ($my_edits_count == 0)
 			{
-				print("<em>You have not edited any pages yet.</em>");
+				print("<em>You have not edited any pages yet.</em>"); #i18n
 			}
 		}
 		else
 		{
-			print("<em>No pages found.</em>");
+			print("<em>No pages found.</em>"); #i18n
 		}
 	}
 	else
 	{
-		print("<strong>This is a list of pages you've edited, ordered by the time of your last change (<a href=\"".$this->href("", $tag, "alphabetically=1")."\">order alphabetically</a>).</strong><br /><br />\n");	
+		print("<strong>This is a list of pages you've edited, ordered by the time of your last change (<a href=\"".$this->href("", $tag, "alphabetically=1")."\">order alphabetically</a>).</strong><br /><br />\n"); #i18n	
 
 		if ($pages = $this->LoadAll("SELECT tag, time FROM ".$this->config["table_prefix"]."pages WHERE user = '".mysql_real_escape_string($this->GetUserName())."' ORDER BY time ASC, tag ASC"))
 		{
@@ -78,18 +93,18 @@ if ($user = $this->GetUser())
 			
 			if ($my_edits_count == 0)
 			{
-				print("<em>You have not edited any pages yet.</em>");
+				print("<em>You have not edited any pages yet.</em>"); #i18n
 			}
 		}
 		else
 		{
-			print("<em>No pages found.</em>");
+			print("<em>No pages found.</em>"); #i18n
 		}
 	}
 }
 else
 {
-	print("<em>You're not logged in, thus the list of pages you've edited couldn't be retrieved.</em>");
+	print("<em>You're not logged in, thus the list of pages you've edited couldn't be retrieved.</em>"); #i18n
 }
 
 ?>

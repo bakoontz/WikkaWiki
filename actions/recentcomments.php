@@ -3,14 +3,15 @@
  * Display a list of recent comments.
  *
  * @package		Actions
- * @name			RecentComments
+ * @name		recentcomments.php
  *
  * @author		{@link http://wikkawiki.org/DarTar Dario Taraborelli} (preliminary code cleanup)
  * @author		{@link http://wikkawiki.org/NickDamoulakis Nick Damoulakis} (ACL check)
  * @since		Wikka 1.1.6.2
+ * @version		$Id$
  *
  * @input		none
- * @todo			- make datetime format configurable
+ * @todo		- make datetime format configurable
  */
 //constants
 if(!defined('COMMENT_DATE_FORMAT')) define('COMMENT_DATE_FORMAT', 'D, d M Y');

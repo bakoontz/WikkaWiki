@@ -6,11 +6,11 @@
  * @license	GPL
  * 
  * @package		Actions
- * @name		Highscores
+ * @name		highscores.php
  * @version		$Id$
  * 
- * @uses	wakka::Query()
- * @uses	wakka::Format()
+ * @uses	Wakka::Query()
+ * @uses	Wakka::Format()
  */
 
 $str = 'SELECT Count(*) AS cnt, `name`  FROM ';

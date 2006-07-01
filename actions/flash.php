@@ -5,10 +5,10 @@
 * Width and Height are optional arguments.
 * 
 * @package 	Actions
-* @name		Flash
+* @name		flash.php
 * @version	$Id$
 * 
-* @uses		cleanUrl()
+* @uses		Wakka::cleanUrl()
 */
 
 if (!$width) $width = 550;

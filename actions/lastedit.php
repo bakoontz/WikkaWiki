@@ -3,7 +3,7 @@
  * Display a box with information on the last edit.
  *
  * @package		Actions
- * @name		Lastedit
+ * @name		lastedit.php
  *
  * @author		{@link http://wikkawiki.org/DarTar Dario Taraborelli} (first draft)
  * @author		{@link http://wikkawiki.org/MinusF MinusF} (code cleanup and validation)
@@ -19,13 +19,13 @@
  * @output		box with lastedit information
  *
  * @todo		- make date/time format system-configurable;
- *			- use FormatUser() method to render author name;
+ *				- use FormatUser() method to render author name;
  *
- * @uses	wakka::Link()
- * @uses	wakka::LoadUser()
- * @uses	wakka::GetPageTag()
- * @uses	wakka::Href()
- * @uses	wakka::htmlspecialchars_ent()
+ * @uses	Wakka::Link()
+ * @uses	Wakka::LoadUser()
+ * @uses	Wakka::GetPageTag()
+ * @uses	Wakka::Href()
+ * @uses	Wakka::htmlspecialchars_ent()
  */
 
 // defaults

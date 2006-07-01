@@ -5,23 +5,28 @@
  * Or it provides a download-link to a single file.
  * 
  * @package		Actions
- * @name		Files
+ * @name		files.php
  * @version		$Id$
  *  
- * @uses	wakka::href()
- * @uses	wakka::GetPageTag()
- * @uses	wakka::HasAccess()
- * @uses	wakka::bytesToHumanReadableUsage()
- * @uses	wakka::mkdir_r
- * @uses	wakka::IsAdmin()
- * @uses	wakka::MiniHref()
- * @uses	wakka::FormClose()
+ * @uses	Wakka::href()
+ * @uses	Wakka::GetPageTag()
+ * @uses	Wakka::HasAccess()
+ * @uses	Wakka::bytesToHumanReadableUsage()
+ * @uses	Wakka::mkdir_r
+ * @uses	Wakka::IsAdmin()
+ * @uses	Wakka::MiniHref()
+ * @uses	Wakka::FormClose()
  */
 
 // $max_upload_size = "1048576"; // 1 Megabyte
 $max_upload_size = "2097152"; // 2 Megabyte
 
 if (! function_exists('mkdir_r')) {
+	/**
+	 * Makes a directory on the server.
+	 * 
+	 * @name mkdir_r()
+	 */
     function mkdir_r($dir) {
         if (strlen($dir) == 0) return 0;
         if (is_dir($dir)) return 1;
@@ -32,10 +37,13 @@ if (! function_exists('mkdir_r')) {
 
 if (! function_exists('bytesToHumanReadableUsage')) {
         /**
-        * Converts bytes to a human readable string
-        * @param int $bytes Number of bytes
-        * @param int $precision Number of decimal places to include in return string
-        * @param array $names Custom usage strings
+        * Converts bytes to a human readable string.
+        * 
+        * @name	bytesToHumanReadableUsage()
+        * 
+        * @input int $bytes Number of bytes
+        * @input int $precision Number of decimal places to include in return string
+        * @input array $names Custom usage strings
         * @return string formatted string rounded to $precision
         */
         function bytesToHumanReadableUsage($bytes, $precision = 2, $names = '')
@@ -71,7 +79,7 @@ if (! function_exists('bytesToHumanReadableUsage')) {
            }
    
            if (empty($suffix)) {
-               trigger_error('Unable to find suffix for case ' . $level);
+               trigger_error('Unable to find suffix for case ' . $level); #i18n
                return false;
            }
    

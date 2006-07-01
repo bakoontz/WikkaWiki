@@ -3,11 +3,11 @@
  * Print the total number of pages in this wiki.
  * 
  * @package		Actions
- * @name		Countpages
+ * @name		countpages.php
  * @version		$Id$
  * 
- * @uses	wakka::LoadSingle()
- * @uses	wakka::Link()
+ * @uses	Wakka::LoadSingle()
+ * @uses	Wakka::Link()
  */
 
 $pagedata = $this->LoadSingle("SELECT count(*) as num FROM ".$this->config["table_prefix"]."pages WHERE latest = 'Y'");

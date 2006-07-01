@@ -3,11 +3,11 @@
  * One solution to display a mindmap.
  * 
  * @package		Actions
- * @name		Mindmap
+ * @name		mindmap.php
  * @version		$Id$
  * 
- * @uses	wakka::cleanUrl()
- * @uses	wakka::htmlspecialchars_ent()
+ * @uses	Wakka::cleanUrl()
+ * @uses	Wakka::htmlspecialchars_ent()
  */
 
 $mindmap_url = $vars['url'];

@@ -5,12 +5,18 @@
 * This action checks user read privileges and displays an index of read-accessible pages.
 *
 * @package    Actions
-* @name    pageindex
+* @name    pageindex.php
 *
 * @author    {@link http://wikkawiki.org/GiorgosKontopoulos GiorgosKontopoulos} (added ACL check, first code cleanup)
 * @author    {@link http://wikkawiki.org/DarTar DarTar} (adding doc header, minor code and layout refinements, i18n)
-*
+* @version	$Id$
 * @since    1.1.6.2
+* 
+* @uses		Wakka::LoadAllPages()
+* @uses		Wakka::GetUserName()
+* @uses		Wakka::HasAccess()
+* @uses		Wakka::Link()
+* @uses		Wakka::Format()
 *
 * @output   a list of pages accessible to the current user
 * @documentation  {@link http://wikkawiki.org/ColorActionInfo}

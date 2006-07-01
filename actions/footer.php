@@ -5,19 +5,19 @@
  * 
  * @package		Template
  * @subpackage	xHtml
- * @name		Footer
+ * @name		footer.php
  * @version		$Id$
  * 
- * @uses	wakka::FormOpen()
- * @uses	wakka::HasAccess()
- * @uses	wakka::href()
- * @uses	wakka::GetPageTime()
- * @uses	wakka::GetPageOwner()
- * @uses	wakka::IsAdmin()
- * @uses	wakka::UserIsOwner()
- * @uses	wakka::Link()
- * @uses	wakka::FormClose()
- * @uses	wakka::GetWakkaVersion()
+ * @uses	Wakka::FormOpen()
+ * @uses	Wakka::HasAccess()
+ * @uses	Wakka:Href()
+ * @uses	Wakka::GetPageTime()
+ * @uses	Wakka::GetPageOwner()
+ * @uses	Wakka::IsAdmin()
+ * @uses	Wakka::UserIsOwner()
+ * @uses	Wakka::Link()
+ * @uses	Wakka::FormClose()
+ * @uses	Wakka::GetWakkaVersion()
  */
 
 	echo $this->FormOpen("", "TextSearch", "get"); 

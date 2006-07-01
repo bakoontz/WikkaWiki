@@ -6,17 +6,17 @@
  * 
  * @package		Actions
  * @subpackage	Navigation
- * @name		Category
+ * @name		category.php
  * @version 	$Id$
  * 
  * @input	string $page optional: the category for which you want to display the pages and categories. Default: current page
  * @input 	integer $compact optional: produces a columnar layout with a layout table; 1 produces output in the form of an unordered list. Default: 0
  * @input	integer $col optional: number of columns (for compact=0). Default: 1
  * @output	A html table with pages
- * @uses	wakka::CheckMySQLVersion()
- * @uses	wakka::FullCategoryTextSearch()
- * @uses	wakka::FullTextSearch()
- * @uses	wakka::Format()
+ * @uses	Wakka::CheckMySQLVersion()
+ * @uses	Wakka::Format()
+ * @uses	Wakka::FullCategoryTextSearch()
+ * @uses	Wakka::FullTextSearch()
  * 
  */
  
@@ -47,7 +47,7 @@ if ($cattag = $_REQUEST["wakka"])
 
 	if ($results)
 	{
-		if (!$compact) $str .= ' pages belong to ' . $page . ': <br /><br /><table '.$class.' width="100%"><tr>';
+		if (!$compact) $str .= ' pages belong to ' . $page . ': <br /><br /><table '.$class.' width="100%"><tr>'; #i18n
 		else $str .= '<div '.$class.'><ul>';
 		
 		$count = 0; 
@@ -63,10 +63,10 @@ if ($cattag = $_REQUEST["wakka"])
 			$count++;
 			$pagecount++;
 		}
-		$str = 'The following '.$pagecount.$str;
+		$str = 'The following '.$pagecount.$str; #i18n
 		if (!$compact)  $str .= '</tr></table>'; else $str .= '</ul></div>';
 	}
-	else $str .= 'Sorry, no items found for ' . $page .'.';
+	else $str .= 'Sorry, no items found for ' . $page .'.'; #i18n
 	print($str);
 }
 ?>

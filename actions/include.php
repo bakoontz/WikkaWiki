@@ -3,12 +3,12 @@
  * Includes another wikipage.
  * 
  * @package		Actions
- * @name		Include
+ * @name		include.php
  * @version		$Id$
  * 
- * @uses	wakka::HasAccess()
- * @uses	wakka::LoadPage()
- * @uses	wakka::Format()
+ * @uses	Wakka::HasAccess()
+ * @uses	Wakka::LoadPage()
+ * @uses	Wakka::Format()
  */
 
 if (!$page) $page = $wikka_vars;

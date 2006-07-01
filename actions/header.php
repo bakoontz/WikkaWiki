@@ -4,17 +4,17 @@
  * 
  * @package		Template
  * @subpackage	xHtml
- * @name		Header
+ * @name		header.php
  * @version		$Id$
  * 
- * @uses	wakka::GetRedirectMessage()
- * @uses	wakka::GetUser()
- * @uses	wakka::GetConfigValue()
- * @uses	wakka::GetWakkaName()
- * @uses	wakka::PageTitle()
- * @uses	wakka::GetMethod()
- * @uses	wakka::Href()
- * @uses	wakka::Format()
+ * @uses	Wakka::GetRedirectMessage()
+ * @uses	Wakka::GetUser()
+ * @uses	Wakka::GetConfigValue()
+ * @uses	Wakka::GetWakkaName()
+ * @uses	Wakka::PageTitle()
+ * @uses	Wakka::GetMethod()
+ * @uses	Wakka::Href()
+ * @uses	Wakka::Format()
  */
 
 $message = $this->GetRedirectMessage();

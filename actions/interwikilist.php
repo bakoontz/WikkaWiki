@@ -1,11 +1,12 @@
 <?php
 /**
- * Echos a list as shown in InterWiki.
+ * Echos the lidt of InterWiki urls.
  * 
  * @package		Actions
- * @name		Interwikilist
+ * @name		interwikilist.php
  * @version		$Id$
  * 
+ * @uses		Wakka::Format
  */
 
 $file = implode("", file("interwiki.conf", 1));

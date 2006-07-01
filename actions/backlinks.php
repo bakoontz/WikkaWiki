@@ -7,12 +7,12 @@
  * ordered alphabetically.
  * 
  * @package		Actions
- * @name		Backlinks
+ * @name		backlinks.php
  * @version		$Id$
  * 
  * @output	a list of the pages linking to the page
- * @uses	wakka::Link()
- * @uses	wakka::LoadPagesLinkingTo()
+ * @uses	Wakka::Link()
+ * @uses	Wakka::LoadPagesLinkingTo()
  */
 
 if ($pages = $this->LoadPagesLinkingTo($this->getPageTag())) {

@@ -3,10 +3,10 @@
  * Print total number of comments in this wiki.
  * 
  * @package		Actions
- * @name		Countcomments
+ * @name		countcomments.php
  * @version 	$Id$
  * 
- * @uses	wakka::LoadSingle()
+ * @uses	Wakka::LoadSingle()
  */
 
 $commentsdata = $this->LoadSingle("SELECT count(*) as num FROM ".$this->config["table_prefix"]."comments");

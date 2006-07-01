@@ -1,6 +1,19 @@
 <?php
-
-//$vars = array('columns' => '3', 'cellpadding' => '1', 'cells' => '**BIG**;**GREEN**;**FROGS**;yes;yes;no;no;yes;yes');
+/**
+ * Prints out an html table with given values.
+ * 
+ * $vars = array('columns' => '3', 'cellpadding' => '1', 'cells' => '**BIG**;**GREEN**;**FROGS**;yes;yes;no;no;yes;yes');
+ *
+ * @package	Actions
+ * @name	table.php
+ * @version $Id$
+ *
+ * @input	string $cells mandatory: string with all cells, separated by ';' and '###' for empty cells
+ * @input	integer $cellpadding optional: padding within cells in pixels; default: 1 
+ * @input	string $style optional: in-line style for the table.
+ * @input	integer $columns optional: 	number of columns for the table; default: 1
+ * @uses	Wakka::ReturnSafeHTML()
+ */
 
 // Init:
 $delimiter=';';

@@ -3,7 +3,7 @@
  * Display current GeSHi version.
  *
  * @package		Actions
- * @name		GeSHiVersion
+ * @name		geshiversion.php
  *
  * @author		{@link http://wikkawiki.org/DarTar Dario Taraborelli}
  * @since		Wikka 1.1.6.2

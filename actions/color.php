@@ -6,13 +6,15 @@
 * taking priority). An optional background color can also be specified.
 *
 * @package    Actions
-* @name		Color
+* @name		  color.php
 * @version    $Id$
 *
 * @author    {@link http://www.mornography.de/ Hendrik Mans}
 * @author    {@link http://wikkawiki.org/NilsLindenberg Nils Lindenberg} (modifications)
 * @author    {@link http://wikkawiki.org/DotMG Mahefa Randimbisoa} (modification - RGB syntax)
 *
+* @uses		Wakka::htmlspecialchars_ent()
+* @uses		color_syntax_is_valid()
 * @input    string $text mandatory: the text which should be colored.    
 * @input    string $c optional: (html)name or hex-value of the color for the text;
 * @input    string $hex optional: alias for $c
@@ -37,9 +39,23 @@ if (!defined('ERROR_NO_COLOR_SPECIFIED')) define('ERROR_NO_COLOR_SPECIFIED', 'So
 // ***Internal function to test if syntax is valid
 if (!function_exists('color_syntax_is_valid'))
 {
+	/**
+	 * Validates a html color syntax.
+	 * 
+	 * @package	Actions
+	 * @name	color_syntax_is_valid()
+	 * 
+	 * @author	{@link http://wikkawiki.org/DotMG Mahefa Randimbisoa}
+	 * @since	1.1.6.2
+	 * @version	$Id$
+	 * 
+	 * @input	string $syntax requiered: the color syntax to be validated
+	 * @todo	To be more strict, ensure that when using rgb(r, g, b) syntax, 
+	 * 			integer values for r, g, and b are less than 256, or if % is used, 
+	 * 			those values are not greater than 100%
+	 */
 	function color_syntax_is_valid($syntax)
 	{
-		//Todo: To be more strict, ensure that when using rgb(r, g, b) syntax, integer values for r, g, and b are less than 256, or if % is used, those values are not greater than 100%
 		if (!defined ('PATTERN_VALID_HEX_COLOR')) define('PATTERN_VALID_HEX_COLOR', '#(?>[\da-f]{3}){1,2}');
 		if (!defined ('PATTERN_VALID_RGB_COLOR')) define('PATTERN_VALID_RGB_COLOR', 'rgb\(\s*\d+((?>\.\d*)?%)?\s*(?>,\s*\d+(?(1)(\.\d*)?%)\s*){2}\)');
 		$htlm_color_names = array('aliceblue', 'antiquewhite', 'aqua', 'aquamarine', 'azure', 'beige', 'bisque', 'black', 'blanchedalmond', 'blue',

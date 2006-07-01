@@ -3,10 +3,10 @@
  * Print number of registered users.
  * 
  * @package		Actions
- * @name		Countusers
+ * @name		countusers.php
  * @version		$Id$
  * 
- * @uses	wakka::LoadSingle()
+ * @uses	Wakka::LoadSingle()
  */ 
 
 $userdata = $this->LoadSingle("SELECT count(*) as num FROM ".$this->config["table_prefix"]."users ");
