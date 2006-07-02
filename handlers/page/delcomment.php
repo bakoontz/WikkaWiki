@@ -1,4 +1,23 @@
 <?php
+/**
+ * Handel the deletion of a comment.
+ * 
+ * @package	Handlers
+ * @subpackage	Comments
+ * @name	delcomment.php
+ * @version $Id$
+ * 
+ * @uses	Wakka::GetUserName()
+ * @uses	Wakka::Href()
+ * @uses	Wakka::LoadSingle()
+ * @uses	Wakka::Query()
+ * @uses	Wakka::redirect()
+ * @uses	Wakka::UserIsOwner()
+ * @todo	- move main <div> to templating class
+ */
+
+//i18n
+if (!defined('ERROR_NO_RIGHT_TO_DELETE_COMMENT')) define('ERROR_NO_RIGHT_TO_DELETE_COMMENT', "Sorry, you're not allowed to delete this comment!");
 
 //select comment and delete it
 $comment_id = intval(trim($_POST["comment_id"]));
@@ -14,7 +33,7 @@ if ($this->UserIsOwner() || $comment["user"]==$current_user)
 }
 else
 {
-	print("<div class=\"page\"><em>Sorry, you're not allowed to delete this comment!</em></div>\n");
+	print('<div class="page"><em class="error">'.ERROR_NO_RIGHT_TO_DELETE_COMMENT.'</em></div>'."\n");
 }
 
 ?>

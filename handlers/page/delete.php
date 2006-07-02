@@ -1,5 +1,22 @@
 <div class="page">
 <?php
+/**
+ * Delete a page if the user is an admin.
+ * 
+ * @package     Handlers
+ * @subpackage  Page
+ * @name        delete.php
+ * @version		$Id$
+ * 
+ * @uses		Wakka::FormOpen()
+ * @uses		Wakka::FormClose()
+ * @uses		Wakka::GetPageTag()
+ * @uses		Wakka::IsAdmin()
+ * @uses		Wakka::Link()
+ * @uses		Wakka::Query()
+ * @uses		Wakka::Redirect()
+ * @todo		- move main <div> to templating class;
+ */
 
 if ($this->IsAdmin())
 {
@@ -15,13 +32,13 @@ if ($this->IsAdmin())
         $this->Query("delete from ".$this->config["table_prefix"]."referrers where page_tag = '".mysql_real_escape_string($tag)."'");
 
         // redirect back to main page
-        $this->Redirect($this->config["base_url"], "Page has been deleted!");
+        $this->Redirect($this->config["base_url"], "Page has been deleted!"); #i18n
     }
     else
     {
         // show form
         ?>
-        <h3>Delete <?php echo $this->Link($this->GetPageTag()) ?></h3>
+        <h3>Delete <?php echo $this->Link($this->GetPageTag()); #i18n ?></h3>
         <br />
 
         <?php echo $this->FormOpen("delete") ?>
@@ -40,7 +57,7 @@ if ($this->IsAdmin())
 }
 else
 {
-    print("<em>You are not allowed to delete pages.</em>");
+    print("<em>You are not allowed to delete pages.</em>"); #i18n
 }
 
 ?>

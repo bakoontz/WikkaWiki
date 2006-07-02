@@ -3,12 +3,14 @@
  * Display a form to edit the current page.
  *
  * @package		Handlers
- * @name		Edit
+ * @subpackage	Page
+ * @name		edit.php
  *
  * @author		{@link http://wikkawiki.org/JsnX Jason Tourtelotte} (original code)
  * @author		{@link http://wikkawiki.org/Dartar Dario Taraborelli} (preliminary code cleanup, i18n)
  * @author		{@link http://wikkawiki.org/DotMG Mahefa Randimbisoa} (bugfixes)
  * @since		Wikka 1.1.6.2
+ * @version		$Id$
  *
  * @todo		- move main <div> to templating class;
  * 			- optimization using history.back();

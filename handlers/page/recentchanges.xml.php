@@ -1,4 +1,18 @@
 <?php
+/**
+ * Show an XML Version of the recent changes in the wiki.
+ * 
+ * @package		Handlers
+ * @subpackage	XML	
+ * @name		recentchanges.xml.php
+ * @version		$Id$
+ * 
+ * @uses		Wakka::GetConfigValue()
+ * @uses		Wakka::Href()
+ * @uses		Wakka::htmlspecialchars_ent()
+ * @uses		Wakka::LoadRecentlyChanged()
+ */
+
 // i18n strings
 define('WHEN_BY_WHO', '%1$s by %2$s');
 define('ERROR_ACL_READ_INFO', 'You\'re not allowed to access this information.');
@@ -13,7 +27,7 @@ $xml .= "<rss version=\"0.92\">\n";
 $xml .= "<channel>\n";
 $xml .= "<title>".$this->GetConfigValue("wakka_name")." - ".$this->tag."</title>\n";
 $xml .= "<link>".$this->GetConfigValue("base_url")."</link>\n";
-$xml .= "<description>Recent changes of ".$this->GetConfigValue("wakka_name")."</description>\n";
+$xml .= "<description>Recent changes of ".$this->GetConfigValue("wakka_name")."</description>\n"; # i18n
 $xml .= '<language>'.I18N_LANG."</language>\n";
 
 if ($pages = $this->LoadRecentlyChanged())

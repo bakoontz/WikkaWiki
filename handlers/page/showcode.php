@@ -4,13 +4,18 @@
  *
  * @package		Handlers
  * @subpackage	Page
- * @name		Showcode
+ * @name		showcode.php
  *
  * @author		{@link http://wikkawiki.org/JsnX JsnX} (first draft)
  * @author		{@link http://wikkawiki.org/DarTar Dario Taraborelli} (code cleanup, i18n strings and DB check)
- * @version		0.3
+ * @version		$Id$
  * @since		Wikka 1.1.6.0
  *
+ * @uses		Wakka::ExistsPage()
+ * @uses		Wakka::Format()
+ * @uses		Wakka::HasAccess()
+ * @uses		Wakka::href()
+ * @uses		Wakka::htmlspecialchars_ent()
  * @output		Wiki source of current page (if it exists).
  * @todo			- move structural elements to templating class;
  *				- create GeSHi highlighter for Wikka markup; #144

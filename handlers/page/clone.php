@@ -12,12 +12,12 @@
  * edition immediately after its creation.
  *
  * @package         Handlers
- * @subpackage        
- * @name              clone
+ * @subpackage        Page
+ * @name              clone.php
  *
  * @author            {@link http://wikkawiki.org/ChristianBarthelemy Christian Barthelemy} - original idea and code.
  * @author            {@link http://wikkawiki.org/DarTar Dario Taraborelli} - bugs fixed, code improved, removed popup alerts.  
- * @version           0.4
+ * @version           $Id$
  * @since             Wikka 1.1.6.0
  *                      
  * @input             string  $to  required: the page to be created
@@ -30,7 +30,17 @@
  * @input             boolean $editoption optional: if true, the new page will be opened for edition on creation
  *                            default is false (to allow multiple cloning of the same source)
  *
+ * @uses			  Wakka::ExistsPage()
+ * @uses			  Wakka::Format() 
+ * @uses			  Wakka::FormClose() 
+ * @uses			  Wakka::FormOpen() 
+ * @uses			  Wakka::HasAccess()    
+ * @uses			  Wakka::LoadPage() 
+ * @uses			  Wakka::href() 
+ * @uses			  Wakka::Redirect() 
+ * @uses			  Wakka::SavePage()
  * @todo              Use central library for valid pagenames.
+ * @todo			  move main <div> to templating class
  *        
  */
 // defaults

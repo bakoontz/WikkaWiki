@@ -1,11 +1,28 @@
 <div class="page">
 <?php
+/**
+ * Show domains linking to the page/ the wiki.
+ * 
+ * @package		Handlers
+ * @subpackage	Mindmap	
+ * @name		referrer_sites.php
+ * @version		$Id$
+ * 
+ * @uses		Wakka::IsAdmin()
+ * @uses		Wakka::LoadReferrers()
+ * @uses		Wakka::GetConfigValue()
+ * @uses		Wakka::GetMethod()
+ * @uses		Wakka::GetUser()
+ * @uses		Wakka::Href()
+ * @todo		- move <div> to templste 
+ */
+
 $global = '';
 $IsAdmin = $this->IsAdmin();
 if (isset($_REQUEST["global"]))
 {
 	$global = $_REQUEST["global"];
-	$title = "Domains/sites linking to this wiki (<a href=\"".$this->Href("referrers", "", "global=1")."\">see list of different URLs</a>):";
+	$title = "Domains/sites linking to this wiki (<a href=\"".$this->Href("referrers", "", "global=1")."\">see list of different URLs</a>):"; # i18n
 	$referrers = $this->LoadReferrers();
 }
 else
@@ -16,7 +33,7 @@ else
 }
 
 print("<strong>$title</strong><br />\n");
-print("<em>Note to spammers: This page is not indexed by search engines, so don't waste your time.</em><br /><br />");
+print("<em>Note to spammers: This page is not indexed by search engines, so don't waste your time.</em><br /><br />"); # i18n
 
 if ($this->GetUser()) {
 	if ($referrers)
@@ -44,26 +61,26 @@ if ($this->GetUser()) {
 		{
 			print("<tr>");
 			print("<td width=\"30\" align=\"right\" valign=\"top\" style=\"padding-right: 10px\">$site_count</td>");
-			print("<td valign=\"top\">" . (($site != "unknown") ? "<a href=\"http://".$this->htmlspecialchars_ent($site)."\">".$this->htmlspecialchars_ent($site)."</a>" : $site) . "</a> ".($IsAdmin ? "[<a href=\"".$this->href("delete_referrer", "", "spam_site=").$this->htmlspecialchars_ent($site)."&redirect=".$this->GetMethod()."\">Blacklist</a>]" : "")."</td>");
+			print("<td valign=\"top\">" . (($site != "unknown") ? "<a href=\"http://".$this->htmlspecialchars_ent($site)."\">".$this->htmlspecialchars_ent($site)."</a>" : $site) . "</a> ".($IsAdmin ? "[<a href=\"".$this->href("delete_referrer", "", "spam_site=").$this->htmlspecialchars_ent($site)."&redirect=".$this->GetMethod()."\">Blacklist</a>]" : "")."</td>"); #i18n
 			print("</tr>\n");
 		}
 		print("</table>\n");
 	}
 	else
 	{
-		print("<em>None</em><br />\n");
+		print("<em>None</em><br />\n"); #i18n
 	}
 } else {
-	print("<em>You need to login to see referring sites</em><br />\n");
+	print("<em>You need to login to see referring sites</em><br />\n"); # i18n
 }
 
 if ($global !== '')
 {
-	print("<br />[<a href=\"".$this->Href("referrers_sites")."\">View referring sites for ".$this->GetPageTag()." only</a> | <a href=\"".$this->Href("referrers")."\">View referrers for ".$this->GetPageTag()." only</a> | <a href=\"".$this->Href("review_blacklist")."\">View referrer blacklist</a>]");
+	print("<br />[<a href=\"".$this->Href("referrers_sites")."\">View referring sites for ".$this->GetPageTag()." only</a> | <a href=\"".$this->Href("referrers")."\">View referrers for ".$this->GetPageTag()." only</a> | <a href=\"".$this->Href("review_blacklist")."\">View referrer blacklist</a>]"); # i18n
 }
 else
 {
-	print("<br />[<a href=\"".$this->Href("referrers_sites", "", "global=1")."\">View global referring sites</a> | <a href=\"".$this->Href("referrers", "", "global=1")."\">View global referrers</a> | <a href=\"".$this->Href("review_blacklist")."\">View referrer blacklist</a>]");
+	print("<br />[<a href=\"".$this->Href("referrers_sites", "", "global=1")."\">View global referring sites</a> | <a href=\"".$this->Href("referrers", "", "global=1")."\">View global referrers</a> | <a href=\"".$this->Href("review_blacklist")."\">View referrer blacklist</a>]"); # i18n
 }
 
 

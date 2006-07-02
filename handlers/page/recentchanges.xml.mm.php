@@ -1,5 +1,18 @@
 <?php
-/* TODO: i18n */
+/**
+ * Show a mindmap of the recent changes in the wiki as an XML File.
+ * 
+ * @package		Handlers
+ * @subpackage	Mindmap	
+ * @name		recentchanges.xml.mm.php
+ * @version		$Id$
+ * 
+ * @uses		Wakka::Href()
+ * @uses		Wakka::htmlspecialchars_ent()
+ * @uses		Wakka::LoadRecentlyChanged()
+ * @todo		- i18n
+ */
+
 header("Content-type: text/xml");
 
 $xml = "<map version=\"0.7.1\">\n";
@@ -84,7 +97,7 @@ else
 	$xml .= "<item>\n";
 	$xml .= "<title>Error</title>\n";
 	$xml .= "<link>".$this->Href("show")."</link>\n";
-	$xml .= "<description>You're not allowed to access this information.</description>\n";
+	$xml .= "<description>You're not allowed to access this information.</description>\n"; # i18n
 	$xml .= "</item>\n";
 }
 

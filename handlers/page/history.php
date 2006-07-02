@@ -1,4 +1,21 @@
 <?php
+/**
+ * Display the history of a page.
+ * 
+ * @package		Handlers
+ * @subpackage	Page
+ * @name		history.php
+ * @version		$Id$
+ * 
+ * @uses		mkdir_r()
+ * @uses		Wakka::GetUser()
+ * @uses		Wakka::HasAccess()
+ * @uses		Wakka::LoadRevisions()
+ * @uses		Wakka::LoadPageById()
+ * @uses		Wakka::Format()
+ * @todo		-move <div> to template
+ */
+
  // i18n strings
  define('DIFF_ADDITIONS', 'Additions:');
  define('DIFF_DELETIONS', 'Deletions:');
@@ -80,7 +97,7 @@ if ($this->HasAccess("read")) {
 					}
 				}
 				else {
-					// $output .= "<DIV class=\"revisioninfo\">Current page:</div>".$this->Format($pageB["body"])."<br />\n<HR><br />\n";
+					// $output .= "<DIV class=\"revisioninfo\">Current page:</div>".$this->Format($pageB["body"])."<br />\n<HR><br />\n"; # i18n
 				}
 				$pageA = $this->LoadPageById($page["id"]);
 				$EditedByUser = $this->Format($page["user"]);

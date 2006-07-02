@@ -1,14 +1,40 @@
 <div class="page" <?php echo (($user = $this->GetUser()) && ($user['doubleclickedit'] == 'N')) ? '' : 'ondblclick="document.location=\''.$this->href('edit').'\';" ' ?>>
 <?php
+/**
+ * Show a page if the user has read access or is an admin.
+ * 
+ * @package		Handlers
+ * @subpackage	Page
+ * @name		show.php
+ * @version		$Id$
+ * 
+ * @uses		Wakka::Format()
+ * @uses		Wakka::FormClose()
+ * @uses		Wakka::FormOpen()
+ * @uses		Wakka::GetConfigValue()
+ * @uses		Wakka::GetPageTag()
+ * @uses		Wakka::GetUser()
+ * @uses		Wakka::GetUserName()
+ * @uses		Wakka::HasAccess()
+ * @uses		Wakka::href()
+ * @uses		Wakka::Href()
+ * @uses		Wakka::htmlspecialchars_ent()
+ * @uses		Wakka::LoadComments()
+ * @uses		Wakka::LoadPage()
+ * @uses		Wakka::LoadUser()
+ * @uses		Wakka::UserIsOwner()
+ * @todo		- move <div> to template
+ */
+
 if (!$this->HasAccess('read'))
 {
-	echo '<p><em class="error">You aren\'t allowed to read this page.</em></p></div>';
+	echo '<p><em class="error">You aren\'t allowed to read this page.</em></p></div>'; #i18n
 }
 else
 {
 	if (!$this->page)
 	{
-		echo '<p>This page doesn\'t exist yet. Maybe you want to <a href="'.$this->Href('edit').'">create</a> it?</p></div>';
+		echo '<p>This page doesn\'t exist yet. Maybe you want to <a href="'.$this->Href('edit').'">create</a> it?</p></div>'; #i18n
 	}
 	else
 	{
@@ -114,18 +140,18 @@ else
 				switch (count($comments))
 				{
 				case 0:
-					$comments_message = 'There are no comments on this page. ';
-					$showcomments_text = 'Add comment';
+					$comments_message = 'There are no comments on this page. '; #i8n
+					$showcomments_text = 'Add comment'; #i8n
 					$comment_form_link  = ($this->HasAccess('comment')) ? 1 : 0;
 					break;
 				case 1:
-					$comments_message = 'There is one comment on this page. ';
-					$showcomments_text = 'Display comment';
+					$comments_message = 'There is one comment on this page. '; #i8n
+					$showcomments_text = 'Display comment'; #i8n
 					$comment_form_link = 1;
 					break;
 				default:
-					$comments_message = 'There are '.count($comments).' comments on this page. ';
-					$showcomments_text = 'Display comments';
+					$comments_message = 'There are '.count($comments).' comments on this page. '; #i8n
+					$showcomments_text = 'Display comments'; #i8n
 					$comment_form_link = 1;
 				}
 

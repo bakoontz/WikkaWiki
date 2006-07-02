@@ -1,4 +1,14 @@
 <?php
+/**
+ * Display a mindmap as XML. 
+ * 
+ * @package		Handlers
+ * @subpackage	Mindmap
+ * @name		mindmap.mm.php
+ * @version		$Id$
+ * 
+ * @uses		Wakka::HasAccess()
+ */
 if ($this->HasAccess("read"))
 {
 	if (!$this->page)

@@ -1,6 +1,27 @@
 <?php
+/**
+ * Show a simple mindmap of the recent changes in the wiki as an XML File. 
+ * 
+ * Only the date and the page of the change are shown.
+ * 
+ * @package		Handlers
+ * @subpackage	Mindmap	
+ * @name		recentchanges_simple.xml.mm.php
+ * @version		$Id$
+ * 
+ * @uses		in_iarray()
+ * @uses		Wakka::Href()
+ * @uses		Wakka::LoadRecentlyChanged()
+ */
+
 header("Content-type: text/xml");
 
+/**
+ * Checks if an item is contained in an array (case insensitive).
+ * 
+ * @name	in_iarray()
+ * @return	TRUE or FALSE
+ */
 function in_iarray ($item, $array) {
    $item = &strtoupper($item);
    foreach($array as $element) {

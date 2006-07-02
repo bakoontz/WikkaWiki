@@ -3,12 +3,13 @@
  * Display a form to manage ACL for the current page.
  *
  * @package		Handlers
- * @name		ACL
+ * @name		acls.php
  *
  * @author		{@link http://wikkawiki.org/MinusF MinusF} (preliminary code cleanup, css selectors)
  * @author		{@link http://wikkawiki.org/DarTar Dario Taraborelli} (further cleanup)
  * @author		{@link http://wikkawiki.org/NilsLindenberg Nils Lindenberg} (i18n)
  * @since		Wikka 1.1.6.2
+ * @version		$Id$
  *
  * @todo		- move main <div> to templating class
  */

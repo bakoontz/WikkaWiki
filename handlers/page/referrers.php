@@ -1,22 +1,43 @@
 <div class="page">
 <?php
+/**
+ * Show external referrers linking to the page/ the wiki.
+ * 
+ * @package		Handlers
+ * @subpackage	Page
+ * @name		referrers.php
+ * @version		$Id$
+ * 
+ * @uses		Wakka::GetConfigValue()
+ * @uses		Wakka::GetPageTag()
+ * @uses		Wakka::GetUser()
+ * @uses		Wakka::href()
+ * @uses		Wakka::Href()
+ * @uses		Wakka::htmlspecialchars_ent()
+ * @uses		Wakka::IsAdmin()
+ * @uses		Wakka::Link
+ * @uses		Wakka::LoadReferrers()
+ * 
+ * @todo		- move main <div> to templating class
+ */
+
 $global = '';
 $IsAdmin = $this->IsAdmin();
 if (isset($_REQUEST["global"]))
 {
 	$global = $_REQUEST["global"];
-	$title = "Sites linking to this wiki (<a href=\"".$this->Href("referrers_sites", "", "global=1")."\">see list of domains</a>):";
+	$title = "Sites linking to this wiki (<a href=\"".$this->Href("referrers_sites", "", "global=1")."\">see list of domains</a>):"; # i18n
 	$referrers = $this->LoadReferrers();
 }
 else
 {
 	$title = "External pages linking to ".$this->Link($this->GetPageTag()).
-		($this->GetConfigValue("referrers_purge_time") ? " (last ".($this->GetConfigValue("referrers_purge_time") == 1 ? "24 hours" : $this->GetConfigValue("referrers_purge_time")." days").")" : "")." (<a href=\"".$this->Href("referrers_sites")."\">see list of domains</a>):";
+		($this->GetConfigValue("referrers_purge_time") ? " (last ".($this->GetConfigValue("referrers_purge_time") == 1 ? "24 hours" : $this->GetConfigValue("referrers_purge_time")." days").")" : "")." (<a href=\"".$this->Href("referrers_sites")."\">see list of domains</a>):"; # i18n
 	$referrers = $this->LoadReferrers($this->GetPageTag());
 }
 
 print("<strong>$title</strong><br />\n");
-print("<em>Note to spammers: This page is not indexed by search engines, so don't waste your time.</em><br /><br />");
+print("<em>Note to spammers: This page is not indexed by search engines, so don't waste your time.</em><br /><br />"); # i18n
 
 if ($this->GetUser()) {
 	if ($referrers)
@@ -41,11 +62,11 @@ if ($this->GetUser()) {
 
 if ($global !== '')
 {
-	print("<br />[<a href=\"".$this->href("referrers_sites")."\">View referring sites for ".$this->GetPageTag()." only</a> | <a href=\"".$this->href("referrers")."\">View referrers for ".$this->GetPageTag()." only</a> | <a href=\"".$this->href("review_blacklist")."\">View referrer blacklist</a>]");
+	print("<br />[<a href=\"".$this->href("referrers_sites")."\">View referring sites for ".$this->GetPageTag()." only</a> | <a href=\"".$this->href("referrers")."\">View referrers for ".$this->GetPageTag()." only</a> | <a href=\"".$this->href("review_blacklist")."\">View referrer blacklist</a>]"); #18n
 }
 else
 {
-	print("<br />[<a href=\"".$this->href("referrers_sites", "", "global=1")."\">View global referring sites</a> | <a href=\"".$this->href("referrers", "", "global=1")."\">View global referrers</a> | <a href=\"".$this->href("review_blacklist")."\">View referrer blacklist</a>]");
+	print("<br />[<a href=\"".$this->href("referrers_sites", "", "global=1")."\">View global referring sites</a> | <a href=\"".$this->href("referrers", "", "global=1")."\">View global referrers</a> | <a href=\"".$this->href("review_blacklist")."\">View referrer blacklist</a>]"); # i18n
 }
 
 

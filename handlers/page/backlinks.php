@@ -10,15 +10,17 @@
 *
 * @package Handlers
 * @subpackage 
-* @name backlinks
+* @name backlinks.php
 *
 * @author {@link http://wakkawiki.de/MartinBurger Martin Burger} - original idea and code.
 * @author {@link http://wikkawiki.org/DarTar Dario Taraborelli} - code rewritten, ExistsPage check added, removed links array. 
-* @version 0.3
+* @version $Id$
 * @since Wikka 1.1.6.X
 * 
-* @todo
-* 
+* @uses	Wakka::ExistsPage()
+* @uses	Wakka::Format()
+* @uses	Wakka::LoadPagesLinkingTo
+* @todo		- move <div> to templating class
 */
 
 // User-interface: strings

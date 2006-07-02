@@ -1,4 +1,19 @@
 <?php
+/**
+ * Handle download/ deletion of a file. 
+ * 
+ * @package		Handlers
+ * @subpackage	File
+ * @name		files.xml.php
+ * @version		$Id$
+ * 
+ * @uses		mkdir_r()
+ * @uses		Wakka::GetPageTag()
+ * @uses		Wakka::HasAccess()
+ * @uses		Wakka::Href()
+ * @uses		Wakka::IsAdmin()
+ * @uses		Wakka::redirect()
+ */
 
 // upload path
 if ($this->config['upload_path'] == '') $this->config['upload_path'] = 'files';

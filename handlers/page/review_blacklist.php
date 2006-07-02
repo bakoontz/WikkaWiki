@@ -1,5 +1,24 @@
 <div class="page">
 <?php
+/**
+ * Show blacklisted referrers.
+ * 
+ * Admins have the possibility to remove entries.
+ * 
+ * @package		Handlers
+ * @subpackage	Page
+ * @name		review_blacklist.php
+ * @version		$Id$
+ * 
+ * @uses		Wakka::IsAdmin()
+ * @uses		Wakka::Href()
+ * @uses		Wakka::htmlspecialchars_ent()
+ * @uses		Wakka::LoadAll()
+ * @uses		Wakka::Query()
+ * @uses		Wakka::redirect()
+ * 
+ * @todo		- move main <div> to templating class
+ */
 
 $IsAdmin = $this->IsAdmin();
 if ($IsAdmin && isset($_REQUEST["whitelist"]))
@@ -10,7 +29,7 @@ if ($IsAdmin && isset($_REQUEST["whitelist"]))
 }
 else
 {
-	print("<strong>Referrer Blacklist:</strong><br /><br />\n");
+	print("<strong>Referrer Blacklist:</strong><br /><br />\n"); # i18n
 	$blacklist = $this->LoadAll("SELECT * FROM ".$this->config["table_prefix"]."referrer_blacklist");
 
 	if ($blacklist)
@@ -26,11 +45,11 @@ else
 	}
 	else
 	{
-		print("<em>Blacklist is empty.</em><br /><br />\n");
+		print("<em>Blacklist is empty.</em><br /><br />\n"); # i18n
 	}
 }
 
-print("<br />[<a href=\"".$this->Href("referrers_sites", "", "global=1")."\">View global referring sites</a> | <a href=\"".$this->Href("referrers", "", "global=1")."\">View global referrers</a>]");
+print("<br />[<a href=\"".$this->Href("referrers_sites", "", "global=1")."\">View global referring sites</a> | <a href=\"".$this->Href("referrers", "", "global=1")."\">View global referrers</a>]"); # i18n
 
 ?>
 </div>

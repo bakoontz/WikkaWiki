@@ -1,4 +1,23 @@
 <?php
+/**
+ * Show a list of revisions for the page sorted after time.
+ * 
+ * @package		Handlers
+ * @subpackage	Page
+ * @name		revisions.php
+ * @version		$Id$
+ * 
+ * @uses		Wakka::HasAccess()
+ * @uses		Wakka::LoadRevisions()
+ * @uses		Wakka::Format()
+ * @uses		Wakka::FormOpen()
+ * @uses		Wakka::GetUser()
+ * @uses		Wakka::FormClose()
+ * @uses		Wakka::Href()
+ * 
+ * @todo		- move main <div> to templating class
+ */
+
 // i18n strings
 define('BUTTON_RETURN_TO_NODE', 'Return To Node / Cancel');
 define('BUTTON_SHOW_DIFFERENCES', 'Show Differences');

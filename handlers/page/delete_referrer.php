@@ -1,4 +1,16 @@
 <?php
+/**
+ * Delete a referrer and add it to the blacklist.
+ *
+ * @package         Handlers
+ * @subpackage        Referrers
+ * @name              delete_referrer.php
+ * @version $Id$
+ * 
+ * @uses	Wakka::Href()
+ * @uses	Wakka::Query()
+ * @uses	Wakka::redirect()
+ */
 
 if ($spam_link = $_REQUEST["spam_link"])
 {

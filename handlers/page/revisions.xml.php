@@ -1,4 +1,22 @@
 <?php
+/**
+ * RSS 2.0 Feed of the revisions of the page.
+ * 
+ * @package		Handlers
+ * @subpackage	Page
+ * @name		revisions.xml.php
+ * @version		$Id$
+ * 
+ * @uses		Wakka::GetConfigValue()
+ * @uses		Wakka::HasAccess()
+ * @uses		Wakka::LoadRevisions()
+ * @uses		Wakka::Href()
+ * @uses		Wakka::htmlspecialchars_ent()
+ * @uses		Wakka::FormClose()
+ * 
+ * @todo		- move main <div> to templating class
+ */
+
 // i18n strings
 define('EDITED_BY', 'Edited by %s');
 define('ERROR_ACL_READ_INFO', 'You\'re not allowed to access this information.');

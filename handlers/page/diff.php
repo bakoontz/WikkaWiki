@@ -1,6 +1,18 @@
 <div class="page">
 <?php
+/**
+ * Compare two versions of a page and output the differences.
+ * 
+ * @package     Handlers
+ * @subpackage  Page
+ * @name        diff.php
+ * @version 	$Id$
+ * 
+ * @uses	Wakka::HasAccess()
+ * @todo		- move main <div> to templating class;
+ */
 
+// i18n
 define('ERROR_DIV_LIBRARY_MISSING', 'The necessary file "libs/diff.lib.php" could not be found. Please make sure the file exists and is placed in the right directory!');
 define('ERROR_NO_PAGE_ACCESS', 'You are not authorized to view this page.');
 define('CONTENT_ADDITIONS_HEADER', 'Additions:');

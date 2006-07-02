@@ -5,10 +5,12 @@
  * When called by a grab button, forces the download of the associate code block.
  * 
  * @package	Handlers
- * @name	grabcode
+ * @name	grabcode.php
  * @author	{@link http://wikkawiki.org/DarTar Dario Taraborelli}
- * @version	0.2
+ * @version	$Id$
  * @since	1.1.6.2
+ * 
+ * @uses	Wakka::GetConfigValue()
  * @todo	- add configurable filename max. length;
  			- use central regex library for filename validation;
  			- check time format for consistency
