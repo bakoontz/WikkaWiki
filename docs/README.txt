@@ -1,4 +1,6 @@
 Wikka
+---------------
+
 
 A Wiki-esque website toolkit originally developed by Hendrik Mans named WakkaWiki.
 Devolopment was forked by Jason Tourtelotte and renamed Wikka.
@@ -13,3 +15,7 @@ find everything else there. (Eventually. :b)
 
 Maintainers:
   Jason Tourtelotte <wikka-admin@jsnx.com>
+  WikkaWiki Development Team <http://wikkawiki.org>
+
+---------------  
+Version: $Id$

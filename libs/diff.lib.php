@@ -1,4 +1,12 @@
 <?php
+/**
+ * Includes the diff functions and classes used by Wikka.
+ * 
+ * @package	Libs
+ * @version $Id$
+ * 
+ */
+
 /* A php wdiff  (word diff) for wakka, adapted by David Delon
    based on wdiff and phpwiki diff (copyright below).
    TODO : Since wdiff use only directive lines, all stuff in diff class 

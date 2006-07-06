@@ -5,12 +5,11 @@
  * 
  * @package		Template
  * @subpackage	xHtml
- * @name		footer.php
  * @version		$Id$
  * 
  * @uses	Wakka::FormOpen()
  * @uses	Wakka::HasAccess()
- * @uses	Wakka:Href()
+ * @uses	Wakka::Href()
  * @uses	Wakka::GetPageTime()
  * @uses	Wakka::GetPageOwner()
  * @uses	Wakka::IsAdmin()
@@ -18,12 +17,24 @@
  * @uses	Wakka::Link()
  * @uses	Wakka::FormClose()
  * @uses	Wakka::GetWakkaVersion()
+ * 
+ * @todo	move <div class="footer"> to template
  */
 
+// i18n
+if (!defined('PAGE_EDIT_LINK_TITLE')) define ('PAGE_EDIT_LINK_TITLE', 'Click to edit this page');
+if (!defined('PAGE_EDIT_LINK_TEXT')) define ('PAGE_EDIT_LINK_TEXT', 'Edit page');
+if (!defined('PAGE_HISTORY_LINK_TITLE')) define ('PAGE_HISTORY_LINK_TITLE', 'Click to view recent edits to this page');
+if (!defined('PAGE_HISTORY_LINK_TEXT')) define ('PAGE_HISTORY_LINK_TEXT', 'Page History');
+if (!defined('PAGE_REVISION_LINK_TITLE')) define ('PAGE_REVISION_LINK_TITLE', 'Click to view recent revisions list for this page');
+if (!defined('PAGE_REVISION_LINK_XML_TITLE')) define ('PAGE_REVISION_LINK_XML_TITLE', 'Click to view recent revisions list for this page');
+if (!defined('PAGE_ACLS_EDIT_LINK_TEXT')) define ('PAGE_ACLS_EDIT_LINK_TEXT', 'Edit ACLs');
+if (!defined('PAGE_ACLS_EDIT_LINK_TEXT_ADMIN')) define ('PAGE_ACLS_EDIT_LINK_TEXT_ADMIN', '(Edit ACLs)');
+
 	echo $this->FormOpen("", "TextSearch", "get"); 
-	echo $this->HasAccess("write") ? "<a href=\"".$this->href("edit")."\" title=\"Click to edit this page\">Edit page</a> ::\n" : "";
-	echo "<a href=\"".$this->href("history")."\" title=\"Click to view recent edits to this page\">Page History</a> ::\n";
-	echo $this->GetPageTime() ? "<a href=\"".$this->href("revisions")."\" title=\"Click to view recent revisions list for this page\">".$this->GetPageTime()."</a> <a href=\"".$this->href("revisions.xml")."\" title=\"Click to view recent page revisions in XML format.\"><img src=\"images/xml.png\" width=\"36\" height=\"14\" align=\"middle\" style=\"border : 0px;\" alt=\"XML\" /></a> ::\n" : "";
+	echo $this->HasAccess("write") ? '<a href="'.$this->href("edit").'" title="'.PAGE_EDIT_LINK_TITLE.'">'.PAGE_EDIT_LINK_TEXT.'</a> ::'."\n" : "";
+	echo '<a href="'.$this->href("history").'" title="'.PAGE_HISTORY_LINK_TITLE.'">'.PAGE_HISTORY_LINK_TEXT.'</a> ::'."\n";
+	echo $this->GetPageTime() ? '<a href="'.$this->href("revisions").'" title="'.PAGE_REVISION_LINK_TITLE.'">'.$this->GetPageTime().'</a> <a href="'.$this->href("revisions.xml").'" title="'.PAGE_REVISION_LINK_XML_TITLE.'"><img src="images/xml.png" width="36" height="14" align="middle" style="border : 0px;" alt="XML" /></a> ::'."\n" : "";
 
 	// if this page exists
 	if ($this->page)
@@ -32,18 +43,18 @@
 		{
 			if ($owner == "(Public)")
 			{
-				print("Public page ".($this->IsAdmin() ? "<a href=\"".$this->href("acls")."\">(Edit ACLs)</a> ::\n" : "::\n"));
+				print("Public page ".($this->IsAdmin() ? '<a href="'.$this->href("acls").'">'.PAGE_ACLS_EDIT_LINK_TEXT_ADMIN.'</a> ::'."\n" : "::\n"));
 			}
 			// if owner is current user
 			elseif ($this->UserIsOwner())
 			{
            		if ($this->IsAdmin())
            		{
-					print("Owner: ".$this->Link($owner, "", "", 0)." :: <a href=\"".$this->href("acls")."\">Edit ACLs</a> ::\n"); #i18n
+					print("Owner: ".$this->Link($owner, "", "", 0).' :: <a href="'.$this->href("acls").'">'.PAGE_ACLS_EDIT_LINK_TEXT_ADMIN.'</a> ::'."\n"); #i18n
             	} 
             	else 
             	{
-					print("You own this page. :: <a href=\"".$this->href("acls")."\">Edit ACLs</a> ::\n"); #i18n
+					print("You own this page. :: <a href=\"".$this->href("acls").'">'.PAGE_ACLS_EDIT_LINK_TEXT.'</a> ::'."\n"); #i18n
 				}
 			}
 			else

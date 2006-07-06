@@ -6,7 +6,6 @@
 * taking priority). An optional background color can also be specified.
 *
 * @package    Actions
-* @name		  color.php
 * @version    $Id$
 *
 * @author    {@link http://www.mornography.de/ Hendrik Mans}
@@ -41,9 +40,6 @@ if (!function_exists('color_syntax_is_valid'))
 {
 	/**
 	 * Validates a html color syntax.
-	 * 
-	 * @package	Actions
-	 * @name	color_syntax_is_valid()
 	 * 
 	 * @author	{@link http://wikkawiki.org/DotMG Mahefa Randimbisoa}
 	 * @since	1.1.6.2

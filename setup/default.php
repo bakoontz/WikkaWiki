@@ -1,4 +1,11 @@
 <?php
+/**
+ * Show the configuration form for a installation or 
+ * show the values in case of an upgrade.
+ * 
+ * @package	Install
+ * @version	$Id$
+ */
 
 // i18n section
 if (!defined('SITE_SUFFIX_INFO')) define ('SITE_SUFFIX_INFO', 'Suffix used for cookies and part of the session name. This allows you to run multiple Wikka installations on the same server by configuring them to use different wiki prefixes.');

@@ -1,7 +1,8 @@
 /*
 -----------------------------------------------
 Wikka Installer Stylesheet
------------------------------------------------ */
+----------------------------------------------- 
+*/
 
 body {
 	font-family: Verdana, Tahoma, Arial, Helvetica, sans-serif;
@@ -95,3 +96,5 @@ xmp{
 	background-color: #FEFEFE;
 	padding: 10px;
 }
+
+/* Version: $Id$ */

@@ -1,5 +1,11 @@
 <?php
-
+/**
+ * Trie to write the config to wikka.config.php
+ * 
+ * @package	Installation
+ * @version	$Id$
+ * 
+ */
 // fetch config
 $config = $config2 = unserialize($_POST["config"]);
 

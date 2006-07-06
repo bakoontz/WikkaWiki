@@ -5,7 +5,6 @@
  * Or it provides a download-link to a single file.
  * 
  * @package		Actions
- * @name		files.php
  * @version		$Id$
  *  
  * @uses	Wakka::href()
@@ -25,7 +24,7 @@ if (! function_exists('mkdir_r')) {
 	/**
 	 * Makes a directory on the server.
 	 * 
-	 * @name mkdir_r()
+	 * @param string $dir mandatory: name of the directory to be created
 	 */
     function mkdir_r($dir) {
         if (strlen($dir) == 0) return 0;
@@ -39,11 +38,9 @@ if (! function_exists('bytesToHumanReadableUsage')) {
         /**
         * Converts bytes to a human readable string.
         * 
-        * @name	bytesToHumanReadableUsage()
-        * 
-        * @input int $bytes Number of bytes
-        * @input int $precision Number of decimal places to include in return string
-        * @input array $names Custom usage strings
+        * @param int $bytes mandatory: Number of bytes
+        * @param int $precision optional Number of decimal places to include in return string; Default: 2 
+        * @param array $names optional: Custom usage strings; Default: <empty>
         * @return string formatted string rounded to $precision
         */
         function bytesToHumanReadableUsage($bytes, $precision = 2, $names = '')

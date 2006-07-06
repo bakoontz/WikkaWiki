@@ -1,7 +1,8 @@
 /*
 -----------------------------------------------
 Wikka Default Stylesheet (screen)
------------------------------------------------ */
+----------------------------------------------- 
+*/
 
 /* global styling */
 
@@ -660,3 +661,6 @@ table.acls {
 .toolbar .btn-pressed { border-color: ButtonShadow ButtonHighlight ButtonHighlight ButtonShadow; }
 .toolbar .btn-pressed { background: ButtonHighlight; }
 .editornamecss { background-color:#CCCCFF; font-size: 18px; padding: 0 10px; }
+
+
+/* Version: $Id$ */

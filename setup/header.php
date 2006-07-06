@@ -1,15 +1,30 @@
 <?php
+/**
+ * Output the header for and include some functions used by the installer.
+ * 
+ * @package	Install
+ * @version	$Id$
+ */
 
 // stuff
+/**
+ * Print if a test failed or succeded.
+ * 
+ * @version	$Id$
+ * @param	string $text mandatory: text for the condition
+ * @param	boolean $condition mandatory: test failed/passed?
+ * @param	string	$errorText optional: text to print out on error; Default: <empty>
+ * @param	int		$stopOnError optional: stops the installation on error if set to 1; Default: 1 
+ */
 function test($text, $condition, $errorText = "", $stopOnError = 1) {
 	print("$text ");
 	if ($condition)
 	{
-		print("<span class=\"ok\">OK</span><br />\n");
+		print('<span class="ok">OK</span><br />'."\n");
 	}
 	else
 	{
-		print("<span class=\"failed\">FAILED</span>");
+		print('<span class="failed">FAILED</span>');
 		if ($errorText) print(": ".$errorText);
 		print("<br />\n");
 		if ($stopOnError)
@@ -30,7 +45,7 @@ function myLocation()
  * Delete a file, or a folder and its contents
  *
  * @author      Aidan Lister <aidan@php.net>
- * @version     1.0.2
+ * @version     $Id$
  * @param       string   $dirname    Directory to delete
  * @return      bool     Returns TRUE on success, FALSE on failure
  */

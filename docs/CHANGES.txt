@@ -510,3 +510,6 @@ Released on May 17 2004 - "The DotMG release"
 
 Wikka 1.0.0
 Released on May 16 2004. The initial release after months of tweaking by JsnX.
+
+-------
+Version: $Id$

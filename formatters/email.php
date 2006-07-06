@@ -1,6 +1,9 @@
 <?php
 /**
  * Email quoting file for Wikka highlighting.
+ * 
+ * @package	Formatters
+ * @version	$Id$
  */
 
  $text = $this->htmlspecialchars_ent($text);

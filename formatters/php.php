@@ -1,6 +1,11 @@
 <?php
 /**
  * PHP language file for Wikka highlighting (uses PHP built-in highlighting).
+ * 
+ * @package	Formatters
+ * @version	$Id$
+ * 
+ * @uses	Wakka::method()
  */
 
 if ($this->method == "diff") {

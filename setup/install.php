@@ -1,4 +1,11 @@
 <?php
+/**
+ * Do the installation/ upgrade.
+ * 
+ * @package	Installation
+ * @version	$Id$
+ * 
+ */
 
 // i18n section
 if (!defined('ADDING_CONFIG_ENTRY')) define('ADDING_CONFIG_ENTRY', 'Adding a new option to the wikka.config file: %s'); // %s - name of the config option

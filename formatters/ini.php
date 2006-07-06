@@ -1,6 +1,9 @@
 <?php
 /**
  * INI language file for Wikka highlighting (configuration file).
+ * 
+ * @package	Formatters
+ * @version	$Id$
  */
 
 $text = htmlspecialchars($text, ENT_QUOTES);
