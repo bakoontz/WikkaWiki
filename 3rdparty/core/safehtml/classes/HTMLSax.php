@@ -1,4 +1,12 @@
 <?php
+/**
+ * Safe HTML parser.
+ * 
+ * @package 3rdParty
+ * @subpackage SafeHTML
+ * @version $Id$
+ * @filesource
+ */
 /*
  +----------------------------------------------------------------------+
  | PHP Version 4                                                        |
@@ -17,25 +25,15 @@
  | Authors: Harry Fuecks <hfuecks@phppatterns.com> Port to PEAR + more  |
  | Authors: Many @ Sitepointforums Advanced PHP Forums                  |
  +----------------------------------------------------------------------+
-
-
-
-
-
  WARNING! This is modified XML_HTMLSax-2.1.2. 
  If you'll use unmodified HTMLSax, Safehtml will be NOT SAFE!
-
-
-
-
-
-
-
 */
+/**
+ * define whitespace
+ */
 define ("WHITESPACE", " \x00\x01\x02\x03\x04\x05\x06\x07\x08\x09\x0A\x0B\x0C\x0D\x0E\x0F\x10\x11\x12\x13\x14\x15\x15\x17\x18\x19\x1A\x1B\x1C\x1D\x1E\x1F");
 /**
 * Base State Parser
-* @package XML_HTMLSax
 * @access protected
 * @abstract
 */
@@ -307,7 +305,8 @@ class XML_HTMLSax_StateParser {
 /**
 * Parser for PHP Versions below 4.3.0. Uses a slower parsing mechanism than
 * the equivalent PHP 4.3.0+  subclass of StateParser
-* @package XML_HTMLSax
+* @package 3rdParty
+* @subpackage SafeHTML
 * @access protected
 * @see XML_HTMLSax_StateParser_Gtet430
 */

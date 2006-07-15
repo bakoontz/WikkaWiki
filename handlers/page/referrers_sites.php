@@ -1,11 +1,9 @@
-<div class="page">
 <?php
 /**
  * Show domains linking to the page/ the wiki.
  * 
  * @package		Handlers
- * @subpackage	Mindmap	
- * @name		referrer_sites.php
+ * @subpackage	Referrers	
  * @version		$Id$
  * 
  * @uses		Wakka::IsAdmin()
@@ -14,8 +12,10 @@
  * @uses		Wakka::GetMethod()
  * @uses		Wakka::GetUser()
  * @uses		Wakka::Href()
- * @todo		- move <div> to templste 
+ * @todo		move <div> to template
+ * @filesource 
  */
+echo '<div class="page">'."\n"; //TODO: move to templating class
 
 $global = '';
 $IsAdmin = $this->IsAdmin();
@@ -83,6 +83,5 @@ else
 	print("<br />[<a href=\"".$this->Href("referrers_sites", "", "global=1")."\">View global referring sites</a> | <a href=\"".$this->Href("referrers", "", "global=1")."\">View global referrers</a> | <a href=\"".$this->Href("review_blacklist")."\">View referrer blacklist</a>]"); # i18n
 }
 
-
+echo '</div>'."\n" //TODO: move to templating class
 ?>
-</div>

@@ -1,5 +1,11 @@
 <?php
-
+/**
+ * Onyx RSS Parser
+ * 
+ * @package 3rdParty
+ * @subpackage Onyx
+ * @filesource
+ */
 /* This software is licenced under The MIT License.
  * Copyright (c) 2003 - Edward R. Swindelles
  *
@@ -20,7 +26,9 @@
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  */
-
+/**
+ * i18n
+ */
 define('ONYX_RSS_VERS', '1.3');
 define('ONYX_ERR_NO_PARSER', '<a href="http://www.php.net/manual/en/ref.xml.php">PHP\'s XML Extension</a> is not loaded or available.');
 define('ONYX_ERR_NOT_WRITEABLE', 'The specified cache directory is not writeable.');

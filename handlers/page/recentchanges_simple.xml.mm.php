@@ -1,17 +1,17 @@
 <?php
 /**
- * Show a simple mindmap of the recent changes in the wiki as an XML File. 
+ * Show a simple mindmap of recent changes in the wiki as an XML File.
  * 
  * Only the date and the page of the change are shown.
  * 
  * @package		Handlers
- * @subpackage	Mindmap	
- * @name		recentchanges_simple.xml.mm.php
+ * @subpackage	Mindmaps
  * @version		$Id$
  * 
  * @uses		in_iarray()
  * @uses		Wakka::Href()
  * @uses		Wakka::LoadRecentlyChanged()
+ * @filesource
  */
 
 header("Content-type: text/xml");
@@ -117,4 +117,4 @@ $xml .= "</map>\n";
 
 print($xml);
 
-?> 
+?>

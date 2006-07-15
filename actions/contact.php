@@ -2,15 +2,15 @@
 /**
  * Print a spam-safe mailto: link to the administrator's email address. 
  * 
- * Note: plain mailto links are a common source of spam.
- * 
  * @package		Actions
- * @name		contact.php
  * @version		$Id$
  * 
  * @uses	Wakka::GetConfigValue()
+ * @filesource
  */
-
+/**
+ * i18n
+ */
 if(!defined('SEND_FEEDBACK_LINK_TITLE')) define('SEND_FEEDBACK_LINK_TITLE', 'Send us your feedback');
 if(!defined('SEND_FEEDBACK_LINK_TEXT')) define('SEND_FEEDBACK_LINK_TEXT', 'Contact');
 

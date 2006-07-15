@@ -3,11 +3,11 @@
  * Display a searchbox for searching google.
  * 
  * @package		Actions
- * @name		googleform.php
  * @version		$Id$
  * 
  * @uses	Wakka::ReturnSafeHTML()
  * @uses	Wakka::GetPageTag()
+ * @filesource
  */
 
 

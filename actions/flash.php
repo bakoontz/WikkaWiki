@@ -1,14 +1,18 @@
 <?php
 /**
-* Syntax: {{Flash url="http://example.com/example.swf" [width=x] [height=x]}}
-*
-* Width and Height are optional arguments.
+* Embed a flash object in a wiki page.
 * 
+* Example: {{flash url="http://example.com/example.swf" [width=x] [height=x]}}
+*
 * @package 	Actions
-* @name		flash.php
 * @version	$Id$
 * 
+* @input 	string $url mandatory: URL of the flash object
+* @input 	int $width optional: custom width (pixels)
+* @input 	int $height optional: custom height (pixels)
+* @output 	displays the flash animation
 * @uses		Wakka::cleanUrl()
+* @filesource
 */
 
 if (!$width) $width = 550;

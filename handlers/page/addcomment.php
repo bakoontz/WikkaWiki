@@ -1,10 +1,9 @@
 <?php
 /**
- * Handel new comments.
+ * Handle new comments.
  * 
  * @package	Handlers
  * @subpackage	Comments
- * @name	addcomment.php
  * @version $Id$
  * 
  * @uses	Wakka::HasAccess()
@@ -12,9 +11,11 @@
  * @uses	Wakka::htmlspecialchars_ent()
  * @uses	Wakka::redirect()
  * @uses	Wakka::SaveComment()
+ * @filesource
  */
-
-// i18n
+/**
+ * i18n
+ */
 if (!defined('ERROR_EMPTY_COMMENT')) define ('ERROR_EMPTY_COMMENT', 'Comment body was empty -- not saved!');
 if (!defined('ERROR_NO_RIGHT_TO_COMMENT')) define ('ERROR_NO_RIGHT_TO_COMMENT', "Sorry, you're not allowed to post comments to this page");
 

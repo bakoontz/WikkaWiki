@@ -4,6 +4,7 @@
  * 
  * @package	Formatters
  * @version	$Id$
+ * @filesource
  */
 
  $text = $this->htmlspecialchars_ent($text);

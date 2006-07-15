@@ -2,11 +2,11 @@
 /**
  * Synonym for color.php.
  * 
- * @see			colour.php
+ * @see			color.php
  * 
  * @package		Actions
- * @name		colour.php
  * @version		$Id$
+ * @filesource
  */
 
 include($this->config['action_path'].'/color.php'); 

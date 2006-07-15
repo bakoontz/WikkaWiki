@@ -3,24 +3,25 @@
  * Display a list of recently commented pages.
  *
  * @package		Actions
- * @name		recentlycommented.php
- *
- * @author		{@link http://wikkawiki.org/DarTar Dario Taraborelli} (preliminary code cleanup, ACL check)
- * @since		Wikka 1.1.6.2
  * @version		$Id$
+ * 
+ * @author		{@link http://wikkawiki.org/DarTar Dario Taraborelli} (preliminary code cleanup, ACL check)
  *
  * @uses		Wakka::Format()
  * @uses		Wakka::LoadRecentlyCommented()
  * @uses		Wakka::HasAccess()
  * @uses		Wakka::LoadUser()
- * @input		none
+ * @filesource
  */
-//constants
+/**
+ * defaults
+ */
 if(!defined('COMMENT_DATE_FORMAT')) define('COMMENT_DATE_FORMAT', 'D, d M Y');
 if(!defined('COMMENT_TIME_FORMAT')) define('COMMENT_TIME_FORMAT', 'H:i T');
 if(!defined('COMMENT_SNIPPET_LENGTH')) define('COMMENT_SNIPPET_LENGTH', 120);
-
-//i18n
+/**
+ * i18n
+ */
 if (!defined('RECENTLY_COMMENTED_HEADING')) define('RECENTLY_COMMENTED_HEADING', '=====Recently commented pages=====');
 if(!defined('ANONYMOUS_COMMENT_AUTHOR')) define('ANONYMOUS_COMMENT_AUTHOR', '(unregistered user)');
 if (!defined('COMMENT_AUTHOR_DIVIDER')) define ('COMMENT_AUTHOR_DIVIDER', ', comment by ');

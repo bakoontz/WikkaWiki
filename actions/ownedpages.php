@@ -1,16 +1,15 @@
 <?php
 /**
- * Number and percentage of the pages the current user owns.
+ * Display the number and percentage of pages owned by the current user.
  * 
  * @package Actions
- * @name	ownedpages.php
- * 
- * @author Chris Tessmer
  * @version	$Id$
+ * @author Chris Tessmer
  * @license	GPL
  * 
  * @uses	Wakka::GetUserName()
  * @uses	Wakka::Query()
+ * @filesource
  */
 
 $str = 'SELECT COUNT(*) FROM '.$this->config["table_prefix"].'pages WHERE `owner` ';

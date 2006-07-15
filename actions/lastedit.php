@@ -3,12 +3,11 @@
  * Display a box with information on the last edit.
  *
  * @package		Actions
- * @name		lastedit.php
+ * @version		$Id$
  *
  * @author		{@link http://wikkawiki.org/DarTar Dario Taraborelli} (first draft)
  * @author		{@link http://wikkawiki.org/MinusF MinusF} (code cleanup and validation)
- * @version		$Id$
- * @since		Wikka 1.1.6.X
+ * @since		Wikka 1.1.6.0
  *
  * @input		integer  $show  optional: amount of details to be displayed;
  *				default: 3
@@ -18,26 +17,29 @@
  *				3: show user, notes (if available), date and quickdiff link
  * @output		box with lastedit information
  *
- * @todo		- make date/time format system-configurable;
- *				- use FormatUser() method to render author name;
- *
  * @uses	Wakka::Link()
  * @uses	Wakka::LoadUser()
  * @uses	Wakka::GetPageTag()
  * @uses	Wakka::Href()
  * @uses	Wakka::htmlspecialchars_ent()
+ * @todo		make date/time format system-configurable;
+ * @todo 	use FormatUser() method to render author name;
+ * @filesource
  */
-
-// defaults
+/**
+ * defaults
+ */
 define('DEFAULT_SHOW', '3');
 define('DATE_FORMAT', 'D, d M Y'); #TODO make this system-configurable
 define('TIME_FORMAT', 'H:i T'); #TODO make this system-configurable
-
-// style
+/**
+ * style
+ */
 define('LASTEDIT_BOX', 'lastedit');
 define('LASTEDIT_NOTES', 'lastedit_notes');
-
-// i18n strings
+/**
+ * i18n
+ */
 define('ANONYMOUS_USER', 'anonymous');
 define('LASTEDIT_MESSAGE', 'Last edited by %s');
 define('DIFF_LINK_TITLE', 'Show differences from last revision');

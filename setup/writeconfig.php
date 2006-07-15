@@ -1,10 +1,10 @@
 <?php
 /**
- * Trie to write the config to wikka.config.php
+ * Stores the configuration in a file called wikka.config.php
  * 
- * @package	Installation
+ * @package	Setup
  * @version	$Id$
- * 
+ * @filesource
  */
 // fetch config
 $config = $config2 = unserialize($_POST["config"]);

@@ -1,7 +1,6 @@
-<div class="page">
 <?php
 /**
-* Displays a list of internal pages linking to the current page.
+* Display a list of internal pages linking to the current page.
 *
 * Usage: append /backlinks to the URL of the page
 * 
@@ -9,21 +8,24 @@
 * It first checks if they exist and prints them on the screen. 
 *
 * @package Handlers
-* @subpackage 
-* @name backlinks.php
+* @subpackage Page
+* @version $Id$
 *
 * @author {@link http://wakkawiki.de/MartinBurger Martin Burger} - original idea and code.
 * @author {@link http://wikkawiki.org/DarTar Dario Taraborelli} - code rewritten, ExistsPage check added, removed links array. 
-* @version $Id$
-* @since Wikka 1.1.6.X
+* @since Wikka 1.1.6.2
 * 
 * @uses	Wakka::ExistsPage()
 * @uses	Wakka::Format()
 * @uses	Wakka::LoadPagesLinkingTo
-* @todo		- move <div> to templating class
+* @todo	move <div> to templating class
+* @filesource
 */
+echo '<div class="page">'."\n"; //TODO: move to templating class
 
-// User-interface: strings
+/**
+ * i18n
+ */
 define('PAGE_TITLE','Pages linking to %s');
 define('ERROR_NO_BACKLINKS','There are no backlinks to this page.');
 
@@ -38,5 +40,5 @@ if ($pages = $this->LoadPagesLinkingTo($this->tag)) {
 } else {
 	print ERROR_NO_BACKLINKS;
 }
+echo '</div>'."\n" //TODO: move to templating class
 ?>
-</div>

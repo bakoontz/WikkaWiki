@@ -1,13 +1,13 @@
 <?php
 /**
- * Display the raw version of a wiki page, i.e. without wiki formatting.
+ * Display the raw version of a wiki page, i.e. the source with no formatting.
  * 
  * @package		Handlers
  * @subpackage	Page
- * @name		raw.php
  * @version		$Id$
  * 
- * @uses		HasAccess()
+ * @uses		Wakka::HasAccess()
+ * @filesource
  */
 
 if ($this->HasAccess("read") && $this->page)

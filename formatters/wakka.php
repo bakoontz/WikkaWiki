@@ -5,7 +5,7 @@
  * This is the main formatting engine used by Wikka to parse wiki markup and render valid XHTML.
  * 
  * @package Formatters
- * @name Wakka
+ * @version $Id$
  *
  * @author {@link http://wikkawiki.org/JsnX Jason Tourtelotte}
  * @author {@link http://wikkawiki.org/DotMG Mahefa Randimbisoa}
@@ -14,11 +14,13 @@
  * @author {@link http://wikkawiki.org/DarTar Dario Taraborelli} (grab handler and filename support for codeblocks)
  * @author {@link http://wikkawiki.org/TormodHaugen Tormod Haugen} (table formatter support)
  * 
- * @todo		- add support for formatter plugins;
- * 			- use a central RegEx library #34;
+ * @todo		add support for formatter plugins;
+ * @todo		use a central RegEx library #34;
+ * @filesource
  */
-
-// i18n strings
+/**
+ * i18n
+ */
 if (!defined('GRABCODE_BUTTON_VALUE')) define('GRABCODE_BUTTON_VALUE', 'Grab');
 if (!defined('GRABCODE_BUTTON_TITLE')) define('GRABCODE_BUTTON_TITLE', 'Download %s');
 

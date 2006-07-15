@@ -5,21 +5,25 @@
  * When called by a grab button, forces the download of the associate code block.
  * 
  * @package	Handlers
- * @name	grabcode.php
- * @author	{@link http://wikkawiki.org/DarTar Dario Taraborelli}
+ * @subpackage Codeblocks
  * @version	$Id$
- * @since	1.1.6.2
+ * 
+ * @author	{@link http://wikkawiki.org/DarTar Dario Taraborelli}
+ * @since	Wikka 1.1.6.2
  * 
  * @uses	Wakka::GetConfigValue()
- * @todo	- add configurable filename max. length;
- 			- use central regex library for filename validation;
- 			- check time format for consistency
+ * @todo add configurable filename max. length;
+ * @todo use central regex library for filename validation;
+ * @todo check time format for consistency;
+ * @filesource
  */
-
-// i18n strings
+/**
+ * i18n
+ */
 define('ERROR_NO_CODE', 'Sorry, there is no code to download.');
-
-// defaults
+/**
+ * defaults
+ */
 define('DEFAULT_FILENAME', 'codeblock.txt'); # default name for code blocks
 define('FILE_EXTENSION', '.txt'); # extension appended to code block name
 

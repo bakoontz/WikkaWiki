@@ -1,11 +1,9 @@
-<div class="page">
 <?php
 /**
  * Delete a page if the user is an admin.
  * 
  * @package     Handlers
  * @subpackage  Page
- * @name        delete.php
  * @version		$Id$
  * 
  * @uses		Wakka::FormOpen()
@@ -15,8 +13,10 @@
  * @uses		Wakka::Link()
  * @uses		Wakka::Query()
  * @uses		Wakka::Redirect()
- * @todo		- move main <div> to templating class;
+ * @todo		move main <div> to templating class;
+ * @filesource
  */
+echo '<div class="page">'."\n"; //TODO: move to templating class
 
 if ($this->IsAdmin())
 {
@@ -59,6 +59,5 @@ else
 {
     print("<em>You are not allowed to delete pages.</em>"); #i18n
 }
-
+echo '</div>'."\n" //TODO: move to templating class
 ?>
-</div>

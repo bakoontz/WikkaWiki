@@ -1,11 +1,11 @@
 <?php 
 /**
- * Comments and the commentform are not displayed on the page.
+ * Disable comments on the current page.
  * 
  * @package	Actions
- * @name	nocomments.php
  * @version	$Id$
+ * 
+ * @filesource
  */
- 
-$this->config["hide_comments"] = 1; 
+$this->config['hide_comments'] = 1; 
 ?>

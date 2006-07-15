@@ -2,23 +2,23 @@
 /** 
  * Send the user a reminder with the md5 checksum of his or her password via email.
  * 
+ * @package		Actions
+ * @version		$Id$
+ *  
  * @author	{@link http://comawiki.martignier.net Costal Martignier} initial action
  * @author	{@link http://wikkawiki.org/NilsLindenberg Nils Lindenberg} rewritten
  * @author	{@link http://wikkawiki.org/DarTar Dario Taraborelli} further cleanup, error styling and improved logical structure
  * @license http://comawiki.martignier.net/LizenzenUndBedingungen
- * @email 	actions@martignier.net
  * 
- * @package		Actions
- * @name		emailpassword.php
- * @version		$Id$
- *  
  * @uses	Wakka::Format()
  * @uses	Wakka::LoadUser()
  * @uses	Wakka::FormOpen()
  * @uses	Wakka::FormClose()
+ * @filesource
  */ 
-
-// *** constant section ***
+/**
+ * i18n
+ */
 if (!defined('INPUT_ERROR_STYLE')) define('INPUT_ERROR_STYLE', 'class="highlight"');
 if (!defined('PW_FORGOTTEN_HEADING')) define('PW_FORGOTTEN_HEADING', '==== Password reminder ==== ');
 if (!defined('PW_CHK_SENT')) define('PW_CHK_SENT', "A password reminder has been sent to %s's registered email address."); // %s - username

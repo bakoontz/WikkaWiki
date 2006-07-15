@@ -1,13 +1,14 @@
 <?php
 /**
- * One solution to display a mindmap.
+ * Embed a mindmap in the current page.
  * 
  * @package		Actions
- * @name		mindmap.php
  * @version		$Id$
  * 
  * @uses	Wakka::cleanUrl()
  * @uses	Wakka::htmlspecialchars_ent()
+ * @todo should we keep an action for mindmaps on top of the handler/formatter?
+ * @filesource
  */
 
 $mindmap_url = $vars['url'];

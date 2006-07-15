@@ -1,13 +1,18 @@
 <?php
 /**
- * Allows admins to manage files (upload, deletion) and everyone to view a list of them or download them. 
+ * Display a form for file uploading/downloading.
  * 
- * Or it provides a download-link to a single file.
+ * Files can be uploaded and deleted by admins and downloaded by any user with read access to the page.
+ * This action can also be used to display a download link for a single file.
  * 
  * @package		Actions
  * @version		$Id$
  *  
- * @uses	Wakka::href()
+ * @input string	$download optional: prints a link to the file specified in the string
+ * @input string	$text optional:	link description for the file specified via the $download parameter
+ * @output form for file uploading/downloading
+ * 
+ * @uses	Wakka::Href()
  * @uses	Wakka::GetPageTag()
  * @uses	Wakka::HasAccess()
  * @uses	Wakka::bytesToHumanReadableUsage()
@@ -15,6 +20,7 @@
  * @uses	Wakka::IsAdmin()
  * @uses	Wakka::MiniHref()
  * @uses	Wakka::FormClose()
+ * @filesource
  */
 
 // $max_upload_size = "1048576"; // 1 Megabyte
@@ -259,4 +265,4 @@ if ($download <> '') {
    print " </table>  ";
 
 }
-?> 
+?>

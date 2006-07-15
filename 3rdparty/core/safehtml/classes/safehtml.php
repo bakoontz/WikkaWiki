@@ -1,31 +1,27 @@
 <?php
-/*
-
-  SafeHTML Parser.
-  v1.2.1. (modified, see notes below from JavaWoman)
-  21 October 2004.
-
-  ---------
-
-  http://pixel-apes.com/safehtml
-
-  Copyright (c) 2004, Roman Ivanov <mailto:thingol@mail.ru>
-  All rights reserved.
-
-  For LICENSE see license.txt
-
-  Modifications by JavaWoman - http://wikkawiki.org/JavaWoman - 2005-01-20
-  1) added 'callto' protocol to whitelist
-  2) special handling for "dangerous" attributes id and name:
-		- id is validated by syntax
-		- name is valid only in form controls and if it conforms to PHP
-		  variable name rules (http://php.net/language.variables)
-	 extra parameter $tagname added to writeAttrs() to provide
-	 context for validating name attribute
-
-=============================================================== (kukutz@npj)
-*/
-
+/**
+ * SafeHTML Parser.
+ * 
+ * v1.2.1.
+ * Modifications by JavaWoman - http://wikkawiki.org/JavaWoman - 2005-01-20
+ * 1) added 'callto' protocol to whitelist
+ * 2) special handling for "dangerous" attributes id and name:
+ *		- id is validated by syntax
+ *		- name is valid only in form controls and if it conforms to PHP
+ *		  variable name rules (http://php.net/language.variables)
+ * extra parameter $tagname added to writeAttrs() to provide
+ * context for validating name attribute
+ *
+ * @package 3rdParty
+ * @subpackage SafeHTML
+ * @version $Id$
+ * 
+ * @copyright Copyright (c) 2004, Roman Ivanov <mailto:thingol@mail.ru>
+ * @filesource
+ */
+/**
+ * Require plugin
+ */
 require_once(dirname(__FILE__).'/HTMLSax.php');
 
 class safehtml {

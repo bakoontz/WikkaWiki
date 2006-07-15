@@ -1,8 +1,8 @@
 <?
 /**
- * Print the footer for the installer.
+ * Generate the footer for the installer.
  * 
- * @package Install
+ * @package Setup
  * @version $Id$
  */
 ?>

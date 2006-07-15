@@ -1,6 +1,6 @@
 <?php
 /**
- * Caches and displays an rss feed.
+ * Caches and displays an RSS feed.
  * 
  * Action usage: {{rss http://domain.com/feed.xml}} 
  * or {{rss url="http://domain.com/feed.xml" cachetime="30"}}.
@@ -14,15 +14,15 @@
  * NOTE 2: no solution for timeout problems with non-existing feeds yet...
  * 
  * @package		Actions
- * @name		system.php
  * @version		$Id$
  * 
  * @input		string $url mandotary: URL of the feed
  * @input		integer $cachetime optional: time in minutes to cach the feed
  * @uses		Wakka::cleanUrl()
  * @uses		Wakka::ReturnSafeHTML()
- * @todo		- should use makeList to generate the list; 
- * 				- maybe better convert to using Magpie first, though
+ * @todo		should use makeList to generate the list; 
+ * @todo		maybe better convert to using Magpie first;
+ * @filesource
  */
 
 $max_items = 30; // set this to the maximum items the RSS action should ever display
@@ -47,6 +47,9 @@ $rss_path = $this->cleanUrl(trim($rss_path));
 // override
 if (preg_match("/^(http|https):\/\/([^\\s\"<>]+)$/i", $rss_path))
 {
+	/**
+	 * Include 3rdParty plugin
+	 */
 	include_once('3rdparty/plugins/onyx-rss/onyx-rss.php');
 	if (!class_exists(Wikka_Onyx))
 	{

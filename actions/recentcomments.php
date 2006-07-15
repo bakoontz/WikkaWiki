@@ -3,22 +3,23 @@
  * Display a list of recent comments.
  *
  * @package		Actions
- * @name		recentcomments.php
+ * @version		$Id$
  *
  * @author		{@link http://wikkawiki.org/DarTar Dario Taraborelli} (preliminary code cleanup)
  * @author		{@link http://wikkawiki.org/NickDamoulakis Nick Damoulakis} (ACL check)
- * @since		Wikka 1.1.6.2
- * @version		$Id$
  *
- * @input		none
- * @todo		- make datetime format configurable
+ * @todo			make datetime format configurable
+ * @filesource
  */
-//constants
+/**
+ * defaults
+ */
 if(!defined('COMMENT_DATE_FORMAT')) define('COMMENT_DATE_FORMAT', 'D, d M Y');
 if(!defined('COMMENT_TIME_FORMAT')) define('COMMENT_TIME_FORMAT', 'H:i T');
 if(!defined('COMMENT_SNIPPET_LENGTH')) define('COMMENT_SNIPPET_LENGTH', 120);
-
-//i18n
+/**
+ * i18n
+ */
 if (!defined('RECENT_COMMENTS_HEADING')) define('RECENT_COMMENTS_HEADING', '=====Recent comments=====');
 if (!defined('COMMENT_AUTHOR_DIVIDER')) define ('COMMENT_AUTHOR_DIVIDER', ', comment by ');
 if (!defined('NO_RECENT_COMMENTS')) define ('NO_RECENT_COMMENTS', 'There are no recent comments.');

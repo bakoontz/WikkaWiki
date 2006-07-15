@@ -5,12 +5,10 @@
 * This action checks user read privileges and displays an index of read-accessible pages.
 *
 * @package    Actions
-* @name    pageindex.php
+* @version	$Id$
 *
 * @author    {@link http://wikkawiki.org/GiorgosKontopoulos GiorgosKontopoulos} (added ACL check, first code cleanup)
 * @author    {@link http://wikkawiki.org/DarTar DarTar} (adding doc header, minor code and layout refinements, i18n)
-* @version	$Id$
-* @since    1.1.6.2
 * 
 * @uses		Wakka::LoadAllPages()
 * @uses		Wakka::GetUserName()
@@ -19,10 +17,12 @@
 * @uses		Wakka::Format()
 *
 * @output   a list of pages accessible to the current user
-* @documentation  {@link http://wikkawiki.org/ColorActionInfo}
+* @todo		add filtering options
+* @filesource
 */
-
-// i18n strings
+/**
+ * i18n
+ */
 define('PAGE_HEADING',"Page Index");
 define('INDEX_CAPTION',"This is an alphabetical list of pages you can read on this server.");
 define('ALL_PAGES',"All");

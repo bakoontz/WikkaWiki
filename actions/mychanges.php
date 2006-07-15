@@ -1,22 +1,21 @@
 <?php
 /**
- * Shows a logged-in user a list of pages he has edited.
+ * Display a list of pages edited by the current user.
  * 
- * If a user is logged-in and has at least changed one page, the changed 
- * page(s) are presented as a list, ordered either alpabetically or after 
- * date and time (last edit first).
+ * If the current user is logged-in and has edited at least one page, a list of pages edited by the current user 
+ * is displayed, ordered alphabetically or by date and time (last edit first).
  * 
  * @package Actions
- * @name	mychanges.php
+ * @version	$Id$
  * 
  * @author Carlo Zottmann
- * @version	$Id$
  * 
  * @uses	Wakka::GetUser()
  * @uses	Wakka::LoadAll()
  * @uses	Wakka::Link()
  * @uses	Wakka::href()
  * @uses	Wakka::GetUserName()
+ * @filesource
  */
 
 if ($user = $this->GetUser())

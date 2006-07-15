@@ -4,7 +4,6 @@
  * 
  * @package		Handlers
  * @subpackage	Page
- * @name		revisions.php
  * @version		$Id$
  * 
  * @uses		Wakka::HasAccess()
@@ -15,18 +14,20 @@
  * @uses		Wakka::FormClose()
  * @uses		Wakka::Href()
  * 
- * @todo		- move main <div> to templating class
+ * @todo		move main <div> to templating class
+ * @filesource
  */
-
-// i18n strings
+/**
+ * i18n
+ */
 define('BUTTON_RETURN_TO_NODE', 'Return To Node / Cancel');
 define('BUTTON_SHOW_DIFFERENCES', 'Show Differences');
 define('ERROR_ACL_READ', 'You aren\'t allowed to read this page.');
 define('SIMPLE_DIFF', 'Simple Diff');
 define('WHEN_BY_WHO', '%1$s by %2$s');
-?>
-<div class="page">
-<?php
+
+echo '<div class="page">'."\n"; //TODO: move to templating class
+
 if ($this->HasAccess("read")) {
 	// load revisions for this page
 	if ($pages = $this->LoadRevisions($this->tag))
@@ -70,5 +71,5 @@ if ($this->HasAccess("read")) {
 } else {
 	print('<em class="error">'.ERROR_ACL_READ.'</em>');
 }
+echo '</div>'."\n" //TODO: move to templating class
 ?>
-</div>

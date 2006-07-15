@@ -1,16 +1,16 @@
 <?php
 /**
- * Displays a form to send feedback to the site administrator, as specified in wikka.config.php
+ * Display a form to send feedback to the site administrator, as specified in wikka.config.php
  * 
  * It first validates the form, then sends it using the mail() function;
  * 
  * @package		Actions
- * @name		feedback.php
  * @version		$Id$
  * 
  * @uses	Wakka::FormOpen()
  * @uses	Wakka::FormClose()
  * @uses	Wakka::GetConfigValue()
+ * @filesource
  */
 
 $form = "<p>Fill in the form below to send us your comments:</p>".

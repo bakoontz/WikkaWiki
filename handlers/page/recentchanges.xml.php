@@ -1,19 +1,20 @@
 <?php
 /**
- * Show an XML Version of the recent changes in the wiki.
+ * Generate a feed with recent changes in the wiki.
  * 
  * @package		Handlers
  * @subpackage	XML	
- * @name		recentchanges.xml.php
  * @version		$Id$
  * 
  * @uses		Wakka::GetConfigValue()
  * @uses		Wakka::Href()
  * @uses		Wakka::htmlspecialchars_ent()
  * @uses		Wakka::LoadRecentlyChanged()
+ * @filesource
  */
-
-// i18n strings
+/**
+ * i18n
+ */
 define('WHEN_BY_WHO', '%1$s by %2$s');
 define('ERROR_ACL_READ_INFO', 'You\'re not allowed to access this information.');
 define('LABEL_ERROR', 'Error');

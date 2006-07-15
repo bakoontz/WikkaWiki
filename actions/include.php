@@ -1,14 +1,14 @@
 <?php
 /**
- * Includes another wikipage.
+ * Include another wikipage.
  * 
  * @package		Actions
- * @name		include.php
  * @version		$Id$
  * 
  * @uses	Wakka::HasAccess()
  * @uses	Wakka::LoadPage()
  * @uses	Wakka::Format()
+ * @filesource
  */
 
 if (!$page) $page = $wikka_vars;

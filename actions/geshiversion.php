@@ -3,14 +3,15 @@
  * Display current GeSHi version.
  *
  * @package		Actions
- * @name		geshiversion.php
+ * @version		$Id$
  *
  * @author		{@link http://wikkawiki.org/DarTar Dario Taraborelli}
  * @since		Wikka 1.1.6.2
- * @version		$Id$
+ * @filesource
  */
-
-// i18n
+/**
+ * i18n
+ */
 if (!defined('NOT_AVAILABLE')) define('NOT_AVAILABLE', 'n/a');
 if (!defined('NOT_INSTALLED')) define('NOT_INSTALLED', 'not installed');
 

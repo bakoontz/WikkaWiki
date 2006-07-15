@@ -24,12 +24,13 @@
  *  along with GeSHi; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  * 
- * @package   core
+ * @package   3rdParty
+ * @subpackage GeSHi
  * @author    Nigel McNie <nigel@geshi.org>
  * @copyright Copyright &copy; 2004, 2005, Nigel McNie
  * @license   http://gnu.org/copyleft/gpl.html GNU GPL
- * @version   $Id: geshi.php,v 1.40.2.1 2006/06/21 10:35:33 oracleshinoda Exp $
- *
+ * @version   $Id:geshi.php 154 2006-06-30 08:33:14Z DarTar $
+ * @filesource
  */
 
 //

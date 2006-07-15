@@ -22,12 +22,10 @@
  * Marcus Kazmierczak for the original that inspired this, however indirectly: Thanks!
  *
  * @package		Actions
- * @subpackage	Date and Time
- * @name		calendar.php
+ * @version		$Id$
  *
  * @author		{@link http://wikkawiki.org/GmBowen GmBowen} (first draft)
  * @author		{@link http://wikkawiki.org/JavaWoman JavaWoman} (more modifications)
- * @version		$Id$
  * @since		Wikka 1.1.6.0
  *
  * @uses		Wakka::Href()
@@ -39,16 +37,21 @@
  *				the default can be overridden by providing a URL parameter 'month'
  * @output		data table for specified or current month
  *
- * @todo		- take care we don't go over date limits for PHP with navigation links
- *				- configurable first day of week
+ * @todo		take care we don't go over date limits for PHP with navigation links
+ * @todo		configurable first day of week
+ * @filesource
  */
 
-// ***** CONSTANTS section *****
+/**
+ * CONSTANTS section
+ */
 define('MIN_DATETIME', strtotime('1970-01-01 00:00:00 GMT'));		# earliest timestamp PHP can handle (Windows and some others - to be safe)
 define('MAX_DATETIME', strtotime('2038-01-19 03:04:07 GMT'));		# latest timestamp PHP can handle
 define('MIN_YEAR', date('Y',MIN_DATETIME));
 define('MAX_YEAR', date('Y',MAX_DATETIME)-1);						# don't include partial January 2038
-// not-quite-constants
+/**
+ * not quite constants
+ */
 $daysInMonth = array(31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31);
 define('CUR_YEAR', date('Y',mktime()));
 define('CUR_MONTH', date('n',mktime()));
@@ -57,7 +60,6 @@ define('CUR_MONTH', date('n',mktime()));
 define('LOC_MON_YEAR', "%B %Y");																	# i18n
 define('FMT_SUMMARY', "Calendar for %s");															# i18n
 define('TODAY', "today");																			# i18n
-// ***** END CONSTANTS section *****
 
 // ***** (ACTION) PARAMETERS Interface *****
 // set parameter defaults: current year and month

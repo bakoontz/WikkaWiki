@@ -4,7 +4,6 @@
  * 
  * @package		Handlers
  * @subpackage	Page 
- * @name 		backlinks.php
  * @version		$Id$
  * 
  * @uses	Wakka::GetPageOwner()
@@ -14,9 +13,12 @@
  * @uses	Wakka::Href()
  * @uses	Wakka::SetRedirectMessager()
  * @uses	Wakka::Redirect()
+ * @filesource
  */
 
-// i18n
+/**
+ * i18n
+ */
 if(!defined('USER_IS_NOW_OWNER')) define ('USER_IS_NOW_OWNER',"You are now the owner of this page.");
 
 if ($this->page && !$this->GetPageOwner() && $this->GetUser())

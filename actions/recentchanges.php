@@ -3,11 +3,10 @@
  * Display a list of recently changed pages.
  *
  * @package		Actions
- * @name		recentchanges.php
+ * @version		$Id$
  *
  * @author    	{@link http://www.mornography.de/ Hendrik Mans} (wakka code)
  * @author		{@link http://wikkawiki.org/DarTar Dario Taraborelli} (preliminary code cleanup)
- * @version		$Id$
  * 
  * @uses		Wakka::Format()
  * @uses		Wakka::LoadRecentlyChanged()
@@ -16,18 +15,20 @@
  * @uses		Wakka::HasAccess()
  * @uses		Wakka::LoadUser()
  * 
- * @todo		- make datetime format configurable;
- * 				- add configurable option for non-accessible pages {@link http://wush.net/trac/wikka/ticket/178 #178};
- * 				- added extensive logging of events such as page deletion, cloning, ACL change {@link http://wush.net/trac/wikka/ticket/143 #143};
+ * @todo		make datetime format configurable;
+ * @todo		add configurable option for non-accessible pages {@link http://wush.net/trac/wikka/ticket/178 #178};
+ * @todo		added extensive logging of events such as page deletion, cloning, ACL change {@link http://wush.net/trac/wikka/ticket/143 #143};
  */
-
-//defaults
+/**
+ * defaults
+ */
 if(!defined('REVISION_DATE_FORMAT')) define('REVISION_DATE_FORMAT', 'D, d M Y');
 if(!defined('REVISION_TIME_FORMAT')) define('REVISION_TIME_FORMAT', 'H:i T');
 if (!defined('PAGE_EDITOR_DIVIDER')) define ('PAGE_EDITOR_DIVIDER', '&#8594;');
 if (!defined('MAX_REVISION_NUMBER')) define ('MAX_REVISION_NUMBER', '50');
-
-//i18n
+/**
+ * i18n
+ */
 if (!defined('RECENT_CHANGES_HEADING')) define('RECENT_CHANGES_HEADING', '=====Recently changed pages=====');
 if (!defined('UNREGISTERED_USER')) define('UNREGISTERED_USER', 'unregistered user');
 if (!defined('LABEL_HISTORY')) define('LABEL_HISTORY', 'history');

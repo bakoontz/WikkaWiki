@@ -1,10 +1,9 @@
 <?php
 /**
- * Handle download/ deletion of a file. 
+ * Handle download/deletion of a file. 
  * 
  * @package		Handlers
- * @subpackage	File
- * @name		files.xml.php
+ * @subpackage	Files
  * @version		$Id$
  * 
  * @uses		mkdir_r()
@@ -13,6 +12,7 @@
  * @uses		Wakka::Href()
  * @uses		Wakka::IsAdmin()
  * @uses		Wakka::redirect()
+ * @filesource
  */
 
 // upload path
@@ -41,4 +41,4 @@ switch ($_REQUEST['action']) {
             }
             print $this->redirect($this->Href());
 }
-?> 
+?>

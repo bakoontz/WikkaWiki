@@ -1,11 +1,8 @@
 <?php
 /**
- * Prints out an html table with given values.
+ * Display a data table.
  * 
- * $vars = array('columns' => '3', 'cellpadding' => '1', 'cells' => '**BIG**;**GREEN**;**FROGS**;yes;yes;no;no;yes;yes');
- *
  * @package	Actions
- * @name	table.php
  * @version $Id$
  *
  * @input	string $cells mandatory: string with all cells, separated by ';' and '###' for empty cells
@@ -13,6 +10,8 @@
  * @input	string $style optional: in-line style for the table.
  * @input	integer $columns optional: 	number of columns for the table; default: 1
  * @uses	Wakka::ReturnSafeHTML()
+ * @todo		will be replaced after Wikka 1.1.6.2 by the table formatter
+ * @filesource
  */
 
 // Init:

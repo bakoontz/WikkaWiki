@@ -10,18 +10,19 @@
  *	{{system [show="OS|machine|host"]}}
  *
  * @package		Actions
- * @name		system.php
+ * @version		$Id$
  *
  * @author		{@link http://wikkawiki.org/JavaWoman Marjolein Katsma} (first version)
  * @author		{@link http://wikkawiki.org/DarTar Dario Taraborelli} (admin check)
  * @since		Wikka 1.1.6.2
- * @version		$Id$
  *
  * @input		string	$show	optional: what type of system info to show (OS, machine or host);
  *				default: empty, shows all information
+ * @filesource
  */
-
-// i18n
+/**
+ * i18n
+ */
 if (!defined('NOT_AVAILABLE')) define('NOT_AVAILABLE', 'n/a');
 
 // defaults

@@ -1,17 +1,17 @@
 <?php
 /**
- * Displays all pages with no links from any other page.
+ * Display a list of orphaned pages, i.e. pages with no links from other pages.
  * 
  * @package Actions
- * @name	orphanedpages.php
- * 
  * @version	$Id$
  * 
  * @uses	Wakka::LoadOrphanedPages()
  * @uses	Wakka::Link()
+ * @filesource
  */
-
-//i18n 
+/**
+ * i18n
+ */
 if(!defined('NO_ORPHANED_PAGES')) define('NO_ORPHANED_PAGES', 'No orphaned pages. Good!');
 
 if ($pages = $this->LoadOrphanedPages())

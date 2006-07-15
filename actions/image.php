@@ -3,7 +3,6 @@
  * Display an image.
  * 
  * @package		Actions
- * @name		image.php
  * @version		$Id$
  * 
  * @uses	Wakka::Link()
@@ -13,6 +12,7 @@
  * @input	string $title optional: title text displayed when mouse hovers above image
  * @input	string $class optional: a class for the image
  * @input	string $class optional: an alt text
+ * @filesource
  */
 
 $title = 'WikiImage';

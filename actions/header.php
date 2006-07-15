@@ -1,9 +1,8 @@
 <?php
 /**
- * Echos the header for an xhtml 1.0 page.
+ * Generates the page header.
  * 
  * @package		Template
- * @subpackage	xHtml
  * @version		$Id$
  * 
  * @uses	Wakka::GetRedirectMessage()
@@ -14,6 +13,7 @@
  * @uses	Wakka::GetMethod()
  * @uses	Wakka::Href()
  * @uses	Wakka::Format()
+ * @filesource
  */
 
 $message = $this->GetRedirectMessage();

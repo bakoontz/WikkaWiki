@@ -4,6 +4,7 @@
  * 
  * @package	Formatters
  * @version	$Id$
+ * @filesource
  */
 
 $text = htmlspecialchars($text, ENT_QUOTES);

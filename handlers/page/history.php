@@ -4,7 +4,6 @@
  * 
  * @package		Handlers
  * @subpackage	Page
- * @name		history.php
  * @version		$Id$
  * 
  * @uses		mkdir_r()
@@ -13,10 +12,12 @@
  * @uses		Wakka::LoadRevisions()
  * @uses		Wakka::LoadPageById()
  * @uses		Wakka::Format()
- * @todo		-move <div> to template
+ * @todo		move <div> to template;
+ * @filesource
  */
-
- // i18n strings
+/**
+ * i18n
+ */
  define('DIFF_ADDITIONS', 'Additions:');
  define('DIFF_DELETIONS', 'Deletions:');
  define('DIFF_NO_DIFFERENCES', 'No differences.');
@@ -24,10 +25,9 @@
  define('ERROR_ACL_READ', 'You aren\'t allowed to read this page.');
  define('HISTORY_PAGE_VIEW', 'Page view:');
  define('OLDEST_VERSION_EDITED_ON_BY', 'Oldest known version of this page was edited on %1$s by %2$s');
-	define('MOST_RECENT_EDIT', 'Most recent edit on %1$s by %2$s');
-?>
-<div class="page">
-<?php
+ define('MOST_RECENT_EDIT', 'Most recent edit on %1$s by %2$s');
+ 
+echo '<div class="page">'."\n"; //TODO: move to templating class
 if ($this->HasAccess("read")) {
 	// load revisions for this page
 	if ($pages = $this->LoadRevisions($this->tag))
@@ -110,5 +110,5 @@ if ($this->HasAccess("read")) {
 } else {
 	print('<em>'.ERROR_ACL_READ.'</em>');
 }
+echo '</div>'."\n" //TODO: move to templating class
 ?>
-</div>

@@ -4,8 +4,8 @@
  * 
  * @package	Formatters
  * @version	$Id$
- * 
- * @uses	Wakka::method()
+ * @uses		Wakka::method()
+ * @filesource
  */
 
 if ($this->method == "diff") {

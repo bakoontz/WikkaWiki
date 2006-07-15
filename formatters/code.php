@@ -4,6 +4,7 @@
  * 
  * @package	Formatters
  * @version	$Id$
+ * @filesource
  */
 print("<pre>".htmlspecialchars($text, ENT_QUOTES)."</pre>");
 ?>

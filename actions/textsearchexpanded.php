@@ -1,9 +1,8 @@
 <?php
 /**
- * Search for a phrase and show the results with their surrounding text.
+ * Search wiki pages for a phrase and display the results with a snippet of surrounding text.
  * 
  * @package	Actions
- * @name	textsearchexpanded.php
  * @version $Id$
  * 
  * @uses	Wakka::FormClose()
@@ -12,17 +11,20 @@
  * @uses	Wakka::HasAccess()
  * @uses	Wakka::htmlspecialchars_ent()
  * @uses	Wakka::ReturnSafeHtml()
+ * @filesource
  */
+/**
+ * i18n
+ */
+if (!defined('SEARCH_FOR')) define('SEARCH_FOR', 'Search for');
+if (!defined('SEARCH_ZERO_MATCH')) define('SEARCH_ZERO_MATCH', 'No matches');
+if (!defined('SEARCH_ONE_MATCH')) define('SEARCH_ONE_MATCH', 'One match found');
+if (!defined('SEARCH_N_MATCH')) define('SEARCH_N_MATCH', 'There was %d matches found');
+if (!defined('SEARCH_RESULTS')) define('SEARCH_RESULTS', 'Search results');
+if (!defined('SEARCH_MAX_SNIPPETS')) define('SEARCH_MAX_SNIPPETS', 3);
+if (!defined('SEARCH_MYSQL_IDENTICAL_CHARS')) define('SEARCH_MYSQL_IDENTICAL_CHARS', 'aàáâã,eèéêë,iìîï,oòóôõ,uùúû,cç,nñ,yý');
 
- //constants
-	if (!defined('SEARCH_FOR')) define('SEARCH_FOR', 'Search for');
-	if (!defined('SEARCH_ZERO_MATCH')) define('SEARCH_ZERO_MATCH', 'No matches');
-	if (!defined('SEARCH_ONE_MATCH')) define('SEARCH_ONE_MATCH', 'One match found');
-	if (!defined('SEARCH_N_MATCH')) define('SEARCH_N_MATCH', 'There was %d matches found');
-	if (!defined('SEARCH_RESULTS')) define('SEARCH_RESULTS', 'Search results');
-	if (!defined('SEARCH_MAX_SNIPPETS')) define('SEARCH_MAX_SNIPPETS', 3);
-	if (!defined('SEARCH_MYSQL_IDENTICAL_CHARS')) define('SEARCH_MYSQL_IDENTICAL_CHARS', 'aàáâã,eèéêë,iìîï,oòóôõ,uùúû,cç,nñ,yý');
-	$result_page_list = '';
+$result_page_list = '';
 ?>
 <?php echo $this->FormOpen("", "", "get"); ?>
 <table border="0" cellspacing="0" cellpadding="0">

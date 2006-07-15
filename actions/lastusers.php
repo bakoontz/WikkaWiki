@@ -3,19 +3,19 @@
  * Display a list of newly registered users.
  * 
  * @package		Actions
- * @name		lastusers.php
  * @version		$Id$
  * 
  * @uses	Wakka::LoadAll()
  * @uses	Wakka::LoadSingle()
  * @uses	Wakka::Link()
+ * @filesource
  */
-
-// ***** CONSTANTS section *****
+/**
+ * i18n
+ */
 define('NAME', "Name");
 define('OWNED_PAGES', "Owned Pages");
 define('SIGNUP_DATE_TIME', "Signup Date/Time");
-// ***** END CONSTANTS section *****
 
 if ($stat===0) $limit = 1000;
 else $limit = 100;

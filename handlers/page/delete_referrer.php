@@ -4,12 +4,12 @@
  *
  * @package         Handlers
  * @subpackage        Referrers
- * @name              delete_referrer.php
  * @version $Id$
  * 
  * @uses	Wakka::Href()
  * @uses	Wakka::Query()
  * @uses	Wakka::redirect()
+ * @filesource
  */
 
 if ($spam_link = $_REQUEST["spam_link"])

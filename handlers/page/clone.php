@@ -1,4 +1,3 @@
-<div class="page">
 <?php
 /**
  * Clone the current page and save a copy of it as a new page.
@@ -13,7 +12,6 @@
  *
  * @package         Handlers
  * @subpackage        Page
- * @name              clone.php
  *
  * @author            {@link http://wikkawiki.org/ChristianBarthelemy Christian Barthelemy} - original idea and code.
  * @author            {@link http://wikkawiki.org/DarTar Dario Taraborelli} - bugs fixed, code improved, removed popup alerts.  
@@ -36,17 +34,22 @@
  * @uses			  Wakka::FormOpen() 
  * @uses			  Wakka::HasAccess()    
  * @uses			  Wakka::LoadPage() 
- * @uses			  Wakka::href() 
+ * @uses			  Wakka::Href() 
  * @uses			  Wakka::Redirect() 
  * @uses			  Wakka::SavePage()
- * @todo              Use central library for valid pagenames.
+ * 
+ * @todo           use central library for valid pagenames.
  * @todo			  move main <div> to templating class
- *        
+ * @filesource
  */
-// defaults
+/**
+ * Defaults
+ */
 if(!defined('VALID_PAGENAME_PATTERN')) define ('VALID_PAGENAME_PATTERN', '/^[A-Za-zÄÖÜßäöü]+[A-Za-z0-9ÄÖÜßäöü]*$/s');
 
-// i18n
+/**
+ * i18n
+ */
 define('CLONE_HEADER', '==== Clone current page ====');
 define('CLONE_SUCCESSFUL', '%s was succesfully created!');
 define('CLONE_X_TO', 'Clone %s to:');
@@ -67,6 +70,8 @@ $to = $this->tag;
 $note = sprintf(CLONED_FROM, $from);
 $editoption = ''; 
 $box = PLEASE_FILL_VALID_TARGET;
+
+echo '<div class="page">'."\n"; //TODO: move to templating class
 
 // print header
 echo $this->Format(CLONE_HEADER);
@@ -157,5 +162,5 @@ if (!$this->ExistsPage($from))
 if (isset($box)) echo $this->Format(' --- '.$box.' --- --- ');
 // print form
 if (isset($form)) print $form;
+echo '</div>'."\n" //TODO: move to templating class
 ?>
-</div>

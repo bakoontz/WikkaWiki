@@ -1,11 +1,9 @@
-<div class="page" <?php echo (($user = $this->GetUser()) && ($user['doubleclickedit'] == 'N')) ? '' : 'ondblclick="document.location=\''.$this->href('edit').'\';" ' ?>>
 <?php
 /**
  * Show a page if the user has read access or is an admin.
  * 
  * @package		Handlers
  * @subpackage	Page
- * @name		show.php
  * @version		$Id$
  * 
  * @uses		Wakka::Format()
@@ -16,15 +14,19 @@
  * @uses		Wakka::GetUser()
  * @uses		Wakka::GetUserName()
  * @uses		Wakka::HasAccess()
- * @uses		Wakka::href()
  * @uses		Wakka::Href()
  * @uses		Wakka::htmlspecialchars_ent()
  * @uses		Wakka::LoadComments()
  * @uses		Wakka::LoadPage()
  * @uses		Wakka::LoadUser()
  * @uses		Wakka::UserIsOwner()
- * @todo		- move <div> to template
+ * @todo		move <div> to template
+ * @filesource
  */
+ 
+echo '<div class="page"';
+echo (($user = $this->GetUser()) && ($user['doubleclickedit'] == 'N')) ? '' : 'ondblclick="document.location=\''.$this->href('edit').'\';" ';
+echo '>'."\n";//TODO: move to templating class
 
 if (!$this->HasAccess('read'))
 {
@@ -161,7 +163,7 @@ else
 				{
 					echo '[<a href="'.$this->Href('', '', 'show_comments=1#comments').'">'.$showcomments_text.'</a>]';
 				}
-				echo "\n".'</div>'."\n";
+				echo "\n".'</div>'."\n";//TODO: move to templating class
 			}
 		}
 	}

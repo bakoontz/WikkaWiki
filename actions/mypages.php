@@ -1,21 +1,20 @@
 <?php
 /**
- * For a logged-in user, his pages are displayed (if he owns any).
+ * Display a list of pages owned by the current user.
  * 
- * If a user is logged-in and has at least changed one page, the changed 
- * page(s) are presented as a list, ordered either alpabetically or after 
- * date and time (last edit first).
+ * If the current user is logged-in and owns at least one page, a list of pages owned by the current user
+ * is displayed, ordered alphabetically or by date and time (last edit first).
  * 
  * @package Actions
- * @name	mypages.php
+ * @version	$Id$
  * 
  * @author Carlo Zottmann
- * @version	$Id$
  * 
  * @uses	Wakka::GetUser()
  * @uses	Wakka::LoadAllPages()
  * @uses	Wakka::GetUserName() 
  * @uses	Wakka::Link()
+ * @filesource
  */
 
 if ($user = $this->GetUser())

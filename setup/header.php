@@ -1,14 +1,15 @@
 <?php
 /**
- * Output the header for and include some functions used by the installer.
+ * Generate the header for the installer and include some functions used by the installer.
  * 
- * @package	Install
+ * @package	Setup
  * @version	$Id$
+ * @filesource
  */
 
 // stuff
 /**
- * Print if a test failed or succeded.
+ * Notify if a test failed or succeded.
  * 
  * @version	$Id$
  * @param	string $text mandatory: text for the condition

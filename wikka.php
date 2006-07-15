@@ -10,7 +10,6 @@
  * @see /docs/WakkaWiki.LICENSE
  *
  * @package Core
- * @name Wikka
  * @version $Id$
  * 
  * @author Hendrik Mans <hendrik@mans.de>
@@ -29,9 +28,11 @@
  * 
  * @todo use templating class for page generation;
  * @todo add phpdoc documentation for configuration array elements;
+ * @filesource
  */
-
-//i18n
+/**
+ * i18n
+ */
 if(!defined('ERROR_WAKKA_LIBRARY_MISSING')) define ('ERROR_WAKKA_LIBRARY_MISSING','The necessary file "libs/Wakka.class.php" could not be found. To run Wikka, please make sure the file exists and is placed in the right directory!');
 if(!defined('ERROR_WRONG_PHP_VERSION')) define ('ERROR_WRONG_PHP_VERSION', '$_REQUEST[] not found. Wakka requires PHP 4.1.0 or higher!');
 if(!defined('ERROR_SETUP_FILE_MISSING')) define ('ERROR_SETUP_FILE_MISSING', 'A file of the installer/ upgrader was not found. Please install Wikka again!');

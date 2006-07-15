@@ -1,4 +1,3 @@
-<div class="page">
 <?php
 /**
  * Show blacklisted referrers.
@@ -6,8 +5,7 @@
  * Admins have the possibility to remove entries.
  * 
  * @package		Handlers
- * @subpackage	Page
- * @name		review_blacklist.php
+ * @subpackage	Referrers
  * @version		$Id$
  * 
  * @uses		Wakka::IsAdmin()
@@ -17,8 +15,10 @@
  * @uses		Wakka::Query()
  * @uses		Wakka::redirect()
  * 
- * @todo		- move main <div> to templating class
+ * @todo		move main <div> to templating class
+ * @filesource
  */
+echo '<div class="page">'."\n"; //TODO: move to templating class
 
 $IsAdmin = $this->IsAdmin();
 if ($IsAdmin && isset($_REQUEST["whitelist"]))
@@ -51,5 +51,5 @@ else
 
 print("<br />[<a href=\"".$this->Href("referrers_sites", "", "global=1")."\">View global referring sites</a> | <a href=\"".$this->Href("referrers", "", "global=1")."\">View global referrers</a>]"); # i18n
 
+echo '</div>'."\n" //TODO: move to templating class
 ?>
-</div>

@@ -3,21 +3,21 @@
  * Display a form to register, login and change user settings.
  *
  * @package		Actions
- * @name		usersettings.php
+ * @version		$Id$
  *
  * @author		{@link http://wikkawiki.org/MinusF MinusF} (code cleanup and validation)
  * @author		{@link http://wikkawiki.org/DarTar Dario Taraborelli} (further cleanup, i18n, replaced JS dialogs with server-generated messages)
  * @author		{@link http://wikkawiki.org/NilsLindenberg Nils Lindenberg} (possibility to restrict registration)
- * @since		Wikka 1.1.6.2
  *
- * @input		none
- * @todo			-use different actions for registration / login / user settings;
- 					-add documentation links or short explanations for each option;
- 					-use error handler for displaying messages and highlighting invalid input fields;
- 					-remove useless redirections;
+ * @todo			use different actions for registration / login / user settings;
+ * @todo			add documentation links or short explanations for each option;
+ * @todo			use error handler for displaying messages and highlighting invalid input fields;
+ * @todo			remove useless redirections;
+ * @filesource
  */
-
-// defaults
+/**
+ * defaults
+ */
 if (!defined('PASSWORD_MIN_LENGTH')) define('PASSWORD_MIN_LENGTH', "5");
 if (!defined('VALID_EMAIL_PATTERN')) define('VALID_EMAIL_PATTERN', "/^.+?\@.+?\..+$/"); //TODO: Use central regex library
 if (!defined('REVISION_DISPLAY_LIMIT_MIN')) define('REVISION_DISPLAY_LIMIT_MIN', "0"); // 0 means no limit, 1 is the minimum number of revisions
@@ -25,8 +25,9 @@ if (!defined('REVISION_DISPLAY_LIMIT_MAX')) define('REVISION_DISPLAY_LIMIT_MAX',
 if (!defined('RECENTCHANGES_DISPLAY_LIMIT_MIN')) define('RECENTCHANGES_DISPLAY_LIMIT_MIN', "0"); // 0 means no limit, 1 is the minimum number of changes
 if (!defined('RECENTCHANGES_DISPLAY_LIMIT_MAX')) define('RECENTCHANGES_DISPLAY_LIMIT_MAX', "50"); // keep this value within a reasonable limit to avoid an unnecessary long list
 if (!defined('INPUT_ERROR_STYLE')) define('INPUT_ERROR_STYLE', 'class="highlight"');
-
-// i18n strings
+/**
+ * i18n
+ */
 if (!defined('USER_SETTINGS_HEADING')) define('USER_SETTINGS_HEADING', "User settings");
 if (!defined('USER_LOGGED_OUT')) define('USER_LOGGED_OUT', "You have successfully logged out.");
 if (!defined('USER_SETTINGS_STORED')) define('USER_SETTINGS_STORED', "User settings stored!");

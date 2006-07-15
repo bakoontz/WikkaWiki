@@ -3,14 +3,14 @@
  * Show a mindmap of the recent changes in the wiki as an XML File.
  * 
  * @package		Handlers
- * @subpackage	Mindmap	
- * @name		recentchanges.xml.mm.php
+ * @subpackage	Mindmaps
  * @version		$Id$
  * 
  * @uses		Wakka::Href()
  * @uses		Wakka::htmlspecialchars_ent()
  * @uses		Wakka::LoadRecentlyChanged()
- * @todo		- i18n
+ * @todo		i18n
+ * @filesource
  */
 
 header("Content-type: text/xml");

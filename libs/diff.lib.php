@@ -1,42 +1,23 @@
 <?php
 /**
- * Includes the diff functions and classes used by Wikka.
- * 
- * @package	Libs
- * @version $Id$
- * 
+ * A php wdiff  (word diff) for wakka, adapted by David Delon
+ * based on wdiff and phpwiki diff (copyright below).
+ *
+ * @todo 	Since wdiff use only directive lines, all stuff in diff class 
+ * related to line and context display should be removed.
+ *
+ * @package Core
+ * @subpackage Libs
+ * @license GNU General Public License
+ * @copyright Copyright (C) 2000, 2001 Geoffrey T. Dairiki <dairiki@dairiki.org>
+ * @copyright Copyright (C) 1992 Free Software Foundation, Inc. Francois Pinard <pinard@iro.umontreal.ca>.
+ * @filesource
  */
-
-/* A php wdiff  (word diff) for wakka, adapted by David Delon
-   based on wdiff and phpwiki diff (copyright below).
-   TODO : Since wdiff use only directive lines, all stuff in diff class 
-   related to line and context display should be removed.
-
-   This program is free software; you can redistribute it and/or modify
-   it under the terms of the GNU General Public License as published by
-   the Free Software Foundation; either version 2, or (at your option)
-   any later version. */
-
-  
-/* A PHP diff engine for phpwiki.
-  
-   Copyright (C) 2000, 2001 Geoffrey T. Dairiki <dairiki@dairiki.org>
-   You may copy this code freely under the conditions of the GPL.
-*/
- 
-/* wdiff -- front end to diff for comparing on a word per word basis.
-   Copyright (C) 1992 Free Software Foundation, Inc.
-   Francois Pinard <pinard@iro.umontreal.ca>.
-
-   This program is free software; you can redistribute it and/or modify
-   it under the terms of the GNU General Public License as published by
-   the Free Software Foundation; either version 2, or (at your option)
-   any later version.
-
-*/
-
-// Side : a string for wdiff
-
+/**
+ * @name Side
+ * @package Core
+ * @subpackage Libs
+ */
 class Side {
     var $position;
     var $cursor;
@@ -243,14 +224,12 @@ class Side {
 
 }
 
-// difflib
-//
-// A PHP diff engine for phpwiki.
-//
-// Copyright (C) 2000, 2001 Geoffrey T. Dairiki <dairiki@dairiki.org>
-// You may copy this code freely under the conditions of the GPL.
-//
-
+/**
+ * Difflib: A PHP diff engine for phpwiki.
+ * 
+ * @copyright (C) 2000, 2001 Geoffrey T. Dairiki <dairiki@dairiki.org>
+ * @license GNU General Public License
+ */
 
 // PHP3 does not have assert()
 define('USE_ASSERTS', function_exists('assert'));

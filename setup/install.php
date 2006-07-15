@@ -1,10 +1,10 @@
 <?php
 /**
- * Do the installation/ upgrade.
+ * Perform the operations required for installing/upgrading Wikka.
  * 
- * @package	Installation
+ * @package	Setup
  * @version	$Id$
- * 
+ * @filesource
  */
 
 // i18n section

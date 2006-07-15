@@ -3,8 +3,8 @@
  * Print current Wikka version.
  * 
  * @package	Actions
- * @name	wikkaname.php
  * @version $Id$
+ * @filesource
  */
 echo $this->VERSION;
 ?>

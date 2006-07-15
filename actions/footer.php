@@ -1,10 +1,9 @@
 <div class="footer">
 <?php
 /**
- * Echos the footer for an xhtml 1.0 page.
+ * Generates the page footer.
  * 
  * @package		Template
- * @subpackage	xHtml
  * @version		$Id$
  * 
  * @uses	Wakka::FormOpen()
@@ -19,9 +18,11 @@
  * @uses	Wakka::GetWakkaVersion()
  * 
  * @todo	move <div class="footer"> to template
+ * @filesource
  */
-
-// i18n
+/**
+ * i18n
+ */
 if (!defined('PAGE_EDIT_LINK_TITLE')) define ('PAGE_EDIT_LINK_TITLE', 'Click to edit this page');
 if (!defined('PAGE_EDIT_LINK_TEXT')) define ('PAGE_EDIT_LINK_TEXT', 'Edit page');
 if (!defined('PAGE_HISTORY_LINK_TITLE')) define ('PAGE_HISTORY_LINK_TITLE', 'Click to view recent edits to this page');

@@ -4,11 +4,10 @@
  *
  * @package		Handlers
  * @subpackage	Page
- * @name		showcode.php
+ * @version		$Id$
  *
  * @author		{@link http://wikkawiki.org/JsnX JsnX} (first draft)
  * @author		{@link http://wikkawiki.org/DarTar Dario Taraborelli} (code cleanup, i18n strings and DB check)
- * @version		$Id$
  * @since		Wikka 1.1.6.0
  *
  * @uses		Wakka::ExistsPage()
@@ -17,11 +16,13 @@
  * @uses		Wakka::href()
  * @uses		Wakka::htmlspecialchars_ent()
  * @output		Wiki source of current page (if it exists).
- * @todo			- move structural elements to templating class;
- *				- create GeSHi highlighter for Wikka markup; #144
+ * @todo			move structural elements to templating class;
+ * @todo			create GeSHi highlighter for Wikka markup; #144
+ * @filesource
  */
-
-// i18n strings
+/**
+ * i18n
+ */
 if(!defined('SOURCE_HEADING')) define('SOURCE_HEADING', '=== Formatting code for [[%s]] ==='); //TODO: check for consistency with other handlers (formatting code vs. source vs. markup)
 if(!defined('RAW_LINK_LABEL')) define('RAW_LINK_LABEL', 'show source only');
 if(!defined('ERROR_NOT_EXISTING_PAGE')) define('ERROR_NOT_EXISTING_PAGE', 'Sorry, this page doesn\'t exist.');

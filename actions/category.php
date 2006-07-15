@@ -5,8 +5,6 @@
  * See WikiCategory to understand how the system works.
  * 
  * @package		Actions
- * @subpackage	Navigation
- * @name		category.php
  * @version 	$Id$
  * 
  * @input	string $page optional: the category for which you want to display the pages and categories. Default: current page
@@ -17,7 +15,7 @@
  * @uses	Wakka::Format()
  * @uses	Wakka::FullCategoryTextSearch()
  * @uses	Wakka::FullTextSearch()
- * 
+ * @filesource
  */
  
 if ($cattag = $_REQUEST["wakka"])

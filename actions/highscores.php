@@ -2,15 +2,15 @@
 /**
  * Displays a list of users, ranked after their ownership of pages in the wiki.
  * 
+ * @package		Actions
+ * @version		$Id$
+ *
  * @author	Chris Tessmer (19 Dec 2002)
  * @license	GPL
  * 
- * @package		Actions
- * @name		highscores.php
- * @version		$Id$
- * 
  * @uses	Wakka::Query()
  * @uses	Wakka::Format()
+ * @filesource
  */
 
 $str = 'SELECT Count(*) AS cnt, `name`  FROM ';

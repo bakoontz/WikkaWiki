@@ -4,25 +4,26 @@
  *
  * @package		Handlers
  * @subpackage	Page
- * @name		edit.php
+ * @version		$Id$
  *
  * @author		{@link http://wikkawiki.org/JsnX Jason Tourtelotte} (original code)
  * @author		{@link http://wikkawiki.org/Dartar Dario Taraborelli} (preliminary code cleanup, i18n)
  * @author		{@link http://wikkawiki.org/DotMG Mahefa Randimbisoa} (bugfixes)
- * @since		Wikka 1.1.6.2
- * @version		$Id$
  *
- * @todo		- move main <div> to templating class;
- * 			- optimization using history.back();
- * 			- use central regex library for validation;
+ * @todo		move main <div> to templating class;
+ * @todo		optimization using history.back();
+ * @todo		use central regex library for validation;
+ * @filesource
  */
-
-// defaults
+/**
+ * Defaults
+ */
 if(!defined('VALID_PAGENAME_PATTERN')) define ('VALID_PAGENAME_PATTERN', '/^[A-Za-zÄÖÜßäöü]+[A-Za-z0-9ÄÖÜßäöü]*$/s');
 if(!defined('MAX_TAG_LENGTH')) define ('MAX_TAG_LENGTH', 75);
 if(!defined('MAX_EDIT_NOTE_LENGTH')) define ('MAX_EDIT_NOTE_LENGTH', 50);
-
-//i18n
+/**
+ * i18n
+ */
 if(!defined('PREVIEW_HEADER')) define('PREVIEW_HEADER', 'Preview');
 if(!defined('LABEL_EDIT_NOTE')) define('LABEL_EDIT_NOTE', 'Please add a note on your edit');
 if (!defined('INPUT_ERROR_STYLE')) define('INPUT_ERROR_STYLE', 'class="highlight"');
@@ -222,5 +223,5 @@ else
 			"<br />\n";
 	echo $message;
 }
+echo '</div>'."\n" //TODO: move to templating class
 ?>
-</div>

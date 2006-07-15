@@ -1,15 +1,15 @@
 <?php
 /**
- * Shows the name of nonexisting pages to which other pages are linking to.
+ * Display a list of nonexisting pages to which other pages are linking to.
  * 
  * @package	Actions
- * @name	wantedpages.php
  * @version $Id$
  * 
  * @uses	 Wakka::LoadPagesLinkingTo()
  * @uses	 Wakka::Link()
  * @uses	 Wakka::LoadWantedPages()
- * @uses	 Wakka::href() 
+ * @uses	 Wakka::Href()
+ * @filesource
  */
 $linking_to = '';
 if (isset($_REQUEST["linking_to"]))

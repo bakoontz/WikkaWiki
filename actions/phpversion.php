@@ -3,9 +3,9 @@
  * Print current PHP version.
  * 
  * @package	Actions
- * @name	phpversion.php
  * @version	$Id$
+ * 
+ * @filesource
  */
-
 echo phpversion();
 ?>

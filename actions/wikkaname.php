@@ -1,12 +1,12 @@
 <?php
 /**
- * Print name of this WikkaWiki.
+ * Print the name of this WikkaWiki.
  * 
  * @package	Actions
- * @name	wikkaname.php
  * @version $Id$
  * 
  * @uses	Wakka::GetConfigValue()
+ * @filesource
  */
 echo $this->GetConfigValue("wakka_name");
 ?>

@@ -1,20 +1,22 @@
 <?php
 /**  
- * Search for a phrase.
+ * Search wiki pages for a phrase.
  * 
  * @package	Actions
- * @name	textsearch.php
  * @version $Id$
  * 
  * @uses	Wakka::FormClose()
  * @uses	Wakka::FormOpen()
  * @uses	Wakka::FullTextSearch()
- * @uses	Wakka::href()
+ * @uses	Wakka::Href()
  * @uses	Wakka::HasAccess()
  * @uses	Wakka::CheckMySQLVersion()
  * @uses	Wakka::htmlspecialchars_ent()
+ * @filesource
  */
-//constants
+/**
+ * i18n
+ */
 if (!defined('SEARCH_FOR')) define('SEARCH_FOR', 'Search for');
 if (!defined('SEARCH_ZERO_MATCH')) define('SEARCH_ZERO_MATCH', 'No matches');
 if (!defined('SEARCH_ONE_MATCH')) define('SEARCH_ONE_MATCH', 'One match found');

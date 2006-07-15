@@ -5,8 +5,20 @@
  * It includes the Wakka class, which provides the core functions
  * to run Wikka. 
  *
+ * @package Core
+ * @subpackage Libs
+ * @version $Id$
+ * @filesource
  */
- 
+/**
+ * The Wikka core.
+ * 
+ * This class contains all the core methods used to run Wikka.
+ * @name Wakka
+ * @package Core
+ * @subpackage Libs
+ * 
+ */
 class Wakka
 {
 	var $config = array();
@@ -18,7 +30,9 @@ class Wakka
 	var $VERSION;
 	var $cookies_sent = false;
 
-	// constructor
+	/**
+	 * Constructor
+	 */
 	function Wakka($config)
 	{
 		$this->config = $config;
@@ -34,7 +48,9 @@ class Wakka
  		$this->VERSION = WAKKA_VERSION;
 	}
 
-	// DATABASE
+	/**
+	 * Database methods
+	 */
 	function Query($query)
 	{
 		$start = $this->GetMicroTime();
@@ -97,7 +113,9 @@ class Wakka
 		}
 	}
 
-	// MISC
+	/**
+	 * Misc methods
+	 */
 	function GetMicroTime() { list($usec, $sec) = explode(" ",microtime()); return ((float)$usec + (float)$sec); }
 	function IncludeBuffered($filename, $notfoundText = "", $vars = "", $path = "")
 	{
@@ -181,11 +199,11 @@ class Wakka
 	 * entity references are also rendered as such instead of as their corresponding characters.
 	 *
 	 * @access	public
-	 * @since	wikka 1.1.6.0
+	 * @since	Wikka 1.1.6.0
 	 * @version	1.0
 	 * @todo	(later) support full range of situations where (in SGML) a terminating ; may legally
 	 *			be omitted (end, newline and tag are merely the most common ones).
-		* @todo (maybe) recognize valid html entities, thus transform &error; to &amp;error;
+	 * @todo (maybe) recognize valid html entities, thus transform &error; to &amp;error;
 	 *
 	 * @param	string	$text required: text to be converted
 	 * @param	integer	$quote_style optional: quoting style - can be ENT_COMPAT (default, escape
@@ -243,10 +261,10 @@ class Wakka
 	 *
 	 * @access	public
 	 * @since	wikka 1.1.6.0
-	 * @uses	wakka::config
+	 * @uses	Wakka::config
 	 * @uses	GeShi
-	 * @todo	- support for GeSHi line number styles
-	 *			- enable error handling
+	 * @todo		support for GeSHi line number styles
+	 * @todo		enable error handling
 	 *
 	 * @param	string	$sourcecode	required: source code to be highlighted
 	 * @param	string	$language	required: language spec to select highlighter
@@ -300,7 +318,9 @@ class Wakka
 		return $geshi->parse_code();
 	}
 
-	// VARIABLES
+	/**
+	 * Variable-related methods
+	 */
 	function GetPageTag() { return $this->tag; }
 	function GetPageTime() { return $this->page["time"]; }
 	function GetMethod() { return $this->method; }
@@ -308,7 +328,9 @@ class Wakka
 	function GetWakkaName() { return $this->GetConfigValue("wakka_name"); }
 	function GetWakkaVersion() { return $this->VERSION; }
 
-	// PAGES
+	/**
+	 * Page-related methods
+	 */
 	function LoadPage($tag, $time = "", $cache = 1) {
 		// retrieve from cache
 		if (!$time && $cache) {

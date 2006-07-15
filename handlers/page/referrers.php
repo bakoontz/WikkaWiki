@@ -1,25 +1,24 @@
-<div class="page">
 <?php
 /**
- * Show external referrers linking to the page/ the wiki.
+ * Show external referrers linking to the current page or to this wiki.
  * 
  * @package		Handlers
- * @subpackage	Page
- * @name		referrers.php
+ * @subpackage	Referrers
  * @version		$Id$
  * 
  * @uses		Wakka::GetConfigValue()
  * @uses		Wakka::GetPageTag()
  * @uses		Wakka::GetUser()
- * @uses		Wakka::href()
  * @uses		Wakka::Href()
  * @uses		Wakka::htmlspecialchars_ent()
  * @uses		Wakka::IsAdmin()
  * @uses		Wakka::Link
  * @uses		Wakka::LoadReferrers()
  * 
- * @todo		- move main <div> to templating class
+ * @todo		move main <div> to templating class
+ * @filesource
  */
+echo '<div class="page">'."\n"; //TODO: move to templating class
 
 $global = '';
 $IsAdmin = $this->IsAdmin();
@@ -69,6 +68,5 @@ else
 	print("<br />[<a href=\"".$this->href("referrers_sites", "", "global=1")."\">View global referring sites</a> | <a href=\"".$this->href("referrers", "", "global=1")."\">View global referrers</a> | <a href=\"".$this->href("review_blacklist")."\">View referrer blacklist</a>]"); # i18n
 }
 
-
+echo '</div>'."\n" //TODO: move to templating class
 ?>
-</div>

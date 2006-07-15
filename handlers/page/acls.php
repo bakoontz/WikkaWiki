@@ -3,18 +3,20 @@
  * Display a form to manage ACL for the current page.
  *
  * @package		Handlers
- * @name		acls.php
+ * @subpackage 	Page
+ * @version		$Id$
  *
  * @author		{@link http://wikkawiki.org/MinusF MinusF} (preliminary code cleanup, css selectors)
  * @author		{@link http://wikkawiki.org/DarTar Dario Taraborelli} (further cleanup)
  * @author		{@link http://wikkawiki.org/NilsLindenberg Nils Lindenberg} (i18n)
- * @since		Wikka 1.1.6.2
- * @version		$Id$
  *
- * @todo		- move main <div> to templating class
+ * @todo		move main <div> to templating class
+ * @filesource
  */
 
-//i18n
+/**
+ * i18n
+ */
 if (!defined('ACLS_UPDATED')) define('ACLS_UPDATED', 'Access control lists updated.');
 if (!defined('NO_PAGE_OWNER')) define('NO_PAGE_OWNER', '(Nobody)');
 if (!defined('NOT_PAGE_OWNER')) define('NOT_PAGE_OWNER', 'You are not the owner of this page.');

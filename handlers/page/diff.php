@@ -1,15 +1,14 @@
-<div class="page">
 <?php
 /**
  * Compare two versions of a page and output the differences.
  * 
  * @package     Handlers
  * @subpackage  Page
- * @name        diff.php
  * @version 	$Id$
  * 
  * @uses	Wakka::HasAccess()
- * @todo		- move main <div> to templating class;
+ * @todo		move main <div> to templating class;
+ * @filesource
  */
 
 // i18n
@@ -18,6 +17,7 @@ define('ERROR_NO_PAGE_ACCESS', 'You are not authorized to view this page.');
 define('CONTENT_ADDITIONS_HEADER', 'Additions:');
 define('CONTENT_DELETIONS_HEADER', 'Deletions:');
 define('CONTENT_NO_DIFFERENCES', 'No Differences');
+echo '<div class="page">'."\n"; //TODO: move to templating class
 
 if ($this->HasAccess("read")) 
 {
@@ -180,5 +180,5 @@ else die(ERROR_DIV_LIBRARY_MISSING);
 else{
 	echo '<em>'.ERROR_NO_PAGE_ACCESS.'</em>';
 }
+echo '</div>'."\n" //TODO: move to templating class
 ?>
-</div>

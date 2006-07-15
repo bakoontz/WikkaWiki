@@ -3,11 +3,11 @@
  * Display a mindmap as XML. 
  * 
  * @package		Handlers
- * @subpackage	Mindmap
- * @name		mindmap.mm.php
+ * @subpackage	Mindmaps
  * @version		$Id$
  * 
  * @uses		Wakka::HasAccess()
+ * @filesource
  */
 if ($this->HasAccess("read"))
 {

@@ -1,13 +1,14 @@
 <?php
 /**
- * Show the configuration form for a installation or 
- * show the values in case of an upgrade.
+ * Display the web wizard to install or upgrade Wikka.
  * 
- * @package	Install
+ * @package	Setup
  * @version	$Id$
+ * @filesource
  */
-
-// i18n section
+/**
+ * i18n
+ */
 if (!defined('SITE_SUFFIX_INFO')) define ('SITE_SUFFIX_INFO', 'Suffix used for cookies and part of the session name. This allows you to run multiple Wikka installations on the same server by configuring them to use different wiki prefixes.');
 if (!defined('SITE_SUFFIX_LABEL')) define ('SITE_SUFFIX_LABEL', 'Your Wiki suffix:');
 

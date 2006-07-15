@@ -1,10 +1,9 @@
 <?php
 /**
- * RSS 2.0 Feed of the revisions of the page.
+ * Generate a RSS 2.0 feed of the revisions of the current page.
  * 
  * @package		Handlers
- * @subpackage	Page
- * @name		revisions.xml.php
+ * @subpackage	XML
  * @version		$Id$
  * 
  * @uses		Wakka::GetConfigValue()
@@ -14,10 +13,11 @@
  * @uses		Wakka::htmlspecialchars_ent()
  * @uses		Wakka::FormClose()
  * 
- * @todo		- move main <div> to templating class
+ * @filesource
  */
-
-// i18n strings
+/**
+ * i18n
+ */
 define('EDITED_BY', 'Edited by %s');
 define('ERROR_ACL_READ_INFO', 'You\'re not allowed to access this information.');
 define('HISTORY_REVISIONS_OF', 'History/revisions of %s');

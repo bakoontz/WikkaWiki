@@ -2,8 +2,8 @@
 /**
  * A simple forwarder to wikka.php.
  * 
- * @name Index
  * @package Core
+ * @filesource
 */
   header('Location: wikka.php');
   exit;

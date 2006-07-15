@@ -1,13 +1,13 @@
 <?php
 /**
- * Print name of this WikkaWiki.
+ * Print information on the current release.
  * 
  * @package	Actions
- * @name	wikkachanges.php
  * @version $Id$
  * 
  * @uses	Wakka::Format()
  * @todo	should be a default page, not an action
+ * @filesource
  */
 
 $output = "=====Wikka Release Notes=====\n\n".

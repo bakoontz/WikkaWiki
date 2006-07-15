@@ -1,6 +1,6 @@
 <?php
 /**
-* Renders a string as colored text.
+* Render a string as colored text.
 *
 * You can specifiy either one of HTML defined names or hex-values (with the former one 
 * taking priority). An optional background color can also be specified.
@@ -23,15 +23,12 @@
 * @input    string $bg optional: (html)name or hex-value for the backgroundcolor;
 * @output   colored text
 *
-* @constraint    at least one valid parameter for $c (or $hex or $fg) or $bg is required
-*
-* @documentation  {@link http://wikkawiki.org/PatternValidColorInfoFR}
-* @documentation  {@link http://wikkawiki.org/ColorActionInfo}
-*
 * @todo     make it part of the formatter instead of using an action
+* @filesource
 */
-
-// *** Constant section ***
+/**
+ * i18n
+ */
 if (!defined('ERROR_NO_TEXT_GIVEN')) define('ERROR_NO_TEXT_GIVEN','There is no text to highlight!');
 if (!defined('ERROR_NO_COLOR_SPECIFIED')) define('ERROR_NO_COLOR_SPECIFIED', 'Sorry, but you did not specify a color for highlighting!');
 
