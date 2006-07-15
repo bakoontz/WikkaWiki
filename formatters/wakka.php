@@ -48,6 +48,7 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 		static $br = 1;
 		static $trigger_table = 0;
 		static $trigger_rowgroup = 0;
+		static $trigger_colgroup = 0;
 		static $trigger_bold = 0;
 		static $trigger_italic = 0;
 		static $trigger_underline = 0;
@@ -70,7 +71,8 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 
 		if ((!is_array($things)) && ($things == 'closetags'))
 		{
-			if (2 < $trigger_table) echo ('</th></tr>');
+			if (3 < $trigger_table) echo ('</caption>');
+			else if (2 < $trigger_table) echo ('</th></tr>');
 			else if (1 < $trigger_table) echo ('</td></tr>');
 			if (2 < $trigger_rowgroup) echo ('</tbody>');
 			else if (1 < $trigger_rowgroup) echo ('</tfoot>');
@@ -93,27 +95,23 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 			return;
 		}
 
-		if ( preg_match("/^\|(\?)(.*?)\|\n$/", $thing, $matches) )
+		// table. trigger means: 0==no table, 1==in table no cell, 2==in table data cell, 3==in table header cell, 4==in caption
+		else if ( preg_match("/^\|(\?|!|=|\[|\]|#|_|-)?(\(.*?\))?\|(\n)?$/", $thing, $matches) )
 		{
-			if ( $trigger_table == 0 )
-			{
-				$trigger_table = 1;
-				return '<table class="wikka" summary="'.$matches[2].'">'."\n";
-			}
-		}
-		// table. trigger means: 0==no table, 1==in table no cell, 2==in table data cell, 3==in table header cell
-		else if ( preg_match("/^\|(=|!|#)?(c|r|h|f|b)?(\d*)?(?:,)?(\d*)?\|(\n)?$/", $thing, $matches) )
-		{
-			//Set up the two variables that will aggregate the html markup
+			//Set up the variables that will aggregate the html markup
 			$close_part = '';
 			$open_part  = '';
-			//First catch is header|caption|rowgroup, second is attribute, third is colspan, fourth is rowspan, fifth is linebreak.
-			if ( $trigger_table == 4 )
-			{
+			$linebreak_after_open = '';
+			$selfclose = '';
+			
+			//First catch is caption|header|rowgroup, second is attributes, third is linebreak.
+			if ( $trigger_table == 4 ) {
+				$close_part = '</caption>'."\n";
 				$trigger_table = 1;
-				return '</caption>'."\n"; //Can return here, it is closed.
+				return $close_part;
 			}
-			else if ( $trigger_table == 3 )
+			
+			if ( $trigger_table == 3 )
 			{
 				$close_part = '</th>';
 			}
@@ -121,28 +119,41 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 			{
 				$close_part = '</td>';
 			}
-			else if ( $trigger_table == 1 )
+			else if ( $trigger_table == 1 || $matches[1] == '!')
 			{
 				$close_part = '';
 			}
 			else
 			{
 				//This is actually opening the table (i.e. nothing at all to close).
+				$trigger_table = 1;
 				$close_part = '<table class="wikka">'."\n";
 			}
 			
-			if ( $trigger_table > 1 && $matches[5] == "\n" )
+			if ( $trigger_table > 1 && $matches[3] == "\n" )
 			{
 				$trigger_table = 1;
 				return $close_part .= '</tr>'."\n"; //Can return here, it is closed-
 			}
+			
+			if ( $trigger_colgroup == 1 && $matches[3] == "\n" )
+			{
+				$trigger_colgroup = 0;
+				return $close_part .= '</colgroup>'."\n"; //Can return here, it is closed-
+			}
 
 			if ( $matches[1] == '!' )
 			{
-				$trigger_table = 4;
-				$open_part = '<caption>';
+				$trigger_table = 1;
+				$open_part = '<table class="wikka"';
+				$linebreak_after_open = "\n";
 			}
-			else if ( $matches[1] == '#' )
+			else if ( $matches[1] == '?' )
+			{
+				$trigger_table = 4;
+				$open_part = '<caption';
+			}
+			else if ( $matches[1] == '#' || $matches[1] == '[' || $matches[1] == ']' )
 			{
 				//If we're here, we want to close any open rowgroup.
 				if (2 < $trigger_rowgroup)
@@ -158,26 +169,40 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 					$close_part .= '</thead>'."\n";
 				}
 
-				if ($matches[2] && ($matches[2] == 'h' || $matches[2] == 'f') )
+				if ($matches[1] == '[' )
 				{
-					//thead or tfoot
-					if ($matches[2] == 'h')
-					{
-						$open_part .= '<thead>'."\n";
-						$trigger_rowgroup = 1;
-					}
-					else if ($matches[2] == 'f')
-					{
-						$open_part .= '<tfoot>'."\n";
-						$trigger_rowgroup = 2;
-					}
+					$open_part .= '<thead';
+					$trigger_rowgroup = 1;
+				}
+				else if ($matches[1] == ']' )
+				{
+					$open_part .= '<tfoot';
+					$trigger_rowgroup = 2;
 				}
 				else
 				{
-					//tbody
-					$open_part .= '<tbody>'."\n";
+					$open_part .= '<tbody';
 					$trigger_rowgroup = 3;
 				}
+
+				$linebreak_after_open = "\n";
+			}
+			else if ( $matches[1] == '_' )
+			{
+				//close any open colgroup
+				if ( $trigger_colgroup == 1 )
+				{
+					$close_part .= '</colgroup>'."\n";
+				}
+				
+				$trigger_colgroup = 1;
+				$open_part .= '<colgroup';
+			}
+			else if ( $matches[1] == '-' )
+			{
+				$open_part .= '<col';
+				$selfclose = ' /';
+				if ( $matches[3] ) $linebreak_after_open = "\n";
 			}
 			else
 			{
@@ -197,36 +222,26 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 				{
 					$trigger_table = 3;
 					$open_part .= '<th';
-					if ( $matches[2] )
-					{
-						if ( $matches[2] == 'c' )
-						{
-							$open_part .= ' scope="col"';
-						}
-						else if ( $matches[2] == 'r' )
-						{
-							$open_part .= ' scope="row"';
-					}
-					}
 				}
 				else
 				{
 					$trigger_table = 2;
 					$open_part .= '<td';
 				}
-				
-				if ( $matches[3] && $matches[3] > 1 )
-				{
-					$open_part .= ' colspan="'.$matches[3].'"';
-				}
 
-				if ( $matches[4] && $matches[4] > 1 )
-				{
-					$open_part .= ' rowspan="'.$matches[4].'"';
-				}
-				$open_part .= '>';
 			}
-			return $close_part . $open_part;
+			
+			if ( preg_match("/\((.*)\)/", $matches[2], $attribs ) )
+			{
+//				$hints = array('core' => 'core', 'i18n' => 'i18n');
+				$hints = array();
+				if ($trigger_table == 2 || $trigger_table == 3) $hints['cell'] = 'cell';
+				else $hints['other_table'] = 'other_table';
+				$open_part .= parse_attributes($attribs, $hints);
+			}
+
+			$open_part .= $selfclose.'>';
+			return $close_part . $open_part . $linebreak_after_open;
 		}
 		else if ( $trigger_table == 1 )
 		{
@@ -580,6 +595,48 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 		}
 		// if we reach this point, it must have been an accident.
 		return $thing;
+	}
+}
+
+if (!function_exists("parse_attributes"))
+{
+	function parse_attributes($attribs, $hints) {
+
+		static $attributes = array(
+			'core' => array( 'c' => 'class','i' => 'id','s' => 'style','t' => 'title'),
+			'i18n' => array( 'd' => 'dir','l' => 'xml:lang'),
+			'cell' => array( 'a' => 'abbr','h' => 'headers','o' => 'scope','x' => 'colspan','y' => 'rowspan','z' => 'axis'),
+			'other_table' => array( 'p' => 'span','u' => 'summary')
+			);
+		
+		//adds in default hints ( core + i18n )
+		$hints['core'] = 'core';
+		$hints['i18n'] = 'i18n';
+
+		$attribs = preg_split('/;(?=.:)/', $attribs[1]);
+		$return_value = '';
+
+		foreach ( $attribs as $attrib )
+		{
+			list ($key, $value) = explode(':', $attrib, 2);
+			foreach ( $hints as $hint )
+			{
+				$temp = $attributes[$hint];
+				if ($temp) $a = $temp[$key];
+				if ($a) break;
+			}
+	
+			if (!$a)
+			{
+				echo '<!--Cannot find attribute for key "'.$key.'" from hints given.-->'."\n";
+			}
+			else
+			{
+				$return_value .= ' '.$a.'="'.$value.'"';
+			}
+		}
+
+		return $return_value;
 	}
 }
 
