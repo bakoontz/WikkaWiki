@@ -4,6 +4,8 @@
  *
  * @package		Actions
  * @version		$Id$
+ * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
+ * @filesource
  *
  * @author		{@link http://wikkawiki.org/DarTar Dario Taraborelli} (first draft)
  * @author		{@link http://wikkawiki.org/MinusF MinusF} (code cleanup and validation)
@@ -24,7 +26,6 @@
  * @uses	Wakka::htmlspecialchars_ent()
  * @todo		make date/time format system-configurable;
  * @todo 	use FormatUser() method to render author name;
- * @filesource
  */
 /**
  * defaults

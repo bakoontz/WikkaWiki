@@ -4,10 +4,11 @@
  *
  * @package		Actions
  * @version		$Id$
+ * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
+ * @filesource
  *
  * @author		{@link http://wikkawiki.org/DarTar Dario Taraborelli}
  * @since		Wikka 1.1.6.2
- * @filesource
  */
 /**
  * i18n

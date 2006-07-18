@@ -4,12 +4,13 @@
  *
  * @package		Actions
  * @version		$Id$
+ * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
+ * @filesource
  *
  * @author		{@link http://wikkawiki.org/DarTar Dario Taraborelli} (preliminary code cleanup)
  * @author		{@link http://wikkawiki.org/NickDamoulakis Nick Damoulakis} (ACL check)
  *
  * @todo			make datetime format configurable
- * @filesource
  */
 /**
  * defaults

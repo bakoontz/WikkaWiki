@@ -4,6 +4,8 @@
  * 
  * @package		Actions
  * @version		$Id$
+ * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
+ * @filesource
  * 
  * @uses	Wakka::Link()
  * @uses	Wakka::ReturnSafeHTML()
@@ -12,7 +14,6 @@
  * @input	string $title optional: title text displayed when mouse hovers above image
  * @input	string $class optional: a class for the image
  * @input	string $class optional: an alt text
- * @filesource
  */
 
 $title = 'WikiImage';

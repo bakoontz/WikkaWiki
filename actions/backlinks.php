@@ -8,11 +8,12 @@
  * 
  * @package		Actions
  * @version		$Id$
+ * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
+ * @filesource
  * 
  * @output	a list of the pages linking to the page
  * @uses	Wakka::Link()
  * @uses	Wakka::LoadPagesLinkingTo()
- * @filesource
  */
 
 if ($pages = $this->LoadPagesLinkingTo($this->getPageTag())) {

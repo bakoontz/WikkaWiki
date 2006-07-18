@@ -5,6 +5,8 @@
  * @package		Handlers
  * @subpackage	Files
  * @version		$Id$
+ * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
+ * @filesource
  * 
  * @uses		mkdir_r()
  * @uses		Wakka::GetPageTag()
@@ -12,7 +14,6 @@
  * @uses		Wakka::Href()
  * @uses		Wakka::IsAdmin()
  * @uses		Wakka::redirect()
- * @filesource
  */
 
 // upload path

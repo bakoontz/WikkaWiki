@@ -11,6 +11,8 @@
  *
  * @package		Actions
  * @version		$Id$
+ * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
+ * @filesource
  *
  * @author		{@link http://wikkawiki.org/JavaWoman Marjolein Katsma} (first version)
  * @author		{@link http://wikkawiki.org/DarTar Dario Taraborelli} (admin check)
@@ -18,7 +20,6 @@
  *
  * @input		string	$show	optional: what type of system info to show (OS, machine or host);
  *				default: empty, shows all information
- * @filesource
  */
 /**
  * i18n

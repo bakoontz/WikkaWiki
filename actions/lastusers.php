@@ -4,11 +4,12 @@
  * 
  * @package		Actions
  * @version		$Id$
+ * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
+ * @filesource
  * 
  * @uses	Wakka::LoadAll()
  * @uses	Wakka::LoadSingle()
  * @uses	Wakka::Link()
- * @filesource
  */
 /**
  * i18n

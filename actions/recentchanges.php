@@ -4,13 +4,15 @@
  *
  * @package		Actions
  * @version		$Id$
+ * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
+ * @filesource
  *
  * @author    	{@link http://www.mornography.de/ Hendrik Mans} (wakka code)
  * @author		{@link http://wikkawiki.org/DarTar Dario Taraborelli} (preliminary code cleanup)
  * 
  * @uses		Wakka::Format()
  * @uses		Wakka::LoadRecentlyChanged()
- * @uses		Wakka::href()
+ * @uses		Wakka::Href()
  * @uses		Wakka::GetUser()
  * @uses		Wakka::HasAccess()
  * @uses		Wakka::LoadUser()

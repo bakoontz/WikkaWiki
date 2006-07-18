@@ -5,13 +5,14 @@
  * @package	Handlers
  * @subpackage	Comments
  * @version $Id$
+ * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
+ * @filesource
  * 
  * @uses	Wakka::HasAccess()
  * @uses	Wakka::Href()
  * @uses	Wakka::htmlspecialchars_ent()
  * @uses	Wakka::redirect()
  * @uses	Wakka::SaveComment()
- * @filesource
  */
 /**
  * i18n

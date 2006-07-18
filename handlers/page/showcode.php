@@ -5,6 +5,8 @@
  * @package		Handlers
  * @subpackage	Page
  * @version		$Id$
+ * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
+ * @filesource
  *
  * @author		{@link http://wikkawiki.org/JsnX JsnX} (first draft)
  * @author		{@link http://wikkawiki.org/DarTar Dario Taraborelli} (code cleanup, i18n strings and DB check)
@@ -18,7 +20,6 @@
  * @output		Wiki source of current page (if it exists).
  * @todo			move structural elements to templating class;
  * @todo			create GeSHi highlighter for Wikka markup; #144
- * @filesource
  */
 /**
  * i18n

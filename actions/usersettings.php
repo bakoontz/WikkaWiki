@@ -4,6 +4,8 @@
  *
  * @package		Actions
  * @version		$Id$
+ * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
+ * @filesource
  *
  * @author		{@link http://wikkawiki.org/MinusF MinusF} (code cleanup and validation)
  * @author		{@link http://wikkawiki.org/DarTar Dario Taraborelli} (further cleanup, i18n, replaced JS dialogs with server-generated messages)
@@ -13,7 +15,6 @@
  * @todo			add documentation links or short explanations for each option;
  * @todo			use error handler for displaying messages and highlighting invalid input fields;
  * @todo			remove useless redirections;
- * @filesource
  */
 /**
  * defaults

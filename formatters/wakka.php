@@ -6,6 +6,8 @@
  * 
  * @package Formatters
  * @version $Id$
+ * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
+ * @filesource
  *
  * @author {@link http://wikkawiki.org/JsnX Jason Tourtelotte}
  * @author {@link http://wikkawiki.org/DotMG Mahefa Randimbisoa}
@@ -16,7 +18,6 @@
  * 
  * @todo		add support for formatter plugins;
  * @todo		use a central RegEx library #34;
- * @filesource
  */
 /**
  * i18n

@@ -4,13 +4,13 @@
  * 
  * @package		Actions
  * @version		$Id$
+ * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
+ * @filesource
  *
  * @author	Chris Tessmer (19 Dec 2002)
- * @license	GPL
  * 
  * @uses	Wakka::Query()
  * @uses	Wakka::Format()
- * @filesource
  */
 
 $str = 'SELECT Count(*) AS cnt, `name`  FROM ';

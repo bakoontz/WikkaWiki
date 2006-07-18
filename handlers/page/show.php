@@ -5,6 +5,8 @@
  * @package		Handlers
  * @subpackage	Page
  * @version		$Id$
+ * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
+ * @filesource
  * 
  * @uses		Wakka::Format()
  * @uses		Wakka::FormClose()
@@ -20,8 +22,8 @@
  * @uses		Wakka::LoadPage()
  * @uses		Wakka::LoadUser()
  * @uses		Wakka::UserIsOwner()
+ * 
  * @todo		move <div> to template
- * @filesource
  */
  
 echo '<div class="page"';

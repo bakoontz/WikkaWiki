@@ -5,6 +5,8 @@
  * @package		Handlers
  * @subpackage	Page
  * @version		$Id$
+ * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
+ * @filesource
  *
  * @author		{@link http://wikkawiki.org/JsnX Jason Tourtelotte} (original code)
  * @author		{@link http://wikkawiki.org/Dartar Dario Taraborelli} (preliminary code cleanup, i18n)
@@ -13,7 +15,6 @@
  * @todo		move main <div> to templating class;
  * @todo		optimization using history.back();
  * @todo		use central regex library for validation;
- * @filesource
  */
 /**
  * Defaults

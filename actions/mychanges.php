@@ -7,6 +7,8 @@
  * 
  * @package Actions
  * @version	$Id$
+ * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
+ * @filesource
  * 
  * @author Carlo Zottmann
  * 
@@ -15,7 +17,6 @@
  * @uses	Wakka::Link()
  * @uses	Wakka::href()
  * @uses	Wakka::GetUserName()
- * @filesource
  */
 
 if ($user = $this->GetUser())

@@ -4,17 +4,18 @@
  * 
  * @package		Actions
  * @version		$Id$
+ * @license http://comawiki.martignier.net/LizenzenUndBedingungen
+ * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
+ * @filesource
  *  
  * @author	{@link http://comawiki.martignier.net Costal Martignier} initial action
  * @author	{@link http://wikkawiki.org/NilsLindenberg Nils Lindenberg} rewritten
  * @author	{@link http://wikkawiki.org/DarTar Dario Taraborelli} further cleanup, error styling and improved logical structure
- * @license http://comawiki.martignier.net/LizenzenUndBedingungen
  * 
  * @uses	Wakka::Format()
  * @uses	Wakka::LoadUser()
  * @uses	Wakka::FormOpen()
  * @uses	Wakka::FormClose()
- * @filesource
  */ 
 /**
  * i18n

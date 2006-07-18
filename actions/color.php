@@ -7,6 +7,8 @@
 *
 * @package    Actions
 * @version    $Id$
+* @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
+* @filesource
 *
 * @author    {@link http://www.mornography.de/ Hendrik Mans}
 * @author    {@link http://wikkawiki.org/NilsLindenberg Nils Lindenberg} (modifications)
@@ -24,7 +26,6 @@
 * @output   colored text
 *
 * @todo     make it part of the formatter instead of using an action
-* @filesource
 */
 /**
  * i18n

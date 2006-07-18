@@ -39,6 +39,7 @@
  *
  * @todo		take care we don't go over date limits for PHP with navigation links
  * @todo		configurable first day of week
+ * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
  */
 

@@ -5,12 +5,14 @@
  * @package		Handlers
  * @subpackage	Mindmaps
  * @version		$Id$
+ * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
+ * @filesource
  * 
  * @uses		Wakka::Href()
  * @uses		Wakka::htmlspecialchars_ent()
  * @uses		Wakka::LoadRecentlyChanged()
+ * 
  * @todo		i18n
- * @filesource
  */
 
 header("Content-type: text/xml");

@@ -4,12 +4,13 @@
  * 
  * @package	Actions
  * @version $Id$
+ * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
+ * @filesource
  * 
  * @uses	 Wakka::LoadPagesLinkingTo()
  * @uses	 Wakka::Link()
  * @uses	 Wakka::LoadWantedPages()
  * @uses	 Wakka::Href()
- * @filesource
  */
 $linking_to = '';
 if (isset($_REQUEST["linking_to"]))

@@ -4,6 +4,8 @@
  * 
  * @package		Template
  * @version		$Id$
+ * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
+ * @filesource
  * 
  * @uses	Wakka::GetRedirectMessage()
  * @uses	Wakka::GetUser()
@@ -13,7 +15,6 @@
  * @uses	Wakka::GetMethod()
  * @uses	Wakka::Href()
  * @uses	Wakka::Format()
- * @filesource
  */
 
 $message = $this->GetRedirectMessage();

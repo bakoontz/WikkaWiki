@@ -7,6 +7,8 @@
  * @package	Handlers
  * @subpackage Codeblocks
  * @version	$Id$
+ * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
+ * @filesource
  * 
  * @author	{@link http://wikkawiki.org/DarTar Dario Taraborelli}
  * @since	Wikka 1.1.6.2
@@ -15,7 +17,6 @@
  * @todo add configurable filename max. length;
  * @todo use central regex library for filename validation;
  * @todo check time format for consistency;
- * @filesource
  */
 /**
  * i18n

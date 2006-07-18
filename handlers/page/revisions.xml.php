@@ -5,6 +5,8 @@
  * @package		Handlers
  * @subpackage	XML
  * @version		$Id$
+ * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
+ * @filesource
  * 
  * @uses		Wakka::GetConfigValue()
  * @uses		Wakka::HasAccess()
@@ -12,8 +14,6 @@
  * @uses		Wakka::Href()
  * @uses		Wakka::htmlspecialchars_ent()
  * @uses		Wakka::FormClose()
- * 
- * @filesource
  */
 /**
  * i18n

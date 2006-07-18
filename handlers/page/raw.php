@@ -5,9 +5,10 @@
  * @package		Handlers
  * @subpackage	Page
  * @version		$Id$
+ * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
+ * @filesource
  * 
  * @uses		Wakka::HasAccess()
- * @filesource
  */
 
 if ($this->HasAccess("read") && $this->page)

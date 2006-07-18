@@ -4,11 +4,12 @@
  * 
  * @package		Actions
  * @version		$Id$
+ * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
+ * @filesource
  * 
  * @uses	Wakka::cleanUrl()
  * @uses	Wakka::htmlspecialchars_ent()
  * @todo should we keep an action for mindmaps on top of the handler/formatter?
- * @filesource
  */
 
 $mindmap_url = $vars['url'];

@@ -4,12 +4,13 @@
  * 
  * @package Actions
  * @version	$Id$
+ * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
+ * @filesource
+ * 
  * @author Chris Tessmer
- * @license	GPL
  * 
  * @uses	Wakka::GetUserName()
  * @uses	Wakka::Query()
- * @filesource
  */
 
 $str = 'SELECT COUNT(*) FROM '.$this->config["table_prefix"].'pages WHERE `owner` ';

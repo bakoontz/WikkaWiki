@@ -5,6 +5,7 @@
  * @package		Handlers
  * @subpackage	Page
  * @version		$Id$
+ * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * 
  * @uses		Wakka::HasAccess()
  * @uses		Wakka::LoadRevisions()
@@ -15,7 +16,6 @@
  * @uses		Wakka::Href()
  * 
  * @todo		move main <div> to templating class
- * @filesource
  */
 /**
  * i18n

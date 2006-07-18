@@ -1,12 +1,14 @@
 <?php
 /**
- * Show blacklisted referrers.
+ * Show a list of blacklisted referrers.
  * 
  * Admins have the possibility to remove entries.
  * 
  * @package		Handlers
  * @subpackage	Referrers
  * @version		$Id$
+ * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
+ * @filesource
  * 
  * @uses		Wakka::IsAdmin()
  * @uses		Wakka::Href()
@@ -16,7 +18,6 @@
  * @uses		Wakka::redirect()
  * 
  * @todo		move main <div> to templating class
- * @filesource
  */
 echo '<div class="page">'."\n"; //TODO: move to templating class
 

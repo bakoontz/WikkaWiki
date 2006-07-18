@@ -4,8 +4,10 @@
  * 
  * @package	Formatters
  * @version	$Id$
- * @uses		Wakka::method()
+ * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
+ * 
+ * @uses		Wakka::method()
  */
 
 if ($this->method == "diff") {

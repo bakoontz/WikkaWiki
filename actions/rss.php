@@ -1,10 +1,10 @@
 <?php
 /**
- * Caches and displays an RSS feed.
+ * Cache and display an RSS feed.
  * 
  * Action usage: {{rss http://domain.com/feed.xml}} 
  * or {{rss url="http://domain.com/feed.xml" cachetime="30"}}.
- * NOTE1 : in Onyx-RSS default is "debugMode" which results in all errors being printed
+ * NOTE 1 : in Onyx-RSS default is "debugMode" which results in all errors being printed
  * this could be suppressed by turning debug mode off, but then we'd never have a
  * clue about the cause of any error.
  * A better (preliminary) approach seems to be to override the raiseError() method
@@ -15,6 +15,8 @@
  * 
  * @package		Actions
  * @version		$Id$
+ * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
+ * @filesource
  * 
  * @input		string $url mandotary: URL of the feed
  * @input		integer $cachetime optional: time in minutes to cach the feed
@@ -22,7 +24,6 @@
  * @uses		Wakka::ReturnSafeHTML()
  * @todo		should use makeList to generate the list; 
  * @todo		maybe better convert to using Magpie first;
- * @filesource
  */
 
 $max_items = 30; // set this to the maximum items the RSS action should ever display

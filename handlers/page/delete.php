@@ -5,6 +5,8 @@
  * @package     Handlers
  * @subpackage  Page
  * @version		$Id$
+ * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
+ * @filesource
  * 
  * @uses		Wakka::FormOpen()
  * @uses		Wakka::FormClose()
@@ -14,7 +16,6 @@
  * @uses		Wakka::Query()
  * @uses		Wakka::Redirect()
  * @todo		move main <div> to templating class;
- * @filesource
  */
 echo '<div class="page">'."\n"; //TODO: move to templating class
 

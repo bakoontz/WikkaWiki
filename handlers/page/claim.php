@@ -5,6 +5,8 @@
  * @package		Handlers
  * @subpackage	Page 
  * @version		$Id$
+ * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
+ * @filesource
  * 
  * @uses	Wakka::GetPageOwner()
  * @uses	Wakka::GetPageTag()
@@ -13,7 +15,6 @@
  * @uses	Wakka::Href()
  * @uses	Wakka::SetRedirectMessager()
  * @uses	Wakka::Redirect()
- * @filesource
  */
 
 /**

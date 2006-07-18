@@ -4,6 +4,8 @@
  * 
  * @package	Actions
  * @version $Id$
+ * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
+ * @filesource
  *
  * @input	string $cells mandatory: string with all cells, separated by ';' and '###' for empty cells
  * @input	integer $cellpadding optional: padding within cells in pixels; default: 1 
@@ -11,7 +13,6 @@
  * @input	integer $columns optional: 	number of columns for the table; default: 1
  * @uses	Wakka::ReturnSafeHTML()
  * @todo		will be replaced after Wikka 1.1.6.2 by the table formatter
- * @filesource
  */
 
 // Init:

@@ -1,19 +1,20 @@
 <?php
 /**
-* Embed a flash object in a wiki page.
-* 
-* Example: {{flash url="http://example.com/example.swf" [width=x] [height=x]}}
-*
-* @package 	Actions
-* @version	$Id$
-* 
-* @input 	string $url mandatory: URL of the flash object
-* @input 	int $width optional: custom width (pixels)
-* @input 	int $height optional: custom height (pixels)
-* @output 	displays the flash animation
-* @uses		Wakka::cleanUrl()
-* @filesource
-*/
+ * Embed a flash object in a wiki page.
+ * 
+ * Example: {{flash url="http://example.com/example.swf" [width=x] [height=x]}}
+ *
+ * @package 	Actions
+ * @version	$Id$
+ * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
+ * @filesource
+ * 
+ * @input 	string $url mandatory: URL of the flash object
+ * @input 	int $width optional: custom width (pixels)
+ * @input 	int $height optional: custom height (pixels)
+ * @output 	displays the flash animation
+ * @uses		Wakka::cleanUrl()
+ */
 
 if (!$width) $width = 550;
 else $width = (int)$width;

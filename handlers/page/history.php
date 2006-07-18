@@ -5,6 +5,8 @@
  * @package		Handlers
  * @subpackage	Page
  * @version		$Id$
+ * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
+ * @filesource
  * 
  * @uses		mkdir_r()
  * @uses		Wakka::GetUser()
@@ -13,7 +15,6 @@
  * @uses		Wakka::LoadPageById()
  * @uses		Wakka::Format()
  * @todo		move <div> to template;
- * @filesource
  */
 /**
  * i18n

@@ -6,11 +6,12 @@
  * 
  * @package		Actions
  * @version		$Id$
+ * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
+ * @filesource
  * 
  * @uses	Wakka::FormOpen()
  * @uses	Wakka::FormClose()
  * @uses	Wakka::GetConfigValue()
- * @filesource
  */
 
 $form = "<p>Fill in the form below to send us your comments:</p>".

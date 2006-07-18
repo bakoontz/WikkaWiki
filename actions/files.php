@@ -7,6 +7,8 @@
  * 
  * @package		Actions
  * @version		$Id$
+ * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
+ * @filesource
  *  
  * @input string	$download optional: prints a link to the file specified in the string
  * @input string	$text optional:	link description for the file specified via the $download parameter
@@ -20,7 +22,6 @@
  * @uses	Wakka::IsAdmin()
  * @uses	Wakka::MiniHref()
  * @uses	Wakka::FormClose()
- * @filesource
  */
 
 // $max_upload_size = "1048576"; // 1 Megabyte

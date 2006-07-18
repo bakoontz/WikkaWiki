@@ -1,9 +1,10 @@
 <?php
 /**
- * Stores the configuration in a file called wikka.config.php
+ * Store the configuration in a file called wikka.config.php
  * 
  * @package	Setup
  * @version	$Id$
+ * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
  */
 // fetch config

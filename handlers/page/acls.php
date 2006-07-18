@@ -5,13 +5,14 @@
  * @package		Handlers
  * @subpackage 	Page
  * @version		$Id$
+ * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
+ * @filesource
  *
  * @author		{@link http://wikkawiki.org/MinusF MinusF} (preliminary code cleanup, css selectors)
  * @author		{@link http://wikkawiki.org/DarTar Dario Taraborelli} (further cleanup)
  * @author		{@link http://wikkawiki.org/NilsLindenberg Nils Lindenberg} (i18n)
  *
  * @todo		move main <div> to templating class
- * @filesource
  */
 
 /**

@@ -5,6 +5,8 @@
  * @package		Handlers
  * @subpackage	Referrers	
  * @version		$Id$
+ * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
+ * @filesource
  * 
  * @uses		Wakka::IsAdmin()
  * @uses		Wakka::LoadReferrers()
@@ -12,8 +14,8 @@
  * @uses		Wakka::GetMethod()
  * @uses		Wakka::GetUser()
  * @uses		Wakka::Href()
+ * 
  * @todo		move <div> to template
- * @filesource 
  */
 echo '<div class="page">'."\n"; //TODO: move to templating class
 

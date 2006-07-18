@@ -1,25 +1,26 @@
 <?php
 /**
-* Display an alphabetical list of pages of the wiki.
-*
-* This action checks user read privileges and displays an index of read-accessible pages.
-*
-* @package    Actions
-* @version	$Id$
-*
-* @author    {@link http://wikkawiki.org/GiorgosKontopoulos GiorgosKontopoulos} (added ACL check, first code cleanup)
-* @author    {@link http://wikkawiki.org/DarTar DarTar} (adding doc header, minor code and layout refinements, i18n)
-* 
-* @uses		Wakka::LoadAllPages()
-* @uses		Wakka::GetUserName()
-* @uses		Wakka::HasAccess()
-* @uses		Wakka::Link()
-* @uses		Wakka::Format()
-*
-* @output   a list of pages accessible to the current user
-* @todo		add filtering options
-* @filesource
-*/
+ * Display an alphabetical list of pages of the wiki.
+ *
+ * This action checks user read privileges and displays an index of read-accessible pages.
+ *
+ * @package    Actions
+ * @version	$Id$
+ * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
+ * @filesource
+ *
+ * @author    {@link http://wikkawiki.org/GiorgosKontopoulos GiorgosKontopoulos} (added ACL check, first code cleanup)
+ * @author    {@link http://wikkawiki.org/DarTar DarTar} (adding doc header, minor code and layout refinements, i18n)
+ * 
+ * @uses		Wakka::LoadAllPages()
+ * @uses		Wakka::GetUserName()
+ * @uses		Wakka::HasAccess()
+ * @uses		Wakka::Link()
+ * @uses		Wakka::Format()
+ *
+ * @output   a list of pages accessible to the current user
+ * @todo		add filtering options
+ */
 /**
  * i18n
  */

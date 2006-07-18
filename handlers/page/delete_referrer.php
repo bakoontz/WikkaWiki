@@ -5,11 +5,12 @@
  * @package         Handlers
  * @subpackage        Referrers
  * @version $Id$
+ * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
+ * @filesource
  * 
  * @uses	Wakka::Href()
  * @uses	Wakka::Query()
  * @uses	Wakka::redirect()
- * @filesource
  */
 
 if ($spam_link = $_REQUEST["spam_link"])

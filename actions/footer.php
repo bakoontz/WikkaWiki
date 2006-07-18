@@ -5,6 +5,8 @@
  * 
  * @package		Template
  * @version		$Id$
+ * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
+ * @filesource
  * 
  * @uses	Wakka::FormOpen()
  * @uses	Wakka::HasAccess()
@@ -18,7 +20,6 @@
  * @uses	Wakka::GetWakkaVersion()
  * 
  * @todo	move <div class="footer"> to template
- * @filesource
  */
 /**
  * i18n

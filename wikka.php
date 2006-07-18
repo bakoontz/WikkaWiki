@@ -11,6 +11,9 @@
  *
  * @package Core
  * @version $Id$
+ * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
+ * @see /docs/Wikka.LICENSE
+ * @filesource
  * 
  * @author Hendrik Mans <hendrik@mans.de>
  * @author Jason Tourtelotte <wikka-admin@jsnx.com>
@@ -23,12 +26,8 @@
  * @copyright Copyright 2004-2005, Jason Tourtelotte <wikka-admin@jsnx.com>
  * @copyright Copyright 2006, {@link http://wikkawiki.org/CreditsPage Wikka Development Team}
  * 
- * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
- * @see /docs/Wikka.LICENSE
- * 
  * @todo use templating class for page generation;
  * @todo add phpdoc documentation for configuration array elements;
- * @filesource
  */
 /**
  * i18n
@@ -40,7 +39,7 @@ if(!defined('ERROR_SETUP_HEADER_MISSING')) define ('ERROR_SETUP_HEADER_MISSING',
 if(!defined('ERROR_SETUP_FOOTER_MISSING')) define ('ERROR_SETUP_FOOTER_MISSING', 'The file "setup/footer.php" was not found. Please install Wikka again!');
 if(!defined('ERROR_NO_DB_ACCESS')) define ('ERROR_NO_DB_ACCESS', 'The wiki is currently unavailable. <br /><br />Error: Unable to connect to the MySQL database.');
 /**
- * Displays page generation time in seconds with 4 decimals (%.4f)
+ * Display page generation time in seconds with 4 decimals (%.4f)
  */
 if(!defined('PAGE_GENERATION_TIME')) define ('PAGE_GENERATION_TIME', 'Page was generated in %.4f seconds');
 if(!defined('WIKI_UPGRADE_NOTICE')) define ('WIKI_UPGRADE_NOTICE', 'This site is currently being upgraded. Please try again later.');

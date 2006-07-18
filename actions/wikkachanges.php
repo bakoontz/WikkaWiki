@@ -4,10 +4,11 @@
  * 
  * @package	Actions
  * @version $Id$
+ * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
+ * @filesource
  * 
  * @uses	Wakka::Format()
  * @todo	should be a default page, not an action
- * @filesource
  */
 
 $output = "=====Wikka Release Notes=====\n\n".

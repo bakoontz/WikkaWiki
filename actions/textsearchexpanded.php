@@ -4,6 +4,8 @@
  * 
  * @package	Actions
  * @version $Id$
+ * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
+ * @filesource
  * 
  * @uses	Wakka::FormClose()
  * @uses	Wakka::FormOpen()
@@ -11,7 +13,6 @@
  * @uses	Wakka::HasAccess()
  * @uses	Wakka::htmlspecialchars_ent()
  * @uses	Wakka::ReturnSafeHtml()
- * @filesource
  */
 /**
  * i18n

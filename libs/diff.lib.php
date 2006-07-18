@@ -8,10 +8,12 @@
  *
  * @package Core
  * @subpackage Libs
- * @license GNU General Public License
+ * @version $Id$
+ * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
+ * @filesource
+ * 
  * @copyright Copyright (C) 2000, 2001 Geoffrey T. Dairiki <dairiki@dairiki.org>
  * @copyright Copyright (C) 1992 Free Software Foundation, Inc. Francois Pinard <pinard@iro.umontreal.ca>.
- * @filesource
  */
 /**
  * @name Side
@@ -228,7 +230,7 @@ class Side {
  * Difflib: A PHP diff engine for phpwiki.
  * 
  * @copyright (C) 2000, 2001 Geoffrey T. Dairiki <dairiki@dairiki.org>
- * @license GNU General Public License
+ * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
  */
 
 // PHP3 does not have assert()
