@@ -81,13 +81,13 @@ if ($this->HasAccess("read")) {
 						{
 							// remove blank lines
 							$output .= "<br />\n<strong>".DIFF_ADDITIONS."</strong><br />\n";
-							$output .= "<span class=\"additions\">".$this->Format(implode("\n", $added))."</span><br />";
+							$output .= "<ins>".$this->Format(implode("\n", $added))."</ins><br />";
 						}
 
 						if ($deleted)
 						{
 							$output .= "<br />\n<strong>".DIFF_DELETIONS."</strong><br />\n";
-							$output .= "<span class=\"deletions\">".$this->Format(implode("\n", $deleted))."</span><br />";
+							$output .= "<del>".$this->Format(implode("\n", $deleted))."</del><br />";
 						}
 
 						if (!$added && !$deleted)
@@ -109,7 +109,7 @@ if ($this->HasAccess("read")) {
 		print($output);
 	}
 } else {
-	print('<em>'.ERROR_ACL_READ.'</em>');
+	print('<em class="error">'.ERROR_ACL_READ.'</em>');
 }
 echo '</div>'."\n" //TODO: move to templating class
 ?>

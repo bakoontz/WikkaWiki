@@ -58,7 +58,7 @@ if ($this->IsAdmin())
 }
 else
 {
-    print("<em>You are not allowed to delete pages.</em>"); #i18n
+    echo '<em class="error">You are not allowed to delete pages.</em>'; #i18n
 }
 echo '</div>'."\n" //TODO: move to templating class
 ?>

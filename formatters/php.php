@@ -24,9 +24,9 @@ if ($this->method == "diff") {
 	$listing = ob_get_clean(); ob_start();
 	// render diff tags
 	$listing = preg_replace("/££<\/font>/", "</font>££", $listing);
-	$listing = preg_replace("/££(.*?)££/", "<span class='additions'>\\1</span>", $listing);
+	$listing = preg_replace("/££(.*?)££/", "<ins>\\1</ins>", $listing);
 	$listing = preg_replace("/¥¥<\/font>/", "</font>¥¥", $listing);
-	$listing = preg_replace("/¥¥(.*?)¥¥/", "<span class='deletions'>\\1</span>", $listing);
+	$listing = preg_replace("/¥¥(.*?)¥¥/", "<del>\\1</del>", $listing);
 	// write original output and revised highlighting back to fresh buffer
 	print $dummy.$listing;
 }

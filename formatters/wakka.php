@@ -325,12 +325,12 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 		// additions
 		else if ($thing == "&pound;&pound;")
 		{
-			return (++$trigger_inserted % 2 ? "<span class=\"additions\">" : "</span>");
+			return (++$trigger_inserted % 2 ? "<ins>" : "</ins>");
 		}
 		// deletions
 		else if ($thing == "&yen;&yen;")
 		{
-			return (++$trigger_deleted % 2 ? "<span class=\"deletions\">" : "</span>");
+			return (++$trigger_deleted % 2 ? "<del>" : "</del>");
 		}
 		// center
 		else if ($thing == "@@")

@@ -421,9 +421,16 @@ em.success {
 	padding: 5px;
 }
 
-.additions {background-color: #ccffcc;}
+ins {
+	background-color: #CFC;
+	text-decoration: none;
+}
 
-.deletions {color: #876; background-color: #FFCC99;}
+del {
+	color: #876;
+	background-color: #FC9;
+	text-decoration: none;
+}
 
 .recentchanges {font-size: 0.9em;}
 
