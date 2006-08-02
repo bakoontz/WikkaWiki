@@ -1,6 +1,11 @@
 <?php
 /**
- * Show a page if the user has read access or is an admin.
+ * Display a page if the user has read access or is an admin.
+ * 
+ * This is the default page handler used by Wikka when no other handler is specified.
+ * Depending on user privileges, it displays the page body or an error message. It also
+ * displays footer comments and a form to post comments, depending on ACL and general 
+ * config settings.
  * 
  * @package		Handlers
  * @subpackage	Page
@@ -23,11 +28,12 @@
  * @uses		Wakka::LoadUser()
  * @uses		Wakka::UserIsOwner()
  * 
- * @todo		move <div> to template
+ * @todo		move <div> to template;
+ * @todo		i18n;
  */
  
 echo '<div class="page"';
-echo (($user = $this->GetUser()) && ($user['doubleclickedit'] == 'N')) ? '' : 'ondblclick="document.location=\''.$this->href('edit').'\';" ';
+echo (($user = $this->GetUser()) && ($user['doubleclickedit'] == 'N') || !$this->HasAccess('write')) ? '' : 'ondblclick="document.location=\''.$this->Href('edit').'\';" '; #268
 echo '>'."\n";//TODO: move to templating class
 
 if (!$this->HasAccess('read'))
