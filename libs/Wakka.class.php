@@ -831,15 +831,20 @@ class Wakka
 		$this->StartLinkTracking();
 		return $result;
 	}
+	/**
+	 * @todo i18n;
+	 * @todo use templating class
+	 * @todo separate different classes of handlers (page, user, files etc.);
+	 */
 	function Method($method)
 	{
 		if (strstr($method, '/'))
 		{
 			$method = substr($method, strrpos($method, '/')+1);
 		}
-		if (!$handler = $this->page["handler"]) $handler = "page";
-		$methodLocation = $handler."/".$method.".php";
-		return $this->IncludeBuffered($methodLocation, "<em>Unknown method \"$methodLocation\"</em>", "", $this->config["handler_path"]);
+		if (!$handler = $this->page['handler']) $handler = 'page';
+		$method_location = $handler.'/'.$method.'.php';
+		return $this->IncludeBuffered($method_location, '<div class="page"><em class="error">Sorry, <tt>'.$method_location.'</tt> is an unknown handler.</em></div>', '', $this->config['handler_path']); #i18n
 	}
 	function Format($text, $formatter="wakka") { return $this->IncludeBuffered($formatter.".php", "<em>Formatter \"$formatter\" not found</em>", compact("text"), $this->config['wikka_formatter_path']); }
 
