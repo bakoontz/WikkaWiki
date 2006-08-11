@@ -6,6 +6,9 @@
  * @version	$Id$
  * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
+ * 
+ * @todo i18n;
+ * @todo Add welcome screen with requirements;
  */
 /**
  * i18n
@@ -50,17 +53,16 @@ function check() {
 <?php } ?>
 <form action="<?php echo myLocation() ?>?installAction=install" name="form1" method="post">
 <table>
-
-	<tr><td></td><td><h1>Wikka Installation</h1></td></tr>
-
 	<?php
 	if ($wakkaConfig["wakka_version"])
 	{
-		print("<tr><td></td><td>Your installed Wikka is reporting itself as <tt>".$wakkaConfig["wakka_version"]."</tt>. You are about to <strong>upgrade</strong> to Wikka ".WAKKA_VERSION.". Please review your configuration settings below.</td></tr>\n");
+		echo "	<tr><td></td><td><h1>Wikka Upgrade</h1></td></tr>\n";
+		echo "<tr><td></td><td>Your installed Wikka is reporting itself as <tt>".$wakkaConfig["wakka_version"]."</tt>. You are about to <strong>upgrade</strong> to Wikka <tt>".WAKKA_VERSION."</tt>. Please review your configuration settings below.</td></tr>\n";
 	}
 	else
 	{
-		print("<tr><td></td><td>Since there is no existing Wikka configuration, this probably is a fresh Wikka install. You are about to install Wikka <tt>".WAKKA_VERSION."</tt>. Installing Wikka will take only a few minutes. To start the installation, please fill in the form below.</td></tr>\n");
+		echo "	<tr><td></td><td><h1>Wikka Installation</h1></td></tr>\n";
+		print("<tr><td></td><td>Since there is no existing Wikka configuration, this probably is a <strong>fresh install</strong>. You are about to install Wikka <tt>".WAKKA_VERSION."</tt>. Installing Wikka will take only a few minutes. To start the installation, please fill in the form below.</td></tr>\n");
 	}
 	?>
 
