@@ -136,6 +136,7 @@ $wakkaDefaultConfig = array(
 
 	'action_path'			=> 'actions',
 	'handler_path'			=> 'handlers',
+	'edit_buttons_position' 	=> 'bottom',		# valid values: bottom, top; both
 	'gui_editor'				=> '1',
 	'stylesheet'				=> 'wikka.css',
 

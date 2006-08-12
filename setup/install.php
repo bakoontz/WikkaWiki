@@ -322,6 +322,8 @@ case "1.1.6.2":
 	$config["enable_user_host_lookup"] = '1';	
 	test(sprintf(ADDING_CONFIG_ENTRY, '<tt>enable_rss_autodiscovery</tt>'), 1);
 	$config["enable_rss_autodiscovery"] = '1';	
+	test(sprintf(ADDING_CONFIG_ENTRY, '<tt>edit_buttons_position</tt>'), 1);
+	$config["edit_buttons_position"] = 'bottom';	
 	test("Archiving former FormattingRules revision...", 
 	mysql_query("update ".$config["table_prefix"]."pages set latest = 'N' where tag = 'FormattingRules'"), "Already done? OK!", 0);
 	test("Updating FormattingRules page...",

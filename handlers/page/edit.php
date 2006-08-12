@@ -48,6 +48,7 @@ if(!defined('SHOWCODE_LINK_TITLE')) define('SHOWCODE_LINK_TITLE', 'Click to view
 //initialization
 $error = '';
 $highlight_note = '';
+$edit_note_field = '';
 $note = '';
 $ondblclick = ''; //#123
 if (isset($_POST['submit']) && ($_POST['submit'] == 'Preview') && ($user = $this->GetUser()) && ($user['doubleclickedit'] != 'N'))
@@ -68,6 +69,7 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 	$newtag = $output = '';
 	if (isset($_POST['newtag'])) $newtag = $_POST['newtag'];
 	if ($newtag !== '') $this->Redirect($this->Href('edit', $newtag));
+
 	if ($_POST)
 	{
 		// strip CRLF line endings down to LF to achieve consistency ... plus it saves database space.
@@ -122,6 +124,12 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 		}
 	}
 
+	 //check if edit_notes are enabled
+	if ($this->config['require_edit_note'] != 2)
+	{
+		$edit_note_field = '<input size="'.MAX_EDIT_NOTE_LENGTH.'" type="text" name="note" value="'.htmlspecialchars($note).'" '.$highlight_note.'/> '.LABEL_EDIT_NOTE.'<br />'."\n";
+	}
+
 	// fetch fields
 	$previous = $this->page['id'];
 	if (isset($_POST['previous'])) $previous = $_POST['previous'];
@@ -137,33 +145,26 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 	{
 		$maxtaglen = MAX_TAG_LENGTH;
 	}
-
-	if (isset($_POST['submit']) && $_POST['submit'] == INPUT_SUBMIT_PREVIEW) # preview output
+	
+	// PREVIEW screen
+	if (isset($_POST['submit']) && $_POST['submit'] == INPUT_SUBMIT_PREVIEW)
 	{
-		$preview_buttons = '<hr />'."\n";
 		// We need to escape ALL entity refs before display so we display them _as_ entities instead of interpreting them
 		// so we use htmlspecialchars on the edit note (as on the body)
-		if ($this->config['require_edit_note'] != 2) //check if edit_notes are enabled
-		{
-			$preview_buttons .= '<input size="'.MAX_EDIT_NOTE_LENGTH.'" type="text" name="note" value="'.htmlspecialchars($note).'" '.$highlight_note.'/>'.LABEL_EDIT_NOTE.'<br />'."\n";
-		}
-		$preview_buttons .= '<input name="submit" type="submit" value="'.INPUT_SUBMIT_STORE.'" accesskey="'.ACCESSKEY_STORE.'" />'."\n".
+		$preview_buttons = '<fieldset><legend>Store page</legend>'.$edit_note_field.'<input name="submit" type="submit" value="'.INPUT_SUBMIT_STORE.'" accesskey="'.ACCESSKEY_STORE.'" />'."\n".
 			'<input name="submit" type="submit" value="'.INPUT_SUBMIT_REEDIT.'" accesskey="'.ACCESSKEY_REEDIT.'" id="reedit_id" />'."\n".
-			'<input type="button" value="'.INPUT_BUTTON_CANCEL.'" onclick="document.location=\''.$this->href('').'\';" />'."\n";
+			'<input type="button" value="'.INPUT_BUTTON_CANCEL.'" onclick="document.location=\''.$this->href('').'\';" /></fieldset>'."\n";
 
+		//build page
 		$output .= '<div class="previewhead">'.PREVIEW_HEADER.'</div>'."\n";
-
 		$output .= $this->Format($body);
-
-		$output .=
-			$this->FormOpen('edit')."\n".
-			'<input type="hidden" name="previous" value="'.$previous.'" />'."\n".
+		$output .= $this->FormOpen('edit')."\n";
+		$output .= '<input type="hidden" name="previous" value="'.$previous.'" />'."\n".
 			// We need to escape ALL entity refs before display so we display them _as_ entities instead of interpreting them
 			// hence htmlspecialchars() instead of htmlspecialchars_ent() which UNescapes entities!
 			'<input type="hidden" name="body" value="'.htmlspecialchars($body).'" />'."\n";
-
-
-		$output .= "<br />\n".$preview_buttons.$this->FormClose()."\n";
+		$output .= $preview_buttons."\n";
+		$output .= $this->FormClose()."\n";
 	}
 	elseif (!$this->page && strlen($this->tag) > $maxtaglen) # rename page
 	{
@@ -175,7 +176,8 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 		$output .= '<input name="submit" type="submit" value="'.INPUT_SUBMIT_RENAME.'" />'."\n";
 		$output .= $this->FormClose();
 	}
-	else	 # edit page
+	// EDIT Screen
+	else	
 	{
 		// display form
 		if ($error)
@@ -188,23 +190,24 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 		{
 			$body = trim($body)."\n\n----\n\n--".$this->GetUserName().' ('.strftime("%c").')';
 		}
-
-		$output .=
-			$this->FormOpen('edit').
-			'<input type="hidden" name="previous" value="'.$previous.'" />'."\n".
+		$edit_buttons =	'<fieldset><legend>Store page</legend>'.$edit_note_field.'<input name="submit" type="submit" value="'.INPUT_SUBMIT_STORE.'" accesskey="'.ACCESSKEY_STORE.'" /> <input name="submit" type="submit" value="'.INPUT_SUBMIT_PREVIEW.'" accesskey="'.ACCESSKEY_PREVIEW.'" /> <input type="button" value="'.INPUT_BUTTON_CANCEL.'" onclick="document.location=\''.$this->Href('').'\';" />'."</fieldset>\n";
+		$output .= $this->FormOpen('edit');
+		if ($this->config['edit_buttons_position'] != 'bottom')
+		{
+			$output .= $edit_buttons;
+		}
+		$output .= '<input type="hidden" name="previous" value="'.$previous.'" />'."\n".
 			// We need to escape ALL entity refs before display so we display them _as_ entities instead of interpreting them
 			// hence htmlspecialchars() instead of htmlspecialchars_ent() which UNescapes entities!
 			'<textarea id="body" name="body">'.htmlspecialchars($body).'</textarea><br />'."\n";
 			//note add Edit
 			// We need to escape ALL entity refs before display so we display them _as_ entities instead of interpreting them
 			// so we use htmlspecialchars on the edit note (as on the body)
-		if ($this->config['require_edit_note'] != 2) //check if edit_notes are enabled
+		if ($this->config['edit_buttons_position'] != 'top')
 		{
-			$output .= '<input size="'.MAX_EDIT_NOTE_LENGTH.'" type="text" name="note" value="'.htmlspecialchars($note).'" '.$highlight_note.'/> '.LABEL_EDIT_NOTE.'<br />'."\n";
+			$output .= $edit_buttons;			
 		}
-		//finish
-		$output .=	'<input name="submit" type="submit" value="'.INPUT_SUBMIT_STORE.'" accesskey="'.ACCESSKEY_STORE.'" /> <input name="submit" type="submit" value="'.INPUT_SUBMIT_PREVIEW.'" accesskey="'.ACCESSKEY_PREVIEW.'" /> <input type="button" value="'.INPUT_BUTTON_CANCEL.'" onclick="document.location=\''.$this->Href('').'\';" />'."\n".
-			$this->FormClose();
+		$output .=	$this->FormClose();
 
 		if ($this->config['gui_editor'] == 1) 
 		{
