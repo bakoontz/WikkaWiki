@@ -21,7 +21,7 @@
 if (!defined('SEARCH_FOR')) define('SEARCH_FOR', 'Search for');
 if (!defined('SEARCH_ZERO_MATCH')) define('SEARCH_ZERO_MATCH', 'No matches');
 if (!defined('SEARCH_ONE_MATCH')) define('SEARCH_ONE_MATCH', 'One match found');
-if (!defined('SEARCH_N_MATCH')) define('SEARCH_N_MATCH', 'There was %d matches found');
+if (!defined('SEARCH_N_MATCH')) define('SEARCH_N_MATCH', '%d matches found');
 if (!defined('SEARCH_RESULTS')) define('SEARCH_RESULTS', 'Search results');
 if (!defined('SEARCH_TRY_EXPANDED')) define('SEARCH_TRY_EXPANDED', '<br />Not sure which page to choose?<br />Try the <a href="$1">Expanded Text Search</a> which shows surrounding text.');
 if (!defined('SEARCH_TIPS')) define('SEARCH_TIPS', "<br /><br /><hr /><br /><strong>Search Tips:</strong><br /><br />"
@@ -42,7 +42,7 @@ if (!defined('SEARCH_TIPS')) define('SEARCH_TIPS', "<br /><br /><hr /><br /><str
 	."but not 'some noise words'). <br />");
 $result_page_list = '';
 ?>		
-<?php echo $this->FormOpen("", "", "get"); ?>
+<?php echo $this->FormOpen('', '', 'get'); ?>
 <table border="0" cellspacing="0" cellpadding="0">
 	<tr>
 		<td><?php echo SEARCH_FOR; ?>:&nbsp;</td>
@@ -65,7 +65,7 @@ if (isset($_REQUEST['phrase']) && ($phrase = $_REQUEST["phrase"]))
 			if ($this->HasAccess("read",$page["tag"]))
 			{
 				$total_results ++;
-				$result_page_list .= ($i+1).". ".$this->Link($page["tag"])."<br />\n";
+				$result_page_list .= '<li>'.$this->Link($page['tag']).'</li>'."\n";
 			}
 		}
 	}
@@ -81,11 +81,11 @@ if (isset($_REQUEST['phrase']) && ($phrase = $_REQUEST["phrase"]))
 			$match_str = SEARCH_N_MATCH;
 			break;
 	}
-	printf(SEARCH_RESULTS.": <strong>".$match_str."</strong> for <strong>".$this->htmlspecialchars_ent($phrase)."</strong><br />\n", $total_results);
+	printf(SEARCH_RESULTS.': <strong>'.$match_str.'</strong> for <strong>'.$this->htmlspecialchars_ent($phrase).'</strong><br />'."\n", $total_results);
 	if ($total_results > 0)
 	{
-		print($result_page_list);
-		print(str_replace('$1', $this->href("", "TextSearchExpanded", 'phrase='.urlencode($phrase)), SEARCH_TRY_EXPANDED));
+		echo '<ol>'.$result_page_list.'</ol>'."\n";
+		echo str_replace('$1', $this->Href('', 'TextSearchExpanded', 'phrase='.urlencode($phrase)), SEARCH_TRY_EXPANDED);
 	}
 }
 if ($this->CheckMySQLVersion(4,00,01))

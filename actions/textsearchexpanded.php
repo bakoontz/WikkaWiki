@@ -20,7 +20,7 @@
 if (!defined('SEARCH_FOR')) define('SEARCH_FOR', 'Search for');
 if (!defined('SEARCH_ZERO_MATCH')) define('SEARCH_ZERO_MATCH', 'No matches');
 if (!defined('SEARCH_ONE_MATCH')) define('SEARCH_ONE_MATCH', 'One match found');
-if (!defined('SEARCH_N_MATCH')) define('SEARCH_N_MATCH', 'There was %d matches found');
+if (!defined('SEARCH_N_MATCH')) define('SEARCH_N_MATCH', '%d matches found');
 if (!defined('SEARCH_RESULTS')) define('SEARCH_RESULTS', 'Search results');
 if (!defined('SEARCH_MAX_SNIPPETS')) define('SEARCH_MAX_SNIPPETS', 3);
 if (!defined('SEARCH_MYSQL_IDENTICAL_CHARS')) define('SEARCH_MYSQL_IDENTICAL_CHARS', 'aàáâã,eèéêë,iìîï,oòóôõ,uùúû,cç,nñ,yý');
@@ -95,8 +95,9 @@ if (isset($_REQUEST['phrase']) && ($phrase = $_REQUEST["phrase"]))
 			 #  $phrase contains `span'.
 				$highlightMatch = preg_replace('/('.$this->htmlspecialchars_ent($phrase_re).')/i','<<$1>>',$text,-1);
 				$matchText = "&hellip;".str_replace(array('<<', '>>'), array('<span class="tse_keywords">', '</span>'), $highlightMatch)."&hellip;";
-				$result_page_list .= "\n<p>".($i+1)." ".$this->Link($page["tag"])." &mdash; ".$page['time']."</p>";
+				$result_page_list .= "\n<li>".$this->Link($page["tag"])." &mdash; ".$page['time'];
 				$result_page_list .= "\n<blockquote>".$matchText."</blockquote>\n";
+				$result_page_list .= "\n</li>\n";
 			}
 		}
 	}
@@ -114,6 +115,6 @@ if (isset($_REQUEST['phrase']) && ($phrase = $_REQUEST["phrase"]))
 	}
 	printf(SEARCH_RESULTS.": <strong>".$match_str."</strong> for <strong>".$this->htmlspecialchars_ent($phrase)."</strong><br />\n", $total_results);
 	$result_page_list = $this->ReturnSafeHtml($result_page_list);
-	echo $result_page_list;
+	echo '<ol>'.$result_page_list.'</ol>'."\n";
 }
 ?>
