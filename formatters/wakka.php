@@ -97,7 +97,7 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 		}
 
 		// table. trigger means: 0==no table, 1==in table no cell, 2==in table data cell, 3==in table header cell, 4==in caption
-		else if ( preg_match("/^\|(\?|!|=|\[|\]|#|_|-)?(\(.*?\))?\|(\n)?$/", $thing, $matches) )
+		else if ( preg_match("/^\|([^\|])?\|(\(.*?\))?(\{.*?\})?(\n)?$/", $thing, $matches) )
 		{
 			//Set up the variables that will aggregate the html markup
 			$close_part = '';
@@ -131,13 +131,13 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 				$close_part = '<table class="wikka">'."\n";
 			}
 			
-			if ( $trigger_table > 1 && $matches[3] == "\n" )
+			if ( $trigger_table > 1 && $matches[4] == "\n" )
 			{
 				$trigger_table = 1;
 				return $close_part .= '</tr>'."\n"; //Can return here, it is closed-
 			}
 			
-			if ( $trigger_colgroup == 1 && $matches[3] == "\n" )
+			if ( $trigger_colgroup == 1 && $matches[4] == "\n" )
 			{
 				$trigger_colgroup = 0;
 				return $close_part .= '</colgroup>'."\n"; //Can return here, it is closed-
@@ -203,7 +203,7 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 			{
 				$open_part .= '<col';
 				$selfclose = ' /';
-				if ( $matches[3] ) $linebreak_after_open = "\n";
+				if ( $matches[4] ) $linebreak_after_open = "\n";
 			}
 			else
 			{
@@ -238,7 +238,13 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 				$hints = array();
 				if ($trigger_table == 2 || $trigger_table == 3) $hints['cell'] = 'cell';
 				else $hints['other_table'] = 'other_table';
-				$open_part .= parse_attributes($attribs, $hints);
+				$open_part .= parse_attributes($attribs[1], $hints);
+			}
+
+			if ( preg_match("/\{(.*)\}/", $matches[3], $attribs ) )
+			{
+				$attribs = "s:".$attribs[1];
+				$open_part .= parse_attributes($attribs, array() );
 			}
 
 			$open_part .= $selfclose.'>';
@@ -614,7 +620,7 @@ if (!function_exists("parse_attributes"))
 		$hints['core'] = 'core';
 		$hints['i18n'] = 'i18n';
 
-		$attribs = preg_split('/;(?=.:)/', $attribs[1]);
+		$attribs = preg_split('/;(?=.:)/', $attribs);
 		$return_value = '';
 
 		foreach ( $attribs as $attrib )
@@ -659,7 +665,7 @@ $text = preg_replace_callback(
 	"\*\*|\'\'|\#\#|\#\%|@@|::c::|\>\>|\<\<|&pound;&pound;|&yen;&yen;|\+\+|__|<|>|\/\/|".	# Wiki markup
 	"======|=====|====|===|==|".															# headings
 	"\n([\t~]+)(-|&|[0-9a-zA-Z]+\))?|".														# indents and lists
-	"\|[^\|]*?\|(?:\n)?|".																	# Simple Tables	
+	"\|(?:[^\|])?\|(?:\(.*?\))?(?:\{.*?\})?(?:\n)?|".											# Simple Tables	
 	"\{\{.*?\}\}|".																			# action
 	"\b[A-ZÄÖÜ][A-Za-zÄÖÜßäöü]+[:](?![=_])\S*\b|".											# InterWiki link
 	"\b([A-ZÄÖÜ]+[a-zßäöü]+[A-Z0-9ÄÖÜ][A-Za-z0-9ÄÖÜßäöü]*)\b|".								# CamelWords
