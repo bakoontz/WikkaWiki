@@ -66,6 +66,8 @@ function getmicrotime() {
 }
 
 $tstart = getmicrotime();
+if ( ! function_exists("mysql_real_escape_string") )
+{
 /**
  * Escape special characters in a string for use in a SQL statement.
  * 
@@ -73,8 +75,6 @@ $tstart = getmicrotime();
  * @param string $string the string to be escaped
  * @return string a string with special characters escaped
  */
-if ( ! function_exists("mysql_real_escape_string") )
-{
 	function mysql_real_escape_string($string)
 	{
 		return mysql_escape_string($string);
@@ -322,7 +322,13 @@ header("Cache-Control: no-cache");
 $etag =  md5($content);
 header('ETag: '.$etag);
 
-header('Content-Length: '.$page_length);
+/** 
+ * Ticket #152.
+ * We no longer send Content-Length header, due to a bug in PHP {@link http://wush.net/trac/wikka/ticket/152}.
+ * The Webserver will be clever enough to use chunked transfer encoding.
+ * fixme: remove $page_lenght calculation above.
+ */
+//header('Content-Length: '.$page_length);
 ob_end_clean();
 
 /** 
