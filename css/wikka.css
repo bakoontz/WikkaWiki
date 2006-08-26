@@ -246,25 +246,24 @@ h1 {
 .center, .center p {text-align: center;}
 
 .keys {
-	font-family: Arial, Helvetica, sans-serif;
-	font-size: 12px;
-	color:#FFF;
-	font-weight: bold;
-	background-color: #33A;
-	border-top: 2px solid #FFF;
-	border-left: 2px solid #FFF;
-	border-right: 2px solid #336;
-	border-bottom: 2px solid #336;
+	color: #666;
+	background-color: #DDD;
+	font: normal 95% Verdana, sans-serif;
 	text-align: center;
-	padding: 0.1em 0.3em;
-	line-height: 1.6em;
-	vertical-align: top;
+	border-top: 1px solid #FFF;
+	border-left: 1px solid #FFF;
+	border-right: 1px solid #AAA;
+	border-bottom: 1px solid #AAA;
+	padding: .1em .2em;
 }
 
 .keys:hover {
-	background-color: #66C;
-	border-right: 2px solid #668;
-	border-bottom: 2px solid #668;
+	color: #555;
+	background-color: #CCC;
+	border-top: 1px solid #FFF;
+	border-left: 1px solid #FFF;
+	border-right: 1px solid #999;
+	border-bottom: 1px solid #999;
 }
 
 acronym {
@@ -285,20 +284,18 @@ blockquote {
 
 
 .code_header {
-	color: #FFF;
-	background: #33A;
+	color: #666;
+	background-color: #EEE;
 	border-top: 1px solid #CCC;
 	border-right: 1px solid #CCC;
 	border-left: 1px solid #CCC;
 	border-bottom: none;
-	font-weight: bold;
-	font-family: Arial, Helvetica, sans-serif;
-	font-size: 10pt;
+	font-family: Verdana, Arial, sans-serif;
+	font-size: 100%;
 	padding: 0 3px;
-	width: 95%;
 	margin: 5px auto 0 auto;
 	text-align: left;
-	line-height: 15px;
+	line-height: 1.5em;
 }
 
 .code {
@@ -307,9 +304,8 @@ blockquote {
 	border: 1px solid #CCC;
 	font-size: 11px;
 	font-family: "Lucida Console", Monaco, monospace;
-	width: 95%;
 	margin: auto;
-	padding: 6px 3px 13px 3px;	/* padding-bottom solves hor. scrollbar hiding single line of code in IE6 but causes vert. scrollbar... */
+	padding: 6px 5px 13px 5px;	/* padding-bottom solves hor. scrollbar hiding single line of code in IE6 but causes vert. scrollbar... */
 	text-align: left;			/* override justify on body */
 	overflow: auto;				/* allow scroll bar in case of long lines - goes together with white-space: nowrap! */
 	white-space: nowrap;		/* prevent line wrapping */
@@ -336,23 +332,29 @@ fieldset legend {
 	padding:2px;
 }
 
+input:hover {
+	background-color: #EEE;
+}
 
 input[type=submit], input[type=button] {
-	font-family: Arial, Helvetica, sans-serif;
-	padding: 0px 1px;
-	width: auto;
-	font-size: 9pt;
-	color:#fff;
-	font-weight: bold;
-	background-color: #33A;
-	border-right: 2px solid #336;
-	border-bottom: 2px solid #336;
+	color: #666;
+	background-color: #DDD;
+	font: normal 95% Verdana, sans-serif;
+	text-align: center;
+	border-top: 1px solid #FFF;
+	border-left: 1px solid #FFF;
+	border-right: 1px solid #AAA;
+	border-bottom: 1px solid #AAA;
+	padding: .1em .2em;
 }
 
 input[type=submit]:hover, input[type=button]:hover {
-	background-color: #66C;
-	border-right: 2px solid #668;
-	border-bottom: 2px solid #668;
+	color: #333;
+	background-color: #CCC;
+	border-top: 1px solid #FFF;
+	border-left: 1px solid #FFF;
+	border-right: 1px solid #999;
+	border-bottom: 1px solid #999;
 }
 
 textarea#body{
@@ -371,7 +373,6 @@ textarea#body{
 
 input.grabcode {
 	float: right;
-	margin-right: 20px;
 	margin-top: 0px;
 	font-size: 90%;
 }
