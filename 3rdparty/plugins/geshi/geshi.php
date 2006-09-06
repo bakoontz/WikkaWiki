@@ -2,11 +2,12 @@
 /**
  * GeSHi - Generic Syntax Highlighter
  * 
- * The GeSHi class for Generic Syntax Highlighting. Please refer to the documentation
- * at http://qbnz.com/highlighter/documentation.php for more information about how to
- * use this class.
+ * The GeSHi class for Generic Syntax Highlighting. Please refer to the
+ * documentation at http://qbnz.com/highlighter/documentation.php for more
+ * information about how to use this class.
  *
- * For changes, release notes, TODOs etc, see the relevant files in the docs/ directory
+ * For changes, release notes, TODOs etc, see the relevant files in the docs/
+ * directory.
  *
  *   This file is part of GeSHi.
  *
@@ -29,7 +30,7 @@
  * @author    Nigel McNie <nigel@geshi.org>
  * @copyright Copyright &copy; 2004, 2005, Nigel McNie
  * @license   http://gnu.org/copyleft/gpl.html GNU GPL
- * @version   $Id:geshi.php 154 2006-06-30 08:33:14Z DarTar $
+ * @version   $Id$
  * @filesource
  */
 
@@ -41,7 +42,7 @@
 //
 
 /** The version of this GeSHi file */
-define('GESHI_VERSION', '1.0.7.11');
+define('GESHI_VERSION', '1.0.7.13');
 
 /** Set the correct directory separator */
 define('GESHI_DIR_SEPARATOR', ('WIN' != substr(PHP_OS, 0, 3)) ? '/' : '\\');
@@ -578,7 +579,7 @@ class GeSHi
 	 */
 	function set_overall_id ($id)
 	{
-		$this->overall_id = $id;
+        $this->overall_id = $id;
 	}
 
 	/**
@@ -1415,11 +1416,11 @@ class GeSHi
 			return $this->finalise($result);
 		}
 
-		// Add spaces for regular expression matching and line numbers
-		$code = ' ' . $this->source . ' ';
 		// Replace all newlines to a common form.
-		$code = str_replace("\r\n", "\n", $code);
+		$code = str_replace("\r\n", "\n", $this->source);
 		$code = str_replace("\r", "\n", $code);
+        // Add spaces for regular expression matching and line numbers
+        $code = "\n" . $code . "\n";
 
 		// Initialise various stuff
 		$length           = strlen($code);
@@ -1808,7 +1809,7 @@ class GeSHi
 		$result .= $this->parse_non_string_part($stuff_to_parse);
 
 		// Lop off the very first and last spaces
-		$result = substr($result, 1, strlen($result) - 1);
+		$result = substr($result, 1, -1);
 
 		// Are we still in a string?
 		if ($STRING_OPEN) {
@@ -2265,6 +2266,16 @@ class GeSHi
             $parsed_code = $this->indent($parsed_code);
         }
         
+        // purge some unnecessary stuff
+        $parsed_code = preg_replace('#<span[^>]+>(\s*)</span>#', '\\1', $parsed_code);
+        $parsed_code = preg_replace('#<div[^>]+>(\s*)</div>#', '\\1', $parsed_code);
+
+        // If we are using IDs for line numbers, there needs to be an overall
+        // ID set to prevent collisions.
+        if ($this->add_ids && !$this->overall_id) {
+            $this->overall_id = 'geshi-' . substr(md5(microtime()), 0, 4);
+        }
+        
         // If we're using line numbers, we insert <li>s and appropriate
         // markup to style them (otherwise we don't need to do anything)
         if ($this->line_numbers != GESHI_NO_LINE_NUMBERS) {
@@ -2279,8 +2290,10 @@ class GeSHi
             $attrs = array();
                         
             // Foreach line...
-            foreach ($code as $line) {
-                $line = ( $line ) ? $line : '&nbsp;';
+            foreach ($code as $line) {//echo "LINE:|".htmlspecialchars($line)."| ".strlen($line)."<br />\n";
+                if ('' == $line || ' ' == $line) {
+                    $line = '&nbsp;';
+                }
                 // If this is a "special line"...
         	    if ($this->line_numbers == GESHI_FANCY_LINE_NUMBERS &&
                     $i % $this->line_nth_row == ($this->line_nth_row - 1)) {
@@ -2317,23 +2330,21 @@ class GeSHi
             	++$i;
             	// Are we supposed to use ids? If so, add them
             	if ($this->add_ids) {
-            		//$attr .= " id=\"{$this->overall_id}-{$i}\"";
                     $attrs['id'][] = "$this->overall_id-$i";
             	}
             	if ($this->use_classes && in_array($i, $this->highlight_extra_lines)) {
-            		//$attr .= " class=\"ln-xtra\"";
                     $attrs['class'][] = 'ln-xtra';
             	}
             	if (!$this->use_classes && in_array($i, $this->highlight_extra_lines)) {
-            		//$attr .= " style=\"{$this->highlight_extra_lines_style}\"";
                     $attrs['style'][] = $this->highlight_extra_lines_style;
             	}
 
             	// Add in the line surrounded by appropriate list HTML
                 $attr_string = ' ';
                 foreach ($attrs as $key => $attr) {
-                    $attr_string .= $key . '="' . implode(' ', $attr) . '"';
+                    $attr_string .= $key . '="' . implode(' ', $attr) . '" ';
                 }
+                $attr_string = substr($attr_string, 0, -1);
             	$parsed_code .= "<li$attr_string>$start$line$end</li>$ls";
                 $attrs = array();
         	}
@@ -2343,10 +2354,11 @@ class GeSHi
             $code = explode("\n", $parsed_code);
             $parsed_code = '';
             $i = 0;
-            foreach ($code as $line)
-            {
+            foreach ($code as $line) {
             	// Make lines have at least one space in them if they're empty
-            	$line = ($line) ? $line : '&nbsp;';
+                if ('' == $line || ' ' == $line) {
+                    $line = '&nbsp;';
+                }
             	if (in_array(++$i, $this->highlight_extra_lines)) {
             		if ($this->use_classes) {
             			$parsed_code .= '<div class="ln-xtra">';
@@ -2360,11 +2372,7 @@ class GeSHi
             	}
         	}
         }
-        
-        // purge some unnecessary stuff
-        $parsed_code = preg_replace('#<span[^>]+>(\s*)</span>#', '\\1', $parsed_code);
-        $parsed_code = preg_replace('#<div[^>]+>(\s*)</div>#', '\\1', $parsed_code);
-        
+                
         if ($this->header_type == GESHI_HEADER_PRE) {
         	// enforce line numbers when using pre
             $parsed_code = str_replace('<li></li>', '<li>&nbsp;</li>', $parsed_code);

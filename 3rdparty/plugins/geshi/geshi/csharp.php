@@ -4,10 +4,10 @@
  * ----------
  * Author: Alan Juden (alan@judenware.org)
  * Copyright: (c) 2004 Alan Juden, Nigel McNie (http://qbnz.com/highlighter/)
- * Release Version: 1.0.7.11
- * CVS Revision Version: $Revision: 1.14 $
+ * Release Version: 1.0.7.13
+ * CVS Revision Version: $Revision: 1.14.2.4 $
  * Date Started: 2004/06/04
- * Last Modified: $Date: 2006/05/21 00:06:57 $
+ * Last Modified: $Date: 2006/08/22 10:22:26 $
  *
  * C# language file for GeSHi.
  *
@@ -42,7 +42,7 @@
  ************************************************************************************/
 
  $language_data = array (
-	'LANG_NAME' => 'CSharp',
+	'LANG_NAME' => 'C#',
 	'COMMENT_SINGLE' => array(1 => '//', 2 => '#'),
 	'COMMENT_MULTI' => array('/*' => '*/'),
 	'CASE_KEYWORDS' => GESHI_CAPS_NO_CHANGE,

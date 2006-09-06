@@ -12,6 +12,24 @@ modified by me for consistency/bug fixing.
 Please send any bug reports to nigel@geshi.org, or use the bug report tracker
 at sourceforge (http://sourceforge.net/tracker/?group_id=114997&atid=670231)
 
+Version 1.0.7.13
+  -  Added language files
+     * Uno IDL (Cedric Bosdonnat)
+  -  Fixed add_ids causing odd XHTML (RyanJ)
+  -  Fixed extra newline being added to end of result (Andreas Gohr)
+Version 1.0.7.12
+  -  Fixed lines being collapsed when they contain just a space (artlover)
+  -  Allowed matching for regexes using start/end matchers at the start/end
+     of the code (Sheri)
+  -  Added (dubious) fix for google "I'm feeling lucky" search for java keywords
+     (dubious in that it doesn't work for me)
+  -  mysql - Made the symbols into their own keyword group as the symbol group
+     isn't used. Added a style for multiline comments.
+  -  Added a couple of php5 keywords to the php language files.
+  -  Allow XML tags to have dashes.
+  -  Changed LANG_NAME for many languages to be more sensible/correct case
+     (Matthias Mohr)
+  -  Added case-sensitivity indices to python
 Version 1.0.7.11
   -  Added language files
      * Smalltalk (Bananeweizen)
@@ -265,4 +283,4 @@ Version 1.0.1
 Version 1.0.0
   -  Initial Release
 
-                    $Id: CHANGES,v 1.63.2.2 2006/06/21 10:22:46 oracleshinoda Exp $
+                    $Id$
