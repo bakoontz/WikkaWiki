@@ -717,14 +717,20 @@ class Wakka
 		if ($linktable = $this->GetLinkTable())
 		{
 			$from_tag = mysql_real_escape_string($this->GetPageTag());
+			$sql = '';
 			foreach ($linktable as $to_tag)
 			{
 				$lower_to_tag = strtolower($to_tag);
-				if (!$written[$lower_to_tag])
+				if ((!$written[$lower_to_tag]) && ($lower_to_tag != strtolower($from_tag)))
 				{
-					$this->Query("insert into ".$this->config["table_prefix"]."links set from_tag = '".$from_tag."', to_tag = '".mysql_real_escape_string($to_tag)."'");
+					if ($sql) $sql .= ', ';
+					$sql .= "('".$from_tag."', '".mysql_real_escape_string($to_tag)."')";
 					$written[$lower_to_tag] = 1;
 				}
+			}
+			if ($sql)
+			{
+				$this->Query("INSERT INTO {$this->config['table_prefix']}links VALUES $sql");
 			}
 		}
 	}
@@ -826,9 +832,19 @@ class Wakka
 			}
 		}
 		if (!preg_match('/^[a-zA-Z0-9]+$/', $action)) return '<em class="error">Unknown action; the action name must not contain special characters.</em>';
-		if (!$forceLinkTracking) $this->StopLinkTracking();
+		if (!$forceLinkTracking)
+		{
+			/**
+			 * @var boolean holds previous state of LinkTracking before we StopLinkTracking(). It will then be used to test if we should StartLinkTracking() or not.  
+			 */
+			$link_tracking_state = $_SESSION['linktracking'];
+			$this->StopLinkTracking();
+		}
 		$result = $this->IncludeBuffered(strtolower($action).'.php', '<em class="error">Unknown action "'.$action.'"</em>', $vars, $this->config['action_path']);
-		$this->StartLinkTracking();
+		if ($link_tracking_state)
+		{
+			$this->StartLinkTracking();
+		}
 		return $result;
 	}
 	/**
