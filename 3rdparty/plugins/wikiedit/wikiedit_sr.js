@@ -1,4 +1,4 @@
-/*
+/**
  * Display a dialog for searching and replacing strings in the current edit screen.
  *  
  * Note: Cross-browser semi-transparence is not W3 compliant CSS.

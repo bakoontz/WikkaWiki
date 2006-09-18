@@ -1,13 +1,14 @@
 /*
 ////////////////////////////////////////////////////////////////////////
 // WikiEdit for Wikka                                                 //
-// v. 2.15                                                            //
-// supported: MZ1.4+, MSIE5+                                          //
+// v. 3.01                                                            //
+// supported: MZ1.4+, MSIE5+, Opera 8+                                //
 //                                                                    //
-// (c) Roman "Kukutz" Ivanov <thingol@mail.ru>, 2003-2004             //
+// (c) Roman "Kukutz" Ivanov <thingol@mail.ru>, 2003-2005             //
 //   based on AutoIndent for textarea                                 //
 //   (c) Roman "Kukutz" Ivanov, Evgeny Nedelko, 2003                  //
-// Many thanks to Alexander Babaev, Sergey Kruglov and Evgeny Nedelko //
+// Many thanks to Alexander Babaev, Sergey Kruglov, Evgeny Nedelko    //
+//             and Nikolay Jaremko                                    //
 // http://wackowiki.com/WikiEdit                                      //
 //                                                                    //
 ////////////////////////////////////////////////////////////////////////
@@ -37,7 +38,7 @@ WikiEdit.prototype.constructor = WikiEdit;
 // initialisation
 WikiEdit.prototype.init = function(id, name, nameClass, imgPath) {
 
- if (!(isMZ || isIE)) return;
+ if (!(isMZ || isIE || isO8)) return;
  this.mzBugFixed=true;
  if (isMZ && navigator.userAgent.substr(navigator.userAgent.indexOf("Gecko/")+6,4)=="2003" ) {
   this.mzBugFixed=(navigator.userAgent.substr(navigator.userAgent.indexOf("Gecko/")+6,8)>20030510);
@@ -46,13 +47,19 @@ WikiEdit.prototype.init = function(id, name, nameClass, imgPath) {
   else this.MZ=true;
  }
  if (isMZ && navigator.userAgent.substr(navigator.userAgent.indexOf("Gecko/")+6,4)=="2002" ) this.MZ=false;
- if (!(this.MZ || isIE)) return;
+ if (!(this.MZ || isIE || isO8)) return;
 
  this._init(id);
 
 // if (!this.area.id) this.area.id = "area_"+String(Math.floor(Math.random()*10000));
 
- if (isMZ)
+ this.imagesPath = (imgPath?imgPath:base_url+"3rdparty/plugins/wikiedit/images/");
+ this.editorName = name;
+ this.editorNameClass = nameClass;
+
+ this.actionName = "document.getElementById('" + this.id + "')._owner.insTag";
+
+ if (isMZ || isO8)
  {
  try {
   this.undotext = this.area.value;
@@ -80,15 +87,11 @@ WikiEdit.prototype.init = function(id, name, nameClass, imgPath) {
   this.area.addBehavior(base_url+"3rdparty/plugins/wikiedit/sel.htc");
  }
 
- this.imagesPath = (imgPath?imgPath:base_url+"3rdparty/plugins/wikiedit/images/");
- this.editorName = name;
- this.editorNameClass = nameClass;
-
- this.actionName = "document.getElementById('" + this.id + "')._owner.insTag";
-
 // this.addButton("h1","h1","'==','==',0,1");
+ this.addButton("h1","Heading 1","'======','======',0,1");
  this.addButton("h2","Heading 2","'=====','=====',0,1");
  this.addButton("h3","Heading 3","'====','====',0,1");
+ this.addButton("h4","Heading 4","'===','===',0,1");
  this.addButton(" ");
  this.addButton("bold","Bold","'**','**'");
  this.addButton("italic","Italic","'//','//'");
@@ -221,8 +224,9 @@ WikiEdit.prototype.MarkUp = function (Tag, Text, Tag2, onNewLine, expand, strip)
  var add = 0;
  var f = false;
  var w = new RegExp("(^|\n)( +|\t+)(([-]|([1-9][0-9]*|[a-zA-Z])([.]|[)]))( |))");
- Text = Text.replace(new RegExp("\r", "g"), "");
- var lines = Text.split('\n');
+ if (!isO8) Text = Text.replace(new RegExp("\r", "g"), "");
+ if (!isO8) var lines = Text.split('\n');
+ else var lines = Text.split('\r\n');
  for(var i = 0; i < lines.length; i++) {
    if (this.rbegin.test(lines[i]))
      fIn = true;
@@ -295,34 +299,40 @@ WikiEdit.prototype.searchAndReplace = function () {
  catch (e) { alert(e);}
 }
 
-WikiEdit.prototype.keyDown = function (event) {
+WikiEdit.prototype.keyDown = function (e) {
 
   if (!this.enabled) return;
 
+  if (!e) var e = window.event;
+  
   var l, q, l1, re, tr, str, t, tr2, tr1, r1, re, q, e;
   var justenter = false;
-  var noscroll = remundo = res = false;
+  var wasEvent = remundo = res = false;
+  if (isMZ) var noscroll = false;
 
   var t = this.area;
 
-  var Key = event.keyCode;
-  if (Key==0) Key = event.charCode;
+  var Key = e.keyCode;
+  if (Key==0) Key = e.charCode;
   if (Key==8 || Key==13 || Key==32 || (Key>45 && Key<91) || (Key>93 && Key<112) || (Key>123 && Key<144)
       || (Key>145 && Key<255)) remundo = Key;
-  if (event.altKey && !event.ctrlKey) Key=Key+4096;
-  if (event.ctrlKey && !event.altKey) Key=Key+2048;  // Resolves issue DotMG was having.
-  // if (event.ctrlKey) Key=Key+2048;  
+  if (e.altKey && !e.ctrlKey) Key=Key+4096;
+  /**
+   * [%% && !e.altKey %%]: Resolves issue with some keyboards where typing Alt Gr+4 acts like typing Ctrl+4
+   * @access private
+   */
+  if (e.ctrlKey && !e.altKey) Key=Key+2048;
 
-  if (isMZ && event.type == "keypress" && this.checkKey(Key))
+  if (isMZ && e.type == "keypress" && this.checkKey(Key))
   {
-    event.preventDefault();
-    event.stopPropagation();
+    e.preventDefault();
+    e.stopPropagation();
     return false;
   }
-  if (isMZ && event.type == "keyup" && (Key==9 || Key==13))
+  if (isMZ && e.type == "keyup" && (Key==9 || Key==13))
     return false;
 
-  if (isMZ) 
+  if (isMZ || isO8) 
   {
    var scroll = t.scrollTop;
    undotext = t.value;
@@ -340,12 +350,12 @@ WikiEdit.prototype.keyDown = function (event) {
   sel = (str.length > 0);
 
   if (isIE && Key==2048+187) Key=2048+61; //
-  if (isIE && Key==2048+189 && event.shiftKey) Key=2048+95; //
+  if (isIE && Key==2048+189 && e.shiftKey) Key=2048+95; //
 
   switch (Key)
   {
   case 2138: //Z
-   if (isMZ && this.undotext) {
+   if ((isMZ || isO8) && this.undotext) {
     t.value = this.undotext;
     t.setSelectionRange(this.undosels, this.undosele);
     this.undotext = "";
@@ -356,7 +366,7 @@ WikiEdit.prototype.keyDown = function (event) {
   case 4181: //U
   case 4169: //I
    if (this.tab || Key!=9)
-   if (event.shiftKey || Key==4181) {
+   if (e.shiftKey || Key==4181) {
      res = this.unindent();
    } else {
      res = this.insTag("\t", "", 0, 1);
@@ -378,8 +388,8 @@ WikiEdit.prototype.keyDown = function (event) {
     res = this.insTag("==", "==", 0, 1);
   break;
   case 2143: //_
-//   if (sel) //&& event.shiftKey)
-    res = this.insTag("", "\n----\n", 2);
+//   if (sel) //&& e.shiftKey)
+    res = this.insTag("", "\n-----\n", 2);
   break;
   case 2114: //B
    if (sel)
@@ -402,7 +412,7 @@ WikiEdit.prototype.keyDown = function (event) {
     res = this.insTag("''", "''", 2);
   break;
   case 2118: //Ctrl+Shift+F
-   if (event.shiftKey)
+   if (e.shiftKey)
     this.searchAndReplace();
   break;
   case 4179: //Alt+S
@@ -413,72 +423,80 @@ WikiEdit.prototype.keyDown = function (event) {
   break;
   case 2124:   //L
   case 4172:
-    if (event.shiftKey && event.ctrlKey) {
+    if (e.shiftKey && e.ctrlKey) {
       res = this.insTag("\t- ", "", 0, 1, 1);
-    } else if (event.altKey || event.ctrlKey) {
-      res = this.createLink(event.altKey);
+    } else if (e.altKey || e.ctrlKey) {
+      res = this.createLink(e.altKey);
     }
   break;
   case 2127: //O
   case 2126: //N
-   if (event.ctrlKey && event.shiftKey)
+   if (e.ctrlKey && e.shiftKey)
     res = this.insTag("\t1) ", "", 0, 1, 1);
   break;
   case 13:
   case 2061:
   case 4109:
-   if (event.ctrlKey) {//Ctrl+Enter
+   if (e.ctrlKey) {//Ctrl+Enter
     try {
       if (weSave!=null) weSave();
     }
     catch(e){};
    }
-   else if (event.shiftKey) { //Shift+Enter
+   else if (e.shiftKey) { //Shift+Enter
      res = false;
    }
    else
    {
-     var text = t.value.replace(/\r/g, "");
+     var text = t.value;
+     if (!isO8) text=text.replace(/\r/g, "");
      var sel1 = text.substr(0, t.selectionStart);
      var sel2 = text.substr(t.selectionEnd);           
-     re = new RegExp("(^|\n)(( +|\t+)(((\-|([1-9][0-9]*|[a-zA-Z])([.]|[)]))( |))|))("+(this.enterpressed?"\s":"[^\n]")+"*)"+(this.mzBugFixed?"":"\n?")+"$");
+     re = new RegExp("(^|\n)(( +|\t+)(((\-|([1-9][0-9]*|[a-zA-Z])([.]|[)]))( |))|))("+(this.enterpressed?"\\s":"[^\r\n]")+"*)"+(this.mzBugFixed?"":"\r?\n?")+"$");
      q = sel1.match(re);
      if (q!=null) 
      {
-      if (this.enterpressed) 
+      if (!this.enterpressed) 
+      {
+       if (q[3].length % 2==1)
+        q[2] = "";
+       else
+       {
+        re = new RegExp("([1-9][0-9]*)([.]|[)])");
+        q2 = q[2].match(re);
+        if (q2!=null) 
+          q[2]=q[2].replace(re, String(Number(q2[1])+1)+q2[2]);
+       }
+      }
+      else
       {
        sel1 = sel1.replace(re, "");
        q[2] = "";
       }
+      
+      if (isMZ) q[2] = q[2].replace(/ $/, "");
+      
       t.value=sel1+(this.mzBugFixed?"\n":"")+q[2]+sel2;
-      sel = q[2].length + sel1.length +(this.mzBugFixed?1:0);
+      sel = q[2].length + sel1.length +(this.mzBugFixed?1:0) + (isO8?1:0);
       t.setSelectionRange(sel, sel);
 
-      if (isMZ) {
-       if (t.childNodes[0] != null)
-       {
-        t.childNodes[0].nodeValue=t.value;
-        var temp=document.createRange();
-        temp.setStart(t.childNodes[0],sel-2);
-        temp.setEnd(t.childNodes[0],sel);
-       }
-       //t.scrollIntoView(true);
-       z=t.selectionStart;
-       lines=t.value.substr(0,z).split('\n').length-1;
-       totalLines=t.value.split('\n').length-1;
-       if (scroll + t.offsetHeight + 25 > Math.floor((t.scrollHeight/(totalLines+1))*lines))
-       {
-        t.scrollTop = Math.floor((t.scrollHeight/(totalLines+1))*lines)  - t.offsetHeight + 20;
-        t.focus();
-        noscroll = true;
-       }
-      } else {
+      if (isMZ && q[2] != "") {
+        try {
+          var newEvent = document.createEvent("KeyEvents");
+          newEvent.initKeyEvent("keypress", true, true, document.defaultView, 
+                                e.ctrlKey, e.altKey, e.shiftKey, 
+                                e.metaKey, 0, " ".charCodeAt(0));
+          e.preventDefault();
+          e.target.dispatchEvent(newEvent);
+          wasEvent = true;
+        } catch(e){}; 
+      } else if (isIE) {
        var op = this.area;
        var tp = 0; var lf = 0;
        do {
          tp+=op.offsetTop;
          lf+=op.offsetLeft;
-       } while (op=op.offsetParent)
+       } while (op=op.offsetParent);
        if (tr.offsetTop >= this.area.clientHeight+tp) tr.scrollIntoView(false);
       }
       res = true;
@@ -490,25 +508,24 @@ WikiEdit.prototype.keyDown = function (event) {
 
   this.enterpressed = justenter;
   if (!res && remundo) {//alert(remundo+"|"+Key+"|"+this.undotext1);
-  this.undotext = "";}
+   this.undotext = "";
+  }
 
   if (res)
   {
-    if (isIE) {
-     this.area.focus();
-     e = window.event;
-     e.returnValue = false;
-     return false;
-    } else {
+    this.area.focus();
+    if (isMZ || isO8) {
      this.undotext=undotext;
      this.undosels=undosels;
      this.undosele=undosele;
-     event.cancelBubble = true;
-     event.preventDefault();
-     event.stopPropagation();
-     if (!noscroll) t.scrollTop = scroll;
-     return false;
-    }
+     if (wasEvent) return true;
+     e.cancelBubble = true;
+     e.preventDefault();
+     e.stopPropagation();
+    } 
+    if (!noscroll) t.scrollTop = scroll;
+    e.returnValue = false;
+    return false;
   }
 }
 
@@ -516,7 +533,8 @@ WikiEdit.prototype.getDefines = function ()
 {
   var t = this.area;
 
-  text = t.value.replace(/\r/g, "");
+  text = t.value;
+  if (!isO8) text = text.replace(/\r/g, "");
   this.ss = t.selectionStart;
   this.se = t.selectionEnd;
 
@@ -540,8 +558,14 @@ WikiEdit.prototype.setAreaContent = function (str)
   var t = this.area;
   q = str.match(new RegExp("((.|\n)*)"+this.begin));//?:
   l = q[1].length;
+
+  if (isO8) l = l + q[1].split('\n').length - 1;
+    
   q = str.match(new RegExp(this.begin+"((.|\n)*)"+this.end));
   l1 = q[1].length;
+
+  if (isO8) l1 = l1 + q[1].split('\n').length - 1;  
+  
   str = str.replace(this.rbegin, "");
   str = str.replace(this.rend, "");
   t.value = str;
@@ -588,7 +612,7 @@ WikiEdit.prototype.unindent = function ()
 
   var r = '';
   var fIn = false;
-  var lines = this.str.split('\n');
+  var lines = this.str.split(isO8?'\r\n':'\n');
   var rbeginb = new RegExp("^" + this.begin);
   for(var i = 0; i < lines.length; i++)
   {
@@ -643,8 +667,9 @@ WikiEdit.prototype.createLink = function (isAlt)
 
 WikiEdit.prototype.help = function ()
 {
- s =  " WikiEdit 2.15 (Modified for Wikka)\n";
+ s =  " WikiEdit 3.01 (Modified for Wikka)\n";
  s += "  (c) Roman Ivanov, 2003-2004   \n";
+ s += "  additional changes JHE, 2005; DotMG, 2006   \n";
  s += "  http://wackowiki.com/WikiEdit \n";
  s += "\n";
  s += "         Shortcuts:\n";
@@ -652,9 +677,7 @@ WikiEdit.prototype.help = function ()
  s += " Ctrl+I - Italic\n";
  s += " Ctrl+U - Underline\n";
  s += " Ctrl+Shift+S - Strikethrough\n";
- s += " Ctrl+Shift+1 - Heading 1\n";
- s += " ...\n";
- s += " Ctrl+Shift+5 - Heading 5\n";
+ s += " Ctrl+Shift+1 .. 5 - Heading 1..5\n";
  s += " Alt+I or Ctrl+T - Indent\n";
  s += " Alt+U or Ctrl+Shift+T - Unindent\n";
  s += " Ctrl+J - MarkUp ('')\n";
@@ -665,6 +688,7 @@ WikiEdit.prototype.help = function ()
  s += " Ctrl+Shift+O - Ordered List\n";
  s += " Ctrl+Shift+Minus - Horizontal line\n";
  s += " Ctrl+Shift+F - Advanced search/replace\n";
+ s += " NB: all Alt-shortcuts do not work in Opera.\n";
 
  alert(s);
 }
