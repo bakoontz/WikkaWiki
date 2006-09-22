@@ -49,15 +49,15 @@ class Wakka
 	{
 		$this->config = $config;
 		$this->dblink = @mysql_connect($this->config["mysql_host"], $this->config["mysql_user"], $this->config["mysql_password"]);
-            if ($this->dblink)
-            {
-            	if (!@mysql_select_db($this->config["mysql_database"], $this->dblink))
-                  {
-                  	@mysql_close($this->dblink);
-                        $this->dblink = false;
-                  }
-            }
- 		$this->VERSION = WAKKA_VERSION;
+		if ($this->dblink)
+		{
+			if (!@mysql_select_db($this->config["mysql_database"], $this->dblink))
+			{
+				@mysql_close($this->dblink);
+				$this->dblink = false;
+			}
+		}
+		$this->VERSION = WAKKA_VERSION;
 	}
 
 	/**
@@ -73,10 +73,10 @@ class Wakka
 		}
 		if ($this->GetConfigValue("sql_debugging"))
 		{
-  			$time = $this->GetMicroTime() - $start;
-  			$this->queryLog[] = array(
-  				"query"		=> $query,
-  				"time"		=> $time);
+			$time = $this->GetMicroTime() - $start;
+			$this->queryLog[] = array(
+				"query"		=> $query,
+				"time"		=> $time);
 		}
 		return $result;
 	}
@@ -431,7 +431,54 @@ class Wakka
 
 		return($data);
 	}
-	function FullCategoryTextSearch($phrase) { return $this->LoadAll("select * from ".$this->config["table_prefix"]."pages where latest = 'Y' and match(body) against('".mysql_real_escape_string($phrase)."' IN BOOLEAN MODE)"); }
+	/**
+	 * Takes an array of pages returned by LoadAll() and presents it using table or unordered list.
+	 *
+	 * This method is called in Category action and Backlinks handler
+	 *
+	 * @author		{@link http://wikkawiki.org/DotMG DotMG}
+	 * @access		public
+	 *
+	 * @param mixed $pages required: Array of pages returned by LoadAll
+	 * @param string $nopagesText optional: Error message returned if $pages is void. Default: ''
+	 * @param string $class optional: A classname to be attached to the table or unordered list. Default: ''
+	 * @param int $columns optional: Number of columns of the table if compact = 0. Default: 3
+	 * @param int $compact optional: If 0: use table, if 1: use unordered list. Default: 0
+	 * @return string 
+	 */
+	function ListPages($pages, $nopagesText = '', $class = '', $columns = 3, $compact = 0)
+	{
+		if (!$pages) return ($nopagesText);
+		if ($class) $class=" class='$class'";
+		$str = $compact ? "<div$class><ul>" : "<table width='100%'$class><tr\n>";
+		foreach ($pages as $page)
+		{
+			$list[] = $page['tag'];
+		}
+		sort ($list);
+		$count = 0;
+		foreach ($list as $val)
+		{
+			if ($compact)
+			{
+				$link = '[['.$val;
+				if (eregi('^Category', $val)) $link.= ' '.eregi_replace('^Category', '', $val);
+				$str .= "<li\n>".$this->Format($link.']]').'</li>';
+			}
+			else
+			{
+				if ($count == $columns)
+				{
+					$str .= "</tr><tr\n>";
+					$count = 0;
+				}
+				$str .= '<td>'.$this->Format('[['.$val.']]').'</td>';
+			}
+			$count ++;
+		}
+		$str .= $compact ? '</ul></div>' : '</tr></table>';
+		return ($str);
+	}
 	function SavePage($tag, $body, $note)
 	{
 		// get current user

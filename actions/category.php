@@ -8,16 +8,18 @@
  * @version 	$Id$
  * 
  * @input	string $page optional: the category for which you want to display the pages and categories. Default: current page
- * @input 	integer $compact optional: produces a columnar layout with a layout table; 1 produces output in the form of an unordered list. Default: 0
+ * @input	integer $compact optional: produces a columnar layout with a layout table; 1 produces output in the form of an unordered list. Default: 0
  * @input	integer $col optional: number of columns (for compact=0). Default: 1
  * @output	A html table with pages
- * @uses	Wakka::CheckMySQLVersion()
- * @uses	Wakka::Format()
- * @uses	Wakka::FullCategoryTextSearch()
- * @uses	Wakka::FullTextSearch()
+ * @uses	Wakka::GetPageTag();
+ * @uses	Wakka::ListPages()
+ * @uses	Wakka::LoadPagesLinkingTo()
  * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
  */
+
+if (!defined('ERR_NO_PAGES')) define('ERR_NO_PAGES', 'Sorry, No items found for %s');
+if (!defined('PAGES_BELONGING_TO')) define('PAGES_BELONGING_TO', 'The following %d page(s) belong to %s');
  
 if ($cattag = $_REQUEST["wakka"])
 {
@@ -35,37 +37,14 @@ if ($cattag = $_REQUEST["wakka"])
 	}
 	if (!$page) {$page=$cattag;}
 
-	if ($this->CheckMySQLVersion(4,0,1))
-	{
-    		$results = $this->FullCategoryTextSearch($page); 
-	}
-	else
-	{
-    		$results = $this->FullTextSearch($page); 
-	}
+	$results = $this->LoadPagesLinkingTo($page);
 
-	if ($results)
+	$errmsg = '<em class="error">'.sprintf(ERR_NO_PAGES, $page).'</em>';
+	$str = $this->ListPages($results, $errmsg, $class, $col, $compact);
+	if ($str != $errmsg)
 	{
-		if (!$compact) $str .= ' pages belong to ' . $page . ': <br /><br /><table '.$class.' width="100%"><tr>'; #i18n
-		else $str .= '<div '.$class.'><ul>';
-		
-		$count = 0; 
-		$pagecount = 0;
-		$list = array();
-		
-		foreach ($results as $i => $cpage) if($cpage['tag'] != $page) { array_push($list,$cpage['tag']);}
-		sort($list);
-		while (list($key, $val) = each($list)) {
-			if ($count == $col & !$compact)  { $str .= "</tr><tr>"; $count=0; }
-			if (!$compact) $str .= '<td>'.$this->Format('[['.$val.']]').'</td>';
-			else $str .= '<li>'.$this->Format('[['.$val.' '.preg_replace( "/Category/", "",$val).']]').'</li>';
-			$count++;
-			$pagecount++;
-		}
-		$str = 'The following '.$pagecount.$str; #i18n
-		if (!$compact)  $str .= '</tr></table>'; else $str .= '</ul></div>';
+		printf(PAGES_BELONGING_TO.'<br /><br />', count($results), $page);
 	}
-	else $str .= 'Sorry, no items found for ' . $page .'.'; #i18n
 	print($str);
 }
 ?>
