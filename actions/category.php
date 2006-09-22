@@ -26,15 +26,11 @@ if ($cattag = $_REQUEST["wakka"])
 	$str ="";
 	if (!isset($col)) $col=1;
 	if (!isset($compact)) $compact=0;
-	if (!isset($page)) $page=$this->getPageTag(); 
+	if (!isset($page)) $page=$this->GetPageTag(); 
+	if (isset($this->_included_page)) $page = $this->_included_page;
+	if (!isset($class)) $class = '';
 	if ($page=="/") $page="CategoryCategory"; 
 
-//	$page= preg_replace( "/(\w+)\s(\w+)/", "$1$2",$page);
-	if (isset($class)) {
-		$class="class=\"$class\"";
-	} else {
-		$class="";
-	}
 	if (!$page) {$page=$cattag;}
 
 	$results = $this->LoadPagesLinkingTo($page);
