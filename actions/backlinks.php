@@ -16,11 +16,6 @@
  * @uses	Wakka::LoadPagesLinkingTo()
  */
 
-if ($pages = $this->LoadPagesLinkingTo($this->getPageTag())) {
-	foreach ($pages as $page) {
-		$links[] = $this->Link($page["tag"]);
-	}
-	print(implode("<br />\n", $links));
-}
-
+$pages = $this->LoadPagesLinkingTo($this->GetPageTag());
+echo $this->ListPages($pages, '', '', 0, 1);
 ?>
