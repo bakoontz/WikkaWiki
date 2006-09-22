@@ -9,7 +9,8 @@
  * and released under the terms of the modified BSD license
  * @see /docs/WakkaWiki.LICENSE
  *
- * @package Core
+ * @package Wikka
+ * @subpackage Core
  * @version $Id$
  * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @see /docs/Wikka.LICENSE

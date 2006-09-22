@@ -33,10 +33,10 @@
  */
 define ("WHITESPACE", " \x00\x01\x02\x03\x04\x05\x06\x07\x08\x09\x0A\x0B\x0C\x0D\x0E\x0F\x10\x11\x12\x13\x14\x15\x15\x17\x18\x19\x1A\x1B\x1C\x1D\x1E\x1F");
 /**
-* Base State Parser
-* @access protected
-* @abstract
-*/
+ * Base State Parser
+ * @access protected
+ * @abstract
+ */
 class XML_HTMLSax_StateParser {
     /**
     * Instance of user front end class to be passed to callbacks
@@ -368,12 +368,13 @@ class XML_HTMLSax_StateParser_Lt430 extends XML_HTMLSax_StateParser {
 }
 
 /**
-* Parser for PHP Versions equal to or greater than 4.3.0. Uses a faster
-* parsing mechanism than the equivalent PHP < 4.3.0 subclass of StateParser
-* @package XML_HTMLSax
-* @access protected
-* @see XML_HTMLSax_StateParser_Lt430
-*/
+ * Parser for PHP Versions equal to or greater than 4.3.0. Uses a faster
+ * parsing mechanism than the equivalent PHP < 4.3.0 subclass of StateParser
+ * @package 3rdParty
+ * @subpackage SafeHTML
+ * @access protected
+ * @see XML_HTMLSax_StateParser_Lt430
+ */
 class XML_HTMLSax_StateParser_Gtet430 extends XML_HTMLSax_StateParser {
     /**
     * Constructs XML_HTMLSax_StateParser_Gtet430 defining available
@@ -428,10 +429,11 @@ class XML_HTMLSax_StateParser_Gtet430 extends XML_HTMLSax_StateParser {
 }
 
 /**
-* Default NullHandler for methods which were not set by user
-* @package XML_HTMLSax
-* @access protected
-*/
+ * Default NullHandler for methods which were not set by user
+ * @package 3rdParty
+ * @subpackage SafeHTML
+ * @access protected
+ */
 class XML_HTMLSax_NullHandler {
     /**
     * Generic handler method which does nothing
@@ -443,10 +445,11 @@ class XML_HTMLSax_NullHandler {
 }
 
 /**
-* User interface class. All user calls should only be made to this class
-* @package XML_HTMLSax
-* @access public
-*/
+ * User interface class. All user calls should only be made to this class
+ * @package 3rdParty
+ * @subpackage SafeHTML
+ * @access public
+ */
 class XML_HTMLSax {//extends Pear {
     /**
     * Instance of concrete subclass of XML_HTMLSax_StateParser
@@ -644,16 +647,18 @@ class XML_HTMLSax {//extends Pear {
 }
 
 /**
-* Decorators for dealing with parser options
-* @package XML_HTMLSax
-* @version Id: XML_HTMLSax_Decorators.php,v 1.6 2003/12/04 23:35:20 harryf Exp $
-* @see XML_HTMLSax::set_option
-*/
+ * Decorators for dealing with parser options
+ * @package 3rdParty
+ * @subpackage SafeHTML
+ * @version Id: XML_HTMLSax_Decorators.php,v 1.6 2003/12/04 23:35:20 harryf Exp $
+ * @see XML_HTMLSax::set_option
+ */
 /**
-* Trims the contents of element data from whitespace at start and end
-* @package XML_HTMLSax
-* @access protected
-*/
+ * Trims the contents of element data from whitespace at start and end
+ * @package 3rdParty
+ * @subpackage SafeHTML
+ * @access protected
+ */
 class XML_HTMLSax_Trim {
     /**
     * Original handler object
@@ -691,10 +696,11 @@ class XML_HTMLSax_Trim {
     }
 }
 /**
-* Coverts tag names to upper case
-* @package XML_HTMLSax
-* @access protected
-*/
+ * Coverts tag names to upper case
+ * @package 3rdParty
+ * @subpackage SafeHTML
+ * @access protected
+ */
 class XML_HTMLSax_CaseFolding {
     /**
     * Original handler object
@@ -747,11 +753,12 @@ class XML_HTMLSax_CaseFolding {
     }
 }
 /**
-* Breaks up data by linefeed characters, resulting in additional
-* calls to the data handler
-* @package XML_HTMLSax
-* @access protected
-*/
+ * Breaks up data by linefeed characters, resulting in additional
+ * calls to the data handler
+ * @package 3rdParty
+ * @subpackage SafeHTML
+ * @access protected
+ */
 class XML_HTMLSax_Linefeed {
     /**
     * Original handler object
@@ -789,11 +796,12 @@ class XML_HTMLSax_Linefeed {
     }
 }
 /**
-* Breaks up data by tab characters, resulting in additional
-* calls to the data handler
-* @package XML_HTMLSax
-* @access protected
-*/
+ * Breaks up data by tab characters, resulting in additional
+ * calls to the data handler
+ * @package 3rdParty
+ * @subpackage SafeHTML
+ * @access protected
+ */
 class XML_HTMLSax_Tab {
     /**
     * Original handler object
@@ -831,12 +839,13 @@ class XML_HTMLSax_Tab {
     }
 }
 /**
-* Breaks up data by XML entities and parses them with html_entity_decode(),
-* resulting in additional calls to the data handler<br />
-* Requires PHP 4.3.0+
-* @package XML_HTMLSax
-* @access protected
-*/
+ * Breaks up data by XML entities and parses them with html_entity_decode(),
+ * resulting in additional calls to the data handler<br />
+ * Requires PHP 4.3.0+
+ * @package 3rdParty
+ * @subpackage SafeHTML
+ * @access protected
+ */
 class XML_HTMLSax_Entities_Parsed {
     /**
     * Original handler object
@@ -884,11 +893,12 @@ if (version_compare(phpversion(), '4.3', '<') && !function_exists('html_entity_d
     }
 }
 /**
-* Breaks up data by XML entities but leaves them unparsed,
-* resulting in additional calls to the data handler<br />
-* @package XML_HTMLSax
-* @access protected
-*/
+ * Breaks up data by XML entities but leaves them unparsed,
+ * resulting in additional calls to the data handler<br />
+ * @package 3rdParty
+ * @subpackage SafeHTML
+ * @access protected
+ */
 class XML_HTMLSax_Entities_Unparsed {
     /**
     * Original handler object
@@ -926,10 +936,11 @@ class XML_HTMLSax_Entities_Unparsed {
     }
 }
 /**
-* Main parser components
-* @package XML_HTMLSax
-* @version Id: XML_HTMLSax_States.php,v 1.7 2003/12/04 23:35:20 harryf Exp $
-*/
+ * Main parser components
+ * @package 3rdParty
+ * @subpackage SafeHTML
+ * @version Id: XML_HTMLSax_States.php,v 1.7 2003/12/04 23:35:20 harryf Exp $
+ */
 /**
 * Define parser states
 */
@@ -942,10 +953,11 @@ define('XML_HTMLSAX_STATE_ESCAPE', 6);
 define('XML_HTMLSAX_STATE_JASP', 7);
 define('XML_HTMLSAX_STATE_PI', 8);
 /**
-* StartingState searches for the start of any XML tag
-* @package XML_HTMLSax
-* @access protected
-*/
+ * StartingState searches for the start of any XML tag
+ * @package 3rdParty
+ * @subpackage SafeHTML
+ * @access protected
+ */
 class XML_HTMLSax_StartingState  {
     /**
     * @param XML_HTMLSax_StateParser subclass
@@ -963,10 +975,11 @@ class XML_HTMLSax_StartingState  {
     }
 }
 /**
-* Decides which state to move one from after StartingState
-* @package XML_HTMLSax
-* @access protected
-*/
+ * Decides which state to move one from after StartingState
+ * @package 3rdParty
+ * @subpackage SafeHTML
+ * @access protected
+ */
 class XML_HTMLSax_TagState {
     /**
     * @param XML_HTMLSax_StateParser subclass
@@ -994,10 +1007,11 @@ class XML_HTMLSax_TagState {
     }
 }
 /**
-* Dealing with closing XML tags
-* @package XML_HTMLSax
-* @access protected
-*/
+ * Dealing with closing XML tags
+ * @package 3rdParty
+ * @subpackage SafeHTML
+ * @access protected
+ */
 class XML_HTMLSax_ClosingTagState {
     /**
     * @param XML_HTMLSax_StateParser subclass
@@ -1021,10 +1035,11 @@ class XML_HTMLSax_ClosingTagState {
     }
 }
 /**
-* Dealing with opening XML tags
-* @package XML_HTMLSax
-* @access protected
-*/
+ * Dealing with opening XML tags
+ * @package 3rdParty
+ * @subpackage SafeHTML
+ * @access protected
+ */
 class XML_HTMLSax_OpeningTagState {
     /**
     * Handles attributes
@@ -1102,10 +1117,11 @@ class XML_HTMLSax_OpeningTagState {
 }
 
 /**
-* Deals with XML escapes handling comments and CDATA correctly
-* @package XML_HTMLSax
-* @access protected
-*/
+ * Deals with XML escapes handling comments and CDATA correctly
+ * @package 3rdParty
+ * @subpackage SafeHTML
+ * @access protected
+ */
 class XML_HTMLSax_EscapeState {
     /**
     * @param XML_HTMLSax_StateParser subclass
@@ -1149,10 +1165,11 @@ class XML_HTMLSax_EscapeState {
     }
 }
 /**
-* Deals with JASP/ASP markup
-* @package XML_HTMLSax
-* @access protected
-*/
+ * Deals with JASP/ASP markup
+ * @package 3rdParty
+ * @subpackage SafeHTML
+ * @access protected
+ */
 class XML_HTMLSax_JaspState {
     /**
     * @param XML_HTMLSax_StateParser subclass
@@ -1171,10 +1188,11 @@ class XML_HTMLSax_JaspState {
     }
 }
 /**
-* Deals with XML processing instructions
-* @package XML_HTMLSax
-* @access protected
-*/
+ * Deals with XML processing instructions
+ * @package 3rdParty
+ * @subpackage SafeHTML
+ * @access protected
+ */
 class XML_HTMLSax_PiState {
     /**
     * @param XML_HTMLSax_StateParser subclass

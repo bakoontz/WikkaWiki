@@ -6,7 +6,7 @@
  * @todo 	Since wdiff use only directive lines, all stuff in diff class 
  * related to line and context display should be removed.
  *
- * @package Core
+ * @package Wikka
  * @subpackage Libs
  * @version $Id$
  * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
@@ -17,7 +17,7 @@
  */
 /**
  * @name Side
- * @package Core
+ * @package Wikka
  * @subpackage Libs
  */
 class Side {

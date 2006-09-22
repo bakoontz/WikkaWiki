@@ -5,7 +5,7 @@
  * It includes the Wakka class, which provides the core functions
  * to run Wikka. 
  *
- * @package Core
+ * @package Wikka
  * @subpackage Libs
  * @version $Id$
  * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
@@ -27,7 +27,7 @@
  * 
  * This class contains all the core methods used to run Wikka.
  * @name Wakka
- * @package Core
+ * @package Wikka
  * @subpackage Libs
  * 
  */
