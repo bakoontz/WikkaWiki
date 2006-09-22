@@ -96,7 +96,12 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 			return;
 		}
 
-		// table. trigger means: 0==no table, 1==in table no cell, 2==in table data cell, 3==in table header cell, 4==in caption
+		// Ignore the closing delimiter if there is nothing to close.
+		else if ( preg_match("/^\|\|\n$/", $thing, $matches) && $trigger_table == 1 ) {
+			return "";
+		}
+
+		// $matches[1] is element, $matches[2] is attributes, $matches[3] is styles and $matches[4] is linebreak
 		else if ( preg_match("/^\|([^\|])?\|(\(.*?\))?(\{.*?\})?(\n)?$/", $thing, $matches) )
 		{
 			//Set up the variables that will aggregate the html markup
@@ -105,13 +110,16 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 			$linebreak_after_open = '';
 			$selfclose = '';
 			
-			//First catch is caption|header|rowgroup, second is attributes, third is linebreak.
+			// $trigger_table == 0 means no table, 1 means in table but no cell, 2 is in datacell, 3 is in headercell, 4 is in caption.
+
+			//If we have parsed the caption, close it, set trigger = 1 and return.
 			if ( $trigger_table == 4 ) {
 				$close_part = '</caption>'."\n";
 				$trigger_table = 1;
 				return $close_part;
 			}
 			
+			//If we have parsed a cell - close it, go on to open new.
 			if ( $trigger_table == 3 )
 			{
 				$close_part = '</th>';
@@ -120,40 +128,47 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 			{
 				$close_part = '</td>';
 			}
+			// If no cell, or we want to open a table; then there is nothing to close
 			else if ( $trigger_table == 1 || $matches[1] == '!')
 			{
 				$close_part = '';
 			}
 			else
 			{
-				//This is actually opening the table (i.e. nothing at all to close).
+				//This is actually opening the table (i.e. nothing at all to close). Go on to open a cell.
 				$trigger_table = 1;
 				$close_part = '<table class="wikka">'."\n";
 			}
 			
+			//If we are in a cell and there is a linebreak - then it is end of row.
 			if ( $trigger_table > 1 && $matches[4] == "\n" )
 			{
 				$trigger_table = 1;
 				return $close_part .= '</tr>'."\n"; //Can return here, it is closed-
 			}
 			
+			//If we were in a colgroup and there is a linebreak, then it is the end.
 			if ( $trigger_colgroup == 1 && $matches[4] == "\n" )
 			{
 				$trigger_colgroup = 0;
 				return $close_part .= '</colgroup>'."\n"; //Can return here, it is closed-
 			}
 
+			//We want to start a new table, and most likely have attributes to parse.
+			//TODO: Need to find out if class="wikka" should be auto added, and if so - put it in the attribute list to add up.
 			if ( $matches[1] == '!' )
 			{
 				$trigger_table = 1;
 				$open_part = '<table class="wikka"';
 				$linebreak_after_open = "\n";
 			}
+			//Open a caption.
 			else if ( $matches[1] == '?' )
 			{
 				$trigger_table = 4;
 				$open_part = '<caption';
 			}
+			//Start a rowgroup.
 			else if ( $matches[1] == '#' || $matches[1] == '[' || $matches[1] == ']' )
 			{
 				//If we're here, we want to close any open rowgroup.
@@ -170,6 +185,7 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 					$close_part .= '</thead>'."\n";
 				}
 
+				//Then open the appropriate rowgroup.
 				if ($matches[1] == '[' )
 				{
 					$open_part .= '<thead';
@@ -188,6 +204,7 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 
 				$linebreak_after_open = "\n";
 			}
+			//Here we want to add colgroup.
 			else if ( $matches[1] == '_' )
 			{
 				//close any open colgroup
@@ -199,31 +216,37 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 				$trigger_colgroup = 1;
 				$open_part .= '<colgroup';
 			}
+			//And col elements
 			else if ( $matches[1] == '-' )
 			{
 				$open_part .= '<col';
 				$selfclose = ' /';
 				if ( $matches[4] ) $linebreak_after_open = "\n";
 			}
+			//Ok, then it is cells.
 			else
 			{
 				$open_part = '';
+				//Need a tbody if no other rowgroup open.
 				if ($trigger_rowgroup == 0)
 				{
 					$open_part .= '<tbody>'."\n";
 					$trigger_rowgroup = 3;
 				}
 
+				//If no row, open a new one.
 				if ( $trigger_table == 1 )
 				{
 					$open_part .= '<tr>';
 				}
 
+				//Header cell.
 				if ( $matches[1] == '=' )
 				{
 					$trigger_table = 3;
 					$open_part .= '<th';
 				}
+				//Datacell
 				else
 				{
 					$trigger_table = 2;
@@ -232,27 +255,31 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 
 			}
 			
+			//If attributes...
 			if ( preg_match("/\((.*)\)/", $matches[2], $attribs ) )
 			{
 //				$hints = array('core' => 'core', 'i18n' => 'i18n');
 				$hints = array();
+				//allow / disallow different attribute keys. (ie. data/header cell only.
 				if ($trigger_table == 2 || $trigger_table == 3) $hints['cell'] = 'cell';
 				else $hints['other_table'] = 'other_table';
 				$open_part .= parse_attributes($attribs[1], $hints);
 			}
 
+			//If styles, just make attribute of it and parse again.
 			if ( preg_match("/\{(.*)\}/", $matches[3], $attribs ) )
 			{
 				$attribs = "s:".$attribs[1];
 				$open_part .= parse_attributes($attribs, array() );
 			}
 
+			//the variable $selfclose is "/" if this is a <col/> element.
 			$open_part .= $selfclose.'>';
 			return $close_part . $open_part . $linebreak_after_open;
 		}
+		//Are in table, no cell - but not asked to open new: please close and parse again. ;)
 		else if ( $trigger_table == 1 )
 		{
-			//Are in table, no cell - but not asked to open new: please close and parse again. ;)
 			$close_part = '';
 			if (2 < $trigger_rowgroup)
 			{
@@ -271,6 +298,7 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 			
 			$trigger_table = $trigger_rowgroup = 0;
 			
+			//And remember to parse what we got.
 			return $close_part.wakka2callback($things);
 		}
 		// convert HTML thingies
@@ -591,7 +619,7 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 		else if (preg_match("/-{4,}/", $thing, $matches))
 		{
 			// TODO: This could probably be improved for situations where someone puts text on the same line as a separator.
-			//       Which is a stupid thing to do anyway! HAW HAW! Ahem.
+			//	   Which is a stupid thing to do anyway! HAW HAW! Ahem.
 			$br = 0;
 			return "<hr />\n";
 		}
@@ -609,6 +637,7 @@ if (!function_exists("parse_attributes"))
 {
 	function parse_attributes($attribs, $hints) {
 
+		//Sort different attributes / keys to use for different elements.
 		static $attributes = array(
 			'core' => array( 'c' => 'class','i' => 'id','s' => 'style','t' => 'title'),
 			'i18n' => array( 'd' => 'dir','l' => 'xml:lang'),
@@ -635,6 +664,7 @@ if (!function_exists("parse_attributes"))
 	
 			if (!$a)
 			{
+				//This attribute isn't allowed here / is wrong.
 				echo '<!--Cannot find attribute for key "'.$key.'" from hints given.-->'."\n";
 			}
 			else
@@ -660,7 +690,7 @@ $text = preg_replace_callback(
 	"\"\".*?\"\"|".																			# literal
 	$mind_map_pattern.
 	"\[\[[^\[]*?\]\]|".																		# forced link
-	"-{3,}|".																			# foreced linebreak and separator (hr)
+	"-{3,}|".																			# forced linebreak and hr
 	"\b[a-z]+:\/\/\S+|".																	# URL
 	"\*\*|\'\'|\#\#|\#\%|@@|::c::|\>\>|\<\<|&pound;&pound;|&yen;&yen;|\+\+|__|<|>|\/\/|".	# Wiki markup
 	"======|=====|====|===|==|".															# headings
