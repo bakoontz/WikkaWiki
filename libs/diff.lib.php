@@ -1,6 +1,6 @@
 <?php
 /**
- * A php wdiff  (word diff) for wakka, adapted by David Delon
+ * A php wdiff (word diff) for wakka, adapted by David Delon
  * based on wdiff and phpwiki diff (copyright below).
  *
  * @todo 	Since wdiff use only directive lines, all stuff in diff class 
@@ -12,6 +12,8 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
  * 
+ * @author Geoffrey T. Dairiki
+ * @author Francois Pinard
  * @copyright Copyright (C) 2000, 2001 Geoffrey T. Dairiki <dairiki@dairiki.org>
  * @copyright Copyright (C) 1992 Free Software Foundation, Inc. Francois Pinard <pinard@iro.umontreal.ca>.
  */
@@ -236,6 +238,9 @@ class Side {
 // PHP3 does not have assert()
 define('USE_ASSERTS', function_exists('assert'));
 
+/**
+ * @access private
+ */
 class _DiffOp {
     var $type;
     var $orig;
@@ -250,7 +255,9 @@ class _DiffOp {
 	return $this->final ? sizeof($this->final) : 0;
     }
 }
-
+/**
+ * @access private
+ */
 class _DiffOp_Copy extends _DiffOp {
     var $type = 'copy';
     
@@ -262,7 +269,9 @@ class _DiffOp_Copy extends _DiffOp {
     }
 
 }
-
+/**
+ * @access private
+ */
 class _DiffOp_Delete extends _DiffOp {
     var $type = 'delete';
     
@@ -272,7 +281,9 @@ class _DiffOp_Delete extends _DiffOp {
     }
 
 }
-
+/**
+ * @access private
+ */
 class _DiffOp_Add extends _DiffOp {
     var $type = 'add';
     
@@ -282,7 +293,9 @@ class _DiffOp_Add extends _DiffOp {
     }
 
 }
-
+/**
+ * @access private
+ */
 class _DiffOp_Change extends _DiffOp {
     var $type = 'change';
     
@@ -291,9 +304,7 @@ class _DiffOp_Change extends _DiffOp {
 	$this->final = $final;
     }
 
-}
-	
-      
+}     
 /**
  * Class used internally by Diff to actually compute the diffs.
  *
