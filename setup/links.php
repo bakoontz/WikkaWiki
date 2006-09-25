@@ -56,8 +56,9 @@ while ($pages = LoadSomePages($start))
 		$GLOBALS['tag'] = $page['tag'];
 		$GLOBALS['written'] = array();
 		preg_replace_callback(
-		"/(?>".
+		"/".
 		"%%.*?%%|".																				# code
+		"\"\".*?\"\"|".                      # literal 		
 		"\[\[[^\[]*?\]\]|".																		# forced link
 		#$mind_map_pattern.																		# (safe to be ignored)
 		"\[\[\S*[^\[]*?\]\]|".																		# forced link
@@ -71,7 +72,7 @@ while ($pages = LoadSomePages($start))
 		"\b[A-ZÄÖÜ][A-Za-zÄÖÜßäöü]+[:](?![=_])\S*\b|".											# InterWiki link
 		"\b([A-ZÄÖÜ]+[a-zßäöü]+[A-Z0-9ÄÖÜ][A-Za-z0-9ÄÖÜßäöü]*)\b|".								# CamelWords
 		"\n".																					# new line
-  		")/ms", "relinkcallback", $page['body']);
+		"/ms", "relinkcallback", $page['body']);
 	}
 	$start = $page['tag'];
 	// insert into wikka_links a batch of records at a time.
@@ -99,7 +100,7 @@ function relinkcallback($thing)
 	// This regexp treats CamelCases and [[forcedlink]] (or [[http://external.link of any type]])
 	// In case of a Forced link, it treats only a word before the first space or closing bracket THAT satisfies the regexp [A-ZÄÖÜa-zßäöü]+
 	// So, http links like above are not taken into account, because they contain : and /
-	if (preg_match("/^(\[\[)?([A-ZÄÖÜa-zßäöü]+(?(1)(?=[ \]])|[A-Z0-9ÄÖÜ][A-Za-z0-9ÄÖÜßäöü]*\\b$))/s", $thing, $matches))          # recognize forced links across lines
+	if (preg_match("/^(\[\[)?([A-ZÄÖÜa-zßäöü0-9]+(?(1)(?=[ \]])|[A-Z0-9ÄÖÜ][A-Za-z0-9ÄÖÜßäöü]*\\b$))/s", $thing, $matches))          # recognize forced links across lines
 	{
 		$url = $matches[2];
 		if (($url) && (!isset($written[strtolower($url)])) && (strtolower($url) != strtolower($tag)))
