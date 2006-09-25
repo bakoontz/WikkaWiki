@@ -18,7 +18,6 @@
  */
 
 $message = $this->GetRedirectMessage();
-$user = $this->GetUser();
 $site_base = $this->GetConfigValue("base_url");
 if ( substr_count($site_base, 'wikka.php?wakka=') > 0 ) $site_base = substr($site_base,0,-16);
 ?>
@@ -43,7 +42,7 @@ if ($this->GetMethod() != 'edit' && $this->config['enable_rss_autodiscovery'] !=
 }
 ?>
 </head>
-<body <?php echo $message ? "onLoad=\"alert('".$message."');\" " : "" ?> >
+<body <?php echo $message ? "onload=\"alert('".$message."');\" " : "" ?> >
 <div class="header">
 	<h2><?php echo $this->config["wakka_name"] ?> : <a href="<?php echo $this->href('backlinks', '', ''); ?>" title="Display a list of pages linking to <?php echo $this->tag ?>"><?php echo $this->GetPageTag(); ?></a></h2>
 	<?php echo $this->Link($this->config["root_page"]); ?> ::
