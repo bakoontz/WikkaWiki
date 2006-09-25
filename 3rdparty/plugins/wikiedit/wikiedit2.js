@@ -458,7 +458,7 @@ WikiEdit.prototype.keyDown = function (e) {
      {
       if (!this.enterpressed) 
       {
-       if (q[3].length % 2==1)
+       if ((q[3].length % 2==1) && (q[3] != '\t'))
         q[2] = "";
        else
        {
