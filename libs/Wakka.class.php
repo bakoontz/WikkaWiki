@@ -706,13 +706,28 @@ class Wakka
 		}
 		return $href;
 	}
+	/**
+	 * Link 
+	 * 
+		* Beware of the $title parameter: quotes and backslashes should be previously escaped before passed to 
+		* this method.
+		*
+	 * @param mixed $tag 
+	 * @param string $method 
+	 * @param string $text 
+	 * @param boolean $track 
+	 * @param boolean $escapeText 
+	 * @param string $title 
+	 * @access public
+	 * @return string
+	 */
 	function Link($tag, $method='', $text='', $track=TRUE, $escapeText=TRUE, $title='') {
 		if (!$text) $text = $tag;
 		// escape text?
 		if ($escapeText) $text = $this->htmlspecialchars_ent($text);
 		$tag = $this->htmlspecialchars_ent($tag); #142 & #148
 		$method = $this->htmlspecialchars_ent($method);
-		$title = $this->htmlspecialchars_ent($title);
+		$title_attr = $title ? ' title="'.$this->htmlspecialchars_ent($title).'"' : '';
 		$url = '';
 
 		// is this an interwiki link?
@@ -743,8 +758,7 @@ class Wakka
 			// it's a wiki link
 			if ($_SESSION["linktracking"] && $track) $this->TrackLinkTo($tag);
 			$linkedPage = $this->LoadPage($tag);
-			// return ($linkedPage ? "<a href=\"".$this->Href($method, $linkedPage['tag'])."\">".$text."</a>" : "<span class=\"missingpage\">".$text."</span><a href=\"".$this->Href("edit", $tag)."\" title=\"Create this page\">?</a>");
-			return ($linkedPage ? "<a href=\"".$this->Href($method, $linkedPage['tag'])."\" title=\"$title\">".$text."</a>" : "<a class=\"missingpage\" href=\"".$this->Href("edit", $tag)."\" title=\"Create this page\">".$text."</a>");
+			return ($linkedPage ? "<a href=\"".$this->Href($method, $linkedPage['tag'])."\"$title_attr>".$text."</a>" : "<a class=\"missingpage\" href=\"".$this->Href("edit", $tag)."\" title=\"Create this page\">".$text."</a>");
 		}
 		$external_link_tail = $this->GetConfigValue("external_link_tail");
 		return $url ? "<a class=\"ext\" href=\"$url\">$text</a>$external_link_tail" : $text;
@@ -967,26 +981,20 @@ class Wakka
 	}
 
 	// ACCESS CONTROL
-	/**
-	 * Check if current user is the owner of the current or a specified page.
-	 * 
-	 * @access	public
-	 * @param	string	$tag optional: page to be checked. Default: current page.
-	 * @return	boolean	TRUE if the user is the owner, FALSE otherwise.
-	 */
+	// returns true if logged in user is owner of current page, or page specified in $tag
 	function UserIsOwner($tag = "")
 	{
-		// if not logged in, user can't be owner!
+		// check if user is logged in
 		if (!$this->GetUser()) return false;
 
 		// if user is admin, return true. Admin can do anything!
 		if ($this->IsAdmin()) return true;
 
-		// set default tag & check if user is owner
+		// set default tag
 		if (!$tag = trim($tag)) $tag = $this->GetPageTag();
+
+		// check if user is owner
 		if ($this->GetPageOwner($tag) == $this->GetUserName()) return true;
-		
-		return false;
 	}
 	//returns true if user is listed in configuration list as admin
 	function IsAdmin() {
