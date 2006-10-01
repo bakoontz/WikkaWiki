@@ -452,13 +452,13 @@ WikiEdit.prototype.keyDown = function (e) {
      if (!isO8) text=text.replace(/\r/g, "");
      var sel1 = text.substr(0, t.selectionStart);
      var sel2 = text.substr(t.selectionEnd);           
-     re = new RegExp("(^|\n)(( +|\t+)(((\-|([1-9][0-9]*|[a-zA-Z])([.]|[)]))( |))|))("+(this.enterpressed?"\\s":"[^\r\n]")+"*)"+(this.mzBugFixed?"":"\r?\n?")+"$");
+     re = new RegExp("(^|\n)(( +|\t+|~+)(((\-|\&|([1-9][0-9]*|[a-zA-Z])([.]|[)]))( |))|))("+(this.enterpressed?"\\s":"[^\r\n]")+"*)"+(this.mzBugFixed?"":"\r?\n?")+"$");
      q = sel1.match(re);
      if (q!=null) 
      {
       if (!this.enterpressed) 
       {
-       if ((q[3].length % 2==1) && (q[3] != '\t'))
+       if ((q[3].length % 2==1) && (q[3][0] == ' '))
         q[2] = "";
        else
        {
