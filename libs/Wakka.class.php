@@ -967,20 +967,26 @@ class Wakka
 	}
 
 	// ACCESS CONTROL
-	// returns true if logged in user is owner of current page, or page specified in $tag
+	/**
+	 * Check if current user is the owner of the current or a specified page.
+	 * 
+	 * @access	public
+	 * @param	string	$tag optional: page to be checked. Default: current page.
+	 * @return	boolean	TRUE if the user is the owner, FALSE otherwise.
+	 */
 	function UserIsOwner($tag = "")
 	{
-		// check if user is logged in
+		// if not logged in, user can't be owner!
 		if (!$this->GetUser()) return false;
 
 		// if user is admin, return true. Admin can do anything!
 		if ($this->IsAdmin()) return true;
 
-		// set default tag
+		// set default tag & check if user is owner
 		if (!$tag = trim($tag)) $tag = $this->GetPageTag();
-
-		// check if user is owner
 		if ($this->GetPageOwner($tag) == $this->GetUserName()) return true;
+		
+		return false;
 	}
 	//returns true if user is listed in configuration list as admin
 	function IsAdmin() {
