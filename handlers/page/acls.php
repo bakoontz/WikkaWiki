@@ -91,17 +91,17 @@ if ($this->UserIsOwner())
 <tr>
 	<td>
 	<strong><?php echo READ_ACL_LABEL; ?></strong><br />
-	<textarea name="read_acl" rows="4" cols="20"><?php echo $this->ACLs['read_acl'] ?></textarea>
+	<textarea name="read_acl" rows="4" cols="20"><?php echo preg_replace("/[\s,]+/", "\n", $this->ACLs['read_acl']) ?></textarea>
 	</td>
 
 	<td>
 	<strong><?php echo WRITE_ACL_LABEL; ?></strong><br />
-	<textarea name="write_acl" rows="4" cols="20"><?php echo $this->ACLs['write_acl'] ?></textarea>
+	<textarea name="write_acl" rows="4" cols="20"><?php echo preg_replace("/[\s,]+/", "\n", $this->ACLs['write_acl']) ?></textarea>
 	</td>
 
 	<td>
 	<strong><?php echo COMMENT_ACL_LABEL; ?></strong><br />
-	<textarea name="comment_acl" rows="4" cols="20"><?php echo $this->ACLs['comment_acl'] ?></textarea>
+	<textarea name="comment_acl" rows="4" cols="20"><?php echo preg_replace("/[\s,]+/", "\n", $this->ACLs['comment_acl']) ?></textarea>
 	</td>
 </tr>
 

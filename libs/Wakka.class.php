@@ -1042,10 +1042,10 @@ class Wakka
 		else $this->Query("INSERT INTO ".$this->config["table_prefix"]."acls SET page_tag = '".mysql_real_escape_string($tag)."', ".mysql_real_escape_string($privilege)."_acl = '".mysql_real_escape_string(trim(str_replace("\r", "", $list)))."'");
 	}
 	function TrimACLs($list) {
-		foreach (explode("\n", $list) as $line)
+		foreach (preg_split("/[\s,]+/", $list) as $line)
 		{
 			$line = trim($line);
-			$trimmed_list .= $line."\n";
+			$trimmed_list .= $line." ";
 		}
 		return $trimmed_list;
 	}
@@ -1075,7 +1075,7 @@ class Wakka
 		}
 
 		// fine fine... now go through acl
-		foreach (explode("\n", $acl) as $line)
+		foreach (preg_split("/[\s,]+/", $acl) as $line)
 		{
 			// check for inversion character "!"
 			if (preg_match("/^[!](.*)$/", $line, $matches))
