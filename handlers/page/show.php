@@ -97,7 +97,7 @@ else
 			$tag = $this->GetPageTag();
 			if (!isset($_SESSION['show_comments'][$tag]))
 			{
-				$_SESSION['show_comments'][$tag] = ($this->UserWantsComments) ? '1' : '0';
+				$_SESSION['show_comments'][$tag] = ($this->UserWantsComments()) ? '1' : '0';
 			}
 			if (isset($_REQUEST['show_comments']))
 			{	

@@ -62,7 +62,7 @@ if ($this->GetUser()) {
 
 if ($global !== '')
 {
-	print("<br />[<a href=\"".$this->href("referrers_sites")."\">View referring sites for ".$this->GetPageTag()." only</a> | <a href=\"".$this->href("referrers")."\">View referrers for ".$this->GetPageTag()." only</a> | <a href=\"".$this->href("review_blacklist")."\">View referrer blacklist</a>]"); #18n
+	print("<br />[<a href=\"".$this->href("referrers_sites")."\">View referring sites for ".$this->GetPageTag()." only</a> | <a href=\"".$this->href("referrers")."\">View referrers for ".$this->GetPageTag()." only</a> | <a href=\"".$this->href("review_blacklist")."\">View referrer blacklist</a>]"); #i18n
 }
 else
 {

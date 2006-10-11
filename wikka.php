@@ -327,7 +327,7 @@ header('ETag: '.$etag);
  * Ticket #152.
  * We no longer send Content-Length header, due to a bug in PHP {@link http://wush.net/trac/wikka/ticket/152}.
  * The Webserver will be clever enough to use chunked transfer encoding.
- * fixme: remove $page_lenght calculation above.
+ * fixme: remove $page_length calculation above.
  */
 //header('Content-Length: '.$page_length);
 ob_end_clean();
