@@ -31,7 +31,7 @@ while($row = mysql_fetch_array($rankQuery))
     $i++;
     $str = '<tr>';
     $str .= "<td>$i.&nbsp;</td>";
-    $str .= '<td>'.$this->Format($row["name"]).'</td>';
+    $str .= '<td>'.$this->Link($row["name"]).'</td>';
     $str .= '<td> </td>';
     $str .= '<td> &nbsp;&nbsp;&nbsp;</td>';
     $str .= '<td>'.$row["cnt"].'</td>';
