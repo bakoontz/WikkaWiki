@@ -686,7 +686,7 @@ class Wakka
 			die('<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head><title>Redirected to '.$this->Href($url).'</title>'.
 '<meta http-equiv="refresh" content="0; url=\''.$url.'\'" /></head><body><div><script type="text/javascript">window.location.href="'.$url.'";</script>'.
-'</div><noscript>If your browser does not redirect you, please follow <a href="'.$this->Href($url).'">this link</a></noscript></body></html>');
+'</div><noscript>If your browser does not redirect you, please follow <a href="'.$this->Href($url).'">this link</a></noscript></body></html>'); #i18n
 		} 
 		else 
 		{
@@ -889,10 +889,10 @@ class Wakka
 				}
 				$vars['wikka_vars'] = trim($vars_temp); // <<< add the buffered parameter-string to the array
 			} else {
-				return '<em class="error">Unknown action; the action name must not contain special characters.</em>'; // <<< the pattern ([A-Za-z0-9])\s+ didn't match!
+				return '<em class="error">Unknown action; the action name must not contain special characters.</em>'; // <<< the pattern ([A-Za-z0-9])\s+ didn't match! #i18n
 			}
 		}
-		if (!preg_match('/^[a-zA-Z0-9]+$/', $action)) return '<em class="error">Unknown action; the action name must not contain special characters.</em>';
+		if (!preg_match('/^[a-zA-Z0-9]+$/', $action)) return '<em class="error">Unknown action; the action name must not contain special characters.</em>'; #i18n
 		if (!$forceLinkTracking)
 		{
 			/**
@@ -901,7 +901,7 @@ class Wakka
 			$link_tracking_state = $_SESSION['linktracking'];
 			$this->StopLinkTracking();
 		}
-		$result = $this->IncludeBuffered(strtolower($action).'.php', '<em class="error">Unknown action "'.$action.'"</em>', $vars, $this->config['action_path']);
+		$result = $this->IncludeBuffered(strtolower($action).'.php', '<em class="error">Unknown action "'.$action.'"</em>', $vars, $this->config['action_path']); #i18n
 		if ($link_tracking_state)
 		{
 			$this->StartLinkTracking();
@@ -923,7 +923,7 @@ class Wakka
 		$method_location = $handler.'/'.$method.'.php';
 		return $this->IncludeBuffered($method_location, '<div class="page"><em class="error">Sorry, <tt>'.$method_location.'</tt> is an unknown handler.</em></div>', '', $this->config['handler_path']); #i18n
 	}
-	function Format($text, $formatter="wakka") { return $this->IncludeBuffered($formatter.".php", "<em>Formatter \"$formatter\" not found</em>", compact("text"), $this->config['wikka_formatter_path']); }
+	function Format($text, $formatter="wakka") { return $this->IncludeBuffered($formatter.".php", "<em>Formatter \"$formatter\" not found</em>", compact("text"), $this->config['wikka_formatter_path']); } #i18n
 
 	// USERS
 	function LoadUser($name, $password = 0) { return $this->LoadSingle("select * from ".$this->config['table_prefix']."users where name = '".mysql_real_escape_string($name)."' ".($password === 0 ? "" : "and password = '".mysql_real_escape_string($password)."'")." limit 1"); }
@@ -984,7 +984,13 @@ class Wakka
 	/** 
 	 * Check if current user is the owner of the current or a specified page. 
 	 *  
-	 * @access      public 
+	 * @access      public
+	 * @uses		wakka::GetPageOwner()
+	 * @uses		wakka::GetPageTag()  
+	 * @uses		wakka::GetUser()
+	 * @uses		wakka::GetUserName()
+	 * @uses		wakka::IsAdmin() 
+	 * 
 	 * @param       string  $tag optional: page to be checked. Default: current page. 
 	 * @return      boolean TRUE if the user is the owner, FALSE otherwise. 
 	 */ 
@@ -1001,7 +1007,13 @@ class Wakka
 		if ($this->GetPageOwner($tag) == $this->GetUserName()) return true;
 		return false;
 	}
-	//returns true if user is listed in configuration list as admin
+	/**
+	 * Check if current user is listed in configuration list as admin.
+	 *  
+	 * @access      public
+	 * @uses		wakka::GetUserName() 
+	 * @return      boolean TRUE if the user is an admin, FALSE otherwise. 
+	 */
 	function IsAdmin() {
 		$adminstring = $this->config["admin_users"];
 		$adminarray = explode(',' , $adminstring);
@@ -1009,6 +1021,7 @@ class Wakka
 		foreach ($adminarray as $admin) {
 			if (trim($admin) == $this->GetUserName()) return true;
 		}
+		return false;
 	}
 	function GetPageOwner($tag = "", $time = "") { if (!$tag = trim($tag)) $tag = $this->GetPageTag(); if ($page = $this->LoadPage($tag, $time)) return $page["owner"]; }
 	function SetPageOwner($tag, $user)
