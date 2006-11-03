@@ -669,7 +669,6 @@ if (!function_exists("parse_attributes"))
 				// Consider the code ||(p--><font size=1px><a href=...<!--:blabla
 				// When migrating to utf-8, we could use str_replace('--', '−−', $key) to make things more pretty.
 				echo '<!--Cannot find attribute for key "'.str_replace('--', '__', $key).'" from hints given.-->'."\n";
-}
 			}
 			else
 			{
