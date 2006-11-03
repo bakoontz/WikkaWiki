@@ -253,6 +253,39 @@ class Wakka
 	}
 
 	/**
+	 * Get a value provided by user (by get, post or cookie) and sanitize it.
+	 * The method is also helpful to disable warning when the value was absent.
+	 *
+	 * @access	public
+	 * @since	Wikka 1.1.7.0
+	 * @version	1.0
+	 *
+	 * @param	string	$varname required: field name on get or post or cookie name>
+	 * @param	string	$gpc: one of get, post, request and cookie. Optional, defaults to request.
+	 * @return	string	sanitized value of $_REQUEST[$varname] (or $_GET, $_POST, $_COOKIE, depending on $gpc)
+	 */
+	function GetSafeVar($varname, $gpc='request')
+	{
+		$safe_var = null;
+		if ($gpc == 'post')
+		{
+			$safe_var = isset($_POST[$varname]) ?$_POST[$varname] : null;
+		}
+		elseif ($gpc == 'request')
+		{
+			$safe_var = isset($_REQUEST[$varname]) ? $_REQUEST[$varname] : null;
+		}
+		elseif ($gpc == 'get')
+		{
+			$safe_var = isset($_GET[$varname]) ? $_GET[$varname] : null;
+		}
+		elseif ($gpc == 'cookie')
+		{
+			$safe_var = isset($_COOKIE[$varname]) ? $_COOKIE[$varname] : null;
+		}
+		return ($this->htmlspecialchars_ent($safe_var));
+	}
+	/**
 	 * Highlight a code block with GeSHi.
 	 *
 	 * The path to GeSHi and the GeSHi language files must be defined in the configuration.
