@@ -665,11 +665,16 @@ if (!function_exists("parse_attributes"))
 			if (!$a)
 			{
 				//This attribute isn't allowed here / is wrong.
-				echo '<!--Cannot find attribute for key "'.$key.'" from hints given.-->'."\n";
+				// WARNING: JS vulnerability: two minus signs are not allowed in a comment, so we replace any occurence of them by underscore.
+				// Consider the code ||(p--><font size=1px><a href=...<!--:blabla
+				// When migrating to utf-8, we could use str_replace('--', '−−', $key) to make things more pretty.
+				echo '<!--Cannot find attribute for key "'.str_replace('--', '__', $key).'" from hints given.-->'."\n";
+}
 			}
 			else
 			{
-				$return_value .= ' '.$a.'="'.$value.'"';
+				// WARNING: JS vulnerability: use htmlspecialchars_ent to prevent JS attack!
+				$return_value .= ' '.$a.'="'.$GLOBALS['wakka']->htmlspecialchars_ent($value).'"';
 			}
 		}
 
