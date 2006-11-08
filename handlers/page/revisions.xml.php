@@ -13,7 +13,6 @@
  * @uses		Wakka::LoadRevisions()
  * @uses		Wakka::Href()
  * @uses		Wakka::htmlspecialchars_ent()
- * @uses		Wakka::FormClose()
  */
 /**
  * i18n
@@ -39,23 +38,21 @@ if ($this->HasAccess("read"))
 	// load revisions for this page
 	if ($pages = $this->LoadRevisions($this->tag))
 	{
-		#$max is now computed inside LoadRevisions
-
 		foreach ($pages as $page)
 		{
-				$xml .= "<item>\n";
-				$xml .= "<title>".$page["time"]."</title>\n";
-				$xml .= '<link>'.$this->Href('show', '', 'time=.'.urlencode($page['time'])).'</link>'."\n";
-				$xml .= '<description>'.sprintf(EDITED_BY, $this->htmlspecialchars_ent($page["user"]))." - ".$this->htmlspecialchars_ent($page["note"], '', '', 'XML')."</description>\n";
-				$xml .= "\t<pubDate>".date("r",strtotime($page["time"]))."</pubDate>\n";
-				$xml .= "</item>\n";
+			$xml .= "<item>\n";
+			$xml .= "<title>".$page["time"]."</title>\n";
+			$xml .= '<link>'.$this->Href('show', '', 'time=.'.urlencode($page['time'])).'</link>'."\n";
+			$xml .= '<description>'.sprintf(EDITED_BY, $this->htmlspecialchars_ent($page["user"]))." - ".$this->htmlspecialchars_ent($page["note"], '', '', 'XML')."</description>\n";
+			$xml .= "\t<pubDate>".date("r",strtotime($page["time"]))."</pubDate>\n";
+			$xml .= "</item>\n";
 		}
 	}
 }
 else
 {
 	$xml .= "<item>\n";
-	$xml .= "<title>Error</title>\n";
+	$xml .= "<title>Error</title>\n"; #i18n
 	$xml .= "<link>".$this->Href("show")."</link>\n";
 	$xml .= '<description>'.ERROR_ACL_READ_INFO."</description>\n";
 	$xml .= "</item>\n";
