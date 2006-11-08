@@ -60,6 +60,14 @@ class Wakka
 	 */
 	var $VERSION;
 	var $cookies_sent = false;
+	/**
+	 * $pageCache. 
+	 * This array stores cached pages. Keys are page names (tag) or page id (prepended with /#) and values are the 
+	 * page structure. See {@link Wakka::CachePage()}
+	 * @var array
+	 * @access public
+	 */
+	var $pageCache;
 
 	/**
 	 * Constructor
@@ -338,8 +346,8 @@ class Wakka
 	 * @since	Wikka 1.1.7.0
 	 * @version	1.0
 	 *
-	 * @param	string	$varname required: field name on get or post or cookie name>
-	 * @param	string	$gpc: one of get, post, request and cookie. Optional, defaults to request.
+	 * @param	string	$varname required: field name on get or post or cookie name
+	 * @param	string	$gpc one of get, post, request and cookie. Optional, defaults to request.
 	 * @return	string	sanitized value of $_REQUEST[$varname] (or $_GET, $_POST, $_COOKIE, depending on $gpc)
 	 */
 	function GetSafeVar($varname, $gpc='request')
@@ -486,23 +494,39 @@ class Wakka
 	 * Page-related methods
 	 */
 	/**
-	 * Load a given/ the current version of a page.
-	 *
+	 * LoadPage loads the page whose name is $tag.
+	 * 
+	 * If parameter $time is provided, LoadPage returns the page as it was at that exact time.
+	 * If parameter $time is not provided, it returns the page as its latest state.
+	 * LoadPage and LoadPageById remember the page tag or page id they've queried by caching them,
+	 * so, these methods try first to retrieve data from cache if available.
 	 * @uses	Wakka:LoadSingle()
+	 * @uses	Wakka:CachePage()
+	 * @uses	Wakka:CacheNonExistentPage()
+	 * @uses	Wakka:GetCachedPage()
+	 * @param string $tag 
+	 * @param string $time 
+	 * @param int $cache 
+	 * @access public
+	 * @return mixed $page
 	 */
 	function LoadPage($tag, $time = "", $cache = 1) {
+		$page = null;
 		// retrieve from cache
 		if (!$time && $cache) {
-			$page = isset($this->pageCache[$tag]) ? $this->pageCache[$tag] : null;
+			$page = $this->GetCachedPage($tag);
 			if ($page=="cached_nonexistent_page") return null;
 		}
 		// load page
-		if (!isset($page)) $page = $this->LoadSingle("select * from ".$this->config["table_prefix"]."pages where tag = '".mysql_real_escape_string($tag)."' ".($time ? "and time = '".mysql_real_escape_string($time)."'" : "and latest = 'Y'")." limit 1");
+		if (!$page) $page = $this->LoadSingle("select * from ".$this->config["table_prefix"]."pages where tag = '".mysql_real_escape_string($tag)."' ".($time ? "and time = '".mysql_real_escape_string($time)."'" : "and latest = 'Y'")." limit 1");
 		// cache result
-		if ($page && !$time) {
-			$this->pageCache[$page["tag"]] = $page;
-		} elseif (!$page) {
-			$this->pageCache[$tag] = "cached_nonexistent_page";
+		if ($page) 
+		{
+			$this->CachePage($page);
+		} 
+		else 
+		{
+			$this->CacheNonExistentPage($tag);
 		}
 		return $page;
 	}
@@ -514,10 +538,129 @@ class Wakka
 	function IsLatestPage() {
 		return $this->latest;
 	}
-	function GetCachedPage($tag) { return (isset($this->pageCache[$tag])) ? $this->pageCache[$tag] : null; }
-	function CachePage($page) { $this->pageCache[$page["tag"]] = $page; }
+	/**
+	 * GetCachedPageById gets a page from cache whose id is $id.
+	 * 
+	 * @param mixed $id the id of the page to retrieve from cache
+	 * @access public
+	 * @return mixed an array as returned by LoadPage(), or null if absent from cache.
+	 */
+	function GetCachedPageById($id)
+	{
+		return $this->GetCachedPage('/#'.$id);
+	}
+	/**
+	 * GetCachedPage gets a page from cache whose name is $tag.
+	 * 
+	 * @see Wakka::CachePage()
+	 * @uses Wakka::GetConfigValue()
+	 * @uses Config::$pagename_case_sensitive
+	 * @uses Wakka::$pageCache
+	 * @param mixed $tag the name of the page to retrieve from cache.
+	 * @access public
+	 * @return mixed an array as returned by LoadPage(), or null if absent from cache.
+	 */
+	function GetCachedPage($tag) 
+	{
+		if (!$this->GetConfigValue('pagename_case_sensitive')) $tag = strtolower($tag);
+		$page = (isset($this->pageCache[$tag])) ? $this->pageCache[$tag] : null; 
+		if ((is_string($page)) && ($page[0] == '/'))
+		{
+			$page = $this->pageCache[substr($page, 1)];
+		}
+		return ($page); 
+	}
+	/**
+	 * CachePage caches a page to prevent reusing mysql operations when reloading it.
+	 * <p>Cached pages are stored in the array $this->pageCache.</p>
+	 * <p>If this is the latest version of the page, the page name is used as a key for the array. That page name
+	 * may be lowercased if the database doesn't work with case sensitive collation. Lowercasing it enhances the
+	 * power of caching by preventing reloading of a page (with mysql) under another case. But if the database
+	 * needs to work with case sensitive collation (like cp1250_czech_cs), you must set a config value named
+	 * `pagename_case_sensitive' to 1, and this lowercasing will be disabled.</p>
+	 * <p>CachePage also stores the page under a key made of a special marker slash+sharp (/#) concatenated with 
+	 * the page id. As example, a page having id=208 will be stored at $this->pageCache['/#208'].This ensures 
+	 * that a page previously loaded by its name or by id will be retrieved from cache if the page id match.</p>
+	 * <p>Normally, the type of the value of the array is an array containing the page data, as returned by
+	 * LoadPage. However, If this is the latest version of the page, a link will be made between the page id and 
+	 * the page tag. In such case, the value of an entry of $this->pageCache[] will be just a string beginning 
+	 * with a slash (/), and to retrieve the data, you have to use this string as a key for the array
+	 * $this->pageCache[] after suppressing the leading slash.</p>
+	 * 
+	 * @uses Wakka::GetConfigValue()
+	 * @uses Config::$pagename_case_sensitive
+	 * @uses Wakka::$pageCache
+	 * @param mixed $page 
+	 * @access public
+	 * @return void
+	 */
+	function CachePage($page) 
+	{ 
+		$page_cache_key = $page ? $page['tag'] : '';
+		$page_cache_key = $this->GetConfigValue('pagename_case_sensitive') ? $page_cache_key : strtolower($page_cache_key);
+		if ($page['latest'] == 'Y')
+		{
+			$this->pageCache[$page_cache_key] = $page;
+			$this->pageCache['/#'.$page['id']] = '/'.$page_cache_key;
+		}
+		else
+		{
+			$this->pageCache['/#'.$page['id']] = $page;
+		}
+	}
+	/**
+	 * CacheNonExistentPage marks a page name in cache as a non existent page.
+	 * 
+	 * @uses Wakka::GetConfigValue()
+	 * @uses Config::$pagename_case_sensitive
+	 * @uses Wakka::$pageCache
+	 * @param string $tag the name of the page.
+	 * @access public
+	 * @return void
+	 */
+	function CacheNonExistentPage($tag)
+	{
+		if (!$this->GetConfigValue('pagename_case_sensitive')) $tag = strtolower($tag);
+		$this->pageCache[$tag] = 'cached_nonexistent_page';
+	}
 	function SetPage($page) { $this->page = $page; if ($this->page["tag"]) $this->tag = $this->page["tag"]; }
-	function LoadPageById($id) { return $this->LoadSingle("select * from ".$this->config["table_prefix"]."pages where id = '".mysql_real_escape_string($id)."' limit 1"); }
+	/**
+	 * LoadPageById loads a page whose id is $id.
+	 * 
+	 * If the parameter $cache is true, it first tries to retrieve it from cache.
+	 * If the page id was not retrieved from cache, then use sql and cache the page.
+	 * @param int $id Id of the page to load.
+	 * @param boolean $cache if true, an attempt to retrieve from cache will be made first.
+	 * @access public
+	 * @return mixed a page identified by $id
+	 */
+	function LoadPageById($id, $cache = true) 
+	{ 
+		// It first tries to retrieve from cache.
+		if ($cache)
+		{
+			$page = $this->GetCachedPageById($id);
+			if ((is_string($page)) && ($page == 'cached_nonexistent_page'))
+			{
+				return null;
+			}
+			if (is_array($page))
+			{
+				return ($page);
+			}
+		}
+		// If the page id was not retrieved from cache, then use sql and cache the page.
+		$page = $this->LoadSingle("select * from ".$this->config["table_prefix"]."pages where id = '".mysql_real_escape_string($id)."' limit 1"); 
+		if ($page)
+		{
+			$this->CachePage($page);
+		}
+		else
+		{
+			$this->CacheNonExistentPage('/#'.$id);
+		}
+		return $page;
+	}
 	/**
 	 * LoadRevisions: Load revisions of a page. 
 	 * 
@@ -1115,7 +1258,7 @@ class Wakka
 	 * The file must have only one entry per line consisting of:
 	 * shortcut full_URL
 	 *
-	 * @uses	wakka::AddInterWiki()
+	 * @uses	Wakka::AddInterWiki()
 	 */
 	function ReadInterWikiConfig()
 	{
@@ -1413,11 +1556,11 @@ class Wakka
 	 * Check if current user is the owner of the current or a specified page.
 	 * 
 	 * @access	  public
-	 * @uses		wakka::GetPageOwner()
-	 * @uses		wakka::GetPageTag() 
-	 * @uses		wakka::GetUser()
-	 * @uses		wakka::GetUserName()
-	 * @uses		wakka::IsAdmin()
+	 * @uses		Wakka::GetPageOwner()
+	 * @uses		Wakka::GetPageTag() 
+	 * @uses		Wakka::GetUser()
+	 * @uses		Wakka::GetUserName()
+	 * @uses		Wakka::IsAdmin()
 	 *
 	 * @param	   string  $tag optional: page to be checked. Default: current page.
 	 * @return	  boolean TRUE if the user is the owner, FALSE otherwise.
@@ -1439,7 +1582,7 @@ class Wakka
 	 * Check if current user is listed in configuration list as admin.
 	 * 
 	 * @access	  public
-	 * @uses		wakka::GetUserName()
+	 * @uses		Wakka::GetUserName()
 	 * @return	  boolean TRUE if the user is an admin, FALSE otherwise.
 	 */
 	function IsAdmin() {
