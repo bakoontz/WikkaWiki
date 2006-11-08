@@ -664,7 +664,8 @@ class Wakka
 	/**
 	 * LoadRevisions: Load revisions of a page. 
 	 * 
-	 * <p>Returns up to $max latest revisions of $page. 
+	 * <p>Returns up to $max latest revisions of $page <b>plus</b> <em>eventually</em> one additional 
+	 * row (see explanations below). 0 or a negative value for $max means using a default value.
 	 * The default value for $max is the `revisioncount' user's preference if user is logged in,
 	 * or the (new) config value `default_revisioncount', if such config entry exists, or 20.</p>
 	 * <p>A revision structure consists of an edit note
@@ -673,7 +674,14 @@ class Wakka
 	 * `<b>user</b>' who did the modification. </p>
 	 * <p>Since 1.1.7, we replaced `SELECT *' in the sql instruction by 
 	 * `SELECT note, id, time, user' because only these fields are really needed. (Trac:#75)</p>
+	 * <p>If the page has more revisions than $max, LoadRevisions has an additional row which is 
+	 * the oldest revision of the page, and that oldest revision is also the last row of the array
+	 * returned.</p>
 	 *
+	 * @uses Wakka::GetUser()
+	 * {@access private @uses Wakka::GetConfigValue() is commented, see Config::$...}
+	 * @uses Wakka::LoadAll()
+	 * @uses Config::$default_revisioncount
 	 * @param string $page Name of the page to view revisions of
 	 * @param int $max Maximum number of revisions to load.
 	 * @param int $start 
@@ -687,14 +695,27 @@ class Wakka
 		{
 			if ($user = $this->GetUser())
 			{
-				$max = $user['revisioncount'];
+				$max = intval($user['revisioncount']);
 			}
 			elseif (($max = intval($this->GetConfigValue('default_revisioncount'))) <= 0)
 			{
 				$max = 20;
 			}
 		}
-		return $this->LoadAll("select note, id, time, user from ".$this->config["table_prefix"]."pages where tag = '".mysql_real_escape_string($page)."' order by time desc LIMIT $start$max"); 
+		if ($max <= 0)
+		{ // 0 or a negative value means no max, so choose a huge number.
+			$max = 1000;
+		}
+		$revisions = $this->LoadAll("select note, id, time, user from ".$this->config["table_prefix"]."pages where tag = '".mysql_real_escape_string($page)."' order by time desc LIMIT $start$max");
+		if (is_array($revisions) && count($revisions) == $max)
+		{
+			$latest_revision = $this->LoadSingle("select note, id, time, user from ".$this->config['table_prefix']."pages where tag = '".mysql_real_escape_string($page)."' order by time LIMIT 1");
+			if ($revisions[$max - 1]['id'] != $latest_revision['id'])
+			{
+				$revisions[] = $latest_revision;
+			}
+		}
+		return ($revisions);
 	}
 	function LoadPagesLinkingTo($tag) { return $this->LoadAll("select from_tag as tag from ".$this->config["table_prefix"]."links where to_tag = '".mysql_real_escape_string($tag)."' order by tag"); }
 	function LoadRecentlyChanged()
