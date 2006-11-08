@@ -33,18 +33,12 @@ if ($this->HasAccess("read")) {
 	// load revisions for this page
 	if ($pages = $this->LoadRevisions($this->tag))
 	{
-		if ($user = $this->GetUser()) {
-			$max = $user["revisioncount"];
-		} else {
-			$max = 20;
-		}
+		#$max is now computed inside LoadRevisions
 		$output = "";
 		$c = 0;
 		foreach ($pages as $page)
 		{
 			$c++;
-			if (($c <= $max) || !$max)
-			{
 				$pageB = $this->LoadPageById($page["id"]);
 				$bodyB = explode("\n", $pageB["body"]);
 
@@ -102,7 +96,6 @@ if ($this->HasAccess("read")) {
 				}
 				$pageA = $this->LoadPageById($page["id"]);
 				$EditedByUser = $this->Format($page["user"]);
-			}
 		}
   $output .= '<strong>'.sprintf(OLDEST_VERSION_EDITED_ON_BY, '<a href="'.$this->href('', '', 'time='.urlencode($pageB['time'])).'">'.$pageB['time'].'</a>', $EditedByUser).'</strong> <span class="pagenote smaller">['.$this->htmlspecialchars_ent($page['note'])."]</span></strong><br />\n";
 		$output .= '<div class="revisioninfo">'.HISTORY_PAGE_VIEW.'</div>'.$this->Format(implode("\n", $bodyB));

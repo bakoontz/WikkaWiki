@@ -1,35 +1,35 @@
 <?php
 /**
  * This file is part of Wikka, a PHP wiki engine.
- * 
+ *
  * It includes the Wakka class, which provides the core functions
- * to run Wikka. 
+ * to run Wikka.
  *
  * @package Wikka
  * @subpackage Libs
  * @version $Id$
  * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
- * 
+ *
  * @author Hendrik Mans <hendrik@mans.de>
  * @author Jason Tourtelotte <wikka-admin@jsnx.com>
  * @author {@link http://wikkawiki.org/JavaWoman Marjolein Katsma}
  * @author {@link http://wikkawiki.org/NilsLindenberg Nils Lindenberg}
  * @author {@link http://wikkawiki.org/DotMG Mahefa Randimbisoa}
  * @author {@link http://wikkawiki.org/DarTar Dario Taraborelli}
- * 
+ *
  * @copyright Copyright 2002-2003, Hendrik Mans <hendrik@mans.de>
  * @copyright Copyright 2004-2005, Jason Tourtelotte <wikka-admin@jsnx.com>
  * @copyright Copyright 2006, {@link http://wikkawiki.org/CreditsPage Wikka Development Team}
  */
 /**
  * The Wikka core.
- * 
+ *
  * This class contains all the core methods used to run Wikka.
  * @name Wakka
  * @package Wikka
  * @subpackage Libs
- * 
+ *
  */
 class Wakka
 {
@@ -46,7 +46,7 @@ class Wakka
 	var $page;
 	/**
 	 * Hold the name of the current page.
-	 * 
+	 *
 	 * @access	private
 	 */
 	var $tag;
@@ -84,11 +84,11 @@ class Wakka
 	 */
 	/**
 	 * Send a query to the database.
-	 * 
+	 *
 	 * If the query will fail, the function will simply die(). If SQL-
 	 * Debugging is enabled, the query and the time it took to execute
 	 * will be added to the Query-Log.
-	 * 
+	 *
 	 * @uses	Wakka::GetConfigValue()
 	 * @uses	Wakka::GetMicroTime()
 	 * @param	string $query mandatory: the query to be executed.
@@ -115,7 +115,7 @@ class Wakka
 	}
 	/**
 	 * Return the first result of a query executed on the database.
-	 * 
+	 *
 	 * @uses	Wakka::LoadAll()
 	 * @param	string $query mandatory: the query to be executed
 	 * @return	string? the first result of the query.
@@ -125,12 +125,12 @@ class Wakka
 	function LoadSingle($query) { if ($data = $this->LoadAll($query)) return $data[0]; }
 	/**
 	 * Return all results of a query executed on the database.
-	 * 
+	 *
 	 * @uses	Wakka::Query()
 	 * @param	string $query mandatory: the query to be executed
 	 * @return	array the result of the query.
 	 * @todo	move into a database class.
-	 */	
+	 */   
 	function LoadAll($query)
 	{
 		$data = array();
@@ -143,7 +143,7 @@ class Wakka
 	}
 	/**
 	 * Check if the MySQL-Version is higher or equal to a given one.
-	 * 
+	 *
 	 * @param	integer $major mandatory:
 	 * @param	integer $minor mandatory:
 	 * @param	integer $subminor mandatory:
@@ -193,7 +193,7 @@ class Wakka
 	function GetMicroTime() { list($usec, $sec) = explode(" ",microtime()); return ((float)$usec + (float)$sec); }
 	/**
 	 * Buffer the output from an included file.
-	 * 
+	 *
 	 * @param	string $filename mandatory: name of the file to be included
 	 * @param	string $notfoundText optional: optional text to be returned if the file was not found. default: ""
 	 * @param	string $vars optional: vars to be passed to the file. default: ""
@@ -226,7 +226,7 @@ class Wakka
 	}
 	/**
 	 * Strip potentiall dangerous tags from given html.
-	 * 
+	 *
 	 * @param	string $html mandatory: the html-text to be secured
 	 * @return	string the filtered html-text
 	 */
@@ -392,7 +392,7 @@ class Wakka
 	 * @param	string	$sourcecode	required: source code to be highlighted
 	 * @param	string	$language	required: language spec to select highlighter
 	 * @param	integer	$start		optional: start line number; if supplied and >= 1 line numbering
-	 * 			will be turned on if it is enabled in the configuration.
+	 *			 will be turned on if it is enabled in the configuration.
 	 * @return	string	code block with syntax highlighting classes applied
 	 */
 	function GeSHi_Highlight($sourcecode, $language, $start=0)
@@ -446,38 +446,38 @@ class Wakka
 	 */
 	/**
 	 * Get the name tag of the current page.
-	 * 
+	 *
 	 * @return	string the name of the page
 	 */
 	function GetPageTag() { return $this->tag; }
 	/**
 	 * Get the time to current verion of the current page was saved.
-	 * 
+	 *
 	 * @return string?
 	 */
 	function GetPageTime() { return $this->page["time"]; }
 	/**
 	 * Get the handler used on the page.
-	 * 
+	 *
 	 * @return string name of the method.
 	 */
 	function GetMethod() { return $this->method; }
 	/**
 	 * Get the value of a given value from the wikka config.
-	 * 
+	 *
 	 * @param	$name mandatory: name of a key in the config array
 	 */
 	function GetConfigValue($name) { return (isset($this->config[$name])) ? $this->config[$name] : null; }
 	/**
 	 * Get the name of the Wiki.
-	 * 
+	 *
 	 * @uses	Wakka::GetConfigValue()
 	 * @return	string the name of the Wiki.
 	 */
 	function GetWakkaName() { return $this->GetConfigValue("wakka_name"); }
 	/**
 	 * Get the wikka version.
-	 * 
+	 *
 	 * @return	string the wikka version
 	 */
 	function GetWakkaVersion() { return $this->VERSION; }
@@ -487,7 +487,7 @@ class Wakka
 	 */
 	/**
 	 * Load a given/ the current version of a page.
-	 * 
+	 *
 	 * @uses	Wakka:LoadSingle()
 	 */
 	function LoadPage($tag, $time = "", $cache = 1) {
@@ -508,8 +508,8 @@ class Wakka
 	}
 	/**
 	 * Determine if the current version of the page is the latest.
-	 * 
-	 * @return boolean? TRUE if it is the latest, false otherwise. 
+	 *
+	 * @return boolean? TRUE if it is the latest, false otherwise.
 	 */
 	function IsLatestPage() {
 		return $this->latest;
@@ -518,7 +518,41 @@ class Wakka
 	function CachePage($page) { $this->pageCache[$page["tag"]] = $page; }
 	function SetPage($page) { $this->page = $page; if ($this->page["tag"]) $this->tag = $this->page["tag"]; }
 	function LoadPageById($id) { return $this->LoadSingle("select * from ".$this->config["table_prefix"]."pages where id = '".mysql_real_escape_string($id)."' limit 1"); }
-	function LoadRevisions($page) { return $this->LoadAll("select * from ".$this->config["table_prefix"]."pages where tag = '".mysql_real_escape_string($page)."' order by time desc"); }
+	/**
+	 * LoadRevisions: Load revisions of a page. 
+	 * 
+	 * <p>Returns up to $max latest revisions of $page. 
+	 * The default value for $max is the `revisioncount' user's preference if user is logged in,
+	 * or the (new) config value `default_revisioncount', if such config entry exists, or 20.</p>
+	 * <p>A revision structure consists of an edit note
+	 * (`<b>note</b>' key), the `<b>id</b>' of the revision which permits to retrieve later the
+	 * full edit data (especially the body field), the date of revision (`<b>time</b> key) and the
+	 * `<b>user</b>' who did the modification. </p>
+	 * <p>Since 1.1.7, we replaced `SELECT *' in the sql instruction by 
+	 * `SELECT note, id, time, user' because only these fields are really needed. (Trac:#75)</p>
+	 *
+	 * @param string $page Name of the page to view revisions of
+	 * @param int $max Maximum number of revisions to load.
+	 * @param int $start 
+	 * @access public
+	 * @return array This value contains fields note, id, time and user.
+	 */
+	function LoadRevisions($page, $max=0, $start='') 
+	{
+		$max = intval($max);
+		if ($max <= 0)
+		{
+			if ($user = $this->GetUser())
+			{
+				$max = $user['revisioncount'];
+			}
+			elseif (($max = intval($this->GetConfigValue('default_revisioncount'))) <= 0)
+			{
+				$max = 20;
+			}
+		}
+		return $this->LoadAll("select note, id, time, user from ".$this->config["table_prefix"]."pages where tag = '".mysql_real_escape_string($page)."' order by time desc LIMIT $start$max"); 
+	}
 	function LoadPagesLinkingTo($tag) { return $this->LoadAll("select from_tag as tag from ".$this->config["table_prefix"]."links where to_tag = '".mysql_real_escape_string($tag)."' order by tag"); }
 	function LoadRecentlyChanged()
 	{
@@ -597,7 +631,7 @@ class Wakka
 	 * @param string $class optional: A classname to be attached to the table or unordered list. Default: ''
 	 * @param int $columns optional: Number of columns of the table if compact = 0. Default: 3
 	 * @param int $compact optional: If 0: use table, if 1: use unordered list. Default: 0
-	 * @return string 
+	 * @return string
 	 */
 	function ListPages($pages, $nopagesText = '', $class = '', $columns = 3, $compact = 0)
 	{
@@ -634,7 +668,7 @@ class Wakka
 	}
 	/**
 	 * Save a page.
-	 * 
+	 *
 	 * @uses	Wakka::GetPingParams()
 	 * @uses	Wakka::GetUser()
 	 * @uses	Wakka::GetUserName()
@@ -669,12 +703,12 @@ class Wakka
 			// add new revision
 			$this->Query("insert into ".$this->config["table_prefix"]."pages set ".
 				"tag = '".mysql_real_escape_string($tag)."', ".
- 				"time = now(), ".
-  				"owner = '".mysql_real_escape_string($owner)."', ".
- 				"user = '".mysql_real_escape_string($user)."', ".
+				 "time = now(), ".
+				  "owner = '".mysql_real_escape_string($owner)."', ".
+				 "user = '".mysql_real_escape_string($user)."', ".
 				"note = '".mysql_real_escape_string($note)."', ".
- 				"latest = 'Y', ".
- 				"body = '".mysql_real_escape_string($body)."'");
+				 "latest = 'Y', ".
+				 "body = '".mysql_real_escape_string($body)."'");
 
 			if ($pingdata = $this->GetPingParams($this->config["wikiping_server"], $tag, $user, $note))
 				$this->WikiPing($pingdata);
@@ -682,10 +716,10 @@ class Wakka
 	}
 	/**
 	 * Return the title of the current page.
-	 * 
+	 *
 	 * It is retrieved either from the first level 1-3 header in the page body
 	 * or, if there is none such headline, from the page name.
-	 * 
+	 *
 	 * @uses	Wakka::Format()
 	 * @uses	Wakka::GetPageTag()
 	 * @return	string the title of the current page
@@ -717,7 +751,7 @@ class Wakka
 	function ExistsPage($page)
 	{
 		$count = 0;
-		$query = 	"SELECT COUNT(tag)
+		$query =	 "SELECT COUNT(tag)
 					FROM ".$this->config['table_prefix']."pages
 					WHERE tag='".mysql_real_escape_string($page)."'";
 		if ($r = $this->Query($query))
@@ -733,7 +767,7 @@ class Wakka
 	 */
 	/**
 	 * WikiPing an external server.
-	 * 
+	 *
 	 * @todo	move to an extra class
 	 */
 	function HTTPpost($host, $data, $contenttype="application/x-www-form-urlencoded", $maxAttempts = 5) {
@@ -775,7 +809,7 @@ class Wakka
 	}
 	/**
 	 * Manage the WikiPing(s) of a change to (an) external sever(s).
-	 * 
+	 *
 	 * @uses	Wakka::HTTPpost()
 	 * @todo	move to an extra class
 	 */
@@ -806,15 +840,15 @@ class Wakka
 	}
 	/**
 	 * Gather the necessary parameters for WikiPing.
-	 * 
+	 *
 	 * @uses	Wakka::Href()
 	 * @uses	Wakka::LoadPage()
 	 * @param	string $server mandatory:
 	 * @param	string $tag mandatory:
 	 * @param	string $user mandatory:
 	 * @param	string $changelog optional:
-	 * @return	array/boolean either an array with the WikiPing-params or false if 
-	 * @todo	move to an extra class 
+	 * @return	array/boolean either an array with the WikiPing-params or false if
+	 * @todo	move to an extra class
 	 */
 	function GetPingParams($server, $tag, $user, $changelog = "") {
 		$ping = array();
@@ -822,7 +856,7 @@ class Wakka
 			$ping["server"] = $server;
 			if ($tag) $ping["tag"] = $tag; else return false; // set page-title
 			if (!$ping["taglink"] = $this->Href("", $tag)) return false; // set page-url
-            	if (!$ping["wiki"] = $this->config["wakka_name"]) return false; // set site-name
+				if (!$ping["wiki"] = $this->config["wakka_name"]) return false; // set site-name
 			$ping["history"] = $this->Href("revisions", $tag); // set url to history
 
 			if ($user) {
@@ -866,27 +900,27 @@ class Wakka
 
 	/**
 	 * HTTP/REQUEST/LINK RELATED
-	 */ 
+	 */
 	/**
 	 * Store a message in the session to be displayed after redirection.
-	 * 
+	 *
 	 * @param	string $message text to be stored
 	 */
 	function SetRedirectMessage($message) { $_SESSION["redirectmessage"] = $message; }
 	/**
 	 * Get a message, if one was stored before redirection.
-	 * 
+	 *
 	 * @return string either the text of the message or an empty string.
 	 */
-	function GetRedirectMessage() 
-	{ 
+	function GetRedirectMessage()
+	{
 		$message = '';
 		if (isset($_SESSION["redirectmessage"]))
 		{
-			$message = $_SESSION["redirectmessage"]; 
+			$message = $_SESSION["redirectmessage"];
 			$_SESSION["redirectmessage"] = "";
 		}
-		return $message; 
+		return $message;
 	}
 	/**
 	 * Perform a redirection to another page.
@@ -911,8 +945,8 @@ class Wakka
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head><title>Redirected to '.$this->Href($url).'</title>'.
 '<meta http-equiv="refresh" content="0; url=\''.$url.'\'" /></head><body><div><script type="text/javascript">window.location.href="'.$url.'";</script>'.
 '</div><noscript>If your browser does not redirect you, please follow <a href="'.$this->Href($url).'">this link</a></noscript></body></html>'); #i18n
-		} 
-		else 
+		}
+		else
 		{
 			header("Location: ".$url);
 		}
@@ -924,7 +958,7 @@ class Wakka
 	function MiniHref($method = "", $tag = "") { if (!$tag = trim($tag)) $tag = $this->tag; return $tag.($method ? "/".$method : ""); }
 	/**
 	 * Get the full url to a page/method.
-	 * 
+	 *
 	 * @uses	Wakka::MiniHref()
 	 */
 	function Href($method = "", $tag = "", $params = "")
@@ -937,24 +971,24 @@ class Wakka
 		return $href;
 	}
 	/**
-	 * Turn text with certain types of markup into the appropriate link. 
-	 * 
-	 * Beware of the $title parameter: quotes and backslashes should be previously escaped before passed to 
+	 * Turn text with certain types of markup into the appropriate link.
+	 *
+	 * Beware of the $title parameter: quotes and backslashes should be previously escaped before passed to
 	 * this method.
-	 * 
+	 *
 	 * @access	public
 	 * @uses	Wakka::GetConfigValue()
 	 * @uses	Wakka::GetInterWikiUrl()
 	 * @uses	Wakka::Href()
 	 * @uses	Wakka::htmlspecialchars_ent()
 	 * @uses	Wakka::LoadPage()
-	 * 
+	 *
 	 * @param	mixed $tag mandatory:
 	 * @param	string $method optional:
-	 * @param 	string $text optional:
-	 * @param 	boolean $track optional:
-	 * @param 	boolean $escapeText optional: 
-	 * @param 	string $title optional:
+	 * @param	 string $text optional:
+	 * @param	 boolean $track optional:
+	 * @param	 boolean $escapeText optional:
+	 * @param	 string $title optional:
 	 * @return	string
 	 * @todo	i18n
 	 * @todo	move regexps to regexp-library
@@ -1038,13 +1072,13 @@ class Wakka
 	}
 	/**
 	 * Output the Header for Wikka-pages.
-	 * 
+	 *
 	 * @uses	Wakka::Action()
 	 */
 	function Header() { return $this->Action($this->config['header_action'], 0); }
 	/**
 	 * Output the Footer for Wikka-pages.
-	 * 
+	 *
 	 * @uses	Wakka::Action()
 	 */
 	function Footer() { return $this->Action($this->config['footer_action'], 0); }
@@ -1060,7 +1094,7 @@ class Wakka
 	}
 	/**
 	 * Provide the html to close a form.
-	 * 
+	 *
 	 * @return string the html-tag to close a form and a newline.
 	 */
 	function FormClose()
@@ -1073,14 +1107,14 @@ class Wakka
 	 */
 	/**
 	 * Read the list of interWikis from interwiki.conf.
-	 * 
+	 *
 	 * interwiki.conf in the main dir of wikka holds a list of urls to other
 	 * websites and a shortcut for them, making it possible to use shortcuts
 	 * to their pages instead of the full URL.
-	 * 
+	 *
 	 * The file must have only one entry per line consisting of:
-	 * shortcut full_URL 
-	 * 
+	 * shortcut full_URL
+	 *
 	 * @uses	wakka::AddInterWiki()
 	 */
 	function ReadInterWikiConfig()
@@ -1106,7 +1140,7 @@ class Wakka
 	}
 	/**
 	 * Return the full URL of an interwiki for a given shortcut, if in the list.
-	 * 
+	 *
 	 * @param  string $name mandatory: the shortcut for the interWiki
 	 * @param  string $tag	mandatory: name of a page in the other wiki
 	 * @return string the full URL for $tag or VOID
@@ -1152,7 +1186,7 @@ class Wakka
 	 */
 	/**
 	 * Handle the call to an action.
-	 * 
+	 *
 	 * @uses	Wakka::IncludeBuffered()
 	 * @uses	Wakka::StartLinkTracking()
 	 * @uses	Wakka::StopLinkTracking()
@@ -1190,7 +1224,7 @@ class Wakka
 		if (!$forceLinkTracking)
 		{
 			/**
-			 * @var boolean holds previous state of LinkTracking before we StopLinkTracking(). It will then be used to test if we should StartLinkTracking() or not.  
+			 * @var boolean holds previous state of LinkTracking before we StopLinkTracking(). It will then be used to test if we should StartLinkTracking() or not. 
 			 */
 			$link_tracking_state = $_SESSION['linktracking'];
 			$this->StopLinkTracking();
@@ -1204,11 +1238,11 @@ class Wakka
 	}
 	/**
 	 * Use a handler on the current page.
-	 * 
-	 * @uses	Wakka::IncludeBuffered()	
-	 * @todo 	i18n;
-	 * @todo 	use templating class
-	 * @todo 	separate different classes of handlers (page, user, files etc.);
+	 *
+	 * @uses	Wakka::IncludeBuffered()   
+	 * @todo	 i18n;
+	 * @todo	 use templating class
+	 * @todo	 separate different classes of handlers (page, user, files etc.);
 	 */
 	function Method($method)
 	{
@@ -1222,7 +1256,7 @@ class Wakka
 	}
 	/**
 	 * Format a text using a given/ the standard "wakka" formatter.
-	 * 
+	 *
 	 * @uses	Wakka::IncludeBuffered()
 	 * @param	$text
 	 * @todo i18n;
@@ -1231,10 +1265,10 @@ class Wakka
 
 	/**
 	 * USERS
-	 */ 
+	 */
 	/**
 	 * Load a (given) user, which may have a password, from the database.
-	 * 
+	 *
 	 * @uses	Wakka::LoadSingle()
 	 * @param	string $name mandatory: name of the user
 	 * @param	string $password optional: password of the user. default: 0 (=none)
@@ -1243,19 +1277,19 @@ class Wakka
 	function LoadUser($name, $password = 0) { return $this->LoadSingle("select * from ".$this->config['table_prefix']."users where name = '".mysql_real_escape_string($name)."' ".($password === 0 ? "" : "and password = '".mysql_real_escape_string($password)."'")." limit 1"); }
 	/**
 	 * Load all users registered at the wiki.
-	 * 
+	 *
 	 * @uses	Wakka::LoadAll()
 	 * @return	array contains all users data
 	 */
 	function LoadUsers() { return $this->LoadAll("select * from ".$this->config['table_prefix']."users order by name"); }
 	/**
 	 * Get the name or address of the current user.
-	 * 
+	 *
 	 * If the user is not logged-in, the host name is only looked up if enabled
-	 * in the config (since it can lead to long page generation times). 
+	 * in the config (since it can lead to long page generation times).
 	 * Set 'enable_user_host_lookup' in wikka.config.php to 1 to do the look-up.
 	 * Otherwise the ip-address is used.
-	 * 
+	 *
 	 * @uses	Wakka::GetUser()
 	 * @return	string name/ip-adress/host-name of the current user
 	 */
@@ -1281,15 +1315,15 @@ class Wakka
 	}
 	/**
 	 * Get the name of the current user if he is logged in.
-	 * 
+	 *
 	 * @return string/NULL either a string with the user name or NULL
 	 */
 	function GetUser() { return (isset($_SESSION["user"])) ? $_SESSION["user"] : NULL; }
 	/**
 	 * Log-in a (given) user.
-	 * 
+	 *
 	 * The data of the user is stored in the session and name and password are stored in a Cookie.
-	 *  
+	 * 
 	 * @uses	Wakka::SetPersistentCookie()
 	 * @param	array $user mandatory: must contain the userdata
 	 * @todo	name should be made made persistent with opposite function LogOutUser()
@@ -1297,21 +1331,21 @@ class Wakka
 	function SetUser($user) { $_SESSION["user"] = $user; $this->SetPersistentCookie("user_name", $user["name"]); $this->SetPersistentCookie("pass", $user["password"]); }
 	/**
 	 * Log-out the current user.
-	 * 
+	 *
 	 * The data of the user is deleted from the session and name and password Cookies are deleted, too.
-	 *  
+	 * 
 	 * @uses	Wakka::DeleteCookie()
 	 * @todo	name should be made made persistent with opposite function SetUser()
 	 */
 	function LogoutUser() { $_SESSION["user"] = ""; $this->DeleteCookie("user_name"); $this->DeleteCookie("pass"); }
 	/**
 	 * Find out if the current user wants comments to be shown by default.
-	 * 
-	 * If the user is not logged-in, it is assumed that he does not want 
+	 *
+	 * If the user is not logged-in, it is assumed that he does not want
 	 * the comments be shown by default.
-	 * 
+	 *
 	 * @uses	Wakka::GetUser()
-	 * @return	boolean TRUE if the user wants Comments, FALSE otherwise 
+	 * @return	boolean TRUE if the user wants Comments, FALSE otherwise
 	 */
 	function UserWantsComments() { if (!$user = $this->GetUser()) return false; return ($user["show_comments"] == "Y"); }
 
@@ -1320,7 +1354,7 @@ class Wakka
 	 */
 	/**
 	 * Load the comments for a (given) page.
-	 * 
+	 *
 	 * @uses	Wakka::LoadAll()
 	 * @param	string $tag mandatory: name of the page
 	 * @return	array all the comments for this page
@@ -1328,7 +1362,7 @@ class Wakka
 	function LoadComments($tag) { return $this->LoadAll("SELECT * FROM ".$this->config["table_prefix"]."comments WHERE page_tag = '".mysql_real_escape_string($tag)."' ORDER BY time"); }
 	/**
 	 * Load the last 50 comments on the wiki.
-	 * 
+	 *
 	 * @uses	Wakka::LoadAll()
 	 * @param	integer $limit optional: number of last comments. default: 50
 	 * @return	array the last x comments
@@ -1336,7 +1370,7 @@ class Wakka
 	function LoadRecentComments($limit = 50) { return $this->LoadAll("SELECT * FROM ".$this->config["table_prefix"]."comments ORDER BY time DESC LIMIT ".$limit); }
 	/**
 	 * Load the last 50 comments on different pages on the wiki.
-	 * 
+	 *
 	 * @uses	Wakka::LoadAll()
 	 * @param	integer $limit optional: number of last comments on different pages. default: 50
 	 * @return	array the last x comments on different pages
@@ -1344,16 +1378,16 @@ class Wakka
 	function LoadRecentlyCommented($limit = 50)
 	{
 		$sql = "SELECT comments.id, comments.page_tag, comments.time, comments.comment, comments.user"
-        	. " FROM ".$this->config["table_prefix"]."comments AS comments"
-        	. " LEFT JOIN ".$this->config["table_prefix"]."comments AS c2 ON comments.page_tag = c2.page_tag AND comments.id < c2.id"
-        	. " WHERE c2.page_tag IS NULL "
-        	. " ORDER BY time DESC "
-        	. " LIMIT ".$limit;
+			. " FROM ".$this->config["table_prefix"]."comments AS comments"
+			. " LEFT JOIN ".$this->config["table_prefix"]."comments AS c2 ON comments.page_tag = c2.page_tag AND comments.id < c2.id"
+			. " WHERE c2.page_tag IS NULL "
+			. " ORDER BY time DESC "
+			. " LIMIT ".$limit;
 		return $this->LoadAll($sql);
 	}
 	/**
 	 * Save a (given) comment for a (given) page.
-	 * 
+	 *
 	 * @uses	Wakka::GetUserName()
 	 * @uses	Wakka::Query()
 	 * @param	string $page_tag mandatory: name of the page
@@ -1375,22 +1409,22 @@ class Wakka
 	/**
 	 * ACCESS CONTROL
 	 */
-	/** 
-	 * Check if current user is the owner of the current or a specified page. 
-	 *  
-	 * @access      public
+	/**
+	 * Check if current user is the owner of the current or a specified page.
+	 * 
+	 * @access	  public
 	 * @uses		wakka::GetPageOwner()
-	 * @uses		wakka::GetPageTag()  
+	 * @uses		wakka::GetPageTag() 
 	 * @uses		wakka::GetUser()
 	 * @uses		wakka::GetUserName()
-	 * @uses		wakka::IsAdmin() 
-	 * 
-	 * @param       string  $tag optional: page to be checked. Default: current page. 
-	 * @return      boolean TRUE if the user is the owner, FALSE otherwise. 
-	 */ 
+	 * @uses		wakka::IsAdmin()
+	 *
+	 * @param	   string  $tag optional: page to be checked. Default: current page.
+	 * @return	  boolean TRUE if the user is the owner, FALSE otherwise.
+	 */
 	function UserIsOwner($tag = "")
 	{
-		// if not logged in, user can't be owner! 
+		// if not logged in, user can't be owner!
 		if (!$this->GetUser()) return false;
 
 		// if user is admin, return true. Admin can do anything!
@@ -1403,10 +1437,10 @@ class Wakka
 	}
 	/**
 	 * Check if current user is listed in configuration list as admin.
-	 *  
-	 * @access      public
-	 * @uses		wakka::GetUserName() 
-	 * @return      boolean TRUE if the user is an admin, FALSE otherwise. 
+	 * 
+	 * @access	  public
+	 * @uses		wakka::GetUserName()
+	 * @return	  boolean TRUE if the user is an admin, FALSE otherwise.
 	 */
 	function IsAdmin() {
 		$adminstring = $this->config["admin_users"];
@@ -1419,7 +1453,7 @@ class Wakka
 	}
 	/**
 	 * Return the owner for a given/the current page at a given/the current version.
-	 * 
+	 *
 	 * @uses	Wakka::GetPageTag()
 	 * @uses	Wakka::LoadPage()
 	 * @param	string $tag optional: name of the page. default: current one
@@ -1429,7 +1463,7 @@ class Wakka
 	function GetPageOwner($tag = "", $time = "") { if (!$tag = trim($tag)) $tag = $this->GetPageTag(); if ($page = $this->LoadPage($tag, $time)) return $page["owner"]; }
 	/**
 	 * Set an (given) owner for a (given) page.
-	 * 
+	 *
 	 * @uses	Wakka::LoadUser()
 	 * @uses	Wakka::Query()
 	 * @param	string $tag mandatory: name of the page
@@ -1448,12 +1482,12 @@ class Wakka
 	}
 	/**
 	 * Load the Access Controll list for a given page and a given privilege.
-	 * 
+	 *
 	 * @uses	Wakka::GetConfigValue()
 	 * @uses	Wakka::LoadSingle()
-	 * @param	string $tag mandatory: 
+	 * @param	string $tag mandatory:
 	 * @param	string $privilege mandatory:
-	 * @param	integer $useDefaults optional: 
+	 * @param	integer $useDefaults optional:
 	 * @return	array the page name and the acl
 	 */
 	function LoadACL($tag, $privilege, $useDefaults = 1)
@@ -1466,11 +1500,11 @@ class Wakka
 	}
 	/**
 	 * Load all Access Controll lists for a given page.
-	 * 
+	 *
 	 * @uses	Wakka::GetConfigValue()
 	 * @uses	Wakka::LoadSingle()
-	 * @param	string $tag mandatory: 
-	 * @param	integer $useDefaults optional: 
+	 * @param	string $tag mandatory:
+	 * @param	integer $useDefaults optional:
 	 * @return	array the page name and all acls
 	 */
 	function LoadAllACLs($tag, $useDefaults = 1)
@@ -1483,14 +1517,14 @@ class Wakka
 	}
 	/**
 	 * Save an Access Controll List for a given privilege on a given page to the database.
-	 * 
+	 *
 	 * @uses	Wakka::LoadACL()
 	 * @uses	Wakka::Query()
 	 * @uses	Wakka::SaveACL()
-	 * 
+	 *
 	 * @param	string $tag mandatory: name of the page
 	 * @param	string $privilege mandatory: name of the privilege
-	 * @param	string $list mandatory: a string containing the AC-Syntax	
+	 * @param	string $list mandatory: a string containing the AC-Syntax   
 	 */
 	function SaveACL($tag, $privilege, $list) {
 		if ($this->LoadACL($tag, $privilege, 0)) $this->Query("UPDATE ".$this->config["table_prefix"]."acls SET ".mysql_real_escape_string($privilege)."_acl = '".mysql_real_escape_string(trim(str_replace("\r", "", $list)))."' WHERE page_tag = '".mysql_real_escape_string($tag)."' LIMIT 1");
@@ -1506,19 +1540,19 @@ class Wakka
 	}
 	/**
 	 * Check if a given/ the current user has access to a given privilege on a/ the current page.
-	 * 
+	 *
 	 * @uses	Wakka::ACLs()
-	 * @uses 	Wakka::GetPageTag()
-	 * @uses 	Wakka::GetUser()
-	 * @uses 	Wakka::GetUserName()
-	 * @uses 	Wakka::LoadAllACLs
-	 * @uses 	Wakka::UserIsOwner()
+	 * @uses	 Wakka::GetPageTag()
+	 * @uses	 Wakka::GetUser()
+	 * @uses	 Wakka::GetUserName()
+	 * @uses	 Wakka::LoadAllACLs
+	 * @uses	 Wakka::UserIsOwner()
 	 * @param   string $privilege mandatory: privilege which shall be checked
 	 * @param	string $tag optional: name of the page default: current page
-	 * @param	string $tag optional: name of the user default: current user 
-	 * @return 	FALSE/0 or TRUE/1
+	 * @param	string $tag optional: name of the user default: current user
+	 * @return	 FALSE/0 or TRUE/1
 	 * @todo	make this function return only a boolean value
-	 */ 
+	 */
 	function HasAccess($privilege, $tag = "", $user = "")
 	{
 		// set defaults
@@ -1591,7 +1625,7 @@ class Wakka
 	 */
 	/**
 	 * Purge referrers and old page revisions.
-	 * 
+	 *
 	 * @uses	Wakka::GetConfigValue()
 	 * @uses	Wakka::Query()
 	 */
@@ -1609,7 +1643,7 @@ class Wakka
 	}
 	/**
 	 * THE BIG EVIL NASTY ONE!
-	 * 
+	 *
 	 * @uses	Wakka::Footer()
 	 * @uses	Wakka::GetCookie()
 	 * @uses	Wakka::GetMicrotime()
@@ -1626,7 +1660,7 @@ class Wakka
 	 * @uses	Wakka::SetCookie()
 	 * @uses	Wakka::SetPage()
 	 * @uses	Wakka::SetUser()
-	 * 
+	 *
 	 * @param	string $tag mandatory: name of the single page/image/file etc. to be used
 	 * @param	string $method optional: the method which should be used. default: "show"
 	 */
@@ -1636,10 +1670,10 @@ class Wakka
 		if (!$this->method = trim($method)) $this->method = "show";
 		if (!$this->tag = trim($tag)) $this->Redirect($this->Href("", $this->config["root_page"]));
 		if (!$this->GetUser() && ($user = $this->LoadUser($this->GetCookie('user_name'), $this->GetCookie('pass')))) $this->SetUser($user);
-		if ((!$this->GetUser() && isset($_COOKIE["wikka_user_name"])) && ($user = $this->LoadUser($_COOKIE["wikka_user_name"], $_COOKIE["wikka_pass"]))) 
+		if ((!$this->GetUser() && isset($_COOKIE["wikka_user_name"])) && ($user = $this->LoadUser($_COOKIE["wikka_user_name"], $_COOKIE["wikka_pass"])))
 		{
 		 //Old cookies : delete them
-			SetCookie('wikka_user_name', "", 1, "/"); 
+			SetCookie('wikka_user_name', "", 1, "/");
 			$_COOKIE['wikka_user_name'] = "";
 			SetCookie('wikka_pass', '', 1, '/');
 			$_COOKIE['wikka_pass'] = "";
@@ -1681,5 +1715,5 @@ class Wakka
 			print($this->Header().$this->Method($this->method).$this->Footer());
 		}
 	}
-} 
+}
 ?>
