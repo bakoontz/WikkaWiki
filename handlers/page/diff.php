@@ -28,6 +28,11 @@ define('CONTENT_DELETIONS_HEADER', 'Deletions:');
 define('CONTENT_NO_DIFFERENCES', 'No Differences');
 echo '<div class="page">'."\n"; //TODO: move to templating class
 
+// If javascript is disabled, user may get here after pressing button Next... on the /revisions handler. 
+if (isset($_GET['more_revisions']))
+{
+	$this->Redirect($this->Href('revisions', '', 'a='.$_GET['a'].'&start='.$_GET['start']));
+}
 if ($this->HasAccess("read")) 
 {
 

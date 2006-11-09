@@ -25,13 +25,33 @@ define('BUTTON_SHOW_DIFFERENCES', 'Show Differences');
 define('ERROR_ACL_READ', 'You aren\'t allowed to read this page.');
 define('SIMPLE_DIFF', 'Simple Diff');
 define('WHEN_BY_WHO', '%1$s by %2$s');
+define('REVISIONS_MORE', 'There are more revisions that were not shown here, click the button labelled %s below to view these entries');
+define('BUTTON_REVISIONS_MORE', 'Next ...');
+
+$start = intval($this->GetSafeVar('start', 'get'));
+if ($start) $start .= ', ';
+else $start = '';
 
 echo '<div class="page">'."\n"; //TODO: move to templating class
 
 if ($this->HasAccess("read")) 
 {
+	if (isset($_GET['start']))
+	{
+		$start = intval($this->GetSafeVar('start', 'get'));
+		$a = intval($this->GetSafeVar('a', 'get'));
+		if ($a)
+		{
+			$pageA = $this->LoadPageById($a);
+		}
+	}
+	$pages = $this->LoadRevisions($this->tag, $start);
+	if (isset($pageA) && is_array($pageA) && is_array($pages))
+	{
+		array_unshift($pages, $pageA);
+	}
 	// load revisions for this page
-	if ($pages = $this->LoadRevisions($this->tag))
+	if ($pages)
 	{
 		$output = $this->FormOpen("diff", "", "get");
 		$output .= "<table border=\"0\" cellspacing=\"0\" cellpadding=\"1\">\n";
@@ -55,6 +75,13 @@ if ($this->HasAccess("read"))
 		}
 		$output .= "</table><br />\n";
 		$output .= '<input type="button" value="'.BUTTON_RETURN_TO_NODE.'" onclick="document.location=\''.$this->Href('').'\';" />'."\n";
+		$oldest_revision = $this->LoadOldestRevision($this->tag);
+		if ($oldest_revision['id'] != $page['id'])
+		{
+			$output .= '<input type="hidden" name="start" value="'.$c.'" />'."\n";
+			$output .= '<br />'.sprintf(REVISIONS_MORE, BUTTON_REVISIONS_MORE);
+			$output .= "\n".'<br /><input type="submit" name="more_revisions" value="'.BUTTON_REVISIONS_MORE.'" onclick=\'this.form.action="'.$this->Href('revisions').'"; return (true);\' />';
+		}
 		$output .= $this->FormClose()."\n";
 	}
 	print($output);
