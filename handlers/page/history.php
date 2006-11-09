@@ -48,8 +48,6 @@
  
 echo '<div class="page">'."\n"; //TODO: move to templating class
 $start = intval($this->GetSafeVar('start', 'get'));
-if ($start) $start .= ', ';
-else $start = '';
 if ($this->HasAccess("read")) {
 	// load revisions for this page
 	if ($pages = $this->LoadRevisions($this->tag, $start))

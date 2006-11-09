@@ -664,31 +664,32 @@ class Wakka
 	/**
 	 * LoadRevisions: Load revisions of a page. 
 	 * 
-	 * <p>Returns up to $max latest revisions of $page <b>plus</b> <em>eventually</em> one additional 
-	 * row (see explanations below). 0 or a negative value for $max means using a default value.
+	 * <p>Returns up to $max latest revisions of $page.
+	 * 0 or a negative value for $max means using a default value.
 	 * The default value for $max is the `revisioncount' user's preference if user is logged in,
-	 * or the (new) config value `default_revisioncount', if such config entry exists, or 20.</p>
+	 * or the (new) config value {@link Config::$default_revisioncount default_revisioncount}, if
+	 * such config entry exists, or falls to a hard-coded value of 20.</p>
 	 * <p>A revision structure consists of an edit note
 	 * (`<b>note</b>' key), the `<b>id</b>' of the revision which permits to retrieve later the
 	 * full edit data (especially the body field), the date of revision (`<b>time</b> key) and the
 	 * `<b>user</b>' who did the modification. </p>
 	 * <p>Since 1.1.7, we replaced `SELECT *' in the sql instruction by 
 	 * `SELECT note, id, time, user' because only these fields are really needed. (Trac:#75)</p>
-	 * <p>If the page has more revisions than $max, LoadRevisions has an additional row which is 
-	 * the oldest revision of the page, and that oldest revision is also the last row of the array
-	 * returned.</p>
+	 * <p>If param $start is supplied, LoadRevisions ignore the $start most recent revisions; this
+	 * will allow browsing full history step by step if the pagesize or the number of total revision 
+	 * are getting too big.</p>
 	 *
 	 * @uses Wakka::GetUser()
-	 * {@access private @uses Wakka::GetConfigValue() is commented, see Config::$...}
 	 * @uses Wakka::LoadAll()
 	 * @uses Config::$default_revisioncount
+	 * @uses Config::$pagename_case_sensitive
 	 * @param string $page Name of the page to view revisions of
-	 * @param int $max Maximum number of revisions to load.
 	 * @param int $start 
+	 * @param int $max Maximum number of revisions to load.
 	 * @access public
 	 * @return array This value contains fields note, id, time and user.
 	 */
-	function LoadRevisions($page, $max=0, $start='') 
+	function LoadRevisions($page, $start='', $max=0) 
 	{
 		$max = intval($max);
 		if ($max <= 0)
@@ -706,16 +707,39 @@ class Wakka
 		{ // 0 or a negative value means no max, so choose a huge number.
 			$max = 1000;
 		}
-		$revisions = $this->LoadAll("select note, id, time, user from ".$this->config["table_prefix"]."pages where tag = '".mysql_real_escape_string($page)."' order by time desc LIMIT $start$max");
-		if (is_array($revisions) && count($revisions) == $max)
+		if ($start = intval($start))
 		{
-			$latest_revision = $this->LoadSingle("select note, id, time, user from ".$this->config['table_prefix']."pages where tag = '".mysql_real_escape_string($page)."' order by time LIMIT 1");
-			if ($revisions[$max - 1]['id'] != $latest_revision['id'])
-			{
-				$revisions[] = $latest_revision;
-			}
+			$start .= ', ';
+		}
+		else
+		{
+			$start = '';
+		}
+		$revisions = $this->LoadAll("select note, id, time, user from ".$this->config["table_prefix"]."pages where tag = '".mysql_real_escape_string($page)."' order by time desc LIMIT $start$max");
+		if (is_array($revisions) && (count($revisions) < $max))
+		{
+			if (!$this->GetConfigValue('pagename_case_sensitive')) $page_lowercase = strtolower($page);
+			$this->specialCache['oldest_revision'][$page_lowercase] = $revisions[count($revisions) - 1];
 		}
 		return ($revisions);
+	}
+	/**
+	 * LoadOldestRevision: Load the oldest known revision of a page.
+	 * 
+	 * @param string $page The name of the page to load oldest revision of.
+	 * @uses Config::$pagename_case_sensitive
+	 * @uses Wakka::$specialCache
+	 * @uses Wakka::LoadSingle
+	 * @access public
+	 * @return array
+	 */
+	function LoadOldestRevision($page)
+	{
+		if (!$this->GetConfigValue('pagename_case_sensitive')) $page_lowercase = strtolower($page);
+		if (isset($this->specialCache['oldest_revision'][$page_lowercase])) return ($this->specialCache['oldest_revision'][$page_lowercase]);
+		$latest_revision = $this->LoadSingle("select note, id, time, user from ".$this->config['table_prefix']."pages where tag = '".mysql_real_escape_string($page)."' order by time LIMIT 1");
+		$this->specialCache['oldest_revision'][$page_lowercase] = $latest_revision;
+		return ($latest_revision);
 	}
 	function LoadPagesLinkingTo($tag) { return $this->LoadAll("select from_tag as tag from ".$this->config["table_prefix"]."links where to_tag = '".mysql_real_escape_string($tag)."' order by tag"); }
 	function LoadRecentlyChanged()
