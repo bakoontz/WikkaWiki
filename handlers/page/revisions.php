@@ -2,6 +2,21 @@
 /**
  * Show a list of revisions for the page sorted after time.
  * 
+ * <p>Like {@link history.php the history handler}, this handler shows the history of revisions of a
+ * given page : it lists the date of each revision, the user who modified the page and the edit note
+ * supplied for that revision, but the output is more compact as it doesn't show additions and
+ * deletions nor any content of the page. The date of modification is linked to the version of the
+ * page at that revision.</p>
+ * <p>The user can also pick two revisions from the list and compare them by passing their id's to the
+ * {@link diff.php diff handler}. Two kinds of diffs are proposed: the normal diff and the simple 
+ * diff. This is done by choosing revisions using the checkboxes and by clicking the button <kbd>
+ * Show Differences</kbd>.
+ * The maximum number of revisions shown is configured through the user preference or at the
+ * wikka configuration. See {@link Wakka::LoadRevisions()}. If the page has more revisions than this
+ * configured value, a button <kbd>Next ...</kbd> will appear to allow viewing more revisions. The 
+ * revision marked at the left column will appear at the top of the next page, this will let the user
+ * compare any revision of the current page with another revision on the next (or later) page.</p>
+ * 
  * @package		Handlers
  * @subpackage	Page
  * @version		$Id$
@@ -9,17 +24,17 @@
  * 
  * @uses		Wakka::HasAccess()
  * @uses		Wakka::LoadRevisions()
- * @uses		Wakka::Format()
  * @uses		Wakka::FormOpen()
- * @uses		Wakka::GetUser()
  * @uses		Wakka::FormClose()
+ * @uses		Wakka::GetSafeVar()
+ * @uses		Wakka::LoadPageById()
+ * @uses		Wakka::Link()
+ * @uses		Wakka::htmlspecialchars_ent()
  * @uses		Wakka::Href()
  * 
  * @todo		move main <div> to templating class
  */
-/**
- * i18n
- */
+ // i18n
 define('BUTTON_RETURN_TO_NODE', 'Return To Node / Cancel');
 define('BUTTON_SHOW_DIFFERENCES', 'Show Differences');
 define('ERROR_ACL_READ', 'You aren\'t allowed to read this page.');

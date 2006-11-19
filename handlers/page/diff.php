@@ -2,6 +2,14 @@
 /**
  * Compare two versions of a page and output the differences.
  * 
+ * Parameters to this handler are passed through $_GET. <ul>
+ * <li>$_GET['a'] is the id of the base revision of the page</li>
+ * <li>$_GET['b'] is the id of the revision to compare</li>
+ * <li>$_GET['fastdiff'], if provided, enables the normal diff, and if absent, the simple diff is used.</li>
+ * <li><em>If $_GET['more_revisions'] is also present, this means that JavaScript is disabled and the user
+ * was on the {@link revisions.php revision handler}, so the page is redirected to that handler, with the
+ * parameters $a and $start.</em></li></ul>
+ *
  * @package     Handlers
  * @subpackage  Page
  * @version 	$Id$

@@ -12,7 +12,7 @@
  * configured (config entry {@link Config::$pagesize_max pagesize_max}) to prevent the history to
  * be unaccessible if the page size and revisions are too big. If more revisions than those that 
  * can be shown exist, a link is provided to view the rest of history.</p>
- * <p>If $_GET['param'] is specified, it must be a positive number and the history must start
+ * <p>If $_GET['start'] is specified, it must be a positive number and the history must start
  * from this value, ie ignoring the $start newest revisions. This is useful to present the
  * history of the page step by step, in case the full history cannot be displayed within a
  * single file.</p>
