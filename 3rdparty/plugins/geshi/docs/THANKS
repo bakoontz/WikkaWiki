@@ -52,6 +52,7 @@ PEOPE WHO MADE LANGUAGE FILES
 - AutoIT		mastrboy
 - Bash			Andreas Gohr
 - BlitzBasic	P�draig O`Connel
+- BNF           Rowan Rodrik van der Molen
 - C++			Dennis Bayer, M. Uli Kusterer
 - C#			Alan Juden
 - C for Macs	M. Uli Kusterer
@@ -71,8 +72,10 @@ PEOPE WHO MADE LANGUAGE FILES
 - Inno			Thomas Klinger
 - Java 5		Clemens Bruckmann
 - Javascript	Ben Keen
+- LaTeX         Matthais Pospiech
 - Lisp			Roberto Rossi
 - Lua			Roberto Rossi
+- mIRC          Alberto de Areba Sánchez
 - MPASM			Bakalex
 - MySQL			Carl F�rstenberg
 - NSIS			Tux (updated by Deguix)
@@ -95,6 +98,7 @@ PEOPE WHO MADE LANGUAGE FILES
 - T-SQL			Duncan Lock
 - Text			SmokingRope
 - TCL			Reid van Melle
+- thinBasic     Eros Olmi
 - Uno IDL		Cedric Bosdonnat
 - VB.NET		Alan Juden
 - VisualFoxPro	Roberto Armellin
@@ -103,4 +107,4 @@ PEOPE WHO MADE LANGUAGE FILES
 Do you want your name in here? Help me out! Make a language file, or suggest a new
 feature, or make a plugin for GeSHi for some other software, then tell me about it!
 
-              $Id: THANKS,v 1.19.2.2 2006/08/22 10:28:03 oracleshinoda Exp $
+              $Id: THANKS,v 1.19.2.6 2006/10/23 02:52:37 oracleshinoda Exp $

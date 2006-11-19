@@ -4,10 +4,10 @@
  * -------
  * Author: Galen Johnson (solitaryr@gmail.com)
  * Copyright: (c) 2004 Nigel McNie (http://qbnz.com/highlighter/)
- * Release Version: 1.0.7.13
- * CVS Revision Version: $Revision: 1.5.2.2 $
+ * Release Version: 1.0.7.15
+ * CVS Revision Version: $Revision: 1.5.2.4 $
  * Date Started: 2005/12/27
- * Last Modified: $Date: 2006/07/22 11:30:28 $
+ * Last Modified: $Date: 2006/09/23 02:05:48 $
  *
  * SAS language file for GeSHi. Based on the sas vim file.
  *
