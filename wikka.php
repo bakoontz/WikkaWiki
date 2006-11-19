@@ -116,10 +116,13 @@ if (get_magic_quotes_gpc())
 	magicQuotesWorkaround($_COOKIE);
 }
 
-include_once('libs/Config.class.php');
 /**
  * Load the configuration.
  */
+require_once('libs/Config.class.php');
+$buff = new Config;
+$wakkaDefaultConfig = get_object_vars($buff);
+unset($buff);
 $wakkaConfig = array();
 if (file_exists('wakka.config.php')) rename('wakka.config.php', 'wikka.config.php');
 if (!$configfile = GetEnv('WAKKA_CONFIG')) $configfile = 'wikka.config.php';

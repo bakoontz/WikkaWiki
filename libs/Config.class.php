@@ -356,7 +356,4 @@ class Config
 		$this->base_url = 'http://'.$_SERVER['SERVER_NAME'].($_SERVER['SERVER_PORT'] != 80 ? ':'.$_SERVER['SERVER_PORT'] : '').$_SERVER['REQUEST_URI'].(preg_match('/'.preg_quote('wikka.php').'$/', $_SERVER['REQUEST_URI']) ? '?wakka=' : '');
 	}
 }
-$buff = new Config;
-$wakkaDefaultConfig = get_object_vars($buff);
-
 ?>
