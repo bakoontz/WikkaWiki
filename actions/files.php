@@ -1,269 +1,389 @@
 <?php
 /**
- * Display a form for file uploading/downloading.
+ * Display a form with file attachments to the current page.
  * 
- * Files can be uploaded and deleted by admins and downloaded by any user with read access to the page.
- * This action can also be used to display a download link for a single file.
- * 
+ * This actions displays a form allowing users to download files uploaded to wiki pages. By default only 
+ * wiki admins can upload and delete files. If the intranet mode option is enabled, any user with write access
+ * to the current page can upload or remove file attachments. If the optional download parameter is set, a simple 
+ * download link is displayed for the specified file.
+ *
+ * Usage: {{files [download="filename"] [text="download link text"]}}
+ *
  * @package		Actions
  * @version		$Id$
  * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
- *  
- * @input string	$download optional: prints a link to the file specified in the string
- * @input string	$text optional:	link description for the file specified via the $download parameter
- * @output form for file uploading/downloading
  * 
+ * @author Victor Manuel Varela (original code)
+ * @author {@link http://wikkawiki.org/CryDust CryDust} (code overhaul, stylesheet)
+ * @author {@link http://wikkawiki.org/DarTar Dario Taraborelli} (code cleanup, defaults, i18n, added intranet mode)
+ * @author {@link http://wikkawiki.org/NilsLindenberg Nils Lindenberg} (i18n)
+ * 
+ * @input 	string 	$download  	optional: prints a link to the file specified in the string
+ * 			string 	$text		optional: a text for the link provided with the download parameter
+ * @output a form for file uploading/downloading
+ *
  * @uses	Wakka::Href()
- * @uses	Wakka::GetPageTag()
  * @uses	Wakka::HasAccess()
- * @uses	Wakka::bytesToHumanReadableUsage()
- * @uses	Wakka::mkdir_r
  * @uses	Wakka::IsAdmin()
  * @uses	Wakka::MiniHref()
- * @uses	Wakka::FormClose()
+ *
+ * @todo security: check file type, not only extension
+ * @todo use buttons instead of links for file deletion; #72
+ * @todo replace $_REQUEST in files handler with $_POST and $_GET; #72
+ * @todo replace intranet mode with fine-grained file ownership/ACL;
+ * @todo integrate with edit handler for easy insertion of file links;
+ * @todo maybe move some internal utilities to Wakka class?
+ * @todo make datetime format configurable;
+ * @todo add support for file versioning;
+ * @todo add (AJAX-powered?) confirmation check on file deletion;
+ * @todo integrate file table in page template, à la Wacko;
  */
 
-// $max_upload_size = "1048576"; // 1 Megabyte
-$max_upload_size = "2097152"; // 2 Megabyte
+//---- Global action settings ----
+/**
+ * Toggle intranet mode.
+ *
+ * Setting this mode to 1 allows anyone with write-access to the page to upload files.
+ * WARNING: enabling this option on a public server will allow any user with write access to upload files to your wiki.
+ * We strongly recommend enabling intranet mode in an intranet environment only to avoid major security issues.
+ */
+if(!defined('INTRANET_MODE')) define('INTRANET_MODE', 0);
 
-if (! function_exists('mkdir_r')) {
-	/**
-	 * Makes a directory on the server.
-	 * 
-	 * @param string $dir mandatory: name of the directory to be created
-	 */
-    function mkdir_r($dir) {
-        if (strlen($dir) == 0) return 0;
-        if (is_dir($dir)) return 1;
-        elseif (dirname($dir) == $dir) return 1;
-        return (mkdir_r(dirname($dir)) and mkdir($dir,0755));
-    }
-}
+/** Size limit for file uploads (in bites) */
+if(!defined('MAX_UPLOAD_SIZE')) define('MAX_UPLOAD_SIZE', 2097152);
+/** Pipe-separated list of allowed file extensions */
+if(!defined('ALLOWED_FILE_EXTENSIONS')) define('ALLOWED_FILE_EXTENSIONS', 'gif|jpeg|jpg|jpe|png|doc|xls|csv|ppt|ppz|pps|pot|pdf|asc|txt|zip|gtar|gz|bz2|tar|rar|vpp|mpp|vsd|mm|htm|html');
+/** Displayed date format */
+if(!defined('UPLOAD_DATE_FORMAT')) define('UPLOAD_DATE_FORMAT', 'Y-m-d H:i'); //TODO use general config settings for date format 
 
-if (! function_exists('bytesToHumanReadableUsage')) {
-        /**
-        * Converts bytes to a human readable string.
-        * 
-        * @param int $bytes mandatory: Number of bytes
-        * @param int $precision optional Number of decimal places to include in return string; Default: 2 
-        * @param array $names optional: Custom usage strings; Default: <empty>
-        * @return string formatted string rounded to $precision
-        */
-        function bytesToHumanReadableUsage($bytes, $precision = 2, $names = '')
-        {
-           if (!is_numeric($bytes) || $bytes < 0) {
-               return false;
-           }
-       
-           for ($level = 0; $bytes >= 1024; $level++) {    
-               $bytes /= 1024;      
-           }
-   
-           switch ($level)
-           {
-               case 0:
-                   $suffix = (isset($names[0])) ? $names[0] : 'Bytes';
-                   break;
-               case 1:
-                   $suffix = (isset($names[1])) ? $names[1] : 'KB';
-                   break;
-               case 2:
-                   $suffix = (isset($names[2])) ? $names[2] : 'MB';
-                   break;
-               case 3:
-                   $suffix = (isset($names[3])) ? $names[3] : 'GB';
-                   break;      
-               case 4:
-                   $suffix = (isset($names[4])) ? $names[4] : 'TB';
-                   break;                            
-               default:
-                   $suffix = (isset($names[$level])) ? $names[$level] : '';
-                   break;
-           }
-   
-           if (empty($suffix)) {
-               trigger_error('Unable to find suffix for case ' . $level); #i18n
-               return false;
-           }
-   
-           return round($bytes, $precision) . ' ' . $suffix;
-        }
-}
+// ---- Errore code constants ----
+if (!defined('UPLOAD_ERR_OK')) define('UPLOAD_ERR_OK', 0);
+if (!defined('UPLOAD_ERR_INI_SIZE')) define('UPLOAD_ERR_INI_SIZE', 1);
+if (!defined('UPLOAD_ERR_FORM_SIZE')) define('UPLOAD_ERR_FORM_SIZE', 2);
+if (!defined('UPLOAD_ERR_PARTIAL')) define('UPLOAD_ERR_PARTIAL', 3);
+if (!defined('UPLOAD_ERR_NO_FILE')) define('UPLOAD_ERR_NO_FILE', 4);
+if (!defined('UPLOAD_ERR_NO_TMP_DIR')) define('UPLOAD_ERR_NO_TMP_DIR', 6);
 
+// ---- i18n ----
+if (!defined('ERROR_UPLOAD_DIRECTORY_NOT_WRITABLE')) define ('ERROR_UPLOAD_DIRECTORY_NOT_WRITABLE', 'Please make sure that the server has write access to a folder named <tt>./%s</tt>.');
+if (!defined('ERROR_UPLOAD_DIRECTORY_NOT_READABLE')) define ('ERROR_UPLOAD_DIRECTORY_NOT_READABLE', 'Please make sure that the server has read access to a folder named <tt>./%s</tt>.');
+if (!defined('ERROR_INEXISTENT_FILE')) define ('ERROR_INEXISTENT_FILE', 'Sorry, a file named <tt>%s</tt> does not exist.'); // %s - name of the file
+if (!defined('ERROR_FILE_UPLOAD_INCOMPLETE')) define ('ERROR_FILE_UPLOAD_INCOMPLETE', 'File upload incomplete! Please try again.');
+if (!defined('ERROR_UPLOADING_FILE')) define ('ERROR_UPLOADING_FILE', 'There was an error uploading your file');
+if (!defined('FILE_UPLOAD_SUCCESSFUL')) define ('FILE_UPLOAD_SUCCESSFUL','File was successfully uploaded.');
+if (!defined('ERROR_FILE_ALREADY_EXISTS')) define ('ERROR_FILE_ALREADY_EXISTS', 'Sorry, a file named <tt>%s</tt> already exists.'); // %s - name of the file
+if (!defined('ERROR_EXTENSION_NOT_ALLOWED')) define('ERROR_EXTENSION_NOT_ALLOWED', 'Sorry, files with this extension are not allowed.');
+if (!defined('ERROR_FILE_TOO_BIG')) define ('ERROR_FILE_TOO_BIG','Attempted file upload was too big. Maximum allowed size is %s.'); // %s - allowed filesize 
+if (!defined('ERROR_NO_FILE_SELECTED')) define ('ERROR_NO_FILE_SELECTED','No file selected.'); 
+if (!defined('ERROR_FILE_UPLOAD_IMPOSSIBLE')) define('ERROR_FILE_UPLOAD_IMPOSSIBLE', 'File upload impossible due to misconfigured server.');
+if (!defined('FILE_TABLE_CAPTION')) define ('FILE_TABLE_CAPTION', 'Attachments');
+if (!defined('FILE_TABLE_HEADER_NAME')) define ('FILE_TABLE_HEADER_NAME', 'File');
+if (!defined('FILE_TABLE_HEADER_SIZE')) define ('FILE_TABLE_HEADER_SIZE', 'Size');
+if (!defined('FILE_TABLE_HEADER_DATE')) define ('FILE_TABLE_HEADER_DATE', 'Last modified');
+if (!defined('FILE_UPLOAD_FORM_LABEL')) define ('FILE_UPLOAD_FORM_LABEL', 'Add new attachment:');
+if (!defined('DOWNLOAD_LINK_TITLE')) define('DOWNLOAD_LINK_TITLE', 'Download %s'); // %s - file name
+if (!defined('DELETE_LINK_TITLE')) define('DELETE_LINK_TITLE', 'Remove %s'); // %s - file name
+if (!defined('NO_ATTACHMENTS')) define('NO_ATTACHMENTS', 'This page contains no attachment.');
 
-if ($download <> '') {
+// ---- Initialize variables ----
+$text = '';
+$output = '';
+$error_msg = '';
+$is_writeable = FALSE;
+$is_readable = FALSE;
+$notification_msg = '';
+$max_upload_size = MAX_UPLOAD_SIZE;
+$allowed_extensions = ALLOWED_FILE_EXTENSIONS;
 
-    // link to download a file
-    if ($text == '') $text = $download;
-    echo "<a href=\"".$this->href('files.xml',$this->GetPageTag(),'action=download&amp;file='.urlencode($download))."\">".$text."</a>";
-
-// } elseif ($this->page AND $this->HasAccess('write') AND ($this->method <> 'print.xml') AND ($this->method <> 'edit')) {
-// Show files to anyone with read access, we'll check for write access if they try to delete a file.
-} elseif ($this->page AND $this->HasAccess('read') AND ($this->method <> 'print.xml') AND ($this->method <> 'edit')) {
-
-    // upload path
-    if ($this->config['upload_path'] == '') $this->config['upload_path'] = 'files';
-    $upload_path = $this->config['upload_path'].'/'.$this->GetPageTag();
-    if (! is_dir($upload_path)) mkdir_r($upload_path);
-
-    // upload action
-    $uploaded = $_FILES['file'];
-   // if ($_SERVER['REQUEST_METHOD'] == 'POST') 
-   // if ($_REQUEST['action'] == 'upload' AND $uploaded['size'] > 0) {
-   if ($_REQUEST['action'] == 'upload') {
- 
-		switch($_FILES['file']['error'])
+// ---- Utilities ----
+/**
+ * Check if the current user can upload files
+ */
+if (!function_exists('userCanUpload'))
+{
+	function userCanUpload()
+	{
+		global $wakka;
+		switch(TRUE)
 		{
-				case 0:
-	  	  			if ($_FILES["file"]["size"] > $max_upload_size) {
-						echo "<b>Attempted file upload was too big.  Maximum allowed size is ".bytesToHumanReadableUsage($max_upload_size).".</b>"; #i18n
-			 	   		unlink($uploaded['tmp_name']);
-				      } else {	
-					  	$strippedname=str_replace("'","",$uploaded['name']);
-					  	$strippedname=stripslashes($strippedname);
+			case ($wakka->IsAdmin()):
+			case (INTRANET_MODE && $wakka->HasAccess('write')):
+				return TRUE;
+				break;
 
-						$destfile = $upload_path.'/'.$strippedname;
-
-						if (!file_exists($destfile))
-						{
-							if (move_uploaded_file($uploaded['tmp_name'], $destfile))
-							{
-								// echo("<b>File was successfully uploaded.</b><br />\n"); #i18n
-							}
-							else
-							{
-								echo("<b>There was an error uploading your file.</b><br />\n"); #i18n
-							}
-						}
-						else
-						{
-							echo("<b>There is already a file named \"" . $strippedname . "\".</b> <br />\nPlease rename before uploading or delete the existing file below.<br />\n"); #i18n
-						}
-					}
-					break;
-				case 1:
-				case 2: // File was too big.... as reported by the browser, respecting MAX_FILE_SIZE
-					echo "<b>Attempted file upload was too big. Maximum allowed size is ".bytesToHumanReadableUsage($max_upload_size).".</b>"; 
-					break;
-				case 3:
-					echo("<b>File upload incomplete! Please try again.</b><br />\n"); #i18n
-					break;
-				case 4:
-					echo("<b>No file uploaded.</b><br />\n"); #i18n
+			default:
+				return FALSE;
 		}
+	}
+}
 
-    }
+/**
+ * Create upload folder if it does not exist
+ */
+if (!function_exists('mkdir_r'))
+{
+	function mkdir_r ($dir)
+	{
+		if (strlen($dir) == 0) {
+			return 0;
+		}
+		if (is_dir($dir)) {
+			return 1;
+	 	}
+	 	elseif (dirname($dir) == $dir)
+	 	{
+	 		return 1;
+	 	}
+	 	return (mkdir_r(dirname($dir)) and mkdir($dir,0755));
+	 }
+}
 
-    // uploaded files
-        print "
+/**
+ * Convert bytes to a human readable string
+ *
+ * @param int $bytes Number of bytes
+ * @param int $precision Number of decimal places to include in return string
+ * @param array $names Custom usage strings
+ * @return string formatted string rounded to $precision
+ */
+if (!function_exists('bytesToHumanReadableUsage'))
+{
+	function bytesToHumanReadableUsage($bytes, $precision = 0, $names = '')
+	{
+		if (!is_numeric($bytes) || $bytes < 0)
+		{
+			$bytes = 0;
+		}
+		if (!is_numeric($precision) || $precision < 0)
+		{
+			$precision = 0;
+		}
+		if (!is_array($names))
+		{
+			$names = array('b','Kb','Mb','Gb','Tb','Pb','Eb');
+		}
+		$level = floor(log($bytes)/log(1024));
+		$suffix = '';
+		if ($level < count($names))
+		{
+			$suffix = $names[$level];
+		}
+		return round($bytes/pow(1024, $level), $precision) . $suffix;
+	}
+}
 
-                        <table cellspacing='0' cellpadding='0'>
-                          <tr>
-                                <td>
-                                  &nbsp;
-                                </td>
-                                <td bgcolor='gray' valign='bottom' align='center'>
-                                  <font color='white' size='-2'>
-                                        Attachment
-                                  </font>
-                                </td>
-                                <td bgcolor='gray' valign='bottom' align='center'>
-                                  <font color='white' size='-2'>
-                                        Size
-                                  </font>
-                                </td>
-                                <td bgcolor='gray' valign='bottom' align='center'>
-                                  <font color='white' size='-2'>
-                                        Date Added
-                                  </font>
-                                </td>
-                          </tr>
+// ---- Run action ----
 
-                ";
+// 0. define upload path for the current page
+if ($this->config['upload_path'] == '')
+{
+	$this->config['upload_path'] = 'files';
+}
+$upload_path = $this->config['upload_path'].DIRECTORY_SEPARATOR.$this->tag; #89
 
-    $dir = opendir($upload_path);
-    while ($file = readdir($dir)) {
-        if ($file != '.' && $file != '..') {
-                        $num++;
-				// if ($this->HasAccess('write')) {
-				if ($this->IsAdmin()) {
-             			$delete_link = "<a href=\"".$this->href('files.xml',$this->GetPageTag(),'action=delete&amp;file='.urlencode($file))."\">x</a>";
-            		} else {
-            			$delete_link = "";
+// 1. check if main upload path is writable
+if (!is_writable($this->config['upload_path']))
+{
+	echo '<div class="alertbox">'.sprintf(ERROR_UPLOAD_DIRECTORY_NOT_WRITABLE, $this->config['upload_path']).'</div>';
+}
+else
+{
+	$is_writable = TRUE;
+}
+
+// 2. print a simple download link for the specified file, if it exists
+if (isset($vars['download']))
+{
+	if (file_exists($upload_path.DIRECTORY_SEPARATOR.$vars['download']))
+	{
+		if (!isset($vars['text']))
+		{
+			$text = $vars['download'];
+		} else
+		{
+			$text = $vars['text'];
+		}
+		$output .=  '<a href="'
+			. $this->Href('files.xml', $this->tag, 'action=download&amp;file='.rawurlencode($vars['download']))
+			. '" title="'.sprintf(DOWNLOAD_LINK_TITLE, $text).'">'
+			. $text
+			. '</a>';
+	}
+	else
+	{
+		echo '<em class="error">'.sprintf(ERROR_INEXISTENT_FILE, $vars['download']).'</em>';
+	}
+}
+
+// 3. user is trying to upload
+elseif ($this->page && $this->HasAccess('read') && $this->method == 'show' && $is_writable)
+{
+
+	// create new folders if needed
+	if ($is_writable && !is_dir($upload_path))
+	{
+		mkdir_r($upload_path);
+	}
+
+	// get upload results
+	if ($is_writable && $_POST['action'] == 'upload' && userCanUpload())
+	{
+		switch ($_FILES['file']['error'])
+		{
+			case UPLOAD_ERR_OK:
+				if ($_FILES['file']['size'] > MAX_UPLOAD_SIZE)
+				{
+					$error_msg = sprintf(ERROR_FILE_TOO_BIG, bytesToHumanReadableUsage($max_upload_size));
+				 	unlink($_FILES['file']['tmp_name']);
+			 	}
+			 	elseif (preg_match('/.+\.('.$allowed_extensions.')$/i', $_FILES['file']['name']))
+			 	{
+					$strippedname = str_replace('\'', '', $_FILES['file']['name']);
+					$strippedname = str_replace(" ","_",$strippedname); #46						
+				 	$strippedname = stripslashes($strippedname);
+					$destfile = $upload_path.DIRECTORY_SEPARATOR.$strippedname; #89
+
+					if (!file_exists($destfile))
+				 	{
+						if (move_uploaded_file($_FILES['file']['tmp_name'], $destfile))
+					 	{
+							$notification_msg = FILE_UPLOAD_SUCCESSFUL;
+					 	}
+					 	else
+					 	{
+							$error_msg = ERROR_UPLOADING_FILE;
+					 	}
+				 	}
+				 	else
+				 	{
+						$error_msg = sprintf(ERROR_FILE_ALREADY_EXISTS, $strippedname);
+				 	}
 				}
-				// $download_link = "<a href=\"".$this->href('files.xml',$this->GetPageTag(),'action=download&amp;file='.urlencode($file))."\">".$file."</a>";
-            		$download_link = "<a href=\"".$this->href('files.xml',$this->GetPageTag(),'action=download&amp;file='.rawurlencode($file))."\">".$file."</a>";
-            		// $download_link = "<a href=\"".$this->config["base_url"].$upload_path."\\".rawurlencode($file)."\">".$file."</a>";
-                        $size = bytesToHumanReadableUsage(filesize("$upload_path/$file"));
-                        $date = date("n/d/Y g:i a",filemtime("$upload_path/$file"));
+				else
+				{
+					$error_msg = ERROR_EXTENSION_NOT_ALLOWED;
+				 	unlink($_FILES['file']['tmp_name']);
+				}
+				break;
+			case UPLOAD_ERR_INI_SIZE:
+			case UPLOAD_ERR_FORM_SIZE:
+				$error_msg = sprintf(ERROR_FILE_TOO_BIG, bytesToHumanReadableUsage($max_upload_size)); 
+				break;
+			case UPLOAD_ERR_PARTIAL:
+				$error_msg = ERROR_FILE_UPLOAD_INCOMPLETE;
+				break;
+			case UPLOAD_ERR_NO_FILE:
+				$error_msg = ERROR_NO_FILE_SELECTED;
+				break;
+		 	case UPLOAD_ERR_NO_TMP_DIR:
+				$error_msg = ERROR_FILE_UPLOAD_IMPOSSIBLE;
+				break;
+	}
+	if ($error_msg != '')
+	{
+		 $output .= '<em class="error">'.$error_msg.'</em>';
+	} else if ($notification_msg !='')
+	{
+		 $output .= '<em class="success">'.$notification_msg.'</em>';
+	}
+}
 
-                        print  "
-
-                                        <tr>
-                                          <td valign='top' align='center'>
-                                                &nbsp;&nbsp;
-                                                {$delete_link}
-                                                &nbsp;&nbsp;
-                                          </td>
-                                          <td valign='top'>
-                                                $download_link
-                                          </td>
-                                          <td valign='top'>
-                                                &nbsp;
-                                                <font size='-1' color='gray'>
-                                                  $size
-                                                </font>
-                                          </td>
-                                          <td valign='top'>
-                                                &nbsp;
-                                                <font size='-1' color='gray'>
-                                                  $date
-                                                </font>
-                                          </td>
-                                        </tr>
-
-                                ";
-        }
-    }
-    closedir($dir);
-
-        // print n/a if no files currently exist
-        if (!$num)  print "<tr><td>&nbsp;</td><td colspan='3' align='center'><font color='gray' size='-1'><em>&nbsp;&nbsp;&nbsp;</em></font></td></tr>";
-        else  print "<tr><td>&nbsp;</td></tr>";
-
-   // if ($this->HasAccess('write')) {
-   if ($this->IsAdmin()) {
-   	// form
-    	$result = "<form action=\"".$this->href()."\" method=\"post\" enctype=\"multipart/form-data\">\n";
-    	if (!$this->config["rewrite_mode"]) $result .= "<input type=\"hidden\" name=\"wakka\" value=\"".$this->MiniHref()."\">\n";
-    	echo $result;
-    	echo $this->FormClose();
-
-        // close disp table
-        print "
-
-                          <tr>
-                                <td>
-                                  &nbsp;
-                                </td>
-                                <td colspan='4' valign='top' align='right' nowrap>
-                                  <em>
-                                        $result
-                                        <input type=\"hidden\" name=\"action\" value=\"upload\"></input>
-					 	    <input type=\"hidden\" name=\"MAX_FILE_SIZE\" value=\"$max_upload_size\">
-                                        <font color='gray' size='-2'>
-                                          add new attachment:
-                                          <input type=\"file\" name=\"file\" style=\"padding: 0px; margin: 0px; font-size: 8px; height: 15px\"></input>
-                                          <input type=\"submit\" value=\"+\" style=\"padding: 0px; margin: 0px; font-size: 8px; height: 15px\"></input>
-						    </font>
-                                        ".$this->FormClose()."
-                                  </em>
-                                </td>
-                          </tr> ";
-
-   }
-   print " </table>  ";
+// 4. display file list
+if (is_readable($upload_path))
+{ 
+	$is_readable = TRUE;
+	$dir = opendir($upload_path);
+	$n = 0;
+	// build file interface
+	while ($file = readdir($dir))
+	{
+		if ($file{0} != '.')
+		{
+			$n++;
+			$delete_link = '<!-- delete -->';
+			if (userCanUpload())
+			{
+				$delete_link = '<a class="keys" href="'
+				.$this->Href('files.xml',$this->tag,'action=delete&amp;file='.rawurlencode($file))
+				.'" title="'.sprintf(DELETE_LINK_TITLE, $file).'">x</a>';
+			}
+			$download_link = '<a href="'
+				.$this->Href('files.xml',$this->tag,'action=download&amp;file='.rawurlencode($file))
+				.'" title="'.sprintf(DOWNLOAD_LINK_TITLE, $file).'">'.$file.'</a>';
+			$size = bytesToHumanReadableUsage(filesize($upload_path.DIRECTORY_SEPARATOR.$file)); #89
+			$date = date(UPLOAD_DATE_FORMAT, filemtime($upload_path.DIRECTORY_SEPARATOR.$file)); #89
+			$output_files .= '<tr>'."\n";
+			if (userCanUpload())
+			{
+				$output_files .=	'<td>'.$delete_link.'</td>'."\n";
+			}
+			$output_files .=	'<td>'.$download_link.'</td>'."\n"
+				.'<td>'.$date.'</td>'."\n"
+				.'<td align="right"><tt>'.$size.'</tt></td>'."\n"
+				.'</tr>'."\n";
+		}
+	}
+	closedir($dir);
+	if ($n > 0)
+	{
+		$output .=	'<div class="files">'."\n";
+		// display uploaded files
+		$output .=	'<table class="files">'."\n"
+			.'<caption>'.FILE_TABLE_CAPTION.'</caption>'."\n"
+	 		.'<thead>'."\n"
+			.'<tr>'."\n";
+		if (userCanUpload())
+		{
+			$output .= '<th>&nbsp;</th>'."\n"; //For the delete link. Only needed when user has file upload privs.
+		}
+		$output .= '<th>'.FILE_TABLE_HEADER_NAME.'</th>'."\n"
+			.'<th>'.FILE_TABLE_HEADER_DATE.'</th>'."\n"
+			.'<th>'.FILE_TABLE_HEADER_SIZE.'</th>'."\n"
+			.'</tr>'."\n"
+			.'</thead>'."\n"
+			.'<tbody>'."\n";
+		$output .= $output_files;
+		$output .=	'</tbody>'."\n"
+			.'</table>'."\n";
+	}
+}
+// cannot read the folder contents
+else
+{
+	echo '<div class="alertbox">'.sprintf(ERROR_UPLOAD_DIRECTORY_NOT_READABLE, $upload_path).'</div>';
 
 }
+
+// print message if no files are available
+if ($is_readable && $n < 1)
+{
+	$output .=	'<em>'.NO_ATTACHMENTS.'</em>'."\n"; //
+}
+
+// 5. display upload form
+if ($is_writable && userCanUpload())
+{
+	// upload form
+	$input_for_rewrite_mode = '<!-- rewrite mode disabled -->';
+	if (!$this->config['rewrite_mode'])
+	{
+		$input_for_rewrite_mode = '<input type="hidden" name="wakka" value="'.$this->MiniHref().'" />';
+	}
+	$href = $this->Href();
+	$output .=	'<form action="'.$href.'" method="post" enctype="multipart/form-data">'."\n"
+				.$input_for_rewrite_mode."\n"
+				.'<input type="hidden" name="action" value="upload" />'."\n"
+				.'<fieldset><legend>'.FILE_UPLOAD_FORM_LABEL.'</legend>'."\n"
+				.'<input type="file" name="file" /><br />'."\n"
+				.'<input type="submit" value="Upload" />'."\n"
+				.'</fieldset>'."\n"
+				.'</form>'."\n";
+	}
+}
+$output .= '</div>';
+
+// 6. print output to screen
+$output = $this->ReturnSafeHTML($output);
+echo $output;
 ?>

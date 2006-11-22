@@ -132,6 +132,11 @@ a.ext:hover {
 	text-decoration: underline;
 }
 
+a.keys:hover {
+	text-decoration: none;
+	color: #333;	
+}
+
 /* lists */
 
 ul, ol {
@@ -181,7 +186,16 @@ img.right {
 	float: right;
 }
 
-/* floats */
+/* boxes and floats */
+
+div.alertbox {
+	margin: 10px;
+	padding: 4px 8px;
+	width:49%;
+	background-color:#FEE;
+	border:1px solid #EDD;
+	font-size: 90%;
+}
 
 .floatl {
 	float: left;
@@ -460,6 +474,54 @@ del {
 }
 
 /* ACTION-related styling */
+
+/* File attachments */
+
+div.files {
+	display: block;
+	padding: 5px;
+	width: 40%;
+}
+
+table.files {
+	width: 100%;
+	font-size: 90%;
+	border: 2px solid #CCC;
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+table.files caption {
+	border: 1px solid #CCC;
+	color: #666;
+	margin:5px 0;
+	padding:2px;
+}
+
+table.files thead {
+	background-color: #DDD;
+}
+
+table.files th, table.files td {
+	border: 1px solid #CCC;
+	padding: 1px 3px;
+}
+
+table.files thead th {
+	background-color: #DDD;
+}
+
+table.files tfoot th {
+	background-color: #DDD;
+}
+
+table.files tbody th {
+	background-color: #EEE;
+}
+
+table.files tbody tr:hover {
+	background-color: #EEE;
+}
 
 /* Tables */
 table.wikka {
