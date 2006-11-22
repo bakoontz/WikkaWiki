@@ -154,17 +154,27 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 		$preview_buttons = '<fieldset><legend>Store page</legend>'.$edit_note_field.'<input name="submit" type="submit" value="'.INPUT_SUBMIT_STORE.'" accesskey="'.ACCESSKEY_STORE.'" />'."\n".
 			'<input name="submit" type="submit" value="'.INPUT_SUBMIT_REEDIT.'" accesskey="'.ACCESSKEY_REEDIT.'" id="reedit_id" />'."\n".
 			'<input type="button" value="'.INPUT_BUTTON_CANCEL.'" onclick="document.location=\''.$this->href('').'\';" /></fieldset>'."\n";
-
-		//build page
-		$output .= '<div class="previewhead">'.PREVIEW_HEADER.'</div>'."\n";
-		$output .= $this->Format($body);
-		$output .= $this->FormOpen('edit')."\n";
-		$output .= '<input type="hidden" name="previous" value="'.$previous.'" />'."\n".
+		
+		$preview_form = $this->FormOpen('edit')."\n";
+		$preview_form .= '<input type="hidden" name="previous" value="'.$previous.'" />'."\n".
 			// We need to escape ALL entity refs before display so we display them _as_ entities instead of interpreting them
 			// hence htmlspecialchars() instead of htmlspecialchars_ent() which UNescapes entities!
 			'<input type="hidden" name="body" value="'.htmlspecialchars($body).'" />'."\n";
-		$output .= $preview_buttons."\n";
-		$output .= $this->FormClose()."\n";
+		$preview_form .= $preview_buttons."\n";
+		$preview_form .= $this->FormClose()."\n";
+		
+		//build page
+		$output .= '<div class="previewhead">'.PREVIEW_HEADER.'</div>'."\n";
+		if ($this->config['edit_buttons_position'] != 'bottom')
+		{
+			$output .= $preview_form;
+		}
+		$output .= $this->Format($body);
+		if ($this->config['edit_buttons_position'] != 'top')
+		{
+			$output .= $preview_form;
+		}
+		
 	}
 	elseif (!$this->page && strlen($this->tag) > $maxtaglen) # rename page
 	{
