@@ -125,18 +125,20 @@ if (!function_exists('mkdir_r'))
 {
 	function mkdir_r ($dir)
 	{
-		if (strlen($dir) == 0) {
+		if (strlen($dir) == 0) 
+		{
 			return 0;
 		}
-		if (is_dir($dir)) {
+		if (is_dir($dir)) 
+		{
 			return 1;
-	 	}
-	 	elseif (dirname($dir) == $dir)
-	 	{
-	 		return 1;
-	 	}
-	 	return (mkdir_r(dirname($dir)) and mkdir($dir,0755));
-	 }
+		}
+		elseif (dirname($dir) == $dir)
+		{
+			return 1;
+		}
+		return (mkdir_r(dirname($dir)) and mkdir($dir,0755));
+	}
 }
 
 /**
@@ -237,35 +239,35 @@ elseif ($this->page && $this->HasAccess('read') && $this->method == 'show' && $i
 				if ($_FILES['file']['size'] > MAX_UPLOAD_SIZE)
 				{
 					$error_msg = sprintf(ERROR_FILE_TOO_BIG, bytesToHumanReadableUsage($max_upload_size));
-				 	unlink($_FILES['file']['tmp_name']);
-			 	}
-			 	elseif (preg_match('/.+\.('.$allowed_extensions.')$/i', $_FILES['file']['name']))
-			 	{
+					unlink($_FILES['file']['tmp_name']);
+				}
+				elseif (preg_match('/.+\.('.$allowed_extensions.')$/i', $_FILES['file']['name']))
+				{
 					$strippedname = str_replace('\'', '', $_FILES['file']['name']);
-					$strippedname = str_replace(" ","_",$strippedname); #46						
-				 	$strippedname = stripslashes($strippedname);
+					$strippedname = str_replace(" ","_",$strippedname); #46
+					$strippedname = stripslashes($strippedname);
 					$destfile = $upload_path.DIRECTORY_SEPARATOR.$strippedname; #89
 
 					if (!file_exists($destfile))
-				 	{
+					{
 						if (move_uploaded_file($_FILES['file']['tmp_name'], $destfile))
-					 	{
+						{
 							$notification_msg = FILE_UPLOAD_SUCCESSFUL;
-					 	}
-					 	else
-					 	{
+						}
+						else
+						{
 							$error_msg = ERROR_UPLOADING_FILE;
-					 	}
-				 	}
-				 	else
-				 	{
+						}
+					}
+					else
+					{
 						$error_msg = sprintf(ERROR_FILE_ALREADY_EXISTS, $strippedname);
-				 	}
+					}
 				}
 				else
 				{
 					$error_msg = ERROR_EXTENSION_NOT_ALLOWED;
-				 	unlink($_FILES['file']['tmp_name']);
+					unlink($_FILES['file']['tmp_name']);
 				}
 				break;
 			case UPLOAD_ERR_INI_SIZE:
@@ -278,7 +280,7 @@ elseif ($this->page && $this->HasAccess('read') && $this->method == 'show' && $i
 			case UPLOAD_ERR_NO_FILE:
 				$error_msg = ERROR_NO_FILE_SELECTED;
 				break;
-		 	case UPLOAD_ERR_NO_TMP_DIR:
+			case UPLOAD_ERR_NO_TMP_DIR:
 				$error_msg = ERROR_FILE_UPLOAD_IMPOSSIBLE;
 				break;
 	}
@@ -333,7 +335,7 @@ if (is_readable($upload_path))
 		// display uploaded files
 		$output .=	'<table class="files">'."\n"
 			.'<caption>'.FILE_TABLE_CAPTION.'</caption>'."\n"
-	 		.'<thead>'."\n"
+			.'<thead>'."\n"
 			.'<tr>'."\n";
 		if (userCanUpload())
 		{
@@ -374,13 +376,13 @@ if ($is_writable && userCanUpload())
 	}
 	$href = $this->Href();
 	$output .=	'<form action="'.$href.'" method="post" enctype="multipart/form-data">'."\n"
-				.$input_for_rewrite_mode."\n"
-				.'<input type="hidden" name="action" value="upload" />'."\n"
-				.'<fieldset><legend>'.FILE_UPLOAD_FORM_LABEL.'</legend>'."\n"
-				.'<input type="file" name="file" /><br />'."\n"
-				.'<input type="submit" value="Upload" />'."\n"
-				.'</fieldset>'."\n"
-				.'</form>'."\n";
+		.$input_for_rewrite_mode."\n"
+		.'<input type="hidden" name="action" value="upload" />'."\n"
+		.'<fieldset><legend>'.FILE_UPLOAD_FORM_LABEL.'</legend>'."\n"
+		.'<input type="file" name="file" /><br />'."\n"
+		.'<input type="submit" value="Upload" />'."\n"
+		.'</fieldset>'."\n"
+		.'</form>'."\n";
 	}
 }
 $output .= '</div>';
