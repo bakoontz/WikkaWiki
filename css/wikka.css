@@ -25,11 +25,11 @@ body {
 	line-height: 20px;
 	color: #000000;
 	background-color: #F8F8F8;
+	margin: 0;
 }
 
 .header {
 	padding: 10px;
-	padding-top: 0px;
 }
 
 .page {
@@ -38,38 +38,33 @@ body {
 	font-family: Verdana, Tahoma, Arial, Helvetica, sans-serif;
 	background-color: white;
 	padding: 15px;
-	border: 1px inset;
+	border-top: 1px solid #CCC;
 	border-bottom: none;
 	height: 100%;
 }
 
 .footer {
 	clear: both;
-	background-color: #DDDDDD;
+	background-color: #E3E3E3;
 	padding: 5px 10px;
-	border: 1px inset;
-	border-top: none;
 	border-top: 1px solid #CCCCCC;
+	border-bottom: 1px solid #CCCCCC;
 }
 
 /* comments */
 
 .commentsheader {
 	clear: both;
-	background-color: #DDDDDD;
+	background-color: #E3E3E3;
 	padding: 2px 10px;
-	border-left: 1px inset;
-	border-right: 1px inset;
 	border-top: 1px solid #CCCCCC;
 }
 
 .comment {
 	background-color: #EEEEEE;
 	padding: 10px;
-	border-left: 1px inset;
-	border-right: 1px inset;
 	border-top: 1px solid #CCCCCC;
-	border-bottom: 1px solid #EEEEEE;
+	border-bottom: 1px solid #CCCCCC;
 }
 
 .commentinfo {
@@ -79,9 +74,6 @@ body {
 .commentform {
 	background-color: #EEEEEE;
 	padding: 10px;
-	border-left: 1px inset;
-	border-right: 1px inset;
-	border-top: 1px solid #CCCCCC;
 }
 
 /* links */
@@ -280,6 +272,8 @@ h1 {
 	border-bottom: 1px solid #999;
 }
 
+/* other HTML elements */
+
 acronym {
 	border-bottom: 1px dotted #333;
 	cursor: help;
@@ -294,8 +288,12 @@ blockquote {
 	font-size: 90%;
 }
 
-/* code blocks */
+hr {
+	border: 0;
+	border-top: 1px solid #EEE;
+}
 
+/* code blocks */
 
 .code_header {
 	color: #666;
@@ -347,12 +345,16 @@ fieldset legend {
 }
 
 input:hover {
-	background-color: #EEE;
+	background-color: #F3F3F3;
+}
+
+input:focus {
+	background-color: #E6E6E6;
 }
 
 input[type=submit], input[type=button] {
 	color: #666;
-	background-color: #DDD;
+	background-color: #EEE;
 	font: normal 95% Verdana, sans-serif;
 	text-align: center;
 	border-top: 1px solid #FFF;
@@ -364,7 +366,7 @@ input[type=submit], input[type=button] {
 
 input[type=submit]:hover, input[type=button]:hover {
 	color: #333;
-	background-color: #CCC;
+	background-color: #DDD;
 	border-top: 1px solid #FFF;
 	border-left: 1px solid #FFF;
 	border-right: 1px solid #999;
@@ -691,7 +693,7 @@ table.usersettings {
 
 /* HANDLER-related styling */
 
-/* Acls handler */
+/* acls handler */
 table.acls {
 }
 
