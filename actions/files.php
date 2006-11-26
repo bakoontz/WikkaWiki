@@ -89,10 +89,11 @@ if (!defined('NO_ATTACHMENTS')) define('NO_ATTACHMENTS', 'This page contains no 
 // ---- Initialize variables ----
 $text = '';
 $output = '';
+$output_files = '';
 $error_msg = '';
-$is_writeable = FALSE;
-$is_readable = FALSE;
 $notification_msg = '';
+$is_writable = FALSE;
+$is_readable = FALSE;
 $max_upload_size = MAX_UPLOAD_SIZE;
 $allowed_extensions = ALLOWED_FILE_EXTENSIONS;
 
