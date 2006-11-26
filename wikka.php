@@ -178,6 +178,7 @@ if ($wakkaConfig['wakka_version'] !== WAKKA_VERSION)
  * Start session.
  */
 session_name(md5(BASIC_COOKIE_NAME.$wakkaConfig['wiki_suffix']));
+session_cache_limiter(''); #279
 session_start();
 
 /**
@@ -248,16 +249,15 @@ if (strstr ($HTTP_SERVER_VARS['HTTP_ACCEPT_ENCODING'], 'gzip') && function_exist
 	$page_length = strlen($page_output);
 }
 
-/** 
- * Send HTTP headers.
- */
-// header("Cache-Control: pre-check=0");
-header("Cache-Control: no-cache");
-// header("Pragma: ");
-// header("Expires: ");
-
 $etag =  md5($content);
 header('ETag: '.$etag);
+
+if (!isset($this->do_not_send_anticaching_headers) || (!$this->do_not_send_anticaching_headers))
+{ #279
+	header('Expires: Thu, 19 Nov 1981 08:52:00 GMT');
+	header('Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0');
+	header('Pragma: no-cache');
+}
 
 /** 
  * Ticket #152.

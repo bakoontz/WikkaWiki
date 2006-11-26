@@ -68,6 +68,13 @@ class Wakka
 	 * @access public
 	 */
 	var $pageCache;
+	/**
+	 * $do_not_send_anticaching_headers. 
+	 * If this value is set to true, Anti-caching HTTP headers won't be added.
+	 * @var boolean
+	 * @access public
+	 */
+	var $do_not_send_anticaching_headers = false;
 
 	/**
 	 * Constructor
