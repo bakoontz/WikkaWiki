@@ -204,6 +204,8 @@ if (isset($vars['download']))
 		{
 			$text = $vars['text'];
 		}
+		//Although $output is passed to ReturnSafeHTML, it's better to sanitize $text here. At least it can avoid invalid XHTML.
+		$text = $this->htmlspecialchars_ent($text);
 		$output .=  '<a href="'
 			. $this->Href('files.xml', $this->tag, 'action=download&amp;file='.rawurlencode($vars['download']))
 			. '" title="'.sprintf(DOWNLOAD_LINK_TITLE, $text).'">'
