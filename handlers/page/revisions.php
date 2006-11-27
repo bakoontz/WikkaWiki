@@ -43,9 +43,7 @@ define('WHEN_BY_WHO', '%1$s by %2$s');
 define('REVISIONS_MORE', 'There are more revisions that were not shown here, click the button labelled %s below to view these entries');
 define('BUTTON_REVISIONS_MORE', 'Next ...');
 
-$start = intval($this->GetSafeVar('start', 'get'));
-if ($start) $start .= ', ';
-else $start = '';
+$start = 0;
 
 echo '<div class="page">'."\n"; //TODO: move to templating class
 
@@ -93,7 +91,7 @@ if ($this->HasAccess("read"))
 		$oldest_revision = $this->LoadOldestRevision($this->tag);
 		if ($oldest_revision['id'] != $page['id'])
 		{
-			$output .= '<input type="hidden" name="start" value="'.$c.'" />'."\n";
+			$output .= '<input type="hidden" name="start" value="'.($start + $c).'" />'."\n";
 			$output .= '<br />'.sprintf(REVISIONS_MORE, BUTTON_REVISIONS_MORE);
 			$output .= "\n".'<br /><input type="submit" name="more_revisions" value="'.BUTTON_REVISIONS_MORE.'" onclick=\'this.form.action="'.$this->Href('revisions').'"; return (true);\' />';
 		}
