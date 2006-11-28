@@ -59,6 +59,11 @@ if (!defined('WAKKA_VERSION')) define('WAKKA_VERSION', 'trunk');
  */
 if(!defined('BASIC_COOKIE_NAME')) define('BASIC_COOKIE_NAME', 'Wikkawiki');
 /**
+ * Length to use for generated part of id attribute.
+ */
+if(!defined('ID_LENGTH')) define('ID_LENGTH',10);   
+
+/**
  * Calculate page generation time.
  */
 function getmicrotime() {
