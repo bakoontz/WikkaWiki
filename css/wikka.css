@@ -414,6 +414,7 @@ em.error {
 	font-style: normal;
 	font-weight: bold;
 	font-size: 95%;
+	display: block;
 }
 
 em.success {
@@ -421,6 +422,7 @@ em.success {
 	font-style: normal;
 	font-weight: bold;
 	font-size: 95%;
+	display: block;
 }
 
 .comments {display: none;}
@@ -688,7 +690,49 @@ table.calendar a:active {
 }
 
 /* Usersettings action */
-table.usersettings {
+
+fieldset.usersettings {
+	display: block;
+	min-width: 600px;
+}
+
+fieldset.usersettings em {
+	float: left;
+	display: block;
+	margin: 0 0 0 220px;
+}
+
+fieldset.usersettings label {
+	display: block;
+	width: 200px;
+	float: left;
+	margin-bottom: 10px;
+	text-align: right;
+	padding-right: 20px;
+}
+
+fieldset.usersettings select#update_option {
+	display: block;
+	width: 220px;
+	float: left;
+	margin-bottom: 10px;
+}
+
+fieldset.usersettings input[type=text] {
+	display: block;
+	width: 150px;
+	float: left;
+	margin-bottom: 10px;
+	border:6px solid #DDD;
+}
+
+fieldset.usersettings input[type=submit] {
+	float: left;
+	margin-left: 220px;
+}
+
+fieldset.usersettings br {
+	clear: left;
 }
 
 /* HANDLER-related styling */

@@ -29,7 +29,11 @@ if (!defined('INPUT_ERROR_STYLE')) define('INPUT_ERROR_STYLE', 'class="highlight
 /**
  * i18n
  */
-if (!defined('USER_SETTINGS_HEADING')) define('USER_SETTINGS_HEADING', "User settings");
+if (!defined('USER_ACCOUNT_LEGEND')) define('USER_ACCOUNT_LEGEND', "Your username");
+if (!defined('LOGIN_REGISTER_LEGEND')) define('LOGIN_REGISTER_LEGEND', "Login/Register");
+if (!defined('LOGIN_LEGEND')) define('LOGIN_LEGEND', "Login");
+if (!defined('RETRIEVE_PASSWORD_LEGEND')) define('RETRIEVE_PASSWORD_LEGEND', "Password forgotten");
+// if (!defined('REGISTER_LABEL')) define('REGISTER_LABEL', "Register"); # to be used later for register-action
 if (!defined('USER_LOGGED_OUT')) define('USER_LOGGED_OUT', "You have successfully logged out.");
 if (!defined('USER_SETTINGS_STORED')) define('USER_SETTINGS_STORED', "User settings stored!");
 if (!defined('ERROR_NO_BLANK')) define('ERROR_NO_BLANK', "Sorry, blanks are not permitted in the password.");
@@ -50,8 +54,6 @@ if (!defined('NEW_PASSWORD_CONFIRM_LABEL')) define('NEW_PASSWORD_CONFIRM_LABEL',
 if (!defined('CHANGE_BUTTON_LABEL')) define('CHANGE_BUTTON_LABEL', "Change password");
 if (!defined('REGISTER_BUTTON_LABEL')) define('REGISTER_BUTTON_LABEL', "Register");
 if (!defined('INVITATION_CODE_LABEL')) define('INVITATION_CODE_LABEL', "<abbr title=\"In order to register, you must fill in the invitation code sent by this website's administrator.\">Invitation Code</abbr>:");
-if (!defined('QUICK_LINKS_HEADING')) define('QUICK_LINKS_HEADING', "Quick links");
-if (!defined('QUICK_LINKS')) define('QUICK_LINKS', "See a list of pages you own (MyPages) and pages you've edited (MyChanges).");
 if (!defined('ERROR_WRONG_PASSWORD')) define('ERROR_WRONG_PASSWORD', "Sorry, you entered the wrong password.");
 if (!defined('ERROR_WRONG_HASH')) define('ERROR_WRONG_HASH', "Sorry, you entered a wrong password reminder.");
 if (!defined('ERROR_EMPTY_USERNAME')) define('ERROR_EMPTY_USERNAME', "Please fill in your user name.");
@@ -71,17 +73,13 @@ if (!defined('ERROR_INVALID_RECENTCHANGES_DISPLAY_LIMIT')) define('ERROR_INVALID
 if (!defined('ERROR_INVITATION_CODE_INCORRECT')) define ('ERROR_INVITATION_CODE_INCORRECT', "This is a private wiki, only invited members can register an account! Please contact the administrator of this website for an invitation code.");
 if (!defined('NO_REGISTRATION')) define('NO_REGISTRATION', "Registration on this wiki is disabled.");
 if (!defined('REGISTRATION_SUCCEEDED')) define('REGISTRATION_SUCCEEDED', "You have successfully registered!");
-if (!defined('REGISTERED_USER_LOGIN_LABEL')) define('REGISTERED_USER_LOGIN_LABEL', "If you're already a registered user, log in here!");
-// if (!defined('REGISTER_HEADING')) define('REGISTER_HEADING', "===Register==="); # to be used later for register-action
-if (!defined('LOGIN_HEADING')) define('LOGIN_HEADING', "===Login===");
-if (!defined('LOGIN_REGISTER_HEADING')) define('LOGIN_REGISTER_HEADING', "===Login/Register===");
+if (!defined('REGISTERED_USER_LOGIN_LABEL')) define('REGISTERED_USER_LOGIN_LABEL', "If you're already a registered user, log in here:");
 if (!defined('WIKINAME_LABEL')) define('WIKINAME_LABEL', "Your <abbr title=\"A WikiName is formed by two or more capitalized words without space, e.g. JohnDoe\">WikiName</abbr>:");
 if (!defined('PASSWORD_LABEL')) define('PASSWORD_LABEL', "Password (%s+ chars):");
 if (!defined('LOGIN_BUTTON_LABEL')) define('LOGIN_BUTTON_LABEL', "Login");
 if (!defined('LOGOUT_BUTTON_LABEL')) define('LOGOUT_BUTTON_LABEL', "Logout");
-if (!defined('NEW_USER_REGISTER_LABEL')) define('NEW_USER_REGISTER_LABEL', "Stuff you only need to fill in when you're logging in for the first time (and thus signing up as a new user on this site).");
+if (!defined('NEW_USER_REGISTER_LABEL')) define('NEW_USER_REGISTER_LABEL', "Fields required if you are signing up as a new user:");
 if (!defined('CONFIRM_PASSWORD_LABEL')) define('CONFIRM_PASSWORD_LABEL', "Confirm password:");
-if (!defined('RETRIEVE_PASSWORD_HEADING')) define('RETRIEVE_PASSWORD_HEADING', "===Forgot your password?===");
 if (!defined('RETRIEVE_PASSWORD_MESSAGE')) define('RETRIEVE_PASSWORD_MESSAGE', "If you need a password reminder, click [[PasswordForgotten here]]. --- You can login here using your password reminder.");
 if (!defined('TEMP_PASSWORD_LABEL')) define('TEMP_PASSWORD_LABEL', "Password reminder:");
 
@@ -179,19 +177,23 @@ else if ($user = $this->GetUser())
 		$show_comments = $user['show_comments'];
 		$revisioncount = $user['revisioncount'];
 		$changescount = $user['changescount'];
-		
 	}
 
 	// display user settings form
-	echo '<h3>'.USER_SETTINGS_HEADING.'</h3>';
 	echo $this->FormOpen();
 ?>
+	<fieldset id="username" class="usersettings"><legend><?php echo USER_ACCOUNT_LEGEND; ?></legend>
 	<input type="hidden" name="action" value="update" />
-	<table class="usersettings">
-		<tr>
-			<td>&nbsp;</td>
-			<td>Hello, <?php echo $this->Link($user['name']) ?>!</td>
-		</tr>
+	<label>You are logged in as <?php echo $this->Link($user['name']); ?></label>
+	<input type="button" value="<?php echo LOGOUT_BUTTON_LABEL; ?>" onclick="document.location='<?php echo $this->href('', '', 'action=logout'); ?>'" />
+	<br />
+	<ul>
+		<li>Pages you own: <?php echo $this->Link(MyPages); ?></li>
+		<li>Pages you have modified: <?php echo $this->Link(MyChanges); ?></li>
+	</ul>
+	</fieldset>
+	
+	<fieldset id="usersettings" class="usersettings"><legend>Settings</legend>
 <?php
 
 	// create confirmation message if needed
@@ -211,39 +213,34 @@ else if ($user = $this->GetUser())
 	switch(TRUE)
 	{
 		case (isset($error)):
-			echo '<tr><td></td><td><em class="error">'.$this->Format($error).'</em></td></tr>'."\n";
+			echo '<em class="error">'.$this->Format($error).'</em><br />'."\n";
 			break;
 		case (isset($success)):
-			echo '<tr><td></td><td><em class="success">'.$this->Format($success).'</em></td></tr>'."\n";		
+			echo '<em class="success">'.$this->Format($success).'</em><br />'."\n";
 			break;
 		default:
 	}
 ?>
-		<tr>
-			<td align="right"><?php echo USER_EMAIL_LABEL ?></td>
-			<td><input <?php echo $email_highlight; ?> name="email" value="<?php echo $this->htmlspecialchars_ent($email) ?>" size="40" /></td>
-		</tr>
-		<tr>
-			<td align="right"><?php echo DOUBLECLICK_LABEL ?></td>
-			<td><input type="hidden" name="doubleclickedit" value="N" /><input type="checkbox" name="doubleclickedit" value="Y" <?php echo $doubleclickedit == 'Y' ? 'checked="checked"' : '' ?> /></td>
-		</tr>
-		<tr>
-			<td align="right"><?php echo SHOW_COMMENTS_LABEL ?></td>
-			<td><input type="hidden" name="show_comments" value="N" /><input type="checkbox" name="show_comments" value="Y" <?php echo $show_comments == 'Y' ? 'checked="checked"' : '' ?> /></td>
-		</tr>
-		<tr>
-			<td align="right"><?php echo PAGEREVISION_LIST_LIMIT_LABEL ?></td>
-			<td><input <?php echo $revisioncount_highlight; ?> name="revisioncount" value="<?php echo $this->htmlspecialchars_ent($revisioncount) ?>" size="40" /></td>
-		</tr>
-		<tr>
-			<td align="right"><?php echo RECENTCHANGES_DISPLAY_LIMIT_LABEL ?></td>
-			<td><input <?php echo $changescount_highlight; ?> name="changescount" value="<?php echo $this->htmlspecialchars_ent($changescount) ?>" size="40" /></td>
-		</tr>
-		<tr>
-			<td>&nbsp;</td>
-			<td><input type="submit" value="<?php echo UPDATE_SETTINGS_INPUT ?>" /> <input type="button" value="<?php echo LOGOUT_BUTTON_LABEL; ?>" onclick="document.location='<?php echo $this->href('', '', 'action=logout'); ?>'" /></td>
-		</tr>
-	</table>
+	<label for="email"><?php echo USER_EMAIL_LABEL ?></label>
+	<input id="email" <?php echo $email_highlight; ?> name="email" value="<?php echo $this->htmlspecialchars_ent($email) ?>" size="40" />
+	<br />
+	<label for="doubleclick"><?php echo DOUBLECLICK_LABEL ?></label>
+	<input type="hidden" name="doubleclickedit" value="N" />
+	<input id="doubleclick" type="checkbox" name="doubleclickedit" value="Y" <?php echo $doubleclickedit == 'Y' ? 'checked="checked"' : '' ?> />
+	<br />
+	<label for="showcomments"><?php echo SHOW_COMMENTS_LABEL ?></label>
+	<input type="hidden" name="show_comments" value="N" />
+	<input id="showcomments" type="checkbox" name="show_comments" value="Y" <?php echo $show_comments == 'Y' ? 'checked="checked"' : '' ?> />
+	<br />
+	<label for="revisioncount"><?php echo PAGEREVISION_LIST_LIMIT_LABEL ?></label>
+	<input id="revisioncount" <?php echo $revisioncount_highlight; ?> name="revisioncount" value="<?php echo $this->htmlspecialchars_ent($revisioncount) ?>" size="40" />
+	<br />
+	<label for="changescount"><?php echo RECENTCHANGES_DISPLAY_LIMIT_LABEL ?></label>
+	<input id="changescount" <?php echo $changescount_highlight; ?> name="changescount" value="<?php echo $this->htmlspecialchars_ent($changescount) ?>" size="40" />
+	<br />
+	<input id="updatesettings" type="submit" value="<?php echo UPDATE_SETTINGS_INPUT ?>" />
+	<br />
+	</fieldset>
 <?php	
 	echo $this->FormClose(); //close user settings form
 
@@ -311,41 +308,31 @@ else if ($user = $this->GetUser())
 	echo '<hr />'."\n";
 	echo $this->FormOpen();
 ?>
+	<fieldset class="usersettings" id="changepassword"><legend><?php echo CHANGE_PASSWORD_HEADING ?></legend>
 	<input type="hidden" name="action" value="changepass" />
-	<h5><?php echo CHANGE_PASSWORD_HEADING ?></h5>
-	<table class="usersettings">
 <?php
 		if (isset($passerror))
 		{
-			print('<tr><td></td><td><em class="error">'.$this->Format($passerror).'</em></td></tr>'."\n");
+			print('<em class="error">'.$this->Format($passerror).'</em><br />'."\n");
 		}
 ?>
-		<tr>
-			<td align="right">
-				<select name="update_option">
-					<option value="pw" <?php echo $pw_selected; ?>><?php echo CURRENT_PASSWORD_LABEL; ?></option>
-					<option value="hash" <?php echo $hash_selected; ?>><?php echo PASSWORD_REMINDER_LABEL; ?></option>
-			</select></td>
-			<td><input <?php echo $password_highlight; ?> type="password" name="oldpass" size="40" /></td>
-		</tr>
-		<tr>
-			<td align="right"><?php echo NEW_PASSWORD_LABEL ?></td>
-			<td><input  <?php echo $password_new_highlight; ?> type="password" name="password" size="40" /></td>
-		</tr>
-		<tr>
-			<td align="right"><?php echo NEW_PASSWORD_CONFIRM_LABEL ?></td>
-			<td><input  <?php echo $password_confirm_highlight; ?> type="password" name="password_confirm" size="40" /></td>
-		</tr>
-		<tr>
-			<td></td>
-			<td><input type="submit" value="<?php echo CHANGE_BUTTON_LABEL ?>" size="40" /></td>
-		</tr>
-	</table>
+	<select id="update_option" name="update_option">
+		<option value="pw" <?php echo $pw_selected; ?>><?php echo CURRENT_PASSWORD_LABEL; ?></option>
+		<option value="hash" <?php echo $hash_selected; ?>><?php echo PASSWORD_REMINDER_LABEL; ?></option>
+	</select>
+	<input <?php echo $password_highlight; ?> type="password" name="oldpass" size="40" />
+	<br />
+	<label for="password"><?php echo NEW_PASSWORD_LABEL ?></label>
+	<input id="password" <?php echo $password_new_highlight; ?> type="password" name="password" size="40" />
+	<br />
+	<label for="password_confirm"><?php echo NEW_PASSWORD_CONFIRM_LABEL ?></label>
+	<input id="password_confirm" <?php echo $password_confirm_highlight; ?> type="password" name="password_confirm" size="40" />
+	<br />
+	<input type="submit" value="<?php echo CHANGE_BUTTON_LABEL ?>" size="40" />
+	<br />
+	</fieldset>
 <?php
-	echo '<hr />'."\n";
-	echo '<h5>'.QUICK_LINKS_HEADING.'</h5>'."\n";
-	echo $this->Format(QUICK_LINKS);
-	print($this->FormClose());
+	echo $this->FormClose();
 }
 // END *** Usersettings ***
 // BEGIN *** LOGIN/LOGOUT ***
@@ -495,107 +482,81 @@ else // user is not logged in
 	// BEGIN ***  Register ***
 	print($this->FormOpen());
 ?>
+	<fieldset id="register" class="usersettings"><legend>	<?php  echo ($register == '1' || $register == '2') ? LOGIN_REGISTER_LEGEND : LOGIN_LEGEND; ?></legend>
 	<input type="hidden" name="action" value="login" />
-	<table class="usersettings">
-   	<tr>
-   		<td colspan="2"><?php  echo ($register == '1' || $register == '2') ? $this->Format(LOGIN_REGISTER_HEADING) : $this->Format(LOGIN_HEADING); ?></td>
-   		<td>&nbsp;</td>
-   	</tr>
-	<tr>
-		<td>&nbsp;</td>
-		<td><?php echo $this->Format(REGISTERED_USER_LOGIN_LABEL); ?></td>
-	</tr>
 <?php
 	switch (true)
 	{
 		case (isset($error)):
-			echo '<tr><td></td><td><em class="error">'.$this->Format($error).'</em></td></tr>'."\n";
+			echo '<em class="error">'.$this->Format($error).'</em>'."\n";
 			break;
 		case (isset($success)):
-			echo '<tr><td></td><td><em class="success">'.$this->Format($success).'</em></td></tr>'."\n";
+			echo '<em class="success">'.$this->Format($success).'</em>'."\n";
 			break;
 	}
 ?>
-	<tr>
-		<td align="right"><?php echo WIKINAME_LABEL ?></td>
-		<td><input <?php echo $username_highlight; ?> name="name" size="40" value="<?php echo $this->GetSafeVar('name', 'post'); ?>" /></td>
-	</tr>
-	<tr>
-		<td align="right"><?php echo sprintf(PASSWORD_LABEL, PASSWORD_MIN_LENGTH) ?></td>
-		<td><input <?php echo $password_highlight; ?> type="password" name="password" size="40" /></td>
-	</tr>
-	<tr>
-		<td>&nbsp;</td>
-		<td><input type="submit" value="<?php echo LOGIN_BUTTON_LABEL ?>" size="40" /></td>
-	</tr>
+	<em><?php echo $this->Format(REGISTERED_USER_LOGIN_LABEL); ?></em>
+	<br />
+	<label for="name"><?php echo WIKINAME_LABEL ?></label>
+	<input id="name" <?php echo $username_highlight; ?> name="name" size="40" value="<?php echo $this->GetSafeVar('name', 'post'); ?>" />
+	<br />
+	<label for="password"><?php echo sprintf(PASSWORD_LABEL, PASSWORD_MIN_LENGTH) ?></label>
+	<input id="password" <?php echo $password_highlight; ?> type="password" name="password" size="40" />
+	<br />
+	<input id="login" type="submit" value="<?php echo LOGIN_BUTTON_LABEL ?>" size="40" />
+	<br /><br />
 <?php
 	// END *** Login/Logout ***
 	$register = $this->GetConfigValue('allow_user_registration');
     if ($register == '1' || $register == '2')
     {
 ?>
-	<tr>
-		<td>&nbsp;</td>
-		<td width="500"><?php echo $this->Format(NEW_USER_REGISTER_LABEL); ?></td>
-	</tr>
-	<tr>
-		<td align="right"><?php echo CONFIRM_PASSWORD_LABEL ?></td>
-		<td><input  <?php echo $password_confirm_highlight; ?> type="password" name="confpassword" size="40" /></td>
-	</tr>
-	<tr>
-		<td align="right"><?php echo USER_EMAIL_LABEL ?></td>
-		<td><input <?php echo $email_highlight; ?> name="email" size="40" value="<?php echo $email; ?>" /></td>
-	</tr>
+	<em><?php echo $this->Format(NEW_USER_REGISTER_LABEL); ?></em>
+	<br />
+	<label for="confpassword"><?php echo CONFIRM_PASSWORD_LABEL ?></label>
+	<input id="confpassword" <?php echo $password_confirm_highlight; ?> type="password" name="confpassword" size="40" />
+	<br />
+	<label><?php echo USER_EMAIL_LABEL ?></label>
+	<input id="email" <?php echo $email_highlight; ?> name="email" size="40" value="<?php echo $email; ?>" />
+	<br />
 <?php
 	    if ($register == '2')
 	    {
 ?>
-               <tr>
-                   <td align='right'><?php echo INVITATION_CODE_LABEL ?></td>
-                   <td><input <?php echo $invitation_code_highlight; ?> type='text' size='20' name='invitation_code' /></td>
-               </tr>
+	<label for="invitation_code"><?php echo INVITATION_CODE_LABEL ?></label>
+	<input id="invitation_code" <?php echo $invitation_code_highlight; ?> type='text' size='20' name='invitation_code' />
+	<br />
 <?php
 		}
 ?>
-	<tr>
-		<td>&nbsp;</td>
-		<td><input type="submit" value="<?php echo REGISTER_BUTTON_LABEL ?>" size="40" /></td>
-	</tr>
-</table>
+	<input type="submit" value="<?php echo REGISTER_BUTTON_LABEL ?>" size="40" />
+	<br />
+	</fieldset>
 <?php
     }
 	print($this->FormClose());
 	// END *** Register ***
 	print($this->FormOpen());
 ?>
+	<fieldset id="password_forgotten" class="usersettings"><legend><?php echo RETRIEVE_PASSWORD_LEGEND; ?></legend>
 	<input type="hidden" name="action" value="updatepass" />
-	<table class="usersettings">
-	<tr>
-		<td colspan="2"><br /><hr /><?php echo $this->Format(RETRIEVE_PASSWORD_HEADING) ?></td><td></td>
-	</tr>
-	<tr>
-		<td align="left"></td>
-		<td><?php echo $this->Format(RETRIEVE_PASSWORD_MESSAGE) ?></td>
-	</tr>
 <?php   
 	if (isset($newerror))
 	{
-		print('<tr><td></td><td><em class="error">'.$this->Format($newerror).'</em></td></tr>'."\n");
+		print('<em class="error">'.$this->Format($newerror).'</em>'."\n");
 	}
 ?>
-	<tr>
-		<td align="right"><?php echo WIKINAME_LABEL ?></td>
-		<td><input <?php echo $username_temp_highlight; ?> name="yourname" value="<?php echo $this->GetSafeVar('yourname', 'post'); ?>" size="40" /></td>
-	</tr>
-	<tr>
-		<td align="right"><?php echo TEMP_PASSWORD_LABEL ?></td>
-		<td><input <?php echo $password_temp_highlight; ?> name="temppassword" size="40" /></td>
-	</tr>
-	<tr>
-		<td>&nbsp;</td>
-		<td><input type="submit" value="<?php echo LOGIN_BUTTON_LABEL ?>" size="40" /></td>
-	</tr>
-   </table>
+	<em><?php echo $this->Format(RETRIEVE_PASSWORD_MESSAGE) ?></em>
+	<br />
+	<label for="yourname"><?php echo WIKINAME_LABEL ?></label>
+	<input id="yourname" <?php echo $username_temp_highlight; ?> name="yourname" value="<?php echo $this->GetSafeVar('yourname', 'post'); ?>" size="40" />
+	<br />
+	<label><?php echo TEMP_PASSWORD_LABEL ?></label>
+	<input id="temppassword" <?php echo $password_temp_highlight; ?> name="temppassword" size="40" />
+	<br />
+	<input type="submit" value="<?php echo LOGIN_BUTTON_LABEL ?>" size="40" />
+	<br />
+	</fieldset>
 <?php
 	print($this->FormClose());
 }
