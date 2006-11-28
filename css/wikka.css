@@ -691,29 +691,39 @@ table.calendar a:active {
 
 /* Usersettings action */
 
+fieldset#account {
+	background-color: #F6F6F6;
+}
+
 fieldset.usersettings {
 	display: block;
 	min-width: 600px;
 }
 
+fieldset.usersettings {
+	display: block;
+	min-width: 600px;
+}
+
+
 fieldset.usersettings em {
 	float: left;
 	display: block;
-	margin: 0 0 0 220px;
+	margin: 0 0 0 240px;
 }
 
 fieldset.usersettings label {
 	display: block;
-	width: 200px;
+	width: 230px;
 	float: left;
 	margin-bottom: 10px;
 	text-align: right;
-	padding-right: 20px;
+	padding-right: 10px;
 }
 
 fieldset.usersettings select#update_option {
 	display: block;
-	width: 220px;
+	width: 240px;
 	float: left;
 	margin-bottom: 10px;
 }
@@ -728,7 +738,7 @@ fieldset.usersettings input[type=text] {
 
 fieldset.usersettings input[type=submit] {
 	float: left;
-	margin-left: 220px;
+	margin-left: 250px;
 }
 
 fieldset.usersettings br {

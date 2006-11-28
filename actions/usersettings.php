@@ -29,7 +29,8 @@ if (!defined('INPUT_ERROR_STYLE')) define('INPUT_ERROR_STYLE', 'class="highlight
 /**
  * i18n
  */
-if (!defined('USER_ACCOUNT_LEGEND')) define('USER_ACCOUNT_LEGEND', "Your username");
+if (!defined('USER_ACCOUNT_LEGEND')) define('USER_ACCOUNT_LEGEND', "Your account");
+if (!defined('USER_SETTINGS_LEGEND')) define('USER_SETTINGS_LEGEND', "Settings");
 if (!defined('LOGIN_REGISTER_LEGEND')) define('LOGIN_REGISTER_LEGEND', "Login/Register");
 if (!defined('LOGIN_LEGEND')) define('LOGIN_LEGEND', "Login");
 if (!defined('RETRIEVE_PASSWORD_LEGEND')) define('RETRIEVE_PASSWORD_LEGEND', "Password forgotten");
@@ -41,7 +42,7 @@ if (!defined('ERROR_PASSWORD_TOO_SHORT')) define('ERROR_PASSWORD_TOO_SHORT', "So
 if (!defined('PASSWORD_CHANGED')) define('PASSWORD_CHANGED', "Password successfully changed!");
 if (!defined('ERROR_OLD_PASSWORD_WRONG')) define('ERROR_OLD_PASSWORD_WRONG', "The old password you entered is wrong.");
 if (!defined('USER_EMAIL_LABEL')) define('USER_EMAIL_LABEL', "Your email address:");
-if (!defined('DOUBLECLICK_LABEL')) define('DOUBLECLICK_LABEL', "Doubleclick Editing:");
+if (!defined('DOUBLECLICK_LABEL')) define('DOUBLECLICK_LABEL', "Doubleclick editing:");
 if (!defined('SHOW_COMMENTS_LABEL')) define('SHOW_COMMENTS_LABEL', "Show comments by default:");
 if (!defined('RECENTCHANGES_DISPLAY_LIMIT_LABEL')) define('RECENTCHANGES_DISPLAY_LIMIT_LABEL', "RecentChanges display limit:");
 if (!defined('PAGEREVISION_LIST_LIMIT_LABEL')) define('PAGEREVISION_LIST_LIMIT_LABEL', "Page revisions list limit:");
@@ -182,18 +183,13 @@ else if ($user = $this->GetUser())
 	// display user settings form
 	echo $this->FormOpen();
 ?>
-	<fieldset id="username" class="usersettings"><legend><?php echo USER_ACCOUNT_LEGEND; ?></legend>
+	<fieldset id="account" class="usersettings"><legend><?php echo USER_ACCOUNT_LEGEND; ?></legend>
 	<input type="hidden" name="action" value="update" />
 	<label>You are logged in as <?php echo $this->Link($user['name']); ?></label>
 	<input type="button" value="<?php echo LOGOUT_BUTTON_LABEL; ?>" onclick="document.location='<?php echo $this->href('', '', 'action=logout'); ?>'" />
-	<br />
-	<ul>
-		<li>Pages you own: <?php echo $this->Link(MyPages); ?></li>
-		<li>Pages you have modified: <?php echo $this->Link(MyChanges); ?></li>
-	</ul>
 	</fieldset>
 	
-	<fieldset id="usersettings" class="usersettings"><legend>Settings</legend>
+	<fieldset id="usersettings" class="usersettings"><legend><?php echo USER_SETTINGS_LEGEND; ?></legend>
 <?php
 
 	// create confirmation message if needed
@@ -305,7 +301,6 @@ else if ($user = $this->GetUser())
 	}
 
 	//display password update form
-	echo '<hr />'."\n";
 	echo $this->FormOpen();
 ?>
 	<fieldset class="usersettings" id="changepassword"><legend><?php echo CHANGE_PASSWORD_HEADING ?></legend>
@@ -482,7 +477,7 @@ else // user is not logged in
 	// BEGIN ***  Register ***
 	print($this->FormOpen());
 ?>
-	<fieldset id="register" class="usersettings"><legend>	<?php  echo ($register == '1' || $register == '2') ? LOGIN_REGISTER_LEGEND : LOGIN_LEGEND; ?></legend>
+	<fieldset id="register" class="usersettings"><legend><?php  echo ($register == '1' || $register == '2') ? LOGIN_REGISTER_LEGEND : LOGIN_LEGEND; ?></legend>
 	<input type="hidden" name="action" value="login" />
 <?php
 	switch (true)
