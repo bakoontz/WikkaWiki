@@ -527,9 +527,9 @@ else // user is not logged in
 ?>
 	<input type="submit" value="<?php echo REGISTER_BUTTON_LABEL ?>" size="40" />
 	<br />
-	</fieldset>
 <?php
     }
+    echo	'	</fieldset>'."\n";
 	print($this->FormClose());
 	// END *** Register ***
 	print($this->FormOpen());
