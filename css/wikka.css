@@ -698,13 +698,8 @@ fieldset#account {
 fieldset.usersettings {
 	display: block;
 	min-width: 600px;
+	padding: 10px;
 }
-
-fieldset.usersettings {
-	display: block;
-	min-width: 600px;
-}
-
 
 fieldset.usersettings em {
 	float: left;
@@ -723,17 +718,17 @@ fieldset.usersettings label {
 
 fieldset.usersettings select#update_option {
 	display: block;
-	width: 240px;
+	width: 230px;
 	float: left;
-	margin-bottom: 10px;
+	margin: 0px 10px 10px 0px;
 }
 
-fieldset.usersettings input[type=text] {
+fieldset.usersettings input[type=text], fieldset.usersettings input[type=password] {
 	display: block;
-	width: 150px;
+	width: 250px;
 	float: left;
 	margin-bottom: 10px;
-	border:6px solid #DDD;
+	border:1px solid #CCC;
 }
 
 fieldset.usersettings input[type=submit] {

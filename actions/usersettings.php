@@ -41,6 +41,7 @@ if (!defined('ERROR_NO_BLANK')) define('ERROR_NO_BLANK', "Sorry, blanks are not 
 if (!defined('ERROR_PASSWORD_TOO_SHORT')) define('ERROR_PASSWORD_TOO_SHORT', "Sorry, the password must contain at least %s characters.");
 if (!defined('PASSWORD_CHANGED')) define('PASSWORD_CHANGED', "Password successfully changed!");
 if (!defined('ERROR_OLD_PASSWORD_WRONG')) define('ERROR_OLD_PASSWORD_WRONG', "The old password you entered is wrong.");
+if (!defined('USER_LOGGED_IN_AS_LABEL')) define('USER_LOGGED_IN_AS_LABEL', "Your are logged in as %s");
 if (!defined('USER_EMAIL_LABEL')) define('USER_EMAIL_LABEL', "Your email address:");
 if (!defined('DOUBLECLICK_LABEL')) define('DOUBLECLICK_LABEL', "Doubleclick editing:");
 if (!defined('SHOW_COMMENTS_LABEL')) define('SHOW_COMMENTS_LABEL', "Show comments by default:");
@@ -185,8 +186,8 @@ else if ($user = $this->GetUser())
 ?>
 	<fieldset id="account" class="usersettings"><legend><?php echo USER_ACCOUNT_LEGEND; ?></legend>
 	<input type="hidden" name="action" value="update" />
-	<label>You are logged in as <?php echo $this->Link($user['name']); ?></label>
-	<input type="button" value="<?php echo LOGOUT_BUTTON_LABEL; ?>" onclick="document.location='<?php echo $this->href('', '', 'action=logout'); ?>'" />
+	<label for="logout"><?php echo sprintf(USER_LOGGED_IN_AS_LABEL, $this->Link($user['name'])); ?></label>
+	<input id="logout" type="button" value="<?php echo LOGOUT_BUTTON_LABEL; ?>" onclick="document.location='<?php echo $this->href('', '', 'action=logout'); ?>'" />
 	</fieldset>
 	
 	<fieldset id="usersettings" class="usersettings"><legend><?php echo USER_SETTINGS_LEGEND; ?></legend>
@@ -218,7 +219,7 @@ else if ($user = $this->GetUser())
 	}
 ?>
 	<label for="email"><?php echo USER_EMAIL_LABEL ?></label>
-	<input id="email" <?php echo $email_highlight; ?> name="email" value="<?php echo $this->htmlspecialchars_ent($email) ?>" size="40" />
+	<input id="email" type="text" <?php echo $email_highlight; ?> name="email" value="<?php echo $this->htmlspecialchars_ent($email) ?>" size="40" />
 	<br />
 	<label for="doubleclick"><?php echo DOUBLECLICK_LABEL ?></label>
 	<input type="hidden" name="doubleclickedit" value="N" />
@@ -229,10 +230,10 @@ else if ($user = $this->GetUser())
 	<input id="showcomments" type="checkbox" name="show_comments" value="Y" <?php echo $show_comments == 'Y' ? 'checked="checked"' : '' ?> />
 	<br />
 	<label for="revisioncount"><?php echo PAGEREVISION_LIST_LIMIT_LABEL ?></label>
-	<input id="revisioncount" <?php echo $revisioncount_highlight; ?> name="revisioncount" value="<?php echo $this->htmlspecialchars_ent($revisioncount) ?>" size="40" />
+	<input id="revisioncount" type="text" <?php echo $revisioncount_highlight; ?> name="revisioncount" value="<?php echo $this->htmlspecialchars_ent($revisioncount) ?>" size="40" />
 	<br />
 	<label for="changescount"><?php echo RECENTCHANGES_DISPLAY_LIMIT_LABEL ?></label>
-	<input id="changescount" <?php echo $changescount_highlight; ?> name="changescount" value="<?php echo $this->htmlspecialchars_ent($changescount) ?>" size="40" />
+	<input id="changescount" type="text" <?php echo $changescount_highlight; ?> name="changescount" value="<?php echo $this->htmlspecialchars_ent($changescount) ?>" size="40" />
 	<br />
 	<input id="updatesettings" type="submit" value="<?php echo UPDATE_SETTINGS_INPUT ?>" />
 	<br />
@@ -493,7 +494,7 @@ else // user is not logged in
 	<em><?php echo $this->Format(REGISTERED_USER_LOGIN_LABEL); ?></em>
 	<br />
 	<label for="name"><?php echo WIKINAME_LABEL ?></label>
-	<input id="name" <?php echo $username_highlight; ?> name="name" size="40" value="<?php echo $this->GetSafeVar('name', 'post'); ?>" />
+	<input id="name" type="text" <?php echo $username_highlight; ?> name="name" size="40" value="<?php echo $this->GetSafeVar('name', 'post'); ?>" />
 	<br />
 	<label for="password"><?php echo sprintf(PASSWORD_LABEL, PASSWORD_MIN_LENGTH) ?></label>
 	<input id="password" <?php echo $password_highlight; ?> type="password" name="password" size="40" />
@@ -511,15 +512,15 @@ else // user is not logged in
 	<label for="confpassword"><?php echo CONFIRM_PASSWORD_LABEL ?></label>
 	<input id="confpassword" <?php echo $password_confirm_highlight; ?> type="password" name="confpassword" size="40" />
 	<br />
-	<label><?php echo USER_EMAIL_LABEL ?></label>
-	<input id="email" <?php echo $email_highlight; ?> name="email" size="40" value="<?php echo $email; ?>" />
+	<label for="email"><?php echo USER_EMAIL_LABEL ?></label>
+	<input id="email" type="text" <?php echo $email_highlight; ?> name="email" size="40" value="<?php echo $email; ?>" />
 	<br />
 <?php
 	    if ($register == '2')
 	    {
 ?>
 	<label for="invitation_code"><?php echo INVITATION_CODE_LABEL ?></label>
-	<input id="invitation_code" <?php echo $invitation_code_highlight; ?> type='text' size='20' name='invitation_code' />
+	<input id="invitation_code" type="text" <?php echo $invitation_code_highlight; ?> size="20" name="invitation_code" />
 	<br />
 <?php
 		}
@@ -544,10 +545,10 @@ else // user is not logged in
 	<em><?php echo $this->Format(RETRIEVE_PASSWORD_MESSAGE) ?></em>
 	<br />
 	<label for="yourname"><?php echo WIKINAME_LABEL ?></label>
-	<input id="yourname" <?php echo $username_temp_highlight; ?> name="yourname" value="<?php echo $this->GetSafeVar('yourname', 'post'); ?>" size="40" />
+	<input id="yourname" type="text" <?php echo $username_temp_highlight; ?> name="yourname" value="<?php echo $this->GetSafeVar('yourname', 'post'); ?>" size="40" />
 	<br />
-	<label><?php echo TEMP_PASSWORD_LABEL ?></label>
-	<input id="temppassword" <?php echo $password_temp_highlight; ?> name="temppassword" size="40" />
+	<label for="temppassword"><?php echo TEMP_PASSWORD_LABEL ?></label>
+	<input id="temppassword" type="text" <?php echo $password_temp_highlight; ?> name="temppassword" size="40" />
 	<br />
 	<input type="submit" value="<?php echo LOGIN_BUTTON_LABEL ?>" size="40" />
 	<br />
