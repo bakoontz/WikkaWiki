@@ -171,7 +171,7 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 			$output .= $preview_form;
 		}
 		$output .= $this->Format($body);
-		if ($this->config['edit_buttons_position'] != 'bottom')
+		if ($this->config['edit_buttons_position'] == 'bottom')
 		{
 			$output .= $preview_form;
 		}
