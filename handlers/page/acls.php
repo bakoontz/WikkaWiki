@@ -22,7 +22,7 @@ if (!defined('ACLS_UPDATED')) define('ACLS_UPDATED', 'Access control lists updat
 if (!defined('NO_PAGE_OWNER')) define('NO_PAGE_OWNER', '(Nobody)');
 if (!defined('NOT_PAGE_OWNER')) define('NOT_PAGE_OWNER', 'You are not the owner of this page.');
 if (!defined('PAGE_OWNERSHIP_CHANGED')) define('PAGE_OWNERSHIP_CHANGED', 'Ownership changed to %s'); // %s - name of new owner
-if (!defined('ACL_HEADING')) define('ACL_HEADING', '====Access Control Lists for %s===='); // %s - name of current page
+if (!defined('ACL_LEGEND')) define('ACL_LEGEND', 'Access Control Lists for %s'); // %s - name of current page
 if (!defined('READ_ACL_LABEL')) define('READ_ACL_LABEL', 'Read ACL:');
 if (!defined('WRITE_ACL_LABEL')) define('WRITE_ACL_LABEL', 'Write ACL:');
 if (!defined('COMMENT_ACL_LABEL')) define('COMMENT_ACL_LABEL', 'Comment ACL:');
@@ -84,24 +84,24 @@ if ($this->UserIsOwner())
 	}
 	else	// show form
 	{
-	echo $this->Format(sprintf(ACL_HEADING, '[['.$this->tag.']]').' --- ');
 ?>
 <?php echo $this->FormOpen('acls') ?>
+<fieldset><legend><?php echo $this->Format(sprintf(ACL_LEGEND, '[['.$this->tag.']]').' --- ');?></legend>
 <table class="acls">
 <tr>
 	<td>
-	<strong><?php echo READ_ACL_LABEL; ?></strong><br />
-	<textarea name="read_acl" rows="4" cols="20"><?php echo preg_replace("/[\s,]+/", "\n", $this->ACLs['read_acl']) ?></textarea>
+	<label for="read_acl"><strong><?php echo READ_ACL_LABEL; ?></strong></label><br />
+	<textarea id="read_acl" name="read_acl" rows="4" cols="20"><?php echo preg_replace("/[\s,]+/", "\n", $this->ACLs['read_acl']) ?></textarea>
 	</td>
 
 	<td>
-	<strong><?php echo WRITE_ACL_LABEL; ?></strong><br />
-	<textarea name="write_acl" rows="4" cols="20"><?php echo preg_replace("/[\s,]+/", "\n", $this->ACLs['write_acl']) ?></textarea>
+	<label for="write_acl"><strong><?php echo WRITE_ACL_LABEL; ?></strong></label><br />
+	<textarea id="write_acl" name="write_acl" rows="4" cols="20"><?php echo preg_replace("/[\s,]+/", "\n", $this->ACLs['write_acl']) ?></textarea>
 	</td>
 
 	<td>
-	<strong><?php echo COMMENT_ACL_LABEL; ?></strong><br />
-	<textarea name="comment_acl" rows="4" cols="20"><?php echo preg_replace("/[\s,]+/", "\n", $this->ACLs['comment_acl']) ?></textarea>
+	<label for="comment_acl"><strong><?php echo COMMENT_ACL_LABEL; ?></strong></label><br />
+	<textarea id="comment_acl" name="comment_acl" rows="4" cols="20"><?php echo preg_replace("/[\s,]+/", "\n", $this->ACLs['comment_acl']) ?></textarea>
 	</td>
 </tr>
 
@@ -113,8 +113,8 @@ if ($this->UserIsOwner())
 	</td>
 
 	<td>
-	<strong><?php echo SET_OWNER_LABEL; ?></strong><br />
-	<select name="newowner">
+	<label for="newowner"><strong><?php echo SET_OWNER_LABEL; ?></strong></label><br />
+	<select id="newowner" name="newowner">
 	<option value="same"><?php echo $this->GetPageOwner().' '.SET_OWNER_CURRENT_LABEL ?></option>
 	<option value="(Public)"><?php echo SET_OWNER_PUBLIC_LABEL; ?></option>
 	<option value=""><?php echo SET_NO_OWNER_LABEL; ?></option>
@@ -131,7 +131,7 @@ if ($this->UserIsOwner())
 	</td>
 </tr>
 </table>
-
+</fieldset>
 <br />
 <?php echo $this->Format(ACL_SYNTAX_HELP); ?>
 <?php
@@ -140,7 +140,7 @@ if ($this->UserIsOwner())
 }
 else
 {
-	echo '<em>'.NOT_PAGE_OWNER.'</em>'."\n";
+	echo '<em class="error">'.NOT_PAGE_OWNER.'</em>'."\n";
 }
 echo '</div>'."\n" //TODO: move to templating class
 ?>
