@@ -73,9 +73,9 @@ class Config
 	var $handler_path = 'handlers';
 	/**
 	 * Edit buttons position.
-	 * Valid values for this config entry are bottom, top and both. Actually, any invalid value is considered as if it was both.
-	 * This entry lets you customize the placement of the Store/Preview/Cancel buttons when editing a page : whether at the top of the page body
-	 * (before the wikiedit toolbar), or at the bottom (below the wikiedit toolbar, this is the default value) or both.
+	 * Valid values for this config entry are "bottom" and "top". This entry lets you customize the placement of the Store/Preview/Cancel buttons 
+	 * when editing a page : whether at the top of the page body (before the wikiedit toolbar), or at the bottom (below the wikiedit toolbar, 
+	 * this is the default value).
 	 */
 	var $edit_buttons_position = 'bottom';
 	/**

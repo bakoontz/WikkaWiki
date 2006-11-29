@@ -15,6 +15,7 @@
  * @todo		move main <div> to templating class;
  * @todo		optimization using history.back();
  * @todo		use central regex library for validation;
+ * @todo		document edit_button_position
  */
 /**
  * Defaults
@@ -127,7 +128,7 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 	 //check if edit_notes are enabled
 	if ($this->config['require_edit_note'] != 2)
 	{
-		$edit_note_field = '<input size="'.MAX_EDIT_NOTE_LENGTH.'" type="text" name="note" value="'.htmlspecialchars($note).'" '.$highlight_note.'/> '.LABEL_EDIT_NOTE.'<br />'."\n";
+		$edit_note_field = '<input id="note" size="'.MAX_EDIT_NOTE_LENGTH.'" type="text" name="note" value="'.htmlspecialchars($note).'" '.$highlight_note.'/> <label for="note">'.LABEL_EDIT_NOTE.'</label><br />'."\n";
 	}
 
 	// fetch fields
@@ -165,12 +166,12 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 		
 		//build page
 		$output .= '<div class="previewhead">'.PREVIEW_HEADER.'</div>'."\n";
-		if ($this->config['edit_buttons_position'] != 'bottom')
+		if ($this->config['edit_buttons_position'] == 'top')
 		{
 			$output .= $preview_form;
 		}
 		$output .= $this->Format($body);
-		if ($this->config['edit_buttons_position'] != 'top')
+		if ($this->config['edit_buttons_position'] != 'bottom')
 		{
 			$output .= $preview_form;
 		}
