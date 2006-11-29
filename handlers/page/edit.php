@@ -45,6 +45,7 @@ if(!defined('ACCESSKEY_REEDIT')) define('ACCESSKEY_REEDIT', 'r');
 if(!defined('ACCESSKEY_PREVIEW')) define('ACCESSKEY_PREVIEW', 'p');
 if(!defined('SHOWCODE_LINK')) define('SHOWCODE_LINK', 'View formatting code for this page');
 if(!defined('SHOWCODE_LINK_TITLE')) define('SHOWCODE_LINK_TITLE', 'Click to view page formatting code');
+if(!defined('DEFAULT_BUTTONS_POSITION')) define('DEFAULT_BUTTONS_POSITION', 'bottom');
 
 //initialization
 $error = '';
@@ -52,6 +53,15 @@ $highlight_note = '';
 $edit_note_field = '';
 $note = '';
 $ondblclick = ''; //#123
+if ($this->config['edit_buttons_position'] == 'top' || $this->config['edit_buttons_position'] == 'bottom')
+{
+	$buttons_position = $this->config['edit_buttons_position'];
+}
+else
+{
+	$buttons_position = DEFAULT_BUTTONS_POSITION;	
+}
+
 if (isset($_POST['submit']) && ($_POST['submit'] == 'Preview') && ($user = $this->GetUser()) && ($user['doubleclickedit'] != 'N'))
 {
 	$ondblclick = ' ondblclick=\'document.getElementById("reedit_id").click();\'';
@@ -166,12 +176,12 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 		
 		//build page
 		$output .= '<div class="previewhead">'.PREVIEW_HEADER.'</div>'."\n";
-		if ($this->config['edit_buttons_position'] == 'top')
+		if ($buttons_position == 'top')
 		{
 			$output .= $preview_form;
 		}
 		$output .= $this->Format($body);
-		if ($this->config['edit_buttons_position'] == 'bottom')
+		if ($buttons_position == 'bottom')
 		{
 			$output .= $preview_form;
 		}
@@ -203,7 +213,7 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 		}
 		$edit_buttons =	'<fieldset><legend>Store page</legend>'.$edit_note_field.'<input name="submit" type="submit" value="'.INPUT_SUBMIT_STORE.'" accesskey="'.ACCESSKEY_STORE.'" /> <input name="submit" type="submit" value="'.INPUT_SUBMIT_PREVIEW.'" accesskey="'.ACCESSKEY_PREVIEW.'" /> <input type="button" value="'.INPUT_BUTTON_CANCEL.'" onclick="document.location=\''.$this->Href('').'\';" />'."</fieldset>\n";
 		$output .= $this->FormOpen('edit');
-		if ($this->config['edit_buttons_position'] != 'bottom')
+		if ($buttons_position == 'top')
 		{
 			$output .= $edit_buttons;
 		}
@@ -214,7 +224,7 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 			//note add Edit
 			// We need to escape ALL entity refs before display so we display them _as_ entities instead of interpreting them
 			// so we use htmlspecialchars on the edit note (as on the body)
-		if ($this->config['edit_buttons_position'] != 'top')
+		if ($buttons_position == 'bottom')
 		{
 			$output .= $edit_buttons;			
 		}
