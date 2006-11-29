@@ -46,8 +46,12 @@
  * @uses			  Wakka::Redirect() 
  * @uses			  Wakka::SavePage()
  * 
- * @todo           use central library for valid pagenames.
+ * @todo           use central library for valid pagenames
  * @todo			  move main <div> to templating class
+ * @todo			  use input highlight to mark invalid values
+ * @todo			  add check for require_edit_note in the config file to enforce note
+ * @todo			  make note max. length configurable in a constant
+ * 
  * @filesource
  */
 /**
@@ -58,7 +62,7 @@ if(!defined('VALID_PAGENAME_PATTERN')) define ('VALID_PAGENAME_PATTERN', '/^[A-Z
 /**
  * i18n
  */
-if (!defined('CLONE_HEADER')) define('CLONE_HEADER', '==== Clone current page ====');
+if (!defined('CLONE_LEGEND')) define('CLONE_LEGEND', 'Clone current page');
 if (!defined('CLONE_SUCCESSFUL')) define('CLONE_SUCCESSFUL', '%s was succesfully created!');
 if (!defined('CLONE_X_TO')) define('CLONE_X_TO', 'Clone %s to:');
 if (!defined('CLONED_FROM')) define('CLONED_FROM', 'Cloned from %s');
@@ -71,7 +75,7 @@ if (!defined('ERROR_PAGE_NOT_EXIST')) define('ERROR_PAGE_NOT_EXIST', ' Sorry, pa
 if (!defined('LABEL_CLONE')) define('LABEL_CLONE', 'Clone');
 if (!defined('LABEL_EDIT_OPTION')) define('LABEL_EDIT_OPTION', ' Edit after creation');
 if (!defined('LABEL_ACL_OPTION')) define('LABEL_ACL_OPTION', ' Clone ACL');
-if (!defined('PLEASE_FILL_VALID_TARGET')) define('PLEASE_FILL_VALID_TARGET', 'Please fill in a valid target ""PageName"" and an (optional) edit note.');
+if (!defined('PLEASE_FILL_VALID_TARGET')) define('PLEASE_FILL_VALID_TARGET', 'Please fill in a valid target page name and an (optional) edit note.');
 
 // initialization
 $from = $this->tag;
@@ -79,12 +83,9 @@ $to = $this->tag;
 $note = sprintf(CLONED_FROM, $from);
 $editoption = ''; 
 $cloneaclsoption = '';
-$box = PLEASE_FILL_VALID_TARGET;
+$box = '<em>'.PLEASE_FILL_VALID_TARGET.'<em>';
 
 echo '<div class="page">'."\n"; //TODO: move to templating class
-
-// print header
-echo $this->Format(CLONE_HEADER);
 
 // 1. check source page existence
 if (!$this->ExistsPage($from))
@@ -113,25 +114,30 @@ if (!$this->ExistsPage($from))
 			if (!preg_match(VALID_PAGENAME_PATTERN, $to))  //TODO use central regex library
 			{
 				// invalid pagename!
-				$box = '""<em class="error">'.ERROR_INVALID_PAGENAME.'</em>""';
+				$box = '<em class="error">'.ERROR_INVALID_PAGENAME.'</em>';
 			} else
 			{
 				// 4. target page name is valid - now check user's write-access
 				if (!$this->HasAccess('write', $to))  
 				{
-					$box = '""<em class="error">'.sprintf(ERROR_ACL_WRITE, $to).'</em>""';
-				} else
+					$box = '<em class="error">'.sprintf(ERROR_ACL_WRITE, $to).'</em>';
+				}
+				else
 				{
 					// 5. check target page existence
 					if ($this->ExistsPage($to))
 					{ 
 						// page already exists!
-						$box = '""<em class="error">'.ERROR_PAGE_ALREADY_EXIST.'</em>""';
-					} else
+						$box = '<em class="error">'.ERROR_PAGE_ALREADY_EXIST.'</em>';
+					}
+					else
 					{
 						// 6. Valid request - proceed to page cloning
 						$thepage=$this->LoadPage($from);
-						if ($thepage) $pagecontent = $thepage['body'];
+						if ($thepage)
+						{
+							$pagecontent = $thepage['body'];	
+						}
 						$this->SavePage($to, $pagecontent, $note);
 						// Clone ACLs if requested
 						if ($cloneaclsoption == 'checked="checked"')
@@ -149,7 +155,7 @@ if (!$this->ExistsPage($from))
 						} else
 						{
 							// show confirmation message
-							$box = '""<em class="success">'.sprintf(CLONE_SUCCESSFUL, $to).'</em>""';
+							$box = '<em class="success">'.sprintf(CLONE_SUCCESSFUL, $to).'</em>';
 						}
 					}
 				}
@@ -157,14 +163,16 @@ if (!$this->ExistsPage($from))
 		} 
 		// build form
 		$form = $this->FormOpen('clone');
+		$form .= '<fieldset><legend>'.CLONE_LEGEND.'</legend>';
 		$form .= '<table class="clone">'."\n".
+			'<tr><td colspan="2">%s</td></tr>'."\n".
 			'<tr>'."\n".
-			'<td>'.sprintf(CLONE_X_TO, $this->Link($this->GetPageTag())).'</td>'."\n".
-			'<td><input type="text" name="to" value="'.$to.'" size="37" maxlength="75" /></td>'."\n".
+			'<td><label for="to">'.sprintf(CLONE_X_TO, $this->Link($this->tag)).'</label></td>'."\n".
+			'<td><input id="to" type="text" name="to" value="'.$to.'" size="37" maxlength="75" /></td>'."\n".
 			'</tr>'."\n".
 			'<tr>'."\n".
-			'<td>'.EDIT_NOTE.'</strong></td>'.
-			'<td><input type="text" name="note" value="'.$note.'" size="37" maxlength="75" /></td>'."\n".
+			'<td><label for="note">'.EDIT_NOTE.'</label></td>'.
+			'<td><input id="note" name="note" type="text" value="'.$note.'" size="37" maxlength="75" /></td>'."\n".
 			'</tr>'."\n".
 			'<tr>'."\n".
 			'<td></td>'."\n".
@@ -178,14 +186,16 @@ if (!$this->ExistsPage($from))
 			'<input type="submit" name="create" value="'.LABEL_CLONE.'" />'."\n".
 			'</td>'."\n".
 			'</tr>'."\n".
-			'</table>'."\n";
+			'</table>'."\n".
+			'</fieldset>'."\n";
 		$form .= $this->FormClose();
 	}
 }
 
 // display messages
-if (isset($box)) echo $this->Format(' --- '.$box.' --- --- ');
+//if (isset($box)) echo $this->Format(' --- '.$box.' --- --- ');
 // print form
-if (isset($form)) print $form;
+//echo $form;
+echo sprintf($form, $box);
 echo '</div>'."\n" //TODO: move to templating class
 ?>
