@@ -62,9 +62,9 @@ if(!defined('VALID_PAGENAME_PATTERN')) define ('VALID_PAGENAME_PATTERN', '/^[A-Z
 /**
  * i18n
  */
-if (!defined('CLONE_LEGEND')) define('CLONE_LEGEND', 'Clone current page');
+if (!defined('CLONE_LEGEND')) define('CLONE_LEGEND', 'Clone %s');
 if (!defined('CLONE_SUCCESSFUL')) define('CLONE_SUCCESSFUL', '%s was succesfully created!');
-if (!defined('CLONE_X_TO')) define('CLONE_X_TO', 'Clone %s to:');
+if (!defined('CLONE_X_TO')) define('CLONE_X_TO', 'Clone as:');
 if (!defined('CLONED_FROM')) define('CLONED_FROM', 'Cloned from %s');
 if (!defined('EDIT_NOTE')) define('EDIT_NOTE', 'Edit note:');
 if (!defined('ERROR_ACL_READ')) define('ERROR_ACL_READ', 'You are not allowed to read the source of this page.');
@@ -83,7 +83,7 @@ $to = $this->tag;
 $note = sprintf(CLONED_FROM, $from);
 $editoption = ''; 
 $cloneaclsoption = '';
-$box = '<em>'.PLEASE_FILL_VALID_TARGET.'<em>';
+$box = '<em>'.PLEASE_FILL_VALID_TARGET.'</em>';
 
 echo '<div class="page">'."\n"; //TODO: move to templating class
 
@@ -163,11 +163,11 @@ if (!$this->ExistsPage($from))
 		} 
 		// build form
 		$form = $this->FormOpen('clone');
-		$form .= '<fieldset><legend>'.CLONE_LEGEND.'</legend>';
+		$form .= '<fieldset><legend>'.sprintf(CLONE_LEGEND, $this->Link($this->tag)).'</legend>';
 		$form .= '<table class="clone">'."\n".
 			'<tr><td colspan="2">%s</td></tr>'."\n".
 			'<tr>'."\n".
-			'<td><label for="to">'.sprintf(CLONE_X_TO, $this->Link($this->tag)).'</label></td>'."\n".
+			'<td><label for="to">'.CLONE_X_TO.'</label></td>'."\n".
 			'<td><input id="to" type="text" name="to" value="'.$to.'" size="37" maxlength="75" /></td>'."\n".
 			'</tr>'."\n".
 			'<tr>'."\n".
