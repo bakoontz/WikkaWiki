@@ -344,6 +344,18 @@ fieldset legend {
 	padding:2px;
 }
 
+textarea {
+	border: 1px solid #CCC;	
+}
+
+textarea:hover {
+	background-color: #F3F3F3;
+}
+
+textarea:focus {
+	background-color: #E6E6E6;
+}
+
 input:hover {
 	background-color: #F3F3F3;
 }
@@ -377,7 +389,6 @@ textarea#body{
 	width: 100%;
 	height: 500px;
 	padding: 2px;
-	border: 1px solid #CCC;	
 }
 
 .searchbox {
