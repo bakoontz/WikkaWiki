@@ -1661,7 +1661,7 @@ class Wakka
 	 * @param	integer $limit optional: number of last comments. default: 50
 	 * @return	array the last x comments
 	 */
-	function LoadRecentComments($limit = 50) { return $this->LoadAll("SELECT * FROM ".$this->config["table_prefix"]."comments ORDER BY time DESC LIMIT ".$limit); }
+	function LoadRecentComments($limit = 50) { return $this->LoadAll("SELECT * FROM ".$this->config["table_prefix"]."comments ORDER BY time DESC LIMIT ".intval($limit)); }
 	/**
 	 * Load the last 50 comments on different pages on the wiki.
 	 *
@@ -1676,7 +1676,7 @@ class Wakka
 			. " LEFT JOIN ".$this->config["table_prefix"]."comments AS c2 ON comments.page_tag = c2.page_tag AND comments.id < c2.id"
 			. " WHERE c2.page_tag IS NULL "
 			. " ORDER BY time DESC "
-			. " LIMIT ".$limit;
+			. " LIMIT ".intval($limit);
 		return $this->LoadAll($sql);
 	}
 	/**
