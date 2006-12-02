@@ -257,7 +257,7 @@ if (strstr ($HTTP_SERVER_VARS['HTTP_ACCEPT_ENCODING'], 'gzip') && function_exist
 $etag =  md5($content);
 header('ETag: '.$etag);
 
-if (!isset($this->do_not_send_anticaching_headers) || (!$this->do_not_send_anticaching_headers))
+if (!isset($wakka->do_not_send_anticaching_headers) || (!$wakka->do_not_send_anticaching_headers))
 { #279
 	header('Expires: Thu, 19 Nov 1981 08:52:00 GMT');
 	header('Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0');
