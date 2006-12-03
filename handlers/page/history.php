@@ -122,7 +122,7 @@ if ($this->HasAccess("read")) {
 		$oldest_revision = $this->LoadOldestRevision($this->tag);
 		if ($oldest_revision['id'] != $pageB['id'])
 		{
-			$additional_output .= "\n".'<br /><strong>'.sprintf(HISTORY_MORE, $this->Href('history', '', 'start='.($c-1))).'</strong>';
+			$additional_output .= "\n".'<br /><strong>'.sprintf(HISTORY_MORE, $this->Href('history', '', 'start='.($c>1 ? $c+$start-1 : $c+$start))).'</strong>';
 			$output .= '<strong>'.sprintf(EDITED_ON, '<a href="'.$this->href('', '', 'time='.urlencode($pageB['time'])).'">'.$pageB['time'].'</a>', $this->Format($pageB['user'])).'</strong> <span class="pagenote smaller">['.$this->htmlspecialchars_ent($pageB['note'])."]</span><br />\n";
 		}
 		else
