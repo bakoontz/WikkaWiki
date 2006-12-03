@@ -859,6 +859,35 @@ class Wakka
 			return $pages;
 		}
 	}
+	/**
+	 * Load pages that need to be created.
+	 * This is an expanded version of {@link Wakka::LoadWantedPages()} by permitting sorting by
+	 * number of pages referring to each wanted page, or by latest modified date of any page referring
+	 * to wanted pages, or alphabetically.
+	 * WARNING: The parameter $sort passed to this method is considered sanitized.
+	 *
+	 * @uses Wakka::LoadAll()
+	 * @param string $sort Sorting needed: Legal SQL expression after ORDER BY clause. Field names are count, time and tag.
+	 * @access public
+	 * @return array
+	 */
+	function LoadWantedPages2($sort='')
+	{
+		if (!$sort)
+		{
+			$sort = 'count desc, time desc, tag';
+		}
+		return $this->LoadAll('
+			select distinct _LINKS.to_tag as tag,
+			count(_LINKS.from_tag) as count,
+			max(CONCAT_WS("/", _PAGES2.time, _PAGES2.tag)) as time
+			from '.$this->config['table_prefix'].'links _LINKS left join '.$this->config['table_prefix'].
+			'pages _PAGES on _LINKS.to_tag = _PAGES.tag 
+			INNER JOIN '.$this->config['table_prefix'].'pages _PAGES2 ON _LINKS.from_tag = _PAGES2.tag
+			where _PAGES.tag is NULL 
+			and _PAGES2.latest = \'Y\'
+			group by tag order by '.$sort);
+	}
 	function LoadWantedPages() { return $this->LoadAll("select distinct ".$this->config["table_prefix"]."links.to_tag as tag,count(".$this->config["table_prefix"]."links.from_tag) as count from ".$this->config["table_prefix"]."links left join ".$this->config["table_prefix"]."pages on ".$this->config["table_prefix"]."links.to_tag = ".$this->config["table_prefix"]."pages.tag where ".$this->config["table_prefix"]."pages.tag is NULL group by tag order by count desc"); }
 	function IsWantedPage($tag)
 	{
