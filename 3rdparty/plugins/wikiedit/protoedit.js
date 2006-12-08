@@ -16,6 +16,7 @@ var isIE5 = isIE && isDOM //MSIE 5+
 var isMZ  = isDOM && (navigator.appName=="Netscape")
 var ua = navigator.userAgent.toLowerCase();
 var isSafari = (ua.indexOf("safari") != -1);
+var isWK  = (ua.indexOf("webkit") != -1) || (ua.indexOf("swift") != -1)
 
 var ProtoEdit = function(){
  this.enabled = true;

@@ -82,6 +82,10 @@ WikiEdit.prototype.init = function(id, name, nameClass, imgPath) {
     base_url = mylocation.substring(0, base_till);
     long_base_url = mylocation.replace(/=.*$/, '=');
   }
+ if (isWK)
+ {
+	 document.write('<scr'+'ipt type="text/javascript" src="'+base_url+'3rdparty/plugins/wikiedit/wikiedit_sr.js?'+Math.random()+'"></scr'+'ipt>');
+ }
  if (isIE)
  {
   this.area.addBehavior(base_url+"3rdparty/plugins/wikiedit/sel.htc");
@@ -535,8 +539,19 @@ WikiEdit.prototype.getDefines = function ()
 
   text = t.value;
   if (!isO8) text = text.replace(/\r/g, "");
+  if (typeof(this.ss) == 'undefined')
+  {
+   this.ss = 0;
+   this.se = 0;
+  }
+  var save_selection = [this.ss, this.se];
   this.ss = t.selectionStart;
   this.se = t.selectionEnd;
+  if (!this.ss && !this.se)
+  {
+   this.ss = save_selection[0];
+   this.se = save_selection[1];
+  }
 
   this.sel1 = text.substr(0, this.ss);
   this.sel2 = text.substr(this.se);
@@ -571,6 +586,8 @@ WikiEdit.prototype.setAreaContent = function (str)
   t.value = str;
   t.setSelectionRange(l, l + l1);
   if (isMZ) t.scrollTop = this.scroll;
+  this.ss = l; 
+  this.se = l+l1;
 }
 
 WikiEdit.prototype.insTag = function (Tag, Tag2, onNewLine, expand, strip)
