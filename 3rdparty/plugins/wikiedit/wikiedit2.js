@@ -83,10 +83,10 @@ WikiEdit.prototype.init = function(id, name, nameClass, imgPath) {
     long_base_url = mylocation.replace(/=.*$/, '=');
   }
  if (isWK)
- {
-	 document.write('<scr'+'ipt type="text/javascript" src="'+base_url+'3rdparty/plugins/wikiedit/wikiedit_sr.js?'+Math.random()+'"></scr'+'ipt>');
+ {//244 below is the latest revision number that modified wikiedit_sr.js :: To avoid caching problem!
+  document.write('<scr'+'ipt type="text/javascript" src="'+base_url+'3rdparty/plugins/wikiedit/wikiedit_sr.js?244"></scr'+'ipt>');
  }
- if (isIE)
+ if (typeof(this.area.addBehavior) != 'undefined')
  {
   this.area.addBehavior(base_url+"3rdparty/plugins/wikiedit/sel.htc");
  }
@@ -125,6 +125,8 @@ WikiEdit.prototype.init = function(id, name, nameClass, imgPath) {
  
 
  try {
+  // If the browser does not support neither addBehavior nor selectionStart, give up!
+  if ((typeof(this.area.addBehavior) == 'undefined') && (typeof(this.area.selectionStart) == 'undefined')) return;
   var toolbar = document.createElement("div");
   toolbar.id = "tb_"+this.id;
   this.area.parentNode.insertBefore(toolbar, this.area);
