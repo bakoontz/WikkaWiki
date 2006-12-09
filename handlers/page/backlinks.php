@@ -4,7 +4,10 @@
  *
  * Usage: append /backlinks to the URL of the page
  * 
- * This handler retrieves a list of internal pages linking to the current page.
+ * This handler retrieves and show a list of internal pages linking to the current page.
+ * It uses {@link Wakka::ListPages()} to list them, parameters passed to this method make
+ * it to display one entry per line, each entry followed by an edit link to allow direct
+ * editing of the referring page.
  * There is no need to check existence of page here because when a page is deleted,
  * links table should be cleaned up accordingly.
  *
@@ -36,6 +39,6 @@ define('ERROR_NO_BACKLINKS','There are no backlinks to this page.');
 $page = $this->tag;
 echo $this->Format('=== '.sprintf(PAGE_TITLE,'[['.$page.']]').' === --- ---');
 $pages = $this->LoadPagesLinkingTo($page);
-$str = $this->ListPages($pages, sprintf('<em class="error">'.ERROR_NO_BACKLINKS.'</em>', $page), '', 0, 1);
+$str = $this->ListPages($pages, sprintf('<em class="error">'.ERROR_NO_BACKLINKS.'</em>', $page), '', 0, 1, true);
 echo $str.'</div>'."\n" //TODO: move to templating class
 ?>

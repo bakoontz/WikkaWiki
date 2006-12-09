@@ -22,6 +22,11 @@
  * @copyright Copyright 2004-2005, Jason Tourtelotte <wikka-admin@jsnx.com>
  * @copyright Copyright 2006, {@link http://wikkawiki.org/CreditsPage Wikka Development Team}
  */
+
+// i18n strings
+if (!defined('LABEL_EDIT')) define('LABEL_EDIT', 'edit');
+if (!defined('LISTPAGES_EDIT_TITLE')) define('LISTPAGES_EDIT_TITLE', 'Click to edit %s');
+
 /**
  * The Wikka core.
  *
@@ -954,10 +959,12 @@ class Wakka
 	 * @param string $class optional: A classname to be attached to the table or unordered list. Default: ''
 	 * @param int $columns optional: Number of columns of the table if compact = 0. Default: 3
 	 * @param int $compact optional: If 0: use table, if 1: use unordered list. Default: 0
+		* @param boolean $show_edit_link If true, each page is followed by an edit link. Default: false. 
 	 * @return string
 	 */
-	function ListPages($pages, $nopagesText = '', $class = '', $columns = 3, $compact = 0)
+	function ListPages($pages, $nopagesText = '', $class = '', $columns = 3, $compact = 0, $show_edit_link=false)
 	{
+		$edit_link = '';
 		if (!$pages) return ($nopagesText);
 		if ($class) $class=" class='$class'";
 		$str = $compact ? "<div$class><ul>" : "<table width='100%'$class><tr\n>";
@@ -969,11 +976,15 @@ class Wakka
 		$count = 0;
 		foreach ($list as $val)
 		{
+			if ($show_edit_link) 
+			{
+				$edit_link = ' <small>['.$this->Link($val, 'edit', LABEL_EDIT, false, true, sprintf(LISTPAGES_EDIT_TITLE, $val)).']</small>';
+			}
 			if ($compact)
 			{
 				$link = '[['.$val;
 				if (eregi('^Category', $val)) $link.= ' '.eregi_replace('^Category', '', $val);
-				$str .= "<li\n>".$this->Format($link.']]').'</li>';
+				$str .= "<li\n>".$this->Format($link.']]').$edit_link.'</li>';
 			}
 			else
 			{
@@ -982,7 +993,7 @@ class Wakka
 					$str .= "</tr><tr\n>";
 					$count = 0;
 				}
-				$str .= '<td>'.$this->Format('[['.$val.']]').'</td>';
+				$str .= '<td>'.$this->Format('[['.$val.']]').$edit_link.'</td>';
 			}
 			$count ++;
 		}
