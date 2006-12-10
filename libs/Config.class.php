@@ -175,6 +175,12 @@ class Config
 	 */
 	var $anony_delete_own_comments = '1';
 	/**
+	 * Allow the page owner to delete the page
+	 * 
+	 * If this value equals 1, the owner of a page is allowed to delete it, including all versions and comments.
+	 */
+	var $owner_delete_page = '0';
+	/**
 	 * System Information visibility.
 	 * This config entry enables or disables display of system information in SysInfo. If this value is not set to 1 (by
 	 * default, its value is 0), only administrators can view system information. Note that revealing such information to

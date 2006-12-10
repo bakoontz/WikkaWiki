@@ -19,12 +19,22 @@
  */
 echo '<div class="page">'."\n"; //TODO: move to templating class
 
-if ($this->IsAdmin())
+/**
+ * i18n
+ */
+if(!defined('ERR_NO_PAGE_DEL_RIGHT')) define ('ERR_NO_PAGE_DEL_RIGHT', 'You are not allowed to delete this page.');
+if(!defined('PAGE_DELETION_SUCCESS')) define('PAGE_DELETION_SUCCESS', 'Page has been deleted!');
+if(!defined('PAGE_DELETION_HEADER')) define('PAGE_DELETION_HEADER', 'Delete %s'); // %s - name of the page
+if(!defined('PAGE_DELETION_TXT')) define('PAGE_DELETION_TXT', 'Completely delete this page, including all comments?');
+if(!defined('BUTTON_CANCEL')) define ('BUTTON_CANCEL', 'Cancel');
+if(!defined('BUTTON_DELETE')) define ('BUTTON_DELETE', 'Delete Page');
+
+$tag = $this->GetPageTag();
+
+if ($this->IsAdmin() || ($this->UserIsOwner($tag) && $this->config["owner_delete_page"] == 1))
 {
     if ($_POST)
     {
-        $tag = $this->GetPageTag();
-
         //  delete the page, comments, related links, acls and referrers 
         $this->Query("delete from ".$this->config["table_prefix"]."pages where tag = '".mysql_real_escape_string($tag)."'");
         $this->Query("delete from ".$this->config["table_prefix"]."comments where page_tag = '".mysql_real_escape_string($tag)."'");
@@ -33,23 +43,23 @@ if ($this->IsAdmin())
         $this->Query("delete from ".$this->config["table_prefix"]."referrers where page_tag = '".mysql_real_escape_string($tag)."'");
 
         // redirect back to main page
-        $this->Redirect($this->config["base_url"], "Page has been deleted!"); #i18n
+        $this->Redirect($this->config["base_url"], PAGE_DELETION_SUCCESS);
     }
     else
     {
         // show form
         ?>
-        <h3>Delete <?php echo $this->Link($this->GetPageTag()); #i18n ?></h3>
+        <h3><?php printf(PAGE_DELETION_HEADER,$this->Link($tag));?></h3>
         <br />
 
         <?php echo $this->FormOpen("delete") ?>
         <table border="0" cellspacing="0" cellpadding="0">
             <tr>
-                <td>Completely delete this page, including all comments?</td>
+                <td><?php echo PAGE_DELETION_TXT; ?></td>
             </tr>
             <tr>
-                <td> <!-- nonsense input so form submission works with rewrite mode --><input type="hidden" value="" name="null"><input type="submit" value="Delete Page"  style="width: 120px"   />
-                <input type="button" value="Cancel" onclick="history.back();" style="width: 120px" /></td>
+                <td> <!-- nonsense input so form submission works with rewrite mode --><input type="hidden" value="" name="null"><input type="submit" value="<?php echo BUTTON_DELETE;?>"  style="width: 120px" />
+                <input type="button" value="<?php echo BUTTON_CANCEL;?>" onclick="history.back();" style="width: 120px" /></td>
             </tr>
         </table>
         <?php
@@ -58,7 +68,7 @@ if ($this->IsAdmin())
 }
 else
 {
-    echo '<em class="error">You are not allowed to delete pages.</em>'; #i18n
+    echo '<em class="error">'.ERR_NO_PAGE_DEL_RIGHT.'</em>';
 }
 echo '</div>'."\n" //TODO: move to templating class
 ?>
