@@ -112,6 +112,15 @@ $invitation_code_highlight = '';
 //create URL
 $url = $this->config['base_url'].$this->tag;
 
+//Remember referring page if internal.
+if (isset($_SERVER['HTTP_REFERER']) && preg_match('/^'.preg_quote($this->config['base_url'], '/')."([^\\/\\?]*)/", $_SERVER['HTTP_REFERER'], $match))
+{
+	if (strcasecmp($this->tag, $match[1]))
+	{
+		$_SESSION['go_back'] = $_SERVER['HTTP_REFERER'];
+	}
+}
+
 // append URL params depending on rewrite_mode
 $params = ($this->config['rewrite_mode'] == 1)? '?' : '&';
 
@@ -359,6 +368,12 @@ else // user is not logged in
 					break;
 				default:
 					$this->SetUser($existingUser);
+					if (isset($_SESSION['go_back'])) 
+					{
+						$go_back = $_SESSION['go_back'];
+						unset($_SESSION['go_back']);
+						$this->Redirect($go_back);
+					}
 					$this->Redirect($url, '');
 			}
 		}
