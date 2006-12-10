@@ -33,74 +33,81 @@
  */
 // i18n
 if (!defined('BACKLINKS_TITLE')) define('BACKLINKS_TITLE', 'Click to view all pages linking to %s');
+if (!defined('LABEL_EDIT')) define('LABEL_EDIT', 'edit');
+if (!defined('LISTPAGES_EDIT_TITLE')) define('LISTPAGES_EDIT_TITLE', 'Click to edit %s');
+if (!defined('LEGEND_SORTING')) define('LEGEND_SORTING', 'Sorting ...');
+if (!defined('LABEL_SORTING_NUMBER')) define('LABEL_SORTING_NUMBER', 'Sorting #');
+if (!defined('LABEL_SORTING_DESC')) define('LABEL_SORTING_DESC', 'desc');
+if (!defined('LABEL_OK')) define('LABEL_OK', '   OK   ');
+if (!defined('NO_WANTED_PAGES')) define('NO_WANTED_PAGES', 'No wanted pages. Good!');
 
 $sorting_fields = array('count', 'time', 'tag');
-	if ((isset($vars) && is_array($vars) && isset($vars['option']) && $vars['option'] == 'v2') || (isset($_GET['ob1'])))
+if ((isset($vars) && is_array($vars) && isset($vars['option']) && $vars['option'] == 'v2') || (isset($_GET['ob1'])))
+{
+	$sort = '';
+	for ($i = 1; $i <= 3; $i ++)
 	{
-		$sort = '';
-		for ($i = 1; $i <= 3; $i ++)
+		if (isset($_GET['ob'.$i]))
 		{
-			if (isset($_GET['ob'.$i]))
+			if (in_array($_GET['ob'.$i], $sorting_fields))
 			{
-				if (in_array($_GET['ob'.$i], $sorting_fields))
+				if ($sort) 
 				{
-					if ($sort) 
-					{
-						$sort .= ',';
-					}
-					$sort .= $_GET['ob'.$i].' ';
-					if (isset($_GET['de'.$i]))
-					{
-						$sort .= 'desc';
-					}
+					$sort .= ',';
 				}
-			}
-		}
-		if ($pages = $this->LoadWantedPages2($sort))
-		{
-			foreach ($pages as $page)
-			{
-				print($this->Link($page["tag"]));
-				if ($page['count'] > 1)
+				$sort .= $_GET['ob'.$i].' ';
+				if (isset($_GET['de'.$i]))
 				{
-					print(' (<a href="'.$this->href('backlinks', $page['tag']).'" title="'.sprintf(BACKLINKS_TITLE, $page['tag']).'">'.$page['count']."</a>)<br />\n");
-				}
-				else
-				{
-					preg_match('#/(.*)$#', $page['time'], $match);
-					print(' (1 : '.$this->Link($match[1]).' <small>['.$this->Link($match[1], 'edit', 'edit')."]</small>)<br />\n"); #i18n : 3rd param of 2nd Link()
+					$sort .= 'desc';
 				}
 			}
 		}
 	}
-	elseif ($pages = $this->LoadWantedPages())
+	if ($pages = $this->LoadWantedPages2($sort))
 	{
 		foreach ($pages as $page)
 		{
-			print($this->Link($page['tag']).' (<a href="'.$this->href('backlinks', $page['tag']).'" title="'.sprintf(BACKLINKS_TITLE, $page['tag']).'">'.$page['count']."</a>)<br />\n");
+			print($this->Link($page["tag"]));
+			if ($page['count'] > 1)
+			{
+				print(' (<a href="'.$this->href('backlinks', $page['tag']).'" title="'.sprintf(BACKLINKS_TITLE, $page['tag']).'">'.$page['count']."</a>)<br />\n");
+			}
+			else
+			{
+				preg_match('#/(.*)$#', $page['time'], $match);
+				print(' (1 : '.$this->Link($match[1]).' <small>['.$this->Link($match[1], 'edit', 'edit', false, true, sprintf(LISTPAGES_EDIT_TITLE, $match[1]))."]</small>)<br />\n");
+			}
 		}
 	}
-	if ($pages)
+}
+elseif ($pages = $this->LoadWantedPages())
+{
+	foreach ($pages as $page)
 	{
-		// adding form to control sorting
-		$options = '<option value="">&nbsp;</option>';
-		foreach ($sorting_fields as $i)
-		{
-			$options .= '<option value="'.$i.'">'.$i.'</option>';
-		}
-		echo $this->FormOpen('', '', 'get');
-		echo '<fieldset id="wantedpages_sorting"><legend>Sorting...</legend>'; #i18n
-		for ($i=1; $i<=3; $i++)
-		{
-			echo '<label>Sorting #'.$i.' : <select name="ob'.$i.'">'.$options.'</select></label> <label><input type="checkbox" name="de'.$i.'" /> desc</label><br />'."\n"; #i18n
-		}
-		echo '<input type="submit" value="  OK  " />'; #i18n
-		echo '</fieldset>';
-		echo $this->FormClose();
+		print($this->Link($page['tag']).' (<a href="'.$this->href('backlinks', $page['tag']).'" title="'.sprintf(BACKLINKS_TITLE, $page['tag']).'">'.$page['count']."</a>)<br />\n");
 	}
-	else
+}
+if ($pages)
+{
+	// adding form to control sorting
+	$options = '<option value="">&nbsp;</option>';
+	foreach ($sorting_fields as $i)
 	{
-		print("<em>No wanted pages. Good!</em>"); # i18n
+		$options .= '<option value="'.$i.'">'.$i.'</option>';
 	}
+	echo $this->FormOpen('', '', 'get');
+	echo '<fieldset id="wantedpages_sorting"><legend>'.LEGEND_SORTING.'</legend>';
+	for ($i=1; $i<=3; $i++)
+	{
+		echo '<label>'.LABEL_SORTING_NUMBER.$i.' : <select name="ob'.$i.'">'.$options.'</select></label> <label><input type="checkbox" name="de'.$i.'" /> '.LABEL_SORTING_DESC.'</label><br />'."\n";
+	}
+	echo '<input type="submit" value="'.LABEL_OK.'" />';
+	echo '</fieldset>';
+	echo $this->FormClose();
+}
+else
+{
+	print('<em>'.NO_WANTED_PAGES.'</em>');
+}
 
 ?>
