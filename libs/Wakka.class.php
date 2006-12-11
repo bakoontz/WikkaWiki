@@ -1602,14 +1602,33 @@ class Wakka
 	 * USERS
 	 */
 	/**
-	 * Load a (given) user, which may have a password, from the database.
+	 * Load a (given) user.
+	 *
+	 * <p>If a second parameter $password is supplied, this method checks if this password is valid, thus a false return value would mean
+	 * nonexistent user or invalid password. Note that this parameter is the <strong>hashed value</strong> of the password usually typed in 
+	 * by user, and not the password itself.</p>
+	 * <p>If this parameter is not supplied, it checks only for existence of the username, and returns an array containing all information
+	 * about the given user if it exists, or a false value. In this latter case, result is cached in $this->specialCache in order to 
+	 * improve performance.</p>
 	 *
 	 * @uses	Wakka::LoadSingle()
 	 * @param	string $name mandatory: name of the user
 	 * @param	string $password optional: password of the user. default: 0 (=none)
-	 * @return	array the data of the user
+	 * @return	array the data of the user, or false if non-existing user or invalid password supplied.
 	 */
-	function LoadUser($name, $password = 0) { return $this->LoadSingle("select * from ".$this->config['table_prefix']."users where name = '".mysql_real_escape_string($name)."' ".($password === 0 ? "" : "and password = '".mysql_real_escape_string($password)."'")." limit 1"); }
+	function LoadUser($name, $password = 0) 
+	{
+		if (($password === 0) && (isset($this->specialCache['user'][strtolower($name)])))
+		{
+			return ($this->specialCache['user'][strtolower($name)]);
+		}
+		$user = $this->LoadSingle("select * from ".$this->config['table_prefix']."users where name = '".mysql_real_escape_string($name)."' ".($password === 0 ? "" : "and password = '".mysql_real_escape_string($password)."'")." limit 1");
+		if ($password === 0)
+		{
+			$this->specialCache['user'][strtolower($name)] = $user;
+		}
+		return ($user);
+	}
 	/**
 	 * Load all users registered at the wiki.
 	 *
