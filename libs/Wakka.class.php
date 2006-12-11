@@ -142,7 +142,7 @@ class Wakka
 	 * @todo	perhaps adding 'LIMIT 1' here instead depending on it beeing in every $query
 	 * @todo	move into a database class.
 	 */
-	function LoadSingle($query) { if ($data = $this->LoadAll($query)) return $data[0]; }
+	function LoadSingle($query) { if ($data = $this->LoadAll($query)) return $data[0]; return (false);}
 	/**
 	 * Return all results of a query executed on the database.
 	 *
@@ -863,6 +863,7 @@ class Wakka
 			}
 			return $pages;
 		}
+		return false;
 	}
 	/**
 	 * Load pages that need to be created.
@@ -1794,7 +1795,7 @@ class Wakka
 	 * @param	? $time optional: time of the page-revision. default: current one?
 	 * @return	string the owner of the page
 	 */
-	function GetPageOwner($tag = "", $time = "") { if (!$tag = trim($tag)) $tag = $this->GetPageTag(); if ($page = $this->LoadPage($tag, $time)) return $page["owner"]; }
+	function GetPageOwner($tag = "", $time = "") { if (!$tag = trim($tag)) $tag = $this->GetPageTag(); if ($page = $this->LoadPage($tag, $time)) return $page["owner"]; return (false);}
 	/**
 	 * Set an (given) owner for a (given) page.
 	 *
