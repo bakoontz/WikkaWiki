@@ -41,7 +41,8 @@ if (!defined('ERROR_NO_BLANK')) define('ERROR_NO_BLANK', "Sorry, blanks are not 
 if (!defined('ERROR_PASSWORD_TOO_SHORT')) define('ERROR_PASSWORD_TOO_SHORT', "Sorry, the password must contain at least %s characters.");
 if (!defined('PASSWORD_CHANGED')) define('PASSWORD_CHANGED', "Password successfully changed!");
 if (!defined('ERROR_OLD_PASSWORD_WRONG')) define('ERROR_OLD_PASSWORD_WRONG', "The old password you entered is wrong.");
-if (!defined('USER_LOGGED_IN_AS_LABEL')) define('USER_LOGGED_IN_AS_LABEL', "Your are logged in as %s");
+if (!defined('USER_LOGGED_IN_AS_LABEL')) define('USER_LOGGED_IN_AS_LABEL', "You are logged in as %s");
+if (!defined('LABEL_NO_GO_BACK')) define('LABEL_NO_GO_BACK', 'Don\'t go back to %s');
 if (!defined('USER_EMAIL_LABEL')) define('USER_EMAIL_LABEL', "Your email address:");
 if (!defined('DOUBLECLICK_LABEL')) define('DOUBLECLICK_LABEL', "Doubleclick editing:");
 if (!defined('SHOW_COMMENTS_LABEL')) define('SHOW_COMMENTS_LABEL', "Show comments by default:");
@@ -118,6 +119,9 @@ if (isset($_SERVER['HTTP_REFERER']) && preg_match('/^'.preg_quote($this->config[
 	if (strcasecmp($this->tag, $match[1]))
 	{
 		$_SESSION['go_back'] = $_SERVER['HTTP_REFERER'];
+		//We save the tag of the referring page, this tag is to be shown in label <Go back to ...>. We must use a session here because if the user 
+		//Refresh the page by hitting <Enter> on the address bar, the value would be lost.
+		$_SESSION['go_back_tag'] = $match[1];
 	}
 }
 
@@ -368,10 +372,11 @@ else // user is not logged in
 					break;
 				default:
 					$this->SetUser($existingUser);
-					if (isset($_SESSION['go_back'])) 
+					if ((isset($_SESSION['go_back'])) && (!isset($_POST['no_go_back'])))
 					{
 						$go_back = $_SESSION['go_back'];
 						unset($_SESSION['go_back']);
+						unset($_SESSION['go_back_tag']);
 						$this->Redirect($go_back);
 					}
 					$this->Redirect($url, '');
@@ -449,6 +454,12 @@ else // user is not logged in
 					// log in
 					$this->SetUser($this->LoadUser($name));
 					$params .= 'registered=true';
+					if ((isset($_SESSION['go_back'])) && (!isset($_POST['no_go_back'])))
+					{
+						$go_back = $_SESSION['go_back'];
+						unset($_SESSION['go_back']);
+						$this->Redirect($go_back);
+					}
 					$this->Redirect($url.$params);
 			}
 		}
@@ -514,6 +525,16 @@ else // user is not logged in
 	<label for="password"><?php echo sprintf(PASSWORD_LABEL, PASSWORD_MIN_LENGTH) ?></label>
 	<input id="password" <?php echo $password_highlight; ?> type="password" name="password" size="40" />
 	<br />
+<?php
+	if (isset($_SESSION['go_back']))
+	{
+	?>
+	<label for="no_go_back"><?php printf(LABEL_NO_GO_BACK, $_SESSION['go_back_tag']); ?></label>
+	<input type="checkbox" name="no_go_back" id="no_go_back"<?php if (isset($_POST['no_go_back'])) echo ' checked="checked"';?> />
+	<br />
+<?php
+	}
+?>
 	<input id="login" type="submit" value="<?php echo LOGIN_BUTTON_LABEL ?>" size="40" />
 	<br /><br />
 <?php
