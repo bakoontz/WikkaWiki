@@ -16,9 +16,8 @@
  * @todo			use error handler for displaying messages and highlighting invalid input fields;
  * @todo			remove useless redirections;
  */
-/**
- * defaults
- */
+
+// defaults
 if (!defined('PASSWORD_MIN_LENGTH')) define('PASSWORD_MIN_LENGTH', "5");
 if (!defined('VALID_EMAIL_PATTERN')) define('VALID_EMAIL_PATTERN', "/^.+?\@.+?\..+$/"); //TODO: Use central regex library
 if (!defined('REVISION_DISPLAY_LIMIT_MIN')) define('REVISION_DISPLAY_LIMIT_MIN', "0"); // 0 means no limit, 1 is the minimum number of revisions
@@ -26,9 +25,8 @@ if (!defined('REVISION_DISPLAY_LIMIT_MAX')) define('REVISION_DISPLAY_LIMIT_MAX',
 if (!defined('RECENTCHANGES_DISPLAY_LIMIT_MIN')) define('RECENTCHANGES_DISPLAY_LIMIT_MIN', "0"); // 0 means no limit, 1 is the minimum number of changes
 if (!defined('RECENTCHANGES_DISPLAY_LIMIT_MAX')) define('RECENTCHANGES_DISPLAY_LIMIT_MAX', "50"); // keep this value within a reasonable limit to avoid an unnecessary long list
 if (!defined('INPUT_ERROR_STYLE')) define('INPUT_ERROR_STYLE', 'class="highlight"');
-/**
- * i18n
- */
+
+// i18n
 if (!defined('USER_ACCOUNT_LEGEND')) define('USER_ACCOUNT_LEGEND', "Your account");
 if (!defined('USER_SETTINGS_LEGEND')) define('USER_SETTINGS_LEGEND', "Settings");
 if (!defined('LOGIN_REGISTER_LEGEND')) define('LOGIN_REGISTER_LEGEND', "Login/Register");
@@ -177,6 +175,7 @@ else if ($user = $this->GetUser())
 					"revisioncount = '".mysql_real_escape_string($revisioncount)."', ".
 					"changescount = '".mysql_real_escape_string($changescount)."' ".
 					"WHERE name = '".$user['name']."' LIMIT 1");
+				unset($this->specialCache['user'][strtolower($user['name'])]);  //invalidate cache if exists #368
 				$this->SetUser($this->LoadUser($user["name"]));
 			
 				// forward
@@ -199,7 +198,7 @@ else if ($user = $this->GetUser())
 ?>
 	<fieldset id="account" class="usersettings"><legend><?php echo USER_ACCOUNT_LEGEND; ?></legend>
 	<input type="hidden" name="action" value="update" />
-	<label for="logout"><?php echo sprintf(USER_LOGGED_IN_AS_LABEL, $this->Link($user['name'])); ?></label>
+	<label><?php echo sprintf(USER_LOGGED_IN_AS_LABEL, $this->Link($user['name'])); ?></label>
 	<input id="logout" type="button" value="<?php echo LOGOUT_BUTTON_LABEL; ?>" onclick="document.location='<?php echo $this->href('', '', 'action=logout'); ?>'" />
 	</fieldset>
 	
@@ -307,6 +306,7 @@ else if ($user = $this->GetUser())
 				break;
 			default:
 				$this->Query('UPDATE '.$this->config['table_prefix'].'users set '."password = md5('".mysql_real_escape_string($password)."') "."WHERE name = '".$user['name']."'");
+				unset($this->specialCache['user'][strtolower($name)]);  //invalidate cache if exists #368
 				$user['password'] = md5($password);
 				$this->SetUser($user);
 				$params .= 'newpassword=true';
@@ -441,15 +441,16 @@ else // user is not logged in
 					$password_confirm_highlight = INPUT_ERROR_STYLE;
 					break;
 				case ($register == '2' && $_POST['invitation_code'] !==  $this->GetConfigValue('invitation_code')):
-				    $error = ERROR_INVITATION_CODE_INCORRECT;
-                	$invitation_code_highlight = INPUT_ERROR_STYLE;
-                	break;
+					$error = ERROR_INVITATION_CODE_INCORRECT;
+					$invitation_code_highlight = INPUT_ERROR_STYLE;
+					break;
 				default: //valid input, create user
 					$this->Query("INSERT INTO ".$this->config['table_prefix']."users SET ".
 						"signuptime = now(), ".
 						"name = '".mysql_real_escape_string($name)."', ".
 						"email = '".mysql_real_escape_string($email)."', ".
 						"password = md5('".mysql_real_escape_string($_POST['password'])."')");
+					unset($this->specialCache['user'][strtolower($name)]);  //invalidate cache if exists #368
 
 					// log in
 					$this->SetUser($this->LoadUser($name));
@@ -468,7 +469,7 @@ else // user is not logged in
 	// BEGIN *** Usersettings ***
 	elseif  (isset($_POST['action']) && ($_POST['action'] == 'updatepass'))
 	{
-        	$name = trim($_POST['yourname']);
+			$name = trim($_POST['yourname']);
 		if (strlen($name) == 0) // empty username	
 		{
 			$newerror = ERROR_EMPTY_USERNAME;
@@ -540,8 +541,8 @@ else // user is not logged in
 <?php
 	// END *** Login/Logout ***
 	$register = $this->GetConfigValue('allow_user_registration');
-    if ($register == '1' || $register == '2')
-    {
+	if ($register == '1' || $register == '2')
+	{
 ?>
 	<em><?php echo $this->Format(NEW_USER_REGISTER_LABEL); ?></em>
 	<br />
@@ -552,8 +553,8 @@ else // user is not logged in
 	<input id="email" type="text" <?php echo $email_highlight; ?> name="email" size="40" value="<?php echo $email; ?>" />
 	<br />
 <?php
-	    if ($register == '2')
-	    {
+		if ($register == '2')
+		{
 ?>
 	<label for="invitation_code"><?php echo INVITATION_CODE_LABEL ?></label>
 	<input id="invitation_code" type="text" <?php echo $invitation_code_highlight; ?> size="20" name="invitation_code" />
@@ -564,8 +565,8 @@ else // user is not logged in
 	<input type="submit" value="<?php echo REGISTER_BUTTON_LABEL ?>" size="40" />
 	<br />
 <?php
-    }
-    echo	'	</fieldset>'."\n";
+	}
+	echo	'	</fieldset>'."\n";
 	print($this->FormClose());
 	// END *** Register ***
 	print($this->FormOpen());
