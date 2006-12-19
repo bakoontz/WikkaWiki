@@ -121,7 +121,10 @@ var sr_dlg=
    return;
    var t = wE.area;
 
-   text = t.value.replace(/\r/g, "");
+   if (!isO8)
+   {
+    text = t.value.replace(/\r/g, "");
+   }
    //I don't know why but in IE, if the user clicks on replacement before clicking to Replace by, an error 
    //related to sel.htc occurs. This solves that strange behavior
    try

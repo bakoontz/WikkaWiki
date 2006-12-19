@@ -573,7 +573,15 @@ WikiEdit.prototype.getDefines = function ()
 WikiEdit.prototype.setAreaContent = function (str)
 {
   var t = this.area;
-  q = str.match(new RegExp("((.|\n)*)"+this.begin));//?:
+  if (isO8)
+  {
+   var str2 = str.replace(/\r\n/g, '¤¤');
+   q = str2.match(new RegExp("((.|\n)*)"+this.begin));
+  }
+  else
+  {
+   q = str.match(new RegExp("((.|\n)*)"+this.begin));//?:
+  }
   l = q[1].length;
 
   if (isO8) l = l + q[1].split('\n').length - 1;
