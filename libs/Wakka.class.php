@@ -1532,11 +1532,11 @@ class Wakka
 		$action = trim($action);
 		$vars=array();
 
-		// only search for parameters if there is a space
-		if (is_int(strpos($action, ' ')))
+		// search for parameters separated by spaces or newlines - #371
+		if (preg_match('/\s/', $action))
 		{
-			// treat everything after the first whitespace as parameter
-			preg_match('/^([A-Za-z0-9]*)\s+(.*)$/', $action, $matches);
+			// parse input for action name and parameters
+			preg_match('/^([A-Za-z0-9]*)\s+(.*)$/s', $action, $matches);
 			// extract $action and $vars_temp ("raw" attributes)
 			list(, $action, $vars_temp) = $matches;
 
