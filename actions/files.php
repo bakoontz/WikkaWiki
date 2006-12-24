@@ -212,7 +212,7 @@ if (isset($vars['download']))
 		$output .=  '<a href="'
 			. $this->Href('files.xml', $this->tag, 'action=download&amp;file='.rawurlencode($vars['download']))
 			. '" title="'.sprintf(DOWNLOAD_LINK_TITLE, $text).'">'
-			. $text
+			. urldecode($text)
 			. '</a>';
 	}
 	else
@@ -245,7 +245,7 @@ elseif ($this->page && $this->HasAccess('read') && $this->method == 'show' && $i
 				elseif (preg_match('/.+\.('.$allowed_extensions.')$/i', $_FILES['file']['name']))
 				{
 					$strippedname = str_replace('\'', '', $_FILES['file']['name']);
-					$strippedname = str_replace(" ","_",$strippedname); #46
+					$strippedname = rawurlencode($strippedname);
 					$strippedname = stripslashes($strippedname);
 					$destfile = $upload_path.DIRECTORY_SEPARATOR.$strippedname; #89
 
@@ -315,7 +315,7 @@ if (is_readable($upload_path))
 			}
 			$download_link = '<a href="'
 				.$this->Href('files.xml',$this->tag,'action=download&amp;file='.rawurlencode($file))
-				.'" title="'.sprintf(DOWNLOAD_LINK_TITLE, $file).'">'.$file.'</a>';
+				.'" title="'.sprintf(DOWNLOAD_LINK_TITLE, $file).'">'.urldecode($file).'</a>';
 			$size = bytesToHumanReadableUsage(filesize($upload_path.DIRECTORY_SEPARATOR.$file)); #89
 			$date = date(UPLOAD_DATE_FORMAT, filemtime($upload_path.DIRECTORY_SEPARATOR.$file)); #89
 			$output_files .= '<tr>'."\n";

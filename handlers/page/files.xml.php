@@ -24,13 +24,13 @@ if (! is_dir($upload_path)) mkdir_r($upload_path);
 // do the action
 switch ($_REQUEST['action']) {
     case 'download':
-            $_REQUEST['file'] = basename(urldecode($_REQUEST['file']));
+            $_REQUEST['file'] = basename($_REQUEST['file']);
             if ($this->HasAccess('read')) {
                 $path = "{$upload_path}/{$_REQUEST['file']}";
                 $filename = basename($path);
 		    Header("Content-Length: ".filesize($path));
 		    Header("Content-Type: application/x-download");
-		    Header("Content-Disposition: attachment; filename=".$filename);
+		    Header("Content-Disposition: attachment; filename=\"".urldecode($filename)."\"");
     		    Header("Connection: close");
     		    @readfile($path);
 		    exit();
