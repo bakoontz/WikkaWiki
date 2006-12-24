@@ -96,33 +96,31 @@ WikiEdit.prototype.init = function(id, name, nameClass, imgPath) {
  this.addButton("h2","Heading 2","'=====','=====',0,1");
  this.addButton("h3","Heading 3","'====','====',0,1");
  this.addButton("h4","Heading 4","'===','===',0,1");
- this.addButton(" ");
+ this.addButton("h5","Heading 5","'==','==',0,1");
  this.addButton("bold","Bold","'**','**'");
  this.addButton("italic","Italic","'//','//'");
  this.addButton("underline","Underline","'__','__'");
  this.addButton("strike","Strikethrough","'++','++'");
+ this.addButton("textred","Marked text","'\\'\\'','\\'\\'',2");
  this.addButton(" ");
  this.addButton("ul","List","'\\t- ','',0,1,1");
  this.addButton("ol","Numbered list","'\\t1) ','',0,1,1");
- this.addButton(" ");
  this.addButton("indent","Indent","'\\t','',0,1");
  this.addButton("outdent","Outdent","","document.getElementById('" + this.id + "')._owner.unindent");
  this.addButton(" ");
- this.addButton("find","Search &amp; replace","","document.getElementById('" + this.id + "')._owner.searchAndReplace");
- this.addButton(" ");
 // this.addButton("quote","quote","'\\n<[',']>\\n',2");
  this.addButton("hr","Line","'','\\n----\\n',2");
- this.addButton("textred","Marked text","'\\'\\'','\\'\\'',2");
  this.addButton("createlink","Hyperlink","","document.getElementById('" + this.id + "')._owner.createLink");
 // this.addButton("createtable","Insert Table","'','\\n#|\\n|| | ||\\n|| | ||\\n|#\\n',2");
  this.addButton(" ");
- this.addButton("help","Help & About","","document.getElementById('" + this.id + "')._owner.help");
+ this.addButton("find","Search &amp; replace","","document.getElementById('" + this.id + "')._owner.searchAndReplace");
+ this.addButton(" ");
+ this.addButton("help","Quick help & about","","document.getElementById('" + this.id + "')._owner.help");
  this.addButton("customhtml",'<td><div style="font:12px Arial;text-decoration:underline; padding:4px;" id="hilfe_' + this.id + '" onmouseover=\'this.className="btn-hover";\' '
             + 'onmouseout=\'this.className="btn-";\' class="btn-" '
             + 'onclick="this.className=\'btn-pressed\';window.open(long_base_url+\'FormattingRules\');" '
-            + ' title="Help on Wikka formatting">Help</a>'
+            + ' title="Wikka Formatting Guide">Docs</a>'
             + '</div></td>');
- 
 
  try {
   // If the browser does not support neither addBehavior nor selectionStart, give up!
@@ -575,7 +573,7 @@ WikiEdit.prototype.setAreaContent = function (str)
   var t = this.area;
   if (isO8)
   {
-   var str2 = str.replace(/\r\n/g, '¤¤');
+   var str2 = str.replace(/\r\n/g, '??');
    q = str2.match(new RegExp("((.|\n)*)"+this.begin));
   }
   else
@@ -706,7 +704,7 @@ WikiEdit.prototype.help = function ()
  s += " Ctrl+Shift+S - Strikethrough\n";
  s += " Ctrl+Shift+1 .. 5 - Heading 1..5\n";
  s += " Alt+I or Ctrl+T - Indent\n";
- s += " Alt+U or Ctrl+Shift+T - Unindent\n";
+ s += " Alt+U or Ctrl+Shift+T - Outdent\n";
  s += " Ctrl+J - MarkUp ('')\n";
  s += " Alt+L - Link\n";
  s += " Ctrl+L - Link with description\n";
