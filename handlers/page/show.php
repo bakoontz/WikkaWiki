@@ -42,7 +42,9 @@ if (!defined('ADD_COMMENT_LABEL')) define('ADD_COMMENT_LABEL', 'Add a comment to
 if (!defined('ADD_COMMENT')) define('ADD_COMMENT', 'Add comment');
 if (!defined('BUTTON_ADD_COMMENT')) define('BUTTON_ADD_COMMENT', 'Add Comment');
 if (!defined('DISPLAY_COMMENT')) define('DISPLAY_COMMENT', 'Display comment');
-if (!defined('DISPLAY_COMMENTS')) define('DISPLAY_COMMENTS', 'Display comments');
+if (!defined('DISPLAY_COMMENTS')) define('DISPLAY_COMMENTS', 'Display comments: ');
+if (!defined('DISPLAY_COMMENTS_EARLIEST')) define('DISPLAY_COMMENTS_EARLIEST', 'Earliest first');
+if (!defined('DISPLAY_COMMENTS_LATEST')) define('DISPLAY_COMMENTS_LATEST', 'Latest first');
 if (!defined('NO_COMMENTS')) define('NO_COMMENTS', 'There are no comments on this page.');
 if (!defined('ONE_COMMENT')) define('ONE_COMMENT', 'There is one comment on this page.');
 if (!defined('SOME_COMMENTS')) define('SOME_COMMENTS', 'There are %d comments on this page. ');
@@ -90,9 +92,6 @@ else
 		echo '</div>'."\n";
 		if ($this->GetConfigValue('hide_comments') != 1)
 		{
-			// load comments for this page
-			$comments = $this->LoadComments($this->tag);
-
 			// store comments display in session
 			$tag = $this->GetPageTag();
 			if (!isset($_SESSION['show_comments'][$tag]))
@@ -109,11 +108,18 @@ else
 				case "1":
 					$_SESSION['show_comments'][$tag] = 1;
 					break;
+				case "2":
+					$_SESSION['show_comments'][$tag] = 2;
+					break;
 				}
 			}
+
 			// display comments!
-			if ($_SESSION['show_comments'][$tag] == 1)
+			if ($_SESSION['show_comments'][$tag] != 0)
 			{
+				// load comments for this page
+				$comments = $this->LoadComments($this->tag, $_SESSION['show_comments'][$tag]);
+
 				// display comments header
 ?>
 				<div class="commentsheader">
@@ -162,28 +168,30 @@ else
 			else
 			{
 				echo '<div class="commentsheader">'."\n";
-				switch (count($comments))
+				$commentCount = $this->CountComments($this->tag);
+				switch ($commentCount)
 				{
 				case 0:
 					$comments_message = NO_COMMENTS.' ';
-					$showcomments_text = ADD_COMMENT;
+					$showcomments_text = '[<a href="'.$this->Href('', '', 'show_comments=1#comments').'">'.ADD_COMMENT.'</a>]';
 					$comment_form_link  = ($this->HasAccess('comment')) ? 1 : 0;
 					break;
 				case 1:
 					$comments_message = ONE_COMMENT.' ';
-					$showcomments_text = DISPLAY_COMMENT;
+					$showcomments_text = '[<a href="'.$this->Href('', '', 'show_comments=1#comments').'">'.DISPLAY_COMMENT.'</a>]';
 					$comment_form_link = 1;
 					break;
 				default:
-					$comments_message = sprintf(SOME_COMMENTS, count($comments));
+					$comments_message = sprintf(SOME_COMMENTS, $commentCount);
 					$showcomments_text = DISPLAY_COMMENTS;
+					$showcomments_text =DISPLAY_COMMENTS.'[<a href="'.$this->Href('', '', 'show_comments=1#comments').'">'.DISPLAY_COMMENTS_EARLIEST.'</a>] [<a href="'.$this->Href('', '', 'show_comments=2#comments').'">'.DISPLAY_COMMENTS_LATEST.'</a>]'; 
 					$comment_form_link = 1;
 				}
 
 				echo $comments_message;
 				if ($comment_form_link == 1)
 				{
-					echo '[<a href="'.$this->Href('', '', 'show_comments=1#comments').'">'.$showcomments_text.'</a>]';
+					echo $showcomments_text;
 				}
 				echo "\n".'</div>'."\n";//TODO: move to templating class
 			}

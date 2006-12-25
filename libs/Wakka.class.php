@@ -1711,11 +1711,33 @@ class Wakka
 	 *
 	 * @uses	Wakka::LoadAll()
 	 * @param	string $tag mandatory: name of the page
+	 * @param   integer $order optional: order of comments (1=date * asc, 2=date desc)
 	 * @return	array all the comments for this page
 	 */
-	function LoadComments($tag) { return $this->LoadAll("SELECT * FROM ".$this->config["table_prefix"]."comments WHERE page_tag = '".mysql_real_escape_string($tag)."' ORDER BY time"); }
+	function LoadComments($tag, $order=1) {
+		if($order==1) { // Return ASC by date
+			return $this->LoadAll("SELECT * FROM ".$this->config["table_prefix"]."comments WHERE page_tag = '".mysql_real_escape_string($tag)."' ORDER BY time"); 
+		}
+		if($order==2) { // Return DESC by date {
+			return $this->LoadAll("SELECT * FROM ".$this->config["table_prefix"]."comments WHERE page_tag = '".mysql_real_escape_string($tag)."' ORDER BY time DESC"); 
+		}
+	}
+
+	/**
+	 * Count the comments for a (given) page.
+	 *
+	 * @uses	Wakka::LoadAll()
+	 * @param	string $tag mandatory: name of the page
+	 * @return	integer Count of comments 
+	 */
+	function CountComments($tag) {
+			$data = $this->LoadSingle("SELECT count(*) FROM ".$this->config["table_prefix"]."comments WHERE page_tag = '".mysql_real_escape_string($tag)."'"); 
+			return $data['count(*)'];
+	}
+
 	/**
 	 * Load the last 50 comments on the wiki.
+	 *
 	 *
 	 * @uses	Wakka::LoadAll()
 	 * @param	integer $limit optional: number of last comments. default: 50
