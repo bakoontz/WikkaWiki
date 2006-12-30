@@ -907,7 +907,8 @@ class Wakka
 		return false;
 	}
 	function LoadOrphanedPages() { return $this->LoadAll("select distinct tag from ".$this->config["table_prefix"]."pages left join ".$this->config["table_prefix"]."links on ".$this->config["table_prefix"]."pages.tag = ".$this->config["table_prefix"]."links.to_tag where ".$this->config["table_prefix"]."links.to_tag is NULL order by tag"); }
-	function LoadPageTitles() { return $this->LoadAll("select distinct tag from ".$this->config["table_prefix"]."pages order by tag"); }
+	function LoadPageTitles() { return $this->LoadAll("select tag, owner from ".$this->config["table_prefix"]."pages where latest = 'Y' order by tag"); }
+	function LoadPagesByOwner($owner) { return $this->LoadAll('select tag from '.$this->config['table_prefix'].'pages where latest = \'Y\' and owner = \''.mysql_real_escape_string($owner).'\'');}
 	function LoadAllPages() { return $this->LoadAll("select * from ".$this->config["table_prefix"]."pages where latest = 'Y' order by tag"); }
 	// function FullTextSearch($phrase) { return $this->LoadAll("select * from ".$this->config["table_prefix"]."pages where latest = 'Y' and match(tag, body) against('".mysql_real_escape_string($phrase)."')"); }
 	function FullTextSearch($phrase)

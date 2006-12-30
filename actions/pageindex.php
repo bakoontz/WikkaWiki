@@ -12,7 +12,7 @@
  * @author    {@link http://wikkawiki.org/GiorgosKontopoulos GiorgosKontopoulos} (added ACL check, first code cleanup)
  * @author    {@link http://wikkawiki.org/DarTar DarTar} (adding doc header, minor code and layout refinements, i18n)
  * 
- * @uses		Wakka::LoadAllPages()
+ * @uses		Wakka::LoadPageTitles()
  * @uses		Wakka::GetUserName()
  * @uses		Wakka::HasAccess()
  * @uses		Wakka::Link()
@@ -31,7 +31,7 @@ define('PAGE_OWNER'," . . . . Owner: %s");
 define('OWNED_PAGES_CAPTION',"Items marked with a * indicate pages that you own.");
 define('ERROR_NO_PAGES_FOUND', "No pages found.");
 
-if ($pages = $this->LoadAllPages())
+if ($pages = $this->LoadPageTitles())
 {
 	// filter by letter
 	if (isset($_REQUEST['letter'])) $requested_letter = $_REQUEST['letter']; else $requested_letter = '';
