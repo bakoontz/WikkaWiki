@@ -47,11 +47,12 @@ switch ($_REQUEST['action']) {
 																				}
 		    //Header("Content-Length: ".filesize($path));
     		    //Header("Connection: close");
-										ob_end_clean();
-										ob_end_clean();
+										@ob_end_clean();
+										@ob_end_clean();
 										$fp = fopen($path, 'rb');
-										while ($data = fread($fp, 4096))
+										while (!feof($fp))
 										{
+																		$data = fread($fp, 4096);
 																		echo $data;
 										}
 										fclose($fp);
