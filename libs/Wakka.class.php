@@ -1343,7 +1343,7 @@ class Wakka
 		{
 			$url = $this->GetInterWikiUrl($matches[1], $matches[2]);
 		}
-		elseif (preg_match("/^(http|https|ftp):\/\/([^\\s\"<>]+)$/", $tag))
+		elseif (preg_match("/^(http|https|ftp|news|irc|gopher):\/\/([^\\s\"<>]+)$/", $tag))
 		{
 			$url = $tag; // this is a valid external URL
 		}
