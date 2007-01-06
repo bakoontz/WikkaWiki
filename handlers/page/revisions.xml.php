@@ -8,6 +8,8 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
  * 
+ * @uses		Config::$wakka_name
+ * @uses		Config::$base_url
  * @uses		Wakka::GetConfigValue()
  * @uses		Wakka::HasAccess()
  * @uses		Wakka::LoadRevisions()
