@@ -11,9 +11,9 @@
  * @uses		Wakka::HasAccess()
  */
 
-if ($this->HasAccess("read") && $this->page)
+if ($this->HasAccess('read') && $this->page)
 {
 	// display raw page
-	print($this->page["body"]);
+	print($this->page['body']);
 }
 ?>

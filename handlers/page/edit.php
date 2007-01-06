@@ -12,20 +12,36 @@
  * @author		{@link http://wikkawiki.org/Dartar Dario Taraborelli} (preliminary code cleanup, i18n)
  * @author		{@link http://wikkawiki.org/DotMG Mahefa Randimbisoa} (bugfixes)
  *
+ * @uses Config::$edit_buttons_position
+ * @uses Config::$require_edit_note
+ * @uses Config::$gui_editor
+ * @uses Wakka::ClearLinkTable()
+ * @uses Wakka::Footer()
+ * @uses Wakka::Format()
+ * @uses Wakka::FormClose()
+ * @uses Wakka::FormOpen()
+ * @uses Wakka::GetUser()
+ * @uses Wakka::GetUserName()
+ * @uses Wakka::HasAccess()
+ * @uses Wakka::Header()
+ * @uses Wakka::Href()
+ * @uses Wakka::htmlspecialchars_ent()
+ * @uses Wakka::Redirect()
+ * @uses Wakka::SavePage()
+ * @uses Wakka::StartLinkTracking()
+ * @uses Wakka::StopLinkTracking()
+ * @uses Wakka::WriteLinkTable()
+ *
  * @todo		move main <div> to templating class;
  * @todo		optimization using history.back();
  * @todo		use central regex library for validation;
  * @todo		document edit_button_position
  */
-/**
- * Defaults
- */
+// Defaults
 if(!defined('VALID_PAGENAME_PATTERN')) define ('VALID_PAGENAME_PATTERN', '/^[A-Za-zÄÖÜßäöü]+[A-Za-z0-9ÄÖÜßäöü]*$/s');
 if(!defined('MAX_TAG_LENGTH')) define ('MAX_TAG_LENGTH', 75);
 if(!defined('MAX_EDIT_NOTE_LENGTH')) define ('MAX_EDIT_NOTE_LENGTH', 50);
-/**
- * i18n
- */
+// i18n
 if(!defined('PREVIEW_HEADER')) define('PREVIEW_HEADER', 'Preview');
 if(!defined('LABEL_EDIT_NOTE')) define('LABEL_EDIT_NOTE', 'Please add a note on your edit');
 if (!defined('INPUT_ERROR_STYLE')) define('INPUT_ERROR_STYLE', 'class="highlight"');
@@ -46,6 +62,7 @@ if(!defined('ACCESSKEY_PREVIEW')) define('ACCESSKEY_PREVIEW', 'p');
 if(!defined('SHOWCODE_LINK')) define('SHOWCODE_LINK', 'View formatting code for this page');
 if(!defined('SHOWCODE_LINK_TITLE')) define('SHOWCODE_LINK_TITLE', 'Click to view page formatting code');
 if(!defined('DEFAULT_BUTTONS_POSITION')) define('DEFAULT_BUTTONS_POSITION', 'bottom');
+if(!defined('LEGEND_STORE_PAGE')) define('LEGEND_STORE_PAGE', 'Store page');
 
 //initialization
 $error = '';
@@ -62,7 +79,7 @@ else
 	$buttons_position = DEFAULT_BUTTONS_POSITION;	
 }
 
-if (isset($_POST['submit']) && ($_POST['submit'] == 'Preview') && ($user = $this->GetUser()) && ($user['doubleclickedit'] != 'N'))
+if (isset($_POST['submit']) && ($_POST['submit'] == INPUT_SUBMIT_PREVIEW) && ($user = $this->GetUser()) && ($user['doubleclickedit'] != 'N'))
 {
 	$ondblclick = ' ondblclick=\'document.getElementById("reedit_id").click();\'';
 	//history.back() not working on IE. (changes are lost)
@@ -148,7 +165,8 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 	$body = preg_replace("/\n[ ]{4}/", "\n\t", $body);	// @@@ FIXME: misses first line and multiple sets of four spaces - JW 2005-01-16
 
 
-	if ($result = mysql_query("describe ".$this->config['table_prefix']."pages tag")) {
+	if ($result = mysql_query("describe ".$this->config['table_prefix']."pages tag")) 
+	{
 		$field = mysql_fetch_assoc($result);
 		if (preg_match("/varchar\((\d+)\)/", $field['Type'], $matches)) $maxtaglen = $matches[1];
 	}
@@ -162,7 +180,7 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 	{
 		// We need to escape ALL entity refs before display so we display them _as_ entities instead of interpreting them
 		// so we use htmlspecialchars on the edit note (as on the body)
-		$preview_buttons = '<fieldset><legend>Store page</legend>'.$edit_note_field.'<input name="submit" type="submit" value="'.INPUT_SUBMIT_STORE.'" accesskey="'.ACCESSKEY_STORE.'" />'."\n".
+		$preview_buttons = '<fieldset><legend>'.LEGEND_STORE_PAGE.'</legend>'.$edit_note_field.'<input name="submit" type="submit" value="'.INPUT_SUBMIT_STORE.'" accesskey="'.ACCESSKEY_STORE.'" />'."\n".
 			'<input name="submit" type="submit" value="'.INPUT_SUBMIT_REEDIT.'" accesskey="'.ACCESSKEY_REEDIT.'" id="reedit_id" />'."\n".
 			'<input type="button" value="'.INPUT_BUTTON_CANCEL.'" onclick="document.location=\''.$this->href('').'\';" /></fieldset>'."\n";
 		
@@ -198,7 +216,7 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 		$output .= $this->FormClose();
 	}
 	// EDIT Screen
-	else	
+	else
 	{
 		// display form
 		if ($error)
@@ -211,7 +229,7 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 		{
 			$body = trim($body)."\n\n----\n\n--".$this->GetUserName().' ('.strftime("%c").')';
 		}
-		$edit_buttons =	'<fieldset><legend>Store page</legend>'.$edit_note_field.'<input name="submit" type="submit" value="'.INPUT_SUBMIT_STORE.'" accesskey="'.ACCESSKEY_STORE.'" /> <input name="submit" type="submit" value="'.INPUT_SUBMIT_PREVIEW.'" accesskey="'.ACCESSKEY_PREVIEW.'" /> <input type="button" value="'.INPUT_BUTTON_CANCEL.'" onclick="document.location=\''.$this->Href('').'\';" />'."</fieldset>\n";
+		$edit_buttons = '<fieldset><legend>'.LEGEND_STORE_PAGE.'</legend>'.$edit_note_field.'<input name="submit" type="submit" value="'.INPUT_SUBMIT_STORE.'" accesskey="'.ACCESSKEY_STORE.'" /> <input name="submit" type="submit" value="'.INPUT_SUBMIT_PREVIEW.'" accesskey="'.ACCESSKEY_PREVIEW.'" /> <input type="button" value="'.INPUT_BUTTON_CANCEL.'" onclick="document.location=\''.$this->Href('').'\';" />'."</fieldset>\n";
 		$output .= $this->FormOpen('edit');
 		if ($buttons_position == 'top')
 		{
@@ -242,7 +260,7 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 }
 else
 {
-	$message =	'<em>'.ERROR_NO_WRITE_ACCESS.'</em><br />'."\n".
+	$message = '<em>'.ERROR_NO_WRITE_ACCESS.'</em><br />'."\n".
 			"<br />\n".
 			'<a href="'.$this->Href('showcode').'" title="'.SHOWCODE_LINK_TITLE.'">'.SHOWCODE_LINK.'</a>'.
 			"<br />\n";
