@@ -15,6 +15,11 @@
  * @uses		Wakka::LoadRecentlyChanged()
  */
 
+// i18n
+define('LABEL_FIRST_NODE', 'Recent Changes');
+define('ERROR_ACL_READ_INFO', 'You\'re not allowed to access this information.');
+define('LABEL_ERROR', 'Error');
+
 header("Content-type: text/xml");
 
 /**
@@ -23,18 +28,21 @@ header("Content-type: text/xml");
  * @name	in_iarray()
  * @return	TRUE or FALSE
  */
-function in_iarray ($item, $array) {
-   $item = &strtoupper($item);
-   foreach($array as $element) {
-       if ($item == strtoupper($element)) {
-           return true;
-       }
-   }
-   return false;
+function in_iarray ($item, $array) 
+{
+	$item = &strtoupper($item);
+	foreach($array as $element) 
+	{
+		if ($item == strtoupper($element)) 
+		{
+			return true;
+		}
+	}
+	return false;
 }
 
 $xml = "<map version=\"0.7.1\">\n";
-$xml .= "<node TEXT=\"Recent Changes\">\n";
+$xml .= '<node TEXT="'.LABEL_FIRST_NODE."\">\n";
 $xml .= "<node TEXT=\"Date\" POSITION=\"right\">\n";
 
 if ($pages = $this->LoadRecentlyChanged())
@@ -65,14 +73,16 @@ if ($pages = $this->LoadRecentlyChanged())
 				$curday = $day;
 			}
 
-
-            	$xml .= "<node TEXT=\"".$page["tag"]."\">\n";
+			$xml .= "<node TEXT=\"".$page["tag"]."\">\n";
 			// $xml .= "<arrowlink ENDARROW=\"Default\" DESTINATION=\"Freemind_Link_".$page["user"]."\" STARTARROW=\"None\"/>\n";
-            	$xml .= "</node>\n";
-			if (is_array($users[$page["user"]])) {
+			$xml .= "</node>\n";
+			if (isset($users[$page['user']]) && (is_array($users[$page['user']]))) 
+			{
 				$u_count = count($users[$page["user"]]);
 				$users[$page["user"]][$u_count] = $page["tag"];
-			} else {
+			}
+			else
+			{
 				$users[$page["user"]][0] = $page["user"];
 				$users[$page["user"]][1] = $page["tag"];
 			}
@@ -88,29 +98,33 @@ if ($pages = $this->LoadRecentlyChanged())
 
 	$xml .= "</node></node><node TEXT=\"Author\" POSITION=\"left\">\n";
 	// $pages = $this->LoadAll("select DISTINCT user from ".$this->config["table_prefix"]."pages where latest = 'Y' order by time desc");
-    	foreach ($users as $user)
-    	{
-			$start_loop = true;
-			foreach ($user as $user_page) {
-				if (!$start_loop) {
-					$xml .= "<node TEXT=\"".$user_page."\"/>\n";
-				} else {
-					$xml .= "<node TEXT=\"$user_page\">\n";
-					$start_loop = false;
-				}
-			}				
-			$xml .= "</node>\n";
+	foreach ($users as $user)
+	{
+		$start_loop = true;
+		foreach ($user as $user_page)
+		{
+			if (!$start_loop)
+			{
+				$xml .= "<node TEXT=\"".$user_page."\"/>\n";
+			}
+			else
+			{
+				$xml .= "<node TEXT=\"$user_page\">\n";
+				$start_loop = false;
+			}
+		}
+		$xml .= "</node>\n";
 		// $xml .= "<node ID=\"Freemind_Link_".$user["user"]."\" TEXT=\"".$page["user"]."\"/>\n";
 	}
 
 }
 else
 {
-    $xml .= "<item>\n";
-    $xml .= "<title>Error</title>\n";
-    $xml .= "<link>".$this->Href("show")."</link>\n";
-    $xml .= "<description>You're not allowed to access this information.</description>\n";
-    $xml .= "</item>\n";
+	$xml .= "<item>\n";
+	$xml .= '<title>'.LABEL_ERROR."</title>\n";
+	$xml .= "<link>".$this->Href("show")."</link>\n";
+	$xml .= '<description>'.ERROR_ACL_READ_INFO."</description>\n";
+	$xml .= "</item>\n";
 }
 
 $xml .= "</node></node>\n";

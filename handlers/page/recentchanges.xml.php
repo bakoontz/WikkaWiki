@@ -8,17 +8,19 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
  * 
+ * @uses Config::$base_url
+ * @uses Config::$wakka_name
+ * @uses Config::$xml_recent_changes
  * @uses		Wakka::GetConfigValue()
  * @uses		Wakka::Href()
  * @uses		Wakka::htmlspecialchars_ent()
  * @uses		Wakka::LoadRecentlyChanged()
  */
-/**
- * i18n
- */
+// i18n
 define('WHEN_BY_WHO', '%1$s by %2$s');
 define('ERROR_ACL_READ_INFO', 'You\'re not allowed to access this information.');
 define('LABEL_ERROR', 'Error');
+define('LABEL_RECENTCHANGES', 'Recent changes of %s');
 if (!defined('I18N_LANG')) define('I18N_LANG', 'en-us');
 
 header("Content-type: text/xml");
@@ -29,7 +31,7 @@ $xml .= "<rss version=\"0.92\">\n";
 $xml .= "<channel>\n";
 $xml .= "<title>".$this->GetConfigValue("wakka_name")." - ".$this->tag."</title>\n";
 $xml .= "<link>".$this->GetConfigValue("base_url")."</link>\n";
-$xml .= "<description>Recent changes of ".$this->GetConfigValue("wakka_name")."</description>\n"; # i18n
+$xml .= sprintf('<description>'.LABEL_RECENTCHANGES."</description>\n", $this->GetConfigValue("wakka_name"));
 $xml .= '<language>'.I18N_LANG."</language>\n";
 
 if ($pages = $this->LoadRecentlyChanged())
