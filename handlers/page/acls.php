@@ -7,6 +7,9 @@
  * @version		$Id$
  * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
+ * @uses Config::$default_comment_acl
+ * @uses Config::$default_read_acl
+ * @uses Config::$default_write_acl
  *
  * @author		{@link http://wikkawiki.org/MinusF MinusF} (preliminary code cleanup, css selectors)
  * @author		{@link http://wikkawiki.org/DarTar Dario Taraborelli} (further cleanup)
@@ -31,6 +34,8 @@ if (!defined('SET_OWNER_CURRENT_LABEL')) define('SET_OWNER_CURRENT_LABEL', '(Cur
 if (!defined('SET_OWNER_PUBLIC_LABEL')) define('SET_OWNER_PUBLIC_LABEL','(Public)');
 if (!defined('SET_NO_OWNER_LABEL')) define('SET_NO_OWNER_LABEL', '(Nobody - Set free)');
 if (!defined('ACL_SYNTAX_HELP')) define('ACL_SYNTAX_HELP', '===Syntax:=== ---##*## = Everyone ---##+## = Registered users ---##""JohnDoe""## = the user called ""JohnDoe"", enter as many users as you want, one per line --- --- Any of these items can be negated with a ##!##: ---##!*## = No one (except admins) ---##!+## = Anonymous users only ---##""!JohnDoe""## = ""JohnDoe"" will be denied access --- --- //ACLs are tested in the order they are specified:// --- So be sure to specify ##*## on a separate line //after// negating any users, not before.');
+if (!defined('BUTTON_STORE_ACLS')) define('BUTTON_STORE_ACLS', 'Store ACLs');
+if (!defined('BUTTON_CANCEL')) define('BUTTON_CANCEL', 'Cancel');
 
 echo '<div class="page">'."\n"; //TODO: move to templating class
 
@@ -38,12 +43,12 @@ if ($this->UserIsOwner())
 {
 	if ($_POST)
 	{
-		$default_read_acl	= $this->GetConfigValue('default_read_acl');
-		$default_write_acl	= $this->GetConfigValue('default_write_acl');
-		$default_comment_acl	= $this->GetConfigValue('default_comment_acl');
-		$posted_read_acl	= $_POST['read_acl'];
-		$posted_write_acl	= $_POST['write_acl'];
-		$posted_comment_acl	= $_POST['comment_acl'];
+		$default_read_acl = $this->GetConfigValue('default_read_acl');
+		$default_write_acl = $this->GetConfigValue('default_write_acl');
+		$default_comment_acl = $this->GetConfigValue('default_comment_acl');
+		$posted_read_acl = $_POST['read_acl'];
+		$posted_write_acl = $_POST['write_acl'];
+		$posted_comment_acl = $_POST['comment_acl'];
 		$message = '';
 
 		// store lists only if ACLs have previously been defined,
@@ -54,8 +59,8 @@ if ($this->UserIsOwner())
 		    "' LIMIT 1");
 
 		if ($page ||
-		    ($posted_read_acl	 != $default_read_acl	||
-		     $posted_write_acl	 != $default_write_acl	||
+		    ($posted_read_acl != $default_read_acl||
+		     $posted_write_acl != $default_write_acl||
 		     $posted_comment_acl != $default_comment_acl))
 		{
 			$this->SaveACL($this->GetPageTag(), 'read', $this->TrimACLs($posted_read_acl));
@@ -82,7 +87,7 @@ if ($this->UserIsOwner())
 		// redirect back to page
 		$this->Redirect($this->Href(), $message);
 	}
-	else	// show form
+	else // show form
 	{
 ?>
 <?php echo $this->FormOpen('acls') ?>
@@ -108,8 +113,8 @@ if ($this->UserIsOwner())
 <tr>
 	<td colspan="2">
 	<br />
-	<input type="submit" value="Store ACLs" />
-	<input type="button" value="Cancel" onclick="history.back();" />
+	<input type="submit" value="<?php echo BUTTON_STORE_ACLS; ?>" />
+	<input type="button" value="<?php echo BUTTON_CANCEL; ?>" onclick="history.back();" />
 	</td>
 
 	<td>
