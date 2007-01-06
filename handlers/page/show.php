@@ -27,14 +27,13 @@
  * @uses		Wakka::LoadPage()
  * @uses		Wakka::LoadUser()
  * @uses		Wakka::UserIsOwner()
+ * @uses		Config::$anony_delete_own_comments
+ * @uses		Config::$hide_comments
  * 
  * @todo		move <div> to template;
- * @todo		i18n;
  */
 
-/**
- * i18n 
- */
+// i18n strings
 if (!defined('ERROR_NO_ACCESS')) define('ERROR_NO_ACCESS', "You aren't allowed to read this page.");
 if (!defined('COMMENTS_HEADER')) define('COMMENTS_HEADER', 'Comments');
 if (!defined('HIDE_COMMENTS')) define('HIDE_COMMENTS', 'Hide comments/form');
@@ -48,7 +47,11 @@ if (!defined('DISPLAY_COMMENTS_LATEST')) define('DISPLAY_COMMENTS_LATEST', 'Late
 if (!defined('NO_COMMENTS')) define('NO_COMMENTS', 'There are no comments on this page.');
 if (!defined('ONE_COMMENT')) define('ONE_COMMENT', 'There is one comment on this page.');
 if (!defined('SOME_COMMENTS')) define('SOME_COMMENTS', 'There are %d comments on this page. ');
- 
+if (!defined('BUTTON_RE_EDIT')) define('BUTTON_RE_EDIT', 'Re-edit this old revision');
+if (!defined('BUTTON_DELETE_COMMENT')) define('BUTTON_DELETE_COMMENT', 'Delete Comment');
+if (!defined('LABEL_ASK_CREATE_PAGE')) define('LABEL_ASK_CREATE_PAGE', 'This page doesn\'t exist yet. Maybe you want to <a href="%s">create</a> it?');
+if (!defined('LABEL_OLD_REVISION')) define('LABEL_OLD_REVISION', 'This is an old revision of <a href="%1$s">%2$s</a> from %3$s.');
+
 echo '<div class="page"';
 echo (($user = $this->GetUser()) && ($user['doubleclickedit'] == 'N') || !$this->HasAccess('write')) ? '' : 'ondblclick="document.location=\''.$this->Href('edit').'\';" '; #268
 echo '>'."\n";//TODO: move to templating class
@@ -61,13 +64,13 @@ else
 {
 	if (!$this->page)
 	{
-		echo '<p>This page doesn\'t exist yet. Maybe you want to <a href="'.$this->Href('edit').'">create</a> it?</p></div>'; #i18n
+		printf ('<p>'.LABEL_ASK_CREATE_PAGE.'</p></div>', $this->Href('edit'));
 	}
 	else
 	{
 		if ($this->page['latest'] == 'N')
 		{
-			echo '<div class="revisioninfo">This is an old revision of <a href="'.$this->Href().'">'.$this->GetPageTag().'</a> from '.$this->page['time'].'.</div>'; #i18n
+			printf ('<div class="revisioninfo">'.LABEL_OLD_REVISION.'</div>', $this->Href(), $this->GetPageTag(), $this->page['time']);
 		}
 
 		// display page
@@ -80,11 +83,11 @@ else
 			if ($latest = $this->LoadPage($this->tag))
 			{
 ?>
-		        <br />
+        <br />
  				<?php echo $this->FormOpen('edit') ?>
  				<input type="hidden" name="previous" value="<?php echo $latest['id'] ?>" />
  				<input type="hidden" name="body" value="<?php echo $this->htmlspecialchars_ent($this->page['body']) ?>" />
- 				<input type="submit" value="Re-edit this old revision" />
+ 				<input type="submit" value="<?php echo BUTTON_RE_EDIT ?>" />
  				<?php echo $this->FormClose(); ?>
 <?php
 			}
@@ -99,7 +102,7 @@ else
 				$_SESSION['show_comments'][$tag] = ($this->UserWantsComments()) ? '1' : '0';
 			}
 			if (isset($_REQUEST['show_comments']))
-			{	
+			{
 				switch($_REQUEST['show_comments'])
 				{
 				case "0":
@@ -131,19 +134,19 @@ else
 				{
 					$current_user = $this->GetUserName(); 
 					$is_owner = $this->UserIsOwner();
-		 			foreach ($comments as $comment)
+					foreach ($comments as $comment)
 					{
 						echo '<div class="comment">'."\n".
 							'<span id="comment_'.$comment['id'].'"></span>'.$comment['comment']."\n".
 							"\t".'<div class="commentinfo">'."\n-- ";
 						echo ($this->LoadUser($comment['user']))? $this->Format($comment['user']) : $comment['user']; // #84
 						echo ' ('.$comment['time'].')'."\n";
-   						if ($is_owner || $user['name'] == $comment['user'] || ($this->config['anony_delete_own_comments'] && $current_user == $comment['user']))
+						if ($is_owner || $user['name'] == $comment['user'] || ($this->config['anony_delete_own_comments'] && $current_user == $comment['user']))
 						{
 							echo $this->FormOpen("delcomment");
 ?>
    <input type="hidden" name="comment_id" value="<?php echo $comment['id'] ?>" />
-   <input type="submit" value="Delete Comment" />
+   <input type="submit" value="<?php echo BUTTON_DELETE_COMMENT ?>" />
 <?php 
 							echo $this->FormClose();
 						}
@@ -155,11 +158,11 @@ else
 				echo '<div class="commentform">'."\n";
 				if ($this->HasAccess('comment'))
 				{?>
-		    			<?php echo $this->FormOpen('addcomment'); ?>
+					<?php echo $this->FormOpen('addcomment'); ?>
 					<label for="commentbox"><?php echo ADD_COMMENT_LABEL; ?><br />
 					<textarea id="commentbox" name="body" rows="6" cols="78"></textarea><br />
 					<input type="submit" value="<?php echo BUTTON_ADD_COMMENT; ?>" accesskey="s" />
-            			</label>
+					</label>
 					<?php echo $this->FormClose(); ?>
 				<?php
 				}
