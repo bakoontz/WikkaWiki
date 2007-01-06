@@ -14,6 +14,7 @@
  * @since	Wikka 1.1.6.2
  * 
  * @uses	Wakka::GetConfigValue()
+ * @uses	Config::$grabcode_button
  * @todo add configurable filename max. length;
  * @todo use central regex library for filename validation;
  * @todo check time format for consistency;
@@ -33,7 +34,8 @@ $code = '';
 $filename = '';
 
 // check if grabcode is allowed
-if ($this->GetConfigValue('grabcode_button') == 1) {
+if ($this->GetConfigValue('grabcode_button') == 1) 
+{
 
 	//get URL parameters
 	$code = urldecode($_POST['code']);
@@ -50,7 +52,8 @@ if ($this->GetConfigValue('grabcode_button') == 1) {
 
 	//print code block
 	echo $code;
-} else
+}
+else
 {
 	echo ERROR_NO_CODE;
 }
