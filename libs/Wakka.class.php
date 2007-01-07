@@ -1858,7 +1858,7 @@ class Wakka
 		}
 	}
 	/**
-	 * Load the Access Controll list for a given page and a given privilege.
+	 * Load the Access Control list for a given page and a given privilege.
 	 *
 	 * @uses	Wakka::GetConfigValue()
 	 * @uses	Wakka::LoadSingle()
@@ -1876,7 +1876,7 @@ class Wakka
 		return $acl;
 	}
 	/**
-	 * Load all Access Controll lists for a given page.
+	 * Load all Access Control lists for a given page.
 	 *
 	 * @uses	Wakka::GetConfigValue()
 	 * @uses	Wakka::LoadSingle()
@@ -1893,7 +1893,9 @@ class Wakka
 		return $acl;
 	}
 	/**
-	 * Save an Access Controll List for a given privilege on a given page to the database.
+	 * Save an Access Control List for a given privilege on a given page to the database. 
+	 * If the ACL record doesn't already exist, create it with the
+	 * config defaults.
 	 *
 	 * @uses	Wakka::LoadACL()
 	 * @uses	Wakka::Query()
@@ -1904,9 +1906,63 @@ class Wakka
 	 * @param	string $list mandatory: a string containing the AC-Syntax   
 	 */
 	function SaveACL($tag, $privilege, $list) {
-		if ($this->LoadACL($tag, $privilege, 0)) $this->Query("UPDATE ".$this->config["table_prefix"]."acls SET ".mysql_real_escape_string($privilege)."_acl = '".mysql_real_escape_string(trim(str_replace("\r", "", $list)))."' WHERE page_tag = '".mysql_real_escape_string($tag)."' LIMIT 1");
-		else $this->Query("INSERT INTO ".$this->config["table_prefix"]."acls SET page_tag = '".mysql_real_escape_string($tag)."', ".mysql_real_escape_string($privilege)."_acl = '".mysql_real_escape_string(trim(str_replace("\r", "", $list)))."'");
+		$insert = 0;
+		if(!$acls = $this->LoadAllACLs($tag, 0)) { # Load defaults
+			$insert = 1;
+			$acls['read_acl'] = $this->GetConfigValue('default_read_acl');
+			$acls['write_acl'] = $this->GetConfigValue('default_write_acl');
+			$acls['comment_acl'] = $this->GetConfigValue('default_comment_acl');
+		}
+		$priv = mysql_real_escape_string($privilege)."_acl";
+		$acls[$priv] = 
+			mysql_real_escape_string(trim(str_replace("\r", "", $list))); 
+		if(!$insert) {
+			$this->Query("UPDATE ".$this->config["table_prefix"]."acls SET ".$priv." = '".$acls[$priv]."' WHERE page_tag = '".mysql_real_escape_string($tag)."' LIMIT 1");
+		} else {
+			$acl_list = "";
+			foreach($acls as $acl => $value) {
+				$acl_list .= $acl." = '".$value."', ";
+			}
+			# Remove the trailing comma
+			$acl_list = trim($acl_list, ", ");
+			$this->Query("INSERT INTO ".$this->config["table_prefix"]."acls SET page_tag = '".mysql_real_escape_string($tag)."', ".$acl_list);
+		}
 	}
+
+	/**
+	 * Clone an Access Control List from one page to another. If ACL
+	 * list isn't defined for the source page, use defaults from
+	 * config for the destination page. 
+	 *
+	 * @uses	Wakka::LoadAllACLs()
+	 * @uses	Wakka::Query()
+	 *
+	 * @param	string $from_tag mandatory: Source page for ACLs 
+	 * @param	string $to_tag mandatory: Target page for ACLs 
+	 */
+	function CloneACLs($from_tag, $to_tag) {
+		$acls = $this->LoadAllACLs($from_tag, 1); # Load defaults
+		$acl_list = "";
+		foreach($acls as $acl => $value) {
+			if($acl === 'page_tag') continue;
+			$acl_list .= $acl." = '".$value."', ";
+		}
+		# Remove the trailing comma
+		$acl_list = trim($acl_list, ", ");
+
+		if($this->LoadAllACLs($to_tag, 0)) {
+			$this->Query("UPDATE ".$this->config["table_prefix"]."acls SET ".$acl_list." WHERE page_tag = '".mysql_real_escape_string($to_tag)."' LIMIT 1");
+		} else {
+			$this->Query("INSERT INTO ".$this->config["table_prefix"]."acls SET page_tag = '".mysql_real_escape_string($to_tag)."', ".$acl_list);
+		}
+	}
+
+	/**
+	 * Split ACL list on whitespace or commas, then trim any remaining
+	 * whitespace.  Return a whitespace-delimited list.  Used mainly
+	 * to remove carriage returns.
+	 * @param string $list mandatory: List of ACLs to trim
+	 **/
 	function TrimACLs($list) {
 		foreach (preg_split("/[\s,]+/", $list) as $line)
 		{
@@ -1915,6 +1971,7 @@ class Wakka
 		}
 		return $trimmed_list;
 	}
+
 	/**
 	 * Check if a given/ the current user has access to a given privilege on a/ the current page.
 	 *

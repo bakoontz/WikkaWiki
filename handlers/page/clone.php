@@ -142,10 +142,7 @@ if (!$this->ExistsPage($from))
 						// Clone ACLs if requested
 						if ($cloneaclsoption == 'checked="checked"')
 						{
-							$acl = $this->LoadAllACLs($from, 0);
-							$this->SaveACL($to, 'read', $this->TrimACLs($acl['read_acl']));
-							$this->SaveACL($to, 'write', $this->TrimACLs($acl['write_acl']));
-							$this->SaveACL($to, 'comment', $this->TrimACLs($acl['comment_acl']));
+							$this->CloneACLs($from, $to);
 						}
 						// Open editor if requested
 						if ($editoption == 'checked="checked"')
