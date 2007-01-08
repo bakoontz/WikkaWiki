@@ -827,7 +827,7 @@ class Wakka
 			$start = '';
 		}
 		$revisions = $this->LoadAll("select note, id, time, user from ".$this->config["table_prefix"]."pages where tag = '".mysql_real_escape_string($page)."' order by time desc LIMIT $start$max");
-		if (is_array($revisions) && (count($revisions) < $max))
+		if (is_array($revisions) && (count($revisions) < $max) && (count($revisions))) #38
 		{
 			if (!$this->GetConfigValue('pagename_case_sensitive')) $page_lowercase = strtolower($page);
 			$this->specialCache['oldest_revision'][$page_lowercase] = $revisions[count($revisions) - 1];
@@ -1495,6 +1495,7 @@ class Wakka
 	{
 		// fill values
 		if (!$tag = trim($tag)) $tag = $this->GetPageTag();
+		if (!isset($_SERVER['HTTP_REFERER'])) return; #38
 		if (!$referrer = trim($referrer) && isset($_SERVER["HTTP_REFERER"])) $referrer = $_SERVER["HTTP_REFERER"];
 		$referrer = $this->cleanUrl($referrer);			# secured JW 2005-01-20
 
@@ -1562,7 +1563,7 @@ class Wakka
 			/**
 			 * @var boolean holds previous state of LinkTracking before we StopLinkTracking(). It will then be used to test if we should StartLinkTracking() or not. 
 			 */
-			$link_tracking_state = $_SESSION['linktracking'];
+			$link_tracking_state = isset($_SESSION['linktracking']) ? $_SESSION['linktracking'] : 0; #38
 			$this->StopLinkTracking();
 		}
 		$result = $this->IncludeBuffered(strtolower($action).'.php', '<em class="error">Unknown action "'.$action.'"</em>', $vars, $this->config['action_path']); #i18n

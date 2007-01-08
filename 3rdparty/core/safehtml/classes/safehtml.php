@@ -186,6 +186,7 @@ class safehtml {
 	if (in_array($name, $this->DeleteContent))
 	{
 	 array_push($this->dcStack, $name);
+		if (!isset($this->dcCounter[$name])) $this->dcCounter[$name] = 0; #38
 	 $this->dcCounter[$name]++;
 	}
 	if (count($this->dcStack)!=0) return true;
@@ -208,6 +209,7 @@ class safehtml {
 	  return true;
 	}
 
+	if (!isset($this->Counter['table'])) $this->Counter['table'] = 0; #38
 	// TABLES: cannot open table elements when we are not inside table
 	if ($this->Counter["table"]<=0 && in_array($name, $this->tableTags)) return true;
 
@@ -232,6 +234,7 @@ class safehtml {
 	$this->writeAttrs($attrs, $name);										# pass tag $name to writeAttrs to provide context - JavaWoman
 	$this->xhtml.=">";
 	array_push($this->Stack,$name);
+	if (!isset($this->Counter[$name])) $this->Counter[$name] = 0; #38
 	$this->Counter[$name]++;
   }
 
@@ -240,10 +243,13 @@ class safehtml {
 
 	$name = strtolower($name);
 
+	if (!isset($this->dcCounter[$name])) $this->dcCounter[$name] = 0; #38
+	if (!isset($this->Counter[$name])) $this->Counter[$name] = 0; #38
 	if ($this->dcCounter[$name]>0 && in_array($name, $this->DeleteContent))
 	{
 	 while ($name!=($tag=array_pop($this->dcStack)))
 	 {
+			if (!isset($this->dcCounter[$tag])) $this->dcCounter[$tag] = 0; #38
 	  $this->dcCounter[$tag]--;
 	 }
 	$this->dcCounter[$name]--;
@@ -265,6 +271,7 @@ class safehtml {
 	if (!in_array($tag, $this->noClose))
 	  $this->xhtml.="</".$tag.">";
 
+	if (!isset($this->Counter[$tag])) $this->Counter[$tag] = 0; #38
 	$this->Counter[$tag]--;
 	if (in_array($tag, $this->listTags)) $this->listScope--;
 	if ($tag=="li") array_pop($this->liStack);

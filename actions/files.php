@@ -232,7 +232,7 @@ elseif ($this->page && $this->HasAccess('read') && $this->method == 'show' && $i
 	}
 
 	// get upload results
-	if ($is_writable && $_POST['action'] == 'upload' && userCanUpload())
+	if ($is_writable && isset($_POST['action']) && $_POST['action'] == 'upload' && userCanUpload()) #38
 	{
 		switch ($_FILES['file']['error'])
 		{

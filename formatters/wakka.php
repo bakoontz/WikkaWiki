@@ -104,6 +104,10 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 		// $matches[1] is element, $matches[2] is attributes, $matches[3] is styles and $matches[4] is linebreak
 		else if ( preg_match("/^\|([^\|])?\|(\(.*?\))?(\{.*?\})?(\n)?$/", $thing, $matches) )
 		{
+			for ( $i = 1; $i < 5; $i++ ) #38
+			{
+				if (!isset($matches[$i])) $matches[$i] = '';
+			}
 			//Set up the variables that will aggregate the html markup
 			$close_part = '';
 			$open_part  = '';
@@ -384,7 +388,7 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 			if (preg_match("/\.(mm)$/si", $url)) { #145
 				return $wakka->Action("mindmap ".$url);
 			} else
-				return $wakka->Link($url).$matches[2];
+				return $wakka->Link($url).(isset($matches[2]) ? $matches[2] : ''); #38
 		}
 		// header level 5
 		else if ($thing == "==")
@@ -523,6 +527,8 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 		// \s : any whitespace character
 		else if (preg_match("/^\[\[(\S*)(\s+(.+))?\]\]$/s", $thing, $matches))		# recognize forced links across lines
 		{
+			if (!isset($matches[1])) $matches[1] = ''; #38
+			if (!isset($matches[3])) $matches[3] = ''; #38
 			list (, $url, , $text) = $matches;
 			if ($url)
 			{
