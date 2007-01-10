@@ -14,14 +14,7 @@
  * @uses	Wakka::htmlspecialchars_ent()
  * @uses	Wakka::ReturnSafeHtml()
  */
-/**
- * i18n
- */
-if (!defined('SEARCH_FOR')) define('SEARCH_FOR', 'Search for');
-if (!defined('SEARCH_ZERO_MATCH')) define('SEARCH_ZERO_MATCH', 'No matches');
-if (!defined('SEARCH_ONE_MATCH')) define('SEARCH_ONE_MATCH', 'One match found');
-if (!defined('SEARCH_N_MATCH')) define('SEARCH_N_MATCH', '%d matches found');
-if (!defined('SEARCH_RESULTS')) define('SEARCH_RESULTS', 'Search results');
+
 if (!defined('SEARCH_MAX_SNIPPETS')) define('SEARCH_MAX_SNIPPETS', 3);
 if (!defined('SEARCH_MYSQL_IDENTICAL_CHARS')) define('SEARCH_MYSQL_IDENTICAL_CHARS', 'aàáâã,eèéêë,iìîï,oòóôõ,uùúû,cç,nñ,yý');
 
@@ -113,7 +106,7 @@ if (isset($_REQUEST['phrase']) && ($phrase = $_REQUEST["phrase"]))
 			$match_str = SEARCH_N_MATCH;
 			break;
 	}
-	printf(SEARCH_RESULTS.": <strong>".$match_str."</strong> for <strong>".$this->htmlspecialchars_ent($phrase)."</strong><br />\n", $total_results);
+	printf(SEARCH_RESULTS.": <strong>".$match_str."</strong> for <strong>".$this->htmlspecialchars_ent($phrase)."</strong><br />\n", $total_results); #i18n
 	$result_page_list = $this->ReturnSafeHtml($result_page_list);
 	echo '<ol>'.$result_page_list.'</ol>'."\n";
 }

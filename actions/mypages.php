@@ -17,12 +17,6 @@
  * @uses	Wakka::GetUserName() 
  * @uses	Wakka::Link()
  */
-/**
- * i18n 
- */
-if (!defined('OWNED_PAGES_TXT')) define('OWNED_PAGES_TXT', "This is the list of pages you own."); 
-if (!defined('NO_OWNED_PAGES')) define('NO_OWNED_PAGES', "You don't own any pages.");
-if (!defined('USER_NOT_LOGGED_IN')) define('USER_NOT_LOGGED_IN', "You're not logged in, thus the list of your pages couldn't be retrieved.");
 
 if ($user = $this->GetUser())
 {

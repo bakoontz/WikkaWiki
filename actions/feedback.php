@@ -14,13 +14,13 @@
  * @uses	Wakka::GetConfigValue()
  */
 
-$form = "<p>Fill in the form below to send us your comments:</p>".
+$form = '<p>'.FEEDBACK_FORM_LABEL.'</p>'.
             $this->FormOpen().
-            "\nName: <input name=\"name\" value=\"".$_POST["name"]."\" type=\"text\" /><br />".
-            "\n<input type=\"hidden\" name=\"mail\" value=\"result\">".
-            "\nEmail: <input name=\"email\" value=\"".$_POST["email"]."\" type=\"text\" /><br />".
-            "\nComments:<br />\n<textarea name=\"comments\" rows=\"15\" cols=\"40\">".$_POST["comments"]."</textarea><br / >".
-            "\n<input type=\"submit\" value=\"Send\" />".
+            "\n".FEEDBACK_NAME_LABEL.' <input name="name" value="'.$_POST["name"].'" type="text" /><br />'.
+            "\n".'<input type="hidden" name="mail" value="result">'.
+            "\n".FEEDBACK_EMAIL_LABEL.' <input name="email" value="'.$_POST["email"].'" type="text" /><br />'.
+            "\n".FEEDBACK_COMMENT_LABEL.' <br />'."\n".'<textarea name="comments" rows="15" cols="40">'.$_POST["comments"]."</textarea><br / >".
+            "\n".'<input type="submit" value="'.BUTTON_SEND.'" />'.
             $this->FormClose();
 
 if ($_POST["mail"]=="result") {
@@ -30,29 +30,29 @@ if ($_POST["mail"]=="result") {
 	list($user, $host) = sscanf($email, "%[a-zA-Z0-9._-]@%[a-zA-Z0-9._-]");
 	if (!$name) {
 		// a valid name must be entered
-		echo "<p class=\"error\">Please enter your name</p>";    #i18n
+		echo '<p class="error">'.ERROR_NO_NAME.'</p>';
 		echo $form;    
 	} elseif (!$email || !strchr($email, "@") || !$user || !$host) {
 		// a valid email address must be entered
-		echo "<p class=\"error\">Please enter a valid email address</p>"; #i18n  
+		echo '<p class="error">'.ERROR_NO_EMAIL.'</p>'; 
 		echo $form;
 	} elseif (!$comments) {
 		// some text must be entered
-		echo "<p class=\"error\">Please enter some text</p>"; #i18n
+		echo '<p class="error">'.ERROR_NO_TXT.'</p>';
 		echo $alert;
 		echo $form;
 	} else {
 		// send email and display message
-		$msg = "Name:\t".$name."\n";
-		$msg .= "Email:\t".$email."\n";
+		$msg = FEEDBACK_NAME_LABEL."\t".$name."\n";
+		$msg .= FEEDBACK_EMAIL_LABEL."\t".$email."\n";
 		$msg .= "\n".$comments."\n";
 		$recipient = $this->GetConfigValue("admin_email");
-		$subject = "Feedback from ".$this->GetConfigValue("wakka_name");
+		$subject = "Feedback from ".$this->GetConfigValue("wakka_name"); #i18n
 		$mailheaders = "From:".$email."\n";
 		$mailheaders .= "Reply-To:".$email;
 		mail($recipient, $subject, $msg, $mailheaders);
-		echo $this->Format("Thanks for your interest! Your feedback has been sent to [[".$recipient."]] ---"); #i18n
-		echo $this->Format("Return to the [[".$this->GetConfigValue("root_page")." main page]]"); #i18n
+		echo $this->Format(sprintf(FEEDBACK_SENT, $recipient));
+		echo $this->Format(sprintf(MAIN_PAGE_LINK, $this->GetConfigValue("root_page")));
 		// optionally displays the feedback text
 		//echo $this->Format("---- **Name:** ".$name."---**Email:** ".$email."---**Comments:** ---".$comments);
 	}    

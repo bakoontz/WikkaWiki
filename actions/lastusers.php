@@ -11,12 +11,6 @@
  * @uses	Wakka::LoadSingle()
  * @uses	Wakka::Link()
  */
-/**
- * i18n
- */
-define('NAME', "Name");
-define('OWNED_PAGES', "Owned Pages");
-define('SIGNUP_DATE_TIME', "Signup Date/Time");
 
 if ($stat===0) $limit = 1000;
 else $limit = 100;
@@ -26,7 +20,7 @@ if (!$max || $limit<$max)
 
 $last_users = $this->LoadAll("select name, signuptime from ".$this->config["table_prefix"]."users order by signuptime desc limit ".(int)$max);
 
-$htmlout = "<table width=\"50%\" border=\"0\" cellpadding=\"3%\">\n".
+$htmlout = '<table width="50%" border="0" cellpadding="3%">'."\n".
   "  <tr>\n".
     "    <th><u>".NAME."</u></th>\n".
     "    <th><u>".OWNED_PAGES."</u></th>\n".

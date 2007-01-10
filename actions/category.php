@@ -17,9 +17,6 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
  */
-
-if (!defined('ERR_NO_PAGES')) define('ERR_NO_PAGES', 'Sorry, No items found for %s');
-if (!defined('PAGES_BELONGING_TO')) define('PAGES_BELONGING_TO', 'The following %d page(s) belong to %s');
  
 if ($cattag = $_REQUEST["wakka"])
 {

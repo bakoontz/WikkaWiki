@@ -44,12 +44,12 @@ if ($this->GetMethod() != 'edit' && $this->config['enable_rss_autodiscovery'] !=
 </head>
 <body <?php echo $message ? "onload=\"alert('".$message."');\" " : "" ?> >
 <div class="header">
-	<h2><?php echo $this->config["wakka_name"] ?> : <a href="<?php echo $this->href('backlinks', '', ''); ?>" title="Display a list of pages linking to <?php echo $this->tag ?>"><?php echo $this->GetPageTag(); ?></a></h2>
+	<h2><?php echo $this->config["wakka_name"] ?> : <a href="<?php echo $this->href('backlinks', '', ''); ?>" title="<?php printf(LINKING_PAGES_LINK_TITLE, $this->tag); ?>"><?php echo $this->GetPageTag(); ?></a></h2>
 	<?php echo $this->Link($this->config["root_page"]); ?> ::
 	<?php 
 		if ($this->GetUser()) {
 			echo $this->config["logged_in_navigation_links"] ? $this->Format($this->config["logged_in_navigation_links"])." :: " : ""; 
-			echo "You are ".$this->Link($this->GetUserName());
+			printf(YOU_ARE, $this->Link($this->GetUserName()));
 		} else { 
 			echo $this->config["navigation_links"] ? $this->Format($this->config["navigation_links"]) : ""; 
 		} 

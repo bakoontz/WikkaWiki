@@ -20,14 +20,7 @@
 if(!defined('COMMENT_DATE_FORMAT')) define('COMMENT_DATE_FORMAT', 'D, d M Y');
 if(!defined('COMMENT_TIME_FORMAT')) define('COMMENT_TIME_FORMAT', 'H:i T');
 if(!defined('COMMENT_SNIPPET_LENGTH')) define('COMMENT_SNIPPET_LENGTH', 120);
-/**
- * i18n
- */
-if (!defined('RECENTLY_COMMENTED_HEADING')) define('RECENTLY_COMMENTED_HEADING', '=====Recently commented pages=====');
-if(!defined('ANONYMOUS_COMMENT_AUTHOR')) define('ANONYMOUS_COMMENT_AUTHOR', '(unregistered user)');
-if (!defined('COMMENT_AUTHOR_DIVIDER')) define ('COMMENT_AUTHOR_DIVIDER', ', comment by ');
-if (!defined('NO_RECENTLY_COMMENTED')) define ('NO_RECENTLY_COMMENTED', 'There are no recently commented pages.');
-if (!defined('NO_READABLE_RECENTLY_COMMENTED')) define ('NO_READABLE_RECENTLY_COMMENTED', 'There are no recently commented pages you can read.');
+
 $readable = 0;
 
 echo $this->Format(RECENTLY_COMMENTED_HEADING.' --- ');

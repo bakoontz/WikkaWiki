@@ -9,11 +9,6 @@
  * 
  * @uses	Wakka::GetConfigValue()
  */
-/**
- * i18n
- */
-if(!defined('SEND_FEEDBACK_LINK_TITLE')) define('SEND_FEEDBACK_LINK_TITLE', 'Send us your feedback');
-if(!defined('SEND_FEEDBACK_LINK_TEXT')) define('SEND_FEEDBACK_LINK_TEXT', 'Contact');
 
 $email = $this->GetConfigValue("admin_email");
 

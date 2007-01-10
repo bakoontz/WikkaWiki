@@ -15,7 +15,6 @@
  * @uses	Wakka::LoadPage()
  * @uses	Wakka::Format()
  */
-if (!defined('ERROR_CIRCULAR_REFERENCE')) define('ERROR_CIRCULAR_REFERENCE', 'Circular reference detected!');
 
 if (!$page) $page = $wikka_vars;
 $_included_page = $page;

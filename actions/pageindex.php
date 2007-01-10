@@ -21,15 +21,6 @@
  * @output   a list of pages accessible to the current user
  * @todo		add filtering options
  */
-/**
- * i18n
- */
-define('PAGE_HEADING',"Page Index");
-define('INDEX_CAPTION',"This is an alphabetical list of pages you can read on this server.");
-define('ALL_PAGES',"All");
-define('PAGE_OWNER'," . . . . Owner: %s");
-define('OWNED_PAGES_CAPTION',"Items marked with a * indicate pages that you own.");
-define('ERROR_NO_PAGES_FOUND', "No pages found.");
 
 if ($pages = $this->LoadPageTitles())
 {
@@ -58,22 +49,28 @@ if ($pages = $this->LoadPageTitles())
 
 		$firstChar = strtoupper($page['tag'][0]);
 		if (!preg_match('/[A-Za-z]/', $firstChar)) $firstChar = '#'; //TODO: Internationalization
-		if ($firstChar != $current_character) {
+		if ($firstChar != $current_character) 
+		{
 			$alpha_bar .= '<a href="'.$link.$firstChar.'">'.$firstChar.'</a>&nbsp;'."\n";
 			$current_character = $firstChar;
 			$character_changed = true;
 		}
-		if ($requested_letter == '' || $firstChar == $requested_letter) {
-			if ($character_changed) {
+		if ($requested_letter == '' || $firstChar == $requested_letter) 
+		{
+			if ($character_changed) 
+			{
 				$index_output .= "<br />\n<strong>$firstChar</strong><br />\n";
 				$character_changed = false;
 			}
 			$index_output .= $this->Link($page['tag']);
 
-			if ($cached_username == $page_owner) {                       
+			if ($cached_username == $page_owner) 
+			{                       
 				$index_output .= '*';
 				$user_owns_pages = true;
-			} elseif ($page_owner != '(Public)' && $page_owner != '') {
+			} 
+			elseif ($page_owner != '(Public)' && $page_owner != '') 
+			{
 				$index_output .= sprintf(PAGE_OWNER, $page_owner);
 			}
 		     	$index_output .= "<br />\n";    
@@ -83,7 +80,9 @@ if ($pages = $this->LoadPageTitles())
 	$index_header .= ($user_owns_pages) ? '---'.OWNED_PAGES_CAPTION : '';
 	echo $this->Format('===='.PAGE_HEADING.'==== --- <<'.$index_header.'<< ::c:: ---'); 
 	echo "\n<strong>".$alpha_bar."</strong><br />\n".$index_output;
-} else {
-	echo ERROR_NO_PAGES_FOUND;
+} 
+else 
+{
+	echo NO_PAGES_FOUND;
 }
 ?>

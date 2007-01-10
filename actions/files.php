@@ -65,27 +65,6 @@ if (!defined('UPLOAD_ERR_PARTIAL')) define('UPLOAD_ERR_PARTIAL', 3);
 if (!defined('UPLOAD_ERR_NO_FILE')) define('UPLOAD_ERR_NO_FILE', 4);
 if (!defined('UPLOAD_ERR_NO_TMP_DIR')) define('UPLOAD_ERR_NO_TMP_DIR', 6);
 
-// ---- i18n ----
-if (!defined('ERROR_UPLOAD_DIRECTORY_NOT_WRITABLE')) define ('ERROR_UPLOAD_DIRECTORY_NOT_WRITABLE', 'Please make sure that the server has write access to a folder named <tt>./%s</tt>.');
-if (!defined('ERROR_UPLOAD_DIRECTORY_NOT_READABLE')) define ('ERROR_UPLOAD_DIRECTORY_NOT_READABLE', 'Please make sure that the server has read access to a folder named <tt>./%s</tt>.');
-if (!defined('ERROR_INEXISTENT_FILE')) define ('ERROR_INEXISTENT_FILE', 'Sorry, a file named <tt>%s</tt> does not exist.'); // %s - name of the file
-if (!defined('ERROR_FILE_UPLOAD_INCOMPLETE')) define ('ERROR_FILE_UPLOAD_INCOMPLETE', 'File upload incomplete! Please try again.');
-if (!defined('ERROR_UPLOADING_FILE')) define ('ERROR_UPLOADING_FILE', 'There was an error uploading your file');
-if (!defined('FILE_UPLOAD_SUCCESSFUL')) define ('FILE_UPLOAD_SUCCESSFUL','File was successfully uploaded.');
-if (!defined('ERROR_FILE_ALREADY_EXISTS')) define ('ERROR_FILE_ALREADY_EXISTS', 'Sorry, a file named <tt>%s</tt> already exists.'); // %s - name of the file
-if (!defined('ERROR_EXTENSION_NOT_ALLOWED')) define('ERROR_EXTENSION_NOT_ALLOWED', 'Sorry, files with this extension are not allowed.');
-if (!defined('ERROR_FILE_TOO_BIG')) define ('ERROR_FILE_TOO_BIG','Attempted file upload was too big. Maximum allowed size is %s.'); // %s - allowed filesize 
-if (!defined('ERROR_NO_FILE_SELECTED')) define ('ERROR_NO_FILE_SELECTED','No file selected.'); 
-if (!defined('ERROR_FILE_UPLOAD_IMPOSSIBLE')) define('ERROR_FILE_UPLOAD_IMPOSSIBLE', 'File upload impossible due to misconfigured server.');
-if (!defined('FILE_TABLE_CAPTION')) define ('FILE_TABLE_CAPTION', 'Attachments');
-if (!defined('FILE_TABLE_HEADER_NAME')) define ('FILE_TABLE_HEADER_NAME', 'File');
-if (!defined('FILE_TABLE_HEADER_SIZE')) define ('FILE_TABLE_HEADER_SIZE', 'Size');
-if (!defined('FILE_TABLE_HEADER_DATE')) define ('FILE_TABLE_HEADER_DATE', 'Last modified');
-if (!defined('FILE_UPLOAD_FORM_LABEL')) define ('FILE_UPLOAD_FORM_LABEL', 'Add new attachment:');
-if (!defined('DOWNLOAD_LINK_TITLE')) define('DOWNLOAD_LINK_TITLE', 'Download %s'); // %s - file name
-if (!defined('DELETE_LINK_TITLE')) define('DELETE_LINK_TITLE', 'Remove %s'); // %s - file name
-if (!defined('NO_ATTACHMENTS')) define('NO_ATTACHMENTS', 'This page contains no attachment.');
-
 // ---- Initialize variables ----
 $text = '';
 $output = '';

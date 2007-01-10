@@ -38,12 +38,6 @@ define('TIME_FORMAT', 'H:i T'); #TODO make this system-configurable
  */
 define('LASTEDIT_BOX', 'lastedit');
 define('LASTEDIT_NOTES', 'lastedit_notes');
-/**
- * i18n
- */
-define('ANONYMOUS_USER', 'anonymous');
-define('LASTEDIT_MESSAGE', 'Last edited by %s');
-define('DIFF_LINK_TITLE', 'Show differences from last revision');
 
 if (!isset($show)) 
 {

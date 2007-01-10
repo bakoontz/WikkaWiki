@@ -27,11 +27,6 @@
 *
 * @todo     make it part of the formatter instead of using an action
 */
-/**
- * i18n
- */
-if (!defined('ERROR_NO_TEXT_GIVEN')) define('ERROR_NO_TEXT_GIVEN','There is no text to highlight!');
-if (!defined('ERROR_NO_COLOR_SPECIFIED')) define('ERROR_NO_COLOR_SPECIFIED', 'Sorry, but you did not specify a color for highlighting!');
 
 // ***Internal function to test if syntax is valid
 if (!function_exists('color_syntax_is_valid'))

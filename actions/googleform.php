@@ -50,5 +50,5 @@ $query = $this->htmlspecialchars_ent($query);
 ?>
 <form action="http://www.google.com/search" method="get" target="_blank">
 	<input type="text" value="<?php echo $query; ?>" name="q" size="30" maxlength="2048" class="WBselectonfocus" /> 
-	<input name="btnG" type="submit" value="Google" />
+	<input name="btnG" type="submit" value="<?php echo BUTTON_GOOGLE;?>" />
 <?php echo $this->FormClose(); ?>

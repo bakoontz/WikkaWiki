@@ -58,9 +58,7 @@ define('CUR_YEAR', date('Y',mktime()));
 define('CUR_MONTH', date('n',mktime()));
 // format string for locale-specific month (%B) + 4-digit year (%Y) used for caption and title attributes
 // NOTE: monthname is locale-specific but order of month and year may need to be switched: hence the double quotes!
-define('LOC_MON_YEAR', "%B %Y");																	# i18n
-define('FMT_SUMMARY', "Calendar for %s");															# i18n
-define('TODAY', "today");																			# i18n
+define('LOC_MON_YEAR', "%B %Y");																	# i18n																# i18n
 
 // ***** (ACTION) PARAMETERS Interface *****
 // set parameter defaults: current year and month

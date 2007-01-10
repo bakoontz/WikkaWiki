@@ -31,15 +31,6 @@
  * @uses	 Wakka::FormOpen()
  * @uses	 Wakka::FormClose()
  */
-// i18n
-if (!defined('BACKLINKS_TITLE')) define('BACKLINKS_TITLE', 'Click to view all pages linking to %s');
-if (!defined('LABEL_EDIT')) define('LABEL_EDIT', 'edit');
-if (!defined('LISTPAGES_EDIT_TITLE')) define('LISTPAGES_EDIT_TITLE', 'Click to edit %s');
-if (!defined('LEGEND_SORTING')) define('LEGEND_SORTING', 'Sorting ...');
-if (!defined('LABEL_SORTING_NUMBER')) define('LABEL_SORTING_NUMBER', 'Sorting #');
-if (!defined('LABEL_SORTING_DESC')) define('LABEL_SORTING_DESC', 'desc');
-if (!defined('LABEL_OK')) define('LABEL_OK', '   OK   ');
-if (!defined('NO_WANTED_PAGES')) define('NO_WANTED_PAGES', 'No wanted pages. Good!');
 
 $sorting_fields = array('count', 'time', 'tag');
 if ((isset($vars) && is_array($vars) && isset($vars['option']) && $vars['option'] == 'v2') || (isset($_GET['ob1'])))
@@ -107,7 +98,7 @@ if ($pages)
 }
 else
 {
-	print('<em>'.NO_WANTED_PAGES.'</em>');
+	print '<em>'.NO_WANTED_PAGES.'</em>';
 }
 
 ?>

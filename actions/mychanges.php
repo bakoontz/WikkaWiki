@@ -21,17 +21,6 @@
  * @uses	Wakka::Link()
  */
 
-/**
- * i18n
- */
-if (!defined('NO_PAGES_FOUND')) define ('NO_PAGES_FOUND', 'No pages found.');
-if (!defined('NO_PAGES_EDITED')) define ('NO_PAGES_EDITED', 'You have not edited any pages yet.');
-if (!defined('ALPHA_PAGES_CHANGE_LIST')) define ('ALPHA_PAGES_CHANGE_LIST', "This is a list of pages you've edited, along with the time of your last change.");
-if (!defined('TIME_PAGES_CHANGE_LIST')) define ('TIME_PAGES_CHANGE_LIST', "This is a list of pages you've edited, ordered by the time of your last change.");
-if (!defined('ORDER_DATE')) define ('ORDER_DATE', 'order by date');
-if (!defined('ORDER_ALPHA')) define ('ORDER_ALPHA', 'order alphabetically');
-if (!defined('NOT_LOGGED_IN')) define ('NOT_LOGGED_IN', "You're not logged in, thus the list of pages you've edited couldn't be retrieved.");
-
 // order alphabetically or after time?
 $alpha = FALSE;
 if (isset($_GET["alphabetically"]) && $_GET["alphabetically"] == 1) $alpha = TRUE;

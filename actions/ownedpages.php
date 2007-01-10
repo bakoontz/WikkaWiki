@@ -17,7 +17,7 @@ $str = 'SELECT COUNT(*) FROM '.$this->config["table_prefix"].'pages WHERE `owner
 $str .= "= '" . $this->GetUserName() . "' AND `latest` = 'Y'";
 $countQuery = $this->Query( $str );
 
-# get the total # of pages
+// get the total # of pages
 $str = 'SELECT COUNT(*) FROM '.$this->config["table_prefix"].'pages WHERE `latest` = \'Y\' ';
 $totalQuery = $this->Query( $str );    
 
