@@ -8,6 +8,7 @@
  * @todo		move the rest of the hardoced texts in here.
  */
 
+if (!defined('FREEMIND_PROJECT_URL')) define('FREEMIND_PROJECT_URL', 'http://freemind.sourceforge.net/');
 /**
  * Main.
  */
@@ -153,7 +154,6 @@ define('TIME_PAGES_CHANGE_LIST', "This is a list of pages you've edited, ordered
 define('ORDER_DATE', 'order by date');
 define('ORDER_ALPHA', 'order alphabetically');
 define('NOT_LOGGED_IN', "You're not logged in, thus the list of pages you've edited couldn't be retrieved."); #duplicate
-define('NO_PAGES_FOUND', "No pages found.");
 
 // mypages
 define('OWNED_PAGES_TXT', "This is the list of pages you own."); 
@@ -186,14 +186,13 @@ define('NO_READABLE_RECENTLY_CHANGED_PAGES', 'There are no recently changed page
 
 // recentcomments
 define('RECENT_COMMENTS_HEADING', '=====Recent comments=====');
-define('COMMENT_AUTHOR_DIVIDER', ', comment by ');
+define('COMMENT_AUTHOR_DIVIDER', ', comment by '); // recentlycommented
 define('NO_RECENT_COMMENTS', 'There are no recent comments.');
 define('NO_READABLE_RECENT_COMMENTS', 'There are no recent comments you can read.');
 
 // recentlycommented 
 define('RECENTLY_COMMENTED_HEADING', '=====Recently commented pages=====');
 define('ANONYMOUS_COMMENT_AUTHOR', '(unregistered user)');
-define('COMMENT_AUTHOR_DIVIDER', ', comment by ');
 define('NO_RECENTLY_COMMENTED', 'There are no recently commented pages.');
 define('NO_READABLE_RECENTLY_COMMENTED', 'There are no recently commented pages you can read.');
 

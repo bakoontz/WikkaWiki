@@ -1364,7 +1364,7 @@ class Wakka
 		else
 		{
 			// it's a wiki link
-			if ($_SESSION["linktracking"] && $track) $this->TrackLinkTo($tag);
+			if (isset($_SESSION['linktracking']) && $_SESSION["linktracking"] && $track) $this->TrackLinkTo($tag);
 			$linkedPage = $this->LoadPage($tag);
 			return ($linkedPage ? '<a href="'.$this->Href($method, $linkedPage['tag']).'"'.$title_attr.'>'.$text.'</a>' : '<a class="missingpage" href="'.$this->Href("edit", $tag).'" title="Create this page">'.$text.'</a>'); #i18n
 		}

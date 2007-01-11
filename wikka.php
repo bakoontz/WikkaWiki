@@ -195,7 +195,7 @@ $wakka = preg_replace("/^\//", "", $wakka);
 if (preg_match("#^(.+?)/(.*)$#", $wakka, $matches)) list(, $page, $method) = $matches;
 else if (preg_match("#^(.*)$#", $wakka, $matches)) list(, $page) = $matches;
 //Fix lowercase mod_rewrite bug: URL rewriting makes pagename lowercase. #135
-if (strtolower($page) == $page)
+if ((strtolower($page) == $page) && (isset($_SERVER['REQUEST_URI']))) #38
 {
  $pattern = preg_quote($page, '/');
  if (preg_match("/($pattern)/i", urldecode($_SERVER['REQUEST_URI']), $match_url))
@@ -215,7 +215,7 @@ $wakka =& new Wakka($wakkaConfig);
 if (!$wakka->dblink)
 {
 	echo '<em class="error">'.ERROR_NO_DB_ACCESS.'</em>';
-      exit;
+	exit;
 }
 
 /** 
@@ -236,7 +236,7 @@ $content =  ob_get_contents();
 /** 
  * Use gzip compression if possible.
  */
-if (strstr ($HTTP_SERVER_VARS['HTTP_ACCEPT_ENCODING'], 'gzip') && function_exists('gzencode') )
+if ( isset($_SERVER['HTTP_ACCEPT_ENCODING']) && strstr ($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip') && function_exists('gzencode') ) #38
 {
    // Tell the browser the content is compressed with gzip
 	header ("Content-Encoding: gzip");

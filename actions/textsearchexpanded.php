@@ -37,12 +37,12 @@ if (isset($_REQUEST['phrase']) && ($phrase = $_REQUEST["phrase"]))
 	$results = $this->FullTextSearch($phrase_re);
 	if ($results)
 	{
+		$additional_re = ''; #38
 		$total_results = 0;
 		#Suppress Exact Phrases: terms inside double quotes
 		if (preg_match_all('/"([^"]+?)"/', $phrase_re, $match1))
 		{
 			$phrase_re = preg_replace('/"[^"]+?"/', '', $phrase_re);
-			$additional_re = '';
 			foreach($match1[1] as $match1_v)
 			{
 				$additional_re .= '|'.preg_quote($match1_v);
