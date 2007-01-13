@@ -122,7 +122,7 @@ class Wakka
 		if (!$result = mysql_query($query, $this->dblink))
 		{
 			ob_end_clean();
-			die("Query failed: ".$query." (".mysql_error().")"); #i18n
+			die("Query failed: ".$query." (".mysql_error($this->dblink).")"); #i18n #376
 		}
 		if ($this->GetConfigValue("sql_debugging"))
 		{

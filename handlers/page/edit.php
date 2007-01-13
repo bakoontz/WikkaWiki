@@ -26,6 +26,7 @@
  * @uses Wakka::Header()
  * @uses Wakka::Href()
  * @uses Wakka::htmlspecialchars_ent()
+ * @uses Wakka::LoadSingle()
  * @uses Wakka::Redirect()
  * @uses Wakka::SavePage()
  * @uses Wakka::StartLinkTracking()
@@ -165,14 +166,11 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 	$body = preg_replace("/\n[ ]{4}/", "\n\t", $body);	// @@@ FIXME: misses first line and multiple sets of four spaces - JW 2005-01-16
 
 
-	if ($result = mysql_query("describe ".$this->config['table_prefix']."pages tag")) 
+	$maxtaglen = MAX_TAG_LENGTH; #38 - #376
+	if ( ($field = $this->LoadSingle("describe ".$this->config['table_prefix']."pages tag"))
+	   && (preg_match("/varchar\((\d+)\)/", $field['Type'], $matches)) )
 	{
-		$field = mysql_fetch_assoc($result);
-		if (preg_match("/varchar\((\d+)\)/", $field['Type'], $matches)) $maxtaglen = $matches[1];
-	}
-	else
-	{
-		$maxtaglen = MAX_TAG_LENGTH;
+		$maxtaglen = $matches[1];
 	}
 	
 	// PREVIEW screen
