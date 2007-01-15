@@ -29,6 +29,23 @@ class Config
 	 */
 	var $mysql_user = 'wikka';
 	/**
+	 * Mysql password.
+	 * The password associated to Config:$mysql_user. This value is written in {@link wikka.config.php} as clear text.
+	 */
+	var $mysql_password = '';
+	/**
+	 * Your wiki's keywords.
+	 * These keywords are put in <meta name="keywords" ... tag of every pages of your wiki. They are aimed to help some
+	 * search engines categorize judiciously and more efficiently your site or your pages.
+	 */
+	var $meta_keywords = '';
+	/**
+	 * Your wiki's description.
+	 * Short sentences to describe your site. They are put in <meta name="description" ... tag of every pages of your wiki.
+	 * Just like Config::$meta_keywords, it is intended for search engines and web directories.
+	 */
+	var $meta_description = '';
+	/**
 	 * Mysql table prefix.
 	 * A prefix for all tables used by Wikka.
 	 */
