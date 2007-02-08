@@ -17,9 +17,9 @@
 $form = '<p>'.FEEDBACK_FORM_LABEL.'</p>'.
             $this->FormOpen().
             "\n".FEEDBACK_NAME_LABEL.' <input name="name" value="'.$_POST["name"].'" type="text" /><br />'.
-            "\n".'<input type="hidden" name="mail" value="result">'.
+            "\n".'<input type="hidden" name="mail" value="result" />'.
             "\n".FEEDBACK_EMAIL_LABEL.' <input name="email" value="'.$_POST["email"].'" type="text" /><br />'.
-            "\n".FEEDBACK_COMMENT_LABEL.' <br />'."\n".'<textarea name="comments" rows="15" cols="40">'.$_POST["comments"]."</textarea><br / >".
+            "\n".FEEDBACK_COMMENT_LABEL.' <br />'."\n".'<textarea name="comments" rows="15" cols="40">'.$_POST["comments"]."</textarea><br />".
             "\n".'<input type="submit" value="'.BUTTON_SEND.'" />'.
             $this->FormClose();
 
