@@ -33,22 +33,23 @@
  * @todo		move <div> to template;
  */
 
+
 // i18n strings
 if (!defined('ERROR_NO_ACCESS')) define('ERROR_NO_ACCESS', "You aren't allowed to read this page.");
 if (!defined('COMMENTS_HEADER')) define('COMMENTS_HEADER', 'Comments');
 if (!defined('HIDE_COMMENTS')) define('HIDE_COMMENTS', 'Hide comments/form');
-if (!defined('ADD_COMMENT_LABEL')) define('ADD_COMMENT_LABEL', 'Add a comment to this page:');
-if (!defined('ADD_COMMENT')) define('ADD_COMMENT', 'Add comment');
-if (!defined('BUTTON_ADD_COMMENT')) define('BUTTON_ADD_COMMENT', 'Add Comment');
 if (!defined('DISPLAY_COMMENT')) define('DISPLAY_COMMENT', 'Display comment');
 if (!defined('DISPLAY_COMMENTS')) define('DISPLAY_COMMENTS', 'Display comments: ');
 if (!defined('DISPLAY_COMMENTS_EARLIEST')) define('DISPLAY_COMMENTS_EARLIEST', 'Earliest first');
 if (!defined('DISPLAY_COMMENTS_LATEST')) define('DISPLAY_COMMENTS_LATEST', 'Latest first');
+if (!defined('DISPLAY_COMMENTS_THREADED')) define('DISPLAY_COMMENTS_THREADED', 'Threaded');
+if (!defined('BUTTON_NEW_COMMENT')) define('BUTTON_NEW_COMMENT', 'New Comment');
 if (!defined('NO_COMMENTS')) define('NO_COMMENTS', 'There are no comments on this page.');
 if (!defined('ONE_COMMENT')) define('ONE_COMMENT', 'There is one comment on this page.');
 if (!defined('SOME_COMMENTS')) define('SOME_COMMENTS', 'There are %d comments on this page. ');
 if (!defined('BUTTON_RE_EDIT')) define('BUTTON_RE_EDIT', 'Re-edit this old revision');
 if (!defined('BUTTON_DELETE_COMMENT')) define('BUTTON_DELETE_COMMENT', 'Delete Comment');
+if (!defined('BUTTON_REPLY_COMMENT')) define('BUTTON_REPLY_COMMENT', 'Reply to Comment');
 if (!defined('LABEL_ASK_CREATE_PAGE')) define('LABEL_ASK_CREATE_PAGE', 'This page doesn\'t exist yet. Maybe you want to <a href="%s">create</a> it?');
 if (!defined('LABEL_OLD_REVISION')) define('LABEL_OLD_REVISION', 'This is an old revision of <a href="%1$s">%2$s</a> from %3$s.');
 
@@ -105,28 +106,52 @@ else
 			{
 				switch($_REQUEST['show_comments'])
 				{
-				case "0":
-					$_SESSION['show_comments'][$tag] = 0;
+				case COMMENT_NO_DISPLAY:
+					$_SESSION['show_comments'][$tag] = COMMENT_NO_DISPLAY;
 					break;
-				case "1":
-					$_SESSION['show_comments'][$tag] = 1;
+				case COMMENT_ORDER_DATE_ASC:
+					$_SESSION['show_comments'][$tag] = COMMENT_ORDER_DATE_ASC;
 					break;
-				case "2":
-					$_SESSION['show_comments'][$tag] = 2;
+				case COMMENT_ORDER_DATE_DESC: 
+					$_SESSION['show_comments'][$tag] = COMMENT_ORDER_DATE_DESC;
+					break;
+				case COMMENT_ORDER_THREADED:
+					$_SESSION['show_comments'][$tag] = COMMENT_ORDER_THREADED;
 					break;
 				}
 			}
 
 			// display comments!
-			if ($_SESSION['show_comments'][$tag] != 0)
+			if ($_SESSION['show_comments'][$tag] != COMMENT_NO_DISPLAY)
 			{
+				$levels = array(	
+							0 => 'comment',
+							1 => 'commentL1',
+							2 => 'commentL2',
+							3 => 'commentL3',
+							4 => 'commentL4',
+							5 => 'commentL5',
+							6 => 'commentL6',
+							7 => 'commentL7',
+							8 => 'commentL8',
+							9 => 'commentL9',
+							10 => 'commentL10', );
+
 				// load comments for this page
 				$comments = $this->LoadComments($this->tag, $_SESSION['show_comments'][$tag]);
 
 				// display comments header
 ?>
 				<div class="commentsheader">
-				<span id="comments">&nbsp;</span><?php echo COMMENTS_HEADER; ?> [<a href="<?php echo $this->Href('', '', 'show_comments=0') ?>"><?php echo HIDE_COMMENTS; ?></a>]
+				<span id="comments">&nbsp;</span><?php echo COMMENTS_HEADER; ?> [<a href="<?php echo $this->Href('', '', 'show_comments='.COMMENT_NO_DISPLAY) ?>"><?php echo HIDE_COMMENTS; ?></a>]
+				[<a href="<?php echo $this->Href('', '', 'show_comments='.COMMENT_ORDER_DATE_ASC.'#comments') ?>"><?php echo DISPLAY_COMMENTS_EARLIEST ?></a>]
+				[<a href="<?php echo $this->Href('', '', 'show_comments='.COMMENT_ORDER_DATE_DESC.'#comments') ?>"><?php echo DISPLAY_COMMENTS_LATEST ?></a>]
+				[<a href="<?php echo $this->Href('', '', 'show_comments='.COMMENT_ORDER_THREADED.'#comments') ?>"><?php echo DISPLAY_COMMENTS_THREADED ?></a>]
+
+				<?php echo $this->FormOpen("processcomment") ?>
+				<input type="submit" name="submit" value="<?php echo BUTTON_NEW_COMMENT ?>">
+				<?php echo $this->FormClose() ?>
+
 				</div>
 <?php
 				// display comments themselves
@@ -136,35 +161,37 @@ else
 					$is_owner = $this->UserIsOwner();
 					foreach ($comments as $comment)
 					{
-						echo '<div class="comment">'."\n".
+						if($comment['deleted'] == 'Y') {
+							$comment['user'] = NULL;
+							$comment['comment'] = "Comment deleted";
+							$comment['time'] = NULL;
+						}
+						if(!isset($comment['level']))
+							$comment['level'] = 0;
+
+						echo '<div class="'.$levels[$comment['level']].'">'."\n".
 							'<span id="comment_'.$comment['id'].'"></span>'.$comment['comment']."\n".
-							"\t".'<div class="commentinfo">'."\n-- ";
+							"\t".'<div class="commentinfo">'."\n";
+							if($comment['deleted'] != 'Y') echo "-- ";
 						echo ($this->LoadUser($comment['user']))? $this->Format($comment['user']) : $comment['user']; // #84
-						echo ' ('.$comment['time'].')'."\n";
-						if ($is_owner || $user['name'] == $comment['user'] || ($this->config['anony_delete_own_comments'] && $current_user == $comment['user']))
+						if($comment['deleted'] != 'Y')
+							echo ' ('.$comment['time'].')'."\n";
+						if($this->HasAccess('comment'))
 						{
-							echo $this->FormOpen("delcomment");
+							echo $this->FormOpen("processcomment");
 ?>
    <input type="hidden" name="comment_id" value="<?php echo $comment['id'] ?>" />
-   <input type="submit" value="<?php echo BUTTON_DELETE_COMMENT ?>" />
-<?php 
+   <?php if($comment['deleted'] != 'Y') { ?>
+   <input type="submit" name="submit" value="<?php echo BUTTON_REPLY_COMMENT ?>" />
+   <?php if($is_owner || $user['name'] == $comment['user'] || ($this->config['anony_delete_own_comments'] && $current_user == $comment['user'])) { ?>
+   <input type="submit" name="submit" value="<?php echo BUTTON_DELETE_COMMENT ?>" />
+<?php }
+}
 							echo $this->FormClose();
 						}
 						echo "\n\t".'</div>'."\n";
 						echo '</div>'."\n";
 					}
-				}
-				// display comment form
-				echo '<div class="commentform">'."\n";
-				if ($this->HasAccess('comment'))
-				{?>
-					<?php echo $this->FormOpen('addcomment'); ?>
-					<label for="commentbox"><?php echo ADD_COMMENT_LABEL; ?><br />
-					<textarea id="commentbox" name="body" rows="6" cols="78"></textarea><br />
-					<input type="submit" value="<?php echo BUTTON_ADD_COMMENT; ?>" accesskey="s" />
-					</label>
-					<?php echo $this->FormClose(); ?>
-				<?php
 				}
 				echo '</div>'."\n";
 			}
@@ -176,7 +203,9 @@ else
 				{
 				case 0:
 					$comments_message = NO_COMMENTS.' ';
-					$showcomments_text = '[<a href="'.$this->Href('', '', 'show_comments=1#comments').'">'.ADD_COMMENT.'</a>]';
+					$showcomments_text = $this->FormOpen("processcomment");
+					$showcomments_text .= '<input type="submit" name="submit" value="'.BUTTON_NEW_COMMENT.'">';
+					$showcomments_text .= $this->FormClose();
 					$comment_form_link  = ($this->HasAccess('comment')) ? 1 : 0;
 					break;
 				case 1:
@@ -187,7 +216,9 @@ else
 				default:
 					$comments_message = sprintf(SOME_COMMENTS, $commentCount);
 					$showcomments_text = DISPLAY_COMMENTS;
-					$showcomments_text =DISPLAY_COMMENTS.'[<a href="'.$this->Href('', '', 'show_comments=1#comments').'">'.DISPLAY_COMMENTS_EARLIEST.'</a>] [<a href="'.$this->Href('', '', 'show_comments=2#comments').'">'.DISPLAY_COMMENTS_LATEST.'</a>]'; 
+					$showcomments_text = DISPLAY_COMMENTS.'[<a href="'.$this->Href('', '', 'show_comments='.COMMENT_ORDER_DATE_ASC.'#comments').'">'.DISPLAY_COMMENTS_EARLIEST.'</a>]
+					[<a href="'.$this->Href('', '', 'show_comments='.COMMENT_ORDER_DATE_DESC.'#comments').'">'.DISPLAY_COMMENTS_LATEST.'</a>]
+					[<a href="'.$this->Href('', '', 'show_comments='.COMMENT_ORDER_THREADED.'#comments').'">'.DISPLAY_COMMENTS_THREADED.'</a>]'; 
 					$comment_form_link = 1;
 				}
 

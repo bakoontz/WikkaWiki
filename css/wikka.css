@@ -67,6 +67,76 @@ body {
 	border-bottom: 1px solid #CCCCCC;
 }
 
+.commentL1 {
+	background-color: #EEEEEE;
+	margin-left: 15px;
+	padding: 10px;
+	border: 1px solid #CCCCCC;
+}
+
+.commentL2 {
+	background-color: #EEEEEE;
+	margin-left: 30px;
+	padding: 10px;
+	border: 1px solid #CCCCCC;
+}
+
+.commentL3 {
+	background-color: #EEEEEE;
+	margin-left: 45px;
+	padding: 10px;
+	border: 1px solid #CCCCCC;
+}
+
+.commentL4 {
+	background-color: #EEEEEE;
+	margin-left: 60px;
+	padding: 10px;
+	border: 1px solid #CCCCCC;
+}
+
+.commentL5 {
+	background-color: #EEEEEE;
+	margin-left: 75px;
+	padding: 10px;
+	border: 1px solid #CCCCCC;
+}
+
+.commentL6 {
+	background-color: #EEEEEE;
+	margin-left: 90px;
+	padding: 10px;
+	border: 1px solid #CCCCCC;
+}
+
+.commentL7 {
+	background-color: #EEEEEE;
+	margin-left: 105px;
+	padding: 10px;
+	border: 1px solid #CCCCCC;
+}
+
+.commentL8 {
+	background-color: #EEEEEE;
+	margin-left: 120px;
+	padding: 10px;
+	border: 1px solid #CCCCCC;
+}
+
+.commentL9 {
+	background-color: #EEEEEE;
+	margin-left: 135px;
+	padding: 10px;
+	border: 1px solid #CCCCCC;
+}
+
+.commentL10 {
+	background-color: #EEEEEE;
+	margin-left: 150px;
+	padding: 10px;
+	border: 1px solid #CCCCCC;
+}
+
 .commentinfo {
 	color: #AAAAAA;
 }

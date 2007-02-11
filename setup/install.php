@@ -113,6 +113,8 @@ case "0":
   			"time datetime NOT NULL default '0000-00-00 00:00:00',".
   			"comment text NOT NULL,".
   			"user varchar(75) NOT NULL default '',".
+  			"parent int(10) unsigned default NULL,".
+  			"deleted char(1) default NULL,".
   			"PRIMARY KEY  (id),".
   			"KEY idx_page_tag (page_tag),".
   			"KEY idx_time (time)".
@@ -338,6 +340,11 @@ case "1.1.6.2":
 	mysql_query("insert into ".$config["table_prefix"]."pages set tag = 'HighScores', body = '**Rankings based on quantity of OwnedPages*:**\n {{HighScores}}*//not quality.//\n\n\n----\nCategoryWiki', owner = '(Public)', user = 'WikkaInstaller', time = now(), latest = 'Y'", $dblink), "Already done? OK!", 0);
 	test('Rebuilding links table...', 1);
 	include('links.php');
+	test("Adding fields to comments table to enable threading...", 
+	mysql_query("alter ".$config["table_prefix"]."comments add parent int(10) unsigned default NULL", $dblink), "Already done? OK!", 0);
+	test("Adding fields to comments table to enable threading...", 
+	mysql_query("alter ".$config["table_prefix"]."comments add deleted char(1) default NULL", $dblink), "Already done? OK!", 0);
+
 case "trunk": //latest development version from the SVN repository - do not remove
 	break;
 }
