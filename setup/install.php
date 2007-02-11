@@ -341,9 +341,9 @@ case "1.1.6.2":
 	test('Rebuilding links table...', 1);
 	include('links.php');
 	test("Adding fields to comments table to enable threading...", 
-	mysql_query("alter ".$config["table_prefix"]."comments add parent int(10) unsigned default NULL", $dblink), "Already done? OK!", 0);
+	mysql_query("alter table ".$config["table_prefix"]."comments add parent int(10) unsigned default NULL", $dblink), "Already done? OK!", 0);
 	test("Adding fields to comments table to enable threading...", 
-	mysql_query("alter ".$config["table_prefix"]."comments add deleted char(1) default NULL", $dblink), "Already done? OK!", 0);
+	mysql_query("alter table ".$config["table_prefix"]."comments add deleted char(1) default NULL", $dblink), "Already done? OK!", 0);
 
 case "trunk": //latest development version from the SVN repository - do not remove
 	break;
