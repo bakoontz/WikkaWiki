@@ -209,12 +209,13 @@ class ONYX_RSS
       {
          $parts = parse_url($uri);
          $port  = isset($parts['port']) ? $parts['port'] : 80;
+         $host  = isset($parts['host']) ? $parts['host'] : ''; 
 
          if (!($fp = @fsockopen($host, $port)))
             return 0;
 
          $req = "HEAD {$parts['path']} HTTP/1.1\r\nUser-Agent: PHP/".phpversion();
-         $req.= "\r\nHost: {$parts['host']}\r\nAccept: */*\r\n\r\n";
+         $req.= "\r\nHost: {$host}\r\nAccept: */*\r\n\r\n";
          fputs($fp, $req);
 
          while (!feof($fp))
