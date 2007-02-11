@@ -1395,10 +1395,12 @@ class Wakka
 	{
 		// delete old link table
 		$this->Query("delete from ".$this->config["table_prefix"]."links where from_tag = '".mysql_real_escape_string($this->GetPageTag())."'");
+		// build new link table
 		if ($linktable = $this->GetLinkTable())
 		{
 			$from_tag = mysql_real_escape_string($this->GetPageTag());
 			$sql = '';
+			$written = array();
 			foreach ($linktable as $to_tag)
 			{
 				$lower_to_tag = strtolower($to_tag);
