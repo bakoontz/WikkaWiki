@@ -16,6 +16,7 @@
  * @uses Config::$require_edit_note
  * @uses Config::$gui_editor
  * @uses Wakka::ClearLinkTable()
+ * @uses Wakka::ExistsPage()
  * @uses Wakka::Footer()
  * @uses Wakka::Format()
  * @uses Wakka::FormClose()
@@ -258,10 +259,8 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 }
 else
 {
-	$message = '<em>'.ERROR_NO_WRITE_ACCESS.'</em><br />'."\n".
-			"<br />\n".
-			'<a href="'.$this->Href('showcode').'" title="'.SHOWCODE_LINK_TITLE.'">'.SHOWCODE_LINK.'</a>'.
-			"<br />\n";
+	$message = '<em>'.ERROR_NO_WRITE_ACCESS.'</em><br />'."\n<br />\n";
+	if ($this->ExistsPage($this->tag)) $message .= '<a href="'.$this->Href('showcode').'" title="'.SHOWCODE_LINK_TITLE.'">'.SHOWCODE_LINK.'</a>'."<br />\n";		
 	echo $message;
 }
 echo '</div>'."\n" //TODO: move to templating class
