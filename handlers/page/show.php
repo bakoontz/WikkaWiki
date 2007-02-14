@@ -190,26 +190,36 @@ function displayComments(&$obj, &$comments, $tag) {
 	$is_owner = $obj->UserIsOwner();
 	$prev_level = null;
 	$threaded = 0;
+	$flipflop = 0;
 	if($_SESSION['show_comments'][$tag] == COMMENT_ORDER_THREADED)
 		$threaded = 1;
 
 	foreach ($comments as $comment)
 	{
+		# Blank out deleted comments (they never really go away at
+		# this point; they're just flagged as deleted)
 		if($comment['deleted'] == 'Y') {
 			$comment['user'] = NULL;
 			$comment['comment'] = "Comment deleted";
 			$comment['time'] = NULL;
 		}
+
+		# Handle legacy or non-threaded comments
 		if(!isset($comment['level']) || !$threaded)
 			$comment['level'] = 0;
 
+		# Keep track of closing <div> tags to effect nesting
 		if(isset($prev_level) && ($comment['level'] <= $prev_level)) {
 			for($i=0; $i<$prev_level-$comment['level']+1; ++$i) {
 				echo '</div>'."\n";
 			}
 		}
 
-		echo '<div class="comment">'."\n".
+		# Alternate light/dark comment styles
+		$flipflop ? $comment_class = "comment" : $comment_class = "comment2";
+		$flipflop ^= 1;
+
+		echo '<div class="'.$comment_class.'">'."\n".
 			'<span id="comment_'.$comment['id'].'"></span>'.$comment['comment']."\n".
 			"\t".'<div class="commentinfo">'."\n";
 			if($comment['deleted'] != 'Y') echo "-- ";
