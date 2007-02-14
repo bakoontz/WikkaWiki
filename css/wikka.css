@@ -63,8 +63,9 @@ body {
 .comment {
 	background-color: #EEEEEE;
 	padding: 10px;
-	border-top: 1px solid #CCCCCC;
-	border-bottom: 1px solid #CCCCCC;
+	border: 1px solid #CCCCCC;
+	margin: 15px;
+	/*border-bottom: 1px solid #CCCCCC;*/
 }
 
 .commentL1 {

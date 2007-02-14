@@ -124,19 +124,6 @@ else
 			// display comments!
 			if ($_SESSION['show_comments'][$tag] != COMMENT_NO_DISPLAY)
 			{
-				$levels = array(	
-							0 => 'comment',
-							1 => 'commentL1',
-							2 => 'commentL2',
-							3 => 'commentL3',
-							4 => 'commentL4',
-							5 => 'commentL5',
-							6 => 'commentL6',
-							7 => 'commentL7',
-							8 => 'commentL8',
-							9 => 'commentL9',
-							10 => 'commentL10', );
-
 				// load comments for this page
 				$comments = $this->LoadComments($this->tag, $_SESSION['show_comments'][$tag]);
 
@@ -155,43 +142,8 @@ else
 				</div>
 <?php
 				// display comments themselves
-				if ($comments)
-				{
-					$current_user = $this->GetUserName(); 
-					$is_owner = $this->UserIsOwner();
-					foreach ($comments as $comment)
-					{
-						if($comment['deleted'] == 'Y') {
-							$comment['user'] = NULL;
-							$comment['comment'] = "Comment deleted";
-							$comment['time'] = NULL;
-						}
-						if(!isset($comment['level']))
-							$comment['level'] = 0;
-
-						echo '<div class="'.$levels[$comment['level']].'">'."\n".
-							'<span id="comment_'.$comment['id'].'"></span>'.$comment['comment']."\n".
-							"\t".'<div class="commentinfo">'."\n";
-							if($comment['deleted'] != 'Y') echo "-- ";
-						echo ($this->LoadUser($comment['user']))? $this->Format($comment['user']) : $comment['user']; // #84
-						if($comment['deleted'] != 'Y')
-							echo ' ('.$comment['time'].')'."\n";
-						if($this->HasAccess('comment'))
-						{
-							echo $this->FormOpen("processcomment");
-?>
-   <input type="hidden" name="comment_id" value="<?php echo $comment['id'] ?>" />
-   <?php if($comment['deleted'] != 'Y') { ?>
-   <input type="submit" name="submit" value="<?php echo BUTTON_REPLY_COMMENT ?>" />
-   <?php if($is_owner || $user['name'] == $comment['user'] || ($this->config['anony_delete_own_comments'] && $current_user == $comment['user'])) { ?>
-   <input type="submit" name="submit" value="<?php echo BUTTON_DELETE_COMMENT ?>" />
-<?php }
-}
-							echo $this->FormClose();
-						}
-						echo "\n\t".'</div>'."\n";
-						echo '</div>'."\n";
-					}
+				if ($comments) {
+					displayComments($this, $comments, $tag);
 				}
 				echo '</div>'."\n";
 			}
@@ -232,4 +184,57 @@ else
 		}
 	}
 }
+
+function displayComments(&$obj, &$comments, $tag) {
+	$current_user = $obj->GetUserName(); 
+	$is_owner = $obj->UserIsOwner();
+	$prev_level = null;
+	$threaded = 0;
+	if($_SESSION['show_comments'][$tag] == COMMENT_ORDER_THREADED)
+		$threaded = 1;
+
+	foreach ($comments as $comment)
+	{
+		if($comment['deleted'] == 'Y') {
+			$comment['user'] = NULL;
+			$comment['comment'] = "Comment deleted";
+			$comment['time'] = NULL;
+		}
+		if(!isset($comment['level']) || !$threaded)
+			$comment['level'] = 0;
+
+		if(isset($prev_level) && ($comment['level'] <= $prev_level)) {
+			for($i=0; $i<$prev_level-$comment['level']+1; ++$i) {
+				echo '</div>'."\n";
+			}
+		}
+
+		echo '<div class="comment">'."\n".
+			'<span id="comment_'.$comment['id'].'"></span>'.$comment['comment']."\n".
+			"\t".'<div class="commentinfo">'."\n";
+			if($comment['deleted'] != 'Y') echo "-- ";
+		echo ($obj->LoadUser($comment['user']))? $obj->Format($comment['user']) : $comment['user']; // #84
+		if($comment['deleted'] != 'Y')
+			echo ' ('.$comment['time'].')'."\n";
+		if($obj->HasAccess('comment'))
+		{
+			echo $obj->FormOpen("processcomment");
+?>
+<input type="hidden" name="comment_id" value="<?php echo $comment['id'] ?>" />
+<?php if($comment['deleted'] != 'Y') { ?>
+<input type="submit" name="submit" value="<?php echo BUTTON_REPLY_COMMENT ?>" />
+<?php if($is_owner || $user['name'] == $comment['user'] || ($obj->config['anony_delete_own_comments'] && $current_user == $comment['user'])) { ?>
+<input type="submit" name="submit" value="<?php echo BUTTON_DELETE_COMMENT ?>" />
+<?php }
+}
+			echo $obj->FormClose();
+		}
+		echo "\n\t".'</div>'."\n";
+		$prev_level = $comment['level'];
+	}
+	for($i=0; $i<$prev_level+1; ++$i) {
+		print "</div>\n";
+	}
+}
+
 ?>
