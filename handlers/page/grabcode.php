@@ -27,7 +27,7 @@ define('ERROR_NO_CODE', 'Sorry, there is no code to download.');
  * defaults
  */
 define('DEFAULT_FILENAME', 'codeblock.txt'); # default name for code blocks
-define('FILE_EXTENSION', '.txt'); # extension appended to code block name
+define('FILE_EXTENSION', '.txt'); # extension appended to code block name for security reasons
 
 // initialize variables
 $code = '';
