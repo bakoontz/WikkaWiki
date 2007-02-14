@@ -240,7 +240,7 @@ define('SEARCH_WORD_3','juice');
 define('SEARCH_WORD_4','macintosh');
 define('SEARCH_WORD_5','some');
 define('SEARCH_WORD_6','words');
-define('SEARCH_PHRASE',sprintf('%s %s'),SEARCH_WORD_5,SEARCH_WORD_6);
+define('SEARCH_PHRASE',sprintf('%s %s', SEARCH_WORD_5, SEARCH_WORD_6));
 define('SEARCH_TARGET_1','Find pages that contain at least one of the two words.');
 define('SEARCH_TARGET_2','Find pages that contain both words.');
 define('SEARCH_TARGET_3',sprintf("Find pages that contain the word '%1\$s' but not '%2\$s'.",SEARCH_WORD_1,SEARCH_WORD_4));
