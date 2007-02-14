@@ -136,7 +136,7 @@ else
 				[<a href="<?php echo $this->Href('', '', 'show_comments='.COMMENT_ORDER_THREADED.'#comments') ?>"><?php echo DISPLAY_COMMENTS_THREADED ?></a>]
 
 				<?php echo $this->FormOpen("processcomment") ?>
-				<input type="submit" name="submit" value="<?php echo BUTTON_NEW_COMMENT ?>">
+				<input type="submit" name="submit" value="<?php echo BUTTON_NEW_COMMENT ?>" />
 				<?php echo $this->FormClose() ?>
 
 				</div>
