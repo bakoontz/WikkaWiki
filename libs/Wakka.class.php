@@ -1606,7 +1606,7 @@ class Wakka
 	 * @uses	Wakka::IncludeBuffered()
 	 * @param	$text
 	 */
-	function Format($text, $formatter="wakka") { return $this->IncludeBuffered($formatter.'.php', '<em class="error">'.sprintf(FORMATTER_UNKNOWN,$formatter),'</em>', compact('text'), $this->config['wikka_formatter_path']); }
+	function Format($text, $formatter="wakka") { return $this->IncludeBuffered($formatter.'.php', '<em class="error">'.sprintf(FORMATTER_UNKNOWN,$formatter).'</em>', compact('text'), $this->config['wikka_formatter_path']); }
 
 	/**
 	 * USERS

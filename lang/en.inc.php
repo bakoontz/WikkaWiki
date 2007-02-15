@@ -39,6 +39,7 @@ define('WIKKA_COMMENT_AUTHOR_DIVIDER',', comment by '); //TODo check if we can c
 define('WIKKA_PAGE_EDIT_LINK_DESC','edit');
 define('WIKKA_PAGE_CREATE_LINK_DESC','create');
 define('WIKKA_PAGE_EDIT_LINK_TITLE','Click to edit %s'); // %s page name @@@ 'Edit %s'
+define('WIKKA_BACKLINKS_LINK_TITLE','Display a list of pages linking to %s'); // %s page name
 define('WIKKA_JRE_LINK_DESC','Java Runtime Environment');
 define('WIKKA_NOTE','NOTE:');
 define('WIKKA_JAVA_PLUGIN_NEEDED','Java 1.4.1 (or later) Plug-in is needed to run this applet,');
@@ -135,19 +136,19 @@ define('NO_ATTACHMENTS','This page contains no attachment.');
 
 // footer
 define('PAGE_EDIT_LINK_TITLE','Click to edit this page'); // @@@ TODO 'Edit this page'
-define('PAGE_EDIT_LINK_TEXT','Edit page');
+define('PAGE_EDIT_LINK_DESC','Edit page');
 define('PAGE_HISTORY_LINK_TITLE','Click to view recent edits to this page'); // @@@ TODO 'View recent edits to this page'
-define('PAGE_HISTORY_LINK_TEXT','Page History');
+define('PAGE_HISTORY_LINK_DESC','Page History');
 define('PAGE_REVISION_LINK_TITLE','Click to view recent revisions list for this page'); // @@@ TODO 'View recent revisions list for this page' 
-define('PAGE_REVISION_LINK_XML_TITLE','Click to view recent revisions list for this page'); // @@@ TODO 'View recent revisions list for this page'
-define('PAGE_ACLS_EDIT_LINK_TEXT','Edit ACLs');
-define('PAGE_ACLS_EDIT_ADMIN_LINK_TEXT','('.PAGE_ACLS_EDIT_LINK_TEXT.')');
+define('PAGE_REVISION_XML_LINK_TITLE','Click to view recent revisions list for this page'); // @@@ TODO 'View recent revisions list for this page'
+define('PAGE_ACLS_EDIT_LINK_DESC','Edit ACLs');
+define('PAGE_ACLS_EDIT_ADMIN_LINK_DESC','('.PAGE_ACLS_EDIT_LINK_TEXT.')');
 define('PUBLIC_PAGE','Public page');
 define('USER_IS_OWNER','You own this page.');
 define('NO_OWNER','Nobody');
 define('TAKE_OWNERSHIP','Take Ownership');
-define('REFERRER_LINK_TITLE','Click to view a list of URLs referring to this page'); // @@@ TODO 'View a list of URLs referring to this page'
-define('REFERRER_LINK_TEXT','Referrers');
+define('REFERRERS_LINK_TITLE','Click to view a list of URLs referring to this page'); // @@@ TODO 'View a list of URLs referring to this page'
+define('REFERRERS_LINK_TEXT','Referrers');
 define('QUERY_LOG','Query log:');
 define('SEARCH_LABEL','Search:');
 
@@ -159,7 +160,6 @@ define('GENERIC_DOCTITLE','%1$s: %2$s');	// %1$s - wiki name; %2$s - page title
 define('RSS_REVISIONS_TITLE','%1$s: revisions for %2$s');	// %1$s - wiki name; %2$s - current page name
 define('RSS_RECENTCHANGES_TITLE','%s: recently edited pages');	// %s - wiki name
 define('YOU_ARE','You are %s'); // %s - name / ip of the user.
-define('LINKING_PAGES_LINK_TITLE','Display a list of pages linking to %s'); // %s - page name
 
 // include
 define('ERROR_CIRCULAR_REFERENCE','Circular reference detected!');
@@ -209,7 +209,7 @@ define('OWNEDPAGES_PERCENTAGE','That means you own %s of the total.'); // %s per
 define('PAGEINDEX_HEADING','Page Index');
 define('PAGEINDEX_CAPTION','This is an alphabetical list of pages you can read on this server.');
 define('PAGEINDEX_OWNED_PAGES_CAPTION','Items marked with a * indicate pages that you own.');
-define('ALL_PAGES','All');
+define('PAGEINDEX_ALL_PAGES','All');
 
 // recentchanges
 define('RECENTCHANGES_HEADING','Recently changed pages');
@@ -343,7 +343,6 @@ define('CHANGE_PASSWORD_BUTTON','Change password');
 define('REGISTER_BUTTON','Register');
 
 // wantedpages
-define('BACKLINKS_LINK_TITLE','Click to view all pages linking to %s'); // %s page name
 define('SORTING_LEGEND','Sorting ...');
 define('SORTING_NUMBER_LABEL','Sorting #%d:');
 define('SORTING_DESC_LABEL','desc');

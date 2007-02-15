@@ -35,18 +35,18 @@
 			$page_owner_link = $this->Link($owner,'','',0);
 			if ($owner == "(Public)")
 			{
-				print(PUBLIC_PAGE.' '.($this->IsAdmin() ? '<a href="'.$this->Href("acls").'">'.PAGE_ACLS_EDIT_LINK_TEXT_ADMIN.'</a> ::'."\n" : "::\n"));
+				print(PUBLIC_PAGE.' '.($this->IsAdmin() ? '<a href="'.$this->Href("acls").'">'.PAGE_ACLS_EDIT_ADMIN_LINK_DESC.'</a> ::'."\n" : "::\n"));
 			}
 			// if owner is current user
 			elseif ($this->UserIsOwner())
 			{
            		if ($this->IsAdmin())
            		{
-					print(sprintf(WIKKA_PAGE_OWNER,$page_owner_link).' :: <a href="'.$this->href("acls").'">'.PAGE_ACLS_EDIT_ADMIN_LINK_TEXT.'</a> ::'."\n");
+					print(sprintf(WIKKA_PAGE_OWNER,$page_owner_link).' :: <a href="'.$this->href("acls").'">'.PAGE_ACLS_EDIT_ADMIN_LINK_DESC.'</a> ::'."\n");
             	} 
             	else 
             	{
-					print(USER_IS_OWNER.' :: <a href="'.$this->href("acls").'">'.PAGE_ACLS_EDIT_ADMIN_LINK_TEXT.'</a> ::'."\n");
+					print(USER_IS_OWNER.' :: <a href="'.$this->href("acls").'">'.PAGE_ACLS_EDIT_LINK_DESC.'</a> ::'."\n");
 				}
 			}
 			else

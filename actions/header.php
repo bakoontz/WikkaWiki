@@ -30,7 +30,7 @@ if ( substr_count($site_base, 'wikka.php?wakka=') > 0 ) $site_base = substr($sit
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
 <head>
-	<title><?php printf('GENERIC_DOCTITLE',$this->GetWakkaName(),$this->PageTitle()); ?></title>
+	<title><?php printf(GENERIC_DOCTITLE,$this->GetWakkaName(),$this->PageTitle()); ?></title>
 	<base href="<?php echo $site_base ?>" />
 	<?php if ($this->GetMethod() != 'show' || $this->page["latest"] == 'N' || $this->page["tag"] == 'SandBox') echo "<meta name=\"robots\" content=\"noindex, nofollow, noarchive\" />\n"; ?>
 	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />

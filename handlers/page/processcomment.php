@@ -57,7 +57,7 @@ if($_POST['submit']==COMMENT_REPLY_BUTTON ||
 }
 
 // Save comment
-if($_POST['submit']==BUTTON_ADD_COMMENT) {
+if($_POST['submit']==COMMENT_ADD_BUTTON) {
 	$parent_id = intval(trim($_POST["comment_id"]));
 	if ($this->HasAccess("comment") || $this->IsAdmin())
 	{

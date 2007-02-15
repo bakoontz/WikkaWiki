@@ -23,7 +23,7 @@ $label_email	= FEEDBACK_EMAIL_LABEL;
 $label_comment	= FEEDBACK_COMMENT_LABEL;
 $button_send	= FEEDBACK_SEND_BUTTON;
 // construct form template
-$template = <<<TPLFEEDBACKFORM 
+$template = <<<TPLFEEDBACKFORM
 	<p>$form_caption</p>
 	$form_open
 	<input type="hidden" name="mail" value="result" />
