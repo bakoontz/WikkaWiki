@@ -198,6 +198,7 @@ function displayComments(&$obj, &$comments, $tag)
 			for($i=0; $i<$prev_level-$comment['level']+1; ++$i) {
 				echo '</div>'."\n";
 			}
+			$flipflop ^= 1;
 		}
 
 		# Alternate light/dark comment styles
@@ -228,7 +229,8 @@ function displayComments(&$obj, &$comments, $tag)
 	<input type="submit" name="submit" value="<?php echo COMMENT_REPLY_BUTTON ?>" />
 <?php
 				$user = $obj->GetUser();
-				if($is_owner || $user['name'] == $comment['user'] || ($obj->config['anony_delete_own_comments'] && $current_user == $comment['user']))
+				if(isset($user)) $name = $user['name'];
+				if($is_owner || $name == $comment['user'] || ($obj->config['anony_delete_own_comments'] && $current_user == $comment['user']))
 				{
 ?>
 	<input type="submit" name="submit" value="<?php echo COMMENT_DELETE_BUTTON ?>" />
