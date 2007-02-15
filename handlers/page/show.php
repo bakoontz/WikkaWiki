@@ -108,19 +108,6 @@ else
 			// display comments!
 			if ($_SESSION['show_comments'][$tag] != COMMENT_NO_DISPLAY)
 			{
-				$levels = array(	
-							0 => 'comment',
-							1 => 'commentL1',
-							2 => 'commentL2',
-							3 => 'commentL3',
-							4 => 'commentL4',
-							5 => 'commentL5',
-							6 => 'commentL6',
-							7 => 'commentL7',
-							8 => 'commentL8',
-							9 => 'commentL9',
-							10 => 'commentL10', );
-
 				// load comments for this page
 				$comments = $this->LoadComments($this->tag, $_SESSION['show_comments'][$tag]);
 
@@ -240,7 +227,7 @@ function displayComments(&$obj, &$comments, $tag)
 ?>
 	<input type="submit" name="submit" value="<?php echo COMMENT_REPLY_BUTTON ?>" />
 <?php
-				if($is_owner || $user['name'] == $comment['user'] || ($this->config['anony_delete_own_comments'] && $current_user == $comment['user']))
+				if($is_owner || $user['name'] == $comment['user'] || ($obj->config['anony_delete_own_comments'] && $current_user == $comment['user']))
 				# FIXME 'The local variable $user may not have been initialized'
 				{
 ?>
