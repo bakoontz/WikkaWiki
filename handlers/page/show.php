@@ -227,8 +227,8 @@ function displayComments(&$obj, &$comments, $tag)
 ?>
 	<input type="submit" name="submit" value="<?php echo COMMENT_REPLY_BUTTON ?>" />
 <?php
+				$user = $obj->GetUser();
 				if($is_owner || $user['name'] == $comment['user'] || ($obj->config['anony_delete_own_comments'] && $current_user == $comment['user']))
-				# FIXME 'The local variable $user may not have been initialized'
 				{
 ?>
 	<input type="submit" name="submit" value="<?php echo COMMENT_DELETE_BUTTON ?>" />

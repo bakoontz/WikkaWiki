@@ -1816,24 +1816,8 @@ class Wakka
 				array_push($transformed_map[$parent], $id);
 			}
 		}
-		//DEBUG vv
-/*
-		foreach($transformed_map as $key=>$val) {
-			echo "<br/>Key: ".$key." Vals: ";
-			foreach($val as $key2=>$val2) {
-				echo $val2." ";
-			}
-		}
-		echo "<br/>Visited: ";
-		foreach($visited as $val) {
-			echo $val." ";
-		}
-*/
-		//DEBUG ^^
 		if(is_array($transformed_map[end($visited)]))
 			$id = array_shift($transformed_map[end($visited)]);
-		//DEBUG
-		//echo "<br/>Visiting: ".$id;
 		if(isset($id)) {
 			// Limit recursions to COMMENT_MAX_TRAVERSAL_DEPTH
 			if($level >= COMMENT_MAX_TRAVERSAL_DEPTH) {
@@ -1850,15 +1834,11 @@ class Wakka
 				$this->TraverseComments($tag, $graph);
 			}
 		} else if($level < 0) { // End traversal
-			//DEBUG
-			//echo "<br/>Ending!";
 			return;
 		} else {
 			// Step back to the parent to find next child
 			--$level;
 			array_pop($visited);
-			//DEBUG
-			//echo "<br/>Going back to ".$prev;
 			$this->TraverseComments($tag, $graph); 
 		}
 	}
