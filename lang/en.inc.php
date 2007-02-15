@@ -39,7 +39,7 @@ define('WIKKA_COMMENT_AUTHOR_DIVIDER',', comment by '); //TODo check if we can c
 define('WIKKA_PAGE_EDIT_LINK_DESC','edit');
 define('WIKKA_PAGE_CREATE_LINK_DESC','create');
 define('WIKKA_PAGE_EDIT_LINK_TITLE','Click to edit %s'); // %s page name @@@ 'Edit %s'
-define('WIKKA_BACKLINKS_LINK_TITLE','Display a list of pages linking to %s'); // %s page name
+define('LINKING_PAGES_LINK_TITLE','Display a list of pages linking to %s'); // %s page name
 define('WIKKA_JRE_LINK_DESC','Java Runtime Environment');
 define('WIKKA_NOTE','NOTE:');
 define('WIKKA_JAVA_PLUGIN_NEEDED','Java 1.4.1 (or later) Plug-in is needed to run this applet,');
@@ -148,7 +148,7 @@ define('USER_IS_OWNER','You own this page.');
 define('NO_OWNER','Nobody');
 define('TAKE_OWNERSHIP','Take Ownership');
 define('REFERRERS_LINK_TITLE','Click to view a list of URLs referring to this page'); // @@@ TODO 'View a list of URLs referring to this page'
-define('REFERRERS_LINK_TEXT','Referrers');
+define('REFERRERS_LINK_DESC','Referrers');
 define('QUERY_LOG','Query log:');
 define('SEARCH_LABEL','Search:');
 
