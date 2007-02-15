@@ -19,6 +19,9 @@
  * @uses	Wakka::FormClose()
  * @todo Use [advanced] FormOpen()
  * @todo Add a behaviour scripts to select the content of the input field when focused.
+ * @todo	[accessibility] Add a label with a prompt (cf. footer action)
+ * @todo	[accessibility] Add signal for the user that the result will open in a
+ *			new window
  * @link http://docs.wikkawiki.org/GoogleFormActionInfo
  */
 
@@ -50,5 +53,5 @@ $query = $this->htmlspecialchars_ent($query);
 ?>
 <form action="http://www.google.com/search" method="get" target="_blank">
 	<input type="text" value="<?php echo $query; ?>" name="q" size="30" maxlength="2048" class="WBselectonfocus" /> 
-	<input name="btnG" type="submit" value="<?php echo BUTTON_GOOGLE;?>" />
+	<input name="btnG" type="submit" value="<?php echo GOOGLE_BUTTON;?>" />
 <?php echo $this->FormClose(); ?>

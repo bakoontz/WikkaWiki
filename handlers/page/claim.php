@@ -17,11 +17,6 @@
  * @uses	Wakka::Redirect()
  */
 
-/**
- * i18n
- */
-if(!defined('USER_IS_NOW_OWNER')) define ('USER_IS_NOW_OWNER',"You are now the owner of this page.");
-
 if ($this->page && !$this->GetPageOwner() && $this->GetUser())
 {
 	$this->SetPageOwner($this->GetPageTag(), $this->GetUserName());

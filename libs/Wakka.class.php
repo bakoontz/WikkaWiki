@@ -24,11 +24,6 @@
  * @copyright Copyright 2006, {@link http://wikkawiki.org/CreditsPage Wikka Development Team}
  */
 
-
-// i18n strings
-if (!defined('LABEL_EDIT')) define('LABEL_EDIT', 'edit');
-if (!defined('LISTPAGES_EDIT_TITLE')) define('LISTPAGES_EDIT_TITLE', 'Click to edit %s');
-
 // Comments
 if (!defined('COMMENT_NO_DISPLAY')) define('COMMENT_NO_DISPLAY', 0);
 if (!defined('COMMENT_ORDER_DATE_ASC')) define('COMMENT_ORDER_DATE_ASC', 1);
@@ -131,7 +126,7 @@ class Wakka
 		if (!$result = mysql_query($query, $this->dblink))
 		{
 			ob_end_clean();
-			die("Query failed: ".$query." (".mysql_error($this->dblink).")"); #i18n #376
+			die(QUERY_FAILED.' '.$query.' ('.mysql_error($this->dblink).')'); #376
 		}
 		if ($this->GetConfigValue("sql_debugging"))
 		{
@@ -178,6 +173,7 @@ class Wakka
 	 * @param	integer $subminor mandatory:
 	 * @return	1 - if higher or equal; 0 if not or n/a
 	 * @todo	move into a database class.
+	 * @todo	use PHP version_compare() for comparison
 	 */
 	function CheckMySQLVersion($major, $minor, $subminor)
 	{
@@ -329,7 +325,7 @@ class Wakka
 		// validation (full for 'embed', characters only for other groups since we'll add a prefix)
 		if ('embed' == $group)
 		{
-			$validId = preg_match('/^[A-Za-z][A-Za-z0-9_:.-]*$/',$id);	# ref: http://www.w3.org/TR/html4/types.html#type-id
+			$validId = preg_match('/^[A-Za-z][A-Za-z0-9_:.-]*$/',$id);	# #34 ref: http://www.w3.org/TR/html4/types.html#type-id
 		}
 		else
 		{
@@ -989,7 +985,7 @@ class Wakka
 		{
 			if ($show_edit_link) 
 			{
-				$edit_link = ' <small>['.$this->Link($val, 'edit', LABEL_EDIT, false, true, sprintf(LISTPAGES_EDIT_TITLE, $val)).']</small>';
+				$edit_link = ' <small>['.$this->Link($val, 'edit', WIKKA_PAGE_EDIT_LINK_DESC, false, true, sprintf(WIKKA_PAGE_EDIT_LINK_TITLE, $val)).']</small>';
 			}
 			if ($compact)
 			{
@@ -1027,7 +1023,7 @@ class Wakka
 		// get current user
 		$user = $this->GetUserName();
 
-		// TODO: check write privilege
+		// TODO: check write privilege	??? is this still a TODO??
 		if ($this->HasAccess("write", $tag))
 		{
 			// is page new?
@@ -1285,11 +1281,12 @@ class Wakka
 		$url = ($url == '' ) ? $this->config['base_url'].$this->tag : $url;
 		if ((eregi('IIS', $_SERVER["SERVER_SOFTWARE"])) && ($this->cookies_sent))
 		{
-			@ob_end_clean();
+			@ob_end_clean(); 
+			$redirlink = '<a href="'.$this->Href($url).'">'.REDIR_LINK_DESC.'</a>';
 			die('<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head><title>Redirected to '.$this->Href($url).'</title>'.
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head><title>'.sprintf(REDIR_DOCTITLE,$this->Href($url)).'</title>'.
 '<meta http-equiv="refresh" content="0; url=\''.$url.'\'" /></head><body><div><script type="text/javascript">window.location.href="'.$url.'";</script>'.
-'</div><noscript>If your browser does not redirect you, please follow <a href="'.$this->Href($url).'">this link</a></noscript></body></html>'); #i18n
+'</div><noscript>'.sprintf(REDIR_MANUAL_CAPTION,$redirlink).'</noscript></body></html>');
 		}
 		else
 		{
@@ -1348,7 +1345,8 @@ class Wakka
 		$url = '';
 
 		// is this an interwiki link?
-		if (preg_match("/^([A-ZÄÖÜ][A-Za-zÄÖÜßäöü]+)[:](\S*)$/", $tag, $matches))	# before the : should be a WikiName; anything after can be (nearly) anything that's allowed in a URL
+		// before the : should be a WikiName; anything after can be (nearly) anything that's allowed in a URL
+		if (preg_match("/^([A-ZÄÖÜ][A-Za-zÄÖÜßäöü]+)[:](\S*)$/", $tag, $matches))	// @@@ FIXME #34 (inconsistent with Formatter) 
 		{
 			$url = $this->GetInterWikiUrl($matches[1], $matches[2]);
 		}
@@ -1356,8 +1354,9 @@ class Wakka
 		{
 			$url = $tag; // this is a valid external URL
 		}
-		// is this a full link? ie, does it contain alpha-numeric characters?
-		elseif (preg_match("/[^[:alnum:],ÄÖÜ,ßäöü]/", $tag))
+		// is this a full link? ie, does it contain something *else* than valid WikiName (alpha-numeric) characters?
+		// FIXME just use (!IsWikiName($tag)) here (then fix the RE there!)
+		elseif (preg_match("/[^[:alnum:],ÄÖÜ,ßäöü]/", $tag))	// @@@ FIXME #34 (inconsistent with Formatter! ) remove all ',' from RE (comma should not be allowed in WikiNames!)
 		{
 			// check for email addresses
 			if (preg_match("/^.+\@.+$/", $tag))
@@ -1375,7 +1374,7 @@ class Wakka
 			// it's a wiki link
 			if (isset($_SESSION['linktracking']) && $_SESSION["linktracking"] && $track) $this->TrackLinkTo($tag);
 			$linkedPage = $this->LoadPage($tag);
-			return ($linkedPage ? '<a href="'.$this->Href($method, $linkedPage['tag']).'"'.$title_attr.'>'.$text.'</a>' : '<a class="missingpage" href="'.$this->Href("edit", $tag).'" title="Create this page">'.$text.'</a>'); #i18n
+			return ($linkedPage ? '<a href="'.$this->Href($method, $linkedPage['tag']).'"'.$title_attr.'>'.$text.'</a>' : '<a class="missingpage" href="'.$this->Href("edit", $tag).'" title="'.CREATE_THIS_PAGE_LINK_TITLE.'">'.$text.'</a>'); #i18n
 		}
 		$external_link_tail = $this->GetConfigValue("external_link_tail");
 		return $url ? '<a class="ext" href="'.$url.'">'.$text.'</a>'.$external_link_tail : $text;
@@ -1385,7 +1384,7 @@ class Wakka
 	/**
 	 * Check if a given text is in the Camelcase format.
 	 */
-	function IsWikiName($text) { return preg_match("/^[A-Z,ÄÖÜ][a-z,ßäöü]+[A-Z,0-9,ÄÖÜ][A-Z,a-z,0-9,ÄÖÜ,ßäöü]*$/", $text); }
+	function IsWikiName($text) { return preg_match("/^[A-Z,ÄÖÜ][a-z,ßäöü]+[A-Z,0-9,ÄÖÜ][A-Z,a-z,0-9,ÄÖÜ,ßäöü]*$/", $text); }	// @@@ FIXME #34 (inconsistent with Formatter!) remove all ',' from RE (comma should not be allowed in WikiNames!)
 	function TrackLinkTo($tag) { $_SESSION["linktable"][] = $tag; }
 	function GetLinkTable() { return $_SESSION["linktable"]; }
 	function ClearLinkTable() { $_SESSION["linktable"] = array(); }
@@ -1538,7 +1537,6 @@ class Wakka
 	 * @uses	Wakka::IncludeBuffered()
 	 * @uses	Wakka::StartLinkTracking()
 	 * @uses	Wakka::StopLinkTracking()
-	 * @todo	i18n
 	 */
 	function Action($action, $forceLinkTracking = 0)
 	{
@@ -1565,10 +1563,10 @@ class Wakka
 				}
 				$vars['wikka_vars'] = trim($vars_temp); // <<< add the buffered parameter-string to the array
 			} else {
-				return '<em class="error">Unknown action; the action name must not contain special characters.</em>'; // <<< the pattern ([A-Za-z0-9])\s+ didn't match! #i18n
+				return '<em class="error">'.ACTION_UNKNOWN_SPECCHARS.'</em>'; // <<< the pattern ([A-Za-z0-9])\s+ didn't match!
 			}
 		}
-		if (!preg_match('/^[a-zA-Z0-9]+$/', $action)) return '<em class="error">Unknown action; the action name must not contain special characters.</em>'; #i18n
+		if (!preg_match('/^[a-zA-Z0-9]+$/', $action)) return '<em class="error">'.ACTION_UNKNOWN_SPECCHARS.'</em>';
 		if (!$forceLinkTracking)
 		{
 			/**
@@ -1577,7 +1575,7 @@ class Wakka
 			$link_tracking_state = isset($_SESSION['linktracking']) ? $_SESSION['linktracking'] : 0; #38
 			$this->StopLinkTracking();
 		}
-		$result = $this->IncludeBuffered(strtolower($action).'.php', '<em class="error">Unknown action "'.$action.'"</em>', $vars, $this->config['action_path']); #i18n
+		$result = $this->IncludeBuffered(strtolower($action).'.php', '<em class="error">'.sprintf(ACTION_UNKNOWN,$action).'</em>', $vars, $this->config['action_path']);
 		if ($link_tracking_state)
 		{
 			$this->StartLinkTracking();
@@ -1588,7 +1586,6 @@ class Wakka
 	 * Use a handler on the current page.
 	 *
 	 * @uses	Wakka::IncludeBuffered()   
-	 * @todo	 i18n;
 	 * @todo	 use templating class
 	 * @todo	 separate different classes of handlers (page, user, files etc.);
 	 */
@@ -1600,16 +1597,16 @@ class Wakka
 		}
 		if (!$handler = $this->page['handler']) $handler = 'page';
 		$method_location = $handler.'/'.$method.'.php';
-		return $this->IncludeBuffered($method_location, '<div class="page"><em class="error">Sorry, <tt>'.$method_location.'</tt> is an unknown handler.</em></div>', '', $this->config['handler_path']); #i18n
+		$method_location_disp = '<tt>'.$method_location.'</tt>';
+		return $this->IncludeBuffered($method_location, '<div class="page"><em class="error">'.sprintf(HANDLER_UNKNOWN,$method_location_disp).'</em></div>', '', $this->config['handler_path']);
 	}
 	/**
-	 * Format a text using a given/ the standard "wakka" formatter.
+	 * Format a text using a given or the standard "wakka" formatter.
 	 *
 	 * @uses	Wakka::IncludeBuffered()
 	 * @param	$text
-	 * @todo i18n;
 	 */
-	function Format($text, $formatter="wakka") { return $this->IncludeBuffered($formatter.".php", "<em>Formatter \"$formatter\" not found</em>", compact("text"), $this->config['wikka_formatter_path']); } #i18n
+	function Format($text, $formatter="wakka") { return $this->IncludeBuffered($formatter.'.php', '<em class="error">'.sprintf(FORMATTER_UNKNOWN,$formatter),'</em>', compact('text'), $this->config['wikka_formatter_path']); }
 
 	/**
 	 * USERS
@@ -1992,6 +1989,7 @@ class Wakka
 	 * @param	string $tag mandatory: name of the page
 	 * @param	string $user mandatory: name of the user
 	 * @todo	see if "(Public)" and "(Nobody)" have to be replaced by constants to allow i18n
+	 * 			JW: could keep these constants in the database but 'translate' them in the UI
 	 */
 	function SetPageOwner($tag, $user)
 	{

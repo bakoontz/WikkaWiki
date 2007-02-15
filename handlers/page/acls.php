@@ -16,26 +16,8 @@
  * @author		{@link http://wikkawiki.org/NilsLindenberg Nils Lindenberg} (i18n)
  *
  * @todo		move main <div> to templating class
+ * @todo		show Cancel button only if JavaScript is available
  */
-
-/**
- * i18n
- */
-if (!defined('ACLS_UPDATED')) define('ACLS_UPDATED', 'Access control lists updated.');
-if (!defined('NO_PAGE_OWNER')) define('NO_PAGE_OWNER', '(Nobody)');
-if (!defined('NOT_PAGE_OWNER')) define('NOT_PAGE_OWNER', 'You are not the owner of this page.');
-if (!defined('PAGE_OWNERSHIP_CHANGED')) define('PAGE_OWNERSHIP_CHANGED', 'Ownership changed to %s'); // %s - name of new owner
-if (!defined('ACL_LEGEND')) define('ACL_LEGEND', 'Access Control Lists for %s'); // %s - name of current page
-if (!defined('READ_ACL_LABEL')) define('READ_ACL_LABEL', 'Read ACL:');
-if (!defined('WRITE_ACL_LABEL')) define('WRITE_ACL_LABEL', 'Write ACL:');
-if (!defined('COMMENT_ACL_LABEL')) define('COMMENT_ACL_LABEL', 'Comment ACL:');
-if (!defined('SET_OWNER_LABEL')) define('SET_OWNER_LABEL', 'Set Page Owner:');
-if (!defined('SET_OWNER_CURRENT_LABEL')) define('SET_OWNER_CURRENT_LABEL', '(Current Owner)');
-if (!defined('SET_OWNER_PUBLIC_LABEL')) define('SET_OWNER_PUBLIC_LABEL','(Public)');
-if (!defined('SET_NO_OWNER_LABEL')) define('SET_NO_OWNER_LABEL', '(Nobody - Set free)');
-if (!defined('ACL_SYNTAX_HELP')) define('ACL_SYNTAX_HELP', '===Syntax:=== ---##*## = Everyone ---##+## = Registered users ---##""JohnDoe""## = the user called ""JohnDoe"", enter as many users as you want, one per line --- --- Any of these items can be negated with a ##!##: ---##!*## = No one (except admins) ---##!+## = Anonymous users only ---##""!JohnDoe""## = ""JohnDoe"" will be denied access --- --- //ACLs are tested in the order they are specified:// --- So be sure to specify ##*## on a separate line //after// negating any users, not before.');
-if (!defined('BUTTON_STORE_ACLS')) define('BUTTON_STORE_ACLS', 'Store ACLs');
-if (!defined('BUTTON_CANCEL')) define('BUTTON_CANCEL', 'Cancel');
 
 echo '<div class="page">'."\n"; //TODO: move to templating class
 
@@ -91,21 +73,21 @@ if ($this->UserIsOwner())
 	{
 ?>
 <?php echo $this->FormOpen('acls') ?>
-<fieldset><legend><?php echo $this->Format(sprintf(ACL_LEGEND, '[['.$this->tag.']]').' --- ');?></legend>
+<fieldset><legend><?php echo $this->Format(sprintf(ACLS_LEGEND, '[['.$this->tag.']]').' --- ');?></legend>
 <table class="acls">
 <tr>
 	<td>
-	<label for="read_acl"><strong><?php echo READ_ACL_LABEL; ?></strong></label><br />
+	<label for="read_acl"><strong><?php echo ACLS_READ_LABEL ?></strong></label><br />
 	<textarea id="read_acl" name="read_acl" rows="4" cols="20"><?php echo preg_replace("/[\s,]+/", "\n", $this->ACLs['read_acl']) ?></textarea>
 	</td>
 
 	<td>
-	<label for="write_acl"><strong><?php echo WRITE_ACL_LABEL; ?></strong></label><br />
+	<label for="write_acl"><strong><?php echo ACLS_WRITE_LABEL ?></strong></label><br />
 	<textarea id="write_acl" name="write_acl" rows="4" cols="20"><?php echo preg_replace("/[\s,]+/", "\n", $this->ACLs['write_acl']) ?></textarea>
 	</td>
 
 	<td>
-	<label for="comment_acl"><strong><?php echo COMMENT_ACL_LABEL; ?></strong></label><br />
+	<label for="comment_acl"><strong><?php echo ACLS_COMMENT_LABEL ?></strong></label><br />
 	<textarea id="comment_acl" name="comment_acl" rows="4" cols="20"><?php echo preg_replace("/[\s,]+/", "\n", $this->ACLs['comment_acl']) ?></textarea>
 	</td>
 </tr>
@@ -113,16 +95,16 @@ if ($this->UserIsOwner())
 <tr>
 	<td colspan="2">
 	<br />
-	<input type="submit" value="<?php echo BUTTON_STORE_ACLS; ?>" />
-	<input type="button" value="<?php echo BUTTON_CANCEL; ?>" onclick="history.back();" />
+	<input type="submit" value="<?php echo ACLS_STORE_BUTTON ?>" />
+	<input type="button" value="<?php echo CANCEL_BUTTON ?>" onclick="history.back();" />
 	</td>
 
 	<td>
-	<label for="newowner"><strong><?php echo SET_OWNER_LABEL; ?></strong></label><br />
+	<label for="newowner"><strong><?php echo SET_OWNER_LABEL ?></strong></label><br />
 	<select id="newowner" name="newowner">
-	<option value="same"><?php echo $this->GetPageOwner().' '.SET_OWNER_CURRENT_LABEL ?></option>
-	<option value="(Public)"><?php echo SET_OWNER_PUBLIC_LABEL; ?></option>
-	<option value=""><?php echo SET_NO_OWNER_LABEL; ?></option>
+	<option value="same"><?php echo $this->GetPageOwner().' '.SET_OWNER_CURRENT_OPTION ?></option>
+	<option value="(Public)"><?php echo SET_OWNER_PUBLIC_OPTION ?></option>
+	<option value=""><?php echo SET_NO_OWNER_OPTION ?></option>
 <?php
 		if ($users = $this->LoadUsers())
 		{
@@ -138,7 +120,22 @@ if ($this->UserIsOwner())
 </table>
 </fieldset>
 <br />
-<?php echo $this->Format(ACL_SYNTAX_HELP); ?>
+<?php
+	$acls_sample_wiki_name_escaped = '""'.WIKKA_SAMPLE_WIKINAME.'""';
+
+	$acls_syntax_help  = '==='.ACLS_SYNTAX_HEADING.'===';
+	$acls_syntax_help .= ' ---##*## = '.ACLS_EVERYONE;
+	$acls_syntax_help .= ' ---##+## = '.ACLS_REGISTERED_USERS;
+	$acls_syntax_help .= ' ---##'.$acls_sample_wiki_name_escaped.'## = '.sprintf(ACLS_LIST_USERNAMES,$acls_sample_wiki_name_escaped);
+	$acls_syntax_help .= ' --- --- '.sprintf(ACLS_NEGATION,'##!##');
+	$acls_syntax_help .= ' ---##!*## = '.ACLS_NONE_BUT_ADMINS;
+	$acls_syntax_help .= ' ---##!+## = '.ACLS_ANON_ONLY;
+	$acls_syntax_help .= ' ---##!'.$acls_sample_wiki_name_escaped.'## = '.sprintf(ACLS_DENY_USER_ACCESS,$acls_sample_wiki_name_escaped);
+	$acls_syntax_help .= ' --- --- //'.ACLS_TESTING_ORDER1.'//';
+	$acls_syntax_help .= ' --- '.sprintf(ACLS_TESTING_ORDER2,'##*##','//'.ACLS_AFTER.'//');
+
+	echo $this->Format($acls_syntax_help);
+?>
 <?php
 		print($this->FormClose());
 	}

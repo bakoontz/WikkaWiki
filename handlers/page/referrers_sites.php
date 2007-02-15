@@ -17,52 +17,68 @@
  * @uses		Wakka::Href()
  * 
  * @todo		move <div> to template
+ * @todo		better separation between data gathering and output
+ * @todo		$heading should become heading, not bold text
  */
-//i18n
-if (!defined('REFERRERS_SITES_DOMAINS_LINKING_TO')) define('REFERRERS_SITES_DOMAINS_LINKING_TO', 'Domains/sites linking to this wiki (<a href="%s">see list of different URLs</a>):');
-if (!defined('REFERRERS_PURGE_24_HOURS')) define('REFERRERS_PURGE_24_HOURS', 'last 24 hours');
-if (!defined('REFERRERS_PURGE_N_DAYS')) define('REFERRERS_PURGE_N_DAYS', 'last %d days');
-if (!defined('REFERRERS_SITES_EXTERNAL_PAGES')) define('REFERRERS_SITES_EXTERNAL_PAGES', 'Domains/sites pages linking to %1$s%2$s (<a href="%3$s">see list of different URLs</a>):');
-if (!defined('REFERRERS_NO_SPAM')) define('REFERRERS_NO_SPAM', '<em>Note to spammers: This page is not indexed by search engines, so don\'t waste your time.</em><br /><br />');
-if (!defined('LABEL_BLACKLIST')) define('LABEL_BLACKLIST', 'Blacklist');
-if (!defined('LABEL_NONE')) define('LABEL_NONE', 'None');
-if (!defined('LABEL_PLEASE_LOGIN')) define('LABEL_PLEASE_LOGIN', 'You need to login to see referring sites');
-if (!defined('REFERRERS_CHOICE')) define('REFERRERS_CHOICE', '<a href="%1$s">View referring sites for %2$s only</a> | <a href="%3$s">View referrers for %2$s only</a> | <a href="%4$s">View referrer blacklist</a>');
-if (!defined('REFERRERS_CHOICE_GLOBAL')) define('REFERRERS_CHOICE_GLOBAL', '<a href="%1$s">View global referring sites</a> | <a href="%2$s">View global referrers</a> | <a href="%3$s">View referrer blacklist</a>');
-
-echo '<div class="page">'."\n"; //TODO: move to templating class
 
 $global = '';
 $IsAdmin = $this->IsAdmin();
+
+// set up output variables
+$thispage = $this->GetPageTag();
+$ref_domains_to_wiki_url = $this->Href('referrers_sites','','global=1');
+$ref_domains_to_page_url = $this->Href('referrers_sites');
+$ref_urls_to_wiki_url = $this->Href('referrers','','global=1');
+$ref_urls_to_page_url = $this->Href('referrers');
+$ref_blacklist_url = $this->Href('review_blacklist');
 if (isset($_REQUEST["global"]))
 {
+	// referrers to this wiki
+	// prepare UI
 	$global = $_REQUEST["global"];
-	$title = sprintf(REFERRERS_SITES_DOMAINS_LINKING_TO, $this->Href("referrers", "", "global=1"));
-	$referrers = $this->LoadReferrers();
+	$referrers_urls_link = '<a href="'.$ref_urls_to_wiki_url.'">'.REFERRERS_URLS_LINK_DESC.'</a>';
+	$heading = sprintf(REFERRERS_DOMAINS_TO_WIKI, $referrers_urls_link);
+
+	$ref_domains_to_page_link = '<a href="'.$ref_domains_to_page_url.'">'.sprintf(REFERRERS_DOMAINS_TO_PAGE_LINK_DESC,$thispage).'</a>';
+	$ref_urls_to_page_link = '<a href="'.$ref_urls_to_page_url.'">'.sprintf(REFERRERS_URLS_TO_PAGE_LINK_DESC,$thispage).'</a>';
+	$ref_blacklist_link = '<a href="'.$ref_blacklist_url.'">'.REFERRER_BLACKLIST_LINK_DESC.'</a>';
+	$menu = '['.$ref_domains_to_page_link.' | '.$ref_urls_to_page_link.' | '.$ref_blacklist_link.']';
 }
 else
 {
+	// referrers to this page
+	// prepare UI
 	switch (intval($this->GetConfigValue('referrers_purge_time')))
 	{
 		case 0: 
 			$referrers_purge_time = '';
 			break;
 		case 1:
-			$referrers_purge_time = ' '.REFERRERS_PURGE_24_HOURS;
+			$referrers_purge_time = REFERRERS_PURGE_24_HOURS;
 			break;
 		default:
-			$referrers_purge_time = sprintf(' '.REFERRERS_PURGE_N_DAYS, $this->GetConfigValue('referrers_purge_time'));
+			$referrers_purge_time = sprintf(REFERRERS_PURGE_N_DAYS, $this->GetConfigValue('referrers_purge_time'));
 	}
-	$title = sprintf(REFERRERS_SITES_EXTERNAL_PAGES, $this->Link($this->GetPageTag()), $referrers_purge_time, $this->Href('referrers'));
-	$referrers = $this->LoadReferrers($this->GetPageTag());
+	$referrers_urls_link = '<a href="'.$ref_urls_to_page_url.'">'.REFERRERS_URLS_LINK_DESC.'</a>';
+	$heading = sprintf(REFERRERS_DOMAINS_TO_PAGE, $this->Link($thispage), $referrers_purge_time, $referrers_urls_link);
+
+	$ref_domains_to_wiki_link = '<a href="'.$ref_domains_to_wiki_url.'">'.REFERRERS_DOMAINS_TO_WIKI_LINK_DESC.'</a>';
+	$ref_urls_to_wiki_link = '<a href="'.$ref_urls_to_wiki_url.'">'.REFERRERS_URLS_TO_WIKI_LINK_DESC.'</a>';
+	$ref_blacklist_link = '<a href="'.$ref_blacklist_url.'">'.REFERRER_BLACKLIST_LINK_DESC.'</a>';
+	$menu = '['.$ref_domains_to_wiki_link.' | '.$ref_urls_to_wiki_link.' | '.$ref_blacklist_link.']';
 }
 
-print("<strong>$title</strong><br />\n");
-print(REFERRERS_NO_SPAM);
+echo '<div class="page">'."\n"; //TODO: move to templating class
+echo '<strong>'.$heading.'</strong><br />'."\n";
+echo '<em>'.REFERRERS_NO_SPAM.'</em><br /><br />'."\n";
 
-if ($this->GetUser()) {
+if ($this->GetUser())
+{
+	// get data
+	$referrers = ($global !== '') ? $this->LoadReferrers() : $this->LoadReferrers($thispage);
 	if ($referrers)
 	{
+		// produce statistics
 		for ($a = 0; $a < count($referrers); $a++)
 		{
 			$temp_parse_url = parse_url($referrers[$a]["referrer"]);
@@ -77,38 +93,30 @@ if ($this->GetUser()) {
 				$referrer_sites["$temp_parse_url"] = $referrers[$a]["num"];
 			}
 		}
-
 		array_multisort($referrer_sites, SORT_DESC, SORT_NUMERIC);
 		reset($referrer_sites);
 
+		// present data
 		print("<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\">\n");
 		foreach ($referrer_sites as $site => $site_count)
 		{
 			print("<tr>");
 			print("<td width=\"30\" align=\"right\" valign=\"top\" style=\"padding-right: 10px\">$site_count</td>");
-			print("<td valign=\"top\">" . (($site != "unknown") ? "<a href=\"http://".$this->htmlspecialchars_ent($site)."\">".$this->htmlspecialchars_ent($site)."</a>" : $site) . "</a> ".($IsAdmin ? "[<a href=\"".$this->href("delete_referrer", "", "spam_site=").$this->htmlspecialchars_ent($site)."&redirect=".$this->GetMethod().'">'.LABEL_BLACKLIST."</a>]" : "")."</td>");
+			print("<td valign=\"top\">" . (($site != "unknown") ? "<a href=\"http://".$this->htmlspecialchars_ent($site)."\">".$this->htmlspecialchars_ent($site)."</a>" : $site) . "</a> ".($IsAdmin ? "[<a href=\"".$this->href("delete_referrer", "", "spam_site=").$this->htmlspecialchars_ent($site)."&amp;redirect=".$this->GetMethod().'">'.BLACKLIST_LINK_DESC."</a>]" : "")."</td>");
 			print("</tr>\n");
 		}
 		print("</table>\n");
 	}
 	else
 	{
-		print('<em>'.LABEL_NONE."</em><br />\n");
+		print('<em>'.NONE_CAPTION."</em><br />\n");
 	}
 }
 else
 {
-	print('<em>'.LABEL_PLEASE_LOGIN."</em><br />\n");
+	print('<em>'.PLEASE_LOGIN_CAPTION."</em><br />\n");
 }
 
-if ($global !== '')
-{
-	printf('<br />['.REFERRERS_CHOICE.']', $this->Href('referrers_sites'), $this->GetPageTag(), $this->Href('referrers'), $this->Href('review_blacklist'));
-}
-else
-{
-	printf('<br />['.REFERRERS_CHOICE_GLOBAL.']', $this->href("referrers_sites", "", "global=1"), $this->href("referrers", "", "global=1"), $this->href("review_blacklist"));
-}
-
+echo '<br />'.$menu;
 echo '</div>'."\n" //TODO: move to templating class
 ?>

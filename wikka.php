@@ -150,7 +150,7 @@ if (file_exists('locked'))
 	if ($ask) {
 		header('WWW-Authenticate: Basic realm="'.$wakkaConfig['wakka_name'].' Install/Upgrade Interface"');
 		header('HTTP/1.0 401 Unauthorized');
-		print WIKI_UPGRADE_NOTICE;
+		print STATUS_WIKI_UPGRADE_NOTICE;
 		exit;
     }
 }
@@ -214,7 +214,17 @@ $wakka =& new Wakka($wakkaConfig);
  */
 if (!$wakka->dblink)
 {
-	echo '<em class="error">'.ERROR_NO_DB_ACCESS.'</em>';
+	// set up template variables
+	$wiki_unavail = STATUS_WIKI_UNAVAILABLE;
+	$err_no_db = ERROR_NO_DB_ACCESS;
+
+	// define template @@@ FIXME: make more structural code JW
+	$template = <<<TPLERRDBACCESS
+<em class="error">{$err_wiki_unavail}{$err_no_db}</em>
+TPLERRDBACCESS;
+
+	// print template
+	echo $template;
 	exit;
 }
 

@@ -16,23 +16,23 @@
  * @uses		Wakka::Href()
  * @uses		Wakka::htmlspecialchars_ent()
  */
+
 /**
- * i18n
+ * Defaults
  */
-define('EDITED_BY', 'Edited by %s');
-define('ERROR_ACL_READ_INFO', 'You\'re not allowed to access this information.');
-define('HISTORY_REVISIONS_OF', 'History/revisions of %s');
-if (!defined('I18N_LANG')) define('I18N_LANG', 'en-us');
-if (!defined('I18N_CHARSET')) define('I18N_CHARSET', 'utf-8');
+if (!defined('I18N_LANG')) define('I18N_LANG', 'en-us');	// FIXME wrong format
+if (!defined('I18N_ENCODING_UTF8')) define('I18N_ENCODING_UTF8', 'utf-8'); // should be UTF-8 ?
+if (!defined('RRS_REVISIONS_VERSION')) define('RRS_REVISIONS_VERSION','2.0');
+if (!defined('RRS_RECENTCHANGES_VERSION')) define('RRS_RECENTCHANGES_VERSION','0.92');
 
 header("Content-type: text/xml");
 
-$xml = '<?xml version="1.0" encoding="'.I18N_CHARSET.'"?>'."\n";
-$xml .= "<rss version=\"2.0\">\n";
+$xml = '<?xml version="1.0" encoding="'.I18N_ENCODING.'"?>'."\n";
+$xml .= '<rss version="'.RRS_REVISIONS_VERSION.'">'."\n";
 $xml .= "<channel>\n";
 $xml .= "<title>".$this->GetConfigValue("wakka_name")." - ".$this->tag."</title>\n";
 $xml .= "<link>".$this->GetConfigValue("base_url").$this->tag."</link>\n";
-$xml .= '<description>'.sprintf(HISTORY_REVISIONS_OF, $this->GetConfigValue('wakka_name').'/'.$this->tag)."</description>\n";
+$xml .= '<description>'.sprintf(RECENTCHANGES_LABEL, $this->GetConfigValue('wakka_name').'/'.$this->tag)."</description>\n";
 $xml .= '<language>'.I18N_LANG."</language>\n";
 
 if ($this->HasAccess("read"))
@@ -45,8 +45,8 @@ if ($this->HasAccess("read"))
 			$xml .= "<item>\n";
 			$xml .= "<title>".$page["time"]."</title>\n";
 			$xml .= '<link>'.$this->Href('show', '', 'time='.urlencode($page['time'])).'</link>'."\n";
-			$xml .= '<description>'.sprintf(EDITED_BY, $this->htmlspecialchars_ent($page["user"]))." - ".$this->htmlspecialchars_ent($page["note"], '', '', 'XML')."</description>\n";
-			$xml .= "\t<pubDate>".date("r",strtotime($page["time"]))."</pubDate>\n";
+			$xml .= '<description>'.sprintf(REVISIONS_EDITED_BY, $this->htmlspecialchars_ent($page["user"])).($page['note'] ? ' - '.$this->htmlspecialchars_ent($page['note'], '', '', 'XML') : '')."</description>\n";
+			$xml .= "\t<pubDate>".date("r",strtotime($page["time"]))."</pubDate>\n";               
 			$xml .= "</item>\n";
 		}
 	}
@@ -54,9 +54,9 @@ if ($this->HasAccess("read"))
 else
 {
 	$xml .= "<item>\n";
-	$xml .= "<title>Error</title>\n"; #i18n
+	$xml .= '<title>'.WIKKA_ERROR_CAPTION.'</title>'."\n";
 	$xml .= "<link>".$this->Href("show")."</link>\n";
-	$xml .= '<description>'.ERROR_ACL_READ_INFO."</description>\n";
+	$xml .= '<description>'.WIKKA_ERROR_ACL_READ_INFO."</description>\n";
 	$xml .= "</item>\n";
 }
 

@@ -61,12 +61,13 @@ if ((isset($vars) && is_array($vars) && isset($vars['option']) && $vars['option'
 			print($this->Link($page["tag"]));
 			if ($page['count'] > 1)
 			{
-				print(' (<a href="'.$this->href('backlinks', $page['tag']).'" title="'.sprintf(BACKLINKS_TITLE, $page['tag']).'">'.$page['count']."</a>)<br />\n");
+				print(' (<a href="'.$this->Href('backlinks', $page['tag']).'" title="'.sprintf(WIKKA_BACKLINKS_LINK_TITLE, $page['tag']).'">'.$page['count']."</a>)<br />\n");
 			}
 			else
 			{
 				preg_match('#/(.*)$#', $page['time'], $match);
-				print(' (1 : '.$this->Link($match[1]).' <small>['.$this->Link($match[1], 'edit', 'edit', false, true, sprintf(LISTPAGES_EDIT_TITLE, $match[1]))."]</small>)<br />\n");
+				$pagetime = $match[1];
+				print(' (1 : '.$this->Link($pagetime).' <small>['.$this->Link($pagetime, 'edit', WIKKA_PAGE_EDIT_LINK_DESC, false, true, sprintf(WIKKA_PAGE_EDIT_LINK_TITLE, $pagetime))."]</small>)<br />\n");
 			}
 		}
 	}
@@ -75,7 +76,7 @@ elseif ($pages = $this->LoadWantedPages())
 {
 	foreach ($pages as $page)
 	{
-		print($this->Link($page['tag']).' (<a href="'.$this->href('backlinks', $page['tag']).'" title="'.sprintf(BACKLINKS_TITLE, $page['tag']).'">'.$page['count']."</a>)<br />\n");
+		print($this->Link($page['tag']).' (<a href="'.$this->Href('backlinks', $page['tag']).'" title="'.sprintf(WIKKA_BACKLINKS_LINK_TITLE, $page['tag']).'">'.$page['count']."</a>)<br />\n");
 	}
 }
 if ($pages)
@@ -87,12 +88,13 @@ if ($pages)
 		$options .= '<option value="'.$i.'">'.$i.'</option>';
 	}
 	echo $this->FormOpen('', '', 'get');
-	echo '<fieldset id="wantedpages_sorting"><legend>'.LEGEND_SORTING.'</legend>';
+	echo '<fieldset id="wantedpages_sorting"><legend>'.SORTING_LEGEND.'</legend>';
 	for ($i=1; $i<=3; $i++)
 	{
-		echo '<label>'.LABEL_SORTING_NUMBER.$i.' : <select name="ob'.$i.'">'.$options.'</select></label> <label><input type="checkbox" name="de'.$i.'" /> '.LABEL_SORTING_DESC.'</label><br />'."\n";
+		echo '<label for="ob'.$i.'">'.sprintf(SORTING_NUMBER_LABEL,$i).'</label> <select id="ob'.$i.'" name="ob'.$i.'">'.$options.'</select>';
+		echo ' <input id="de'.$i.'" type="checkbox" name="de'.$i.'" /><label for="de'.$i.'">'.SORTING_DESC_LABEL.'</label><br />'."\n";
 	}
-	echo '<input type="submit" value="'.LABEL_OK.'" />';
+	echo '<input type="submit" value="'.OK_BUTTON.'" />';
 	echo '</fieldset>';
 	echo $this->FormClose();
 }

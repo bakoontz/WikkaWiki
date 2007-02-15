@@ -8,30 +8,32 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
  * 
- * @uses Config::$base_url
- * @uses Config::$wakka_name
- * @uses Config::$xml_recent_changes
- * @uses		Wakka::GetConfigValue()
- * @uses		Wakka::Href()
- * @uses		Wakka::htmlspecialchars_ent()
- * @uses		Wakka::LoadRecentlyChanged()
+ * @uses	Config::$base_url
+ * @uses	Config::$wakka_name
+ * @uses	Config::$xml_recent_changes
+ * @uses	Wakka::GetConfigValue()
+ * @uses	Wakka::Href()
+ * @uses	Wakka::htmlspecialchars_ent()
+ * @uses	Wakka::LoadRecentlyChanged()
  */
-// i18n
-define('WHEN_BY_WHO', '%1$s by %2$s');
-define('ERROR_ACL_READ_INFO', 'You\'re not allowed to access this information.');
-define('LABEL_ERROR', 'Error');
-define('LABEL_RECENTCHANGES', 'Recent changes of %s');
-if (!defined('I18N_LANG')) define('I18N_LANG', 'en-us');
+
+/**
+ * Defaults
+ */
+if (!defined('I18N_LANG')) define('I18N_LANG', 'en-us');	// FIXME wrong format
+if (!defined('I18N_ENCODING_88591')) define('I18N_ENCODING_88591', 'ISO-8859-1');
+if (!defined('RRS_REVISIONS_VERSION')) define('RRS_REVISIONS_VERSION','2.0');
+if (!defined('RRS_RECENTCHANGES_VERSION')) define('RRS_RECENTCHANGES_VERSION','0.92');
 
 header("Content-type: text/xml");
 
-$xml = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n";
+$xml  = '<?xml version="1.0" encoding="'.I18N_ENCODING_88591.'"?>'."\n";
 $xml .= '<?xml-stylesheet href="' . $this->GetConfigValue("base_url") .'/css/xml.css" type="text/css"?' .">\n";
-$xml .= "<rss version=\"0.92\">\n";
+$xml .= '<rss version="'.RRS_RECENTCHANGES_VERSION.'">'."\n";
 $xml .= "<channel>\n";
 $xml .= "<title>".$this->GetConfigValue("wakka_name")." - ".$this->tag."</title>\n";
 $xml .= "<link>".$this->GetConfigValue("base_url")."</link>\n";
-$xml .= sprintf('<description>'.LABEL_RECENTCHANGES."</description>\n", $this->GetConfigValue("wakka_name"));
+$xml .= sprintf('<description>'.RECENTCHANGES_DESC."</description>\n", $this->GetConfigValue("wakka_name"));
 $xml .= '<language>'.I18N_LANG."</language>\n";
 
 if ($pages = $this->LoadRecentlyChanged())
@@ -47,7 +49,7 @@ if ($pages = $this->LoadRecentlyChanged())
 			$xml .= "<item>\n";
 			$xml .= "<title>".$this->htmlspecialchars_ent($page["tag"])."</title>\n";
 			$xml .= "<link>".$this->Href("show", $page["tag"], "time=".urlencode($page["time"]))."</link>\n";
-			$xml .= "\t<description>".sprintf(WHEN_BY_WHO, $page['time'], $this->htmlspecialchars_ent($page["user"], ENT_COMPAT, 'UTF-8', 'XML')).($page['note'] ? ' - '.$this->htmlspecialchars_ent($page['note'], ENT_COMPAT, 'UTF-8', 'XML') : '')."</description>\n";
+			$xml .= "\t<description>".sprintf(WIKKA_REV_WHEN_BY_WHO, $page['time'], $this->htmlspecialchars_ent($page["user"], '', '', 'XML')).($page['note'] ? ' - '.$this->htmlspecialchars_ent($page['note'], '', '', 'XML') : '')."</description>\n";
 			//$xml .= "\t<guid>".$page["id"]."</guid>";
 			$xml .= "\t<pubDate>".date("r",strtotime($page["time"]))."</pubDate>\n";
 			$xml .= "</item>\n";
@@ -57,9 +59,9 @@ if ($pages = $this->LoadRecentlyChanged())
 else
 {
 	$xml .= "<item>\n";
-	$xml .= '<title>'.LABEL_ERROR."</title>\n";
+	$xml .= '<title>'.WIKKA_ERROR_CAPTION."</title>\n";
 	$xml .= "<link>".$this->Href("show")."</link>\n";
-	$xml .= '<description>'.ERROR_ACL_READ_INFO."</description>\n";
+	$xml .= '<description>'.WIKKA_ERROR_ACL_READ_INFO."</description>\n";
 	$xml .= "</item>\n";
 }
 

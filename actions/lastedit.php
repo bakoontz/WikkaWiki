@@ -48,7 +48,7 @@ if ($this->method == 'show')
 {
 	$page = $this->page;
 	$pagetag = $page['tag'];
-	$user = ($this->LoadUser($page['user'])) ? $this->Link($page['user']) : ANONYMOUS_USER;
+	$user = ($this->LoadUser($page['user'])) ? $this->Link($page['user']) : WIKKA_ANONYMOUS_USER; // @@@ or WIKKA_UNREGISTERED_USER
 
 	switch($show)
 	{
@@ -56,7 +56,7 @@ if ($this->method == 'show')
 		$oldpage = $this->LoadSingle("SELECT * FROM ".$this->config['table_prefix']."pages WHERE tag='".$this->GetPageTag()."' AND latest = 'N' ORDER BY time desc LIMIT 1");
 		$newid = $page['id'];
 		$oldid = $oldpage['id'];
-		$difflink = ' [<a title="'.DIFF_LINK_TITLE.'" href="'.$this->Href('diff', $pagetag, 'a='.$page['id'].'&amp;b='.$oldpage['id'].'&amp;fastdiff=1').'">diff</a>]';
+		$difflink = ' [<a title="'.LASTEDIT_DIFF_LINK_TITLE.'" href="'.$this->Href('diff', $pagetag, 'a='.$page['id'].'&amp;b='.$oldpage['id'].'&amp;fastdiff=1').'">diff</a>]';
 
 		case 2:
 		list($day, $time) = explode(' ', $page['time']);
@@ -69,6 +69,6 @@ if ($this->method == 'show')
 
 		default:	
 	}
-	echo '<div class="'.LASTEDIT_BOX.'">'.sprintf(LASTEDIT_MESSAGE, $user).$note.'<br /> '.$dateformatted.' '.$timeformatted.$difflink.'</div>';
+	echo '<div class="'.LASTEDIT_BOX.'">'.sprintf(LASTEDIT_DESC, $user).$note.'<br /> '.$dateformatted.' '.$timeformatted.$difflink.'</div>';
 }
 ?>

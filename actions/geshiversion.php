@@ -20,11 +20,11 @@ if (file_exists($this->config['geshi_path'].'/geshi.php'))
 	}
 	else
 	{
-		echo NOT_AVAILABLE;
+		echo WIKKA_STATUS_NOT_AVAILABLE;
 	}
 }
 else
 {
-		echo NOT_INSTALLED;
+		echo WIKKA_STATUS_NOT_INSTALLED;
 }
 ?>

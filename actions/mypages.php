@@ -16,6 +16,8 @@
  * @uses	Wakka::LoadPagesByOwner()
  * @uses	Wakka::GetUserName() 
  * @uses	Wakka::Link()
+ * @todo	fix RE (#104 etc.); also lose the comma in there!
+ * @todo	actually add the (intended) timestanmp sorting; cf. mychanges action
  */
 
 if ($user = $this->GetUser())
@@ -31,7 +33,7 @@ if ($user = $this->GetUser())
 			//if ($this->GetUserName() == $page["owner"]) 
 			//{
 				$firstChar = strtoupper($page["tag"][0]);
-				if (!preg_match("/[A-Z,a-z]/", $firstChar)) 
+				if (!preg_match("/[A-Z,a-z]/", $firstChar)) //TODO: (#104 #340, #34) Internationalization (allow other starting chars, make consistent with Formatter REs) 
 				{
 					$firstChar = "#";
 				}
@@ -51,11 +53,11 @@ if ($user = $this->GetUser())
 	}
 	else
 	{
-		print '<em>'.NO_OWNED_PAGES.'</em>';
+		print '<em>'.OWNED_NO_PAGES.'</em>';
 	}
 }
 else
 {
-	print '<em>'.USER_NOT_LOGGED_IN.'</em>';
+	print '<em>'.OWNED_NOT_LOGGED_IN.'</em>';
 }
 ?>

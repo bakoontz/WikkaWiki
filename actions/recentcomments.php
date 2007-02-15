@@ -12,16 +12,17 @@
  *
  * @todo			make datetime format configurable
  */
+
 /**
  * defaults
  */
-if(!defined('COMMENT_DATE_FORMAT')) define('COMMENT_DATE_FORMAT', 'D, d M Y');
-if(!defined('COMMENT_TIME_FORMAT')) define('COMMENT_TIME_FORMAT', 'H:i T');
-if(!defined('COMMENT_SNIPPET_LENGTH')) define('COMMENT_SNIPPET_LENGTH', 120);
+if (!defined('COMMENT_DATE_FORMAT'))    define('COMMENT_DATE_FORMAT', 'D, d M Y');
+if (!defined('COMMENT_TIME_FORMAT'))    define('COMMENT_TIME_FORMAT', 'H:i T');
+if (!defined('COMMENT_SNIPPET_LENGTH')) define('COMMENT_SNIPPET_LENGTH', 120);
 
 $readable = 0;
 
-echo $this->Format(RECENT_COMMENTS_HEADING.' --- ');
+echo '<h2>'.RECENTCOMMENTS_HEADING.'</h2><br />'."\n";
 if ($comments = $this->LoadRecentComments())
 {
 	$curday = '';
@@ -52,16 +53,16 @@ if ($comments = $this->LoadRecentComments())
 				$comment_preview = $comment_preview.'&#8230;';
 			}
 			// print entry
-			echo '&nbsp;&nbsp;&nbsp;('.$timeformatted.') <a href="'.$this->href('', $comment['page_tag'], 'show_comments=1').'#comment_'.$comment['id'].'">'.$comment['page_tag'].'</a>'.COMMENT_AUTHOR_DIVIDER.$this->Format($comment['user'])."\n<blockquote>".$comment_preview."</blockquote>\n";
+			echo '&nbsp;&nbsp;&nbsp;'.sprintf(RECENTCOMMENTS_TIMESTAMP_CAPTION,$timeformatted).' <a href="'.$this->href('', $comment['page_tag'], 'show_comments=1').'#comment_'.$comment['id'].'">'.$comment['page_tag'].'</a>'.WIKKA_COMMENT_AUTHOR_DIVIDER.$this->Format($comment['user'])."\n<blockquote>".$comment_preview."</blockquote>\n";
 		}
 	}
 	if ($readable == 0)
 	{
-		echo '<em>'.NO_READABLE_RECENT_COMMENTS.'</em>';
+		echo '<em>'.RECENTCOMMENTS_NONE_ACCESSIBLE.'</em>';
 	}
 }
 else
 {
-	echo '<em>'.NO_RECENT_COMMENTS.'</em>';
+	echo '<em>'.RECENTCOMMENTS_NONE_FOUND.'</em>';
 }
 ?>

@@ -167,7 +167,7 @@ $upload_path = $this->config['upload_path'].DIRECTORY_SEPARATOR.$this->tag; #89
 // 1. check if main upload path is writable
 if (!is_writable($this->config['upload_path']))
 {
-	echo '<div class="alertbox">'.sprintf(ERROR_UPLOAD_DIRECTORY_NOT_WRITABLE, $this->config['upload_path']).'</div>';
+	echo '<div class="alertbox">'.sprintf(ERROR_UPLOAD_DIRECTORY_NOT_WRITABLE, '<tt>'.DIRECTORY_SEPARATOR.$this->config['upload_path'].'</tt>').'</div>'; #89
 }
 else
 {
@@ -196,7 +196,7 @@ if (isset($vars['download']))
 	}
 	else
 	{
-		echo '<em class="error">'.sprintf(ERROR_INEXISTENT_FILE, $vars['download']).'</em>';
+		echo '<em class="error">'.sprintf(ERROR_NONEXISTENT_FILE, '<tt>'.$vars['download'].'</tt>').'</em>';
 	}
 }
 
@@ -241,7 +241,7 @@ elseif ($this->page && $this->HasAccess('read') && $this->method == 'show' && $i
 					}
 					else
 					{
-						$error_msg = sprintf(ERROR_FILE_ALREADY_EXISTS, $strippedname);
+						$error_msg = sprintf(ERROR_FILE_ALREADY_EXISTS, '<tt>'.$strippedname.'</tt>');
 					}
 				}
 				else
@@ -335,7 +335,7 @@ if (is_readable($upload_path))
 // cannot read the folder contents
 else
 {
-	echo '<div class="alertbox">'.sprintf(ERROR_UPLOAD_DIRECTORY_NOT_READABLE, $upload_path).'</div>';
+	echo '<div class="alertbox">'.sprintf(ERROR_UPLOAD_DIRECTORY_NOT_READABLE, '<tt>'.DIRECTORY_SEPARATOR.$upload_path.'</tt>').'</div>'; #89
 
 }
 

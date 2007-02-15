@@ -19,11 +19,6 @@
  * @todo		add support for formatter plugins;
  * @todo		use a central RegEx library #34;
  */
-/**
- * i18n
- */
-if (!defined('GRABCODE_BUTTON_VALUE')) define('GRABCODE_BUTTON_VALUE', 'Grab');
-if (!defined('GRABCODE_BUTTON_TITLE')) define('GRABCODE_BUTTON_TITLE', 'Download %s');
 
 // code block patterns
 if (!defined('PATTERN_OPEN_BRACKET')) define('PATTERN_OPEN_BRACKET', '\(');
@@ -478,7 +473,7 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 			if (isset($language) && isset($wakka->config['geshi_path']) && file_exists($geshi_hi_path.'/'.$language.'.php'))
 			{
 				// check if specified filename is valid and generate code block header
-				if (isset($filename) && strlen($filename) > 0 && strlen($invalid) == 0) # TODO: use central regex library for filename validation
+				if (isset($filename) && strlen($filename) > 0 && strlen($invalid) == 0) # #34 TODO: use central regex library for filename validation
 				{
 					$valid_filename = $filename;
 					// create code block header
@@ -516,7 +511,7 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 			{
 				$output .= $wakka->FormOpen("grabcode");
 				// build form
-				$output .= '<input type="submit" class="grabcode" name="save" value="'.GRABCODE_BUTTON_VALUE.'" title="'.rtrim(sprintf(GRABCODE_BUTTON_TITLE, $valid_filename)).'" />';
+				$output .= '<input type="submit" class="grabcode" name="save" value="'.GRABCODE_BUTTON.'" title="'.rtrim(sprintf(GRABCODE_BUTTON_TITLE, $valid_filename)).'" />';
 				$output .= '<input type="hidden" name="filename" value="'.urlencode($valid_filename).'" />';
 				$output .= '<input type="hidden" name="code" value="'.urlencode($code).'" />';
 				$output .= $wakka->FormClose();
@@ -702,12 +697,12 @@ $text = preg_replace_callback(
 	"\"\".*?\"\"|".																			# literal
 	$mind_map_pattern.
 	"\[\[[^\[]*?\]\]|".																		# forced link
-	"-{3,}|".																			# forced linebreak and hr
+	"-{3,}|".																				# forced linebreak and hr
 	"\b[a-z]+:\/\/\S+|".																	# URL
 	"\*\*|\'\'|\#\#|\#\%|@@|::c::|\>\>|\<\<|&pound;&pound;|&yen;&yen;|\+\+|__|<|>|\/\/|".	# Wiki markup
 	"======|=====|====|===|==|".															# headings
 	"\n[\t~]+(-|&|[0-9a-zA-Z]+\))?|".														# indents and lists
-	"\|(?:[^\|])?\|(?:\(.*?\))?(?:\{[^\{\}]*?\})?(?:\n)?|".										# Simple Tables	
+	"\|(?:[^\|])?\|(?:\(.*?\))?(?:\{[^\{\}]*?\})?(?:\n)?|".									# Simple Tables	
 	"\{\{.*?\}\}|".																			# action
 	"\b[A-ZÄÖÜ][A-Za-zÄÖÜßäöü]+[:](?![=_])\S*\b|".											# InterWiki link
 	"\b([A-ZÄÖÜ]+[a-zßäöü]+[A-Z0-9ÄÖÜ][A-Za-z0-9ÄÖÜßäöü]*)\b|".								# CamelWords

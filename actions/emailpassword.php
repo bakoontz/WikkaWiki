@@ -26,9 +26,11 @@ $highlight = '';
 $user = FALSE;
 $mailsent = FALSE;
 
-//print heading
-$output .= $this->Format(PW_FORGOTTEN_HEADING);
+// print heading
+#$output .= $this->Format(PW_FORGOTTEN_HEADING);
+$output .= '<h3>'.PW_FORGOTTEN_HEADING.'</h3>';
 
+// process input
 if (isset($_POST['wikiname'])) // get posted values
 {
 	$input = $_POST['wikiname'];
@@ -37,7 +39,7 @@ if (isset($_POST['wikiname'])) // get posted values
 	switch(TRUE)
 	{
 		case ($input == ''): // empty user
-			$output .= '<em class="error">'.ERROR_EMPTY_USER.'</em><br />'."\n";
+			$output .= '<em class="error">'.WIKKA_ERROR_EMPTY_USERNAME.'</em><br />'."\n";
 			$highlight = INPUT_ERROR_STYLE;
 			break;
 		case ($input != '' && !$user): // non-existing user
@@ -52,7 +54,8 @@ if (isset($_POST['wikiname'])) // get posted values
 			{
 				$mailsent = TRUE;
 				$output .= '<br /><em class="success">'.sprintf(PW_CHK_SENT, $user['name']).'</em><br />'."\n";
-				$output .= $this->Format(USERSETTINGS_LINK);
+				$usersettings_wlink = '[[UserSettings '.WIKKA_LOGIN_LINK_DESC.']]';
+				$output .= $this->Format(sprintf(USERSETTINGS_REF,$usersettings_wlink));
 			}
 			else 
 			{
@@ -69,7 +72,7 @@ if (!$mailsent)
 //	$output .= '<form name="getwikiname" action="'.$this->href().'" method="post">';
 	$output .= $this->FormOpen();
 	$output .= '<input '.$highlight.' type="text" name="wikiname" value="" />';
-	$output .= '<input type="submit" value="'.BUTTON_SEND_PW_LABEL.'" />';
+	$output .= '<input type="submit" value="'.PW_SEND_BUTTON.'" />';
 	$output .= $this->FormClose();   
 }
 

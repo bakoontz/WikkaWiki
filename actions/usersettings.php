@@ -11,10 +11,12 @@
  * @author		{@link http://wikkawiki.org/DarTar Dario Taraborelli} (further cleanup, i18n, replaced JS dialogs with server-generated messages)
  * @author		{@link http://wikkawiki.org/NilsLindenberg Nils Lindenberg} (possibility to restrict registration)
  *
- * @todo			use different actions for registration / login / user settings;
- * @todo			add documentation links or short explanations for each option;
- * @todo			use error handler for displaying messages and highlighting invalid input fields;
- * @todo			remove useless redirections;
+ * @todo		use different actions for registration / login / user settings;
+ * @todo		add documentation links or short explanations for each option;
+ * @todo		use error handler for displaying messages and highlighting
+ * 				invalid input fields;
+ * @todo		remove useless redirections;
+ * @todo		[accessibility] make logout independent of JavaScript
  */
 
 // defaults
@@ -49,6 +51,7 @@ $password_confirm_highlight = '';
 $revisioncount_highlight = '';
 $changescount_highlight = '';
 $invitation_code_highlight = '';
+$wikiname_expanded = '<abbr title="'.WIKINAME_LONG.'">'.WIKINAME_SHORT.'</abbr>';
 
 //create URL
 $url = $this->config['base_url'].$this->tag;
@@ -94,7 +97,7 @@ else if ($user = $this->GetUser())
 		switch(TRUE) // validate form input
 		{
 			case (strlen($email) == 0): //email is empty
-				$error = ERROR_EMAIL_ADDRESS_REQUIRED;
+				$error = ERROR_EMPTY_EMAIL_ADDRESS;
 				$email_highlight = INPUT_ERROR_STYLE;
 				break;
 			case (!preg_match(VALID_EMAIL_PATTERN, $email)): //invalid email
@@ -138,36 +141,36 @@ else if ($user = $this->GetUser())
 	// display user settings form
 	echo $this->FormOpen();
 ?>
-	<fieldset id="account" class="usersettings"><legend><?php echo USER_ACCOUNT_LEGEND; ?></legend>
+	<fieldset id="account" class="usersettings"><legend><?php echo USER_ACCOUNT_LEGEND ?></legend>
 	<input type="hidden" name="action" value="update" />
-	<label><?php echo sprintf(USER_LOGGED_IN_AS_LABEL, $this->Link($user['name'])); ?></label>
-	<input id="logout" type="button" value="<?php echo LOGOUT_BUTTON_LABEL; ?>" onclick="document.location='<?php echo $this->href('', '', 'action=logout'); ?>'" />
+	<?php echo sprintf(USER_LOGGED_IN_AS_CAPTION, $this->Link($user['name'])); ?>
+	<input id="logout" type="button" value="<?php echo LOGOUT_BUTTON; ?>" onclick="document.location='<?php echo $this->href('', '', 'action=logout'); ?>'" />
 	</fieldset>
 	
-	<fieldset id="usersettings" class="usersettings"><legend><?php echo USER_SETTINGS_LEGEND; ?></legend>
+	<fieldset id="usersettings" class="usersettings"><legend><?php echo USER_SETTINGS_LEGEND ?></legend>
 <?php
 
 	// create confirmation message if needed
 	switch(TRUE)
 	{
 		case (isset($_GET['registered']) && $_GET['registered'] == 'true'):
-			$success = REGISTRATION_SUCCEEDED;
+			$success = USER_REGISTERED_SUCCESS;
 			break;
 		case (isset($_GET['stored']) && $_GET['stored'] == 'true'):
-			$success = USER_SETTINGS_STORED;
+			$success = USER_SETTINGS_STORED_SUCCESS;
 			break;
 		case (isset($_GET['newpassword']) && $_GET['newpassword'] == 'true'):
-			$success = PASSWORD_CHANGED;
+			$success = USER_PASSWORD_CHANGED_SUCCESS;
 	}
 
 	// display error or confirmation message
 	switch(TRUE)
 	{
 		case (isset($error)):
-			echo '<em class="error">'.$this->Format($error).'</em><br />'."\n";
+			echo '<em class="error">'.$error.'</em><br />'."\n";
 			break;
 		case (isset($success)):
-			echo '<em class="success">'.$this->Format($success).'</em><br />'."\n";
+			echo '<em class="success">'.$success.'</em><br />'."\n";
 			break;
 		default:
 	}
@@ -189,7 +192,7 @@ else if ($user = $this->GetUser())
 	<label for="changescount"><?php echo RECENTCHANGES_DISPLAY_LIMIT_LABEL ?></label>
 	<input id="changescount" type="text" <?php echo $changescount_highlight; ?> name="changescount" value="<?php echo $this->htmlspecialchars_ent($changescount) ?>" size="40" />
 	<br />
-	<input id="updatesettings" type="submit" value="<?php echo UPDATE_SETTINGS_INPUT ?>" />
+	<input id="updatesettingssubmit" type="submit" value="<?php echo UPDATE_SETTINGS_BUTTON ?>" />
 	<br />
 	</fieldset>
 <?php	
@@ -209,13 +212,13 @@ else if ($user = $this->GetUser())
 				$passerror = ERROR_EMPTY_PASSWORD_OR_HASH;
 				$password_highlight = INPUT_ERROR_STYLE;
 				break;
-			case (($update_option == 'pw') && md5($oldpass) != $user['password']): //wrong password
-				$passerror = ERROR_WRONG_PASSWORD;
+			case (($update_option == 'pw') && md5($oldpass) != $user['password']): //wrong old password
+				$passerror = ERROR_INVALID_OLD_PASSWORD;
 				$pw_selected = 'selected="selected"';
 				$password_highlight = INPUT_ERROR_STYLE;			
 				break;
-			case (($update_option == 'hash') && $oldpass != $user['password']): //wrong hash
-				$passerror = ERROR_WRONG_HASH;
+			case (($update_option == 'hash') && $oldpass != $user['password']): //wrong reminder (hash)
+				$passerror = ERROR_INVALID_HASH;
 				$hash_selected = 'selected="selected"';
 				$password_highlight = INPUT_ERROR_STYLE;			
 				break;
@@ -225,7 +228,7 @@ else if ($user = $this->GetUser())
 				$password_new_highlight = INPUT_ERROR_STYLE;
 				break;
 			case (preg_match("/ /", $password)):
-				$passerror = ERROR_NO_BLANK;
+				$passerror = ERROR_PASSWORD_NO_BLANK;
 				$password_highlight = INPUT_ERROR_STYLE;			
 				$password_new_highlight = INPUT_ERROR_STYLE;
 				break;
@@ -259,12 +262,12 @@ else if ($user = $this->GetUser())
 	//display password update form
 	echo $this->FormOpen();
 ?>
-	<fieldset class="usersettings" id="changepassword"><legend><?php echo CHANGE_PASSWORD_HEADING ?></legend>
+	<fieldset class="usersettings" id="changepassword"><legend><?php echo CHANGE_PASSWORD_LEGEND ?></legend>
 	<input type="hidden" name="action" value="changepass" />
 <?php
 		if (isset($passerror))
 		{
-			print('<em class="error">'.$this->Format($passerror).'</em><br />'."\n");
+			print('<em class="error">'.$passerror.'</em><br />'."\n");
 		}
 ?>
 	<select id="update_option" name="update_option">
@@ -279,7 +282,7 @@ else if ($user = $this->GetUser())
 	<label for="password_confirm"><?php echo NEW_PASSWORD_CONFIRM_LABEL ?></label>
 	<input id="password_confirm" <?php echo $password_confirm_highlight; ?> type="password" name="password_confirm" size="40" />
 	<br />
-	<input type="submit" value="<?php echo CHANGE_BUTTON_LABEL ?>" size="40" />
+	<input id="changepasswordsubmit" type="submit" value="<?php echo CHANGE_PASSWORD_BUTTON ?>" size="40" />
 	<br />
 	</fieldset>
 <?php
@@ -292,7 +295,7 @@ else // user is not logged in
 	// print confirmation message on successful logout
 	if (isset($_GET['out']) && ($_GET['out'] == 'true'))
 	{
-		$success = USER_LOGGED_OUT;
+		$success = USER_LOGGED_OUT_SUCCESS;
 	}
 
 	// is user trying to log in or register?
@@ -309,7 +312,7 @@ else // user is not logged in
 					$password_highlight = INPUT_ERROR_STYLE;
 					break;
 				case (md5($_POST['password']) != $existingUser['password']):
-					$error = ERROR_WRONG_PASSWORD;
+					$error = ERROR_INVALID_PASSWORD;
 					$password_highlight = INPUT_ERROR_STYLE;
 					break;
 				default:
@@ -337,11 +340,11 @@ else // user is not logged in
 			switch(TRUE)
 			{
 				case (strlen($name) == 0):
-					$error = ERROR_EMPTY_USERNAME;
+					$error = WIKKA_ERROR_EMPTY_USERNAME;
 					$username_highlight = INPUT_ERROR_STYLE;
 					break;
 				case (!$this->IsWikiName($name)):
-					$error = ERROR_WIKINAME;
+					$error = $this->Format(sprintf(ERROR_WIKINAME,'##""WikiName""##','##""'.WIKKA_SAMPLE_WIKINAME.'""##'));
 					$username_highlight = INPUT_ERROR_STYLE;
 					break;
 				case ($this->ExistsPage($name)):
@@ -383,7 +386,7 @@ else // user is not logged in
 					$password_confirm_highlight = INPUT_ERROR_STYLE;
 					break;
 				case ($register == '2' && $_POST['invitation_code'] !==  $this->GetConfigValue('invitation_code')):
-					$error = ERROR_INVITATION_CODE_INCORRECT;
+					$error = ERROR_INVALID_INVITATION_CODE;
 					$invitation_code_highlight = INPUT_ERROR_STYLE;
 					break;
 				default: //valid input, create user
@@ -414,7 +417,7 @@ else // user is not logged in
 			$name = trim($_POST['yourname']);
 		if (strlen($name) == 0) // empty username	
 		{
-			$newerror = ERROR_EMPTY_USERNAME;
+			$newerror = WIKKA_ERROR_EMPTY_USERNAME;
 			$username_temp_highlight = INPUT_ERROR_STYLE;
 		}
 		elseif (!$this->IsWikiName($name)) // check if name is WikiName style	
@@ -424,7 +427,7 @@ else // user is not logged in
 		}
 		elseif (!($this->LoadUser($_POST['yourname']))) //check if user exists
 		{
-			$newerror = ERROR_NON_EXISTENT_USERNAME;
+			$newerror = ERROR_NONEXISTENT_USERNAME;
 			$username_temp_highlight = INPUT_ERROR_STYLE;
 		}
 		elseif ($existingUser = $this->LoadUser($_POST['yourname']))  // if user name already exists, check password
@@ -453,16 +456,16 @@ else // user is not logged in
 	switch (true)
 	{
 		case (isset($error)):
-			echo '<em class="error">'.$this->Format($error).'</em>'."\n";
+			echo '<em class="error">'.$error.'</em>'."\n";
 			break;
 		case (isset($success)):
-			echo '<em class="success">'.$this->Format($success).'</em>'."\n";
+			echo '<em class="success">'.$success.'</em>'."\n";
 			break;
 	}
 ?>
-	<em><?php echo $this->Format(REGISTERED_USER_LOGIN_LABEL); ?></em>
+	<em><?php echo REGISTERED_USER_LOGIN_CAPTION; ?></em>
 	<br />
-	<label for="name"><?php echo WIKINAME_LABEL ?></label>
+	<label for="name"><?php echo printf(WIKINAME_LABEL,$wikiname_expanded) ?></label>
 	<input id="name" type="text" <?php echo $username_highlight; ?> name="name" size="40" value="<?php echo $this->GetSafeVar('name', 'post'); ?>" />
 	<br />
 	<label for="password"><?php echo sprintf(PASSWORD_LABEL, PASSWORD_MIN_LENGTH) ?></label>
@@ -471,14 +474,15 @@ else // user is not logged in
 <?php
 	if (isset($_SESSION['go_back']))
 	{
+		// @@@ label for a checkbox should come AFTER it, not before
 	?>
-	<label for="no_go_back"><?php printf(LABEL_NO_GO_BACK, $_SESSION['go_back_tag']); ?></label>
+	<label for="no_go_back"><?php printf(DONT_GO_BACK_LABEL, $_SESSION['go_back_tag']); ?></label>
 	<input type="checkbox" name="no_go_back" id="no_go_back"<?php if (isset($_POST['no_go_back'])) echo ' checked="checked"';?> />
 	<br />
 <?php
 	}
 ?>
-	<input id="login" type="submit" value="<?php echo LOGIN_BUTTON_LABEL ?>" size="40" />
+	<input id="loginsubmit" type="submit" value="<?php echo LOGIN_BUTTON ?>" size="40" />
 	<br /><br />
 <?php
 	// END *** Login/Logout ***
@@ -486,7 +490,7 @@ else // user is not logged in
 	if ($register == '1' || $register == '2')
 	{
 ?>
-	<em><?php echo $this->Format(NEW_USER_REGISTER_LABEL); ?></em>
+	<em><?php echo NEW_USER_REGISTER_CAPTION; ?></em>
 	<br />
 	<label for="confpassword"><?php echo CONFIRM_PASSWORD_LABEL ?></label>
 	<input id="confpassword" <?php echo $password_confirm_highlight; ?> type="password" name="confpassword" size="40" />
@@ -497,14 +501,15 @@ else // user is not logged in
 <?php
 		if ($register == '2')
 		{
+			$invitation_code_expanded = '<abbr title="'.INVITATION_CODE_LONG.'">'.INVITATION_CODE_SHORT.'</abbr>'
 ?>
-	<label for="invitation_code"><?php echo INVITATION_CODE_LABEL ?></label>
+	<label for="invitation_code"><?php printf(INVITATION_CODE_LABEL,$invitation_code_expanded) ?></label>
 	<input id="invitation_code" type="text" <?php echo $invitation_code_highlight; ?> size="20" name="invitation_code" />
 	<br />
 <?php
 		}
 ?>
-	<input type="submit" value="<?php echo REGISTER_BUTTON_LABEL ?>" size="40" />
+	<input id="registersubmit" type="submit" value="<?php echo REGISTER_BUTTON ?>" size="40" />
 	<br />
 <?php
 	}
@@ -513,23 +518,24 @@ else // user is not logged in
 	// END *** Register ***
 	print($this->FormOpen());
 ?>
-	<fieldset id="password_forgotten" class="usersettings"><legend><?php echo RETRIEVE_PASSWORD_LEGEND; ?></legend>
+	<fieldset id="password_forgotten" class="usersettings"><legend><?php echo RETRIEVE_PASSWORD_LEGEND ?></legend>
 	<input type="hidden" name="action" value="updatepass" />
 <?php   
 	if (isset($newerror))
 	{
-		print('<em class="error">'.$this->Format($newerror).'</em>'."\n");
+		print('<em class="error">'.$newerror.'</em>'."\n");
 	}
+	$retrieve_password_caption = $this->Format(sprintf(RETRIEVE_PASSWORD_CAPTION1,'[[PasswordForgotten here]]').' --- '.RETRIEVE_PASSWORD_CAPTION2);
 ?>
-	<em><?php echo $this->Format(RETRIEVE_PASSWORD_MESSAGE) ?></em>
+	<em><?php echo $retrieve_password_caption ?></em>
 	<br />
-	<label for="yourname"><?php echo WIKINAME_LABEL ?></label>
+	<label for="yourname"><?php printf(WIKINAME_LABEL,$wikiname_expanded) ?></label>
 	<input id="yourname" type="text" <?php echo $username_temp_highlight; ?> name="yourname" value="<?php echo $this->GetSafeVar('yourname', 'post'); ?>" size="40" />
 	<br />
 	<label for="temppassword"><?php echo TEMP_PASSWORD_LABEL ?></label>
 	<input id="temppassword" type="text" <?php echo $password_temp_highlight; ?> name="temppassword" size="40" />
 	<br />
-	<input type="submit" value="<?php echo LOGIN_BUTTON_LABEL ?>" size="40" />
+	<input id="loginsubmit" type="submit" value="<?php echo LOGIN_BUTTON ?>" size="40" />
 	<br />
 	</fieldset>
 <?php

@@ -21,19 +21,20 @@
  * @todo		add configurable option for non-accessible pages {@link http://wush.net/trac/wikka/ticket/178 #178};
  * @todo		added extensive logging of events such as page deletion, cloning, ACL change {@link http://wush.net/trac/wikka/ticket/143 #143};
  */
+
 /**
  * defaults
  */
-if(!defined('REVISION_DATE_FORMAT')) define('REVISION_DATE_FORMAT', 'D, d M Y');
-if(!defined('REVISION_TIME_FORMAT')) define('REVISION_TIME_FORMAT', 'H:i T');
-if (!defined('PAGE_EDITOR_DIVIDER')) define ('PAGE_EDITOR_DIVIDER', '&#8594;');
-if (!defined('MAX_REVISION_NUMBER')) define ('MAX_REVISION_NUMBER', '50');
+if (!defined('REVISION_DATE_FORMAT')) define('REVISION_DATE_FORMAT', 'D, d M Y');
+if (!defined('REVISION_TIME_FORMAT')) define('REVISION_TIME_FORMAT', 'H:i T');
+if (!defined('PAGE_EDITOR_DIVIDER'))  define('PAGE_EDITOR_DIVIDER', '&#8594;');
+if (!defined('MAX_REVISION_NUMBER'))  define('MAX_REVISION_NUMBER', '50');
 
 //initialization
 $max = 0;
 $readable = 0;
 
-echo $this->Format(RECENT_CHANGES_HEADING.' --- ');
+echo '<h2>'.RECENTCHANGES_HEADING.'</h2><br />'."\n";
 if ($pages = $this->LoadRecentlyChanged())
 {
 	$curday = '';
@@ -69,7 +70,7 @@ if ($pages = $this->LoadRecentlyChanged())
 
 			$timeformatted = date(REVISION_TIME_FORMAT, strtotime($page["time"]));
 			$page_edited_by = $page['user'];	
-			if (!$this->LoadUser($page_edited_by)) $page_edited_by .= ' ('.UNREGISTERED_USER.')';
+			if (!$this->LoadUser($page_edited_by)) $page_edited_by .= ' '.WIKKA_ANONYMOUS_AUTHOR_CAPTION; // @@@ or WIKKA_ANONYMOUS_USER
 
 			// print entry
 			if ($page['note'])
@@ -80,12 +81,12 @@ if ($pages = $this->LoadRecentlyChanged())
 			{
 				$note = '';
 			}
-				echo '&nbsp;&nbsp;&nbsp;&nbsp;('.$this->Link($page['tag'], 'revisions', $timeformatted, 0, 1, sprintf(TITLE_REVISION_LINK, $page['tag'])).') ['.$this->Link($page['tag'], 'history', LABEL_HISTORY, 0, 1, sprintf(TITLE_HISTORY_LINK, $page['tag'])).'] - &nbsp;'.$this->Link($page['tag'], '', '', 0).' '.PAGE_EDITOR_DIVIDER.' '.$page_edited_by.' '.$note.'<br />'."\n";
+				echo '&nbsp;&nbsp;&nbsp;&nbsp;('.$this->Link($page['tag'], 'revisions', $timeformatted, 0, 1, sprintf(REVISIONS_LINK_TITLE, $page['tag'])).') ['.$this->Link($page['tag'], 'history', WIKKA_HISTORY, 0, 1, sprintf(HISTORY_LINK_TITLE, $page['tag'])).'] - &nbsp;'.$this->Link($page['tag'], '', '', 0).' '.PAGE_EDITOR_DIVIDER.' '.$page_edited_by.' '.$note.'<br />'."\n";
 		}
 	}
 	if ($readable == 0)
 	{
-		echo '<em>'.NO_READABLE_RECENTLY_CHANGED_PAGES.'</em>';
+		echo '<em>'.RECENTCHANGES_NONE_ACCESSIBLE.'</em>';
 	}
 	echo '</span>'."\n";
 
@@ -95,12 +96,13 @@ if ($pages = $this->LoadRecentlyChanged())
 	{
 		$wikipingserver_url_parsed = parse_url($wikipingserver);
 		$wikipingserver_host = $wikipingserver_url_parsed['host'];
-		printf('<br /><br />['.WIKIPING_ENABLED.']', $wikipingserver_host);
+		$wikiping_link = '<a href="http://'.$wikipingserver_host.'">http://'.$wikipingserver_host.'</a>';
+		printf('<br /><br />['.WIKIPING_ENABLED.']',$wikiping_link);
 	}
 }
 else
 {
-	echo '<em>'.NO_RECENTLY_CHANGED_PAGES.'</em>';
+	echo '<em>'.RECENTCHANGES_NONE_FOUND.'</em>';
 }
 
 ?>

@@ -23,9 +23,9 @@ if (isset($_POST['pagename']))
 {
 	$pagename = $_POST['pagename'];
 
-	if (!(preg_match("/^[A-ZִײÜ]+[a-zßהצü]+[A-Z0-9ִײÜ][A-Za-z0-9ִײÜßהצü]*$/s", $pagename))) 
+	if (!(preg_match("/^[A-ZִײÜ]+[a-zßהצü]+[A-Z0-9ִײÜ][A-Za-z0-9ִײÜßהצü]*$/s", $pagename))) #34 (use !IsWikiName()) 
 	{
-		echo '<em>'.sprintf(ERROR_INVALID_PAGE_NAME, $pagename).'</em>';
+		echo '<em>'.sprintf(WIKKA_ERROR_INVALID_PAGE_NAME, $pagename).'</em>';
 	}
 	else 
 	{
@@ -40,7 +40,7 @@ if ($showform)
 	<br />
 	<?php echo $this->FormOpen(); ?>
 		<input type="text" name="pagename" size="50" value="<?php echo $pagename; ?>" />  
-		<input type="submit" value="<?php echo NEW_PAGE_FORM_LABEL; ?>" />
+		<input type="submit" value="<?php echo NEWPAGE_CREATE_BUTTON; ?>" />
 	<?php echo $this->FormClose(); 
 } 
 ?>

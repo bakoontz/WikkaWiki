@@ -15,27 +15,14 @@
  * @uses	Wakka::redirect()
  * @uses	Wakka::SaveComment()
  * @uses	Wakka::UserIsOwner()
- * @todo		move main <div> to templating class
+ * @todo	move main <div> to templating class
  */
-
-/**
- * i18n
- */
-if (!defined('ERROR_NO_RIGHT_TO_DELETE_COMMENT')) define('ERROR_NO_RIGHT_TO_DELETE_COMMENT', "Sorry, you're not allowed to delete this comment!");
-if (!defined('BUTTON_DELETE_COMMENT')) define('BUTTON_DELETE_COMMENT', 'Delete Comment');
-if (!defined('BUTTON_REPLY_COMMENT')) define('BUTTON_REPLY_COMMENT', 'Reply to Comment');
-if (!defined('ERROR_EMPTY_COMMENT')) define ('ERROR_EMPTY_COMMENT', 'Comment body was empty -- not saved!');
-if (!defined('ERROR_NO_RIGHT_TO_COMMENT')) define ('ERROR_NO_RIGHT_TO_COMMENT', "Sorry, you're not allowed to post comments to this page");
-if (!defined('ADD_COMMENT_LABEL')) define('ADD_COMMENT_LABEL', 'Add a comment to this page:');
-if (!defined('ADD_COMMENT')) define('ADD_COMMENT', 'Add comment');
-if (!defined('BUTTON_ADD_COMMENT')) define('BUTTON_ADD_COMMENT', 'Add Comment');
-if (!defined('BUTTON_NEW_COMMENT')) define('BUTTON_NEW_COMMENT', 'New Comment');
 
 // Get comment id
 $comment_id = intval(trim($_POST["comment_id"]));
 
 // Delete comment
-if($_POST['submit']==BUTTON_DELETE_COMMENT) {
+if($_POST['submit']==COMMENT_DELETE_BUTTON) {
 	$comment = $this->LoadSingle("select user, parent from ".$this->config["table_prefix"]."comments where id = '".$comment_id."' limit 1");
 	$current_user = $this->GetUserName();
 
@@ -47,13 +34,13 @@ if($_POST['submit']==BUTTON_DELETE_COMMENT) {
 	}
 	else
 	{
-		print('<div class="page"><em class="error">'.ERROR_NO_RIGHT_TO_DELETE_COMMENT.'</em></div>'."\n");
+		print('<div class="page"><em class="error">'.ERROR_NO_COMMENT_DEL_ACCESS.'</em></div>'."\n");
 	}
 }
 
 // Display entry area for comment
-if($_POST['submit']==BUTTON_REPLY_COMMENT ||
-   $_POST['submit']==BUTTON_NEW_COMMENT) {
+if($_POST['submit']==COMMENT_REPLY_BUTTON ||
+   $_POST['submit']==COMMENT_NEW_BUTTON) {
 	// display comment form
 	echo '<div class="commentform">'."\n";
 	if ($this->HasAccess('comment'))
@@ -62,7 +49,7 @@ if($_POST['submit']==BUTTON_REPLY_COMMENT ||
 		<input type="hidden" name="comment_id" value="<?php echo $comment_id ?>" >
 		<label for="commentbox"><?php echo ADD_COMMENT_LABEL; ?><br />
 		<textarea id="commentbox" name="body" rows="6" cols="78"></textarea><br />
-		<input type="submit" name="submit" value="<?php echo BUTTON_ADD_COMMENT; ?>" accesskey="s" />
+		<input type="submit" name="submit" value="<?php echo COMMENT_ADD_BUTTON; ?>" accesskey="s" />
 		</label>
 		<?php echo $this->FormClose(); ?>
 	<?php
@@ -93,7 +80,7 @@ if($_POST['submit']==BUTTON_ADD_COMMENT) {
 	}
 	else
 	{
-		print('<div class="page"><em class="error">'.ERROR_NO_RIGHT_TO_COMMENT.'</em></div>'."\n");
+		print('<div class="page"><em class="error">'.ERROR_NO_COMMENT_WRITE_ACCESS.'</em></div>'."\n");
 	}
 }
 ?>

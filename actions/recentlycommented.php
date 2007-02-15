@@ -14,16 +14,17 @@
  * @uses		Wakka::HasAccess()
  * @uses		Wakka::LoadUser()
  */
+
 /**
  * defaults
  */
-if(!defined('COMMENT_DATE_FORMAT')) define('COMMENT_DATE_FORMAT', 'D, d M Y');
-if(!defined('COMMENT_TIME_FORMAT')) define('COMMENT_TIME_FORMAT', 'H:i T');
-if(!defined('COMMENT_SNIPPET_LENGTH')) define('COMMENT_SNIPPET_LENGTH', 120);
+if (!defined('COMMENT_DATE_FORMAT'))    define('COMMENT_DATE_FORMAT', 'D, d M Y');
+if (!defined('COMMENT_TIME_FORMAT'))    define('COMMENT_TIME_FORMAT', 'H:i T');
+if (!defined('COMMENT_SNIPPET_LENGTH')) define('COMMENT_SNIPPET_LENGTH', 120);
 
 $readable = 0;
 
-echo $this->Format(RECENTLY_COMMENTED_HEADING.' --- ');
+echo '<h2>'.RECENTLYCOMMENTED_HEADING.'</h2><br />'."\n";
 if ($comments = $this->LoadRecentlyCommented())
 {
 	$curday = '';
@@ -56,20 +57,20 @@ if ($comments = $this->LoadRecentlyCommented())
 			$comment_by = $comment['user'];
 			if (!$this->LoadUser($comment_by))
 			{
-				$comment_by .= ANONYMOUS_COMMENT_AUTHOR;
+				$comment_by .= WIKKA_ANONYMOUS_AUTHOR_CAPTION;
 			}
 			// print entry
-			echo '&nbsp;&nbsp;&nbsp;'.$commentlink.COMMENT_AUTHOR_DIVIDER.$comment_by.'<blockquote>'.$comment_preview.'</blockquote>'."\n";
+			echo '&nbsp;&nbsp;&nbsp;'.$commentlink.WIKKA_COMMENT_AUTHOR_DIVIDER.$comment_by.'<blockquote>'.$comment_preview.'</blockquote>'."\n";
 		}
 	}
 	if ($readable == 0)
 	{
-		echo '<em>'.NO_READABLE_RECENTLY_COMMENTED.'</em>';
+		echo '<em>'.RECENTLYCOMMENTED_NONE_ACCESSIBLE.'</em>';
 	}
 }
 else
 {
-	echo '<em>'.NO_RECENTLY_COMMENTED.'</em>';
+	echo '<em>'.RECENTLYCOMMENTED_NONE_FOUND.'</em>';
 }
 
 ?>

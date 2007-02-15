@@ -18,8 +18,9 @@
  * @uses		Wakka::Link()
  * @uses		Wakka::Format()
  *
- * @output   a list of pages accessible to the current user
+ * @output		a list of pages accessible to the current user
  * @todo		add filtering options
+ * @todo		fix RE (#104 etc.)
  */
 
 if ($pages = $this->LoadPageTitles())
@@ -32,8 +33,8 @@ if ($pages = $this->LoadPageTitles())
 	$cached_username = $this->GetUserName();
 	$user_owns_pages = false;
 	$link = $this->href('', '', 'letter=');
-	$alpha_bar = '<a href="'.$link.'">'.ALL_PAGES.'</a>&nbsp;'."\n";
-	$index_header = INDEX_CAPTION;
+	$alpha_bar = '<a href="'.$link.'">'.PAGEINDEX_ALL_PAGES.'</a>&nbsp;'."\n";
+	$index_caption = PAGEINDEX_CAPTION;
 	$index_output = '';
 	$current_character = '';
 	$character_changed = false;
@@ -48,7 +49,7 @@ if ($pages = $this->LoadPageTitles())
 		// $this->CachePage($page);
 
 		$firstChar = strtoupper($page['tag'][0]);
-		if (!preg_match('/[A-Za-z]/', $firstChar)) $firstChar = '#'; //TODO: Internationalization
+		if (!preg_match('/[A-Za-z]/', $firstChar)) $firstChar = '#'; //TODO: (#104 #340, #34) Internationalization (allow other starting chars, make consistent with Formatter REs)
 		if ($firstChar != $current_character) 
 		{
 			$alpha_bar .= '<a href="'.$link.$firstChar.'">'.$firstChar.'</a>&nbsp;'."\n";
@@ -71,18 +72,22 @@ if ($pages = $this->LoadPageTitles())
 			} 
 			elseif ($page_owner != '(Public)' && $page_owner != '') 
 			{
-				$index_output .= sprintf(PAGE_OWNER, $page_owner);
+				$index_output .= sprintf(' . . . . '.WIKKA_PAGE_OWNER, $page_owner);
 			}
 		     	$index_output .= "<br />\n";    
 		}
 	}
 	// generate page
-	$index_header .= ($user_owns_pages) ? '---'.OWNED_PAGES_CAPTION : '';
-	echo $this->Format('===='.PAGE_HEADING.'==== --- <<'.$index_header.'<< ::c:: ---'); 
-	echo "\n<strong>".$alpha_bar."</strong><br />\n".$index_output;
+	if ($user_owns_pages)
+	{
+		$index_caption .= '---'.PAGEINDEX_OWNED_PAGES_CAPTION;
+	}
+	echo $this->Format('===='.PAGEINDEX_HEADING.'==== --- <<'.$index_caption.'<< ::c:: ---'); 
+	echo "\n<strong>".$alpha_bar."</strong><br />\n";
+	echo $index_output;
 } 
 else 
 {
-	echo NO_PAGES_FOUND;
+	echo WIKKA_NO_PAGES_FOUND;
 }
 ?>

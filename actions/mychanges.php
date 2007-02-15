@@ -19,6 +19,7 @@
  * @uses	Wakka::href()
  * @uses	Wakka::LoadAll()
  * @uses	Wakka::Link()
+ * @todo	fix RE (#104 etc.); also lose the comma in there!
  */
 
 // order alphabetically or after time?
@@ -34,8 +35,8 @@ if ($user = $this->GetUser())
 	
 	// header
 	$output .= '<strong>';
-	if ($alpha) $output .= ALPHA_PAGES_CHANGE_LIST.' (<a href="'.$this->href("", $tag).'">'.ORDER_DATE;
- 	else $output .= TIME_PAGES_CHANGE_LIST.' (<a href="'.$this->href("", $tag, "alphabetically=1").'">'.ORDER_ALPHA;
+	if ($alpha) $output .= MYCHANGES_ALPHA_LIST.' (<a href="'.$this->href("", $tag).'">'.ORDER_DATE_LINK_DESC;
+ 	else $output .= MYCHANGES_DATE_LIST.' (<a href="'.$this->href("", $tag, "alphabetically=1").'">'.ORDER_ALPHA_LINK_DESC;
 	$output .= '</a>)</strong><br /><br />'."\n";
 
 	// get the pages
@@ -51,10 +52,13 @@ if ($user = $this->GetUser())
 		foreach ($pages as $page) 
 		{
 			// order alphabetically
-			if($alpha)
+			if ($alpha)
 			{
 				$firstChar = strtoupper($page["tag"][0]);
-				if (!preg_match("/[A-Z,a-z]/", $firstChar)) $firstChar = "#";
+				if (!preg_match("/[A-Z,a-z]/", $firstChar)) //TODO: (#104 #340, #34) Internationalization (allow other starting chars, make consistent with Formatter REs)
+				{
+					$firstChar = "#";					
+				}
 		
 				if ($firstChar != $current) 
 				{
@@ -63,7 +67,7 @@ if ($user = $this->GetUser())
 					$current = $firstChar;
 				}
 			}
-			// order after time
+			// order by time
 			else
 			{
 				// day header
@@ -75,23 +79,23 @@ if ($user = $this->GetUser())
 					$current = $day;
 				}
 			}
-			$output .= "&nbsp;&nbsp;&nbsp;(".$page["time"].") (".$this->Link($page["tag"], "revisions", "history", 0).") ".$this->Link($page["tag"], "", "", 0)."<br />\n";
+			$output .= "&nbsp;&nbsp;&nbsp;(".$page["time"].") (".$this->Link($page["tag"], 'revisions', WIKKA_HISTORY, 0).") ".$this->Link($page["tag"], "", "", 0)."<br />\n"; # @@@ TODO link text should be WIKKA_REVISIONS, not WIKKA_HISTORY
 			$my_edits_count++;
 		}
 		
 		if ($my_edits_count == 0)
 		{
-			$output .= '<em>'.NO_PAGES_EDITED.'</em>';
+			$output .= '<em>'.STATUS_NO_PAGES_EDITED.'</em>';
 		}
 	}
 	else
 	{
-		$output .= '<em>'.NO_PAGES_FOUND.'</em>';
+		$output .= '<em>'.WIKKA_NO_PAGES_FOUND.'</em>';
 	}
 }
 else
 {
-	$output .= '<em>'.NOT_LOGGED_IN.'</em>';
+	$output .= '<em>'.MYCHANGES_NOT_LOGGED_IN.'</em>';
 }
 
 // *** output section ***

@@ -25,20 +25,11 @@
  * @uses Wakka::Redirect()
  * @uses Diff
  * 
- * @todo		move main <div> to templating class;
+ * @todo	move main <div> to templating class;
  * @todo 	This is a really cheap way to do it. I think it may be more intelligent to write the two pages to temporary files and run /usr/bin/diff over them. Then again, maybe not.
+ * 			JW: that may be nice but won't work on a Windows system ;) 
  */
 
-// i18n
-define('ERROR_DIV_LIBRARY_MISSING', 'The necessary file "libs/diff.lib.php" could not be found. Please make sure the file exists and is placed in the right directory!');
-define('ERROR_NO_PAGE_ACCESS', 'You are not authorized to view this page.');
-define('ERROR_BAD_PARAMETERS', 'There is something wrong with parameters you supplied, it\'s very likely that one of the version you want to compare has been deleted.');
-define('CONTENT_ADDITIONS_HEADER', 'Additions:');
-define('CONTENT_DELETIONS_HEADER', 'Deletions:');
-define('CONTENT_NO_DIFFERENCES', 'No Differences');
-define('LABEL_DIFF_COMPARING', 'Comparing <a href="%1$s">%2$s</a> to <a href="%3$s">%4$s</a>');
-define('LABEL_DIFF_COMPARISON_OF', 'Comparison of  <a href="%1$s">%2$s</a> &amp; <a href="%3$s">%4$s</a>');
-define('HIGHLIGHTING_LEGEND', 'Highlighting Guide: <ins>addition</ins> <del>deletion</del>');
 echo '<div class="page">'."\n"; //TODO: move to templating class
 
 // If javascript is disabled, user may get here after pressing button Next... on the /revisions handler. 
@@ -50,8 +41,11 @@ if ((isset($_GET['more_revisions'])) && (isset($_GET['a'])) && (isset($_GET['sta
 if ($this->HasAccess("read")) 
 {
 	// looking for the diff-classes
+	// @@@ TODO needed only if we're NOT doing a 'fastdiff'
+	// instead of copping out we could use fastdiff as fallback if the library is missing:
+	// first determine diff method based on params AND presense of library; then do it
 	if (file_exists('libs/diff.lib.php')) require_once('libs/diff.lib.php');
-	else die(ERROR_DIV_LIBRARY_MISSING);
+	else die(ERROR_DIFF_LIBRARY_MISSING);	// @@@ ERROR: end div won't be produced here
 
 	// load pages
 	$pageA = $this->LoadPageById($_REQUEST['a']);
@@ -59,8 +53,12 @@ if ($this->HasAccess("read"))
 	if (!$pageA || !$pageB)
 	{
 		echo '<em class="error">'.ERROR_BAD_PARAMETERS.'</em><br />';
-		return;
+		return;	// @@@ ERROR: end div won't be produced here
 	}
+	// set up header variables
+	$linkPageA = '<a href="'.$this->Href('', '', 'time='.urlencode($pageA['time'])).'">'.$pageA['time'].'</a>';
+	$linkPageB = '<a href="'.$this->Href('', '', 'time='.urlencode($pageB['time'])).'">'.$pageB['time'].'</a>';
+
 	// If asked, call original diff 
 	if (isset($_REQUEST['fastdiff']) && $_REQUEST['fastdiff'])
 	{
@@ -69,29 +67,33 @@ if ($this->HasAccess("read"))
 		$bodyA = explode("\n", $pageA['body']);
 		$bodyB = explode("\n", $pageB['body']);
 
-		$added = array_diff($bodyA, $bodyB);
+		$added   = array_diff($bodyA, $bodyB);
 		$deleted = array_diff($bodyB, $bodyA);
 
-		$output = sprintf('<h5>'.LABEL_DIFF_COMPARISON_OF.'</h5><br />'."\n", $this->Href('', '', 'time='.urlencode($pageA['time'])), $pageA['time'], $this->Href('', '', 'time='.urlencode($pageB['time'])), $pageB['time']);
+		//$output = sprintf('<h5>'.DIFF_FAST_COMPARISON_HEADER.'</h5><br />'."\n", $this->Href('', '', 'time='.urlencode($pageA['time'])), $pageA['time'], $this->Href('', '', 'time='.urlencode($pageB['time'])), $pageB['time']);
+		$head = '<h5>'.sprintf(DIFF_FAST_COMPARISON_HEADER,$linkPageA,$linkPageB).'</h5>'."\n";
+		// TODO add legend
+
+		$output = '';
 
 		if ($added)
 		{
 			// remove blank lines
-			$output .= '<br />'."\n".'<strong>'.CONTENT_ADDITIONS_HEADER.'</strong><br />'."\n";
+			$output .= '<br />'."\n".'<strong>'.DIFF_ADDITIONS_HEADER.'</strong><br />'."\n";
 			$output .= '<ins>'.$this->Format(implode("\n", $added)).'</ins>';
 		}
 
 		if ($deleted)
 		{
-			$output .= '<br />'."\n".'<strong>'.CONTENT_DELETIONS_HEADER.'</strong><br />'."\n";
+			$output .= '<br />'."\n".'<strong>'.DIFF_DELETIONS_HEADER.'</strong><br />'."\n";
 			$output .= '<del>'.$this->Format(implode("\n", $deleted)).'</del>';
 		}
 	
 		if (!$added && !$deleted)
 		{
-			$output .= "<br />\n".CONTENT_NO_DIFFERENCES;
+			$output .= "<br />\n".DIFF_NO_DIFFERENCES;
 		}
-		echo $output;
+		echo $head.$output;
 	}
 	else
 	{
@@ -125,9 +127,12 @@ if ($this->HasAccess("read"))
 		$sideA->init();
 		$sideB->init();
 
-		printf('<h5>'.LABEL_DIFF_COMPARING.'</h5>'."\n", $this->Href('', '', 'time='.urlencode($pageB['time'])), $pageB['time'], $this->Href('', '', 'time='.urlencode($pageA['time'])), $pageA['time']);
-		echo HIGHLIGHTING_LEGEND;
-		$output='';
+		$sample_addition = '<ins>'.DIFF_SAMPLE_ADDITION.'</ins>';
+		$sample_deletion = '<del>'.DIFF_SAMPLE_DELETION.'</del>';
+		$head  = '<h5>'.sprintf(DIFF_COMPARISON_HEADER,$linkPageA,$linkPageB).'</h5>'."\n";
+		$head .= sprintf(HIGHLIGHTING_LEGEND,$sample_addition,$sample_deletion);
+
+		$output = '';
 
 		while (1)
 		{
@@ -181,17 +186,17 @@ if ($this->HasAccess("read"))
 				}
 			}
 		}
-
 		$sideB->copy_until_ordinal($count_total_right,$output);
 		$sideB->copy_whitespace($output);
-		$out=$this->Format($output);
-		echo $out;
+
+		$out = $this->Format($output);
+		echo $head.$out;
 
 	}
 }
 else
 {
-	echo '<em class="error">'.ERROR_NO_PAGE_ACCESS.'</em>';
+	echo '<em class="error">'.WIKKA_ERROR_ACL_READ.'</em>';
 }
 echo '</div>'."\n" //TODO: move to templating class
 ?>

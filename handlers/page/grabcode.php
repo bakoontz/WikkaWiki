@@ -19,10 +19,7 @@
  * @todo use central regex library for filename validation;
  * @todo check time format for consistency;
  */
-/**
- * i18n
- */
-define('ERROR_NO_CODE', 'Sorry, there is no code to download.');
+
 /**
  * defaults
  */

@@ -33,18 +33,6 @@
  * @todo		move <div> to template;
  * @todo  make sure resulting XHTML is valid
  */
-/**
- * i18n
- */
- define('DIFF_ADDITIONS', 'Additions:');
- define('DIFF_DELETIONS', 'Deletions:');
- define('DIFF_NO_DIFFERENCES', 'No differences.');
- define('EDITED_ON', 'Edited on %1$s by %2$s');
- define('ERROR_ACL_READ', 'You aren\'t allowed to read this page.');
- define('HISTORY_PAGE_VIEW', 'Page view:');
- define('OLDEST_VERSION_EDITED_ON_BY', 'Oldest known version of this page was edited on %1$s by %2$s');
- define('MOST_RECENT_EDIT', 'Most recent edit on %1$s by %2$s');
- define('HISTORY_MORE', 'Full history for this page cannot be displayed within a single page, click <a href="%1$s">here</a> to view more.');
  
 echo '<div class="page">'."\n"; //TODO: move to templating class
 $start = intval($this->GetSafeVar('start', 'get'));
@@ -95,14 +83,14 @@ if ($this->HasAccess("read")) {
 					if ($added)
 					{
 						// remove blank lines
-						$output .= "<br />\n<strong>".DIFF_ADDITIONS."</strong><br />\n";
-						$output .= "<ins>".$this->Format(implode("\n", $added))."</ins><br />";
+						$output .= '<br />'."\n".'<strong>'.DIFF_ADDITIONS_HEADER.'</strong><br />'."\n";
+						$output .= '<ins>'.$this->Format(implode("\n", $added)).'</ins>';
 					}
 
 					if ($deleted)
 					{
-						$output .= "<br />\n<strong>".DIFF_DELETIONS."</strong><br />\n";
-						$output .= "<del>".$this->Format(implode("\n", $deleted))."</del><br />";
+						$output .= '<br />'."\n".'<strong>'.DIFF_DELETIONS_HEADER.'</strong><br />'."\n";
+						$output .= '<del>'.$this->Format(implode("\n", $deleted)).'</del>';
 					}
 
 					if (!$added && !$deleted)
@@ -122,7 +110,8 @@ if ($this->HasAccess("read")) {
 		$oldest_revision = $this->LoadOldestRevision($this->tag);
 		if ($oldest_revision['id'] != $pageB['id'])
 		{
-			$additional_output .= "\n".'<br /><strong>'.sprintf(HISTORY_MORE, $this->Href('history', '', 'start='.($c>1 ? $c+$start-1 : $c+$start))).'</strong>';
+			$history_more_link = '<a href="'.$this->Href('history', '', 'start='.($c>1 ? $c+$start-1 : $c+$start)).'">'.HISTORY_MORE_LINK_DESC.'here</a>';
+			$additional_output .= "\n".'<br /><strong>'.sprintf(HISTORY_MORE,$history_more_link).'</strong>';
 			$output .= '<strong>'.sprintf(EDITED_ON, '<a href="'.$this->href('', '', 'time='.urlencode($pageB['time'])).'">'.$pageB['time'].'</a>', $this->Format($pageB['user'])).'</strong> <span class="pagenote smaller">['.$this->htmlspecialchars_ent($pageB['note'])."]</span><br />\n";
 		}
 		else
@@ -133,7 +122,7 @@ if ($this->HasAccess("read")) {
 		print($output.$additional_output);
 	}
 } else {
-	print('<em class="error">'.ERROR_ACL_READ.'</em>');
+	print('<em class="error">'.WIKKA_ERROR_ACL_READ.'</em>');
 }
 echo '</div>'."\n" //TODO: move to templating class
 ?>

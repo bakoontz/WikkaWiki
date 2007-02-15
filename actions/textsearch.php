@@ -62,7 +62,7 @@ if (isset($_REQUEST['phrase']) && ($phrase = $_REQUEST['phrase']))
 	if ($total_results > 0)
 	{
 		$expsearchurl  = $this->Href('', 'TextSearchExpanded', 'phrase='.urlencode($phrase));
-		$expsearchlink = '<a href="'.$expsearchurl.'">'.SEARCH_EXPANDED.'</a>';
+		$expsearchlink = '<a href="'.$expsearchurl.'">'.SEARCH_EXPANDED_LINK_DESC.'</a>';
 
 		echo '<ol>'.$result_page_list.'</ol>'."\n";
 		#echo str_replace('$1', $this->Href('', 'TextSearchExpanded', 'phrase='.urlencode($phrase)), SEARCH_TRY_EXPANDED);

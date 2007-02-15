@@ -28,17 +28,13 @@
  * 
  * @todo	move <div> to templating class
  */
-echo '<div class="page">'."\n"; //TODO: move to templating class
 
-/**
- * i18n
- */
-define('PAGE_TITLE','Pages linking to %s');
-define('ERROR_NO_BACKLINKS','There are no backlinks to this page.');
-
+// define variables
 $page = $this->tag;
-echo $this->Format('=== '.sprintf(PAGE_TITLE,'[['.$page.']]').' === --- ---');
 $pages = $this->LoadPagesLinkingTo($page);
-$str = $this->ListPages($pages, sprintf('<em class="error">'.ERROR_NO_BACKLINKS.'</em>', $page), '', 0, 1, true);
-echo $str.'</div>'."\n" //TODO: move to templating class
+// produce output
+echo '<div class="page">'."\n"; //TODO: move to templating class
+echo $this->Format('=== '.sprintf(BACKLINKS_HEADING,'[['.$page.']]').' === --- ---');
+echo $this->ListPages($pages, sprintf('<em class="error">'.BACKLINKS_NO_PAGES.'</em>', $page), '', 0, 1, true);
+echo '</div>'."\n" //TODO: move to templating class
 ?>

@@ -15,11 +15,6 @@
  * @uses		Wakka::LoadRecentlyChanged()
  */
 
-// i18n
-define('LABEL_FIRST_NODE', 'Recent Changes');
-define('ERROR_ACL_READ_INFO', 'You\'re not allowed to access this information.');
-define('LABEL_ERROR', 'Error');
-
 header("Content-type: text/xml");
 
 /**
@@ -41,8 +36,8 @@ function in_iarray ($item, $array)
 	return false;
 }
 
-$xml = "<map version=\"0.7.1\">\n";
-$xml .= '<node TEXT="'.LABEL_FIRST_NODE."\">\n";
+$xml  = "<map version=\"0.7.1\">\n";
+$xml .= '<node TEXT="'.FIRST_NODE_LABEL."\">\n";
 $xml .= "<node TEXT=\"Date\" POSITION=\"right\">\n";
 
 if ($pages = $this->LoadRecentlyChanged())
@@ -121,9 +116,9 @@ if ($pages = $this->LoadRecentlyChanged())
 else
 {
 	$xml .= "<item>\n";
-	$xml .= '<title>'.LABEL_ERROR."</title>\n";
+	$xml .= '<title>'.WIKKA_ERROR_CAPTION."</title>\n";
 	$xml .= "<link>".$this->Href("show")."</link>\n";
-	$xml .= '<description>'.ERROR_ACL_READ_INFO."</description>\n";
+	$xml .= '<description>'.WIKKA_ERROR_ACL_READ_INFO."</description>\n";
 	$xml .= "</item>\n";
 }
 

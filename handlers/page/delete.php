@@ -16,18 +16,10 @@
  * @uses		Wakka::Query()
  * @uses		Wakka::Redirect()
  * @todo		move main <div> to templating class;
+ * @todo		don't show cancel button when JavaScript is not active
  */
-echo '<div class="page">'."\n"; //TODO: move to templating class
 
-/**
- * i18n
- */
-if(!defined('ERR_NO_PAGE_DEL_RIGHT')) define ('ERR_NO_PAGE_DEL_RIGHT', 'You are not allowed to delete this page.');
-if(!defined('PAGE_DELETION_SUCCESS')) define('PAGE_DELETION_SUCCESS', 'Page has been deleted!');
-if(!defined('PAGE_DELETION_HEADER')) define('PAGE_DELETION_HEADER', 'Delete %s'); // %s - name of the page
-if(!defined('PAGE_DELETION_TXT')) define('PAGE_DELETION_TXT', 'Completely delete this page, including all comments?');
-if(!defined('BUTTON_CANCEL')) define ('BUTTON_CANCEL', 'Cancel');
-if(!defined('BUTTON_DELETE')) define ('BUTTON_DELETE', 'Delete Page');
+echo '<div class="page">'."\n"; //TODO: move to templating class
 
 $tag = $this->GetPageTag();
 
@@ -55,11 +47,13 @@ if ($this->IsAdmin() || ($this->UserIsOwner($tag) && $this->config["owner_delete
 		<?php echo $this->FormOpen("delete") ?>
 		<table border="0" cellspacing="0" cellpadding="0">
 			<tr>
-				<td><?php echo PAGE_DELETION_TXT; ?></td>
+				<td><?php echo PAGE_DELETION_CAPTION ?></td>
 			</tr>
 			<tr>
-				<td> <!-- nonsense input so form submission works with rewrite mode --><input type="hidden" value="" name="null"><input type="submit" value="<?php echo BUTTON_DELETE;?>"  style="width: 120px" />
-				<input type="button" value="<?php echo BUTTON_CANCEL;?>" onclick="history.back();" style="width: 120px" /></td>
+				<td> <!-- nonsense input so form submission works with rewrite mode --><input type="hidden" value="" name="null">
+				<input type="submit" value="<?php echo PAGE_DELETION_DELETE_BUTTON ?>"  style="width: 120px" />
+				<input type="button" value="<?php echo PAGE_DELETION_CANCEL_BUTTON ?>" onclick="history.back();" style="width: 120px" />
+				</td>
 			</tr>
 		</table>
 		<?php
@@ -68,7 +62,7 @@ if ($this->IsAdmin() || ($this->UserIsOwner($tag) && $this->config["owner_delete
 }
 else
 {
-	echo '<em class="error">'.ERR_NO_PAGE_DEL_RIGHT.'</em>';
+	echo '<em class="error">'.ERROR_NO_PAGE_DEL_ACCESS.'</em>';
 }
 echo '</div>'."\n" //TODO: move to templating class
 ?>

@@ -23,44 +23,45 @@
  */
 
 	echo $this->FormOpen("", "TextSearch", "get"); 
-	echo $this->HasAccess("write") ? '<a href="'.$this->href("edit").'" title="'.PAGE_EDIT_LINK_TITLE.'">'.PAGE_EDIT_LINK_TEXT.'</a> ::'."\n" : "";
-	echo '<a href="'.$this->href("history").'" title="'.PAGE_HISTORY_LINK_TITLE.'">'.PAGE_HISTORY_LINK_TEXT.'</a> ::'."\n";
-	echo $this->GetPageTime() ? '<a href="'.$this->href("revisions").'" title="'.PAGE_REVISION_LINK_TITLE.'">'.$this->GetPageTime().'</a> <a href="'.$this->href("revisions.xml").'" title="'.PAGE_REVISION_LINK_XML_TITLE.'"><img src="images/xml.png" width="36" height="14" align="middle" style="border : 0px;" alt="XML" /></a> ::'."\n" : "";
+	echo $this->HasAccess("write") ? '<a href="'.$this->Href("edit").'" title="'.PAGE_EDIT_LINK_TITLE.'">'.PAGE_EDIT_LINK_DESC.'</a> ::'."\n" : "";
+	echo '<a href="'.$this->Href("history").'" title="'.PAGE_HISTORY_LINK_TITLE.'">'.PAGE_HISTORY_LINK_DESC.'</a> ::'."\n";
+	echo $this->GetPageTime() ? '<a href="'.$this->Href("revisions").'" title="'.PAGE_REVISION_LINK_TITLE.'">'.$this->GetPageTime().'</a> <a href="'.$this->href("revisions.xml").'" title="'.PAGE_REVISION_XML_LINK_TITLE.'"><img src="images/xml.png" width="36" height="14" align="middle" style="border: 0px;" alt="XML" /></a> ::'."\n" : "";
 
 	// if this page exists
 	if ($this->page)
 	{
 		if ($owner = $this->GetPageOwner())
 		{
+			$page_owner_link = $this->Link($owner,'','',0);
 			if ($owner == "(Public)")
 			{
-				print(PUBLIC_PAGE.' '.($this->IsAdmin() ? '<a href="'.$this->href("acls").'">'.PAGE_ACLS_EDIT_LINK_TEXT_ADMIN.'</a> ::'."\n" : "::\n"));
+				print(PUBLIC_PAGE.' '.($this->IsAdmin() ? '<a href="'.$this->Href("acls").'">'.PAGE_ACLS_EDIT_LINK_TEXT_ADMIN.'</a> ::'."\n" : "::\n"));
 			}
 			// if owner is current user
 			elseif ($this->UserIsOwner())
 			{
            		if ($this->IsAdmin())
            		{
-					print(OWNER_LABEL.' '.$this->Link($owner, "", "", 0).' :: <a href="'.$this->href("acls").'">'.PAGE_ACLS_EDIT_LINK_TEXT_ADMIN.'</a> ::'."\n");
+					print(sprintf(WIKKA_PAGE_OWNER,$page_owner_link).' :: <a href="'.$this->href("acls").'">'.PAGE_ACLS_EDIT_ADMIN_LINK_TEXT.'</a> ::'."\n");
             	} 
             	else 
             	{
-					print(USER_IS_OWNER.' :: <a href="'.$this->href("acls").'">'.PAGE_ACLS_EDIT_LINK_TEXT.'</a> ::'."\n");
+					print(USER_IS_OWNER.' :: <a href="'.$this->href("acls").'">'.PAGE_ACLS_EDIT_ADMIN_LINK_TEXT.'</a> ::'."\n");
 				}
 			}
 			else
 			{
-				print(OWNER_LABEL.' '.$this->Link($owner, "", "", 0)." ::\n");
+				print sprintf(WIKKA_PAGE_OWNER,$page_owner_link)." ::\n";
 			}
 		}
 		else
 		{
-			print(NO_OWNER.($this->GetUser() ? ' (<a href="'.$this->href("claim").'">'.TAKE_OWNERSHIP."</a>) ::\n" : " ::\n"));
+			print(WIKKA_NO_OWNER.($this->GetUser() ? ' (<a href="'.$this->href("claim").'">'.TAKE_OWNERSHIP."</a>) ::\n" : " ::\n"));
 		}
 	}
 ?>
-<?php echo ($this->GetUser() ? '<a href="'.$this->href("referrers").'" title="'.REFERRER_LINK_TITLE.'">'.REFERRER_LINK_TEXT.'</a> :: ' : "") ?> 
-<?php echo SEARCH_LABEL;?> <input name="phrase" size="15" class="searchbox" />
+<?php echo ($this->GetUser() ? '<a href="'.$this->href("referrers").'" title="'.REFERRERS_LINK_TITLE.'">'.REFERRERS_LINK_DESC.'</a> :: ' : "") ?> 
+<label for="src_phrase"><?php echo SEARCH_LABEL;?></label> <input id="src_phrase" name="phrase" size="15" class="searchbox" />
 <?php echo $this->FormClose(); ?>
 </div>
 

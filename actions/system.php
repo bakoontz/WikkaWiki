@@ -21,14 +21,10 @@
  * @input		string	$show	optional: what type of system info to show (OS, machine or host);
  *				default: empty, shows all information
  */
-/**
- * i18n
- */
-if (!defined('NOT_AVAILABLE')) define('NOT_AVAILABLE', 'n/a');
 
 // defaults
 $show = '';
-$out = NOT_AVAILABLE;
+$out = WIKKA_STATUS_NOT_AVAILABLE;
 
 //check privs
 if ($this->config['public_sysinfo'] == '1' || $this->IsAdmin())
@@ -61,14 +57,14 @@ if ($this->config['public_sysinfo'] == '1' || $this->IsAdmin())
 	switch ($show)
 	{
 		case '':
-			if (isset($os)) $out .= $os.' ';
+			if (isset($os))      $out .= $os.' ';
 			if (isset($release)) $out .= $release.' ';
 			if (isset($version)) $out .= $version.' ';
 			if (isset($machine)) $out .= $machine.' ';
-			if (isset($host)) $out .= '('.$host.')';
+			if (isset($host))    $out .= sprintf(SYSTEM_HOST_CAPTION,$host);
 			break;
 		case 'os':
-			if (isset($os)) $out .= $os.' ';
+			if (isset($os))      $out .= $os.' ';
 			if (isset($release)) $out .= $release.' ';
 			if (isset($version)) $out .= $version.' ';
 			break;
@@ -76,7 +72,7 @@ if ($this->config['public_sysinfo'] == '1' || $this->IsAdmin())
 			if (isset($machine)) $out .= $machine.' ';
 			break;
 		case 'host':
-			if (isset($host)) $out .= $host.' ';
+			if (isset($host))    $out .= $host.' ';
 			break;
 	}
 }	

@@ -33,15 +33,8 @@
  * @uses		Wakka::Href()
  * 
  * @todo		move main <div> to templating class
+ * @todo		make operation (buttons) independent of JavaScript
  */
- // i18n
-define('BUTTON_RETURN_TO_NODE', 'Return To Node / Cancel');
-define('BUTTON_SHOW_DIFFERENCES', 'Show Differences');
-define('ERROR_ACL_READ', 'You aren\'t allowed to read this page.');
-define('SIMPLE_DIFF', 'Simple Diff');
-define('WHEN_BY_WHO', '%1$s by %2$s');
-define('REVISIONS_MORE', 'There are more revisions that were not shown here, click the button labelled %s below to view these entries');
-define('BUTTON_REVISIONS_MORE', 'Next ...');
 
 $start = 0;
 
@@ -69,8 +62,8 @@ if ($this->HasAccess("read"))
 		$output = $this->FormOpen("diff", "", "get");
 		$output .= "<table border=\"0\" cellspacing=\"0\" cellpadding=\"1\">\n";
 		$output .= "<tr>\n";
-		$output .= '<td><input type="submit" value="'.BUTTON_SHOW_DIFFERENCES.'" /></td>';
-		$output .= '<td><input value="1" type="checkbox" checked="checked" name="fastdiff" id="fastdiff" />'."\n".'<label for="fastdiff">'.SIMPLE_DIFF.'</label></td>';
+		$output .= '<td><input type="submit" value="'.REVISIONS_SHOW_DIFFERENCES_BUTTON.'" /></td>';
+		$output .= '<td><input value="1" type="checkbox" checked="checked" name="fastdiff" id="fastdiff" /><label for="fastdiff">'.REVISIONS_SIMPLE_DIFF.'</label></td>';
 		$output .= "</tr>\n";
 		$output .= "</table>\n";
 		$output .= "<table border=\"0\" cellspacing=\"0\" cellpadding=\"1\">\n";
@@ -83,17 +76,17 @@ if ($this->HasAccess("read"))
 			$output .= "<tr>";
 			$output .= "<td><input type=\"radio\" name=\"a\" value=\"".$page["id"]."\" ".($c == 1 ? "checked=\"checked\"" : "")." /></td>";
 			$output .= "<td><input type=\"radio\" name=\"b\" value=\"".$page["id"]."\" ".($c == 2 ? "checked=\"checked\"" : "")." /></td>";
-			$output .= '<td>'.sprintf(WHEN_BY_WHO, '<a href="'.$this->Href('show','','time='.urlencode($page["time"])).'">'.$page['time'].'</a>', $this->Link($page["user"])).' <span class="pagenote smaller">'.$note.'</span></td>';
+			$output .= '<td>'.sprintf(WIKKA_REV_WHEN_BY_WHO, '<a href="'.$this->Href('show','','time='.urlencode($page["time"])).'">'.$page['time'].'</a>', $this->Link($page["user"])).' <span class="pagenote smaller">'.$note.'</span></td>';
 			$output .= "</tr>\n";
 		}
 		$output .= "</table><br />\n";
-		$output .= '<input type="button" value="'.BUTTON_RETURN_TO_NODE.'" onclick="document.location=\''.$this->Href('').'\';" />'."\n";
+		$output .= '<input type="button" value="'.REVISIONS_RETURN_TO_NODE_BUTTON.'" onclick="document.location=\''.$this->Href('').'\';" />'."\n";
 		$oldest_revision = $this->LoadOldestRevision($this->tag);
 		if ($oldest_revision['id'] != $page['id'])
 		{
 			$output .= '<input type="hidden" name="start" value="'.($start + $c).'" />'."\n";
-			$output .= '<br />'.sprintf(REVISIONS_MORE, BUTTON_REVISIONS_MORE);
-			$output .= "\n".'<br /><input type="submit" name="more_revisions" value="'.BUTTON_REVISIONS_MORE.'" onclick=\'this.form.action="'.$this->Href('revisions').'"; return (true);\' />';
+			$output .= '<br />'.sprintf(REVISIONS_MORE_CAPTION, REVISIONS_MORE_BUTTON);
+			$output .= "\n".'<br /><input type="submit" name="more_revisions" value="'.REVISIONS_MORE_BUTTON.'" onclick=\'this.form.action="'.$this->Href('revisions').'"; return true;\' />';
 		}
 		$output .= $this->FormClose()."\n";
 	}
@@ -101,7 +94,7 @@ if ($this->HasAccess("read"))
 } 
 else 
 {
-	print('<em class="error">'.ERROR_ACL_READ.'</em>');
+	print('<em class="error">'.WIKKA_ERROR_ACL_READ.'</em>');
 }
 echo '</div>'."\n" //TODO: move to templating class
 ?>

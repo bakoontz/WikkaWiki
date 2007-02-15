@@ -20,11 +20,12 @@ if (!$max || $limit<$max)
 
 $last_users = $this->LoadAll("select name, signuptime from ".$this->config["table_prefix"]."users order by signuptime desc limit ".(int)$max);
 
+//TODO use generic table styling, not underline
 $htmlout = '<table width="50%" border="0" cellpadding="3%">'."\n".
   "  <tr>\n".
-    "    <th><u>".NAME."</u></th>\n".
-    "    <th><u>".OWNED_PAGES."</u></th>\n".
-    "    <th><u>".SIGNUP_DATE_TIME."</u></th>\n".
+    "    <th><u>".NAME_TH."</u></th>\n".
+    "    <th><u>".OWNED_PAGES_TH."</u></th>\n".
+    "    <th><u>".SIGNUP_DATE_TIME_TH."</u></th>\n".
   "  </tr>\n";
 
 foreach($last_users as $user)
