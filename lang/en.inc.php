@@ -101,7 +101,7 @@ define('BUTTON_SEND_PW','Send reminder');
 define('USERSETTINGS_REF','Return to the %s page.'); // %s - UserSettings link
 
 // feedback
-define('FEEDBACK_FORM_DESC','Fill in the form below to send us your comments:');
+define('FEEDBACK_FORM_CAPTION','Fill in the form below to send us your comments:');
 define('FEEDBACK_NAME_LABEL','Name:');
 define('FEEDBACK_EMAIL_LABEL','Email:');
 define('FEEDBACK_COMMENT_LABEL','Comments:');
@@ -135,14 +135,13 @@ define('DELETE_LINK_TITLE','Remove %s'); // %s - file name
 define('NO_ATTACHMENTS','This page contains no attachment.');
 
 // footer
-define('PAGE_EDIT_LINK_TITLE','Click to edit this page'); // @@@ TODO 'Edit this page'
-define('PAGE_EDIT_LINK_DESC','Edit page');
+define('FOOTER_PAGE_EDIT_LINK_DESC','Edit page');
 define('PAGE_HISTORY_LINK_TITLE','Click to view recent edits to this page'); // @@@ TODO 'View recent edits to this page'
 define('PAGE_HISTORY_LINK_DESC','Page History');
 define('PAGE_REVISION_LINK_TITLE','Click to view recent revisions list for this page'); // @@@ TODO 'View recent revisions list for this page' 
 define('PAGE_REVISION_XML_LINK_TITLE','Click to view recent revisions list for this page'); // @@@ TODO 'View recent revisions list for this page'
 define('PAGE_ACLS_EDIT_LINK_DESC','Edit ACLs');
-define('PAGE_ACLS_EDIT_ADMIN_LINK_DESC','('.PAGE_ACLS_EDIT_LINK_TEXT.')');
+define('PAGE_ACLS_EDIT_ADMIN_LINK_DESC','('.PAGE_ACLS_EDIT_LINK_DESC.')');
 define('PUBLIC_PAGE','Public page');
 define('USER_IS_OWNER','You own this page.');
 define('NO_OWNER','Nobody');
@@ -213,7 +212,7 @@ define('PAGEINDEX_ALL_PAGES','All');
 
 // recentchanges
 define('RECENTCHANGES_HEADING','Recently changed pages');
-define('REVISIONs_LINK_TITLE','View recent revisions list for %s'); // %s - page name
+define('REVISIONS_LINK_TITLE','View recent revisions list for %s'); // %s - page name
 define('HISTORY_LINK_TITLE','View edit history of %s'); // %s - page name
 define('WIKIPING_ENABLED','WikiPing enabled: Changes on this wiki are broadcast to %s'); // %s - link to wikiping server
 define('RECENTCHANGES_NONE_FOUND','There are no recently changed pages.');
@@ -333,7 +332,7 @@ define('INVITATION_CODE_SHORT','Invitation Code');
 define('INVITATION_CODE_LONG','In order to register, you must fill in the invitation code sent by this website\'s administrator.');
 define('INVITATION_CODE_LABEL','Your %s:'); // %s - expanded short invitation code prompt
 define('WIKINAME_SHORT','WikiName');
-define('WIKINAME_LONG',sprintf('A WikiName is formed by two or more capitalized words without space, e.g. ',WIKKA_SAMPLE_WIKINAME));
+define('WIKINAME_LONG',sprintf('A WikiName is formed by two or more capitalized words without space, e.g. %s',WIKKA_SAMPLE_WIKINAME));
 define('WIKINAME_LABEL','Your %s:'); // %s - expanded short wiki name prompt
 // - form buttons
 define('UPDATE_SETTINGS_BUTTON','Update Settings');
@@ -408,7 +407,6 @@ define('USER_IS_NOW_OWNER','You are now the owner of this page.');
 
 // clone
 define('ERROR_ACL_WRITE','Sorry! You don\'t have write-access to %s');
-define('ERROR_INVALID_PAGENAME','This page name is invalid. Valid page names must start with a letter and contain only letters and numbers.');
 define('ERROR_PAGE_ALREADY_EXIST','Sorry, the destination page already exists');
 define('CLONE_VALID_TARGET','Please fill in a valid target page name and an (optional) edit note.');
 define('CLONE_LEGEND','Clone %s'); // %s source page name
@@ -442,7 +440,6 @@ define('DIFF_SAMPLE_DELETION','deletion');
 define('HIGHLIGHTING_LEGEND','Highlighting Guide: %1$s %2$s'); // %1$s - sample added text; %2$s - sample deleted text
 
 // edit
-define('ERROR_INVALID_PAGENAME','This page name is invalid. Valid page names must start with a letter and contain only letters and numbers.');
 define('ERROR_OVERWRITE_ALERT1','OVERWRITE ALERT: This page was modified by someone else while you were editing it.');
 define('ERROR_OVERWRITE_ALERT2','Please copy your changes and re-edit this page.');
 define('ERROR_MISSING_EDIT_NOTE','MISSING EDIT NOTE: Please fill in an edit note!');
