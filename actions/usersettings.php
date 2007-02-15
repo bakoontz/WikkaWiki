@@ -535,7 +535,7 @@ else // user is not logged in
 	<label for="temppassword"><?php echo TEMP_PASSWORD_LABEL ?></label>
 	<input id="temppassword" type="text" <?php echo $password_temp_highlight; ?> name="temppassword" size="40" />
 	<br />
-	<input id="loginsubmit" type="submit" value="<?php echo LOGIN_BUTTON ?>" size="40" />
+	<input id="temppassloginsubmit" type="submit" value="<?php echo LOGIN_BUTTON ?>" size="40" />
 	<br />
 	</fieldset>
 <?php
