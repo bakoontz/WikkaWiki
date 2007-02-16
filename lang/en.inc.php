@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * This file holds all interface language strings for Wikka.
  * 
  * @package 		Language
