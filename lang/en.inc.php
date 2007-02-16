@@ -1,20 +1,34 @@
 <?php
 /*
- * This file will hold all language strings for wikka.
+ * This file holds all interface language strings for Wikka.
  * 
- * @package		language
+ * @package 		Wikka
+ * @subpackage 	Language
+ * 
  * @version		$Id$
+ * @license 		http://www.gnu.org/copyleft/gpl.html GNU General Public License
+ * @filesource
  * 
+ * @author 		{@link http://wikkawiki.org/NilsLindenberg Nils Lindenberg}
+ * @author 		{@link http://wikkawiki.org/DarTar Dario Taraborelli}
+ * @author 		{@link http://wikkawiki.org/JavaWoman Marjolein Katsma}
+ * @author 		{@link http://wikkawiki.org/DotMG Mahefa Randimbisoa}
+ *
+ * @copyright 	Copyright 2007, {@link http://wikkawiki.org/CreditsPage Wikka Development Team}
+ *
  * @todo		make sure that punctuation is always part of defined phrase
  *				(check where these constants are used) 
  * @todo		use single quotes whenever possible
  * 				(unless	that leads to more than one escaped single quote)
  * @todo		move the rest of the hardcoded texts in here (double-check)
+ * 
+ * @todo		use phpdoc headers to document constants where needed. Note that phpdoc blocks apply
+ *  				to the immediately following define. Use non-phpdoc comments to divide this file 
+ * 				into sections.
  */ 
 
-/**
- * General - strings (that are or can be) used across several files
- */
+/* ------------------ COMMON ------------------ */
+
 define('WIKKA_ERROR_CAPTION','Error');
 #define('ERROR_NO_PAGE_ACCESS','You are not authorized to view this page.');
 define('WIKKA_ERROR_ACL_READ','You aren\'t allowed to read this page.'); # was in diff.php: 'You are not authorized to view this page.'
@@ -45,9 +59,8 @@ define('WIKKA_NOTE','NOTE:');
 define('WIKKA_JAVA_PLUGIN_NEEDED','Java 1.4.1 (or later) Plug-in is needed to run this applet,');
 
 
-/**
- * Main.
- */
+/*  ------------------ CORE ------------------  */
+
 // wikka
 define('ERROR_WAKKA_LIBRARY_MISSING','The necessary file "libs/Wakka.class.php" could not be found. To run Wikka, please make sure the file exists and is placed in the right directory!');
 define('ERROR_WRONG_PHP_VERSION','$_REQUEST[] not found. Wakka requires PHP 4.1.0 or higher!');
@@ -55,17 +68,16 @@ define('ERROR_SETUP_FILE_MISSING','A file of the installer / upgrader was not fo
 define('ERROR_SETUP_HEADER_MISSING','The file "setup/header.php" was not found. Please install Wikka again!');
 define('ERROR_SETUP_FOOTER_MISSING','The file "setup/footer.php" was not found. Please install Wikka again!');
 define('ERROR_NO_DB_ACCESS','Error: Unable to connect to the MySQL database.'); //TODO Don't mention DB engine JW
+define('STATUS_WIKI_UNAVAILABLE','The wiki is currently unavailable.');
+define('STATUS_WIKI_UPGRADE_NOTICE','This site is currently being upgraded. Please try again later.');
 /**
  * Display page generation time in seconds with 4 decimals (%.4f)
  */
-define('STATUS_WIKI_UNAVAILABLE','The wiki is currently unavailable.');
-define('STATUS_WIKI_UPGRADE_NOTICE','This site is currently being upgraded. Please try again later.');
-define('PAGE_GENERATION_TIME','Page was generated in %.4f seconds'); // %.4f - page generation time in seconds
+define('PAGE_GENERATION_TIME','Page was generated in %.4f seconds');
  
 
-/**
- * Actions.
- */
+/*  ------------------ ACTIONS  ------------------  */
+
 // calendar
 define('FMT_SUMMARY','Calendar for %s');					
 define('TODAY','today');
@@ -349,26 +361,23 @@ define('OK_BUTTON','   OK   ');
 define('NO_WANTED_PAGES','No wanted pages. Good!');
 
 
-/**
- * 3rd party
- */
+/* ------------------ 3RD PARTY ------------------ */
+
 // fullscreen
 define('CLOSE_WINDOW','Close Window');
 define('MM_GET_JAVA_PLUGIN_LINK_DESC','get the latest Java Plug-in here'); // used in MM_GET_JAVA_PLUGIN
 define('MM_GET_JAVA_PLUGIN','so if it does not work, %s.'); // %s - plugin download link
 
 
-/**
- * Formatters
- */
+/* ------------------ FORMATTERS ------------------ */
+
 // wakka
 define('GRABCODE_BUTTON','Grab');
 define('GRABCODE_BUTTON_TITLE','Download %s'); // %s download filename
 
 
-/**
- * (Page) Handlers
- */
+/* ------------------ HANDLERS (PAGE) ------------------ */
+
 // acls
 // TODO: 'translate' DB value '(Public)' when displaying it!
 define('ACLS_UPDATED','Access control lists updated.');
@@ -550,9 +559,8 @@ define('COMMENT_TIME_CAPTION','(%s)'); // %s comment time
 define('SOURCE_HEADING','Formatting code for %s'); // %s - page link
 define('SHOW_RAW_LINK_DESC','show source only');
 
-/**
- * Libs
- */
+/* ------------------ LIBS ------------------*/
+
 // Wakka.class
 define('QUERY_FAILED','Query failed:');
 define('REDIR_DOCTITLE','Redirected to %s'); // %s - target page
@@ -564,9 +572,7 @@ define('ACTION_UNKNOWN','Unknown action "%s"'); // %s - action name
 define('HANDLER_UNKNOWN','Sorry, %s is an unknown handler.'); // %s handler name
 define('FORMATTER_UNKNOWN','Formatter "%s" not found'); // %s formatter name
 
-/**
- * Setup
- */
+/* ------------------ SETUP ------------------ */
 // @@@ later....
 
 ?>
