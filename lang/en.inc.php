@@ -2,8 +2,7 @@
 /*
  * This file holds all interface language strings for Wikka.
  * 
- * @package 		Wikka
- * @subpackage 	Language
+ * @package 		Language
  * 
  * @version		$Id$
  * @license 		http://www.gnu.org/copyleft/gpl.html GNU General Public License
