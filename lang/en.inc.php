@@ -305,34 +305,33 @@ define('ERROR_PASSWORD_TOO_SHORT','Sorry, the password must contain at least %d 
 define('ERROR_INVALID_INVITATION_CODE','This is a private wiki, only invited members can register an account! Please contact the administrator of this website for an invitation code.');
 define('ERROR_INVALID_REVISION_DISPLAY_LIMIT','The number of page revisions should not exceed %d.'); // %d - maximum revisions to view
 define('ERROR_INVALID_RECENTCHANGES_DISPLAY_LIMIT','The number of recently changed pages should not exceed %d.'); // %d - maximum changed pages to view
-// - captions
-define('NEW_USER_REGISTER_CAPTION','Fields required if you are signing up as a new user:');
-define('REGISTERED_USER_LOGIN_CAPTION','If you\'re already a registered user, log in here:');
-define('RETRIEVE_PASSWORD_CAPTION1','If you need a password reminder, click %s.'); // %s PasswordForgotten link 
-define('RETRIEVE_PASSWORD_CAPTION2','You can login here using your password reminder.');
-define('USER_LOGGED_IN_AS_CAPTION','You are logged in as %s'); // %s user name
 // - success messages
 define('USER_LOGGED_OUT_SUCCESS','You have successfully logged out.');
 define('USER_REGISTERED_SUCCESS','You have successfully registered!');
 define('USER_SETTINGS_STORED_SUCCESS','User settings stored!');
 define('USER_PASSWORD_CHANGED_SUCCESS','Password successfully changed!');
+// - captions
+define('NEW_USER_REGISTER_CAPTION','Fields required if you are signing up as a new user:');
+define('REGISTERED_USER_LOGIN_CAPTION','If you\'re already a registered user, log in here:');
+define('RETRIEVE_PASSWORD_LINK_DESC','here'); // TODO rephrase with functional name and avoid 'here'
+define('RETRIEVE_PASSWORD_CAPTION1','If you need a password reminder, click %s.'); // %s PasswordForgotten link 
+define('RETRIEVE_PASSWORD_CAPTION2','You can login here using your password reminder.');
+define('USER_LOGGED_IN_AS_CAPTION','You are logged in as %s'); // %s user name
 // - form legends
 define('USER_ACCOUNT_LEGEND','Your account');
 define('USER_SETTINGS_LEGEND','Settings');
 define('LOGIN_REGISTER_LEGEND','Login/Register');
 define('LOGIN_LEGEND','Login');
-#define('REGISTER_LEGEND','Register'); // @@@ to be used later for register-action
+#define('REGISTER_LEGEND','Register'); // @@@ TODO to be used later for register-action
 define('CHANGE_PASSWORD_LEGEND','Change your password');
 define('RETRIEVE_PASSWORD_LEGEND','Password forgotten');
-// - form field labels
+// - form field labels (should end in ':' _unless_ it's a checkbox or radio button option)
 define('DONT_GO_BACK_LABEL','Don\'t go back to %s'); // %s page user came from
 define('USER_EMAIL_LABEL','Your email address:');
 define('DOUBLECLICK_LABEL','Doubleclick editing:');
 define('SHOW_COMMENTS_LABEL','Show comments by default:');
 define('RECENTCHANGES_DISPLAY_LIMIT_LABEL','RecentChanges display limit:');
 define('PAGEREVISION_LIST_LIMIT_LABEL','Page revisions list limit:');
-define('CURRENT_PASSWORD_LABEL','Your current password:');
-define('PASSWORD_REMINDER_LABEL','Password reminder:');
 define('NEW_PASSWORD_LABEL','Your new password:');
 define('NEW_PASSWORD_CONFIRM_LABEL','Confirm new password:');
 define('NO_REGISTRATION','Registration on this wiki is disabled.');
@@ -345,6 +344,9 @@ define('INVITATION_CODE_LABEL','Your %s:'); // %s - expanded short invitation co
 define('WIKINAME_SHORT','WikiName');
 define('WIKINAME_LONG',sprintf('A WikiName is formed by two or more capitalized words without space, e.g. %s',WIKKA_SAMPLE_WIKINAME));
 define('WIKINAME_LABEL','Your %s:'); // %s - expanded short wiki name prompt
+// - form options
+define('CURRENT_PASSWORD_OPTION','Your current password');
+define('PASSWORD_REMINDER_OPTION','Password reminder');
 // - form buttons
 define('UPDATE_SETTINGS_BUTTON','Update Settings');
 define('LOGIN_BUTTON','Login');
@@ -466,7 +468,7 @@ define('ACCESSKEY_PREVIEW','p'); // ideally, should match EDIT_PREVIEW_BUTTON
 define('ACCESSKEY_STORE','s'); // ideally, should match EDIT_STORE_BUTTON
 define('ACCESSKEY_REEDIT','r'); // ideally, should match EDIT_REEDIT_BUTTON
 define('SHOWCODE_LINK','View formatting code for this page');
-define('SHOWCODE_LINK_TITLE','Click to view page formatting code'); // @@@ MODIFY: 'View page formatting code'
+define('SHOWCODE_LINK_TITLE','Click to view page formatting code'); // @@@ TODO 'View page formatting code'
 define('EDIT_COMMENT_TIMESTAMP_CAPTION','(%s)'); // %s timestamp
 
 // grabcode
@@ -478,17 +480,20 @@ define('HISTORY_PAGE_VIEW','Page view:');
 define('OLDEST_VERSION_EDITED_ON_BY','Oldest known version of this page was edited on %1$s by %2$s'); // %1$s - time; %2$s - user name
 define('MOST_RECENT_EDIT','Most recent edit on %1$s by %2$s'); // %1$s - time; %2$s - user name
 define('HISTORY_MORE_LINK_DESC','here'); // used for alternative history link in HISTORY_MORE
-define('HISTORY_MORE','Full history for this page cannot be displayed within a single page, click %s to view more.'); // %s alternative history link
+define('HISTORY_MORE','Full history for this page cannot be displayed within a single page, click %s to view more.'); // %s alternative history link # @@@ TODO avoid using 'here'
+
+// processcomment & show
+// - comment buttons
+define('COMMENT_DELETE_BUTTON','Delete Comment');
+define('COMMENT_REPLY_BUTTON','Reply to Comment');
+define('COMMENT_ADD_BUTTON','Add Comment');
+define('COMMENT_NEW_BUTTON','New Comment');
 
 // processcomment
 define('ERROR_NO_COMMENT_DEL_ACCESS','Sorry, you\'re not allowed to delete this comment!');
 define('ERROR_NO_COMMENT_WRITE_ACCESS','Sorry, you\'re not allowed to post comments to this page');
 define('ERROR_EMPTY_COMMENT','Comment body was empty -- not saved!');
 define('ADD_COMMENT_LABEL','Add a comment to this page:');
-define('COMMENT_DELETE_BUTTON','Delete Comment');
-define('COMMENT_REPLY_BUTTON','Reply to Comment');
-define('COMMENT_ADD_BUTTON','Add Comment');
-define('COMMENT_NEW_BUTTON','New Comment');
 
 // recentchanges_simple.xml.mm
 define('FIRST_NODE_LABEL','Recent Changes');
@@ -549,9 +554,6 @@ define('HIDE_COMMENTS_LINK_DESC','Hide comments/form');
 define('STATUS_NO_COMMENTS','There are no comments on this page.');
 define('STATUS_ONE_COMMENT','There is one comment on this page.');
 define('STATUS_SOME_COMMENTS','There are %d comments on this page.'); // %d - number of comments
-define('COMMENT_NEW_BUTTON','New Comment');
-define('COMMENT_DELETE_BUTTON','Delete Comment');
-define('COMMENT_REPLY_BUTTON','Reply to Comment');
 define('COMMENT_TIME_CAPTION','(%s)'); // %s comment time
 
 // showcode

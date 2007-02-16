@@ -51,6 +51,7 @@ $password_confirm_highlight = '';
 $revisioncount_highlight = '';
 $changescount_highlight = '';
 $invitation_code_highlight = '';
+
 $wikiname_expanded = '<abbr title="'.WIKINAME_LONG.'">'.WIKINAME_SHORT.'</abbr>';
 
 //create URL
@@ -93,8 +94,9 @@ else if ($user = $this->GetUser())
 		$show_comments = $this->GetSafeVar('show_comments', 'post');
 		$revisioncount = (int) $this->GetSafeVar('revisioncount', 'post');
 		$changescount = (int) $this->GetSafeVar('changescount', 'post');
-		
-		switch(TRUE) // validate form input
+
+		// validate form input
+		switch(TRUE)
 		{
 			case (strlen($email) == 0): //email is empty
 				$error = ERROR_EMPTY_EMAIL_ADDRESS;
@@ -128,7 +130,8 @@ else if ($user = $this->GetUser())
 				$this->Redirect($url.$params);
 		}
 	}
-	else //user just logged in
+	//user just logged in
+	else 
 	{
 		// get stored settings
 		$email = $user['email'];
@@ -143,7 +146,7 @@ else if ($user = $this->GetUser())
 ?>
 	<fieldset id="account" class="usersettings"><legend><?php echo USER_ACCOUNT_LEGEND ?></legend>
 	<input type="hidden" name="action" value="update" />
-	<?php echo sprintf(USER_LOGGED_IN_AS_CAPTION, $this->Link($user['name'])); ?>
+	<?php printf(USER_LOGGED_IN_AS_CAPTION, $this->Link($user['name'])); ?>
 	<input id="logout" type="button" value="<?php echo LOGOUT_BUTTON; ?>" onclick="document.location='<?php echo $this->href('', '', 'action=logout'); ?>'" />
 	</fieldset>
 	
@@ -172,7 +175,7 @@ else if ($user = $this->GetUser())
 		case (isset($success)):
 			echo '<em class="success">'.$success.'</em><br />'."\n";
 			break;
-		default:
+		default:	// TODO needed?
 	}
 ?>
 	<label for="email"><?php echo USER_EMAIL_LABEL ?></label>
@@ -271,8 +274,8 @@ else if ($user = $this->GetUser())
 		}
 ?>
 	<select id="update_option" name="update_option">
-		<option value="pw" <?php echo $pw_selected; ?>><?php echo CURRENT_PASSWORD_LABEL; ?></option>
-		<option value="hash" <?php echo $hash_selected; ?>><?php echo PASSWORD_REMINDER_LABEL; ?></option>
+		<option value="pw" <?php echo $pw_selected; ?>><?php echo CURRENT_PASSWORD_OPTION; ?></option>
+		<option value="hash" <?php echo $hash_selected; ?>><?php echo PASSWORD_REMINDER_OPTION; ?></option>
 	</select>
 	<input <?php echo $password_highlight; ?> type="password" name="oldpass" size="40" />
 	<br />
@@ -465,16 +468,16 @@ else // user is not logged in
 ?>
 	<em><?php echo REGISTERED_USER_LOGIN_CAPTION; ?></em>
 	<br />
-	<label for="name"><?php echo printf(WIKINAME_LABEL,$wikiname_expanded) ?></label>
+	<label for="name"><?php printf(WIKINAME_LABEL,$wikiname_expanded) ?></label>
 	<input id="name" type="text" <?php echo $username_highlight; ?> name="name" size="40" value="<?php echo $this->GetSafeVar('name', 'post'); ?>" />
 	<br />
-	<label for="password"><?php echo sprintf(PASSWORD_LABEL, PASSWORD_MIN_LENGTH) ?></label>
+	<label for="password"><?php printf(PASSWORD_LABEL, PASSWORD_MIN_LENGTH) ?></label>
 	<input id="password" <?php echo $password_highlight; ?> type="password" name="password" size="40" />
 	<br />
 <?php
 	if (isset($_SESSION['go_back']))
 	{
-		// @@@ label for a checkbox should come AFTER it, not before
+		// FIXME @@@ label for a checkbox should come AFTER it, not before
 	?>
 	<label for="no_go_back"><?php printf(DONT_GO_BACK_LABEL, $_SESSION['go_back_tag']); ?></label>
 	<input type="checkbox" name="no_go_back" id="no_go_back"<?php if (isset($_POST['no_go_back'])) echo ' checked="checked"';?> />
@@ -525,7 +528,8 @@ else // user is not logged in
 	{
 		print('<em class="error">'.$newerror.'</em>'."\n");
 	}
-	$retrieve_password_caption = $this->Format(sprintf(RETRIEVE_PASSWORD_CAPTION1,'[[PasswordForgotten here]]').' --- '.RETRIEVE_PASSWORD_CAPTION2);
+	$retrieve_password_link = '[[PasswordForgotten '.RETRIEVE_PASSWORD_LINK_DESC.']]';
+	$retrieve_password_caption = $this->Format(sprintf(RETRIEVE_PASSWORD_CAPTION1,$retrieve_password_link).' --- '.RETRIEVE_PASSWORD_CAPTION2);
 ?>
 	<em><?php echo $retrieve_password_caption ?></em>
 	<br />
