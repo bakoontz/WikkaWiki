@@ -33,6 +33,7 @@
  * @todo		move <div> to template;
  */
 
+echo "\n".'<!--starting page content-->'."\n";
 echo '<div class="page"';
 echo (($user = $this->GetUser()) && ($user['doubleclickedit'] == 'N') || !$this->HasAccess('write')) ? '' : 'ondblclick="document.location=\''.$this->Href('edit').'\';" '; #268
 echo '>'."\n"; //TODO: move to templating class
@@ -40,7 +41,7 @@ echo '>'."\n"; //TODO: move to templating class
 if (!$this->HasAccess('read'))
 {
 	echo '<p><em class="error">'.WIKKA_ERROR_ACL_READ.'</em></p>';
-	echo "\n".'</div>'."\n"; //TODO: move to templating class
+	echo "\n".'</div><!--closing page content-->'."\n"; //TODO: move to templating class
 }
 else
 {
@@ -48,7 +49,7 @@ else
 	{
 		$createlink = '<a href="'.$this->Href('edit').'">'.WIKKA_PAGE_CREATE_LINK_DESC.'</a>';
 		echo '<p>'.sprintf(SHOW_ASK_CREATE_PAGE_CAPTION,$createlink).'</p>'."\n";
-		echo '</div>'."\n"; //TODO: move to templating class
+		echo '</div><!--closing page content-->'."\n"; //TODO: move to templating class
 	}
 	else
 	{
@@ -77,9 +78,12 @@ else
 <?php
 			}
 		}
-		echo '</div>'."\n";
+		echo "\n".'</div><!--closing page content-->'."\n\n";
+
 		if ($this->GetConfigValue('hide_comments') != 1)
 		{
+			echo '<!-- starting comments block-->'."\n";
+			echo '<div id="pagecomments">'."\n";
 			// store comments display in session
 			$tag = $this->GetPageTag();
 			if (!isset($_SESSION['show_comments'][$tag]))
@@ -113,26 +117,29 @@ else
 
 				// display comments header
 ?>
-				<div class="commentsheader"><?php // TODO what is this span for?? ?>
-				<span id="comments">&nbsp;</span><?php echo COMMENTS_CAPTION ?> [<a href="<?php echo $this->Href('', '', 'show_comments='.COMMENT_NO_DISPLAY) ?>"><?php echo HIDE_COMMENTS_LINK_DESC ?></a>]
+				<!--starting comments header (show)-->
+				<div class="commentsheader">
+				<!--<span id="comments">&nbsp;</span>--><?php echo COMMENTS_CAPTION ?><?php // TODO what is this span for?? ?>
+				[<a href="<?php echo $this->Href('', '', 'show_comments='.COMMENT_NO_DISPLAY) ?>"><?php echo HIDE_COMMENTS_LINK_DESC ?></a>]
 				[<a href="<?php echo $this->Href('', '', 'show_comments='.COMMENT_ORDER_DATE_ASC.'#comments') ?>"><?php echo DISPLAY_COMMENTS_EARLIEST_LINK_DESC ?></a>]
 				[<a href="<?php echo $this->Href('', '', 'show_comments='.COMMENT_ORDER_DATE_DESC.'#comments') ?>"><?php echo DISPLAY_COMMENTS_LATEST_LINK_DESC ?></a>]
 				[<a href="<?php echo $this->Href('', '', 'show_comments='.COMMENT_ORDER_THREADED.'#comments') ?>"><?php echo DISPLAY_COMMENTS_THREADED_LINK_DESC ?></a>]
 
 				<?php echo $this->FormOpen("processcomment") ?>
-				<input type="submit" name="submit" value="<?php echo COMMENT_NEW_BUTTON ?>">
+				<input type="submit" name="submit" value="<?php echo COMMENT_NEW_BUTTON ?>" />
 				<?php echo $this->FormClose() ?>
-				</div>
+				</div><!--closing commentsheader (show)-->
 
 <?php
 				// display comments themselves
 				if ($comments) {
 					displayComments($this, $comments, $tag);
 				}
-				echo '</div>'."\n";
 			}
 			else
 			{
+				
+				echo '<!--starting comments header (hide)-->'."\n";
 				echo '<div class="commentsheader">'."\n";
 				$commentCount = $this->CountComments($this->tag);
 				switch ($commentCount)
@@ -150,7 +157,7 @@ else
 					$comment_form_link = 1;
 					break;
 				default:
-					$comments_message = sprintf(STATUS_SOME_COMMENTS, $commentCount);
+					$comments_message = sprintf(STATUS_SOME_COMMENTS, $commentCount).' ';
 					$showcomments_text  = DISPLAY_COMMENTS_LABEL;
 					$showcomments_text .= '[<a href="'.$this->Href('', '', 'show_comments='.COMMENT_ORDER_DATE_ASC.'#comments').'">'.DISPLAY_COMMENTS_EARLIEST_LINK_DESC.'</a>]'.
 										  '[<a href="'.$this->Href('', '', 'show_comments='.COMMENT_ORDER_DATE_DESC.'#comments').'">'.DISPLAY_COMMENTS_LATEST_LINK_DESC.'</a>]'.
@@ -163,8 +170,9 @@ else
 				{
 					echo $showcomments_text;
 				}
-				echo "\n".'</div>'."\n";//TODO: move to templating class
+				echo "\n".'</div><!--closing commentsheader (hide)-->'."\n"; //TODO: move to templating class
 			}
+			echo '</div><!--closing comments block-->'."\n\n";
 		}
 	}
 }
@@ -196,7 +204,7 @@ function displayComments(&$obj, &$comments, $tag)
 		# Keep track of closing <div> tags to effect nesting
 		if(isset($prev_level) && ($comment['level'] <= $prev_level)) {
 			for($i=0; $i<$prev_level-$comment['level']+1; ++$i) {
-				echo '</div>'."\n";
+				echo '</div><!--closing comment level '.$i.'-->'."\n";
 			}
 			$flipflop ^= 1;
 		}
@@ -205,8 +213,8 @@ function displayComments(&$obj, &$comments, $tag)
 		$flipflop ? $comment_class = "comment" : $comment_class = "comment2";
 		$flipflop ^= 1;
 
-		echo '<div class="'.$comment_class.'">'."\n".
-			'<span id="comment_'.$comment['id'].'"></span>'.$comment['comment']."\n".
+		echo '<div id="comment_'.$comment['id'].'" class="'.$comment_class.'">'."\n".
+			'<!--<span id="comment_'.$comment['id'].'"></span>-->'.$comment['comment']."\n".	//TODO What is this span for?
 			"\t".'<div class="commentinfo">'."\n";
 		if($comment['deleted'] != 'Y')
 		{
@@ -239,12 +247,12 @@ function displayComments(&$obj, &$comments, $tag)
 			}
 			echo $obj->FormClose();
 		}
-		echo "\n\t".'</div>'."\n";
+		echo "\n\t".'</div><!--close commentinfo-->'."\n";
 		$prev_level = $comment['level'];
 	}
 	for($i=0; $i<$prev_level+1; ++$i)
 	{
-		print "</div>\n";
+		print '</div><!--closing comment level (end)-->'."\n";
 	}
 }
 ?>
