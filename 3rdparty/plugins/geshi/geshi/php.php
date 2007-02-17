@@ -2,12 +2,12 @@
 /*************************************************************************************
  * php.php
  * --------
- * Author: Nigel McNie (oracle.shinoda@gmail.com)
+ * Author: Nigel McNie (nigel@geshi.org)
  * Copyright: (c) 2004 Nigel McNie (http://qbnz.com/highlighter/)
- * Release Version: 1.0.7.15
- * CVS Revision Version: $Revision: 1.14.2.7 $
+ * Release Version: 1.0.7.17
+ * CVS Revision Version: $Revision: 866 $
  * Date Started: 2004/06/20
- * Last Modified: $Date: 2006/10/08 00:11:00 $
+ * Last Modified: $Date: 2006-11-26 21:40:26 +1300 (Sun, 26 Nov 2006) $
  *
  * PHP language file for GeSHi.
  *

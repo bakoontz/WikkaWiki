@@ -31,7 +31,7 @@
  * @license   http://gnu.org/copyleft/gpl.html GNU GPL
  * @version   $Id$
  * @filesource
- *
+ * 
  */
 
 //
@@ -42,19 +42,16 @@
 //
 
 /** The version of this GeSHi file */
-define('GESHI_VERSION', '1.0.7.15');
-
-/** Set the correct directory separator */
-define('GESHI_DIR_SEPARATOR', ('WIN' != substr(PHP_OS, 0, 3)) ? '/' : '\\');
+define('GESHI_VERSION', '1.0.7.17');
 
 // Define the root directory for the GeSHi code tree
 if (!defined('GESHI_ROOT')) {
     /** The root directory for GeSHi */
-    define('GESHI_ROOT', dirname(__FILE__) . GESHI_DIR_SEPARATOR);
+    define('GESHI_ROOT', dirname(__FILE__) . DIRECTORY_SEPARATOR);
 }
 /** The language file directory for GeSHi
     @access private */
-define('GESHI_LANG_ROOT', GESHI_ROOT . 'geshi' . GESHI_DIR_SEPARATOR);
+define('GESHI_LANG_ROOT', GESHI_ROOT . 'geshi' . DIRECTORY_SEPARATOR);
 
 
 // Line numbers - use with enable_line_numbers()
@@ -451,7 +448,7 @@ class GeSHi
 	 */
 	function get_language_name ()
 	{
-		if (GESHI_ERROR_NO_SUCH_LANG == $this->_error) {
+		if (GESHI_ERROR_NO_SUCH_LANG == $this->error) {
 			return $this->language_data['LANG_NAME'] . ' (Unknown Language)';
 		}
 		return $this->language_data['LANG_NAME'];
@@ -1085,12 +1082,12 @@ class GeSHi
 				'asm' => array('ash', 'asm'),
 				'asp' => array('asp'),
 				'bash' => array('sh'),
-				'c' => array('c'),
-				'c_mac' => array('c'),
+				'c' => array('c', 'h'),
+				'c_mac' => array('c', 'h'),
 				'caddcl' => array(),
 				'cadlisp' => array(),
                 'cdfg' => array('cdfg'),
-				'cpp' => array('cpp'),
+				'cpp' => array('cpp', 'h', 'hpp'),
 				'csharp' => array(),
 				'css' => array('css'),
 				'delphi' => array('dpk', 'dpr'),

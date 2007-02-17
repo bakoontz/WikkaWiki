@@ -54,6 +54,7 @@ PEOPE WHO MADE LANGUAGE FILES
 - BlitzBasic	P�draig O`Connel
 - BNF           Rowan Rodrik van der Molen
 - C++			Dennis Bayer, M. Uli Kusterer
+- C++/QT		Iulian M
 - C#			Alan Juden
 - C for Macs	M. Uli Kusterer
 - CADDCL		Roberto Rossi
@@ -86,6 +87,7 @@ PEOPE WHO MADE LANGUAGE FILES
 - Oracle 8		Guy Wicks
 - Pascal		Tux
 - Perl			Andreas Gohr, Ben Keen
+- PL/SQL        Victor Engmark
 - Python		Roberto Rossi
 - Reg			SmokingRope
 - Robots		Christian Lescuyer
@@ -107,4 +109,4 @@ PEOPE WHO MADE LANGUAGE FILES
 Do you want your name in here? Help me out! Make a language file, or suggest a new
 feature, or make a plugin for GeSHi for some other software, then tell me about it!
 
-              $Id: THANKS,v 1.19.2.6 2006/10/23 02:52:37 oracleshinoda Exp $
+              $Id: THANKS 864 2006-11-26 06:11:51Z oracleshinoda $
