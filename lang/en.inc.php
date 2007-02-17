@@ -1,5 +1,7 @@
 <?php
 /**
+ * Wikka language file.
+ * 
  * This file holds all interface language strings for Wikka.
  * 
  * @package 		Language
@@ -21,15 +23,14 @@
  * 				(unless	that leads to more than one escaped single quote)
  * @todo		move the rest of the hardcoded texts in here (double-check)
  * 
- * @todo		use phpdoc headers to document constants where needed. Note that 
- * 				phpdoc blocks apply to the immediately following define. 
- *				Use non-phpdoc comments to divide this file into sections.
+ * @todo		document the use of phpdoc group docblocks to append automatically descriptions to multiple constants.
+ * 
+ * @todo		backlink to constants adding the <tt>uses</tt> tag in the corresponding components
  */ 
 
 /* ------------------ COMMON ------------------ */
 
 /**#@+
- * define group.
  * Language constant shared (or likely to be shared) among several WikkaWiki files
  */
 define('WIKKA_ERROR_CAPTION','Error');
@@ -66,7 +67,6 @@ define('WIKKA_JAVA_PLUGIN_NEEDED','Java 1.4.1 (or later) Plug-in is needed to ru
 /*  ------------------ CORE ------------------  */
 
 /**#@+
- * define group.
  * Language constant for the core {@link wikka.php wikka} program 
  */
 // wikka
@@ -88,7 +88,6 @@ define('PAGE_GENERATION_TIME','Page was generated in %.4f seconds'); // %.4f - p
 /*  ------------------ ACTIONS  ------------------  */
 
 /**#@+
- * define group.
  * Language constant used by the {@link calendar.php calendar} action
  */
 // calendar
@@ -97,7 +96,6 @@ define('TODAY','today');
 /**#@-*/
 
 /**#@+
- * define group.
  * Language constant used by the {@link category.php category} action
  */
 // category
@@ -106,7 +104,6 @@ define('PAGES_BELONGING_TO','The following %1$d page(s) belong to '); // %1$d nu
 /**#@-*/
 
 /**#@+
- * define group.
  * Language constant used by the {@link color.php color} action
  */
 // color
@@ -115,7 +112,6 @@ define('ERROR_NO_COLOR_SPECIFIED','Sorry, but you did not specify a color for hi
 /**#@-*/
 
 /**#@+
- * define group.
  * Language constant used by the {@link contact.php contact} action
  */
 // contact
@@ -124,7 +120,6 @@ define('SEND_FEEDBACK_LINK_TEXT','Contact');
 /**#@-*/
 
 /**#@+
- * define group.
  * Language constant used by the {@link countowned.php countowned} action
  */
 // countowned
@@ -132,7 +127,6 @@ define('DISPLAY_MYPAGES_LINK_TITLE','Display a list of the pages you currently o
 /**#@-*/
 
 /**#@+
- * define group.
  * Language constant used by the {@link countpages.php countpages} action
  */
 // countpages
@@ -140,7 +134,6 @@ define('INDEX_LINK_TITLE','Display an alphabetical page index');
 /**#@-*/
 
 /**#@+
- * define group.
  * Language constant used by the {@link emailpassword.php emailpassword} action
  */
 // emailpassword
@@ -157,7 +150,6 @@ define('USERSETTINGS_REF','Return to the %s page.'); // %s - UserSettings link
 /**#@-*/
 
 /**#@+
- * define group.
  * Language constant used by the {@link feedback.php feedback} action
  */
 // feedback
@@ -175,7 +167,6 @@ define('FEEDBACK_SEND_BUTTON','Send');
 /**#@-*/
 
 /**#@+
- * define group.
  * Language constant used by the {@link files.php files} action
  */
 // files
@@ -201,7 +192,6 @@ define('NO_ATTACHMENTS','This page contains no attachment.');
 /**#@-*/
 
 /**#@+
- * define group.
  * Language constant used by the {@link footer.php footer} action
  */
 // footer
@@ -223,7 +213,6 @@ define('SEARCH_LABEL','Search:');
 /**#@-*/
 
 /**#@+
- * define group.
  * Language constant used by the {@link googleform.php googleform} action
  */
 // googleform
@@ -231,7 +220,6 @@ define('GOOGLE_BUTTON','Google');
 /**#@-*/
 
 /**#@+
- * define group.
  * Language constant used by the {@link header.php header} action
  */
 // header
@@ -242,7 +230,6 @@ define('YOU_ARE','You are %s'); // %s - name / ip of the user.
 /**#@-*/
 
 /**#@+
- * define group.
  * Language constant used by the {@link include.php include} action
  */
 // include
@@ -250,7 +237,6 @@ define('ERROR_CIRCULAR_REFERENCE','Circular reference detected!');
 /**#@-*/
 
 /**#@+
- * define group.
  * Language constant used by the {@link lastedit.php lastedit} action
  */
 // lastedit
@@ -259,7 +245,6 @@ define('LASTEDIT_DIFF_LINK_TITLE','Show differences from last revision');
 /**#@-*/
 
 /**#@+
- * define group.
  * Language constant used by the {@link lastusers.php lastusers} action
  */
 // lastusers
@@ -269,7 +254,6 @@ define('SIGNUP_DATE_TIME','Signup Date/Time');
 /**#@-*/
 
 /**#@+
- * define group.
  * Language constant used by the {@link mindmap.php mindmap} action
  */
 // mindmap
@@ -282,7 +266,6 @@ define('PROPER_USAGE_MM_SYNTAX','Proper usage: %1$s or %2$s'); // %1$s - syntax 
 /**#@-*/
 
 /**#@+
- * define group.
  * Language constant used by the {@link mychanges.php mychanges} action
  */
 // mychanges
@@ -295,7 +278,6 @@ define('MYCHANGES_NOT_LOGGED_IN', "You're not logged in, thus the list of pages 
 /**#@-*/
 
 /**#@+
- * define group.
  * Language constant used by the {@link mypages.php mypages} action
  */
 // mypages
@@ -305,7 +287,6 @@ define('OWNED_NOT_LOGGED_IN', "You're not logged in, thus the list of your pages
 /**#@-*/
 
 /**#@+
- * define group.
  * Language constant used by the {@link newpage.php newpage} action
  */
 // newpage
@@ -314,14 +295,12 @@ define('NEWPAGE_CREATE_BUTTON','Create and Edit');
 /**#@-*/
 
 /**#@+
- * define group.
  * Language constant used by the {@link orphanedpages.php orphanedpages} action
  */
 // orphanedpages
 define('NO_ORPHANED_PAGES','No orphaned pages. Good!');
 
 /**#@+
- * define group.
  * Language constant used by the {@link ownedpages.php ownedpages} action
  */
 // ownedpages
@@ -330,7 +309,6 @@ define('OWNEDPAGES_PERCENTAGE','That means you own %s of the total.'); // %s per
 /**#@-*/
 
 /**#@+
- * define group.
  * Language constant used by the {@link pageindex.php pageindex} action
  */
 // pageindex
@@ -341,7 +319,6 @@ define('PAGEINDEX_ALL_PAGES','All');
 /**#@-*/
 
 /**#@+
- * define group.
  * Language constant used by the {@link recentchanges.php recentchanges} action
  */
 // recentchanges
@@ -354,7 +331,6 @@ define('RECENTCHANGES_NONE_ACCESSIBLE','There are no recently changed pages you 
 /**#@-*/
 
 /**#@+
- * define group.
  * Language constant used by the {@link recentcomments.php recentcomments} action
  */
 // recentcomments
@@ -365,7 +341,6 @@ define('RECENTCOMMENTS_NONE_ACCESSIBLE','There are no recent comments you have a
 /**#@-*/
 
 /**#@+
- * define group.
  * Language constant used by the {@link recentlycommented.php recentlycommented} action
  */
 // recentlycommented 
@@ -375,7 +350,6 @@ define('RECENTLYCOMMENTED_NONE_ACCESSIBLE','There are no recently commented page
 /**#@-*/
 
 /**#@+
- * define group.
  * Language constant used by the {@link system.php system} action
  */
 // system
@@ -383,7 +357,6 @@ define('SYSTEM_HOST_CAPTION','(%s)'); // %s - host name
 /**#@-*/
 
 /**#@+
- * define group.
  * Language constant shared by the {@link textsearch.php textsearch} and 
  * {@link textsearchexpanded.php textsearchexpanded} actions
  */
@@ -430,7 +403,6 @@ define('SEARCH_TARGET_5',sprintf("Find pages that contain the exact phrase '%1\$
 /**#@-*/
 
 /**#@+
- * define group.
  * Language constant used by the {@link usersettings.php usersettings} action
  */
 // usersettings
@@ -505,7 +477,6 @@ define('REGISTER_BUTTON','Register');
 /**#@-*/
 
 /**#@+
- * define group.
  * Language constant used by the {@link wantedpages.php wantedpages} action
  */
 // wantedpages
@@ -520,7 +491,6 @@ define('NO_WANTED_PAGES','No wanted pages. Good!');
 /* ------------------ 3RD PARTY ------------------ */
 
 /**#@+
- * define group.
  * Language constant used by the {@link fullscreen.php fullscreen} 3rd party 
  * MindMap display utility
  */
@@ -534,7 +504,6 @@ define('MM_GET_JAVA_PLUGIN','so if it does not work, %s.'); // %s - plugin downl
 /* ------------------ FORMATTERS ------------------ */
 
 /**#@+
- * define group.
  * Language constant used by the {@link wakka.php wakka} formatter
  */
 // wakka
@@ -546,7 +515,6 @@ define('GRABCODE_BUTTON_TITLE','Download %s'); // %s download filename
 /* ------------------ HANDLERS (PAGE) ------------------ */
 
 /**#@+
- * define group.
  * Language constant used by the {@link acls.php acls} (page) handler
  */
 // acls
@@ -589,7 +557,6 @@ define('BACKLINKS_NO_PAGES','There are no backlinks to this page.');
 /**#@-*/
 
 /**#@+
- * define group.
  * Language constant used by the {@link claim.php claim} (page) handler
  */
 // claim
@@ -597,7 +564,6 @@ define('USER_IS_NOW_OWNER','You are now the owner of this page.');
 /**#@-*/
 
 /**#@+
- * define group.
  * Language constant used by the {@link clone.php clone} (page) handler
  */
 // clone
@@ -615,7 +581,6 @@ define('CLONE_BUTTON','Clone');
 /**#@-*/
 
 /**#@+
- * define group.
  * Language constant used by the {@link delete.php delete} (page) handler
  */
 // delete
@@ -628,7 +593,6 @@ define('PAGE_DELETION_CANCEL_BUTTON','Cancel');
 /**#@-*/
 
 /**#@+
- * define group.
  * Language constant used by the {@link diff.php diff} (page) handler
  */
 // diff
@@ -646,7 +610,6 @@ define('HIGHLIGHTING_LEGEND','Highlighting Guide: %1$s %2$s'); // %1$s - sample 
 /**#@-*/
 
 /**#@+
- * define group.
  * Language constant used by the {@link edit.php edit} (page) handler
  */
 // edit
@@ -673,7 +636,6 @@ define('EDIT_COMMENT_TIMESTAMP_CAPTION','(%s)'); // %s timestamp
 /**#@-*/
 
 /**#@+
- * define group.
  * Language constant used by the {@link grabcode.php grabcode} (page) handler
  */
 // grabcode
@@ -681,7 +643,6 @@ define('ERROR_NO_CODE','Sorry, there is no code to download.');
 /**#@-*/
 
 /**#@+
- * define group.
  * Language constant used by the {@link history.php history} (page) handler
  */
 // history
@@ -694,7 +655,6 @@ define('HISTORY_MORE','Full history for this page cannot be displayed within a s
 /**#@-*/
 
 /**#@+
- * define group.
  * Language constant shared by the {@link processcomments.php processcomments} and 
  * {@link show.php show} (page) handlers
  */
@@ -707,7 +667,6 @@ define('COMMENT_NEW_BUTTON','New Comment');
 /**#@-*/
 
 /**#@+
- * define group.
  * Language constant used by the {@link processcomments.php processcomments} (page) handler
  */
 // processcomment
@@ -718,7 +677,6 @@ define('ADD_COMMENT_LABEL','Add a comment to this page:');
 /**#@-*/
 
 /**#@+
- * define group.
  * Language constant used by the {@link recentchanges_simple.xml.mm.php recentchanges_simple.xml.mm}
  * (page) handler
  */
@@ -727,7 +685,6 @@ define('FIRST_NODE_LABEL','Recent Changes');
 /**#@-*/
 
 /**#@+
- * define group.
  * Language constant used by the {@link recentchanges.xml.php recentchanges.xml} (page) handler
  */
 // recentchanges.xml
@@ -735,7 +692,6 @@ define('RECENTCHANGES_DESC','Recent changes of %s'); // %s - page name
 /**#@-*/
 
 /**#@+
- * define group.
  * Language constant shared by the {@link referrers_sites.php referrers_sites},
  * {@link referrers.php referrers} and {@link review_blacklist.php review_blacklist} 
  * (page) handlers
@@ -755,9 +711,7 @@ define('PLEASE_LOGIN_CAPTION','You need to login to see referring sites');
 /**#@-*/
 
 /**#@+
- * define group.
- * Language constant used by the {@link referrers_sites.php referrers_sites} 
- * (page) handler
+ * Language constant used by the {@link referrers_sites.php referrers_sites} (page) handler
  */
 // referrers_sites
 define('REFERRERS_URLS_LINK_DESC','see list of different URLs');
@@ -766,7 +720,6 @@ define('REFERRERS_DOMAINS_TO_PAGE','Domains/sites linking to %1$s %2$s (%3$s)');
 /**#@-*/
 
 /**#@+
- * define group.
  * Language constant used by the {@link referrers.php referrers} (page) handler
  */
 // referrers
@@ -776,9 +729,7 @@ define('REFERRERS_URLS_TO_PAGE','External pages linking to %1$s %2$s (%3$s)'); /
 /**#@-*/
 
 /**#@+
- * define group.
- * Language constant used by the {@link review_blacklist.php review_blacklist} 
- * (page) handler
+ * Language constant used by the {@link review_blacklist.php review_blacklist} (page) handler
  */
 // review_blacklist
 define('BLACKLIST_HEADING','Referrer Blacklist');
@@ -787,7 +738,6 @@ define('STATUS_BLACKLIST_EMPTY','Blacklist is empty.');
 /**#@-*/
 
 /**#@+
- * define group.
  * Language constant used by the {@link revisions.php revisions} (page) handler
  */
 // revisions
@@ -799,7 +749,6 @@ define('REVISIONS_MORE_BUTTON','Next...');
 /**#@-*/
 
 /**#@+
- * define group.
  * Language constant used by the {@link revisions.xml.php revisions.xml} (page) handler
  */
 // revisions.xml
@@ -808,7 +757,6 @@ define('HISTORY_REVISIONS_OF','History/revisions of %s'); // %s - page name
 /**#@-*/
 
 /**#@+
- * define group.
  * Language constant used by the {@link show.php show} (page) handler
  */
 // show
@@ -840,7 +788,6 @@ define('SHOW_RAW_LINK_DESC','show source only');
 /* ------------------ LIBS ------------------*/
 
 /**#@+
- * define group.
  * Language constant used by the {@link Wakka.class.php Wakka class} (the Wikka core containing most methods)
  */
 // Wakka.class
@@ -857,7 +804,6 @@ define('FORMATTER_UNKNOWN','Formatter "%s" not found'); // %s formatter name
 
 /* ------------------ SETUP ------------------ */
 /**#@+
- * define group.
  * Language constant used by the {@link default.php setup} program (several files)
  */
 // @@@ later....
