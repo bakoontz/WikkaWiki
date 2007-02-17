@@ -147,7 +147,7 @@ else
 				case 0:
 					$comments_message = STATUS_NO_COMMENTS.' ';
 					$showcomments_text  = $this->FormOpen("processcomment");
-					$showcomments_text .= '<input type="submit" name="submit" value="'.COMMENT_NEW_BUTTON.'">';
+					$showcomments_text .= '<input type="submit" name="submit" value="'.COMMENT_NEW_BUTTON.'" />';
 					$showcomments_text .= $this->FormClose();
 					$comment_form_link  = ($this->HasAccess('comment')) ? 1 : 0;
 					break;
