@@ -21,13 +21,17 @@
  * 				(unless	that leads to more than one escaped single quote)
  * @todo		move the rest of the hardcoded texts in here (double-check)
  * 
- * @todo		use phpdoc headers to document constants where needed. Note that phpdoc blocks apply
- *  				to the immediately following define. Use non-phpdoc comments to divide this file 
- * 				into sections.
+ * @todo		use phpdoc headers to document constants where needed. Note that 
+ * 				phpdoc blocks apply to the immediately following define. 
+ *				Use non-phpdoc comments to divide this file into sections.
  */ 
 
 /* ------------------ COMMON ------------------ */
 
+/**#@+
+ * define group.
+ * Language constant shared (or likely to be shared) among several WikkaWiki files
+ */
 define('WIKKA_ERROR_CAPTION','Error');
 #define('ERROR_NO_PAGE_ACCESS','You are not authorized to view this page.');
 define('WIKKA_ERROR_ACL_READ','You aren\'t allowed to read this page.'); # was in diff.php: 'You are not authorized to view this page.'
@@ -56,10 +60,15 @@ define('LINKING_PAGES_LINK_TITLE','Display a list of pages linking to %s'); // %
 define('WIKKA_JRE_LINK_DESC','Java Runtime Environment');
 define('WIKKA_NOTE','NOTE:');
 define('WIKKA_JAVA_PLUGIN_NEEDED','Java 1.4.1 (or later) Plug-in is needed to run this applet,');
+/**#@-*/
 
 
 /*  ------------------ CORE ------------------  */
 
+/**#@+
+ * define group.
+ * Language constant for the core {@link wikka.php wikka} program 
+ */
 // wikka
 define('ERROR_WAKKA_LIBRARY_MISSING','The necessary file "libs/Wakka.class.php" could not be found. To run Wikka, please make sure the file exists and is placed in the right directory!');
 define('ERROR_WRONG_PHP_VERSION','$_REQUEST[] not found. Wakka requires PHP 4.1.0 or higher!');
@@ -72,33 +81,68 @@ define('STATUS_WIKI_UPGRADE_NOTICE','This site is currently being upgraded. Plea
 /**
  * Display page generation time in seconds with 4 decimals (%.4f)
  */
-define('PAGE_GENERATION_TIME','Page was generated in %.4f seconds');
+define('PAGE_GENERATION_TIME','Page was generated in %.4f seconds'); // %.4f - page generation time
+/**#@-*/
  
 
 /*  ------------------ ACTIONS  ------------------  */
 
+/**#@+
+ * define group.
+ * Language constant used by the {@link calendar.php calendar} action
+ */
 // calendar
 define('FMT_SUMMARY','Calendar for %s');					
 define('TODAY','today');
+/**#@-*/
 
+/**#@+
+ * define group.
+ * Language constant used by the {@link category.php category} action
+ */
 // category
 define('ERR_NO_PAGES','Sorry, No items found for %s');
 define('PAGES_BELONGING_TO','The following %1$d page(s) belong to '); // %1$d number found; %1$d category 
+/**#@-*/
 
+/**#@+
+ * define group.
+ * Language constant used by the {@link color.php color} action
+ */
 // color
 define('ERROR_NO_TEXT_GIVEN','There is no text to highlight!');
 define('ERROR_NO_COLOR_SPECIFIED','Sorry, but you did not specify a color for highlighting!');
+/**#@-*/
 
+/**#@+
+ * define group.
+ * Language constant used by the {@link contact.php contact} action
+ */
 // contact
 define('SEND_FEEDBACK_LINK_TITLE','Send us your feedback');
 define('SEND_FEEDBACK_LINK_TEXT','Contact');
+/**#@-*/
 
+/**#@+
+ * define group.
+ * Language constant used by the {@link countowned.php countowned} action
+ */
 // countowned
 define('DISPLAY_MYPAGES_LINK_TITLE','Display a list of the pages you currently own');
+/**#@-*/
 
+/**#@+
+ * define group.
+ * Language constant used by the {@link countpages.php countpages} action
+ */
 // countpages
 define('INDEX_LINK_TITLE','Display an alphabetical page index'); 
+/**#@-*/
 
+/**#@+
+ * define group.
+ * Language constant used by the {@link emailpassword.php emailpassword} action
+ */
 // emailpassword
 define('PW_FORGOTTEN_HEADING','Password reminder');
 define('PW_CHK_SENT','A password reminder has been sent to %s\'s registered email address.'); // %s - username
@@ -110,7 +154,12 @@ define('ERROR_UNKNOWN_USER','You have entered a non-existent user!');
 define('ERROR_MAIL_NOT_SENT','An error occurred while trying to send the password. Outgoing mail might be disabled. Please contact your server administrator.');
 define('BUTTON_SEND_PW','Send reminder');
 define('USERSETTINGS_REF','Return to the %s page.'); // %s - UserSettings link
+/**#@-*/
 
+/**#@+
+ * define group.
+ * Language constant used by the {@link feedback.php feedback} action
+ */
 // feedback
 define('FEEDBACK_FORM_CAPTION','Fill in the form below to send us your comments:');
 define('FEEDBACK_NAME_LABEL','Name:');
@@ -123,7 +172,12 @@ define('FEEDBACK_SUBJECT','Feedback from %s'); // %s name of the wiki
 define('FEEDBACK_SENT','Thanks for your interest! Your feedback has been sent to %s'); // %s - Admin email link (wiki format)
 define('MAIN_PAGE_REF','Return to the %s'); // %s - main page link (wiki format)
 define('FEEDBACK_SEND_BUTTON','Send');
+/**#@-*/
 
+/**#@+
+ * define group.
+ * Language constant used by the {@link files.php files} action
+ */
 // files
 define('ERROR_UPLOAD_DIRECTORY_NOT_WRITABLE','Please make sure that the server has write access to a folder named %s.'); // %s Upload folder ref #89
 define('ERROR_UPLOAD_DIRECTORY_NOT_READABLE','Please make sure that the server has read access to a folder named %s.'); // %s Upload folder ref #89
@@ -144,7 +198,12 @@ define('FILE_UPLOAD_FORM_LABEL','Add new attachment:');
 define('DOWNLOAD_LINK_TITLE','Download %s'); // %s - file name
 define('DELETE_LINK_TITLE','Remove %s'); // %s - file name
 define('NO_ATTACHMENTS','This page contains no attachment.');
+/**#@-*/
 
+/**#@+
+ * define group.
+ * Language constant used by the {@link footer.php footer} action
+ */
 // footer
 define('FOOTER_PAGE_EDIT_LINK_DESC','Edit page');
 define('PAGE_HISTORY_LINK_TITLE','Click to view recent edits to this page'); // @@@ TODO 'View recent edits to this page'
@@ -161,28 +220,58 @@ define('REFERRERS_LINK_TITLE','Click to view a list of URLs referring to this pa
 define('REFERRERS_LINK_DESC','Referrers');
 define('QUERY_LOG','Query log:');
 define('SEARCH_LABEL','Search:');
+/**#@-*/
 
+/**#@+
+ * define group.
+ * Language constant used by the {@link googleform.php googleform} action
+ */
 // googleform
 define('GOOGLE_BUTTON','Google');
+/**#@-*/
 
+/**#@+
+ * define group.
+ * Language constant used by the {@link header.php header} action
+ */
 // header
 define('GENERIC_DOCTITLE','%1$s: %2$s');	// %1$s - wiki name; %2$s - page title
 define('RSS_REVISIONS_TITLE','%1$s: revisions for %2$s');	// %1$s - wiki name; %2$s - current page name
 define('RSS_RECENTCHANGES_TITLE','%s: recently edited pages');	// %s - wiki name
 define('YOU_ARE','You are %s'); // %s - name / ip of the user.
+/**#@-*/
 
+/**#@+
+ * define group.
+ * Language constant used by the {@link include.php include} action
+ */
 // include
 define('ERROR_CIRCULAR_REFERENCE','Circular reference detected!');
+/**#@-*/
 
+/**#@+
+ * define group.
+ * Language constant used by the {@link lastedit.php lastedit} action
+ */
 // lastedit
 define('LASTEDIT_DESC','Last edited by %s'); // %s user name
 define('LASTEDIT_DIFF_LINK_TITLE','Show differences from last revision');
+/**#@-*/
 
+/**#@+
+ * define group.
+ * Language constant used by the {@link lastusers.php lastusers} action
+ */
 // lastusers
 define('NAME','Name');
 define('OWNED_PAGES','Owned Pages');
 define('SIGNUP_DATE_TIME','Signup Date/Time');
+/**#@-*/
 
+/**#@+
+ * define group.
+ * Language constant used by the {@link mindmap.php mindmap} action
+ */
 // mindmap
 define('MM_JRE_INSTALL_REQ','Please install a %s on your computer.'); // %s - JRE install link
 define('MM_DOWNLOAD_LINK_DESC','Download this mind map');
@@ -190,7 +279,12 @@ define('MM_EDIT','Use %s to edit it'); // %s - link to freemind project
 define('MM_FULLSCREEN_LINK_DESC','Open fullscreen');
 define('ERROR_INVALID_MM_SYNTAX','Error: Invalid MindMap action syntax.');
 define('PROPER_USAGE_MM_SYNTAX','Proper usage: %1$s or %2$s'); // %1$s - syntax sample 1; %2$s - syntax sample 2
+/**#@-*/
 
+/**#@+
+ * define group.
+ * Language constant used by the {@link mychanges.php mychanges} action
+ */
 // mychanges
 define('NO_PAGES_EDITED','You have not edited any pages yet.');
 define('MYCHANGES_ALPHA_LIST', "This is a list of pages you've edited, along with the time of your last change.");
@@ -198,29 +292,58 @@ define('MYCHANGES_DATE_LIST', "This is a list of pages you've edited, ordered by
 define('ORDER_DATE','order by date');
 define('ORDER_ALPHA','order alphabetically');
 define('MYCHANGES_NOT_LOGGED_IN', "You're not logged in, thus the list of pages you've edited couldn't be retrieved.");
+/**#@-*/
 
+/**#@+
+ * define group.
+ * Language constant used by the {@link mypages.php mypages} action
+ */
 // mypages
 define('OWNED_PAGES_TXT','This is the list of pages you own.'); 
 define('OWNED_NO_PAGES','You don\'t own any pages.');
 define('OWNED_NOT_LOGGED_IN', "You're not logged in, thus the list of your pages couldn't be retrieved.");
+/**#@-*/
 
+/**#@+
+ * define group.
+ * Language constant used by the {@link newpage.php newpage} action
+ */
 // newpage
 define('ERROR_INVALID_PAGE_NAME','The page name %s is invalid. Valid page names must start with a capital letter, contain only letters and numbers, and be in CamelCase format.'); // %s - page name
 define('NEWPAGE_CREATE_BUTTON','Create and Edit');
+/**#@-*/
 
+/**#@+
+ * define group.
+ * Language constant used by the {@link orphanedpages.php orphanedpages} action
+ */
 // orphanedpages
 define('NO_ORPHANED_PAGES','No orphaned pages. Good!');
 
+/**#@+
+ * define group.
+ * Language constant used by the {@link ownedpages.php ownedpages} action
+ */
 // ownedpages
 define('OWNEDPAGES_COUNTS','You own %1$s pages out of the %2$s pages on this Wiki.'); // %1$s - number of pages owned; %2$s - total number of pages 
 define('OWNEDPAGES_PERCENTAGE','That means you own %s of the total.'); // %s percentage of pages owned
+/**#@-*/
 
+/**#@+
+ * define group.
+ * Language constant used by the {@link pageindex.php pageindex} action
+ */
 // pageindex
 define('PAGEINDEX_HEADING','Page Index');
 define('PAGEINDEX_CAPTION','This is an alphabetical list of pages you can read on this server.');
 define('PAGEINDEX_OWNED_PAGES_CAPTION','Items marked with a * indicate pages that you own.');
 define('PAGEINDEX_ALL_PAGES','All');
+/**#@-*/
 
+/**#@+
+ * define group.
+ * Language constant used by the {@link recentchanges.php recentchanges} action
+ */
 // recentchanges
 define('RECENTCHANGES_HEADING','Recently changed pages');
 define('REVISIONS_LINK_TITLE','View recent revisions list for %s'); // %s - page name
@@ -228,21 +351,42 @@ define('HISTORY_LINK_TITLE','View edit history of %s'); // %s - page name
 define('WIKIPING_ENABLED','WikiPing enabled: Changes on this wiki are broadcast to %s'); // %s - link to wikiping server
 define('RECENTCHANGES_NONE_FOUND','There are no recently changed pages.');
 define('RECENTCHANGES_NONE_ACCESSIBLE','There are no recently changed pages you have access to.');
+/**#@-*/
 
+/**#@+
+ * define group.
+ * Language constant used by the {@link recentcomments.php recentcomments} action
+ */
 // recentcomments
 define('RECENTCOMMENTS_HEADING','Recent comments');
 define('RECENTCOMMENTS_TIMESTAMP_CAPTION','(%s)'); // %s - timestamp
 define('RECENTCOMMENTS_NONE_FOUND','There are no recent comments.');
 define('RECENTCOMMENTS_NONE_ACCESSIBLE','There are no recent comments you have access to.');
+/**#@-*/
 
+/**#@+
+ * define group.
+ * Language constant used by the {@link recentlycommented.php recentlycommented} action
+ */
 // recentlycommented 
 define('RECENTLYCOMMENTED_HEADING','Recently commented pages');
 define('RECENTLYCOMMENTED_NONE_FOUND','There are no recently commented pages.');
 define('RECENTLYCOMMENTED_NONE_ACCESSIBLE','There are no recently commented pages you have access to.');
+/**#@-*/
 
+/**#@+
+ * define group.
+ * Language constant used by the {@link system.php system} action
+ */
 // system
 define('SYSTEM_HOST_CAPTION','(%s)'); // %s - host name
+/**#@-*/
 
+/**#@+
+ * define group.
+ * Language constant shared by the {@link textsearch.php textsearch} and 
+ * {@link textsearchexpanded.php textsearchexpanded} actions
+ */
 // textsearch & textsearchexpanded
 define('SEARCH_FOR','Search for');
 define('SEARCH_ZERO_MATCH','No matches');
@@ -283,7 +427,12 @@ define('SEARCH_TARGET_2','Find pages that contain both words.');
 define('SEARCH_TARGET_3',sprintf("Find pages that contain the word '%1\$s' but not '%2\$s'.",SEARCH_WORD_1,SEARCH_WORD_4));
 define('SEARCH_TARGET_4',"Find pages that contain words such as 'apple','apples','applesauce', or 'applet'."); // make sure target words all *start* with SEARCH_WORD_1
 define('SEARCH_TARGET_5',sprintf("Find pages that contain the exact phrase '%1\$s' (for example, pages that contain '%1\$s of wisdom' but not '%2\$s noise %3\$s').",SEARCH_PHRASE,SEARCH_WORD_5,SEARCH_WORD_6));
+/**#@-*/
 
+/**#@+
+ * define group.
+ * Language constant used by the {@link usersettings.php usersettings} action
+ */
 // usersettings
 define('ERROR_EMPTY_USERNAME','Please fill in your user name.');
 define('ERROR_NONEXISTENT_USERNAME','Sorry, this user name doesn\'t exist.'); // @@@ too specific
@@ -353,32 +502,53 @@ define('LOGIN_BUTTON','Login');
 define('LOGOUT_BUTTON','Logout');
 define('CHANGE_PASSWORD_BUTTON','Change password');
 define('REGISTER_BUTTON','Register');
+/**#@-*/
 
+/**#@+
+ * define group.
+ * Language constant used by the {@link wantedpages.php wantedpages} action
+ */
 // wantedpages
 define('SORTING_LEGEND','Sorting ...');
 define('SORTING_NUMBER_LABEL','Sorting #%d:');
 define('SORTING_DESC_LABEL','desc');
 define('OK_BUTTON','   OK   ');
 define('NO_WANTED_PAGES','No wanted pages. Good!');
+/**#@-*/
 
 
 /* ------------------ 3RD PARTY ------------------ */
 
+/**#@+
+ * define group.
+ * Language constant used by the {@link fullscreen.php fullscreen} 3rd party 
+ * MindMap display utility
+ */
 // fullscreen
 define('CLOSE_WINDOW','Close Window');
 define('MM_GET_JAVA_PLUGIN_LINK_DESC','get the latest Java Plug-in here'); // used in MM_GET_JAVA_PLUGIN
 define('MM_GET_JAVA_PLUGIN','so if it does not work, %s.'); // %s - plugin download link
+/**#@-*/
 
 
 /* ------------------ FORMATTERS ------------------ */
 
+/**#@+
+ * define group.
+ * Language constant used by the {@link wakka.php wakka} formatter
+ */
 // wakka
 define('GRABCODE_BUTTON','Grab');
 define('GRABCODE_BUTTON_TITLE','Download %s'); // %s download filename
+/**#@-*/
 
 
 /* ------------------ HANDLERS (PAGE) ------------------ */
 
+/**#@+
+ * define group.
+ * Language constant used by the {@link acls.php acls} (page) handler
+ */
 // acls
 // TODO: 'translate' DB value '(Public)' when displaying it!
 define('ACLS_UPDATED','Access control lists updated.');
@@ -407,14 +577,29 @@ define('ACLS_DENY_USER_ACCESS','%s will be denied access'); // %s - sample user 
 define('ACLS_AFTER','after');
 define('ACLS_TESTING_ORDER1','ACLs are tested in the order they are specified:');
 define('ACLS_TESTING_ORDER2','So be sure to specify %1$s on a separate line %2$s negating any users, not before.'); // %1$s - 'all' mark; %2$s - emphasised 'after' 
+/**#@-*/
 
+/**#@+
+ * define group.
+ * Language constant used by the {@link backlinks.php backlinks} (page) handler
+ */
 // backlinks
 define('BACKLINKS_HEADING','Pages linking to %s');
 define('BACKLINKS_NO_PAGES','There are no backlinks to this page.');
+/**#@-*/
 
+/**#@+
+ * define group.
+ * Language constant used by the {@link claim.php claim} (page) handler
+ */
 // claim
 define('USER_IS_NOW_OWNER','You are now the owner of this page.');
+/**#@-*/
 
+/**#@+
+ * define group.
+ * Language constant used by the {@link clone.php clone} (page) handler
+ */
 // clone
 define('ERROR_ACL_WRITE','Sorry! You don\'t have write-access to %s');
 define('ERROR_PAGE_ALREADY_EXIST','Sorry, the destination page already exists');
@@ -427,7 +612,12 @@ define('CLONE_EDIT_NOTE_LABEL','Edit note:');
 define('CLONE_EDIT_OPTION_LABEL',' Edit after creation');
 define('CLONE_ACL_OPTION_LABEL',' Clone ACL');
 define('CLONE_BUTTON','Clone');
+/**#@-*/
 
+/**#@+
+ * define group.
+ * Language constant used by the {@link delete.php delete} (page) handler
+ */
 // delete
 define('ERROR_NO_PAGE_DEL_ACCESS','You are not allowed to delete this page.');
 define('PAGE_DELETION_HEADER','Delete %s'); // %s - name of the page
@@ -435,7 +625,12 @@ define('PAGE_DELETION_SUCCESS','Page has been deleted!');
 define('PAGE_DELETION_CAPTION','Completely delete this page, including all comments?');
 define('PAGE_DELETION_DELETE_BUTTON','Delete Page');
 define('PAGE_DELETION_CANCEL_BUTTON','Cancel');
+/**#@-*/
 
+/**#@+
+ * define group.
+ * Language constant used by the {@link diff.php diff} (page) handler
+ */
 // diff
 define('ERROR_DIFF_LIBRARY_MISSING','The necessary file "libs/diff.lib.php" could not be found. Please make sure the file exists and is placed in the right directory!'); //TODO 'Please make sure' should be 'please inform WikiAdmin' - end user can't "make sure"
 #define('ERROR_NO_PAGE_ACCESS','You are not authorized to view this page.'); // for consistency replaced by WIKKA_ERROR_ACL_READ
@@ -448,7 +643,12 @@ define('DIFF_COMPARISON_HEADER','Comparing %2$s to %1$s'); // %1$s - link to pag
 define('DIFF_SAMPLE_ADDITION','addition');
 define('DIFF_SAMPLE_DELETION','deletion');
 define('HIGHLIGHTING_LEGEND','Highlighting Guide: %1$s %2$s'); // %1$s - sample added text; %2$s - sample deleted text
+/**#@-*/
 
+/**#@+
+ * define group.
+ * Language constant used by the {@link edit.php edit} (page) handler
+ */
 // edit
 define('ERROR_OVERWRITE_ALERT1','OVERWRITE ALERT: This page was modified by someone else while you were editing it.');
 define('ERROR_OVERWRITE_ALERT2','Please copy your changes and re-edit this page.');
@@ -470,10 +670,20 @@ define('ACCESSKEY_REEDIT','r'); // ideally, should match EDIT_REEDIT_BUTTON
 define('SHOWCODE_LINK','View formatting code for this page');
 define('SHOWCODE_LINK_TITLE','Click to view page formatting code'); // @@@ TODO 'View page formatting code'
 define('EDIT_COMMENT_TIMESTAMP_CAPTION','(%s)'); // %s timestamp
+/**#@-*/
 
+/**#@+
+ * define group.
+ * Language constant used by the {@link grabcode.php grabcode} (page) handler
+ */
 // grabcode
 define('ERROR_NO_CODE','Sorry, there is no code to download.');
+/**#@-*/
 
+/**#@+
+ * define group.
+ * Language constant used by the {@link history.php history} (page) handler
+ */
 // history
 define('EDITED_ON','Edited on %1$s by %2$s'); // %1$s - time; %2$s - user name
 define('HISTORY_PAGE_VIEW','Page view:');
@@ -481,26 +691,55 @@ define('OLDEST_VERSION_EDITED_ON_BY','Oldest known version of this page was edit
 define('MOST_RECENT_EDIT','Most recent edit on %1$s by %2$s'); // %1$s - time; %2$s - user name
 define('HISTORY_MORE_LINK_DESC','here'); // used for alternative history link in HISTORY_MORE
 define('HISTORY_MORE','Full history for this page cannot be displayed within a single page, click %s to view more.'); // %s alternative history link # @@@ TODO avoid using 'here'
+/**#@-*/
 
+/**#@+
+ * define group.
+ * Language constant shared by the {@link processcomments.php processcomments} and 
+ * {@link show.php show} (page) handlers
+ */
 // processcomment & show
 // - comment buttons
 define('COMMENT_DELETE_BUTTON','Delete Comment');
 define('COMMENT_REPLY_BUTTON','Reply to Comment');
 define('COMMENT_ADD_BUTTON','Add Comment');
 define('COMMENT_NEW_BUTTON','New Comment');
+/**#@-*/
 
+/**#@+
+ * define group.
+ * Language constant used by the {@link processcomments.php processcomments} (page) handler
+ */
 // processcomment
 define('ERROR_NO_COMMENT_DEL_ACCESS','Sorry, you\'re not allowed to delete this comment!');
 define('ERROR_NO_COMMENT_WRITE_ACCESS','Sorry, you\'re not allowed to post comments to this page');
 define('ERROR_EMPTY_COMMENT','Comment body was empty -- not saved!');
 define('ADD_COMMENT_LABEL','Add a comment to this page:');
+/**#@-*/
 
+/**#@+
+ * define group.
+ * Language constant used by the {@link recentchanges_simple.xml.mm.php recentchanges_simple.xml.mm}
+ * (page) handler
+ */
 // recentchanges_simple.xml.mm
 define('FIRST_NODE_LABEL','Recent Changes');
+/**#@-*/
 
+/**#@+
+ * define group.
+ * Language constant used by the {@link recentchanges.xml.php recentchanges.xml} (page) handler
+ */
 // recentchanges.xml
 define('RECENTCHANGES_DESC','Recent changes of %s'); // %s - page name
+/**#@-*/
 
+/**#@+
+ * define group.
+ * Language constant shared by the {@link referrers_sites.php referrers_sites},
+ * {@link referrers.php referrers} and {@link review_blacklist.php review_blacklist} 
+ * (page) handlers
+ */
 // referrers_sites + referrers + review_blacklist
 define('REFERRERS_PURGE_24_HOURS','last 24 hours');
 define('REFERRERS_PURGE_N_DAYS','last %d days'); // %d number of days
@@ -513,33 +752,65 @@ define('REFERRER_BLACKLIST_LINK_DESC','View referrer blacklist');
 define('BLACKLIST_LINK_DESC','Blacklist');
 define('NONE_CAPTION','None');
 define('PLEASE_LOGIN_CAPTION','You need to login to see referring sites');
+/**#@-*/
 
+/**#@+
+ * define group.
+ * Language constant used by the {@link referrers_sites.php referrers_sites} 
+ * (page) handler
+ */
 // referrers_sites
 define('REFERRERS_URLS_LINK_DESC','see list of different URLs');
 define('REFERRERS_DOMAINS_TO_WIKI','Domains/sites linking to this wiki (%s)'); // %s - link to referrers handler
 define('REFERRERS_DOMAINS_TO_PAGE','Domains/sites linking to %1$s %2$s (%3$s)'); // %1$s - page link; %2$s - purge time; %3$s - link to referrers handler
+/**#@-*/
 
+/**#@+
+ * define group.
+ * Language constant used by the {@link referrers.php referrers} (page) handler
+ */
 // referrers
 define('REFERRERS_DOMAINS_LINK_DESC','see list of domains');
 define('REFERRERS_URLS_TO_WIKI','External pages linking to this wiki (%s)'); // %s - link to referrers_sites handler
 define('REFERRERS_URLS_TO_PAGE','External pages linking to %1$s %2$s (%3$s)'); // %1$s - page link; %2$s - purge time; %3$s - link to referrers_sites handler
+/**#@-*/
 
+/**#@+
+ * define group.
+ * Language constant used by the {@link review_blacklist.php review_blacklist} 
+ * (page) handler
+ */
 // review_blacklist
 define('BLACKLIST_HEADING','Referrer Blacklist');
 define('BLACKLIST_REMOVE_LINK_DESC','Remove');
 define('STATUS_BLACKLIST_EMPTY','Blacklist is empty.');
+/**#@-*/
 
+/**#@+
+ * define group.
+ * Language constant used by the {@link revisions.php revisions} (page) handler
+ */
 // revisions
 define('REVISIONS_SIMPLE_DIFF','Simple Diff');
 define('REVISIONS_MORE_CAPTION','There are more revisions that were not shown here, click the button labelled %s below to view these entries'); // %S - text of REVISIONS_MORE_BUTTON
 define('REVISIONS_RETURN_TO_NODE_BUTTON','Return To Node / Cancel');
 define('REVISIONS_SHOW_DIFFERENCES_BUTTON','Show Differences');
 define('REVISIONS_MORE_BUTTON','Next...');
+/**#@-*/
 
+/**#@+
+ * define group.
+ * Language constant used by the {@link revisions.xml.php revisions.xml} (page) handler
+ */
 // revisions.xml
 define('REVISIONS_EDITED_BY','Edited by %s'); // %s user name
 define('HISTORY_REVISIONS_OF','History/revisions of %s'); // %s - page name
+/**#@-*/
 
+/**#@+
+ * define group.
+ * Language constant used by the {@link show.php show} (page) handler
+ */
 // show
 define('SHOW_RE_EDIT_BUTTON','Re-edit this old revision');
 define('SHOW_ASK_CREATE_PAGE_CAPTION','This page doesn\'t exist yet. Maybe you want to %s it?'); // %s - page create link
@@ -555,13 +826,23 @@ define('STATUS_NO_COMMENTS','There are no comments on this page.');
 define('STATUS_ONE_COMMENT','There is one comment on this page.');
 define('STATUS_SOME_COMMENTS','There are %d comments on this page.'); // %d - number of comments
 define('COMMENT_TIME_CAPTION','(%s)'); // %s comment time
+/**#@-*/
 
+/**#@+
+ * define group.
+ * Language constant used by the {@link showcode.php showcode} (page) handler
+ */
 // showcode
 define('SOURCE_HEADING','Formatting code for %s'); // %s - page link
 define('SHOW_RAW_LINK_DESC','show source only');
+/**#@-*/
 
 /* ------------------ LIBS ------------------*/
 
+/**#@+
+ * define group.
+ * Language constant used by the {@link Wakka.class.php Wakka class} (the Wikka core containing most methods)
+ */
 // Wakka.class
 define('QUERY_FAILED','Query failed:');
 define('REDIR_DOCTITLE','Redirected to %s'); // %s - target page
@@ -572,8 +853,14 @@ define('ACTION_UNKNOWN_SPECCHARS','Unknown action; the action name must not cont
 define('ACTION_UNKNOWN','Unknown action "%s"'); // %s - action name
 define('HANDLER_UNKNOWN','Sorry, %s is an unknown handler.'); // %s handler name
 define('FORMATTER_UNKNOWN','Formatter "%s" not found'); // %s formatter name
+/**#@-*/
 
 /* ------------------ SETUP ------------------ */
+/**#@+
+ * define group.
+ * Language constant used by the {@link default.php setup} program (several files)
+ */
 // @@@ later....
+/**#@-*/
 
 ?>
