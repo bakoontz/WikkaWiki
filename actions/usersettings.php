@@ -343,7 +343,7 @@ else // user is not logged in
 			switch(TRUE)
 			{
 				case (strlen($name) == 0):
-					$error = WIKKA_ERROR_EMPTY_USERNAME;
+					$error = ERROR_EMPTY_USERNAME;
 					$username_highlight = INPUT_ERROR_STYLE;
 					break;
 				case (!$this->IsWikiName($name)):
