@@ -31,7 +31,7 @@
 /* ------------------ COMMON ------------------ */
 
 /**#@+
- * Language constant shared (or likely to be shared) among several WikkaWiki files
+ * Language constant shared among several Wikka files
  */
 define('WIKKA_ERROR_CAPTION','Error');
 #define('ERROR_NO_PAGE_ACCESS','You are not authorized to view this page.');
@@ -78,9 +78,6 @@ define('ERROR_SETUP_FOOTER_MISSING','The file "setup/footer.php" was not found. 
 define('ERROR_NO_DB_ACCESS','Error: Unable to connect to the MySQL database.'); //TODO Don't mention DB engine JW
 define('STATUS_WIKI_UNAVAILABLE','The wiki is currently unavailable.');
 define('STATUS_WIKI_UPGRADE_NOTICE','This site is currently being upgraded. Please try again later.');
-/**
- * Display page generation time in seconds with 4 decimals (%.4f)
- */
 define('PAGE_GENERATION_TIME','Page was generated in %.4f seconds'); // %.4f - page generation time
 /**#@-*/
  
@@ -357,8 +354,7 @@ define('SYSTEM_HOST_CAPTION','(%s)'); // %s - host name
 /**#@-*/
 
 /**#@+
- * Language constant shared by the {@link textsearch.php textsearch} and 
- * {@link textsearchexpanded.php textsearchexpanded} actions
+ * Language constant shared by the {@link textsearch.php textsearch} and {@link textsearchexpanded.php textsearchexpanded} actions
  */
 // textsearch & textsearchexpanded
 define('SEARCH_FOR','Search for');
@@ -491,8 +487,7 @@ define('NO_WANTED_PAGES','No wanted pages. Good!');
 /* ------------------ 3RD PARTY ------------------ */
 
 /**#@+
- * Language constant used by the {@link fullscreen.php fullscreen} 3rd party 
- * MindMap display utility
+ * Language constant used by the {@link fullscreen.php fullscreen} 3rd party MindMap display utility
  */
 // fullscreen
 define('CLOSE_WINDOW','Close Window');
@@ -548,7 +543,6 @@ define('ACLS_TESTING_ORDER2','So be sure to specify %1$s on a separate line %2$s
 /**#@-*/
 
 /**#@+
- * define group.
  * Language constant used by the {@link backlinks.php backlinks} (page) handler
  */
 // backlinks
@@ -655,8 +649,7 @@ define('HISTORY_MORE','Full history for this page cannot be displayed within a s
 /**#@-*/
 
 /**#@+
- * Language constant shared by the {@link processcomments.php processcomments} and 
- * {@link show.php show} (page) handlers
+ * Language constant shared by the {@link processcomment.php processcomment} and {@link show.php show} (page) handlers
  */
 // processcomment & show
 // - comment buttons
@@ -667,7 +660,7 @@ define('COMMENT_NEW_BUTTON','New Comment');
 /**#@-*/
 
 /**#@+
- * Language constant used by the {@link processcomments.php processcomments} (page) handler
+ * Language constant used by the {@link processcomment.php processcomment} (page) handler
  */
 // processcomment
 define('ERROR_NO_COMMENT_DEL_ACCESS','Sorry, you\'re not allowed to delete this comment!');
@@ -677,8 +670,7 @@ define('ADD_COMMENT_LABEL','Add a comment to this page:');
 /**#@-*/
 
 /**#@+
- * Language constant used by the {@link recentchanges_simple.xml.mm.php recentchanges_simple.xml.mm}
- * (page) handler
+ * Language constant used by the {@link recentchanges_simple.xml.mm.php recentchanges_simple.xml.mm} (page) handler
  */
 // recentchanges_simple.xml.mm
 define('FIRST_NODE_LABEL','Recent Changes');
@@ -775,7 +767,6 @@ define('COMMENT_TIME_CAPTION','(%s)'); // %s comment time
 /**#@-*/
 
 /**#@+
- * define group.
  * Language constant used by the {@link showcode.php showcode} (page) handler
  */
 // showcode
