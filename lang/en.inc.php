@@ -692,9 +692,7 @@ define('RECENTCHANGES_DESC','Recent changes of %s'); // %s - page name
 /**#@-*/
 
 /**#@+
- * Language constant shared by the {@link referrers_sites.php referrers_sites},
- * {@link referrers.php referrers} and {@link review_blacklist.php review_blacklist} 
- * (page) handlers
+ * Language constant shared by the {@link referrers_sites.php referrers_sites}, {@link referrers.php referrers} and {@link review_blacklist.php review_blacklist} (page) handlers
  */
 // referrers_sites + referrers + review_blacklist
 define('REFERRERS_PURGE_24_HOURS','last 24 hours');
