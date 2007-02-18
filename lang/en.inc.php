@@ -34,8 +34,7 @@
  * Language constant shared among several Wikka files
  */
 define('WIKKA_ERROR_CAPTION','Error');
-#define('ERROR_NO_PAGE_ACCESS','You are not authorized to view this page.');
-define('WIKKA_ERROR_ACL_READ','You aren\'t allowed to read this page.'); # was in diff.php: 'You are not authorized to view this page.'
+define('WIKKA_ERROR_ACL_READ','You aren\'t allowed to read this page.');
 define('WIKKA_ERROR_ACL_READ_SOURCE','You aren\'t allowed to read the source of this page.');
 define('WIKKA_ERROR_ACL_READ_INFO','You aren\'t allowed to access this information.');
 define('WIKKA_ERROR_LABEL','Error');
@@ -591,7 +590,6 @@ define('PAGE_DELETION_CANCEL_BUTTON','Cancel');
  */
 // diff
 define('ERROR_DIFF_LIBRARY_MISSING','The necessary file "libs/diff.lib.php" could not be found. Please make sure the file exists and is placed in the right directory!'); //TODO 'Please make sure' should be 'please inform WikiAdmin' - end user can't "make sure"
-#define('ERROR_NO_PAGE_ACCESS','You are not authorized to view this page.'); // for consistency replaced by WIKKA_ERROR_ACL_READ
 define('ERROR_BAD_PARAMETERS','There is something wrong with parameters you supplied, it\'s very likely that one of the versions you want to compare has been deleted.');
 define('DIFF_ADDITIONS_HEADER','Additions:');
 define('DIFF_DELETIONS_HEADER','Deletions:');
