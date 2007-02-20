@@ -21,7 +21,7 @@
  *
  * @copyright Copyright 2002-2003, Hendrik Mans <hendrik@mans.de>
  * @copyright Copyright 2004-2005, Jason Tourtelotte <wikka-admin@jsnx.com>
- * @copyright Copyright 2006, {@link http://wikkawiki.org/CreditsPage Wikka Development Team}
+ * @copyright Copyright 2006-2007, {@link http://wikkawiki.org/CreditsPage Wikka Development Team}
  */
 
 // Comments
