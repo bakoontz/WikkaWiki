@@ -142,7 +142,8 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 	 //check if edit_notes are enabled
 	if ($this->config['require_edit_note'] != 2)
 	{
-		$edit_note_field = '<input id="note" size="'.MAX_EDIT_NOTE_LENGTH.'" type="text" name="note" value="'.htmlspecialchars($note).'" '.$highlight_note.'/> <label for="note">'.EDIT_NOTE_LABEL.'</label><br />'."\n";
+		#$edit_note_field = '<input id="note" size="'.MAX_EDIT_NOTE_LENGTH.'" type="text" name="note" value="'.htmlspecialchars($note).'" '.$highlight_note.'/> <label for="note">'.EDIT_NOTE_LABEL.'</label><br />'."\n";
+		$edit_note_field = '<input id="note" size="'.MAX_EDIT_NOTE_LENGTH.'" type="text" name="note" value="'.$this->hsc_secure($note).'" '.$highlight_note.'/> <label for="note">'.EDIT_NOTE_LABEL.'</label><br />'."\n";	#427
 	}
 
 	// fetch fields
@@ -164,7 +165,8 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 	{
 		// We need to escape ALL entity refs before display so we display them _as_ entities instead of interpreting them
 		// so we use htmlspecialchars on the edit note (as on the body)
-		$preview_buttons =	'<fieldset><legend>'.EDIT_STORE_PAGE_LEGEND.'</legend>'.$edit_note_field."\n".
+		$preview_buttons =	'<fieldset><legend>'.EDIT_STORE_PAGE_LEGEND.'</legend>'."\n".
+							$edit_note_field.
 							'<input name="submit" type="submit" value="'.EDIT_STORE_BUTTON.'" accesskey="'.ACCESSKEY_STORE.'" />'."\n".
 							'<input name="submit" type="submit" value="'.EDIT_REEDIT_BUTTON.'" accesskey="'.ACCESSKEY_REEDIT.'" id="reedit_id" />'."\n".
 							'<input type="button" value="'.EDIT_CANCEL_BUTTON.'" onclick="document.location=\''.$this->href('').'\';" />'."\n".
@@ -174,7 +176,8 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 		$preview_form .= '<input type="hidden" name="previous" value="'.$previous.'" />'."\n".
 			// We need to escape ALL entity refs before display so we display them _as_ entities instead of interpreting them
 			// hence htmlspecialchars() instead of htmlspecialchars_ent() which UNescapes entities!
-			'<input type="hidden" name="body" value="'.htmlspecialchars($body).'" />'."\n";
+			#'<input type="hidden" name="body" value="'.htmlspecialchars($body).'" />'."\n";
+			'<input type="hidden" name="body" value="'.$this->hsc_secure($body).'" />'."\n";	#427
 		$preview_form .= $preview_buttons."\n";
 		$preview_form .= $this->FormClose()."\n";
 		
@@ -215,7 +218,8 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 		{
 			$body = trim($body)."\n\n----\n\n--".$this->GetUserName().' '.sprintf(EDIT_COMMENT_TIMESTAMP_CAPTION,strftime("%c")).')';
 		}
-		$edit_buttons = '<fieldset><legend>'.EDIT_STORE_PAGE_LEGEND.'</legend>'.$edit_note_field."\n".
+		$edit_buttons = '<fieldset><legend>'.EDIT_STORE_PAGE_LEGEND.'</legend>'."\n".
+						$edit_note_field.
 						'<input name="submit" type="submit" value="'.EDIT_STORE_BUTTON.'" accesskey="'.ACCESSKEY_STORE.'" />'."\n".
 						'<input name="submit" type="submit" value="'.EDIT_PREVIEW_BUTTON.'" accesskey="'.ACCESSKEY_PREVIEW.'" />'."\n".
 						'<input type="button" value="'.EDIT_CANCEL_BUTTON.'" onclick="document.location=\''.$this->Href('').'\';" />'."\n".
@@ -228,10 +232,12 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 		$output .= '<input type="hidden" name="previous" value="'.$previous.'" />'."\n".
 			// We need to escape ALL entity refs before display so we display them _as_ entities instead of interpreting them
 			// hence htmlspecialchars() instead of htmlspecialchars_ent() which UNescapes entities!
-			'<textarea id="body" name="body">'.htmlspecialchars($body).'</textarea><br />'."\n";
+			#'<textarea id="body" name="body">'.htmlspecialchars($body).'</textarea><br />'."\n";
+			'<textarea id="body" name="body">'.$this->hsc_secure($body).'</textarea><br />'."\n";	#427
 			//note add Edit
 			// We need to escape ALL entity refs before display so we display them _as_ entities instead of interpreting them
 			// so we use htmlspecialchars on the edit note (as on the body)
+			// JW/2007-02-20: why is this? wouldn't it be  easier for the preson editing to show actual characters instead of entities?  
 		if ($buttons_position == 'bottom')
 		{
 			$output .= $edit_buttons;			

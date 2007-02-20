@@ -357,6 +357,6 @@ Once again, see <a href="http://wikkawiki.org/WikkaInstallation" target="_blank"
 </p>
 
 <form action="<?php echo myLocation(); ?>?installAction=writeconfig" method="post">
-<input type="hidden" name="config" value="<?php echo htmlspecialchars(serialize($config)) ?>" />
+<input type="hidden" name="config" value="<?php echo $this->hsc_secure(serialize($config)) ?>" /><!--#427-->
 <input type="submit" value="Continue" />
 </form>

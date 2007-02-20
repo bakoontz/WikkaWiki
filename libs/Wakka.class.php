@@ -369,63 +369,88 @@ class Wakka
 	/**
 	 * Make sure a (user-provided) URL does use &amp; instead of & and is protected from attacks.
 	 *
-	 * Any already-present '&amp;' is first turned into '&'; then htmlspecialchars() is applied so
-	 * all ampersands are "escaped" while characters that could be used to create a script attack
-	 * (< > or ") are "neutralized" by escaping them.
+#	 * Any already-present '&amp;' is first turned into '&'; then htmlspecialchars() is applied so
+	 * Any already-present '&amp;' is first turned into '&'; then hsc_secure() 
+	 * is applied so all ampersands are "escaped" while characters that could be 
+	 * used to create a script attack (< > or ") are "neutralized" by escaping 
+	 * them.
 	 *
-	 * This method should be applied on any user-provided url in actions, handlers etc.
+	 * This method should be applied on any user-provided url in actions, 
+	 * handlers etc.
+	 * 
+	 * Note: hsc_secure() is the secure replacement for PHP's htmlspecialchars().
+	 * See #427. 
 	 *
 	 * @author		{@link http://wikkawiki.org/JavaWoman JavaWoman}
 	 * @copyright	Copyright © 2004, Marjolein Katsma
 	 * @license		http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
-	 * @version		0.7
+	 * @version		1.0
 	 *
 	 * @access		public
-	 * @todo		refine (maybe)
-	 *
+	 * @uses		Wakka::hsc_secure()
 	 * @param		string	$url  required: URL to sanitize
 	 * @return		string	sanitzied URL
 	 */
 	function cleanUrl($url)
 	{
-		return htmlspecialchars(preg_replace('/&amp;/','&',$url));
+		#return htmlspecialchars(preg_replace('/&amp;/','&',$url));
+		return $this->hsc_secure(preg_replace('/&amp;/','&',$url));
 	}
 
 	/**
-	 * Wrapper around PHP's htmlspecialchars() which preserves (repairs) entity references.
+#	 * Wrapper around PHP's htmlspecialchars() which preserves (repairs) entity references.
+	 * Wrapper around hsc_secure() which preserves entity references.
 	 *
-	 * The function accepts the same parameters as htmlspecialchars() in PHP and passes them on
-	 * to that function.
+#	 * The function accepts the same parameters as htmlspecialchars() in PHP and passes them on
+#	 * to that function.
+	 * The function accepts the same parameters as htmlspecialchars() in PHP and 
+	 * passes them on to our hsc_secure() replacement for that function.
 	 *
 	 * One default here is different here from that in htmlspecialchars() in PHP:
 	 * charset is set to UTF-8 so we're ready for UTF-8 support (and as long as we don't support
 	 * that there should be no difference with Latin-1); on systems where the charset parameter
 	 * is not available or UTF-8 is not supported this will revert to Latin-1 (ISO-8859-1).
+	 * ### updatee ^^
 	 *
-	 * The function first applies htmlspecialchars() to the input string and then "unescapes"
+#	 * The function first applies htmlspecialchars() to the input string and then "unescapes"
+	 * The function first applies hsc_secure() to the input string and then "unescapes"
 	 * character entity references and numeric character references (both decimal and hexadecimal).
 	 * Entities are recognized also if the ending semicolon is omitted at the end or before a
 	 * newline or tag but for consistency the semicolon is always added in the output where it was
 	 * omitted.
 	 *
 	 * NOTE:
-	 * Where code should be rendered _as_code_ the original PHP function should be used so that
+#	 * Where code should be rendered _as_code_ the original PHP function should be used so that
+	 * Where code should be rendered _as_code_ hsc_secure() should be used directly so that
 	 * entity references are also rendered as such instead of as their corresponding characters.
+	 * 
+	 * NOTE2:
+	 * It seems the $doctype parameter was added in 1.1.6.2; version should have 
+	 * been bumped up to 1.1, and the param documented. We'll assume the updated
+	 * version was indeed 1.1, and put this one using hsc_secure() at 1.2 (at 
+	 * the same time updating the 'XML' doctype with apos as named entity).
 	 *
 	 * @access	public
 	 * @since	Wikka 1.1.6.0
-	 * @version	1.0
-	 * @todo	(later) support full range of situations where (in SGML) a terminating ; may legally
-	 *			be omitted (end, newline and tag are merely the most common ones).
-	 * @todo	(maybe) recognize valid html entities, thus transform &error; to &amp;error;
+	 * @version	1.2
 	 *
+	 * @uses	Wakka::hsc_secure()
 	 * @param	string	$text required: text to be converted
 	 * @param	integer	$quote_style optional: quoting style - can be ENT_COMPAT (default, escape
 	 *			only double quotes), ENT_QUOTES (escape both double and single quotes) or
 	 *			ENT_NOQUOTES (don't escape any quotes)
 	 * @param	string	$charset optional: charset to use while converting; default UTF-8
 	 *			(overriding PHP's default ISO-8859-1)
+	 * @param	string $doctype 'HTML' (default) or 'XML'; for XML only the XML
+	 * 			standard entities are unescaped so we'll have valid XML content
 	 * @return	string	converted string with escaped special characted but entity references intact
+	 * 
+	 * @todo	rewrite to eliminate the $charset parameter which is suplerflous
+	 * 			for our hsc_secure() replacement function.
+	 * @todo	extend valid character entities for XML with 'apos'
+	 * @todo	(later) support full range of situations where (in SGML) a terminating ; may legally
+	 *			be omitted (end, newline and tag are merely the most common ones).
+	 * @todo	(maybe) recognize valid html entities and only leave those alone, thus transform &error; to &amp;error;
 	 */
 	function htmlspecialchars_ent($text,$quote_style=ENT_COMPAT,$charset='UTF-8',$doctype='HTML')
 	{
@@ -434,8 +459,10 @@ class Wakka
 		$ignore_case = 'i';
 		if ($doctype == 'XML')
 		{
-			$alpha = 'lt|gt|quot|amp';
+			// only valid named entities in XML (case-sensitive)
+			$alpha = 'lt|gt|quot|apos|amp';			
 			$ignore_case = '';
+			// enforce defaults if defaults were "undefaulted"
 			if ($quote_style === '') $quote_style = ENT_COMPAT;
 			if ($charset === '') $charset = 'UTF-8';
 		}
@@ -445,8 +472,10 @@ class Wakka
 		$entitystring = $alpha.'|'.$numdec.'|'.$numhex;
 		$escaped_entity = '&amp;('.$entitystring.')('.$terminator.')';
 
-		// execute PHP built-in function, passing on optional parameters
-		$output = htmlspecialchars($text,$quote_style,$charset);
+		#// execute PHP built-in function, passing on optional parameters
+		#$output = htmlspecialchars($text,$quote_style,$charset);
+		// execute our replacement hsc_secure() function, passing on optional parameters
+		$output = $this->hsc_secure($text,$quote_style,$charset);
 		// "repair" escaped entities
 		// modifiers: s = across lines, i = case-insensitive
 		$output = preg_replace('/'.$escaped_entity.'/s'.$ignore_case,"&$1;",$output);
@@ -643,7 +672,8 @@ class Wakka
 		}
 
 		// parse and return highlighted code
-		return $geshi->parse_code();
+		// comments added to make GeSHi-highlighted block visible in code JW/20070220
+		return '<!--start GeSHi-->'."\n".$geshi->parse_code()."\n".'<!--end GeSHi-->'."\n";	
 	}
 
 	/**
@@ -656,7 +686,7 @@ class Wakka
 	 */
 	function GetPageTag() { return $this->tag; }
 	/**
-	 * Get the time to current verion of the current page was saved.
+	 * Get the time the current verion of the current page was saved.
 	 *
 	 * @return string?
 	 */

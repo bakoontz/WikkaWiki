@@ -9,13 +9,44 @@
  * @license  http://gnu.org/copyleft/gpl.html GNU GPL
  * @version  $Id$
  * @filesource
+ * 
+ * @todo	check if we should (copy and) use Wakka::GetSafeVar() and 
+ * 			Wakka::Wakka::cleanUrl() to secure our input parameters 
+ * 			(cf. mindmap action!)
+ * @todo	we probably should be using $_GET instead of $_REQUEST as well
+ * @todo	fix JRE download URL
  */
 
 if (!defined('FREEMIND_PROJECT_URL')) define('FREEMIND_PROJECT_URL', 'http://freemind.sourceforge.net/');
-if (!defined('WIKKA_JRE_DOWNLOAD_URL')) define('WIKKA_JRE_DOWNLOAD_URL','http://www.java.com/');	# @@@ I don't think that's the correct link now! JW
+if (!defined('WIKKA_JRE_DOWNLOAD_URL')) define('WIKKA_JRE_DOWNLOAD_URL','http://www.java.com/');	// TODO @@@ I don't think that's the correct link now! JW
 if (!defined('SAMPLE_SYNTAX_URL')) define('SAMPLE_SYNTAX_URL','http://example.com/MapName/mindmap.mm');
 if (!defined('SAMPLE_SYNTAX1')) define('SAMPLE_SYNTAX1','{{mindmap '.SAMPLE_SYNTAX_URL.'}}');
 if (!defined('SAMPLE_SYNTAX2')) define('SAMPLE_SYNTAX2','{{mindmap url="'.SAMPLE_SYNTAX_URL.'"}}');
+
+/**
+ * Secure replacement for PHP built-in function htmlspecialchars().
+ * 
+ * Copy of Wakka::hsc_secure() - See Wakka.class.php for complete comments.
+ */
+function hsc_secure($string, $quote_style=ENT_COMPAT)
+{
+	// init
+	$aTransSpecchar = array('&' => '&amp;',
+							'"' => '&quot;',
+							'<' => '&lt;',
+							'>' => '&gt;'
+							);			// ENT_COMPAT set
+	if (ENT_NOQUOTES == $quote_style)	// don't convert double quotes
+	{
+		unset($aTransSpecchar['"']);
+	}
+	elseif (ENT_QUOTES == $quote_style)	// convert single quotes as well
+	{
+		$aTransSpecchar["'"] = '&#39;';	// (apos) htmlspecialchars() uses '&#039;'
+	}
+	// return translated string
+	return strtr($string,$aTransSpecchar);
+}
 
 /**
  * Include language file if it exists.
@@ -38,18 +69,19 @@ else die('Language File (/lang/en.inc.php) not found! Please add the file.');
    <body>
 
 <?php
-$mindmap_url = htmlspecialchars(preg_replace('/&amp;/','&',(trim($_REQUEST["url"]))));
-if (isset($_REQUEST["height"])) $height = htmlspecialchars(trim($_REQUEST["height"]));
+#$mindmap_url = htmlspecialchars(preg_replace('/&amp;/','&',(trim($_REQUEST["url"]))));
+#if (isset($_REQUEST["height"])) $height = htmlspecialchars(trim($_REQUEST["height"]));
+$mindmap_url = hsc_secure(preg_replace('/&amp;/','&',(trim($_REQUEST['url'])))); // duplicates Wakka::cleanUrl()
+if (isset($_REQUEST['height'])) $height = hsc_secure(trim($_REQUEST['height'])); // more or less equivalent to Wakka::GetSafeVar()
 
 if ($mindmap_url) {
 
 	// set up template variables
 	$close_window = CLOSE_WINDOW;
-	$height = (isset($height)) ? $height : '80%';	// try to avoid vertical scrollbar on window
+	$height = (isset($height)) ? $height : '80%';	// try to avoid vertical scrollbar on window (NOTE: mindmap action uses '550' as default)
 	$jre_plugin_link = '<a href="'.WIKKA_JRE_DOWNLOAD_URL.'">'.MM_GET_JAVA_PLUGIN_LINK_DESC.'</a>';
 	$jre_download_link = '<a href="'.WIKKA_JRE_DOWNLOAD_URL.'">'.WIKKA_JRE_LINK_DESC.'</a>';
 	$jre_install_req = sprintf(MM_JRE_INSTALL_REQ,$jre_download_link);
-	#$jre_install_req_sub = preg_replace('/^[.]/',strtolower($start),$jre_install_req);
 	$jre_install_req_sub = $jre_install_req; 
 	$jre_install_req_sub[0] = strtolower($jre_install_req_sub[0]);	// lower case first char for use in subphrase
 	$freemind_link = '<a href="'.FREEMIND_PROJECT_URL.'">Freemind</a>';
