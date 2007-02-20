@@ -20,8 +20,8 @@
 /**
  * Defaults
  */
-if (!defined('RRS_REVISIONS_VERSION')) define('RRS_REVISIONS_VERSION','2.0');
-if (!defined('RRS_RECENTCHANGES_VERSION')) define('RRS_RECENTCHANGES_VERSION','0.92');
+if (!defined('RSS_REVISIONS_VERSION')) define('RSS_REVISIONS_VERSION','2.0');
+if (!defined('RSS_RECENTCHANGES_VERSION')) define('RSS_RECENTCHANGES_VERSION','0.92');
 
 $message = $this->GetRedirectMessage();
 $site_base = $this->GetConfigValue("base_url");
@@ -43,8 +43,8 @@ if ( substr_count($site_base, 'wikka.php?wakka=') > 0 ) $site_base = substr($sit
 <?php
 if ($this->GetMethod() != 'edit' && $this->config['enable_rss_autodiscovery'] != 0) {
 	$wikiname = $this->GetWakkaName();
-	$rsslink  = '	<link rel="alternate" type="application/rss+xml" title="'.sprintf(RSS_REVISIONS_TITLE,$wikiname,$this->tag).' (RSS '.RRS_REVISIONS_VERSION.')" href="'.$this->Href('revisions.xml', $this->tag).'" />'."\n";
-	$rsslink .= '	<link rel="alternate" type="application/rss+xml" title="'.sprintf(RSS_RECENTCHANGES_TITLE,$wikiname).' (RSS '.RRS_RECENTCHANGES_VERSION.')" href="'.$this->Href('recentchanges.xml', $this->tag).'" />'."\n";
+	$rsslink  = '	<link rel="alternate" type="application/rss+xml" title="'.sprintf(RSS_REVISIONS_TITLE,$wikiname,$this->tag).' (RSS '.RSS_REVISIONS_VERSION.')" href="'.$this->Href('revisions.xml', $this->tag).'" />'."\n";
+	$rsslink .= '	<link rel="alternate" type="application/rss+xml" title="'.sprintf(RSS_RECENTCHANGES_TITLE,$wikiname).' (RSS '.RSS_RECENTCHANGES_VERSION.')" href="'.$this->Href('recentchanges.xml', $this->tag).'" />'."\n";
 	echo $rsslink;	
 }
 ?>

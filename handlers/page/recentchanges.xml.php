@@ -22,14 +22,14 @@
  */
 if (!defined('I18N_LANG')) define('I18N_LANG', 'en-us');	// FIXME wrong format
 if (!defined('I18N_ENCODING_88591')) define('I18N_ENCODING_88591', 'ISO-8859-1');
-if (!defined('RRS_REVISIONS_VERSION')) define('RRS_REVISIONS_VERSION','2.0');
-if (!defined('RRS_RECENTCHANGES_VERSION')) define('RRS_RECENTCHANGES_VERSION','0.92');
+if (!defined('RSS_REVISIONS_VERSION')) define('RSS_REVISIONS_VERSION','2.0');
+if (!defined('RSS_RECENTCHANGES_VERSION')) define('RSS_RECENTCHANGES_VERSION','0.92');
 
 header("Content-type: text/xml");
 
 $xml  = '<?xml version="1.0" encoding="'.I18N_ENCODING_88591.'"?>'."\n";
 $xml .= '<?xml-stylesheet href="' . $this->GetConfigValue("base_url") .'/css/xml.css" type="text/css"?' .">\n";
-$xml .= '<rss version="'.RRS_RECENTCHANGES_VERSION.'">'."\n";
+$xml .= '<rss version="'.RSS_RECENTCHANGES_VERSION.'">'."\n";
 $xml .= "<channel>\n";
 $xml .= "<title>".$this->GetConfigValue("wakka_name")." - ".$this->tag."</title>\n";
 $xml .= "<link>".$this->GetConfigValue("base_url")."</link>\n";
