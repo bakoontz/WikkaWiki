@@ -44,17 +44,21 @@ if (isset($_REQUEST["height"])) $height = htmlspecialchars(trim($_REQUEST["heigh
 if ($mindmap_url) {
 
 	// set up template variables
-	$height = (isset($height)) ? $height : '100%';
 	$close_window = CLOSE_WINDOW;
+	$height = (isset($height)) ? $height : '80%';	// try to avoid vertical scrollbar on window
 	$jre_plugin_link = '<a href="'.WIKKA_JRE_DOWNLOAD_URL.'">'.MM_GET_JAVA_PLUGIN_LINK_DESC.'</a>';
 	$jre_download_link = '<a href="'.WIKKA_JRE_DOWNLOAD_URL.'">'.WIKKA_JRE_LINK_DESC.'</a>';
-	$jre_install_req = str_replace('/','\/',sprintf(MM_JRE_INSTALL_REQ,$jre_download_link));
+	$jre_install_req = sprintf(MM_JRE_INSTALL_REQ,$jre_download_link);
+	#$jre_install_req_sub = preg_replace('/^[.]/',strtolower($start),$jre_install_req);
+	$jre_install_req_sub = $jre_install_req; 
+	$jre_install_req_sub[0] = strtolower($jre_install_req_sub[0]);	// lower case first char for use in subphrase
+	$freemind_link = '<a href="'.FREEMIND_PROJECT_URL.'">Freemind</a>';
+
+	$mm_download_link = '<a href="'.$mindmap_url.'">'.MM_DOWNLOAD_LINK_DESC.'</a>';
+	$mm_edit = sprintf(MM_EDIT,$freemind_link);
 	$mm_note = WIKKA_NOTE;
 	$mm_plugin_needed = WIKKA_JAVA_PLUGIN_NEEDED;
-	$mm_get_plugin = MM_GET_JAVA_PLUGIN;
-	$mm_download_link = '<a href="'.$mindmap_url.'">'.MM_DOWNLOAD_LINK_DESC.'</a>';
-	$freemind_link = '<a href="'.FREEMIND_PROJECT_URL.'">Freemind</a>';
-	$mm_edit = sprintf(MM_EDIT,$freemind_link);
+	$mm_get_plugin = sprintf(MM_GET_JAVA_PLUGIN,$jre_install_req_sub);
 
 	// define template
 	$mm_template = <<<TPLMMTEMPLATE
@@ -76,7 +80,7 @@ if ($mindmap_url) {
 	</applet>
 	<br />
 	<span class="floatr">$mm_download_link :: $mm_edit :: <a href="#" onclick="window.close('fullmindmap')">$close_window</a></span>
-	<br /><strong>$jre_note</strong> $mm_plugin_needed<br />$mm_get_plugin
+	<br /><strong>$mm_note</strong> $mm_plugin_needed $mm_get_plugin
 	</div>
 TPLMMTEMPLATE;
 
