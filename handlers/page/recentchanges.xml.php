@@ -49,7 +49,7 @@ if ($pages = $this->LoadRecentlyChanged())
 			$xml .= "<item>\n";
 			$xml .= "<title>".$this->htmlspecialchars_ent($page["tag"])."</title>\n";
 			$xml .= "<link>".$this->Href("show", $page["tag"], "time=".urlencode($page["time"]))."</link>\n";
-			$xml .= "\t<description>".sprintf(WIKKA_REV_WHEN_BY_WHO, $page['time'], $this->htmlspecialchars_ent($page["user"], '', '', 'XML')).($page['note'] ? ' - '.$this->htmlspecialchars_ent($page['note'],ENT_COMPAT,'XML') : '')."</description>\n";
+			$xml .= "\t<description>".sprintf(WIKKA_REV_WHEN_BY_WHO, $page['time'], $this->htmlspecialchars_ent($page['user'],ENT_COMPAT,'XML')).($page['note'] ? ' - '.$this->htmlspecialchars_ent($page['note'],ENT_COMPAT,'XML') : '')."</description>\n";
 			//$xml .= "\t<guid>".$page["id"]."</guid>";
 			$xml .= "\t<pubDate>".date("r",strtotime($page["time"]))."</pubDate>\n";
 			$xml .= "</item>\n";

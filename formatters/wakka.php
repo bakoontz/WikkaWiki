@@ -489,7 +489,7 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 					$output .= '</div>'."\n";
 				}
 				// use GeSHi for highlighting
-				$output .= $wakka->GeSHi_Highlight($code, $language, $start); //TODO make GeSHi_Highlight() add a "\n" at the end (as well as the comments, maybe)
+				$output .= $wakka->GeSHi_Highlight($code, $language, $start);
 			}
 			// check Wikka highlighter path is set and if we have an internal Wikka highlighter
 			elseif (isset($language) && isset($wakka->config['wikka_formatter_path']) && file_exists($wikka_hi_path.'/'.$language.'.php') && 'wakka' != $language)
