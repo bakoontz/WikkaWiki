@@ -14,11 +14,10 @@
  * 			Wakka::Wakka::cleanUrl() to secure our input parameters 
  * 			(cf. mindmap action!)
  * @todo	we probably should be using $_GET instead of $_REQUEST as well
- * @todo	fix JRE download URL
  */
 
 if (!defined('FREEMIND_PROJECT_URL')) define('FREEMIND_PROJECT_URL', 'http://freemind.sourceforge.net/');
-if (!defined('WIKKA_JRE_DOWNLOAD_URL')) define('WIKKA_JRE_DOWNLOAD_URL','http://www.java.com/');	// TODO @@@ I don't think that's the correct link now! JW
+if (!defined('WIKKA_JRE_DOWNLOAD_URL')) define('WIKKA_JRE_DOWNLOAD_URL','http://www.java.com/getjava');
 if (!defined('SAMPLE_SYNTAX_URL')) define('SAMPLE_SYNTAX_URL','http://example.com/MapName/mindmap.mm');
 if (!defined('SAMPLE_SYNTAX1')) define('SAMPLE_SYNTAX1','{{mindmap '.SAMPLE_SYNTAX_URL.'}}');
 if (!defined('SAMPLE_SYNTAX2')) define('SAMPLE_SYNTAX2','{{mindmap url="'.SAMPLE_SYNTAX_URL.'"}}');
@@ -82,6 +81,7 @@ if ($mindmap_url) {
 	$jre_plugin_link = '<a href="'.WIKKA_JRE_DOWNLOAD_URL.'">'.MM_GET_JAVA_PLUGIN_LINK_DESC.'</a>';
 	$jre_download_link = '<a href="'.WIKKA_JRE_DOWNLOAD_URL.'">'.WIKKA_JRE_LINK_DESC.'</a>';
 	$jre_install_req = sprintf(MM_JRE_INSTALL_REQ,$jre_download_link);
+	$jre_install_req_js = str_replace('/','\/',$jre_install_req);	// escape slashes for JavaScript 
 	$jre_install_req_sub = $jre_install_req; 
 	$jre_install_req_sub[0] = strtolower($jre_install_req_sub[0]);	// lower case first char for use in subphrase
 	$freemind_link = '<a href="'.FREEMIND_PROJECT_URL.'">Freemind</a>';
@@ -98,7 +98,7 @@ if ($mindmap_url) {
 	<div class="mindmap" style="height: 100%; clear:both;"><script type="text/javascript">
 	<!--
 	    if(!navigator.javaEnabled()) {
-	        document.write('{$jre_install_req}');
+	        document.write('{$jre_install_req_js}');
 	    }
 	//-->
 	</script>

@@ -9,12 +9,10 @@
  * 
  * @uses	Wakka::cleanUrl()
  * @uses	Wakka::htmlspecialchars_ent()
- * 
- * @todo	fix JRE download URL
  */
 
 if (!defined('FREEMIND_PROJECT_URL')) define('FREEMIND_PROJECT_URL', 'http://freemind.sourceforge.net/');
-if (!defined('WIKKA_JRE_DOWNLOAD_URL')) define('WIKKA_JRE_DOWNLOAD_URL','http://www.java.com/');	// TODO @@@ I don't think that's the correct link now! JW
+if (!defined('WIKKA_JRE_DOWNLOAD_URL')) define('WIKKA_JRE_DOWNLOAD_URL','http://www.java.com/getjava');
 if (!defined('SAMPLE_SYNTAX_URL')) define('SAMPLE_SYNTAX_URL','http://example.com/MapName/mindmap.mm');
 if (!defined('SAMPLE_SYNTAX1')) define('SAMPLE_SYNTAX1','{{mindmap '.SAMPLE_SYNTAX_URL.'}}');
 if (!defined('SAMPLE_SYNTAX2')) define('SAMPLE_SYNTAX2','{{mindmap url="'.SAMPLE_SYNTAX_URL.'"}}');
@@ -36,6 +34,7 @@ if ($mindmap_url)
 	// set up template variables
 	$jre_download_link = '<a href="'.WIKKA_JRE_DOWNLOAD_URL.'">'.WIKKA_JRE_LINK_DESC.'</a>';
 	$jre_install_req = sprintf(MM_JRE_INSTALL_REQ,$jre_download_link);
+	$jre_install_req_js = str_replace('/','\/',$jre_install_req);	// escape slashes for JavaScript 
 	$freemind_link = '<a href="'.FREEMIND_PROJECT_URL.'">Freemind</a>';
 
 	$mm_download_link = '<a href="'.$mindmap_url.'">'.MM_DOWNLOAD_LINK_DESC.'</a>';
@@ -48,7 +47,7 @@ if ($mindmap_url)
 	<script type="text/javascript" language="JavaScript">
 	<!--
 	    if (!navigator.javaEnabled()) {
-	        document.write('{$jre_install_req}');
+	        document.write('{$jre_install_req_js}');
 	    }
 		function popup(mylink, windowname)
 		{
