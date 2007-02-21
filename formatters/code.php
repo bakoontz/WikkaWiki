@@ -6,6 +6,8 @@
  * @version	$Id$
  * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
+ * 
+ * @uses	Wakka::hsc_secure()
  */
-print("<pre>".htmlspecialchars($text, ENT_QUOTES)."</pre>");
+echo '<pre>'.$this->hsc_secure($text,ENT_QUOTES).'</pre>';	#427
 ?>

@@ -15,6 +15,7 @@
  * @uses		Wakka::GetMethod()
  * @uses		Wakka::GetUser()
  * @uses		Wakka::Href()
+ * @uses		Wakka::htmlspecialchars_ent()
  * 
  * @todo		move <div> to template
  * @todo		better separation between data gathering and output
@@ -100,9 +101,10 @@ if ($this->GetUser())
 		print("<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\">\n");
 		foreach ($referrer_sites as $site => $site_count)
 		{
+			$site_esc = $this->htmlspecialchars_ent($site);
 			print("<tr>");
 			print("<td width=\"30\" align=\"right\" valign=\"top\" style=\"padding-right: 10px\">$site_count</td>");
-			print("<td valign=\"top\">" . (($site != "unknown") ? "<a href=\"http://".$this->htmlspecialchars_ent($site)."\">".$this->htmlspecialchars_ent($site)."</a>" : $site) . "</a> ".($IsAdmin ? "[<a href=\"".$this->href("delete_referrer", "", "spam_site=").$this->htmlspecialchars_ent($site)."&amp;redirect=".$this->GetMethod().'">'.BLACKLIST_LINK_DESC."</a>]" : "")."</td>");
+			print("<td valign=\"top\">" . (($site != "unknown") ? "<a href=\"http://".$site_esc."\">".$site_esc."</a>" : $site) . "</a> ".($IsAdmin ? "[<a href=\"".$this->href("delete_referrer", "", "spam_site=").$site_esc."&amp;redirect=".$this->GetMethod().'">'.BLACKLIST_LINK_DESC."</a>]" : "")."</td>");
 			print("</tr>\n");
 		}
 		print("</table>\n");

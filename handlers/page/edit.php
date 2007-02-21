@@ -27,6 +27,7 @@
  * @uses Wakka::Header()
  * @uses Wakka::Href()
  * @uses Wakka::htmlspecialchars_ent()
+ * @uses Wakka::hsc_secure()
  * @uses Wakka::LoadSingle()
  * @uses Wakka::Redirect()
  * @uses Wakka::SavePage()
@@ -139,10 +140,11 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 		}
 	}
 
-	 //check if edit_notes are enabled
+	// create edit note field if edit_notes are enabled
 	if ($this->config['require_edit_note'] != 2)
 	{
-		#$edit_note_field = '<input id="note" size="'.MAX_EDIT_NOTE_LENGTH.'" type="text" name="note" value="'.htmlspecialchars($note).'" '.$highlight_note.'/> <label for="note">'.EDIT_NOTE_LABEL.'</label><br />'."\n";
+		// We need to escape ALL entity refs before display so we display them _as_ entities instead of interpreting them
+		// so we use hsc_secure() on the edit note (as on the body)
 		$edit_note_field = '<input id="note" size="'.MAX_EDIT_NOTE_LENGTH.'" type="text" name="note" value="'.$this->hsc_secure($note).'" '.$highlight_note.'/> <label for="note">'.EDIT_NOTE_LABEL.'</label><br />'."\n";	#427
 	}
 
@@ -163,8 +165,6 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 	// PREVIEW screen
 	if (isset($_POST['submit']) && $_POST['submit'] == EDIT_PREVIEW_BUTTON)
 	{
-		// We need to escape ALL entity refs before display so we display them _as_ entities instead of interpreting them
-		// so we use htmlspecialchars on the edit note (as on the body)
 		$preview_buttons =	'<fieldset><legend>'.EDIT_STORE_PAGE_LEGEND.'</legend>'."\n".
 							$edit_note_field.
 							'<input name="submit" type="submit" value="'.EDIT_STORE_BUTTON.'" accesskey="'.ACCESSKEY_STORE.'" />'."\n".
@@ -175,8 +175,8 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 		$preview_form = $this->FormOpen('edit')."\n";
 		$preview_form .= '<input type="hidden" name="previous" value="'.$previous.'" />'."\n".
 			// We need to escape ALL entity refs before display so we display them _as_ entities instead of interpreting them
-			// hence htmlspecialchars() instead of htmlspecialchars_ent() which UNescapes entities!
-			#'<input type="hidden" name="body" value="'.htmlspecialchars($body).'" />'."\n";
+			// hence hsc_secure() instead of htmlspecialchars_ent() which UNescapes entities!
+			// JW/2007-02-20: why is this? wouldn't it be  easier for the person editing to show actual characters instead of entities?  
 			'<input type="hidden" name="body" value="'.$this->hsc_secure($body).'" />'."\n";	#427
 		$preview_form .= $preview_buttons."\n";
 		$preview_form .= $this->FormClose()."\n";
@@ -231,13 +231,9 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 		}
 		$output .= '<input type="hidden" name="previous" value="'.$previous.'" />'."\n".
 			// We need to escape ALL entity refs before display so we display them _as_ entities instead of interpreting them
-			// hence htmlspecialchars() instead of htmlspecialchars_ent() which UNescapes entities!
-			#'<textarea id="body" name="body">'.htmlspecialchars($body).'</textarea><br />'."\n";
+			// hence hsc_secure() instead of htmlspecialchars_ent() which UNescapes entities!
+			// JW/2007-02-20: why is this? wouldn't it be  easier for the person editing to show actual characters instead of entities?  
 			'<textarea id="body" name="body">'.$this->hsc_secure($body).'</textarea><br />'."\n";	#427
-			//note add Edit
-			// We need to escape ALL entity refs before display so we display them _as_ entities instead of interpreting them
-			// so we use htmlspecialchars on the edit note (as on the body)
-			// JW/2007-02-20: why is this? wouldn't it be  easier for the preson editing to show actual characters instead of entities?  
 		if ($buttons_position == 'bottom')
 		{
 			$output .= $edit_buttons;			

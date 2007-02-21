@@ -16,6 +16,8 @@
  * @author {@link http://wikkawiki.org/DarTar Dario Taraborelli} (grab handler and filename support for codeblocks)
  * @author {@link http://wikkawiki.org/TormodHaugen Tormod Haugen} (table formatter support)
  * 
+ * @uses	Wakka::htmlspecialchars_ent()
+ * 
  * @todo		add support for formatter plugins;
  * @todo		use a central RegEx library #34;
  */
@@ -487,7 +489,7 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 					$output .= '</div>'."\n";
 				}
 				// use GeSHi for highlighting
-				$output .= $wakka->GeSHi_Highlight($code, $language, $start);
+				$output .= $wakka->GeSHi_Highlight($code, $language, $start); //TODO make GeSHi_Highlight() add a "\n" at the end (as well as the comments, maybe)
 			}
 			// check Wikka highlighter path is set and if we have an internal Wikka highlighter
 			elseif (isset($language) && isset($wakka->config['wikka_formatter_path']) && file_exists($wikka_hi_path.'/'.$language.'.php') && 'wakka' != $language)
@@ -670,7 +672,7 @@ if (!function_exists("parse_attributes"))
 				//This attribute isn't allowed here / is wrong.
 				// WARNING: JS vulnerability: two minus signs are not allowed in a comment, so we replace any occurence of them by underscore.
 				// Consider the code ||(p--><font size=1px><a href=...<!--:blabla
-				// When migrating to utf-8, we could use str_replace('--', '−−', $key) to make things more pretty.
+				// When migrating to utf-8, we could use str_replace('--', '−−', $key) to make things more pretty. //TODO garbled ... mdash?
 				echo '<!--Cannot find attribute for key "'.str_replace('--', '__', $key).'" from hints given.-->'."\n";
 			}
 			else

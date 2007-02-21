@@ -16,6 +16,7 @@
  * @uses		Wakka::GetUser()
  * @uses		Wakka::HasAccess()
  * @uses		Wakka::LoadUser()
+ * @uses		Wakka::htmlspecialchars_ent()
  * 
  * @todo		make datetime format configurable;
  * @todo		add configurable option for non-accessible pages {@link http://wush.net/trac/wikka/ticket/178 #178};

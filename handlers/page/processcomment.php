@@ -15,6 +15,8 @@
  * @uses	Wakka::redirect()
  * @uses	Wakka::SaveComment()
  * @uses	Wakka::UserIsOwner()
+ * @uses	Wakka::htmlspecialchars_ent()
+ * 
  * @todo	move main <div> to templating class
  */
 

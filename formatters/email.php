@@ -6,6 +6,8 @@
  * @version	$Id$
  * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
+ * 
+ * @uses	Wakka::htmlspecialchars_ent()
  */
 
  $text = $this->htmlspecialchars_ent($text);

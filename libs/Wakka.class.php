@@ -398,33 +398,37 @@ class Wakka
 	}
 
 	/**
-#	 * Wrapper around PHP's htmlspecialchars() which preserves (repairs) entity references.
 	 * Wrapper around hsc_secure() which preserves entity references.
 	 *
-#	 * The function accepts the same parameters as htmlspecialchars() in PHP and passes them on
-#	 * to that function.
-	 * The function accepts the same parameters as htmlspecialchars() in PHP and 
-	 * passes them on to our hsc_secure() replacement for that function.
-	 *
-	 * One default here is different here from that in htmlspecialchars() in PHP:
-	 * charset is set to UTF-8 so we're ready for UTF-8 support (and as long as we don't support
-	 * that there should be no difference with Latin-1); on systems where the charset parameter
-	 * is not available or UTF-8 is not supported this will revert to Latin-1 (ISO-8859-1).
-	 * ### updatee ^^
-	 *
-#	 * The function first applies htmlspecialchars() to the input string and then "unescapes"
-	 * The function first applies hsc_secure() to the input string and then "unescapes"
-	 * character entity references and numeric character references (both decimal and hexadecimal).
-	 * Entities are recognized also if the ending semicolon is omitted at the end or before a
-	 * newline or tag but for consistency the semicolon is always added in the output where it was
-	 * omitted.
-	 *
-	 * NOTE:
-#	 * Where code should be rendered _as_code_ the original PHP function should be used so that
-	 * Where code should be rendered _as_code_ hsc_secure() should be used directly so that
-	 * entity references are also rendered as such instead of as their corresponding characters.
+	 * The first two parameters for this function as the same as those for 
+	 * htmlspecialchars() in PHP: the text to be treated, and an optional
+	 * parameter determining how to handle quotes; both these parameters are 
+	 * passed on to our hsc_secure() replacement for htmlspecialchars().
 	 * 
-	 * NOTE2:
+	 * Since hsc_secure() does not need a character set parameter, we don't
+	 * have that here any more either.
+	 * 
+	 * A third 'doctype' parameter is for local use only and determines how 
+	 * pre-existing entity references are treated after hsc_secure() has done 
+	 * its work: numeic entity references are always "unescaped' since they are
+	 * valid for both HTML and XML doctypes; for XML the named entity references
+	 * for the special characters are unescaped as well, while for for HTML any
+	 * named entity reference is unescaped. This parameter is optional and 
+	 * defaults to HTML.   
+	 *
+	 * The function first applies hsc_secure() to the input string and then 
+	 * "unescapes" character entity references and numeric character references 
+	 * (both decimal and hexadecimal).
+	 * Entities are recognized also if the ending semicolon is omitted at the 
+	 * end or before a newline or tag but for consistency the semicolon is 
+	 * always added in the output where it was omitted.
+	 *
+	 * Usage note:
+	 * Where code should be rendered <em>as code</em> hsc_secure() should be 
+	 * used directly so that entity references are also rendered as such instead 
+	 * of as their corresponding characters.
+	 * 
+	 * Documentation note:
 	 * It seems the $doctype parameter was added in 1.1.6.2; version should have 
 	 * been bumped up to 1.1, and the param documented. We'll assume the updated
 	 * version was indeed 1.1, and put this one using hsc_secure() at 1.2 (at 
@@ -436,49 +440,58 @@ class Wakka
 	 *
 	 * @uses	Wakka::hsc_secure()
 	 * @param	string	$text required: text to be converted
-	 * @param	integer	$quote_style optional: quoting style - can be ENT_COMPAT (default, escape
-	 *			only double quotes), ENT_QUOTES (escape both double and single quotes) or
-	 *			ENT_NOQUOTES (don't escape any quotes)
-	 * @param	string	$charset optional: charset to use while converting; default UTF-8
-	 *			(overriding PHP's default ISO-8859-1)
+	 * @param	integer	$quote_style optional: quoting style - can be ENT_COMPAT 
+	 * 			(default, escape only double quotes), ENT_QUOTES (escape both 
+	 * 			double and single quotes) or ENT_NOQUOTES (don't escape any 
+	 * 			quotes)
 	 * @param	string $doctype 'HTML' (default) or 'XML'; for XML only the XML
 	 * 			standard entities are unescaped so we'll have valid XML content
-	 * @return	string	converted string with escaped special characted but entity references intact
+	 * @return	string	converted string with escaped special characted but 
+	 * 			entity references intact
 	 * 
-	 * @todo	rewrite to eliminate the $charset parameter which is suplerflous
-	 * 			for our hsc_secure() replacement function.
-	 * @todo	extend valid character entities for XML with 'apos'
-	 * @todo	(later) support full range of situations where (in SGML) a terminating ; may legally
-	 *			be omitted (end, newline and tag are merely the most common ones).
-	 * @todo	(maybe) recognize valid html entities and only leave those alone, thus transform &error; to &amp;error;
+	 * @todo	(maybe) recognize valid html entities and only leave those 
+	 * 			alone, thus transform &error; to &amp;error;
+	 * @todo	later - maybe) support full range of situations where (in SGML) 
+	 * 			a terminating ; may legally be omitted (end, newline and tag are 
+	 * 			merely the most common ones); such usage is quite rare though 
+	 * 			and may not be worth the effort
 	 */
-	function htmlspecialchars_ent($text,$quote_style=ENT_COMPAT,$charset='UTF-8',$doctype='HTML')
+	function htmlspecialchars_ent($text,$quote_style=ENT_COMPAT,$doctype='HTML')
 	{
+		// re-establish default if overwritten because of third parameter
+		// [ENT_COMPAT] => 2
+	    // [ENT_QUOTES] => 3
+	    // [ENT_NOQUOTES] => 0
+		if (!in_array($quote_style,array(ENT_COMPAT,ENT_QUOTES,ENT_NOQUOTES))) {
+			$quote_style = ENT_COMPAT;	
+		}
+		
 		// define patterns
-		$alpha  = '[a-z]+';							# character entity reference todo: $alpha='eacute|egrave|ccirc|...'
-		$ignore_case = 'i';
-		if ($doctype == 'XML')
+		$terminator = ';|(?=($|[\n<]|&lt;))';	// semicolon; or end-of-string, newline or tag
+		$numdec = '#[0-9]+';					// numeric character reference (decimal)
+		$numhex = '#x[0-9a-f]+';				// numeric character reference (hexadecimal)
+		if ($doctype == 'XML')					// pure XML allows only named entities for special chars
 		{
 			// only valid named entities in XML (case-sensitive)
-			$alpha = 'lt|gt|quot|apos|amp';			
+			$named = 'lt|gt|quot|apos|amp';			
 			$ignore_case = '';
-			// enforce defaults if defaults were "undefaulted"
-			if ($quote_style === '') $quote_style = ENT_COMPAT;
-			if ($charset === '') $charset = 'UTF-8';
+			$entitystring = $named.'|'.$numdec.'|'.$numhex;
 		}
-		$numdec = '#[0-9]+';						# numeric character reference (decimal)
-		$numhex = '#x[0-9a-f]+';					# numeric character reference (hexadecimal)
-		$terminator = ';|(?=($|[\n<]|&lt;))';		# semicolon; or end-of-string, newline or tag
-		$entitystring = $alpha.'|'.$numdec.'|'.$numhex;
+		else									// (X)HTML
+		{
+			$alpha  = '[a-z]+';					// character entity reference TODO $named='eacute|egrave|ccirc|...'
+			$ignore_case = 'i';					// names can consist of upper and lower case letters
+			$entitystring = $alpha.'|'.$numdec.'|'.$numhex;
+		}
 		$escaped_entity = '&amp;('.$entitystring.')('.$terminator.')';
 
-		#// execute PHP built-in function, passing on optional parameters
-		#$output = htmlspecialchars($text,$quote_style,$charset);
 		// execute our replacement hsc_secure() function, passing on optional parameters
-		$output = $this->hsc_secure($text,$quote_style,$charset);
+		$output = $this->hsc_secure($text,$quote_style);
+
 		// "repair" escaped entities
 		// modifiers: s = across lines, i = case-insensitive
 		$output = preg_replace('/'.$escaped_entity.'/s'.$ignore_case,"&$1;",$output);
+
 		// return output
 		return $output;
 	}
@@ -1279,7 +1292,8 @@ class Wakka
 				if ($ping["authorpage"]) $rpcRequest .= "<member>\n<name>authorpage</name>\n<value>".$ping["authorpage"]."</value>\n</member>\n";
 			}
 			if ($ping["history"]) $rpcRequest .= "<member>\n<name>history</name>\n<value>".$ping["history"]."</value>\n</member>\n";
-			if ($ping["changelog"]) $rpcRequest .= "<member>\n<name>changelog</name>\n<value>".$this->htmlspecialchars_ent($ping["changelog"], '', '', 'XML')."</value>\n</member>\n";
+			#if ($ping["changelog"]) $rpcRequest .= "<member>\n<name>changelog</name>\n<value>".$this->htmlspecialchars_ent($ping["changelog"], '', '', 'XML')."</value>\n</member>\n";
+			if ($ping["changelog"]) $rpcRequest .= "<member>\n<name>changelog</name>\n<value>".$this->htmlspecialchars_ent($ping["changelog"],ENT_COMPAT,'XML')."</value>\n</member>\n";
 			$rpcRequest .= "</struct>\n</value>\n</param>\n";
 			$rpcRequest .= "</params>\n";
 			$rpcRequest .= "</methodCall>\n";

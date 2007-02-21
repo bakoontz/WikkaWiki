@@ -11,6 +11,8 @@
  * @author		{@link http://wikkawiki.org/DarTar Dario Taraborelli} (further cleanup, i18n, replaced JS dialogs with server-generated messages)
  * @author		{@link http://wikkawiki.org/NilsLindenberg Nils Lindenberg} (possibility to restrict registration)
  *
+ * @uses		Wakka::htmlspecialchars_ent()
+ * 
  * @todo		use different actions for registration / login / user settings;
  * @todo		add documentation links or short explanations for each option;
  * @todo		use error handler for displaying messages and highlighting
@@ -96,7 +98,7 @@ else if ($user = $this->GetUser())
 		$changescount = (int) $this->GetSafeVar('changescount', 'post');
 
 		// validate form input
-		switch(TRUE)
+		switch (TRUE)
 		{
 			case (strlen($email) == 0): //email is empty
 				$error = ERROR_EMPTY_EMAIL_ADDRESS;
@@ -147,7 +149,7 @@ else if ($user = $this->GetUser())
 	<fieldset id="account" class="usersettings"><legend><?php echo USER_ACCOUNT_LEGEND ?></legend>
 	<input type="hidden" name="action" value="update" />
 	<?php printf(USER_LOGGED_IN_AS_CAPTION, $this->Link($user['name'])); ?>
-	<input id="logout" type="button" value="<?php echo LOGOUT_BUTTON; ?>" onclick="document.location='<?php echo $this->href('', '', 'action=logout'); ?>'" />
+	<input id="logout" type="button" value="<?php echo LOGOUT_BUTTON; ?>" onclick="document.location='<?php echo $this->Href('', '', 'action=logout'); ?>'" />
 	</fieldset>
 	
 	<fieldset id="usersettings" class="usersettings"><legend><?php echo USER_SETTINGS_LEGEND ?></legend>

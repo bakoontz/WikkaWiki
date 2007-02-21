@@ -27,6 +27,7 @@
  * @uses	Wakka::HasAccess()
  * @uses	Wakka::IsAdmin()
  * @uses	Wakka::MiniHref()
+ * @uses	Wakka::htmlspecialchars_ent()
  *
  * @todo security: check file type, not only extension
  * @todo use buttons instead of links for file deletion; #72

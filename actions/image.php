@@ -9,6 +9,7 @@
  * 
  * @uses	Wakka::Link()
  * @uses	Wakka::ReturnSafeHTML()
+ * @uses	Wakka::htmlspecialchars_ent()
  * @input	string $url mandatory: URL of image to be embedded
  * @input	string $link optional: target link for image (optional). Supports URL, WikiName links, InterWiki links etc.
  * @input	string $title optional: title text displayed when mouse hovers above image

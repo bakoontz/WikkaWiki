@@ -81,8 +81,8 @@ if (isset($_REQUEST['phrase']) && ($phrase = $_REQUEST["phrase"]))
 				{
 					$matchString[0] = array_splice($matchString[0], SEARCH_MAX_SNIPPETS, count($matchString));
 				}
-				$text = $this->htmlspecialchars_ent(implode('<br />', $matchString[0]));
-				$text = str_replace('&lt;br /&gt;', '&hellip;<br />&hellip;', $text);
+				$text = $this->htmlspecialchars_ent(implode('<br />', $matchString[0]));	//TODO could be done in a single step
+				$text = str_replace('&lt;br /&gt;', '&hellip;<br />&hellip;', $text);		//TODO could be done in a single step
 			 # CSS-driven highlighting, tse stands for textsearchexpanded. We highlight $text in 2 steps, 
 			 #  We do not use <span>..</span> with preg_replace to ensure that the tag `span' won't be replaced if
 			 #  $phrase contains `span'.
@@ -106,7 +106,7 @@ if (isset($_REQUEST['phrase']) && ($phrase = $_REQUEST["phrase"]))
 			$match_str = SEARCH_N_MATCH;
 			break;
 	}
-	printf(SEARCH_RESULTS.": <strong>".$match_str."</strong> for <strong>".$this->htmlspecialchars_ent($phrase)."</strong><br />\n", $total_results); #i18n
+	printf(SEARCH_RESULTS.": <strong>".$match_str."</strong> for <strong>".$this->htmlspecialchars_ent($phrase)."</strong><br />\n", $total_results);
 	$result_page_list = $this->ReturnSafeHtml($result_page_list);
 	echo '<ol>'.$result_page_list.'</ol>'."\n";
 }
