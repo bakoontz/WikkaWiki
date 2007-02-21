@@ -20,14 +20,14 @@
 /**
  * Defaults
  */
-if (!defined('I18N_LANG')) define('I18N_LANG', 'en-us');	// FIXME wrong format
-if (!defined('I18N_ENCODING_UTF8')) define('I18N_ENCODING_UTF8', 'utf-8'); // should be UTF-8 ?
+if (!defined('I18N_LANG')) define('I18N_LANG', 'en-US');
+if (!defined('I18N_ENCODING_UTF8')) define('I18N_ENCODING_UTF8', 'UTF-8');
 if (!defined('RSS_REVISIONS_VERSION')) define('RSS_REVISIONS_VERSION','2.0');
 if (!defined('RSS_RECENTCHANGES_VERSION')) define('RSS_RECENTCHANGES_VERSION','0.92');
 
 header("Content-type: text/xml");
 
-$xml = '<?xml version="1.0" encoding="'.I18N_ENCODING.'"?>'."\n";
+$xml = '<?xml version="1.0" encoding="'.I18N_ENCODING_UTF8.'"?>'."\n";
 $xml .= '<rss version="'.RSS_REVISIONS_VERSION.'">'."\n";
 $xml .= "<channel>\n";
 $xml .= "<title>".$this->GetConfigValue("wakka_name")." - ".$this->tag."</title>\n";
@@ -45,7 +45,8 @@ if ($this->HasAccess("read"))
 			$xml .= "<item>\n";
 			$xml .= "<title>".$page["time"]."</title>\n";
 			$xml .= '<link>'.$this->Href('show', '', 'time='.urlencode($page['time'])).'</link>'."\n";
-			$xml .= '<description>'.sprintf(REVISIONS_EDITED_BY, $this->htmlspecialchars_ent($page["user"])).($page['note'] ? ' - '.$this->htmlspecialchars_ent($page['note'], '', '', 'XML') : '')."</description>\n";
+			#$xml .= '<description>'.sprintf(REVISIONS_EDITED_BY, $this->htmlspecialchars_ent($page["user"])).($page['note'] ? ' - '.$this->htmlspecialchars_ent($page['note'], '', '', 'XML') : '')."</description>\n";
+			$xml .= '<description>'.sprintf(REVISIONS_EDITED_BY, $this->htmlspecialchars_ent($page["user"])).($page['note'] ? ' - '.$this->htmlspecialchars_ent($page['note'],ENT_COMPAT,'XML') : '')."</description>\n";
 			$xml .= "\t<pubDate>".date("r",strtotime($page["time"]))."</pubDate>\n";               
 			$xml .= "</item>\n";
 		}
