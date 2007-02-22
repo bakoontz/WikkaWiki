@@ -83,7 +83,7 @@ else
 		if ($this->GetConfigValue('hide_comments') != 1)
 		{
 			echo '<!-- starting comments block-->'."\n";
-			echo '<div id="pagecomments">'."\n";
+			echo '<div id="comments">'."\n";
 			// store comments display in session
 			$tag = $this->GetPageTag();
 			if (!isset($_SESSION['show_comments'][$tag]))
