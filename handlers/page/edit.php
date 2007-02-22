@@ -40,6 +40,8 @@
  * @todo		use central regex library for validation;
  * @todo		document edit_button_position
  * @todo		don't show cancel button if JavaScript is not available
+ * @todo	replace $_REQUEST with either $_GET or $_POST (or both if really
+ * 			necessary) - #312 => NOT CLEAR here what to do  
  */
 
 /**
@@ -145,6 +147,7 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 	{
 		// We need to escape ALL entity refs before display so we display them _as_ entities instead of interpreting them
 		// so we use hsc_secure() on the edit note (as on the body)
+		// JW/2007-02-20: why is this? wouldn't it be  easier for the person editing to show actual characters instead of entities?  
 		$edit_note_field = '<input id="note" size="'.MAX_EDIT_NOTE_LENGTH.'" type="text" name="note" value="'.$this->hsc_secure($note).'" '.$highlight_note.'/> <label for="note">'.EDIT_NOTE_LABEL.'</label><br />'."\n";	#427
 	}
 
@@ -194,7 +197,8 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 		}
 		
 	}
-	elseif (!$this->page && strlen($this->tag) > $maxtaglen) # rename page
+	// RENAME screen
+	elseif (!$this->page && strlen($this->tag) > $maxtaglen)
 	{
 		$this->tag = substr($this->tag, 0, $maxtaglen); // truncate tag to feed a backlinks-handler with the correct value. may be omitted. it only works if the link to a backlinks-handler is built in the footer.
 		$output  = '<em class="error">'.sprintf(ERROR_TAG_TOO_LONG, $maxtaglen).'</em><br />'."\n";
@@ -214,9 +218,11 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 		}
 
 		// append a comment?
-		if (isset($_REQUEST['appendcomment']))
+		// TODO not clear if this is/was intended as a URL parameter (GET), or a check box on the edito form (POST) ....
+		// would be nice as a checkbox, provided it is acted upon only when user is actually submitting - NOT on preview or re-edit  
+		if (isset($_REQUEST['appendcomment'])) #312
 		{
-			$body = trim($body)."\n\n----\n\n--".$this->GetUserName().' '.sprintf(EDIT_COMMENT_TIMESTAMP_CAPTION,strftime("%c")).')';
+			$body = trim($body)."\n\n----\n\n-- ".$this->GetUserName().' '.sprintf(EDIT_COMMENT_TIMESTAMP_CAPTION,strftime("%c")).')';
 		}
 		$edit_buttons = '<fieldset><legend>'.EDIT_STORE_PAGE_LEGEND.'</legend>'."\n".
 						$edit_note_field.

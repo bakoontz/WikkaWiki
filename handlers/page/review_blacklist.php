@@ -19,13 +19,17 @@
  * 
  * @todo		move main <div> to templating class
  * @todo		make valid XHTML (can't mix table with ul)
+ * @todo	replace $_REQUEST with either $_GET or $_POST (or both if really
+ * 			necessary) - #312  
  */
 
 $IsAdmin = $this->IsAdmin();
 
-if ($IsAdmin && isset($_REQUEST["whitelist"]))
+#if ($IsAdmin && isset($_REQUEST["whitelist"]))
+if ($IsAdmin && isset($_GET["whitelist"]))
 {
-	$whitelist = $_REQUEST["whitelist"];
+	#$whitelist = $_REQUEST["whitelist"];
+	$whitelist = $_GET["whitelist"];
 	$this->Query("DELETE FROM ".$this->config["table_prefix"]."referrer_blacklist WHERE spammer = '".mysql_real_escape_string($whitelist)."'");
 	$this->Redirect($this->Href("review_blacklist"));
 }

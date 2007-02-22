@@ -2361,7 +2361,8 @@ class Wakka
 			$_COOKIE['wikka_pass'] = "";
 			$this->SetUser($user);
 		}
-		$this->SetPage($this->LoadPage($tag, (isset($_REQUEST["time"]) ? $_REQUEST["time"] :'')));
+		#$this->SetPage($this->LoadPage($tag, (isset($_REQUEST["time"]) ? $_REQUEST["time"] :'')));
+		$this->SetPage($this->LoadPage($tag, (isset($_GET['time']) ? $_GET['time'] :''))); #312
 
 		$this->LogReferrer();
 		$this->ACLs = $this->LoadAllACLs($this->tag);

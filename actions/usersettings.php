@@ -19,6 +19,8 @@
  * 				invalid input fields;
  * @todo		remove useless redirections;
  * @todo		[accessibility] make logout independent of JavaScript
+ * @todo	replace $_REQUEST with either $_GET or $_POST (or both if really
+ * 			necessary) - #312  
  */
 
 // defaults
@@ -72,17 +74,19 @@ if (isset($_SERVER['HTTP_REFERER']) && preg_match('/^'.preg_quote($this->config[
 }
 
 // append URL params depending on rewrite_mode
-$params = ($this->config['rewrite_mode'] == 1)? '?' : '&';
+$params = ($this->config['rewrite_mode'] == 1) ? '?' : '&';
 
-// BEGIN *** Login/Logout ***
+// BEGIN *** Logout ***
 // is user trying to log out?
-if (isset($_REQUEST['action']) && ($_REQUEST['action'] == 'logout'))
+#if (isset($_REQUEST['action']) && ($_REQUEST['action'] == 'logout'))	// JavaScript button with GET
+if (isset($_POST['logout']) && $_POST['logout'] == LOGOUT_BUTTON)		// replaced with normal form button #353, #312
 {
 	$this->LogoutUser();
 	$params .= 'out=true';
 	$this->Redirect($url.$params);
 }
-// END *** Login/Logout ***
+// END *** Logout ***
+
 // BEGIN *** Usersettings ***
 // user is still logged in
 else if ($user = $this->GetUser())
@@ -149,7 +153,8 @@ else if ($user = $this->GetUser())
 	<fieldset id="account" class="usersettings"><legend><?php echo USER_ACCOUNT_LEGEND ?></legend>
 	<input type="hidden" name="action" value="update" />
 	<?php printf(USER_LOGGED_IN_AS_CAPTION, $this->Link($user['name'])); ?>
-	<input id="logout" type="button" value="<?php echo LOGOUT_BUTTON; ?>" onclick="document.location='<?php echo $this->Href('', '', 'action=logout'); ?>'" />
+	<!--input id="logout" type="button" value="<?php echo LOGOUT_BUTTON; ?>" onclick="document.location='<?php echo $this->Href('', '', 'action=logout'); ?>'" /-->
+	<input id="logout" name="logout" type="submit" value="<?php echo LOGOUT_BUTTON; ?>" /><!--#353,#312-->
 	</fieldset>
 	
 	<fieldset id="usersettings" class="usersettings"><legend><?php echo USER_SETTINGS_LEGEND ?></legend>
@@ -480,6 +485,7 @@ else // user is not logged in
 	if (isset($_SESSION['go_back']))
 	{
 		// FIXME @@@ label for a checkbox should come AFTER it, not before
+		// FIXME @@@ 'go_back_tag' should be stripped of parameters 
 	?>
 	<label for="no_go_back"><?php printf(DONT_GO_BACK_LABEL, $_SESSION['go_back_tag']); ?></label>
 	<input type="checkbox" name="no_go_back" id="no_go_back"<?php if (isset($_POST['no_go_back'])) echo ' checked="checked"';?> />

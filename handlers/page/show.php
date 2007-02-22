@@ -31,6 +31,8 @@
  * @uses		Config::$hide_comments
  * 
  * @todo		move <div> to template;
+ * @todo	replace $_REQUEST with either $_GET or $_POST (or both if really
+ * 			necessary) - #312  
  */
 
 echo "\n".'<!--starting page content-->'."\n";
@@ -90,9 +92,11 @@ else
 			{
 				$_SESSION['show_comments'][$tag] = ($this->UserWantsComments()) ? '1' : '0';
 			}
-			if (isset($_REQUEST['show_comments']))
+			#if (isset($_REQUEST['show_comments']))
+			if (isset($_GET['show_comments'])) #312
 			{
-				switch($_REQUEST['show_comments'])
+				#switch($_REQUEST['show_comments'])
+				switch($_GET['show_comments']) #312
 				{
 				case COMMENT_NO_DISPLAY:
 					$_SESSION['show_comments'][$tag] = COMMENT_NO_DISPLAY;

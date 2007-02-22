@@ -14,26 +14,46 @@
  * @uses	Wakka::HasAccess()
  * @uses	Wakka::CheckMySQLVersion()
  * @uses	Wakka::htmlspecialchars_ent()
- * @todo	JW: cleanup temporary comments i18n
+ * 
+ * @todo	[accesibility] make form accessible 
+ * @todo	replace $_REQUEST with either $_GET or $_POST (or both if really
+ * 			necessary) - #312  
+ * @todo	i18n search button text  
  */
 
+// init
 $result_page_list = '';
+
+// get input
+$phrase = (isset($_GET['phrase'])) ? stripslashes(trim($_GET['phrase'])) : ''; #312
+$phrase_disp = $this->htmlspecialchars_ent($phrase);
+
+// display form
 ?>		
 <?php echo $this->FormOpen('', '', 'get'); ?>
 <table border="0" cellspacing="0" cellpadding="0">
 	<tr>
 		<td><?php echo SEARCH_FOR; ?>:&nbsp;</td>
-		<td><input name="phrase" size="40" value="<?php if (isset($_REQUEST['phrase'])) echo $this->htmlspecialchars_ent(stripslashes($_REQUEST['phrase'])); ?>" /> <input type="submit" value="Search"/></td>
+		<!--<td><input name="phrase" size="40" value="<?php if (isset($_REQUEST['phrase'])) echo $this->htmlspecialchars_ent(stripslashes($_REQUEST['phrase'])); ?>" /> <input type="submit" value="Search"/></td>-->
+		<td><input name="phrase" size="40" value="<?php echo $phrase_disp ?>" /> <input type="submit" value="Search"/></td><!--i18n-->
 	</tr>
 </table><br />
 <?php echo $this->FormClose(); ?>
 
 <?php
-if (isset($_REQUEST['phrase']) && ($phrase = $_REQUEST['phrase']))
+// strange construct here 
+// also inconsistent behavior:
+// if 'phrase' is empty, search tips would be displayed
+// if 'phrase' is empty after trimming and removing slashes, search tips NOT displayed
+
+// process search request  
+#if (isset($_REQUEST['phrase']) && ($phrase = $_REQUEST['phrase']))
+if ('' !== $phrase)
 {
-	$phrase_re = stripslashes(trim($phrase)); 
-	if (!$phrase_re) return;
-	$results = $this->FullTextSearch($phrase_re);
+	#$phrase_re = stripslashes(trim($phrase)); 
+	#if (!$phrase_re) return;
+	#$results = $this->FullTextSearch($phrase_re);
+	$results = $this->FullTextSearch($phrase);
 	$total_results = 0;
 	if ($results)
 	{
@@ -65,13 +85,13 @@ if (isset($_REQUEST['phrase']) && ($phrase = $_REQUEST['phrase']))
 		$expsearchlink = '<a href="'.$expsearchurl.'">'.SEARCH_EXPANDED_LINK_DESC.'</a>';
 
 		echo '<ol>'.$result_page_list.'</ol>'."\n";
-		#echo str_replace('$1', $this->Href('', 'TextSearchExpanded', 'phrase='.urlencode($phrase)), SEARCH_TRY_EXPANDED);
 		printf('<br />'.SEARCH_NOT_SURE_CHOICE.'<br />'.SEARCH_TRY_EXPANDED,$expsearchlink);
 	}
 }
-if ($this->CheckMySQLVersion(4,00,01))
+
+// display search tips
+if ($this->CheckMySQLVersion(4,00,01))	//TODO replace with version_compare
 {	
-	#print SEARCH_TIPS;
 	// define variables for template
 	$search_tips     = SEARCH_TIPS;
 	$search_word_1   = SEARCH_WORD_1;

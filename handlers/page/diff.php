@@ -19,18 +19,20 @@
  * @author David Delon
  * 
  * @uses	Wakka::HasAccess()
- * @uses Wakka::LoadPageById()
- * @uses Wakka::Href()
- * @uses Wakka::Format()
- * @uses Wakka::Redirect()
- * @uses Diff
+ * @uses	Wakka::LoadPageById()
+ * @uses	Wakka::Href()
+ * @uses	Wakka::Format()
+ * @uses	Wakka::Redirect()
+ * @uses	Diff
  * 
  * @todo	move main <div> to templating class;
  * @todo 	This is a really cheap way to do it. I think it may be more intelligent to write the two pages to temporary files and run /usr/bin/diff over them. Then again, maybe not.
  * 			JW: that may be nice but won't work on a Windows system ;) 
+ * @todo	replace $_REQUEST with either $_GET or $_POST (or both if really
+ * 			necessary) - #312  
  */
 
-echo '<div class="page">'."\n"; //TODO: move to templating class
+echo '<div class="page">'."\n"; //TODO: move to templating class //TODO move _after_ redirect
 
 // If javascript is disabled, user may get here after pressing button Next... on the /revisions handler. 
 if ((isset($_GET['more_revisions'])) && (isset($_GET['a'])) && (isset($_GET['start'])))
@@ -44,23 +46,26 @@ if ($this->HasAccess("read"))
 	// @@@ TODO needed only if we're NOT doing a 'fastdiff'
 	// instead of copping out we could use fastdiff as fallback if the library is missing:
 	// first determine diff method based on params AND presense of library; then do it
-	if (file_exists('libs/diff.lib.php')) require_once('libs/diff.lib.php');
+	if (file_exists('libs'.DIRECTORY_SEPARATOR.'diff.lib.php')) require_once('libs'.DIRECTORY_SEPARATOR.'diff.lib.php');	#89
 	else die(ERROR_DIFF_LIBRARY_MISSING);	// @@@ ERROR: end div won't be produced here
 
 	// load pages
-	$pageA = $this->LoadPageById($_REQUEST['a']);
-	$pageB = $this->LoadPageById($_REQUEST['b']);
+	#$pageA = $this->LoadPageById($_REQUEST['a']);
+	#$pageB = $this->LoadPageById($_REQUEST['b']);
+	$pageA = $this->LoadPageById($_GET['a']);	#312
+	$pageB = $this->LoadPageById($_GET['b']);	#312
 	if (!$pageA || !$pageB)
 	{
 		echo '<em class="error">'.ERROR_BAD_PARAMETERS.'</em><br />';
 		return;	// @@@ ERROR: end div won't be produced here
 	}
-	// set up header variables
+	// set up heading variables
 	$linkPageA = '<a href="'.$this->Href('', '', 'time='.urlencode($pageA['time'])).'">'.$pageA['time'].'</a>';
 	$linkPageB = '<a href="'.$this->Href('', '', 'time='.urlencode($pageB['time'])).'">'.$pageB['time'].'</a>';
 
 	// If asked, call original diff 
-	if (isset($_REQUEST['fastdiff']) && $_REQUEST['fastdiff'])
+	#if (isset($_REQUEST['fastdiff']) && $_REQUEST['fastdiff'])
+	if (isset($_GET['fastdiff']) && $_GET['fastdiff'])	#312
 	{
 
 		// prepare bodies
@@ -79,13 +84,13 @@ if ($this->HasAccess("read"))
 		if ($added)
 		{
 			// remove blank lines
-			$output .= '<br />'."\n".'<strong>'.DIFF_ADDITIONS_HEADER.'</strong><br />'."\n";
+			$output .= '<br />'."\n".'<strong>'.DIFF_ADDITIONS_HEADER.'</strong><br />'."\n"; //TODO make real heading
 			$output .= '<ins>'.$this->Format(implode("\n", $added)).'</ins>';
 		}
 
 		if ($deleted)
 		{
-			$output .= '<br />'."\n".'<strong>'.DIFF_DELETIONS_HEADER.'</strong><br />'."\n";
+			$output .= '<br />'."\n".'<strong>'.DIFF_DELETIONS_HEADER.'</strong><br />'."\n"; //TODO make real heading
 			$output .= '<del>'.$this->Format(implode("\n", $deleted)).'</del>';
 		}
 	
@@ -97,7 +102,6 @@ if ($this->HasAccess("read"))
 	}
 	else
 	{
-
 		// extract text from bodies
 		$textA = $pageB['body'];
 		$textB = $pageA['body'];

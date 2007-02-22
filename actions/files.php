@@ -21,7 +21,7 @@
  * 
  * @input 	string 	$download  	optional: prints a link to the file specified in the string
  * 			string 	$text		optional: a text for the link provided with the download parameter
- * @output a form for file uploading/downloading
+ * @output	a form for file uploading/downloading and a table with an overview of attached files
  *
  * @uses	Wakka::Href()
  * @uses	Wakka::HasAccess()
@@ -30,8 +30,10 @@
  * @uses	Wakka::htmlspecialchars_ent()
  *
  * @todo security: check file type, not only extension
- * @todo use buttons instead of links for file deletion; #72
- * @todo replace $_REQUEST in files handler with $_POST and $_GET; #72
+ * @todo use buttons instead of links for file deletion; #72 comment 7
+ * @todo similarly replace download link with POST form button -> files handler 
+ * 		 can then use only $_POST instead of $_GET
+ * @todo replace $_REQUEST in files handler with $_POST / $_GET; #72, #312
  * @todo replace intranet mode with fine-grained file ownership/ACL;
  * @todo integrate with edit handler for easy insertion of file links;
  * @todo maybe move some internal utilities to Wakka class?
@@ -58,7 +60,7 @@ if(!defined('ALLOWED_FILE_EXTENSIONS')) define('ALLOWED_FILE_EXTENSIONS', 'gif|j
 /** Displayed date format */
 if(!defined('UPLOAD_DATE_FORMAT')) define('UPLOAD_DATE_FORMAT', 'Y-m-d H:i'); //TODO use general config settings for date format 
 
-// ---- Errore code constants ----
+// ---- Error code constants ----
 if (!defined('UPLOAD_ERR_OK')) define('UPLOAD_ERR_OK', 0);
 if (!defined('UPLOAD_ERR_INI_SIZE')) define('UPLOAD_ERR_INI_SIZE', 1);
 if (!defined('UPLOAD_ERR_FORM_SIZE')) define('UPLOAD_ERR_FORM_SIZE', 2);
@@ -178,7 +180,7 @@ else
 // 2. print a simple download link for the specified file, if it exists
 if (isset($vars['download']))
 {
-	if (file_exists($upload_path.DIRECTORY_SEPARATOR.$vars['download']))
+	if (file_exists($upload_path.DIRECTORY_SEPARATOR.$vars['download'])) #89
 	{
 		if (!isset($vars['text']))
 		{
@@ -274,7 +276,7 @@ elseif ($this->page && $this->HasAccess('read') && $this->method == 'show' && $i
 	}
 }
 
-// 4. display file list
+// 4. display attached files table
 if (is_readable($upload_path))
 { 
 	$is_readable = TRUE;
@@ -289,6 +291,7 @@ if (is_readable($upload_path))
 			$delete_link = '<!-- delete -->';
 			if (userCanUpload())
 			{
+				// TODO #72
 				$delete_link = '<a class="keys" href="'
 				.$this->Href('files.xml',$this->tag,'action=delete&amp;file='.rawurlencode($file))
 				.'" title="'.sprintf(DELETE_LINK_TITLE, $file).'">x</a>';
@@ -298,10 +301,11 @@ if (is_readable($upload_path))
 				.'" title="'.sprintf(DOWNLOAD_LINK_TITLE, $file).'">'.urldecode($file).'</a>';
 			$size = bytesToHumanReadableUsage(filesize($upload_path.DIRECTORY_SEPARATOR.$file)); #89
 			$date = date(UPLOAD_DATE_FORMAT, filemtime($upload_path.DIRECTORY_SEPARATOR.$file)); #89
+
 			$output_files .= '<tr>'."\n";
 			if (userCanUpload())
 			{
-				$output_files .=	'<td>'.$delete_link.'</td>'."\n";
+				$output_files .=	'<td>'.$delete_link.'</td>'."\n";	// TODO #72
 			}
 			$output_files .=	'<td>'.$download_link.'</td>'."\n"
 				.'<td>'.$date.'</td>'."\n"

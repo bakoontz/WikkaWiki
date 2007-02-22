@@ -14,6 +14,8 @@
  * 			Wakka::Wakka::cleanUrl() to secure our input parameters 
  * 			(cf. mindmap action!)
  * @todo	we probably should be using $_GET instead of $_REQUEST as well
+ * @todo	replace $_REQUEST with either $_GET or $_POST (or both if really
+ * 			necessary) - #312  
  */
 
 if (!defined('FREEMIND_PROJECT_URL')) define('FREEMIND_PROJECT_URL', 'http://freemind.sourceforge.net/');
@@ -68,10 +70,10 @@ else die('Language File (/lang/en.inc.php) not found! Please add the file.');
    <body>
 
 <?php
-#$mindmap_url = htmlspecialchars(preg_replace('/&amp;/','&',(trim($_REQUEST["url"]))));
-#if (isset($_REQUEST["height"])) $height = htmlspecialchars(trim($_REQUEST["height"]));
-$mindmap_url = hsc_secure(preg_replace('/&amp;/','&',(trim($_REQUEST['url'])))); // duplicates Wakka::cleanUrl()
-if (isset($_REQUEST['height'])) $height = hsc_secure(trim($_REQUEST['height'])); // more or less equivalent to Wakka::GetSafeVar()
+#$mindmap_url = hsc_secure(preg_replace('/&amp;/','&',(trim($_REQUEST['url'])))); // duplicates Wakka::cleanUrl()
+#if (isset($_REQUEST['height'])) $height = hsc_secure(trim($_REQUEST['height'])); // more or less equivalent to Wakka::GetSafeVar()
+$mindmap_url = hsc_secure(preg_replace('/&amp;/','&',(trim($_GET['url'])))); #312 // duplicates Wakka::cleanUrl()
+if (isset($_GET['height'])) $height = hsc_secure(trim($_GET['height'])); #312 // more or less equivalent to Wakka::GetSafeVar()
 
 if ($mindmap_url) {
 

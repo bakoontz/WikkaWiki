@@ -23,20 +23,26 @@
  * @uses		Wakka::IsAdmin()
  * @uses		Wakka::redirect()
  * @uses		Config::$upload_path
+ * 
+ * @todo	replace $_REQUEST with either $_GET or $_POST (or both if really
+ * 			necessary) - #312  
  */
 
 // upload path
 if ($this->config['upload_path'] == '') $this->config['upload_path'] = 'files';
-$upload_path = $this->config['upload_path'].'/'.$this->GetPageTag();
+$upload_path = $this->config['upload_path'].DIRECTORY_SEPARATOR.$this->GetPageTag(); #89
 if (! is_dir($upload_path)) mkdir_r($upload_path);
 
 // do the action
-switch ($_REQUEST['action']) 
+#switch ($_REQUEST['action']) 
+switch ($_GET['action'])	#312 
 {
-	case 'download':
+	case 'download':	//TODO make shared download code for this and grab code handler
 		header('Accept-Ranges: bytes');
-		$_REQUEST['file'] = basename($_REQUEST['file']);
-		$path = "{$upload_path}/{$_REQUEST['file']}";
+		#$_REQUEST['file'] = basename($_REQUEST['file']);
+		#$path = "{$upload_path}/{$_REQUEST['file']}";
+		$_GET['file'] = basename($_GET['file']); #312
+		$path = $upload_path.DIRECTORY_SEPARATOR.$_GET['file'];	#89, #312
 		$filename = basename($path);
 		Header("Content-Type: application/x-download");
 		Header("Content-Disposition: attachment; filename=\"".urldecode($filename)."\"");
@@ -71,7 +77,8 @@ switch ($_REQUEST['action'])
 	case 'delete':
 		if ($this->IsAdmin()) 
 		{
-			@unlink("{$upload_path}/{$_REQUEST['file']}");
+			#@unlink("{$upload_path}/{$_REQUEST['file']}");
+			@unlink($upload_path.DIRECTORY_SEPARATOR.$_GET['file']); #89, #312 // TODO if this is admin-only, why hide any errors?
 		}
 		print $this->redirect($this->Href());
 }

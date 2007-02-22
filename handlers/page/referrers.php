@@ -22,6 +22,8 @@
  * @todo		move main <div> to templating class
  * @todo		better separation between data gathering and output
  * @todo		$heading should become heading, not bold text
+ * @todo	replace $_REQUEST with either $_GET or $_POST (or both if really
+ * 			necessary) - #312  
  */
 
 $global = '';
@@ -34,10 +36,13 @@ $ref_domains_to_page_url = $this->Href('referrers_sites');
 $ref_urls_to_wiki_url = $this->Href('referrers','','global=1');
 $ref_urls_to_page_url = $this->Href('referrers');
 $ref_blacklist_url = $this->Href('review_blacklist');
-if (isset($_REQUEST["global"]))
+#if (isset($_REQUEST["global"]))
+if (isset($_GET["global"])) #312
 {
 	// referrers to this wiki
-	$global = $_REQUEST["global"];
+	// prepare UI
+	#$global = $_REQUEST["global"];
+	$global = $_GET["global"]; #312
 	$referrers_domains_link = '<a href="'.$ref_domains_to_wiki_url.'">'.REFERRERS_DOMAINS_LINK_DESC.'</a>';
 	$heading = sprintf(REFERRERS_URLS_TO_WIKI, $referrers_domains_link);
 
@@ -49,6 +54,7 @@ if (isset($_REQUEST["global"]))
 else
 {
 	// referrers to this page
+	// prepare UI
 	switch (intval($this->GetConfigValue('referrers_purge_time')))
 	{
 		case 0: 

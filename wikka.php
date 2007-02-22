@@ -29,6 +29,8 @@
  * 
  * @todo use templating class for page generation;
  * @todo add phpdoc documentation for configuration array elements;
+ * @todo	replace $_REQUEST with either $_GET or $_POST (or both if really
+ * 			necessary) - #312  
  */
 
 /**
@@ -88,7 +90,7 @@ if (file_exists('libs/Wakka.class.php')) require_once('libs/Wakka.class.php');
 else die(ERROR_WAKKA_LIBRARY_MISSING);
 
 // stupid version check
-if (!isset($_REQUEST)) die(ERROR_WRONG_PHP_VERSION);
+if (!isset($_REQUEST)) die(ERROR_WRONG_PHP_VERSION); // TODO replace with php version_compare
 
 /** 
  * Workaround for the amazingly annoying magic quotes.
@@ -165,7 +167,8 @@ if ($wakkaConfig['wakka_version'] !== WAKKA_VERSION)
 	 * Start installer.
 	 */
 	$installAction = 'default';
-	if (isset($_REQUEST['installAction'])) $installAction = trim($_REQUEST['installAction']);
+	#if (isset($_REQUEST['installAction'])) $installAction = trim($_REQUEST['installAction']);
+	if (isset($_POST['installAction'])) $installAction = trim($_POST['installAction']);	#312
 	if (file_exists('setup/header.php')) include('setup/header.php'); else print '<em>'.ERROR_SETUP_HEADER_MISSING.'</em>';
 	if (file_exists('setup/'.$installAction.'.php')) include('setup/'.$installAction.'.php'); else print '<em>'.ERROR_SETUP_FILE_MISSING.'</em>';
 	if (file_exists('setup/footer.php')) include('setup/footer.php'); else print '<em>'.ERROR_SETUP_FOOTER_MISSING.'</em>';
@@ -180,17 +183,23 @@ session_cache_limiter(''); #279
 session_start();
 
 /**
- * Fetch wakka location
+ * Fetch wakka location (requested page + parameters)
+ * 
+ * @todo files action uses POST, everything else uses GET #312
+ * @todo use different name - $wakka clashes with $wakka object (which should be #Wakka)
  */
-$wakka = $_REQUEST["wakka"];
+#$wakka = $_REQUEST["wakka"];
+$wakka = $_GET['wakka']; #312
 
 /**
  * Remove leading slash.
+ * @todo use different name - $wakka clashes with $wakka object (which should be #Wakka)
  */
 $wakka = preg_replace("/^\//", "", $wakka);
 
 /**
  * Split into page/method
+ * @todo use different name - $wakka clashes with $wakka object (which should be #Wakka)
  */
 if (preg_match("#^(.+?)/(.*)$#", $wakka, $matches)) list(, $page, $method) = $matches;
 else if (preg_match("#^(.*)$#", $wakka, $matches)) list(, $page) = $matches;
@@ -206,11 +215,13 @@ if ((strtolower($page) == $page) && (isset($_SERVER['REQUEST_URI']))) #38
 
 /**
  * Create Wakka object
+ * @todo use name with Capital for object; also clashes with $wakka (above) now
  */
 $wakka =& new Wakka($wakkaConfig);
 
 /** 
  * Check for database access.
+ * @todo use name with Capital for object; also clashes with $wakka (above) now
  */
 if (!$wakka->dblink)
 {
@@ -230,6 +241,7 @@ TPLERRDBACCESS;
 
 /** 
  * Run the engine.
+ * @todo use name with Capital for object; also clashes with $wakka (above) now
  */
 if (!isset($method)) $method='';
 $wakka->Run($page, $method);
@@ -248,7 +260,7 @@ $content =  ob_get_contents();
  */
 if ( isset($_SERVER['HTTP_ACCEPT_ENCODING']) && strstr ($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip') && function_exists('gzencode') ) #38
 {
-   // Tell the browser the content is compressed with gzip
+	// Tell the browser the content is compressed with gzip
 	header ("Content-Encoding: gzip");
 	$page_output = gzencode($content);
 	$page_length = strlen($page_output);

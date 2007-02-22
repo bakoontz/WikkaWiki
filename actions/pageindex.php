@@ -21,13 +21,16 @@
  * @output		a list of pages accessible to the current user
  * @todo		add filtering options
  * @todo		fix RE (#104 etc.)
+ * @todo	replace $_REQUEST with either $_GET or $_POST (or both if really
+ * 			necessary) - #312  
  */
 
 if ($pages = $this->LoadPageTitles())
 {
 	// filter by letter
-	if (isset($_REQUEST['letter'])) $requested_letter = $_REQUEST['letter']; else $requested_letter = '';
-	if (!$requested_letter && isset($letter)) $requested_letter = strtoupper($letter); 
+	#if (isset($_REQUEST['letter'])) $requested_letter = $_REQUEST['letter']; else $requested_letter = '';
+	$requested_letter = (isset($_GET['letter'])) ? $_GET['letter'] : ''; #312 
+	if (!$requested_letter && isset($letter)) $requested_letter = strtoupper($letter); // TODO action parameter (letter) needs to be validated 
 
 	// get things started
 	$cached_username = $this->GetUserName();

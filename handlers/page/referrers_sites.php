@@ -20,6 +20,8 @@
  * @todo		move <div> to template
  * @todo		better separation between data gathering and output
  * @todo		$heading should become heading, not bold text
+ * @todo	replace $_REQUEST with either $_GET or $_POST (or both if really
+ * 			necessary) - #312  
  */
 
 $global = '';
@@ -32,11 +34,13 @@ $ref_domains_to_page_url = $this->Href('referrers_sites');
 $ref_urls_to_wiki_url = $this->Href('referrers','','global=1');
 $ref_urls_to_page_url = $this->Href('referrers');
 $ref_blacklist_url = $this->Href('review_blacklist');
-if (isset($_REQUEST["global"]))
+#if (isset($_REQUEST["global"]))
+if (isset($_GET["global"])) #312
 {
 	// referrers to this wiki
 	// prepare UI
-	$global = $_REQUEST["global"];
+	#$global = $_REQUEST["global"];
+	$global = $_GET["global"]; #312
 	$referrers_urls_link = '<a href="'.$ref_urls_to_wiki_url.'">'.REFERRERS_URLS_LINK_DESC.'</a>';
 	$heading = sprintf(REFERRERS_DOMAINS_TO_WIKI, $referrers_urls_link);
 
