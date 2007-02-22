@@ -70,7 +70,7 @@ define('WIKKA_JAVA_PLUGIN_NEEDED','Java 1.4.1 (or later) Plug-in is needed to ru
  */
 // wikka
 define('ERROR_WAKKA_LIBRARY_MISSING','The necessary file "libs/Wakka.class.php" could not be found. To run Wikka, please make sure the file exists and is placed in the right directory!');
-define('ERROR_WRONG_PHP_VERSION','$_REQUEST[] not found. Wakka requires PHP 4.1.0 or higher!');
+define('ERROR_WRONG_PHP_VERSION','$_REQUEST[] not found. Wakka requires PHP 4.1.0 or higher!'); //TODO remove referral to PHP internals; refer only to required version
 define('ERROR_SETUP_FILE_MISSING','A file of the installer / upgrader was not found. Please install Wikka again!');
 define('ERROR_SETUP_HEADER_MISSING','The file "setup/header.php" was not found. Please install Wikka again!');
 define('ERROR_SETUP_FOOTER_MISSING','The file "setup/footer.php" was not found. Please install Wikka again!');
@@ -362,7 +362,7 @@ define('SEARCH_ONE_MATCH','One match found');
 define('SEARCH_N_MATCH','%d matches found'); // %d - number of hits
 define('SEARCH_RESULTS','Search results:');
 define('SEARCH_NOT_SURE_CHOICE','Not sure which page to choose?');
-define('SEARCH_EXPANDED','Expanded Text Search'); // search link description
+define('SEARCH_EXPANDED_LINK_DESC','Expanded Text Search'); // search link description
 define('SEARCH_TRY_EXPANDED','Try the %s which shows surrounding text.'); // %s expanded search link
 /*
 define('SEARCH_TIPS', "<br /><br /><hr /><br /><strong>Search Tips:</strong><br /><br />"
@@ -589,7 +589,7 @@ define('PAGE_DELETION_CANCEL_BUTTON','Cancel');
  * Language constant used by the {@link diff.php diff} (page) handler
  */
 // diff
-define('ERROR_DIFF_LIBRARY_MISSING','The necessary file "libs/diff.lib.php" could not be found. Please make sure the file exists and is placed in the right directory!'); //TODO 'Please make sure' should be 'please inform WikiAdmin' - end user can't "make sure"
+define('ERROR_DIFF_LIBRARY_MISSING','The necessary file "libs'.DIRECTORY_SEPARATOR.'diff.lib.php" could not be found. Please make sure the file exists and is placed in the right directory!'); //TODO 'Please make sure' should be 'please inform WikiAdmin' - end user can't "make sure"
 define('ERROR_BAD_PARAMETERS','There is something wrong with parameters you supplied, it\'s very likely that one of the versions you want to compare has been deleted.');
 define('DIFF_ADDITIONS_HEADER','Additions:');
 define('DIFF_DELETIONS_HEADER','Deletions:');
