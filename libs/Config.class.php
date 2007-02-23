@@ -378,13 +378,5 @@ class Config
 	 */
 	var $gui_editor = '1';
 
-	/**
-	 * This method sets the appropriate system variables from config settings for building Wikka URIs.
-	 */
-	function Config()
-	{
-		$this->rewrite_mode = (preg_match('/'.preg_quote('wikka.php').'$/', $_SERVER['REQUEST_URI']) ? '0' : '1');
-		$this->base_url = 'http://'.$_SERVER['SERVER_NAME'].($_SERVER['SERVER_PORT'] != 80 ? ':'.$_SERVER['SERVER_PORT'] : '').$_SERVER['REQUEST_URI'].(preg_match('/'.preg_quote('wikka.php').'$/', $_SERVER['REQUEST_URI']) ? '?wakka=' : '');
-	}
 }
 ?>

@@ -130,6 +130,7 @@ if (file_exists($configfile)) include($configfile);
 
 $wakkaConfigLocation = $configfile;
 $wakkaConfig = array_merge($wakkaDefaultConfig, $wakkaConfig);
+$htaccessLocation = str_replace('\\', '/', dirname(__FILE__)).'/.htaccess';
 
 /**
  * Check for locking.
@@ -163,15 +164,7 @@ if (file_exists('locked'))
 if (!isset($wakkaConfig['wakka_version'])) $wakkaConfig['wakka_version'] = 0;
 if ($wakkaConfig['wakka_version'] !== WAKKA_VERSION)
 {
-	/**
-	 * Start installer.
-	 */
-	$installAction = 'default';
-	#if (isset($_REQUEST['installAction'])) $installAction = trim($_REQUEST['installAction']);
-	if (isset($_POST['installAction'])) $installAction = trim($_POST['installAction']);	#312
-	if (file_exists('setup/header.php')) include('setup/header.php'); else print '<em>'.ERROR_SETUP_HEADER_MISSING.'</em>';
-	if (file_exists('setup/'.$installAction.'.php')) include('setup/'.$installAction.'.php'); else print '<em>'.ERROR_SETUP_FILE_MISSING.'</em>';
-	if (file_exists('setup/footer.php')) include('setup/footer.php'); else print '<em>'.ERROR_SETUP_FOOTER_MISSING.'</em>';
+	if (file_exists('setup/index.php')) include('setup/index.php'); else print '<em>'.ERROR_SETUP_FILE_MISSING.'</em>';
 	exit;
 }
 

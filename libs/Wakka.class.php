@@ -1429,7 +1429,9 @@ class Wakka
 	 */
 	function Href($method = "", $tag = "", $params = "")
 	{
-		$href = $this->config["base_url"].$this->MiniHref($method, $tag);
+		$href = $this->config['base_url'];
+		if ($this->config['rewrite_mode'] == 0) $href .= 'wikka.php?wakka=';
+		$href .= $this->MiniHref($method, $tag);
 		if ($params)
 		{
 			$href .= ($this->config["rewrite_mode"] ? "?" : "&amp;").$params;
