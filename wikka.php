@@ -47,7 +47,7 @@ error_reporting (E_ALL ^ E_NOTICE);
 /**
  * Defines current version. Do not change the version number or you will have problems upgrading.
  */
-if (!defined('WAKKA_VERSION')) define('WAKKA_VERSION', '1.1.6.3');
+if (!defined('WAKKA_VERSION')) define('WAKKA_VERSION', '1.1.6.2');
 
 if(!defined('BASIC_COOKIE_NAME')) define('BASIC_COOKIE_NAME', 'Wikkawiki');
 
