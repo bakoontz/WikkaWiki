@@ -130,7 +130,7 @@ function check() {
 		<li>if Rewrite Mode is enabled, make sure the base URL ends with a slash "/",<br />e.g. <tt>http://www.example.com/</tt></li>
 		</ul></td>
 	</tr>
-	<tr><td align="right" nowrap>Base URL:</td><td><input type="text" size="50" name="config[base_url]" value="<?php echo $wakkaConfig["base_url"] ?>/" /></td></tr>
+	<tr><td align="right" nowrap>Base URL:</td><td><input type="text" size="50" name="config[base_url]" value="<?php echo $wakkaConfig["base_url"] ?>" /></td></tr>
 
 	<tr><td></td><td>Rewrite mode is used to produce a nicer URL for your Wikka site. If Rewrite mode is modified, the base URL should be changed accordingly.
 	<ul>
