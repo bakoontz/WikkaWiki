@@ -1,4 +1,25 @@
 <?php
+/**
+ * Wikka Formatting Engine
+ * 
+ * This is the main formatting engine used by Wikka to parse wiki markup and render valid XHTML.
+ * 
+ * @package Formatters
+ * @version $Id$
+ * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
+ * @filesource
+ *
+ * @author {@link http://wikkawiki.org/JsnX Jason Tourtelotte}
+ * @author {@link http://wikkawiki.org/DotMG Mahefa Randimbisoa}
+ * @author {@link http://wikkawiki.org/JavaWoman Marjolein Katsma}
+ * @author {@link http://wikkawiki.org/NilsLindenberg Nils Lindenberg} (code cleanup)
+ * @author {@link http://wikkawiki.org/DarTar Dario Taraborelli} (grab handler and filename support for codeblocks)
+ * 
+ * @uses	Wakka::htmlspecialchars_ent()
+ * 
+ * @todo		add support for formatter plugins;
+ * @todo		use a central RegEx library #34;
+ */
 
 // i18n strings
 if (!defined('GRABCODE_BUTTON_VALUE')) define('GRABCODE_BUTTON_VALUE', 'Grab');
@@ -235,7 +256,7 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 			if (isset($language) && isset($wakka->config['geshi_path']) && file_exists($geshi_hi_path.'/'.$language.'.php'))
 			{
 				// check if specified filename is valid and generate code block header
-				if (isset($filename) && strlen($filename) > 0 && strlen($invalid) == 0) # TODO: use central regex library for filename validation
+				if (isset($filename) && strlen($filename) > 0 && strlen($invalid) == 0) # #34 TODO: use central regex library for filename validation
 				{
 					$valid_filename = $filename;
 					// create code block header
@@ -382,7 +403,7 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 		else if (preg_match("/-{4,}/", $thing, $matches))
 		{
 			// TODO: This could probably be improved for situations where someone puts text on the same line as a separator.
-			//       Which is a stupid thing to do anyway! HAW HAW! Ahem.
+			//	   Which is a stupid thing to do anyway! HAW HAW! Ahem.
 			$br = 0;
 			return "<hr />\n";
 		}
