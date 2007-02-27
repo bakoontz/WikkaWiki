@@ -1,3 +1,16 @@
+<?php
+/**
+ * Open a fullscreen window with an embedded Freemind map
+ * 
+ * @package  3rdParty
+ * @subpackage Freemind
+ * @author	{@link http://wikkawiki.org/JsnX Jason Tourtelotte} (first draft)
+ * @author	{@link http://wikkawiki.org/JavaWoman Marjolein Katsma} (fixed notices, secured parameters, XHTML compliancy)
+ * @license  http://gnu.org/copyleft/gpl.html GNU GPL
+ * @version  $Id$
+ * @filesource
+ */
+?>
 <?php header("Content-Type: text/html; charset=ISO-8859-1");  ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
    "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
@@ -12,15 +25,6 @@
    <body>
 
 <?php
-
-/* FIXED:
-	- secured $mindmap_url parameter (can't use method from wikka.php...)
-	- secured $height parameter
-	- fixed notices for undefined variables
-	- made floated box at the top valid XHTML
-	should be solved more cleanly later - JavaWoman 2005-01-20
-*/
-
 $mindmap_url = htmlspecialchars(preg_replace('/&amp;/','&',(trim($_REQUEST["url"]))));
 if (isset($_REQUEST["height"])) $height = htmlspecialchars(trim($_REQUEST["height"]));
 
