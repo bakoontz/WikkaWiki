@@ -349,10 +349,10 @@ class Wakka
 	}
 	
 	/**
-	 * Strip potentiall dangerous tags from given html.
+	 * Strip potentially dangerous tags from embedded HTML.
 	 *
-	 * @param	string $html mandatory: the html-text to be secured
-	 * @return	string the filtered html-text
+	 * @param	string $html mandatory: HTML to be secured
+	 * @return	string sanitized HTML
 	 */
 	function ReturnSafeHTML($html)
 	{
