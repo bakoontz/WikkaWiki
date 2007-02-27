@@ -12,6 +12,28 @@
  * @author		{@link http://wikkawiki.org/Dartar Dario Taraborelli} (preliminary code cleanup, i18n)
  * @author		{@link http://wikkawiki.org/DotMG Mahefa Randimbisoa} (bugfixes)
  *
+ * @uses Config::$edit_buttons_position
+ * @uses Config::$require_edit_note
+ * @uses Config::$gui_editor
+ * @uses Wakka::ClearLinkTable()
+ * @uses Wakka::ExistsPage()
+ * @uses Wakka::Footer()
+ * @uses Wakka::Format()
+ * @uses Wakka::FormClose()
+ * @uses Wakka::FormOpen()
+ * @uses Wakka::GetUser()
+ * @uses Wakka::GetUserName()
+ * @uses Wakka::HasAccess()
+ * @uses Wakka::Header()
+ * @uses Wakka::Href()
+ * @uses Wakka::htmlspecialchars_ent()
+ * @uses Wakka::hsc_secure()
+ * @uses Wakka::LoadSingle()
+ * @uses Wakka::Redirect()
+ * @uses Wakka::SavePage()
+ * @uses Wakka::StartLinkTracking()
+ * @uses Wakka::StopLinkTracking()
+ * @uses Wakka::WriteLinkTable()
  * @todo		move main <div> to templating class;
  * @todo		optimization using history.back();
  * @todo		use central regex library for validation;
@@ -148,7 +170,6 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 		// so we use htmlspecialchars on the edit note (as on the body)
 		if ($this->config['require_edit_note'] != 2) //check if edit_notes are enabled
 		{
-			#$preview_buttons .= '<input size="'.MAX_EDIT_NOTE_LENGTH.'" type="text" name="note" value="'.htmlspecialchars($note).'" '.$highlight_note.'/>'.LABEL_EDIT_NOTE.'<br />'."\n";
 			$preview_buttons .= '<input size="'.MAX_EDIT_NOTE_LENGTH.'" type="text" name="note" value="'.hsc_secure($note).'" '.$highlight_note.'/>'.LABEL_EDIT_NOTE.'<br />'."\n";
 		}
 		$preview_buttons .= '<input name="submit" type="submit" value="'.INPUT_SUBMIT_STORE.'" accesskey="'.ACCESSKEY_STORE.'" />'."\n".
@@ -164,7 +185,7 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 			'<input type="hidden" name="previous" value="'.$previous.'" />'."\n".
 			// We need to escape ALL entity refs before display so we display them _as_ entities instead of interpreting them
 			// hence htmlspecialchars() instead of htmlspecialchars_ent() which UNescapes entities!
-			#'<input type="hidden" name="body" value="'.htmlspecialchars($body).'" />'."\n";
+			// JW/2007-02-20: why is this? wouldn't it be  easier for the person editing to show actual characters instead of entities?  
 			'<input type="hidden" name="body" value="'.$this->hsc_secure($body).'" />'."\n";	#427
 
 
@@ -200,14 +221,13 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 			'<input type="hidden" name="previous" value="'.$previous.'" />'."\n".
 			// We need to escape ALL entity refs before display so we display them _as_ entities instead of interpreting them
 			// hence htmlspecialchars() instead of htmlspecialchars_ent() which UNescapes entities!
-			#'<textarea id="body" name="body">'.htmlspecialchars($body).'</textarea><br />'."\n";
+			// JW/2007-02-20: why is this? wouldn't it be  easier for the person editing to show actual characters instead of entities?  
 			'<textarea id="body" name="body">'.$this->hsc_secure($body).'</textarea><br />'."\n";	#427
 		// add Edit note
 		// We need to escape ALL entity refs before display so we display them _as_ entities instead of interpreting them
 		// so we use htmlspecialchars on the edit note (as on the body)
 		if ($this->config['require_edit_note'] != 2) //check if edit_notes are enabled
 		{
-			#$output .= '<input size="'.MAX_EDIT_NOTE_LENGTH.'" type="text" name="note" value="'.htmlspecialchars($note).'" '.$highlight_note.'/> '.LABEL_EDIT_NOTE.'<br />'."\n";
 			$output .= '<input size="'.MAX_EDIT_NOTE_LENGTH.'" type="text" name="note" value="'.hsc_secure($note).'" '.$highlight_note.'/> '.LABEL_EDIT_NOTE.'<br />'."\n";
 		}
 		//finish
