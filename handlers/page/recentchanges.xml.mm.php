@@ -24,8 +24,8 @@ if ($pages = $this->LoadRecentlyChanged())
 		$c++;
 		if (($c <= $max) || !$max)
 		{
-			$pageuser = $this->htmlspecialchars_ent($page["user"], '', '', 'XML'); #Just in case...
-			$pagetag = $this->htmlspecialchars_ent($page["tag"], '', '', 'XML');
+			$pageuser = $this->htmlspecialchars_ent($page['user'],ENT_COMPAT,'XML'); #Just in case...
+			$pagetag = $this->htmlspecialchars_ent($page['tag'],ENT_COMPAT,'XML');
 
 			// day header
 			list($day, $time) = explode(" ", $page["time"]);
@@ -41,7 +41,7 @@ if ($pages = $this->LoadRecentlyChanged())
 			$xml .= "<node LINK=\"$pagelink\" TEXT=\"$pagetag\" FOLDED=\"true\">\n";
 			$timeformatted = date("H:i T", strtotime($page["time"]));
 			$xml .= "<node LINK=\"$pagelink/revisions\" TEXT=\"Revision time: $timeformatted\"/>\n";
-			if ($pagenote = $this->htmlspecialchars_ent($page["note"], '', '', 'XML')) {
+			if ($pagenote = $this->htmlspecialchars_ent($page['note'],ENT_COMPAT,'XML')) {
 				$xml .= "<node TEXT=\"$pageuser: $pagenote\"/>\n";
 			} else {
 				$xml .= "<node TEXT=\"Author: $pageuser\"/>\n";
