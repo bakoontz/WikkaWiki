@@ -1,4 +1,22 @@
 <?php
+/**
+ * Generate a feed with recent changes in the wiki.
+ * 
+ * @package		Handlers
+ * @subpackage	XML	
+ * @version		$Id$
+ * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
+ * @filesource
+ * 
+ * @uses	Config::$base_url
+ * @uses	Config::$wakka_name
+ * @uses	Config::$xml_recent_changes
+ * @uses	Wakka::GetConfigValue()
+ * @uses	Wakka::Href()
+ * @uses	Wakka::htmlspecialchars_ent()
+ * @uses	Wakka::LoadRecentlyChanged()
+ */
+
 // i18n strings
 define('WHEN_BY_WHO', '%1$s by %2$s');
 define('ERROR_ACL_READ_INFO', 'You\'re not allowed to access this information.');
@@ -29,7 +47,8 @@ if ($pages = $this->LoadRecentlyChanged())
 			$xml .= "<item>\n";
 			$xml .= "<title>".$this->htmlspecialchars_ent($page["tag"])."</title>\n";
 			$xml .= "<link>".$this->Href("show", $page["tag"], "time=".urlencode($page["time"]))."</link>\n";
-			$xml .= "\t<description>".sprintf(WHEN_BY_WHO, $page['time'], $this->htmlspecialchars_ent($page["user"], ENT_COMPAT, 'UTF-8', 'XML')).($page['note'] ? ' - '.$this->htmlspecialchars_ent($page['note'], ENT_COMPAT, 'UTF-8', 'XML') : '')."</description>\n";
+			#$xml .= "\t<description>".sprintf(WIKKA_REV_WHEN_BY_WHO, $page['time'], $this->htmlspecialchars_ent($page["user"], '', '', 'XML')).($page['note'] ? ' - '.$this->htmlspecialchars_ent($page['note'], '', '', 'XML') : '')."</description>\n";
+			$xml .= "\t<description>".sprintf(WIKKA_REV_WHEN_BY_WHO, $page['time'], $this->htmlspecialchars_ent($page["user"], '', '', 'XML')).($page['note'] ? ' - '.$this->htmlspecialchars_ent($page['note'],ENT_COMPAT,'XML') : '')."</description>\n";
 			//$xml .= "\t<guid>".$page["id"]."</guid>";
 			$xml .= "\t<pubDate>".date("r",strtotime($page["time"]))."</pubDate>\n";
 			$xml .= "</item>\n";
