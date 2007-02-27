@@ -1,9 +1,29 @@
-<div class="page">
 <?php
+/**
+ * Show domains linking to the page/ the wiki.
+ * 
+ * @package		Handlers
+ * @subpackage	Referrers	
+ * @version		$Id$
+ * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
+ * @filesource
+ * 
+ * @uses		Wakka::IsAdmin()
+ * @uses		Wakka::LoadReferrers()
+ * @uses		Wakka::GetConfigValue()
+ * @uses		Wakka::GetMethod()
+ * @uses		Wakka::GetUser()
+ * @uses		Wakka::Href()
+ * 
+ * @todo		move <div> to template
+ */
+echo '<div class="page">'."\n"; //TODO: move to templating class
 
+$global = '';
 $IsAdmin = $this->IsAdmin();
-if ($global = $_REQUEST["global"])
+if (isset($_REQUEST["global"]))
 {
+	$global = $_REQUEST["global"];
 	$title = "Domains/sites linking to this wiki (<a href=\"".$this->Href("referrers", "", "global=1")."\">see list of different URLs</a>):";
 	$referrers = $this->LoadReferrers();
 }
@@ -56,7 +76,7 @@ if ($this->GetUser()) {
 	print("<em>You need to login to see referring sites</em><br />\n");
 }
 
-if ($global)
+if ($global !== '')
 {
 	print("<br />[<a href=\"".$this->Href("referrers_sites")."\">View referring sites for ".$this->GetPageTag()." only</a> | <a href=\"".$this->Href("referrers")."\">View referrers for ".$this->GetPageTag()." only</a> | <a href=\"".$this->Href("review_blacklist")."\">View referrer blacklist</a>]");
 }
@@ -65,6 +85,5 @@ else
 	print("<br />[<a href=\"".$this->Href("referrers_sites", "", "global=1")."\">View global referring sites</a> | <a href=\"".$this->Href("referrers", "", "global=1")."\">View global referrers</a> | <a href=\"".$this->Href("review_blacklist")."\">View referrer blacklist</a>]");
 }
 
-
+echo '</div>'."\n" //TODO: move to templating class
 ?>
-</div>
