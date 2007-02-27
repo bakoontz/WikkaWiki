@@ -682,8 +682,7 @@ class Wakka
 				if ($ping["authorpage"]) $rpcRequest .= "<member>\n<name>authorpage</name>\n<value>".$ping["authorpage"]."</value>\n</member>\n";
 			}
 			if ($ping["history"]) $rpcRequest .= "<member>\n<name>history</name>\n<value>".$ping["history"]."</value>\n</member>\n";
-			#if ($ping["changelog"]) $rpcRequest .= "<member>\n<name>changelog</name>\n<value>".$this->htmlspecialchars_ent($ping["changelog"], '', '', 'XML')."</value>\n</member>\n";
-			if ($ping["changelog"]) $rpcRequest .= "<member>\n<name>changelog</name>\n<value>".$this->htmlspecialchars_ent($ping["changelog"],ENT_COMPAT,'XML')."</value>\n</member>\n";
+			if ($ping["changelog"]) $rpcRequest .= "<member>\n<name>changelog</name>\n<value>".$this->htmlspecialchars_ent($ping['changelog'],ENT_COMPAT,'XML')."</value>\n</member>\n";
 			$rpcRequest .= "</struct>\n</value>\n</param>\n";
 			$rpcRequest .= "</params>\n";
 			$rpcRequest .= "</methodCall>\n";
