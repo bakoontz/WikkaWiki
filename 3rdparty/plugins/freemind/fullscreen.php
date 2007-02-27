@@ -10,6 +10,32 @@
  * @version  $Id$
  * @filesource
  */
+
+/**
+ * Secure replacement for PHP built-in function htmlspecialchars().
+ * 
+ * Copy of Wakka::hsc_secure() - See Wakka.class.php for complete comments.
+ */
+function hsc_secure($string, $quote_style=ENT_COMPAT)
+{
+	// init
+	$aTransSpecchar = array('&' => '&amp;',
+							'"' => '&quot;',
+							'<' => '&lt;',
+							'>' => '&gt;'
+							);			// ENT_COMPAT set
+	if (ENT_NOQUOTES == $quote_style)	// don't convert double quotes
+	{
+		unset($aTransSpecchar['"']);
+	}
+	elseif (ENT_QUOTES == $quote_style)	// convert single quotes as well
+	{
+		$aTransSpecchar["'"] = '&#39;';	// (apos) htmlspecialchars() uses '&#039;'
+	}
+	// return translated string
+	return strtr($string,$aTransSpecchar);
+}
+
 ?>
 <?php header("Content-Type: text/html; charset=ISO-8859-1");  ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
@@ -25,8 +51,10 @@
    <body>
 
 <?php
-$mindmap_url = htmlspecialchars(preg_replace('/&amp;/','&',(trim($_REQUEST["url"]))));
-if (isset($_REQUEST["height"])) $height = htmlspecialchars(trim($_REQUEST["height"]));
+#$mindmap_url = htmlspecialchars(preg_replace('/&amp;/','&',(trim($_REQUEST["url"]))));
+#if (isset($_REQUEST["height"])) $height = htmlspecialchars(trim($_REQUEST["height"]));
+$mindmap_url = hsc_secure(preg_replace('/&amp;/','&',(trim($_REQUEST['url'])))); // duplicates Wakka::cleanUrl()
+if (isset($_REQUEST['height'])) $height = hsc_secure(trim($_REQUEST['height'])); // more or less equivalent to Wakka::GetSafeVar()
 
 if ($mindmap_url) {
 
