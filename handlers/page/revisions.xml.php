@@ -58,7 +58,7 @@ if ($this->HasAccess("read"))
 				$xml .= "<item>\n";
 				$xml .= "<title>".$page["time"]."</title>\n";
 				$xml .= '<link>'.$this->Href('show', '', 'time=.'.urlencode($page['time'])).'</link>'."\n";
-				$xml .= '<description>'.sprintf(REVISIONS_EDITED_BY, $this->htmlspecialchars_ent($page["user"])).($page['note'] ? ' - '.$this->htmlspecialchars_ent($page['note'],ENT_COMPAT,'XML') : '')."</description>\n";
+				$xml .= '<description>'.sprintf(REVISIONS_EDITED_BY, $this->htmlspecialchars_ent($page['user'],ENT_COMPAT,'XML')).($page['note'] ? ' - '.$this->htmlspecialchars_ent($page['note'],ENT_COMPAT,'XML') : '')."</description>\n";
 				$xml .= "\t<pubDate>".date("r",strtotime($page["time"]))."</pubDate>\n";
 				$xml .= "</item>\n";
 			}
