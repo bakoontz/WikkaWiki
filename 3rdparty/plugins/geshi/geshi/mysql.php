@@ -4,10 +4,8 @@
  * --------- 
  * Author: Carl F�rstenberg (azatoth@gmail.com) 
  * Copyright: (c) 2005 Carl F�rstenberg, Nigel McNie (http://qbnz.com/highlighter) 
- * Release Version: 1.0.7.10
- * CVS Revision Version: $Revision: 1.11 $ 
+ * Release Version: 1.0.7.18
  * Date Started: 2004/06/04 
- * Last Modified: $Date: 2006/05/19 11:40:15 $ 
  * 
  * MySQL language file for GeSHi. 
  * 
@@ -100,9 +98,13 @@ $language_data = array (
    4 => array( 
    'MICROSECOND', 'SECOND', 'MINUTE', 'HOUR', 'DAY', 'WEEK', 'MONTH', 'QUARTER', 'YEAR', 'SECOND_MICROSECOND',  
    'MINUTE_MICROSECOND', 'MINUTE_SECOND', 'HOUR_MICROSECOND', 'HOUR_SECOND', 'HOUR_MINUTE', 'DAY_MICROSECOND', 
-   'DAY_SECOND', 'DAY_MINUTE', 'DAY_HOUR', 'YEAR_MONTH', 
+   'DAY_SECOND', 'DAY_MINUTE', 'DAY_HOUR', 'YEAR_MONTH' 
+   ),
+   5 => array(
+   'OR', 'XOR', 'AND', 'NOT', 'BETWEEN', 'IS', 'LIKE', 'REGEXP', 'IN', 'DIV',
+    'MOD', 'BINARY', 'COLLATE', 'LIMIT', 'OFFSET'
    ), 
-   ), 
+   ),
    'SYMBOLS' => array( 
    ':=', 
    '||', 'OR', 'XOR', 
@@ -127,15 +129,18 @@ $language_data = array (
    2 => false, 
    3 => false, 
    4 => false, 
+   5 => false
    ), 
    'STYLES' => array( 
    'KEYWORDS' => array( 
    1 => 'color: #993333; font-weight: bold;', 
    2 => 'color: #aa9933; font-weight: bold;', 
    3 => 'color: #aa3399; font-weight: bold;', 
-   4 => 'color: #33aa99; font-weight: bold;', 
+   4 => 'color: #33aa99; font-weight: bold;',
+   5 => 'color: #993333; font-weight: bold;'
    ), 
    'COMMENTS' => array( 
+   'MULTI' => 'color: #808080; font-style: italic;', 
    1 => 'color: #808080; font-style: italic;', 
    2 => 'color: #808080; font-style: italic;' 
    ), 

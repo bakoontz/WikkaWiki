@@ -4,10 +4,8 @@
  * ----------
  * Author: Ivan F. Villanueva B. (geshi_groovy@artificialidea.com)
  * Copyright: (c) 2006 Ivan F. Villanueva B.(http://www.artificialidea.com)
- * Release Version: 1.0.7.10
- * CVS Revision Version: $Revision: 1.1 $
+ * Release Version: 1.0.7.18
  * Date Started: 2006/04/29
- * Last Modified: $Date: 2006/05/19 10:58:04 $
  *
  * Groovy language file for GeSHi.
  *

@@ -2,12 +2,10 @@
 /*************************************************************************************
  * php-brief.php
  * -------------
- * Author: Nigel McNie (oracle.shinoda@gmail.com)
+ * Author: Nigel McNie (nigel@geshi.org)
  * Copyright: (c) 2004 Nigel McNie (http://qbnz.com/highlighter/)
- * Release Version: 1.0.7.10
- * CVS Revision Version: $Revision: 1.12 $
+ * Release Version: 1.0.7.18
  * Date Started: 2004/06/02
- * Last Modified: $Date: 2006/05/19 11:40:09 $
  *
  * PHP language file for GeSHi (brief version).
  *
@@ -64,7 +62,7 @@ $language_data = array (
 			'null', '__LINE__', '__FILE__',
 			'false', '&lt;?php', '?&gt;',
 			'true', 'var', 'default',
-			'function', 'class', 'new', '&amp;new'
+			'function', 'class', 'new', '&amp;new', 'public', 'private', 'interface', 'extends',
 			),
 		3 => array(
 			'func_num_args', 'func_get_arg', 'func_get_args', 'strlen', 'strcmp', 'strncmp', 'strcasecmp', 'strncasecmp', 'each', 'error_reporting', 'define', 'defined',
