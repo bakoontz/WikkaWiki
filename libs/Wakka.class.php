@@ -1701,7 +1701,7 @@ class Wakka
 			$link_tracking_state = isset($_SESSION['linktracking']) ? $_SESSION['linktracking'] : 0; #38
 			$this->StopLinkTracking();
 		}
-		$result = $this->IncludeBuffered(strtolower($action).'.php', '<em class="error">'.sprintf(ACTION_UNKNOWN,$action).'</em>', $vars, $this->config['action_path']);
+		$result = $this->IncludeBuffered(strtolower($action).'/'.strtolower($action).'.php', '<em class="error">'.sprintf(ACTION_UNKNOWN,$action).'</em>', $vars, $this->config['action_path']);
 		if ($link_tracking_state)
 		{
 			$this->StartLinkTracking();
