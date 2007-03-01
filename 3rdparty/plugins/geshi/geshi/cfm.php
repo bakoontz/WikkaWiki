@@ -4,10 +4,8 @@
  * -------
  * Author: Diego ()
  * Copyright: (c) 2006 Diego
- * Release Version: 1.0.7.10
- * CVS Revision Version: $Revision: 1.6 $
+ * Release Version: 1.0.7.18
  * Date Started: 2006/02/25
- * Last Modified: $Date: 2006/05/19 11:40:14 $
  *
  * ColdFusion language file for GeSHi.
  *
@@ -40,9 +38,9 @@
  ************************************************************************************/
 
 $language_data = array (
-	'LANG_NAME' => 'CFM',
+	'LANG_NAME' => 'ColdFusion',
 	'COMMENT_SINGLE' => array(1 => '//'),
-	'COMMENT_MULTI' => array('<!--' => '-->','&lt;!---' => '---&gt;'),
+    'COMMENT_MULTI' => array('<!--' => '-->','&lt;!---' => '---&gt;', '/*' => '*/'),
 	'CASE_KEYWORDS' => GESHI_CAPS_NO_CHANGE,
 	'QUOTEMARKS' => array("'", '"'),
 	'ESCAPE_CHAR' => '\\',
