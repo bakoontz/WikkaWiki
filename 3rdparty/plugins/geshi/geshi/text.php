@@ -4,10 +4,8 @@
  * --------
  * Author: Sean Hanna (smokingrope@gmail.com)
  * Copyright: (c) 2006 Sean Hanna 
- * Release Version: 1.0.7.10
- * CVS Revision Version: $Revision: 1.1 $
+ * Release Version: 1.0.7.18
  * Date Started: 04/23/2006
- * Last Modified: $Date: 2006/05/19 10:55:41 $
  *
  * Standard Text File (No Syntax Highlighting).
  *
@@ -45,7 +43,7 @@
 
  ************************************************************************************/
 $language_data = array (
-	'LANG_NAME' => 'TEXT',
+	'LANG_NAME' => 'Text',
 	'COMMENT_SINGLE' => array( ),
 	'COMMENT_MULTI' => array( ),
 	'CASE_KEYWORDS' => GESHI_CAPS_NO_CHANGE,
@@ -75,7 +73,9 @@ $language_data = array (
 	'SCRIPT_DELIMITERS' => array( ),
 	'HIGHLIGHT_STRICT_BLOCK' => array( )
 );
-$this->set_numbers_highlighting(false);
-$this->set_brackets_highlighting(false);
-$this->disable_highlighting();
+if (isset($this) && is_a($this, 'GeSHi')) {
+    $this->set_numbers_highlighting(false);
+    $this->set_brackets_highlighting(false);
+    $this->disable_highlighting();
+}
 ?>

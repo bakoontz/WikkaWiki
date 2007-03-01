@@ -4,10 +4,8 @@
  * --------
  * Author: Duncan Lock (dunc@dflock.co.uk)
  * Copyright: (c) 2006 Duncan Lock (http://dflock.co.uk/), Nigel McNie (http://qbnz.com/highlighter)
- * Release Version: 1.0.7.10
- * CVS Revision Version: $Revision: 1.7 $
+ * Release Version: 1.0.7.18
  * Date Started: 2005/11/22
- * Last Modified: $Date: 2006/05/19 11:40:10 $
  *
  * T-SQL language file for GeSHi.
  *
@@ -40,7 +38,7 @@
  ************************************************************************************/
 
 $language_data = array (
-	'LANG_NAME' => 'TSQL',
+	'LANG_NAME' => 'T-SQL',
 	'COMMENT_SINGLE' => array(1 => '--'),
 	'COMMENT_MULTI' => array('/*' => '*/'),
 	'CASE_KEYWORDS' => GESHI_CAPS_UPPER,
@@ -382,4 +380,3 @@ $language_data = array (
 );
 
 ?>
-

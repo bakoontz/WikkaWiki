@@ -2,12 +2,10 @@
 /*************************************************************************************
  * sql.php
  * -------
- * Author: Nigel McNie (oracle.shinoda@gmail.com)
+ * Author: Nigel McNie (nigel@geshi.org)
  * Copyright: (c) 2004 Nigel McNie (http://qbnz.com/highlighter)
- * Release Version: 1.0.7.10
- * CVS Revision Version: $Revision: 1.14 $
+ * Release Version: 1.0.7.18
  * Date Started: 2004/06/04
- * Last Modified: $Date: 2006/05/19 11:40:14 $
  *
  * SQL language file for GeSHi.
  *

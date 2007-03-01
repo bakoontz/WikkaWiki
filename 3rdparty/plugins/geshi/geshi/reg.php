@@ -4,10 +4,8 @@
  * -------
  * Author: Sean Hanna (smokingrope@gmail.com)
  * Copyright: (c) 2006 Sean Hanna 
- * Release Version: 1.0.7.10
- * CVS Revision Version: $Revision: 1.1 $
+ * Release Version: 1.0.7.18
  * Date Started: 03/15/2006
- * Last Modified: $Date: 2006/05/19 11:40:10 $
  *
  * Microsoft Registry Editor Language File.
  *
@@ -59,7 +57,7 @@
 
  ************************************************************************************/
 $language_data = array (
-	'LANG_NAME' => 'REG',
+	'LANG_NAME' => 'Microsoft Registry',
 	'COMMENT_SINGLE' => array(1 =>';'),
 	'COMMENT_MULTI' => array( ),
 	'CASE_KEYWORDS' => GESHI_CAPS_NO_CHANGE,
@@ -90,11 +88,11 @@ $language_data = array (
 			 				 2 => 'color: #0000FF;' ),
 		'COMMENTS' => array( 1 => 'color: #009900;' ),
 		'ESCAPE_CHAR' => array(),
-		'BRACKETS' => array(),
+		'BRACKETS' => array(0 => 'color: #000000;'),
 		'STRINGS' => array( 0 => 'color: #009900;' ),
 		'NUMBERS' => array(),
 		'METHODS' => array(),
-		'SYMBOLS' => array(),
+		'SYMBOLS' => array(0 => 'color: #000000;'),
 		'SCRIPT' => array(),
 		'REGEXPS' => array( 
 			0 => '',
@@ -210,5 +208,7 @@ $language_data = array (
 	'HIGHLIGHT_STRICT_BLOCK' => array(
 		)
 );
-$this->set_numbers_highlighting(false);
+if (isset($this) && is_a($this, 'GeSHi')) {
+    $this->set_numbers_highlighting(false);
+}
 ?>
