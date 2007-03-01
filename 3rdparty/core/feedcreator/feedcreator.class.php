@@ -1,6 +1,23 @@
 <?php
+/**
+ * FeedCreator
+ * 
+ * This class provides the methods required to generate feeds in a flexible way.
+ * 
+ * @package 3rdParty
+ * @subpackage FeedCreator
+ * @version $Id$
+ * @license http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
+ * @filesource
+ * 
+ * @author 	Scott Reynen <scott@randomchaos.com>
+ * @author 	Kai Blankenhorn <kaib@bitfolge.de>
+ * @author	Dirk Clemens
+ * @author	Fabian Wolf <info@f2w.de>
+ * @author	Mohammad Hafiz bin Ismail <mypapit@gmail.com>
+ * @copyright Copyright &copy; 2003 Kai Blankenhorn
+ */
 /***************************************************************************
-
 FeedCreator class v1.7.2-ppt
 originally (c) Kai Blankenhorn
 www.bitfolge.de
