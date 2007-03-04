@@ -5,8 +5,33 @@
  * It includes the Wakka class, which provides the core functions
  * to run Wikka. 
  *
+ * @package Wikka
+ * @subpackage Libs
+ * @version $Id$
+ * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
+ * @filesource
+ * 
+ * @author Hendrik Mans <hendrik@mans.de>
+ * @author Jason Tourtelotte <wikka-admin@jsnx.com>
+ * @author {@link http://wikkawiki.org/JavaWoman Marjolein Katsma}
+ * @author {@link http://wikkawiki.org/NilsLindenberg Nils Lindenberg}
+ * @author {@link http://wikkawiki.org/DotMG Mahefa Randimbisoa}
+ * @author {@link http://wikkawiki.org/DarTar Dario Taraborelli}
+ * 
+ * @copyright Copyright 2002-2003, Hendrik Mans <hendrik@mans.de>
+ * @copyright Copyright 2004-2005, Jason Tourtelotte <wikka-admin@jsnx.com>
+ * @copyright Copyright 2006, {@link http://wikkawiki.org/CreditsPage Wikka Development Team}
  */
  
+/**
+ * The Wikka core.
+ * 
+ * This class contains all the core methods used to run Wikka.
+ * @name Wakka
+ * @package Wikka
+ * @subpackage Libs
+ * 
+ */
 class Wakka
 {
 	var $config = array();
@@ -18,23 +43,27 @@ class Wakka
 	var $VERSION;
 	var $cookies_sent = false;
 
-	// constructor
+	/**
+	 * Constructor
+	 */
 	function Wakka($config)
 	{
 		$this->config = $config;
 		$this->dblink = @mysql_connect($this->config["mysql_host"], $this->config["mysql_user"], $this->config["mysql_password"]);
-            if ($this->dblink)
-            {
-            	if (!@mysql_select_db($this->config["mysql_database"], $this->dblink))
-                  {
-                  	@mysql_close($this->dblink);
-                        $this->dblink = false;
-                  }
-            }
- 		$this->VERSION = WAKKA_VERSION;
+		if ($this->dblink)
+		{
+			if (!@mysql_select_db($this->config["mysql_database"], $this->dblink))
+			{
+				@mysql_close($this->dblink);
+				$this->dblink = false;
+			}
+		}
+		$this->VERSION = WAKKA_VERSION;
 	}
 
-	// DATABASE
+	/**
+	 * Database methods
+	 */
 	function Query($query)
 	{
 		$start = $this->GetMicroTime();
@@ -45,10 +74,10 @@ class Wakka
 		}
 		if ($this->GetConfigValue("sql_debugging"))
 		{
-  			$time = $this->GetMicroTime() - $start;
-  			$this->queryLog[] = array(
-  				"query"		=> $query,
-  				"time"		=> $time);
+			$time = $this->GetMicroTime() - $start;
+			$this->queryLog[] = array(
+				"query"		=> $query,
+				"time"		=> $time);
 		}
 		return $result;
 	}
@@ -97,7 +126,9 @@ class Wakka
 		}
 	}
 
-	// MISC
+	/**
+	 * Misc methods
+	 */
 	function GetMicroTime() { list($usec, $sec) = explode(" ",microtime()); return ((float)$usec + (float)$sec); }
 	function IncludeBuffered($filename, $notfoundText = "", $vars = "", $path = "")
 	{
@@ -407,7 +438,7 @@ class Wakka
 	 * @param	string	$sourcecode	required: source code to be highlighted
 	 * @param	string	$language	required: language spec to select highlighter
 	 * @param	integer	$start		optional: start line number; if supplied and >= 1 line numbering
-	 *			 will be turned on if it is enabled in the configuration.
+	 * 			will be turned on if it is enabled in the configuration.
 	 * @return	string	code block with syntax highlighting classes applied
 	 */
 	function GeSHi_Highlight($sourcecode, $language, $start=0)
@@ -457,7 +488,9 @@ class Wakka
 		return '<!--start GeSHi-->'."\n".$geshi->parse_code()."\n".'<!--end GeSHi-->'."\n";	
 	}
 
-	// VARIABLES
+	/**
+	 * Variable-related methods
+	 */
 	function GetPageTag() { return $this->tag; }
 	function GetPageTime() { return $this->page["time"]; }
 	function GetMethod() { return $this->method; }
@@ -465,7 +498,9 @@ class Wakka
 	function GetWakkaName() { return $this->GetConfigValue("wakka_name"); }
 	function GetWakkaVersion() { return $this->VERSION; }
 
-	// PAGES
+	/**
+	 * Page-related methods
+	 */
 	function LoadPage($tag, $time = "", $cache = 1) {
 		// retrieve from cache
 		if (!$time && $cache) {
@@ -773,13 +808,28 @@ class Wakka
 		}
 		return $href;
 	}
+	/**
+	 * Link 
+	 * 
+	 * Beware of the $title parameter: quotes and backslashes should be previously escaped before passed to 
+	 * this method.
+	 *
+	 * @param mixed $tag 
+	 * @param string $method 
+	 * @param string $text 
+	 * @param boolean $track 
+	 * @param boolean $escapeText 
+	 * @param string $title 
+	 * @access public
+	 * @return string
+	 */
 	function Link($tag, $method='', $text='', $track=TRUE, $escapeText=TRUE, $title='') {
 		if (!$text) $text = $tag;
 		// escape text?
 		if ($escapeText) $text = $this->htmlspecialchars_ent($text);
 		$tag = $this->htmlspecialchars_ent($tag); #142 & #148
 		$method = $this->htmlspecialchars_ent($method);
-		$title = $this->htmlspecialchars_ent($title);
+		$title_attr = $title ? ' title="'.$this->htmlspecialchars_ent($title).'"' : '';
 		$url = '';
 
 		// is this an interwiki link?
@@ -811,7 +861,7 @@ class Wakka
 			if ($_SESSION["linktracking"] && $track) $this->TrackLinkTo($tag);
 			$linkedPage = $this->LoadPage($tag);
 			// return ($linkedPage ? "<a href=\"".$this->Href($method, $linkedPage['tag'])."\">".$text."</a>" : "<span class=\"missingpage\">".$text."</span><a href=\"".$this->Href("edit", $tag)."\" title=\"Create this page\">?</a>");
-			return ($linkedPage ? "<a href=\"".$this->Href($method, $linkedPage['tag'])."\" title=\"$title\">".$text."</a>" : "<a class=\"missingpage\" href=\"".$this->Href("edit", $tag)."\" title=\"Create this page\">".$text."</a>");
+			return ($linkedPage ? "<a href=\"".$this->Href($method, $linkedPage['tag'])."\"$title_attr>".$text."</a>" : "<a class=\"missingpage\" href=\"".$this->Href("edit", $tag)."\" title=\"Create this page\">".$text."</a>");
 		}
 		$external_link_tail = $this->GetConfigValue("external_link_tail");
 		return $url ? "<a class=\"ext\" href=\"$url\">$text</a>$external_link_tail" : $text;
@@ -996,19 +1046,29 @@ class Wakka
 	}
 
 	// ACCESS CONTROL
-	// returns true if logged in user is owner of current page, or page specified in $tag
+	/** 
+	 * Check if current user is the owner of the current or a specified page. 
+	 *  
+	 * @access      public
+	 * @uses		wakka::GetPageOwner()
+	 * @uses		wakka::GetPageTag()  
+	 * @uses		wakka::GetUser()
+	 * @uses		wakka::GetUserName()
+	 * @uses		wakka::IsAdmin() 
+	 * 
+	 * @param       string  $tag optional: page to be checked. Default: current page. 
+	 * @return      boolean TRUE if the user is the owner, FALSE otherwise. 
+	 */ 
 	function UserIsOwner($tag = "")
 	{
-		// check if user is logged in
+		// if not logged in, user can't be owner! 
 		if (!$this->GetUser()) return false;
 
 		// if user is admin, return true. Admin can do anything!
 		if ($this->IsAdmin()) return true;
 
-		// set default tag
+		// set default tag & check if user is owner
 		if (!$tag = trim($tag)) $tag = $this->GetPageTag();
-
-		// check if user is owner
 		if ($this->GetPageOwner($tag) == $this->GetUserName()) return true;
 	}
 	//returns true if user is listed in configuration list as admin

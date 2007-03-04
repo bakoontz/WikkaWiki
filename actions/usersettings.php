@@ -120,11 +120,11 @@ else if ($user = $this->GetUser())
 	if (isset($_POST['action']) && ($_POST['action'] == 'update'))
 	{
 		// get POST parameters
-		$email = $_POST['email'];
-		$doubleclickedit = $_POST['doubleclickedit'];
-		$show_comments = $_POST['show_comments'];
-		$revisioncount = (int) $_POST['revisioncount'];
-		$changescount = (int) $_POST['changescount'];
+		$email = $this->GetSafeVar('email', 'post');
+		$doubleclickedit = $this->GetSafeVar('doubleclickedit', 'post');
+		$show_comments = $this->GetSafeVar('show_comments', 'post');
+		$revisioncount = (int) $this->GetSafeVar('revisioncount', 'post');
+		$changescount = (int) $this->GetSafeVar('changescount', 'post');
 		
 		switch(TRUE) // validate form input
 		{
@@ -238,10 +238,10 @@ else if ($user = $this->GetUser())
 	if (isset($_POST['action']) && ($_POST['action'] == 'changepass'))
 	{
 		// check password
-		$oldpass = $_POST['oldpass']; //can be current password or hash sent as password reminder
-		$password = $_POST['password'];
-		$password_confirm = $_POST['password_confirm'];
-		$update_option = $_POST['update_option'];
+		$oldpass = $this->GetSafeVar('oldpass', 'post'); //can be current password or hash sent as password reminder
+		$password = $this->GetSafeVar('password', 'post');
+		$password_confirm = $this->GetSafeVar('password_confirm', 'post');
+		$update_option = $this->GetSafeVar('update_option', 'post');
 		
 		switch (TRUE)
 		{
@@ -366,10 +366,10 @@ else // user is not logged in
 		}
 		else // otherwise, proceed to registration
 		{
-			$name = trim($_POST['name']);
-			$email = trim($_POST['email']);
-			$password = $_POST['password'];
-			$confpassword = $_POST['confpassword'];
+			$name = trim($this->GetSafeVar('name', 'post'));
+			$email = trim($this->GetSafeVar('email', 'post'));
+			$password = $this->GetSafeVar('password', 'post');
+			$confpassword = $this->GetSafeVar('confpassword', 'post');
 
 			// validate input
 			switch(TRUE)
@@ -436,7 +436,7 @@ else // user is not logged in
 	}
 	elseif  (isset($_POST['action']) && ($_POST['action'] == 'updatepass'))
 	{
-        $name = trim($_POST['yourname']);
+        $name = trim($this->GetSafeVar('yourname', 'post'));
 		if (strlen($name) == 0) // empty username	
 		{
 			$newerror = ERROR_EMPTY_USERNAME;
@@ -447,12 +447,12 @@ else // user is not logged in
 			$newerror = ERROR_WIKINAME;
 			$username_temp_highlight = INPUT_ERROR_STYLE;
 		}
-		elseif (!($this->LoadUser($_POST['yourname']))) //check if user exists
+		elseif (!($this->LoadUser($this->GetSafeVar('yourname', 'post')))) //check if user exists
 		{
 			$newerror = ERROR_NON_EXISTENT_USERNAME;
 			$username_temp_highlight = INPUT_ERROR_STYLE;
 		}
-		elseif ($existingUser = $this->LoadUser($_POST['yourname']))  // if user name already exists, check password
+		elseif ($existingUser = $this->LoadUser($this->GetSafeVar('yourname', 'post')))  // if user name already exists, check password
 		{
 			// updatepassword
 			if ($existingUser['password'] == $_POST['temppassword'])
@@ -493,7 +493,7 @@ else // user is not logged in
 ?>
 	<tr>
 		<td align="right"><?php echo WIKINAME_LABEL ?></td>
-		<td><input <?php echo $username_highlight; ?> name="name" size="40" value="<?php if (isset($_POST['name'])){ echo $_POST['name']; }?>" /></td>
+		<td><input <?php echo $username_highlight; ?> name="name" size="40" value="<?php echo $this->GetSafeVar('name', 'post'); ?>" /></td>
 	</tr>
 	<tr>
 		<td align="right"><?php echo sprintf(PASSWORD_LABEL, PASSWORD_MIN_LENGTH) ?></td>
@@ -513,7 +513,7 @@ else // user is not logged in
 	</tr>
 	<tr>
 		<td align="right"><?php echo USER_EMAIL_LABEL ?></td>
-		<td><input <?php echo $email_highlight; ?> name="email" size="40" value="<?php if (isset($email)){ echo $email; }?>" /></td>
+		<td><input <?php echo $email_highlight; ?> name="email" size="40" value="<?php echo $email; ?>" /></td>
 	</tr>
 	<tr>
 		<td>&nbsp;</td>
@@ -541,7 +541,7 @@ else // user is not logged in
 ?>
 	<tr>
 		<td align="right"><?php echo WIKINAME_LABEL ?></td>
-		<td><input <?php echo $username_temp_highlight; ?> name="yourname" value="<?php if (isset($_POST['yourname'])){ echo $_POST["yourname"]; }?>" size="40" /></td>
+		<td><input <?php echo $username_temp_highlight; ?> name="yourname" value="<?php echo $this->GetSafeVar('yourname', 'post'); ?>" size="40" /></td>
 	</tr>
 	<tr>
 		<td align="right"><?php echo TEMP_PASSWORD_LABEL ?></td>
