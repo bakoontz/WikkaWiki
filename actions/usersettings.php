@@ -238,9 +238,9 @@ else if ($user = $this->GetUser())
 	if (isset($_POST['action']) && ($_POST['action'] == 'changepass'))
 	{
 		// check password
-		$oldpass = $this->GetSafeVar('oldpass', 'post'); //can be current password or hash sent as password reminder
-		$password = $this->GetSafeVar('password', 'post');
-		$password_confirm = $this->GetSafeVar('password_confirm', 'post');
+		$oldpass = $_POST['oldpass']; //can be current password or hash sent as password reminder
+		$password = $_POST['password'];
+		$password_confirm = $_POST['password_confirm'];
 		$update_option = $this->GetSafeVar('update_option', 'post');
 		
 		switch (TRUE)
@@ -366,10 +366,10 @@ else // user is not logged in
 		}
 		else // otherwise, proceed to registration
 		{
-			$name = trim($this->GetSafeVar('name', 'post'));
+			$name = trim($_POST['name']);
 			$email = trim($this->GetSafeVar('email', 'post'));
-			$password = $this->GetSafeVar('password', 'post');
-			$confpassword = $this->GetSafeVar('confpassword', 'post');
+			$password = $_POST['password'];
+			$confpassword = $_POST['confpassword'];
 
 			// validate input
 			switch(TRUE)
@@ -436,7 +436,7 @@ else // user is not logged in
 	}
 	elseif  (isset($_POST['action']) && ($_POST['action'] == 'updatepass'))
 	{
-        $name = trim($this->GetSafeVar('yourname', 'post'));
+        	$name = trim($_POST['yourname']);
 		if (strlen($name) == 0) // empty username	
 		{
 			$newerror = ERROR_EMPTY_USERNAME;
@@ -447,12 +447,12 @@ else // user is not logged in
 			$newerror = ERROR_WIKINAME;
 			$username_temp_highlight = INPUT_ERROR_STYLE;
 		}
-		elseif (!($this->LoadUser($this->GetSafeVar('yourname', 'post')))) //check if user exists
+		elseif (!($this->LoadUser($_POST['yourname']))) //check if user exists
 		{
 			$newerror = ERROR_NON_EXISTENT_USERNAME;
 			$username_temp_highlight = INPUT_ERROR_STYLE;
 		}
-		elseif ($existingUser = $this->LoadUser($this->GetSafeVar('yourname', 'post')))  // if user name already exists, check password
+		elseif ($existingUser = $this->LoadUser($_POST['yourname']))  // if user name already exists, check password
 		{
 			// updatepassword
 			if ($existingUser['password'] == $_POST['temppassword'])
