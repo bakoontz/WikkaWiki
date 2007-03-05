@@ -1,20 +1,27 @@
 <?php
 /**
-* Display an alphabetical list of pages of the wiki.
-*
-* This action checks user read privileges and displays an index of read-accessible pages.
-*
-* @package    Actions
-* @name    pageindex
-*
-* @author    {@link http://wikkawiki.org/GiorgosKontopoulos GiorgosKontopoulos} (added ACL check, first code cleanup)
-* @author    {@link http://wikkawiki.org/DarTar DarTar} (adding doc header, minor code and layout refinements, i18n)
-*
-* @since    1.1.6.2
-*
-* @output   a list of pages accessible to the current user
-* @documentation  {@link http://wikkawiki.org/ColorActionInfo}
-*/
+ * Display an alphabetical list of pages of the wiki.
+ *
+ * This action checks user read privileges and displays an index of read-accessible pages.
+ *
+ * @package    Actions
+ * @version	$Id$
+ * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
+ * @filesource
+ *
+ * @author    {@link http://wikkawiki.org/GiorgosKontopoulos GiorgosKontopoulos} (added ACL check, first code cleanup)
+ * @author    {@link http://wikkawiki.org/DarTar DarTar} (adding doc header, minor code and layout refinements, i18n)
+ * 
+ * @uses		Wakka::LoadPageTitles()
+ * @uses		Wakka::GetUserName()
+ * @uses		Wakka::HasAccess()
+ * @uses		Wakka::Link()
+ * @uses		Wakka::Format()
+ *
+ * @output		a list of pages accessible to the current user
+ * @todo		add filtering options
+ * @todo		fix RE (#104 etc.)
+ */
 
 // i18n strings
 define('PAGE_HEADING',"Page Index");
@@ -27,8 +34,9 @@ define('ERROR_NO_PAGES_FOUND', "No pages found.");
 if ($pages = $this->LoadAllPages())
 {
 	// filter by letter
-	if (isset($_REQUEST['letter'])) $requested_letter = $_REQUEST['letter']; else $requested_letter = '';
-	if (!$requested_letter && isset($letter)) $requested_letter = strtoupper($letter); 
+	#if (isset($_REQUEST['letter'])) $requested_letter = $_REQUEST['letter']; else $requested_letter = '';
+	$requested_letter = (isset($_GET['letter'])) ? $_GET['letter'] : ''; #312 
+	if (!$requested_letter && isset($letter)) $requested_letter = strtoupper($letter); // TODO action parameter (letter) needs to be validated 
 
 	// get things started
 	$cached_username = $this->GetUserName();
