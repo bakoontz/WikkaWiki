@@ -3,17 +3,21 @@
  * Display a form to register, login and change user settings.
  *
  * @package		Actions
- * @name		UserSettings
+ * @version		$Id$
+ * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
+ * @filesource
  *
  * @author		{@link http://wikkawiki.org/MinusF MinusF} (code cleanup and validation)
  * @author		{@link http://wikkawiki.org/DarTar Dario Taraborelli} (further cleanup, i18n, replaced JS dialogs with server-generated messages)
- * @since		Wikka 1.1.6.2
  *
- * @input		none
- * @todo			-use different actions for registration / login / user settings;
- 					-add documentation links or short explanations for each option;
- 					-use error handler for displaying messages and highlighting invalid input fields;
- 					-remove useless redirections;
+ * @uses		Wakka::htmlspecialchars_ent()
+ * 
+ * @todo		use different actions for registration / login / user settings;
+ * @todo		add documentation links or short explanations for each option;
+ * @todo		use error handler for displaying messages and highlighting
+ * 				invalid input fields;
+ * @todo		remove useless redirections;
+ * @todo		[accessibility] make logout independent of JavaScript
  */
 
 // defaults
@@ -104,15 +108,20 @@ $changescount_highlight = '';
 $url = $this->config['base_url'].$this->tag;
 
 // append URL params depending on rewrite_mode
-$params = ($this->config['rewrite_mode'] == 1)? '?' : '&';
+$params = ($this->config['rewrite_mode'] == 1) ? '?' : '&';
 
+// BEGIN *** Logout ***
 // is user trying to log out?
-if (isset($_REQUEST['action']) && ($_REQUEST['action'] == 'logout'))
+#if (isset($_REQUEST['action']) && ($_REQUEST['action'] == 'logout'))	// JavaScript button with GET
+if (isset($_POST['logout']) && $_POST['logout'] == LOGOUT_BUTTON_LABEL)		// replaced with normal form button #353, #312
 {
 	$this->LogoutUser();
 	$params .= 'out=true';
 	$this->Redirect($url.$params);
 }
+// END *** Logout ***
+
+// BEGIN *** Usersettings ***
 // user is still logged in
 else if ($user = $this->GetUser())
 {
@@ -125,8 +134,9 @@ else if ($user = $this->GetUser())
 		$show_comments = $this->GetSafeVar('show_comments', 'post');
 		$revisioncount = (int) $this->GetSafeVar('revisioncount', 'post');
 		$changescount = (int) $this->GetSafeVar('changescount', 'post');
-		
-		switch(TRUE) // validate form input
+
+		// validate form input
+		switch (TRUE)
 		{
 			case (strlen($email) == 0): //email is empty
 				$error = ERROR_EMAIL_ADDRESS_REQUIRED;
@@ -159,7 +169,8 @@ else if ($user = $this->GetUser())
 				$this->Redirect($url.$params);
 		}
 	}
-	else //user just logged in
+	//user just logged in
+	else 
 	{
 		// get stored settings
 		$email = $user['email'];
@@ -167,7 +178,6 @@ else if ($user = $this->GetUser())
 		$show_comments = $user['show_comments'];
 		$revisioncount = $user['revisioncount'];
 		$changescount = $user['changescount'];
-		
 	}
 
 	// display user settings form
@@ -229,7 +239,9 @@ else if ($user = $this->GetUser())
 		</tr>
 		<tr>
 			<td>&nbsp;</td>
-			<td><input type="submit" value="<?php echo UPDATE_SETTINGS_INPUT ?>" /> <input type="button" value="<?php echo LOGOUT_BUTTON_LABEL; ?>" onclick="document.location='<?php echo $this->href('', '', 'action=logout'); ?>'" /></td>
+			<td><input type="submit" value="<?php echo UPDATE_SETTINGS_INPUT ?>" /><!-- <input type="button" value="<?php echo LOGOUT_BUTTON_LABEL; ?>" onclick="document.location='<?php echo $this->href('', '', 'action=logout'); ?>'" /></td>-->
+				<input id="logout" name="logout" type="submit" value="<?php echo LOGOUT_BUTTON_LABEL; ?>" /><!--#353,#312-->
+			</td>
 		</tr>
 	</table>
 <?php	
@@ -335,7 +347,8 @@ else if ($user = $this->GetUser())
 	echo $this->Format(QUICK_LINKS);
 	print($this->FormClose());
 }
-else // user is not logged in
+// user is not logged in
+else 
 {
 	// print confirmation message on successful logout
 	if (isset($_GET['out']) && ($_GET['out'] == 'true'))
@@ -364,6 +377,7 @@ else // user is not logged in
 					$this->Redirect($url, '');
 			}
 		}
+		// BEGIN *** Register ***
 		else // otherwise, proceed to registration
 		{
 			$name = trim($_POST['name']);
@@ -433,7 +447,10 @@ else // user is not logged in
 					$this->Redirect($url.$params);
 			}
 		}
-	}
+		// END *** Register ***
+	} 
+
+	// BEGIN *** Usersettings ***
 	elseif  (isset($_POST['action']) && ($_POST['action'] == 'updatepass'))
 	{
         	$name = trim($_POST['yourname']);
@@ -467,7 +484,9 @@ else // user is not logged in
 			}
 		}
 	}
+	// END *** Usersettings ***
 
+	// BEGIN ***  Login/Register ***
 	print($this->FormOpen());
 ?>
 	<input type="hidden" name="action" value="login" />
@@ -522,6 +541,9 @@ else // user is not logged in
 	</table>
 <?php
 	print($this->FormClose());
+	// END *** Login/Register ***
+
+	// BEGIN *** Login Temp Password *** 
 	print($this->FormOpen());
 ?>
 	<input type="hidden" name="action" value="updatepass" />
@@ -554,5 +576,6 @@ else // user is not logged in
    </table>
 <?php
 	print($this->FormClose());
+	// END *** Login Temp Password *** 
 }
 ?>
