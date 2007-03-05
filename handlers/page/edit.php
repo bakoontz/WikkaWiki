@@ -34,9 +34,12 @@
  * @uses Wakka::StartLinkTracking()
  * @uses Wakka::StopLinkTracking()
  * @uses Wakka::WriteLinkTable()
+ *
  * @todo		move main <div> to templating class;
  * @todo		optimization using history.back();
  * @todo		use central regex library for validation;
+ * @todo	replace $_REQUEST with either $_GET or $_POST (or both if really
+ * 			necessary) - #312 => NOT CLEAR here what to do; see also #449  
  */
 
 /**
@@ -191,7 +194,8 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 
 		$output .= "<br />\n".$preview_buttons.$this->FormClose()."\n";
 	}
-	elseif (!$this->page && strlen($this->tag) > $maxtaglen) # rename page
+	// RENAME screen
+	elseif (!$this->page && strlen($this->tag) > $maxtaglen)
 	{
 		$this->tag = substr($this->tag, 0, $maxtaglen); // truncate tag to feed a backlinks-handler with the correct value. may be omitted. it only works if the link to a backlinks-handler is built in the footer.
 		$output  = '<em class="error">'.sprintf(ERROR_TAG_TOO_LONG, $maxtaglen).'</em><br />'."\n";
@@ -211,7 +215,9 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 		}
 
 		// append a comment?
-		if (isset($_REQUEST['appendcomment']))
+		// TODO not clear if this is/was intended as a URL parameter (GET), or a check box on the edito form (POST) ....
+		// would be nice as a checkbox, provided it is acted upon only when user is actually submitting - NOT on preview or re-edit  
+		if (isset($_REQUEST['appendcomment'])) #312, #449
 		{
 			$body = trim($body)."\n\n----\n\n--".$this->GetUserName().' ('.strftime("%c").')';
 		}
@@ -220,7 +226,7 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 			$this->FormOpen('edit').
 			'<input type="hidden" name="previous" value="'.$previous.'" />'."\n".
 			// We need to escape ALL entity refs before display so we display them _as_ entities instead of interpreting them
-			// hence htmlspecialchars() instead of htmlspecialchars_ent() which UNescapes entities!
+			// hence hsc_secure() instead of htmlspecialchars_ent() which UNescapes entities!
 			// JW/2007-02-20: why is this? wouldn't it be  easier for the person editing to show actual characters instead of entities?  
 			'<textarea id="body" name="body">'.$this->hsc_secure($body).'</textarea><br />'."\n";	#427
 		// add Edit note
