@@ -1,14 +1,56 @@
-<div class="page" <?php echo (($user = $this->GetUser()) && ($user['doubleclickedit'] == 'N')) ? '' : 'ondblclick="document.location=\''.$this->href('edit').'\';" ' ?>>
 <?php
+/**
+ * Display a page if the user has read access or is an admin.
+ * 
+ * This is the default page handler used by Wikka when no other handler is specified.
+ * Depending on user privileges, it displays the page body or an error message. It also
+ * displays footer comments and a form to post comments, depending on ACL and general 
+ * config settings.
+ * 
+ * @package		Handlers
+ * @subpackage	Page
+ * @version		$Id$
+ * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
+ * @filesource
+ * 
+ * @uses		Wakka::Format()
+ * @uses		Wakka::FormClose()
+ * @uses		Wakka::FormOpen()
+ * @uses		Wakka::GetConfigValue()
+ * @uses		Wakka::GetPageTag()
+ * @uses		Wakka::GetUser()
+ * @uses		Wakka::GetUserName()
+ * @uses		Wakka::HasAccess()
+ * @uses		Wakka::Href()
+ * @uses		Wakka::htmlspecialchars_ent()
+ * @uses		Wakka::LoadComments()
+ * @uses		Wakka::LoadPage()
+ * @uses		Wakka::LoadUser()
+ * @uses		Wakka::UserIsOwner()
+ * @uses		Config::$anony_delete_own_comments
+ * @uses		Config::$hide_comments
+ * 
+ * @todo		move <div> to template;
+ * @todo	replace $_REQUEST with either $_GET or $_POST (or both if really
+ * 			necessary) - #312  
+ */
+
+echo "\n".'<!--starting page content-->'."\n";
+echo '<div class="page"';
+echo (($user = $this->GetUser()) && ($user['doubleclickedit'] == 'N') || !$this->HasAccess('write')) ? '' : 'ondblclick="document.location=\''.$this->Href('edit').'\';" '; #268
+echo '>'."\n"; //TODO: move to templating class
+
 if (!$this->HasAccess('read'))
 {
 	echo '<p><em class="error">You aren\'t allowed to read this page.</em></p></div>';
+	echo "\n".'</div><!--closing page content-->'."\n"; //TODO: move to templating class
 }
 else
 {
 	if (!$this->page)
 	{
 		echo '<p>This page doesn\'t exist yet. Maybe you want to <a href="'.$this->Href('edit').'">create</a> it?</p></div>';
+		echo '</div><!--closing page content-->'."\n"; //TODO: move to templating class
 	}
 	else
 	{
@@ -46,8 +88,11 @@ else
 			$tag = $this->GetPageTag();
 			if (!isset($_SESSION['show_comments'][$tag]))
 				$_SESSION['show_comments'][$tag] = ($this->UserWantsComments() ? '1' : '0');
-			if (isset($_REQUEST['show_comments'])){	
-				switch($_REQUEST['show_comments'])
+			#if (isset($_REQUEST['show_comments']))
+			if (isset($_GET['show_comments'])) #312
+			{
+				#switch($_REQUEST['show_comments'])
+				switch($_GET['show_comments']) #312
 				{
 				case "0":
 					$_SESSION['show_comments'][$tag] = 0;
@@ -133,4 +178,3 @@ else
 	}
 }
 ?>
-
