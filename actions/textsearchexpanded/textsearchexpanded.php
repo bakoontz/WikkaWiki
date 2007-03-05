@@ -53,13 +53,13 @@ if ('' !== $phrase)
 	#if (!$phrase_re) return;
 	#$results = $this->FullTextSearch($phrase_re);
 	$results = $this->FullTextSearch($phrase);
+	$total_results = 0;
 	if ($results)
 	{
 		// build RE from $phrase for highlighting
 		// init
 		$phrase_re = $phrase;
 		$additional_re = ''; #38
-		$total_results = 0;
 		
 		// Extract Exact Phrases: terms inside double quotes
 		if (preg_match_all('/"([^"]+?)"/', $phrase_re, $match1))
