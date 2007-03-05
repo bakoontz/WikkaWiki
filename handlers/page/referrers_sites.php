@@ -18,13 +18,18 @@
  * 
  * @todo		move <div> to template
  */
+
 echo '<div class="page">'."\n"; //TODO: move to templating class
 
 $global = '';
 $IsAdmin = $this->IsAdmin();
-if (isset($_REQUEST["global"]))
+#if (isset($_REQUEST["global"]))
+if (isset($_GET["global"])) #312
 {
-	$global = $_REQUEST["global"];
+	// referrers to this wiki
+	// prepare UI
+	#$global = $_REQUEST["global"];
+	$global = $_GET["global"]; #312
 	$title = "Domains/sites linking to this wiki (<a href=\"".$this->Href("referrers", "", "global=1")."\">see list of different URLs</a>):";
 	$referrers = $this->LoadReferrers();
 }
