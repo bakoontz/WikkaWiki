@@ -1020,18 +1020,47 @@ class Wakka
 
 
 	// COMMENTS
+	/**
+	 * Load the comments for a (given) page.
+	 *
+	 * @uses	Wakka::LoadAll()
+	 * @param	string $tag mandatory: name of the page
+	 * @return	array all the comments for this page
+	 */
 	function LoadComments($tag) { return $this->LoadAll("SELECT * FROM ".$this->config["table_prefix"]."comments WHERE page_tag = '".mysql_real_escape_string($tag)."' ORDER BY time"); }
-	function LoadRecentComments($limit = 50) { return $this->LoadAll("SELECT * FROM ".$this->config["table_prefix"]."comments ORDER BY time DESC LIMIT ".$limit); }
+	/**
+	 * Load the last 50 comments on the wiki.
+	 *
+	 * @uses	Wakka::LoadAll()
+	 * @param	integer $limit optional: number of last comments. default: 50
+	 * @return	array the last x comments
+	 */
+	function LoadRecentComments($limit = 50) { return $this->LoadAll("SELECT * FROM ".$this->config["table_prefix"]."comments ORDER BY time DESC LIMIT ".intval($limit)); }
+	/**
+	 * Load the last 50 comments on different pages on the wiki.
+	 *
+	 * @uses	Wakka::LoadAll()
+	 * @param	integer $limit optional: number of last comments on different pages. default: 50
+	 * @return	array the last x comments on different pages
+	 */
 	function LoadRecentlyCommented($limit = 50)
 	{
 		$sql = "SELECT comments.id, comments.page_tag, comments.time, comments.comment, comments.user"
-        	. " FROM ".$this->config["table_prefix"]."comments AS comments"
-        	. " LEFT JOIN ".$this->config["table_prefix"]."comments AS c2 ON comments.page_tag = c2.page_tag AND comments.id < c2.id"
-        	. " WHERE c2.page_tag IS NULL "
-        	. " ORDER BY time DESC "
-        	. " LIMIT ".$limit;
+			. " FROM ".$this->config["table_prefix"]."comments AS comments"
+			. " LEFT JOIN ".$this->config["table_prefix"]."comments AS c2 ON comments.page_tag = c2.page_tag AND comments.id < c2.id"
+			. " WHERE c2.page_tag IS NULL "
+			. " ORDER BY time DESC "
+			. " LIMIT ".intval($limit);
 		return $this->LoadAll($sql);
 	}
+	/**
+	 * Save a (given) comment for a (given) page.
+	 *
+	 * @uses	Wakka::GetUserName()
+	 * @uses	Wakka::Query()
+	 * @param	string $page_tag mandatory: name of the page
+	 * @param	string $comment mandatory: text of the comment
+	 */
 	function SaveComment($page_tag, $comment)
 	{
 		// get current user
@@ -1049,15 +1078,15 @@ class Wakka
 	/** 
 	 * Check if current user is the owner of the current or a specified page. 
 	 *  
-	 * @access      public
-	 * @uses		wakka::GetPageOwner()
-	 * @uses		wakka::GetPageTag()  
-	 * @uses		wakka::GetUser()
-	 * @uses		wakka::GetUserName()
-	 * @uses		wakka::IsAdmin() 
+	 * @access		public
+	 * @uses		Wakka::GetPageOwner()
+	 * @uses		Wakka::GetPageTag() 
+	 * @uses		Wakka::GetUser()
+	 * @uses		Wakka::GetUserName()
+	 * @uses		Wakka::IsAdmin()
 	 * 
-	 * @param       string  $tag optional: page to be checked. Default: current page. 
-	 * @return      boolean TRUE if the user is the owner, FALSE otherwise. 
+	 * @param		string  $tag optional: page to be checked. Default: current page. 
+	 * @return		boolean TRUE if the user is the owner, FALSE otherwise. 
 	 */ 
 	function UserIsOwner($tag = "")
 	{
