@@ -691,7 +691,7 @@ $text = str_replace("\r\n", "\n", $text);
 // replace 4 consecutive spaces at the beginning of a line with tab character
 // $text = preg_replace("/\n[ ]{4}/", "\n\t", $text); // moved to edit.php
 
-if ($this->method == "show") $mind_map_pattern = "<map.*?<\/map>|"; else $mind_map_pattern = "";
+if ($this->handler == "show") $mind_map_pattern = "<map.*?<\/map>|"; else $mind_map_pattern = "";
 
 $text = preg_replace_callback(
 	"/".

@@ -191,10 +191,10 @@ $wakka = $_GET['wakka']; #312
 $wakka = preg_replace("/^\//", "", $wakka);
 
 /**
- * Split into page/method
+ * Extract pagename and handler from URL
  * @todo use different name - $wakka clashes with $wakka object (which should be #Wakka)
  */
-if (preg_match("#^(.+?)/(.*)$#", $wakka, $matches)) list(, $page, $method) = $matches;
+if (preg_match("#^(.+?)/(.*)$#", $wakka, $matches)) list(, $page, $handler) = $matches;
 else if (preg_match("#^(.*)$#", $wakka, $matches)) list(, $page) = $matches;
 //Fix lowercase mod_rewrite bug: URL rewriting makes pagename lowercase. #135
 if ((strtolower($page) == $page) && (isset($_SERVER['REQUEST_URI']))) #38
@@ -236,9 +236,9 @@ TPLERRDBACCESS;
  * Run the engine.
  * @todo use name with Capital for object; also clashes with $wakka (above) now
  */
-if (!isset($method)) $method='';
-$wakka->Run($page, $method);
-if (!preg_match('/(xml|raw|mm|grabcode)$/', $method))
+if (!isset($handler)) $handler='';
+$wakka->Run($page, $handler);
+if (!preg_match('/(xml|raw|mm|grabcode)$/', $handler))
 {
 	$tend = getmicrotime();
 	//calculate the difference

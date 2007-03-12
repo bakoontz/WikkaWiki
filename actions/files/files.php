@@ -10,7 +10,7 @@
  * Usage: {{files [download="filename"] [text="download link text"]}}
  *
  * @package		Actions
- * @version		$Id$
+ * @version		$Id:files.php 369 2007-03-01 14:38:59Z DarTar $
  * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
  * 
@@ -204,7 +204,7 @@ if (isset($vars['download']))
 }
 
 // 3. user is trying to upload
-elseif ($this->page && $this->HasAccess('read') && $this->method == 'show' && $is_writable)
+elseif ($this->page && $this->HasAccess('read') && $this->handler == 'show' && $is_writable)
 {
 
 	// create new folders if needed

@@ -7,10 +7,10 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
  * 
- * @uses		Wakka::method()
+ * @uses		Wakka::Handler()
  */
 
-if ($this->method == "diff") {
+if ($this->handler == "diff") {
 	// save output buffer and restart with clean buffer
 	$dummy = ob_get_clean(); ob_start();
 	// replace diff-tags to prevent highlighting these html-entities!
@@ -19,7 +19,7 @@ if ($this->method == "diff") {
 
 highlight_string($text);
 
-if ($this->method == "diff") {
+if ($this->handler == "diff") {
 	// get highlighting output
 	$listing = ob_get_clean(); ob_start();
 	// render diff tags

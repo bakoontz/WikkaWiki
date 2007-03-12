@@ -3,7 +3,7 @@
  * Generates the page header.
  * 
  * @package		Template
- * @version		$Id$
+ * @version		$Id:header.php 369 2007-03-01 14:38:59Z DarTar $
  * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
  * 
@@ -12,7 +12,7 @@
  * @uses	Wakka::GetConfigValue()
  * @uses	Wakka::GetWakkaName()
  * @uses	Wakka::PageTitle()
- * @uses	Wakka::GetMethod()
+ * @uses	Wakka::GetHandler()
  * @uses	Wakka::Href()
  * @uses	Wakka::Format()
  */
@@ -32,7 +32,7 @@ if ( substr_count($site_base, 'wikka.php?wakka=') > 0 ) $site_base = substr($sit
 <head>
 	<title><?php printf(GENERIC_DOCTITLE,$this->GetWakkaName(),$this->PageTitle()); ?></title>
 	<base href="<?php echo $site_base ?>" />
-	<?php if ($this->GetMethod() != 'show' || $this->page["latest"] == 'N' || $this->page["tag"] == 'SandBox') echo "<meta name=\"robots\" content=\"noindex, nofollow, noarchive\" />\n"; ?>
+	<?php if ($this->GetHandler() != 'show' || $this->page["latest"] == 'N' || $this->page["tag"] == 'SandBox') echo "<meta name=\"robots\" content=\"noindex, nofollow, noarchive\" />\n"; ?>
 	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
 	<meta name="keywords" content="<?php echo $this->GetConfigValue("meta_keywords") ?>" />
 	<meta name="description" content="<?php echo $this->GetConfigValue("meta_description") ?>" />
@@ -41,7 +41,7 @@ if ( substr_count($site_base, 'wikka.php?wakka=') > 0 ) $site_base = substr($sit
 	<link rel="icon" href="images/favicon.ico" type="image/x-icon" />
 	<link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon" />
 <?php
-if ($this->GetMethod() != 'edit' && $this->config['enable_rss_autodiscovery'] != 0) {
+if ($this->GetHandler() != 'edit' && $this->config['enable_rss_autodiscovery'] != 0) {
 	$wikiname = $this->GetWakkaName();
 	$rsslink  = '	<link rel="alternate" type="application/rss+xml" title="'.sprintf(RSS_REVISIONS_TITLE,$wikiname,$this->tag).' (RSS '.RSS_REVISIONS_VERSION.')" href="'.$this->Href('revisions.xml', $this->tag).'" />'."\n";
 	$rsslink .= '	<link rel="alternate" type="application/rss+xml" title="'.sprintf(RSS_RECENTCHANGES_TITLE,$wikiname).' (RSS '.RSS_RECENTCHANGES_VERSION.')" href="'.$this->Href('recentchanges.xml', $this->tag).'" />'."\n";

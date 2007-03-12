@@ -12,7 +12,7 @@
  * @uses		Wakka::IsAdmin()
  * @uses		Wakka::LoadReferrers()
  * @uses		Wakka::GetConfigValue()
- * @uses		Wakka::GetMethod()
+ * @uses		Wakka::GetHandler()
  * @uses		Wakka::GetUser()
  * @uses		Wakka::Href()
  * @uses		Wakka::htmlspecialchars_ent()
@@ -108,7 +108,7 @@ if ($this->GetUser())
 			$site_esc = $this->htmlspecialchars_ent($site);
 			print("<tr>");
 			print("<td width=\"30\" align=\"right\" valign=\"top\" style=\"padding-right: 10px\">$site_count</td>");
-			print("<td valign=\"top\">" . (($site != "unknown") ? "<a href=\"http://".$site_esc."\">".$site_esc."</a>" : $site) . "</a> ".($IsAdmin ? "[<a href=\"".$this->href("delete_referrer", "", "spam_site=").$site_esc."&amp;redirect=".$this->GetMethod().'">'.BLACKLIST_LINK_DESC."</a>]" : "")."</td>");
+			print("<td valign=\"top\">" . (($site != "unknown") ? "<a href=\"http://".$site_esc."\">".$site_esc."</a>" : $site) . "</a> ".($IsAdmin ? "[<a href=\"".$this->href("delete_referrer", "", "spam_site=").$site_esc."&amp;redirect=".$this->GetHandler().'">'.BLACKLIST_LINK_DESC."</a>]" : "")."</td>");
 			print("</tr>\n");
 		}
 		print("</table>\n");

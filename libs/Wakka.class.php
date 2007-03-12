@@ -709,7 +709,7 @@ class Wakka
 	 *
 	 * @return string name of the method.
 	 */
-	function GetMethod() { return $this->method; }
+	function GetHandler() { return $this->handler; }
 	/**
 	 * Get the value of a given value from the wikka config.
 	 *
@@ -1712,19 +1712,19 @@ class Wakka
 	 * Use a handler on the current page.
 	 *
 	 * @uses	Wakka::IncludeBuffered()   
-	 * @todo	 use templating class
-	 * @todo	 separate different classes of handlers (page, user, files etc.);
+	 * @todo	 use templating class;
+	 * @todo	 use handler config files; #446
 	 */
-	function Method($method)
+	function Handler($handler)
 	{
-		if (strstr($method, '/'))
+		if (strstr($handler, '/'))
 		{
-			$method = substr($method, strrpos($method, '/')+1);
+			$handler = substr($handler, strrpos($handler, '/')+1);
 		}
-		if (!$handler = $this->page['handler']) $handler = 'page';
-		$method_location = $handler.'/'.$method.'.php';
-		$method_location_disp = '<tt>'.$method_location.'</tt>';
-		return $this->IncludeBuffered($method_location, '<div class="page"><em class="error">'.sprintf(HANDLER_UNKNOWN,$method_location_disp).'</em></div>', '', $this->config['handler_path']);
+		//if (!$handler = $this->page['handler']) $handler = 'page';
+		$handler_location = 'page/'.$handler.'.php';
+		$handler_location_disp = '<tt>'.$handler_location.'</tt>';
+		return $this->IncludeBuffered($handler_location, '<div class="page"><em class="error">'.sprintf(HANDLER_UNKNOWN,$handler_location_disp).'</em></div>', '', $this->config['handler_path']);
 	}
 	/**
 	 * Format a text using a given or the standard "wakka" formatter.
@@ -2338,7 +2338,7 @@ class Wakka
 	 * @uses	Wakka::LoadUser()
 	 * @uses	Wakka::LogReferrer()
 	 * @uses	Wakka::Maintenance()
-	 * @uses	Wakka::Method()
+	 * @uses	Wakka::Handler()
 	 * @uses	Wakka::ReadInterWikiConfig()
 	 * @uses	Wakka::Redirect()
 	 * @uses	Wakka::SetCookie()
@@ -2347,11 +2347,13 @@ class Wakka
 	 *
 	 * @param	string $tag mandatory: name of the single page/image/file etc. to be used
 	 * @param	string $method optional: the method which should be used. default: "show"
+	 * 
+	 * @todo	rewrite the handler call routine and move handler specific settings to handler config files #446 #452
 	 */
-	function Run($tag, $method = "")
+	function Run($tag, $handler = "")
 	{
 		// do our stuff!
-		if (!$this->method = trim($method)) $this->method = "show";
+		if (!$this->handler = trim($handler)) $this->handler = "show";
 		if (!$this->tag = trim($tag)) $this->Redirect($this->Href("", $this->config["root_page"]));
 		if (!$this->GetUser() && ($user = $this->LoadUser($this->GetCookie('user_name'), $this->GetCookie('pass')))) $this->SetUser($user);
 		if ((!$this->GetUser() && isset($_COOKIE["wikka_user_name"])) && ($user = $this->LoadUser($_COOKIE["wikka_user_name"], $_COOKIE["wikka_pass"])))
@@ -2370,34 +2372,34 @@ class Wakka
 		$this->ACLs = $this->LoadAllACLs($this->tag);
 		$this->ReadInterWikiConfig();
 		if(!($this->GetMicroTime()%3)) $this->Maintenance();
-
-		if (preg_match('/\.(xml|mm)$/', $this->method))
+		//HTTP headers (to be moved to handler config files - #452)
+		if (preg_match('/\.(xml|mm)$/', $this->handler))
 		{
 			header("Content-type: text/xml");
-			print($this->Method($this->method));
+			print($this->Handler($this->handler));
 		}
 		// raw page handler
-		elseif ($this->method == "raw")
+		elseif ($this->handler == "raw")
 		{
 			header("Content-type: text/plain");
-			print($this->Method($this->method));
+			print($this->Handler($this->handler));
 		}
 		// grabcode page handler
-		elseif ($this->method == "grabcode")
+		elseif ($this->handler == "grabcode")
 		{
-			print($this->Method($this->method));
+			print($this->Handler($this->handler));
 		}
-		elseif (preg_match('/\.(gif|jpg|png)$/', $this->method))
+		elseif (preg_match('/\.(gif|jpg|png)$/', $this->handler))
 		{
-			header('Location: images/' . $this->method);
+			header('Location: images/' . $this->handler);
 		}
-		elseif (preg_match('/\.css$/', $this->method))
+		elseif (preg_match('/\.css$/', $this->handler))
 		{
-			header('Location: css/' . $this->method);
+			header('Location: css/' . $this->handler);
 		}
 		else
 		{
-			print($this->Header().$this->Method($this->method).$this->Footer());
+			print($this->Header().$this->Handler($this->handler).$this->Footer());
 		}
 	}
 }
