@@ -1722,7 +1722,7 @@ class Wakka
 			$handler = substr($handler, strrpos($handler, '/')+1);
 		}
 		//if (!$handler = $this->page['handler']) $handler = 'page';
-		$handler_location = 'page/'.$handler.'.php';
+		$handler_location = $handler.'/'.$handler.'.php';
 		$handler_location_disp = '<tt>'.$handler_location.'</tt>';
 		return $this->IncludeBuffered($handler_location, '<div class="page"><em class="error">'.sprintf(HANDLER_UNKNOWN,$handler_location_disp).'</em></div>', '', $this->config['handler_path']);
 	}

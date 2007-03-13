@@ -4,7 +4,7 @@
  *
  * @package		Handlers
  * @subpackage	Referrers
- * @version		$Id$
+ * @version		$Id: delete_referrer.php 330 2007-02-22 01:43:57Z JavaWoman $
  * @license		http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
  * 

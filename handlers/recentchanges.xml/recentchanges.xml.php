@@ -4,7 +4,7 @@
  * 
  * @package		Handlers
  * @subpackage	XML	
- * @version		$Id$
+ * @version		$Id: recentchanges.xml.php 325 2007-02-21 11:42:05Z JavaWoman $
  * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
  * 
