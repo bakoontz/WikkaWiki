@@ -37,11 +37,20 @@
  * Include language file if it exists.
  * @see /lang/en.inc.php
  */
-if (file_exists('lang/en.inc.php')) require_once('lang/en.inc.php');
-else die('Language File (/lang/en.inc.php) not found! Please add the file.');
-
+if (file_exists('lang/en.inc.php'))
+{
+	require_once('lang/en.inc.php');
+}
+else
+{
+	die('Language File (/lang/en.inc.php) not found! Please add the file.');
+}
 ob_start();
 
+/**
+ * Display PHP errors only or errors and warnings
+ * @todo	make this configurable
+ */
 //error_reporting(E_ALL);
 error_reporting (E_ALL ^ E_NOTICE);
 
@@ -62,12 +71,12 @@ if(!defined('ID_LENGTH')) define('ID_LENGTH',10);
  * Calculate page generation time.
  */
 function getmicrotime() {
-	list($usec, $sec) = explode(" ", microtime());
+	list($usec, $sec) = explode(' ', microtime());
 	return ((float)$usec + (float)$sec);
 }
 
 $tstart = getmicrotime();
-if ( ! function_exists("mysql_real_escape_string") )
+if (!function_exists('mysql_real_escape_string'))
 {
 /**
  * Escape special characters in a string for use in a SQL statement.
@@ -86,12 +95,19 @@ if ( ! function_exists("mysql_real_escape_string") )
  * Include main library if it exists.
  * @see /libs/Wakka.class.php
  */
-if (file_exists('libs/Wakka.class.php')) require_once('libs/Wakka.class.php');
-else die(ERROR_WAKKA_LIBRARY_MISSING);
-
+if (file_exists('libs/Wakka.class.php'))
+{
+	require_once('libs/Wakka.class.php');
+}
+else
+{
+	die(ERROR_WAKKA_LIBRARY_MISSING);
+}
 // stupid version check
-if (!isset($_REQUEST)) die(ERROR_WRONG_PHP_VERSION); // TODO replace with php version_compare
-
+if (!isset($_REQUEST))
+{
+	die(ERROR_WRONG_PHP_VERSION); //TODO replace with php version_compare
+}
 /** 
  * Workaround for the amazingly annoying magic quotes.
  */
@@ -102,9 +118,13 @@ function magicQuotesWorkaround(&$a)
 		foreach ($a as $k => $v)
 		{
 			if (is_array($v))
+			{
 				magicQuotesWorkaround($a[$k]);
+			}
 			else
+			{
 				$a[$k] = stripslashes($v);
+			}
 		}
 	}
 }
@@ -124,10 +144,18 @@ $buff = new Config;
 $wakkaDefaultConfig = get_object_vars($buff);
 unset($buff);
 $wakkaConfig = array();
-if (file_exists('wakka.config.php')) rename('wakka.config.php', 'wikka.config.php');
-if (!$configfile = GetEnv('WAKKA_CONFIG')) $configfile = 'wikka.config.php';
-if (file_exists($configfile)) include($configfile);
-
+if (file_exists('wakka.config.php'))
+{
+	rename('wakka.config.php', 'wikka.config.php');	
+}
+if (!$configfile = GetEnv('WAKKA_CONFIG'))
+{
+	$configfile = 'wikka.config.php';
+}
+if (file_exists($configfile))
+{
+	include($configfile);
+}
 $wakkaConfigLocation = $configfile;
 $wakkaConfig = array_merge($wakkaDefaultConfig, $wakkaConfig);
 $htaccessLocation = str_replace('\\', '/', dirname(__FILE__)).'/.htaccess';
@@ -143,14 +171,17 @@ if (file_exists('locked'))
 
 	// is authentification given?
 	if (isset($_SERVER['PHP_AUTH_USER'])) {
-		if (!(($_SERVER['PHP_AUTH_USER'] == 'admin') && ($_SERVER['PHP_AUTH_PW'] == $lockpw))) {
+		if (!(($_SERVER['PHP_AUTH_USER'] == 'admin') && ($_SERVER['PHP_AUTH_PW'] == $lockpw)))
+		{
 			$ask = 1;
 		}
-	} else {
+	}
+	else
+	{
 		$ask = 1;
 	}
-
-	if ($ask) {
+	if ($ask)
+	{
 		header('WWW-Authenticate: Basic realm="'.$wakkaConfig['wakka_name'].' Install/Upgrade Interface"');
 		header('HTTP/1.0 401 Unauthorized');
 		print STATUS_WIKI_UPGRADE_NOTICE;
@@ -161,11 +192,21 @@ if (file_exists('locked'))
 /**
  * Compare versions, start installer if necessary.
  */
-if (!isset($wakkaConfig['wakka_version'])) $wakkaConfig['wakka_version'] = 0;
+if (!isset($wakkaConfig['wakka_version']))
+{
+	$wakkaConfig['wakka_version'] = 0;
+}
 if ($wakkaConfig['wakka_version'] !== WAKKA_VERSION)
 {
-	if (file_exists('setup/index.php')) include('setup/index.php'); else print '<em>'.ERROR_SETUP_FILE_MISSING.'</em>';
-	exit;
+	if (file_exists('setup/index.php'))
+	{
+		include('setup/index.php');
+	}
+	else
+	{
+		print '<em>'.ERROR_SETUP_FILE_MISSING.'</em>';
+		exit;
+	}
 }
 
 /**
@@ -194,16 +235,22 @@ $wakka = preg_replace("/^\//", "", $wakka);
  * Extract pagename and handler from URL
  * @todo use different name - $wakka clashes with $wakka object (which should be #Wakka)
  */
-if (preg_match("#^(.+?)/(.*)$#", $wakka, $matches)) list(, $page, $handler) = $matches;
-else if (preg_match("#^(.*)$#", $wakka, $matches)) list(, $page) = $matches;
+if (preg_match("#^(.+?)/(.*)$#", $wakka, $matches))
+{
+	list(, $page, $handler) = $matches;
+}
+else if (preg_match("#^(.*)$#", $wakka, $matches))
+{
+	list(, $page) = $matches;
+}
 //Fix lowercase mod_rewrite bug: URL rewriting makes pagename lowercase. #135
 if ((strtolower($page) == $page) && (isset($_SERVER['REQUEST_URI']))) #38
 {
- $pattern = preg_quote($page, '/');
- if (preg_match("/($pattern)/i", urldecode($_SERVER['REQUEST_URI']), $match_url))
- {
-  $page = $match_url[1];
- }
+	$pattern = preg_quote($page, '/');
+	if (preg_match("/($pattern)/i", urldecode($_SERVER['REQUEST_URI']), $match_url))
+	{
+		$page = $match_url[1];
+	}
 }
 
 /**
@@ -212,7 +259,7 @@ if ((strtolower($page) == $page) && (isset($_SERVER['REQUEST_URI']))) #38
  */
 $wakka =& new Wakka($wakkaConfig);
 
-/** 
+/**
  * Check for database access.
  * @todo use name with Capital for object; also clashes with $wakka (above) now
  */
@@ -236,8 +283,15 @@ TPLERRDBACCESS;
  * Run the engine.
  * @todo use name with Capital for object; also clashes with $wakka (above) now
  */
-if (!isset($handler)) $handler='';
+if (!isset($handler))
+{
+	$handler='';
+}
 $wakka->Run($page, $handler);
+/**
+ * Calculate microtime
+ * @todo move handler check to handler configuration
+ */
 if (!preg_match('/(xml|raw|mm|grabcode)$/', $handler))
 {
 	$tend = getmicrotime();
@@ -254,7 +308,7 @@ $content =  ob_get_contents();
 if ( isset($_SERVER['HTTP_ACCEPT_ENCODING']) && strstr ($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip') && function_exists('gzencode') ) #38
 {
 	// Tell the browser the content is compressed with gzip
-	header ("Content-Encoding: gzip");
+	header ('Content-Encoding: gzip');
 	$page_output = gzencode($content);
 	$page_length = strlen($page_output);
 } else {
@@ -272,16 +326,15 @@ if (!isset($wakka->do_not_send_anticaching_headers) || (!$wakka->do_not_send_ant
 	header('Pragma: no-cache');
 }
 
-/** 
- * Ticket #152.
+/**
  * We no longer send Content-Length header, due to a bug in PHP {@link http://wush.net/trac/wikka/ticket/152}.
- * The Webserver will be clever enough to use chunked transfer encoding.
- * fixme: remove $page_length calculation above.
+ * The Webserver will be clever enough to use chunked transfer encoding. #152
+ * @todo remove $page_length calculation above.
  */
 //header('Content-Length: '.$page_length);
 ob_end_clean();
 
-/** 
+/**
  * Output the page.
  */
 echo $page_output;
