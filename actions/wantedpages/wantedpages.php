@@ -21,7 +21,7 @@
  * <li>tag : the name of the wanted page, alphabetically.</li></ul></p>
  * 
  * @package	Actions
- * @version $Id$
+ * @version $Id:wantedpages.php 369 2007-03-01 14:38:59Z DarTar $
  * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
  * 
@@ -32,7 +32,7 @@
  * @uses	 Wakka::FormClose()
  */
 
-$sorting_fields = array('count', 'time', 'tag');
+$sorting_fields = array('count', 'time', 'page_tag');
 if ((isset($vars) && is_array($vars) && isset($vars['option']) && $vars['option'] == 'v2') || (isset($_GET['ob1'])))
 {
 	$sort = '';
@@ -61,7 +61,7 @@ if ((isset($vars) && is_array($vars) && isset($vars['option']) && $vars['option'
 			print($this->Link($page["tag"]));
 			if ($page['count'] > 1)
 			{
-				print(' (<a href="'.$this->Href('backlinks', $page['tag']).'" title="'.sprintf(WIKKA_BACKLINKS_LINK_TITLE, $page['tag']).'">'.$page['count']."</a>)<br />\n");
+				print(' (<a href="'.$this->Href('backlinks', $page['page_tag']).'" title="'.sprintf(WIKKA_BACKLINKS_LINK_TITLE, $page['page_tag']).'">'.$page['count']."</a>)<br />\n");
 			}
 			else
 			{
@@ -76,7 +76,7 @@ elseif ($pages = $this->LoadWantedPages())
 {
 	foreach ($pages as $page)
 	{
-		print($this->Link($page['tag']).' (<a href="'.$this->Href('backlinks', $page['tag']).'" title="'.sprintf(WIKKA_BACKLINKS_LINK_TITLE, $page['tag']).'">'.$page['count']."</a>)<br />\n");
+		print($this->Link($page['page_tag']).' (<a href="'.$this->Href('backlinks', $page['page_tag']).'" title="'.sprintf(WIKKA_BACKLINKS_LINK_TITLE, $page['page_tag']).'">'.$page['count']."</a>)<br />\n");
 	}
 }
 if ($pages)

@@ -1013,7 +1013,7 @@ class Wakka
 			$sort = 'count desc, time desc, tag';
 		}
 		return $this->LoadAll('
-			select distinct _LINKS.to_tag as tag,
+			select distinct _LINKS.to_tag as page_tag,
 			count(_LINKS.from_tag) as count,
 			max(CONCAT_WS("/", _PAGES2.time, _PAGES2.tag)) as time
 			from '.$this->config['table_prefix'].'links _LINKS left join '.$this->config['table_prefix'].
@@ -1021,16 +1021,16 @@ class Wakka
 			INNER JOIN '.$this->config['table_prefix'].'pages _PAGES2 ON _LINKS.from_tag = _PAGES2.tag
 			where _PAGES.tag is NULL 
 			and _PAGES2.latest = \'Y\'
-			group by tag order by '.$sort);
+			group by page_tag order by '.$sort);
 	}
-	function LoadWantedPages() { return $this->LoadAll("select distinct ".$this->config["table_prefix"]."links.to_tag as tag,count(".$this->config["table_prefix"]."links.from_tag) as count from ".$this->config["table_prefix"]."links left join ".$this->config["table_prefix"]."pages on ".$this->config["table_prefix"]."links.to_tag = ".$this->config["table_prefix"]."pages.tag where ".$this->config["table_prefix"]."pages.tag is NULL group by tag order by count desc"); }
+	function LoadWantedPages() { return $this->LoadAll("select distinct ".$this->config["table_prefix"]."links.to_tag as page_tag,count(".$this->config["table_prefix"]."links.from_tag) as count from ".$this->config["table_prefix"]."links left join ".$this->config["table_prefix"]."pages on ".$this->config["table_prefix"]."links.to_tag = ".$this->config["table_prefix"]."pages.tag where ".$this->config["table_prefix"]."pages.tag is NULL group by page_tag order by count desc"); }
 	function IsWantedPage($tag)
 	{
 		if ($pages = $this->LoadWantedPages())
 		{
 			foreach ($pages as $page)
 			{
-				if ($page["tag"] == $tag) return true;
+				if ($page['page_tag'] == $tag) return true;
 			}
 		}
 		return false;
