@@ -5,6 +5,7 @@
  *
  * @todo 	Since wdiff use only directive lines, all stuff in diff class 
  * related to line and context display should be removed.
+ * @todo	Use a more flexible diff class
  *
  * @package Wikka
  * @subpackage Libs
