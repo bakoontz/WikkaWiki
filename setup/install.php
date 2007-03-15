@@ -98,7 +98,7 @@ case "0":
   			"doubleclickedit enum('Y','N') NOT NULL default 'Y',".
   			"signuptime datetime NOT NULL default '0000-00-00 00:00:00',".
   			"show_comments enum('Y','N') NOT NULL default 'N',".
-					#278	"challenge char(8) NOT NULL default '00000000',".
+  			"challenge char(8) NOT NULL default '00000000',".
   			"PRIMARY KEY  (name),".
   			"KEY idx_signuptime (signuptime)".
 			") TYPE=MyISAM", $dblink), __('Already exists?'), 0);
@@ -306,8 +306,8 @@ case "1.1.6.2":
 	test(sprintf(ADDING_CONFIG_ENTRY, '<tt>owner_delete_page</tt>'), 1);
 	$config["owner_delete_page"] = '0';	
 	update_default_page(array('HighScores', 'FormattingRules'), $dblink, $config);
-	#278	test("Altering table users : adding field named `challenge'...", 
-	#278	@mysql_query("alter table ".$config["table_prefix"]."users add `challenge` char( 8 ) default '00000000' null", $dblink), "", 0); 
+	test("Altering table users : adding field named `challenge'...", 
+	@mysql_query("alter table ".$config["table_prefix"]."users add `challenge` char( 8 ) default '00000000' null", $dblink), "", 0); 
 	test(__('Rebuilding links table').'...', 1);
 	include('links.php');
 	test(__('Adding fields to comments table to enable threading').'...', 

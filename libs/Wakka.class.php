@@ -1758,8 +1758,16 @@ class Wakka
 		{
 			return ($this->specialCache['user'][strtolower($name)]);
 		}
-		$user = $this->LoadSingle("select * from ".$this->config['table_prefix']."users where name = '".mysql_real_escape_string($name)."' ".($password === 0 ? "" : "and password = '".mysql_real_escape_string($password)."'")." limit 1");
-		if ($password === 0)
+		$user = $this->LoadSingle("select * from ".$this->config['table_prefix']."users where name = '".mysql_real_escape_string($name)."' limit 1");
+		if ($password !== 0)
+		{
+			$pwd = md5($user['challenge'].$user['password']);
+			if ($password != $pwd)
+			{
+				return (null);
+			}
+		}
+		else
 		{
 			$this->specialCache['user'][strtolower($name)] = $user;
 		}
@@ -1812,22 +1820,40 @@ class Wakka
 	/**
 	 * Log-in a (given) user.
 	 *
-	 * The data of the user is stored in the session and name and password are stored in a Cookie.
+	 * The data of the user is stored in the session; but name and password are stored in a Cookie.
 	 * 
 	 * @uses	Wakka::SetPersistentCookie()
+	 * @uses	Wakka::Query()
 	 * @param	array $user mandatory: must contain the userdata
-	 * @todo	name should be made made persistent with opposite function LogOutUser()
+	 * @todo	name should be made made persistent with opposite function LogoutUser()
 	 */
-	function SetUser($user) { $_SESSION["user"] = $user; $this->SetPersistentCookie("user_name", $user["name"]); $this->SetPersistentCookie("pass", $user["password"]); }
+	function SetUser($user)
+	{
+		$_SESSION["user"] = $user;
+		$this->SetPersistentCookie("user_name", $user["name"]);
+		$user['challenge'] = dechex(crc32(rand()));
+		$this->Query('update '.$this->config['table_prefix'].'users set `challenge` = \''.$user['challenge'].'\' where name = \''.mysql_real_escape_string($user['name']).'\'');
+		$this->SetPersistentCookie("pass", md5($user['challenge'].$user['password']));
+	}
 	/**
 	 * Log-out the current user.
 	 *
 	 * The data of the user is deleted from the session and name and password Cookies are deleted, too.
 	 * 
 	 * @uses	Wakka::DeleteCookie()
+	 * @uses	Wakka::GetUserName()
+	 * @uses	Wakka::Query()
 	 * @todo	name should be made made persistent with opposite function SetUser()
 	 */
-	function LogoutUser() { $_SESSION["user"] = ""; $this->DeleteCookie("user_name"); $this->DeleteCookie("pass"); }
+	function LogoutUser()
+	{
+		// Choosing an arbitrary challenge that the DB server only knows.
+		$user['challenge'] = dechex(crc32(rand()));
+		$this->Query('update '.$this->config['table_prefix'].'users set `challenge` = \''.$user['challenge'].'\' where name = \''.mysql_real_escape_string($this->GetUserName()).'\'');
+		$_SESSION["user"] = "";
+		$this->DeleteCookie("user_name");
+		$this->DeleteCookie("pass");
+	}
 	/**
 	 * Find out if the current user wants comments to be shown by default.
 	 *
@@ -2355,15 +2381,12 @@ class Wakka
 		// do our stuff!
 		if (!$this->handler = trim($handler)) $this->handler = "show";
 		if (!$this->tag = trim($tag)) $this->Redirect($this->Href("", $this->config["root_page"]));
-		if (!$this->GetUser() && ($user = $this->LoadUser($this->GetCookie('user_name'), $this->GetCookie('pass')))) $this->SetUser($user);
-		if ((!$this->GetUser() && isset($_COOKIE["wikka_user_name"])) && ($user = $this->LoadUser($_COOKIE["wikka_user_name"], $_COOKIE["wikka_pass"])))
+		if ($user = $this->LoadUser($this->GetCookie('user_name'), $this->GetCookie('pass'))) $this->SetUser($user);
+		if (isset($_COOKIE["wikka_user_name"]) && (isset($_COOKIE['wikka_pass'])))
 		{
 		 //Old cookies : delete them
-			SetCookie('wikka_user_name', "", 1, "/");
-			$_COOKIE['wikka_user_name'] = "";
-			SetCookie('wikka_pass', '', 1, '/');
-			$_COOKIE['wikka_pass'] = "";
-			$this->SetUser($user);
+			$this->DeleteCookie('wikka_pass');
+			$this->DeleteCookie('wikka_user_name');
 		}
 		#$this->SetPage($this->LoadPage($tag, (isset($_REQUEST["time"]) ? $_REQUEST["time"] :'')));
 		$this->SetPage($this->LoadPage($tag, (isset($_GET['time']) ? $_GET['time'] :''))); #312
