@@ -4,7 +4,7 @@
  *
  * @package		Handlers
  * @subpackage	Page
- * @version		$Id$
+ * @version		$Id:showcode.php 407 2007-03-13 05:59:51Z DarTar $
  * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
  *
@@ -31,7 +31,7 @@ if ($this->ExistsPage($this->tag))
 	if ($this->HasAccess('read'))
 	{
 		// display raw page, slightly formatted for viewing
-		$pagelink = '[['.$this->tag.']]';
+		$pagelink = $this->Link($this->tag, '', $this->tag);
 		printf('<h4>'.SOURCE_HEADING.'</h4><br />', $pagelink);
 		echo '(<a href="'.$this->href('raw').'">'.SHOW_RAW_LINK_DESC.'</a>)<br /><br />';
 		echo '<tt>'.nl2br($this->htmlspecialchars_ent($this->page["body"], ENT_QUOTES)).'</tt>';
