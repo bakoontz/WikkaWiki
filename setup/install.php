@@ -321,7 +321,7 @@ case "trunk": //latest development version from the SVN repository - do not remo
 if (!file_exists($wakkaConfigLocation) || !is_writeable($wakkaConfigLocation))
 {
 ?>
-<p><?php printf(__('In the next step, the installer will try to write the updated configuration file, %s').'.', '<tt>'.$wakkaConfigLocation.'</tt>');
+<p><?php printf(__('In the next step, the installer will try to write the updated configuration file, %s').'. ', '<tt>'.$wakkaConfigLocation.'</tt>');
 echo __('Please make sure the web server has write access to the file, or you will have to edit it manually').'.';
 printf(__('Once again, see %s for details'), '<a href="http://wikkawiki.org/WikkaInstallation" target="_blank">Wikka:WikkaInstallation</a>');
 ?>.

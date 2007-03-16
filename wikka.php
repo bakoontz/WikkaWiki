@@ -205,8 +205,8 @@ if ($wakkaConfig['wakka_version'] !== WAKKA_VERSION)
 	else
 	{
 		print '<em>'.ERROR_SETUP_FILE_MISSING.'</em>';
-		exit;
 	}
+	exit;
 }
 
 /**

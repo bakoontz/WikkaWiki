@@ -156,7 +156,11 @@ if (isset($server_info['mod_rewrite']))
 	echo '</li>'."\n".'</ul></li>';
 }
 echo '</ul></div>'."\n";
-echo '<div class="grabcode"><a href="wikka.php?installAction=grabinfo" title="'. _p(' Download server information').'">'.__('Grab').'</a></div>'."\n";
+echo '<h3>'.__('Download this').'</h3>';
+echo '<p>';
+printf(__('You can optionally %1$sdownload%2$s your system configuration settings. This may be useful should you have any problem when upgrading or installing some add-ons'), '<a href="wikka.php?installAction=grabinfo">', '</a>');
+echo '.</p>';
+
 echo $req."\n";
 if (($server_info['mod_rewrite']) && (!file_exists($htaccessLocation) || !is_writeable($htaccessLocation)))
 {
