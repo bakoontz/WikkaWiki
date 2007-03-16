@@ -120,7 +120,7 @@ else
 	printf(__('don\'t forget to remove write access again later, ie %s'), '<tt>chmod 644 '.$wakkaConfigLocation.'</tt>');
 	echo ".\n";
 	printf(__('If, for any reason, you can\'t do this, you\'ll have to copy the text below into a new file and save/upload it as %1$s'), '<tt>'.$wakkaConfigLocation.'</tt>');
-	printf(__('Once you\'ve done this, your Wikka site should work. If not, please visit %s'), '<a href="http://wikkawiki.org/WikkaInstallation">Wikka:WikkaInstallation</a>');
+	printf(__('Once you\'ve done this, your Wikka site should work. If not, please visit %s'), '<a href="http://docs.wikkawiki.org/WikkaInstallation">Wikka:WikkaInstallation</a>');
 	echo '.</p>'."\n";
 	?>
 	<form action="<?php echo $action_target; ?>" method="post">

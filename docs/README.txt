@@ -9,7 +9,7 @@ Not much to read here. For some quick installation instructions, please
 check out INSTALL.
 
 Most of the Wikka documentation is available online only. Please visit
-the official Wikka homepage at <http://wikkawiki.org>. You'll
+the official Wikka documentation at <http://docs.wikkawiki.org>. You'll
 find everything else there. (Eventually. :b)
 
 

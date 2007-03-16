@@ -152,7 +152,7 @@ if (isset($server_info['mod_rewrite']))
 {
 	echo '<li><strong>'.__('URL rewriting').' ('.__('optional').'):</strong>'."\n";
 	echo '<ul>'."\n";	
-	echo '<li><strong>'.__('Rewrite mode').':</strong> '.($server_info['mod_rewrite'] ? '<span class="ok">OK</span>' : '<span class="failed">n/a</span> <a href="http://wikkawiki.org/ModRewrite">'.__('learn more').'...</a>');
+	echo '<li><strong>'.__('Rewrite mode').':</strong> '.($server_info['mod_rewrite'] ? '<span class="ok">OK</span>' : '<span class="failed">n/a</span> <a href="http://docs.wikkawiki.org/ModRewrite">'.__('learn more').'...</a>');
 	echo '</li>'."\n".'</ul></li>';
 }
 echo '</ul></div>'."\n";

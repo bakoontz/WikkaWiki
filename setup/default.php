@@ -19,12 +19,12 @@
 	if (isset($wakkaConfig['wakka_version']) && ($wakkaConfig['wakka_version']))
 	{
 		echo '	<tr><td>&nbsp;</td><td><h1>'.__('WikkaWiki Upgrade').' (1/5)</h1></td></tr>'."\n";
-		echo '<tr><td>&nbsp;</td><td><p>'.sprintf(__('Welcome to the WikkaWiki Setup Wizard. Your installed WikkaWiki is reporting itself as %s'), '<tt>'.$wakkaConfig['wakka_version'].'</tt>').'</p><p>'.sprintf(__('You are about to %1$s WikkaWiki to version %2$s'), '<em>'.__('upgrade').'</em>', '<strong><tt>'.WAKKA_VERSION.'</tt></strong>').'. '.sprintf(__('Please refer to the %1$s for further instructions'), '<a href="http://wikkawiki.org/UpgradeNotes" target="_blank">'.__('documentation').'</a>').'.</p></td></tr>'."\n";
+		echo '<tr><td>&nbsp;</td><td><p>'.sprintf(__('Welcome to the WikkaWiki Setup Wizard. Your installed WikkaWiki is reporting itself as %s'), '<tt>'.$wakkaConfig['wakka_version'].'</tt>').'</p><p>'.sprintf(__('You are about to %1$s WikkaWiki to version %2$s'), '<em>'.__('upgrade').'</em>', '<strong><tt>'.WAKKA_VERSION.'</tt></strong>').'. '.sprintf(__('Please refer to the %1$s for further instructions'), '<a href="http://docs.wikkawiki.org/UpgradeNotes" target="_blank">'.__('documentation').'</a>').'.</p></td></tr>'."\n";
 	}
 	else
 	{
 		echo '	<tr><td>&nbsp;</td><td><h1>'.__('WikkaWiki Installation').' (1/5)</h1></td></tr>'."\n";
-		echo '<tr><td>&nbsp;</td><td><p>'.__('Welcome to the WikkaWiki Setup Wizard. Since there is no existing WikkaWiki configuration, this probably is a <em>fresh install</em>').'.</p><p>'.sprintf(__('You are about to install WikkaWiki (version %s). This wizard will guide you through the installation, which should take only a few minutes'), '<strong><tt>'.WAKKA_VERSION.'</tt></strong>').'. '.sprintf(__('Please refer to the %1$s for further instructions'), '<a href="http://wikkawiki.org/WikkaInstallation" target="_blank">'.__('documentation').'</a>').'.</p></td></tr>'."\n";
+		echo '<tr><td>&nbsp;</td><td><p>'.__('Welcome to the WikkaWiki Setup Wizard. Since there is no existing WikkaWiki configuration, this probably is a <em>fresh install</em>').'.</p><p>'.sprintf(__('You are about to install WikkaWiki (version %s). This wizard will guide you through the installation, which should take only a few minutes'), '<strong><tt>'.WAKKA_VERSION.'</tt></strong>').'. '.sprintf(__('Please refer to the %1$s for further instructions'), '<a href="http://docs.wikkawiki.org/WikkaInstallation" target="_blank">'.__('documentation').'</a>').'.</p></td></tr>'."\n";
 		echo '<tr><td>&nbsp;</td><td>'.__('To start the installation, please fill in the form below').'.</td></tr>'."\n";
 	}
 

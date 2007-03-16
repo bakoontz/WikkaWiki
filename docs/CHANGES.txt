@@ -211,7 +211,7 @@ Bug fixes:
 
 Misc:
 
-# Updated SafeHTML to version 1.2.0 (See http://pixel-apes.com/safehtml/feed8 for changes)
+# Updated SafeHTML to version 1.2.0 (See http://pixel-apes.com/safehtml/feed for changes)
 # Moved double-click event handling from BODY tag to a div tag with attribute class="page". This seems to make more sense. Requested by AHerdOfTurtles, see WikkaBugsResolved.
     * Files modified: actions/header.php, handlers/page/show.php 
 
@@ -220,7 +220,7 @@ Misc:
 
 # css/wikka.css modified to add style info for LastEdit and JwCalendar.
 # Removed file /actions/wakkabug.php. This file was pointing to wakkawiki.com -- which doesn't exist anymore.
-# Changed setup links that pointed to wakkawiki.com; they now point to http://wikkawiki.org/WikkaInstallation8.
+# Changed setup links that pointed to wakkawiki.com; they now point to http://wikkawiki.org/WikkaInstallation.
 # Slightly updated files in /docs directory: INSTALL, readme, and UPGRADE.
 # Added note to bottom of RecentChanges if WikiPing is enabled, per suggestion from NilsLindenberg.
     * File modified: actions/recentchanges.php 
@@ -252,10 +252,10 @@ Wikka 1.1.5.3
 Released on September 27 2004, minor changes
 
 Feature addition:
-# PageIndex action modified to show an alphabetical header that allows quick browsing of pages that start with a certain letter. See Wikka:Mod041fPageIndexByLetter8 for more info.
+# PageIndex action modified to show an alphabetical header that allows quick browsing of pages that start with a certain letter. See Wikka:Mod041fPageIndexByLetter for more info.
 
 Misc:
-# Small edit to Wikka:Mod040fSmartPageTitles8. Page titles will now be made from headers that are 3 or above. Previously it was 2 or above. This is to prevent the equality operator in code from being seen as a title.
+# Small edit to Wikka:Mod040fSmartPageTitles. Page titles will now be made from headers that are 3 or above. Previously it was 2 or above. This is to prevent the equality operator in code from being seen as a title.
 # Added a GPL header at the top of the main Wikka file, and included a copy of the GPL in the docs directory.
 
 Wikka 1.1.5.2
@@ -494,7 +494,7 @@ Released on May 23 2004
     * Fixed an issue with the upgrade script.
     * Added error checking to the installer. Credit to WackoWiki.
     * Click on the following link if you'd like to browse the exact code changes:
-    * http://www.jsnx.com/wikka-diff/Wikka-1.0.2.htm8
+    * http://www.jsnx.com/wikka-diff/Wikka-1.0.2.htm
 
 
 Wikka 1.0.1
@@ -505,7 +505,7 @@ Released on May 17 2004 - "The DotMG release"
           o The "wakka" formatter was modified to close tags that were left opened.
           o The "show" page handler was modified to not display the edit button if a page no longer exists. 
     * Click on the following link if you'd like to browse the exact code changes:
-    * http://www.jsnx.com/wikka-diff/Wikka1.0.1.htm8
+    * http://www.jsnx.com/wikka-diff/Wikka1.0.1.htm
 
 
 Wikka 1.0.0

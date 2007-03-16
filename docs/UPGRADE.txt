@@ -18,7 +18,7 @@ Wikka directory; once Wikka sees it, it will ask for a username ("admin") and a
 password (whatever you put into that file). Don't forget to remove the "locked" file
 once you're done with upgrading!
 
-More details, hopefully, on <http://wikkawiki.org/UpgradeNotes>.
+More details, hopefully, on <http://docs.wikkawiki.org/UpgradeNotes>.
 
 ---------------
 Version: $Id$
