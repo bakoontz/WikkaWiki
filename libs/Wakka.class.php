@@ -91,10 +91,10 @@ class Wakka
 	function Wakka($config)
 	{
 		$this->config = $config;
-		$this->dblink = @mysql_connect($this->config["mysql_host"], $this->config["mysql_user"], $this->config["mysql_password"]);
+		$this->dblink = @mysql_connect($this->config['mysql_host'], $this->config['mysql_user'], $this->config['mysql_password']);
 		if ($this->dblink)
 		{
-			if (!@mysql_select_db($this->config["mysql_database"], $this->dblink))
+			if (!@mysql_select_db($this->config['mysql_database'], $this->dblink))
 			{
 				@mysql_close($this->dblink);
 				$this->dblink = false;
@@ -109,9 +109,9 @@ class Wakka
 	/**
 	 * Send a query to the database.
 	 *
-	 * If the query will fail, the function will simply die(). If SQL-
+	 * If the query fails, the function will simply die(). If SQL-
 	 * Debugging is enabled, the query and the time it took to execute
-	 * will be added to the Query-Log.
+	 * are added to the Query-Log.
 	 *
 	 * @uses	Wakka::GetConfigValue()
 	 * @uses	Wakka::GetMicroTime()
@@ -143,10 +143,17 @@ class Wakka
 	 * @uses	Wakka::LoadAll()
 	 * @param	string $query mandatory: the query to be executed
 	 * @return	string? the first result of the query.
-	 * @todo	perhaps adding 'LIMIT 1' here instead depending on it beeing in every $query
+	 * @todo	perhaps add 'LIMIT 1' here instead depending on it beeing in every $query
 	 * @todo	move into a database class.
 	 */
-	function LoadSingle($query) { if ($data = $this->LoadAll($query)) return $data[0]; return (false);}
+	function LoadSingle($query)
+	{
+		if ($data = $this->LoadAll($query))
+		{
+			return $data[0];
+		}
+		return (false);
+	}
 	/**
 	 * Return all results of a query executed on the database.
 	 *
@@ -160,7 +167,10 @@ class Wakka
 		$data = array();
 		if ($r = $this->Query($query))
 		{
-			while ($row = mysql_fetch_assoc($r)) $data[] = $row;
+			while ($row = mysql_fetch_assoc($r))
+			{
+				$data[] = $row;
+			}
 			mysql_free_result($r);
 		}
 		return $data;
@@ -186,24 +196,32 @@ class Wakka
 		else
 		{
 			$result = @mysql_query('SHOW VARIABLES LIKE \'version\'');
-			if ($result != FALSE && @mysql_num_rows($result) > 0) {
+			if ($result != FALSE && @mysql_num_rows($result) > 0)
+			{
 				$row   = mysql_fetch_row($result);
 				$match = explode('.', $row[1]);
-			} else {
+			}
+			else
+			{
 				return 0;
 			}
 		}
-
 		$mysql_major = $match[0];
 		$mysql_minor = $match[1];
 		$mysql_subminor = $match[2][0].$match[2][1];
 
-		if ($mysql_major > $major) {
+		if ($mysql_major > $major)
+		{
 			return 1;
-		} else {
-			if (($mysql_major == $major) && ($mysql_minor >= $minor) && ($mysql_subminor >= $subminor)) {
+		}
+		else
+		{
+			if (($mysql_major == $major) && ($mysql_minor >= $minor) && ($mysql_subminor >= $subminor))
+			{
 				return 1;
-			} else {
+			}
+			else
+			{
 				return 0;
 			}
 		}
@@ -215,7 +233,11 @@ class Wakka
 	/**
 	 * Generate a timestamp.
 	 */
-	function GetMicroTime() { list($usec, $sec) = explode(" ",microtime()); return ((float)$usec + (float)$sec); }
+	function GetMicroTime()
+	{
+		list($usec, $sec) = explode(' ',microtime());
+		return ((float)$usec + (float)$sec);
+	}
 	/**
 	 * Buffer the output from an included file.
 	 *
@@ -226,19 +248,29 @@ class Wakka
 	 * @return	string in case the file has some output or there was a notfoundText, boolean FALSE otherwise
 	 * @todo	make the function return only one type of variable
 	 */
-	function IncludeBuffered($filename, $notfoundText = "", $vars = "", $path = "")
+	function IncludeBuffered($filename, $not_found_text = '', $vars = '', $path = '')
 	{
-		if ($path) $dirs = explode(":", $path);
-		else $dirs = array("");
-
+		if ($path)
+		{
+			$dirs = explode(':', $path);
+		}
+		else
+		{
+			$dirs = array("");
+		}
 		foreach($dirs as $dir)
 		{
-			if ($dir) $dir .= "/";
+			if ($dir)
+			{
+				$dir .= "/";
+			}
 			$fullfilename = $dir.$filename;
 			if (file_exists($fullfilename))
 			{
-				if (is_array($vars)) extract($vars);
-
+				if (is_array($vars))
+				{
+					extract($vars);
+				}
 				ob_start();
 				include($fullfilename);
 				$output = ob_get_contents();
@@ -246,8 +278,14 @@ class Wakka
 				return $output;
 			}
 		}
-		if ($notfoundText) return $notfoundText;
-		else return false;
+		if ($not_found_text)
+		{
+			return $not_found_text;
+		}
+		else
+		{
+			return false;
+		}
 	}
 	
 	/**
@@ -369,7 +407,7 @@ class Wakka
 	/**
 	 * Make sure a (user-provided) URL does use &amp; instead of & and is protected from attacks.
 	 *
-#	 * Any already-present '&amp;' is first turned into '&'; then htmlspecialchars() is applied so
+	 * Any already-present '&amp;' is first turned into '&'; then htmlspecialchars() is applied so
 	 * Any already-present '&amp;' is first turned into '&'; then hsc_secure() 
 	 * is applied so all ampersands are "escaped" while characters that could be 
 	 * used to create a script attack (< > or ") are "neutralized" by escaping 
@@ -691,44 +729,63 @@ class Wakka
 
 	/**
 	 * Variable-related methods
+	 * 
+	 * @todo decide if we need these methods
 	 */
 	/**
 	 * Get the name tag of the current page.
 	 *
 	 * @return	string the name of the page
 	 */
-	function GetPageTag() { return $this->tag; }
+	function GetPageTag()
+	{
+		return $this->tag;
+	}
 	/**
 	 * Get the time the current verion of the current page was saved.
 	 *
 	 * @return string?
 	 */
-	function GetPageTime() { return $this->page["time"]; }
+	function GetPageTime()
+	{
+		return $this->page['time']; }
 	/**
 	 * Get the handler used on the page.
 	 *
 	 * @return string name of the method.
 	 */
-	function GetHandler() { return $this->handler; }
+	function GetHandler()
+	{
+		return $this->handler;
+	}
 	/**
 	 * Get the value of a given value from the wikka config.
 	 *
 	 * @param	$name mandatory: name of a key in the config array
 	 */
-	function GetConfigValue($name) { return (isset($this->config[$name])) ? $this->config[$name] : null; }
+	function GetConfigValue($name)
+	{
+		return (isset($this->config[$name])) ? $this->config[$name] : null;
+	}
 	/**
 	 * Get the name of the Wiki.
 	 *
 	 * @uses	Wakka::GetConfigValue()
 	 * @return	string the name of the Wiki.
 	 */
-	function GetWakkaName() { return $this->GetConfigValue("wakka_name"); }
+	function GetWakkaName()
+	{
+		return $this->GetConfigValue('wakka_name');
+	}
 	/**
 	 * Get the wikka version.
 	 *
 	 * @return	string the wikka version
 	 */
-	function GetWakkaVersion() { return $this->VERSION; }
+	function GetWakkaVersion()
+	{
+		return $this->VERSION;
+	}
 
 	/**
 	 * Page-related methods
@@ -750,17 +807,25 @@ class Wakka
 	 * @access public
 	 * @return mixed $page
 	 */
-	function LoadPage($tag, $time = "", $cache = 1) {
+	function LoadPage($tag, $time = '', $cache = 1)
+	{
 		$page = null;
 		// retrieve from cache
-		if (!$time && $cache) {
+		if (!$time && $cache)
+		{
 			$page = $this->GetCachedPage($tag);
-			if ($page=="cached_nonexistent_page") return null;
+			if ($page == 'cached_nonexistent_page')
+			{
+				return null;
+			}
 		}
 		// load page
-		if (!$page) $page = $this->LoadSingle("select * from ".$this->config["table_prefix"]."pages where tag = '".mysql_real_escape_string($tag)."' ".($time ? "and time = '".mysql_real_escape_string($time)."'" : "and latest = 'Y'")." limit 1");
+		if (!$page)
+		{
+			$page = $this->LoadSingle('SELECT * FROM '.$this->config['table_prefix'].'pages WHERE tag = "'.mysql_real_escape_string($tag).'" '.($time ? 'AND time = "'.mysql_real_escape_string($time).'"' : 'AND latest = "Y"').' LIMIT 1');
+		}
 		// cache result
-		if ($page) 
+		if ($page)
 		{
 			$this->CachePage($page);
 		} 
@@ -775,7 +840,8 @@ class Wakka
 	 *
 	 * @return boolean? TRUE if it is the latest, false otherwise.
 	 */
-	function IsLatestPage() {
+	function IsLatestPage()
+	{
 		return $this->latest;
 	}
 	/**
@@ -802,7 +868,10 @@ class Wakka
 	 */
 	function GetCachedPage($tag) 
 	{
-		if (!$this->GetConfigValue('pagename_case_sensitive')) $tag = strtolower($tag);
+		if (!$this->GetConfigValue('pagename_case_sensitive'))
+		{
+			$tag = strtolower($tag);
+		}
 		$page = (isset($this->pageCache[$tag])) ? $this->pageCache[$tag] : null; 
 		if ((is_string($page)) && ($page[0] == '/'))
 		{
@@ -860,10 +929,20 @@ class Wakka
 	 */
 	function CacheNonExistentPage($tag)
 	{
-		if (!$this->GetConfigValue('pagename_case_sensitive')) $tag = strtolower($tag);
+		if (!$this->GetConfigValue('pagename_case_sensitive'))
+		{
+			$tag = strtolower($tag);
+		}
 		$this->pageCache[$tag] = 'cached_nonexistent_page';
 	}
-	function SetPage($page) { $this->page = $page; if ($this->page["tag"]) $this->tag = $this->page["tag"]; }
+	function SetPage($page)
+	{
+		$this->page = $page;
+		if ($this->page['tag'])
+		{
+			$this->tag = $this->page['tag'];
+		}
+	}
 	/**
 	 * LoadPageById loads a page whose id is $id.
 	 * 
@@ -890,7 +969,7 @@ class Wakka
 			}
 		}
 		// If the page id was not retrieved from cache, then use sql and cache the page.
-		$page = $this->LoadSingle("select * from ".$this->config["table_prefix"]."pages where id = '".mysql_real_escape_string($id)."' limit 1"); 
+		$page = $this->LoadSingle('SELECT * FROM '.$this->config['table_prefix'].'pages WHERE id = "'.mysql_real_escape_string($id).'" LIMIT 1'); 
 		if ($page)
 		{
 			$this->CachePage($page);
@@ -955,13 +1034,16 @@ class Wakka
 		{
 			$start = '';
 		}
-		$revisions = $this->LoadAll("select note, id, time, user from ".$this->config["table_prefix"]."pages where tag = '".mysql_real_escape_string($page)."' order by time desc LIMIT $start$max");
+		$revisions = $this->LoadAll('SELECT note, id, time, user FROM '.$this->config['table_prefix'].'pages WHERE tag = "'.mysql_real_escape_string($page).'" ORDER BY time desc LIMIT '.$start.$max);
 		if (is_array($revisions) && (count($revisions) < $max) && (count($revisions))) #38
 		{
-			if (!$this->GetConfigValue('pagename_case_sensitive')) $page_lowercase = strtolower($page);
+			if (!$this->GetConfigValue('pagename_case_sensitive'))
+			{
+				$page_lowercase = strtolower($page);
+			}
 			$this->specialCache['oldest_revision'][$page_lowercase] = $revisions[count($revisions) - 1];
 		}
-		return ($revisions);
+		return $revisions;
 	}
 	/**
 	 * LoadOldestRevision: Load the oldest known revision of a page.
@@ -975,16 +1057,25 @@ class Wakka
 	 */
 	function LoadOldestRevision($page)
 	{
-		if (!$this->GetConfigValue('pagename_case_sensitive')) $page_lowercase = strtolower($page);
-		if (isset($this->specialCache['oldest_revision'][$page_lowercase])) return ($this->specialCache['oldest_revision'][$page_lowercase]);
-		$latest_revision = $this->LoadSingle("select note, id, time, user from ".$this->config['table_prefix']."pages where tag = '".mysql_real_escape_string($page)."' order by time LIMIT 1");
+		if (!$this->GetConfigValue('pagename_case_sensitive'))
+		{
+			$page_lowercase = strtolower($page);
+		}
+		if (isset($this->specialCache['oldest_revision'][$page_lowercase]))
+		{
+			return ($this->specialCache['oldest_revision'][$page_lowercase]);
+		}
+		$latest_revision = $this->LoadSingle('SELECT note, id, time, user FROM '.$this->config['table_prefix'].'pages WHERE tag = "'.mysql_real_escape_string($page).'" ORDER BY time LIMIT 1');
 		$this->specialCache['oldest_revision'][$page_lowercase] = $latest_revision;
-		return ($latest_revision);
+		return $latest_revision;
 	}
-	function LoadPagesLinkingTo($tag) { return $this->LoadAll("select from_tag as tag from ".$this->config["table_prefix"]."links where to_tag = '".mysql_real_escape_string($tag)."' order by tag"); }
+	function LoadPagesLinkingTo($tag)
+	{
+		return $this->LoadAll('SELECT from_tag AS tag FROM '.$this->config['table_prefix'].'links WHERE to_tag = "'.mysql_real_escape_string($tag).'" ORDER BY tag');
+	}
 	function LoadRecentlyChanged()
 	{
-		if ($pages = $this->LoadAll("select * from ".$this->config["table_prefix"]."pages where latest = 'Y' order by time desc"))
+		if ($pages = $this->LoadAll('SELECT * FROM '.$this->config['table_prefix'].'pages WHERE latest = "Y" ORDER BY time DESC'))
 		{
 			foreach ($pages as $page)
 			{
@@ -996,7 +1087,7 @@ class Wakka
 	}
 	/**
 	 * Load pages that need to be created.
-	 * This is an expanded version of {@link Wakka::LoadWantedPages()} by permitting sorting by
+	 * This is an expanded version of {@link Wakka::LoadWantedPages()} allowing sorting by
 	 * number of pages referring to each wanted page, or by latest modified date of any page referring
 	 * to wanted pages, or alphabetically.
 	 * WARNING: The parameter $sort passed to this method is considered sanitized.
@@ -1010,48 +1101,69 @@ class Wakka
 	{
 		if (!$sort)
 		{
-			$sort = 'count desc, time desc, tag';
+			$sort = 'count DESC, time DESC, tag';
 		}
 		return $this->LoadAll('
-			select distinct _LINKS.to_tag as page_tag,
-			count(_LINKS.from_tag) as count,
-			max(CONCAT_WS("/", _PAGES2.time, _PAGES2.tag)) as time
-			from '.$this->config['table_prefix'].'links _LINKS left join '.$this->config['table_prefix'].
-			'pages _PAGES on _LINKS.to_tag = _PAGES.tag 
+			SELECT DISTINCT _LINKS.to_tag AS page_tag,
+			COUNT(_LINKS.from_tag) AS count,
+			MAX(CONCAT_WS("/", _PAGES2.time, _PAGES2.tag)) AS time
+			FROM '.$this->config['table_prefix'].'links _LINKS LEFT JOIN '.$this->config['table_prefix'].
+			'pages _PAGES ON _LINKS.to_tag = _PAGES.tag 
 			INNER JOIN '.$this->config['table_prefix'].'pages _PAGES2 ON _LINKS.from_tag = _PAGES2.tag
-			where _PAGES.tag is NULL 
-			and _PAGES2.latest = \'Y\'
-			group by page_tag order by '.$sort);
+			WHERE _PAGES.tag IS NULL 
+			AND _PAGES2.latest = \'Y\'
+			GROUP BY page_tag ORDER BY '.$sort);
 	}
-	function LoadWantedPages() { return $this->LoadAll("select distinct ".$this->config["table_prefix"]."links.to_tag as page_tag,count(".$this->config["table_prefix"]."links.from_tag) as count from ".$this->config["table_prefix"]."links left join ".$this->config["table_prefix"]."pages on ".$this->config["table_prefix"]."links.to_tag = ".$this->config["table_prefix"]."pages.tag where ".$this->config["table_prefix"]."pages.tag is NULL group by page_tag order by count desc"); }
+	function LoadWantedPages()
+	{
+		return $this->LoadAll('SELECT DISTINCT '.$this->config['table_prefix'].'links.to_tag AS page_tag, COUNT('.$this->config['table_prefix'].'links.from_tag) AS count FROM '.$this->config['table_prefix'].'links LEFT JOIN '.$this->config['table_prefix'].'pages ON '.$this->config['table_prefix'].'links.to_tag = '.$this->config['table_prefix'].'pages.tag WHERE '.$this->config['table_prefix'].'pages.tag IS NULL GROUP BY page_tag ORDER BY count DESC');
+	}
 	function IsWantedPage($tag)
 	{
 		if ($pages = $this->LoadWantedPages())
 		{
 			foreach ($pages as $page)
 			{
-				if ($page['page_tag'] == $tag) return true;
+				if ($page['page_tag'] == $tag)
+				{
+					return true;
+				}
 			}
 		}
 		return false;
 	}
-	function LoadOrphanedPages() { return $this->LoadAll("select distinct tag from ".$this->config["table_prefix"]."pages left join ".$this->config["table_prefix"]."links on ".$this->config["table_prefix"]."pages.tag = ".$this->config["table_prefix"]."links.to_tag where ".$this->config["table_prefix"]."links.to_tag is NULL order by tag"); }
-	function LoadPageTitles() { return $this->LoadAll("select tag, owner from ".$this->config["table_prefix"]."pages where latest = 'Y' order by tag"); }
-	function LoadPagesByOwner($owner) { return $this->LoadAll('select tag from '.$this->config['table_prefix'].'pages where latest = \'Y\' and owner = \''.mysql_real_escape_string($owner).'\'');}
-	function LoadAllPages() { return $this->LoadAll("select * from ".$this->config["table_prefix"]."pages where latest = 'Y' order by tag"); }
+	function LoadOrphanedPages()
+	{
+		return $this->LoadAll('SELECT DISTINCT tag FROM '.$this->config['table_prefix'].'pages LEFT JOIN '.$this->config['table_prefix'].'links ON '.$this->config['table_prefix'].'pages.tag = '.$this->config['table_prefix'].'links.to_tag WHERE '.$this->config['table_prefix'].'links.to_tag IS NULL ORDER BY tag');
+	}
+	function LoadPageTitles()
+	{
+		return $this->LoadAll('SELECT tag, owner FROM '.$this->config['table_prefix'].'pages WHERE latest = "Y" ORDER BY tag');
+	}
+	function LoadPagesByOwner($owner)
+	{
+		return $this->LoadAll('SELECT tag FROM '.$this->config['table_prefix'].'pages WHERE latest = "Y" and owner = "'.mysql_real_escape_string($owner).'"');
+	}
+	function LoadAllPages()
+	{
+		return $this->LoadAll('SELECT * FROM '.$this->config['table_prefix'].'pages WHERE latest = "Y" ORDER BY tag');
+	}
 	// function FullTextSearch($phrase) { return $this->LoadAll("select * from ".$this->config["table_prefix"]."pages where latest = 'Y' and match(tag, body) against('".mysql_real_escape_string($phrase)."')"); }
 	function FullTextSearch($phrase)
 	{
-		$data = "";
+		$data = '';
 		if ($this->CheckMySQLVersion(4,00,01))
 		{
-			if (preg_match('/[A-Z]/', $phrase)) $phrase = "\"".$phrase."\"";
-			$data = $this->LoadAll(" select * from "
-			.$this->config["table_prefix"]
-			."pages where latest = 'Y' and tag like('%".mysql_real_escape_string($phrase)."%') UNION select * from "
-			.$this->config["table_prefix"]
-			."pages where latest = 'Y' and match(tag, body) against('".mysql_real_escape_string($phrase)
-			."' IN BOOLEAN MODE) order by time DESC");
+			if (preg_match('/[A-Z]/', $phrase))
+			{
+				$phrase = '"'.$phrase.'"';
+			}
+			$data = $this->LoadAll('SELECT * FROM '
+			.$this->config['table_prefix']
+			.'pages WHERE latest = "Y" AND tag LIKE("%'.mysql_real_escape_string($phrase).'%") UNION SELECT * FROM '
+			.$this->config['table_prefix']
+			.'pages WHERE latest = "Y" AND MATCH(tag, body) AGAINST("'.mysql_real_escape_string($phrase)
+			.'" IN BOOLEAN MODE) ORDER BY time DESC');
 		}
 
 		// else if ($this->CheckMySQLVersion(3,23,23))
@@ -1065,21 +1177,18 @@ class Wakka
 		// }
 
 		/* if no results perform a more general search */
-		if (!$data)  {
-				$data = $this->LoadAll("select * from "
-				.$this->config["table_prefix"]
-				."pages where latest = 'Y' and
-				  (tag like '%".mysql_real_escape_string($phrase)."%' or
-				   body like '%".mysql_real_escape_string($phrase)."%')
-				   order by time DESC");
+		if (!$data)
+		{
+			$data = $this->LoadAll('SELECT * FROM '
+			.$this->config['table_prefix']
+			.'pages WHERE latest = "Y" AND (tag LIKE "%'.mysql_real_escape_string($phrase).'%" OR
+			   body LIKE "%'.mysql_real_escape_string($phrase).'%")
+			   ORDER BY time DESC');
 		}
-
 		return($data);
 	}
 	/**
-	 * Takes an array of pages returned by LoadAll() and presents it using table or unordered list.
-	 *
-	 * This method is called in Category action and Backlinks handler
+	 * Takes an array of pages returned by LoadAll() and renders it as a table or unordered list.
 	 *
 	 * @author		{@link http://wikkawiki.org/DotMG DotMG}
 	 * @access		public
@@ -1090,15 +1199,21 @@ class Wakka
 	 * @param string $class optional: A classname to be attached to the table or unordered list. Default: ''
 	 * @param int $columns optional: Number of columns of the table if compact = 0. Default: 3
 	 * @param int $compact optional: If 0: use table, if 1: use unordered list. Default: 0
-		* @param boolean $show_edit_link If true, each page is followed by an edit link. Default: false. 
+	 * @param boolean $show_edit_link If true, each page is followed by an edit link. Default: false. 
 	 * @return string
 	 */
 	function ListPages($pages, $nopagesText = '', $class = '', $columns = 3, $compact = 0, $show_edit_link=false)
 	{
 		$edit_link = '';
-		if (!$pages) return ($nopagesText);
-		if ($class) $class=" class='$class'";
-		$str = $compact ? "<div$class><ul>" : "<table width='100%'$class><tr\n>";
+		if (!$pages)
+		{
+			return ($nopagesText);
+		}
+		if ($class)
+		{
+			$class = ' class="'.$class.'"';
+		}
+		$str = $compact ? '<div'.$class.'><ul>' : '<table width="100%"'.$class.'><tr>'."\n";
 		foreach ($pages as $page)
 		{
 			$list[] = $page['tag'];
@@ -1115,13 +1230,13 @@ class Wakka
 			{
 				$link = '[['.$val;
 				if (eregi('^Category', $val)) $link.= ' '.eregi_replace('^Category', '', $val);
-				$str .= "<li\n>".$this->Format($link.']]').$edit_link.'</li>';
+				$str .= '<li>'."\n".$this->Format($link.']]').$edit_link.'</li>';
 			}
 			else
 			{
 				if ($count == $columns)
 				{
-					$str .= "</tr><tr\n>";
+					$str .= '</tr><tr>'."\n";
 					$count = 0;
 				}
 				$str .= '<td>'.$this->Format('[['.$val.']]').$edit_link.'</td>';
@@ -1129,7 +1244,7 @@ class Wakka
 			$count ++;
 		}
 		$str .= $compact ? '</ul></div>' : '</tr></table>';
-		return ($str);
+		return $str;
 	}
 	/**
 	 * Save a page.
@@ -1148,35 +1263,40 @@ class Wakka
 		$user = $this->GetUserName();
 
 		// TODO: check write privilege	??? is this still a TODO??
-		if ($this->HasAccess("write", $tag))
+		if ($this->HasAccess('write', $tag))
 		{
 			// is page new?
 			if (!$oldPage = $this->LoadPage($tag))
 			{
 				// current user is owner if user is logged in, otherwise, no owner.
-				if ($this->GetUser()) $owner = $user;
+				if ($this->GetUser())
+				{
+					$owner = $user;
+				}
 			}
 			else
 			{
 				// aha! page isn't new. keep owner!
-				$owner = $oldPage["owner"];
+				$owner = $oldPage['owner'];
 			}
 
 			// set all other revisions to old
-			$this->Query("update ".$this->config["table_prefix"]."pages set latest = 'N' where tag = '".mysql_real_escape_string($tag)."'");
+			$this->Query('UPDATE '.$this->config['table_prefix'].'pages SET latest = "N" WHERE tag = "'.mysql_real_escape_string($tag).'"');
 
 			// add new revision
-			$this->Query("insert into ".$this->config["table_prefix"]."pages set ".
-				"tag = '".mysql_real_escape_string($tag)."', ".
-				 "time = now(), ".
-				  "owner = '".mysql_real_escape_string($owner)."', ".
-				 "user = '".mysql_real_escape_string($user)."', ".
-				"note = '".mysql_real_escape_string($note)."', ".
-				 "latest = 'Y', ".
-				 "body = '".mysql_real_escape_string($body)."'");
+			$this->Query('INSERT INTO '.$this->config['table_prefix'].'pages SET '.
+				'tag = "'.mysql_real_escape_string($tag).'", '.
+				'time = now(), '.
+				'owner = "'.mysql_real_escape_string($owner).'", '.
+				'user = "'.mysql_real_escape_string($user).'", '.
+				'note = "'.mysql_real_escape_string($note).'", '.
+				'latest = "Y", '.
+				'body = "'.mysql_real_escape_string($body).'"');
 
-			if ($pingdata = $this->GetPingParams($this->config["wikiping_server"], $tag, $user, $note))
+			if ($pingdata = $this->GetPingParams($this->config['wikiping_server'], $tag, $user, $note))
+			{
 				$this->WikiPing($pingdata);
+			}
 		}
 	}
 	/**
@@ -1189,15 +1309,23 @@ class Wakka
 	 * @uses	Wakka::GetPageTag()
 	 * @return	string the title of the current page
 	 */
-	function PageTitle() {
-		$title = "";
-		$pagecontent = $this->page["body"];
-		if (ereg( "(=){3,5}([^=\n]+)(=){3,5}", $pagecontent, $title)) {
-			$formatting_tags = array("**", "//", "__", "##", "''", "++", "#%", "@@", "\"\"");
-			$title = str_replace($formatting_tags, "", $title[2]);
+	function PageTitle()
+	{
+		$title = '';
+		$pagecontent = $this->page['body'];
+		if (ereg( '(=){3,5}([^=\n]+)(=){3,5}', $pagecontent, $title))
+		{
+			$formatting_tags = array('**', '//', '__', '##', "''", '++', '#%', '@@', '""');
+			$title = str_replace($formatting_tags, '', $title[2]);
 		}
-		if ($title) return strip_tags($this->Format($title));				# fix for forced links in heading
-		else return $this->GetPageTag();
+		if ($title)
+		{
+			return strip_tags($this->Format($title));				# fix for forced links in heading
+		}
+		else
+		{
+			return $this->tag;
+		}
 	}
 	/**
 	 * Check by name if a page exists.
@@ -1216,9 +1344,9 @@ class Wakka
 	function ExistsPage($page)
 	{
 		$count = 0;
-		$query =	 "SELECT COUNT(tag)
-					FROM ".$this->config['table_prefix']."pages
-					WHERE tag='".mysql_real_escape_string($page)."'";
+		$query = 'SELECT COUNT(tag)
+					FROM '.$this->config['table_prefix'].'pages
+					WHERE tag="'.mysql_real_escape_string($page).'"';
 		if ($r = $this->Query($query))
 		{
 			$count = mysql_result($r,0);
@@ -1235,43 +1363,84 @@ class Wakka
 	 *
 	 * @todo	move to an extra class
 	 */
-	function HTTPpost($host, $data, $contenttype="application/x-www-form-urlencoded", $maxAttempts = 5) {
-		$attempt =0; $status = 300; $result = "";
-		while ($status >= 300 && $status < 400 && $attempt++ <= $maxAttempts) {
+	function HTTPpost($host, $data, $contenttype='application/x-www-form-urlencoded', $maxAttempts = 5)
+	{
+		$attempt = 0;
+		$status = 300;
+		$result = '';
+		while ($status >= 300 && $status < 400 && $attempt++ <= $maxAttempts)
+		{
 			$url = parse_url($host);
-			if (isset($url["path"]) == false) $url["path"] = "/";
-			if (isset($url["port"]) == false) $url["port"] = 80;
-
-			if ($socket = fsockopen ($url["host"], $url["port"], $errno, $errstr, 15)) {
-				$strQuery = "POST ".$url["path"]." HTTP/1.1\n";
-				$strQuery .= "Host: ".$url["host"]."\n";
-				$strQuery .= "Content-Length: ".strlen($data)."\n";
-				$strQuery .= "Content-Type: ".$contenttype."\n";
-				$strQuery .= "Connection: close\n\n";
+			if (isset($url['path']) == FALSE)
+			{
+				$url['path'] = '/';
+			}
+			if (isset($url["port"]) == FALSE)
+			{
+				$url['port'] = 80;
+			}
+			if ($socket = fsockopen ($url['host'], $url['port'], $errno, $errstr, 15))
+			{
+				$strQuery = 'POST '.$url['path'].' HTTP/1.1'."\n";
+				$strQuery .= 'Host: '.$url['host']."\n";
+				$strQuery .= 'Content-Length: '.strlen($data)."\n";
+				$strQuery .= 'Content-Type: '.$contenttype."\n";
+				$strQuery .= 'Connection: close'."\n\n";
 				$strQuery .= $data;
 
 				// send request & get response
 				fputs($socket, $strQuery);
-				$bHeader = true;
-				while (!feof($socket)) {
+				$bHeader = TRUE;
+				while (!feof($socket))
+				{
 					$strLine = trim(fgets($socket, 512));
-					if (strlen($strLine) == 0) $bHeader = false; // first empty line ends header-info
-					if ($bHeader) {
-						if (!$status) $status = $strLine;
-						if (preg_match("/^Location:\s(.*)/", $strLine, $matches)) $location = $matches[1];
-					} else $result .= trim($strLine)."\n";
+					if (strlen($strLine) == 0)
+					{
+						$bHeader = false; // first empty line ends header-info
+					}
+					if ($bHeader)
+					{
+						if (!$status)
+						{
+							$status = $strLine;
+						}
+						if (preg_match('/^Location:\s(.*)/', $strLine, $matches))
+						{
+							$location = $matches[1];
+						}
+					}
+					else
+					{
+						$result .= trim($strLine)."\n";
+					}
 				}
 				fclose ($socket);
-			} else $status = "999 timeout";
+			}
+			else
+			{
+				$status = '999 timeout';
+			}
 
-			if ($status) {
-				if(preg_match("/(\d){3}/", $status, $matches)) $status = $matches[1];
-			} else $status = 999;
+			if ($status)
+			{
+				if(preg_match('/(\d){3}/', $status, $matches))
+				{
+					$status = $matches[1];
+				}
+			}
+			else
+			{
+				$status = 999;
+			}
 			$host = $location;
 		}
-		if (preg_match("/^[\da-fA-F]+(.*)$/", $result, $matches)) $result = $matches[1];
+		if (preg_match('/^[\da-fA-F]+(.*)$/', $result, $matches))
+		{
+			$result = $matches[1];
+		}
 		return $result;
 	}
+	//TODO Continue cleanup from here
 	/**
 	 * Manage the WikiPing(s) of a change to (an) external sever(s).
 	 *
