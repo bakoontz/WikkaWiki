@@ -1440,35 +1440,41 @@ class Wakka
 		}
 		return $result;
 	}
-	//TODO Continue cleanup from here
 	/**
-	 * Manage the WikiPing(s) of a change to (an) external sever(s).
+	 * Broadcast wiki changes to external servers.
 	 *
 	 * @uses	Wakka::HTTPpost()
-	 * @todo	move to an extra class
+	 * @todo	move to a dedicated class
 	 */
-	function WikiPing($ping, $debug = false) {
-		if ($ping) {
+	function WikiPing($ping, $debug = false)
+	{
+		if ($ping)
+		{
 			$rpcRequest .= "<methodCall>\n";
 			$rpcRequest .= "<methodName>wiki.ping</methodName>\n";
 			$rpcRequest .= "<params>\n";
 			$rpcRequest .= "<param>\n<value>\n<struct>\n";
-			$rpcRequest .= "<member>\n<name>tag</name>\n<value>".$ping["tag"]."</value>\n</member>\n";
-			$rpcRequest .= "<member>\n<name>url</name>\n<value>".$ping["taglink"]."</value>\n</member>\n";
-			$rpcRequest .= "<member>\n<name>wiki</name>\n<value>".$ping["wiki"]."</value>\n</member>\n";
-			if ($ping["author"]) {
-				$rpcRequest .= "<member>\n<name>author</name>\n<value>".$ping["author"]."</value>\n</member>\n";
-				if ($ping["authorpage"]) $rpcRequest .= "<member>\n<name>authorpage</name>\n<value>".$ping["authorpage"]."</value>\n</member>\n";
+			$rpcRequest .= "<member>\n<name>tag</name>\n<value>".$ping['tag']."</value>\n</member>\n";
+			$rpcRequest .= "<member>\n<name>url</name>\n<value>".$ping['taglink']."</value>\n</member>\n";
+			$rpcRequest .= "<member>\n<name>wiki</name>\n<value>".$ping['wiki']."</value>\n</member>\n";
+			if ($ping['author'])
+			{
+				$rpcRequest .= "<member>\n<name>author</name>\n<value>".$ping['author']."</value>\n</member>\n";
+				if ($ping['authorpage']) $rpcRequest .= "<member>\n<name>authorpage</name>\n<value>".$ping['authorpage']."</value>\n</member>\n";
 			}
-			if ($ping["history"]) $rpcRequest .= "<member>\n<name>history</name>\n<value>".$ping["history"]."</value>\n</member>\n";
-			if ($ping["changelog"]) $rpcRequest .= "<member>\n<name>changelog</name>\n<value>".$this->htmlspecialchars_ent($ping['changelog'],ENT_COMPAT,'XML')."</value>\n</member>\n";
+			if ($ping['history']) $rpcRequest .= "<member>\n<name>history</name>\n<value>".$ping['history']."</value>\n</member>\n";
+			if ($ping['changelog']) $rpcRequest .= "<member>\n<name>changelog</name>\n<value>".$this->htmlspecialchars_ent($ping['changelog'],ENT_COMPAT,'XML')."</value>\n</member>\n";
 			$rpcRequest .= "</struct>\n</value>\n</param>\n";
 			$rpcRequest .= "</params>\n";
 			$rpcRequest .= "</methodCall>\n";
 
-			foreach (explode(" ", $ping["server"]) as $server) {
-				$response = $this->HTTPpost($server, $rpcRequest, "text/xml");
-				if ($debug) print $response;
+			foreach (explode(' ', $ping['server']) as $server)
+			{
+				$response = $this->HTTPpost($server, $rpcRequest, 'text/xml');
+				if ($debug)
+				{
+					print $response;
+				}
 			}
 		}
 	}
@@ -1484,22 +1490,48 @@ class Wakka
 	 * @return	array/boolean either an array with the WikiPing-params or false if
 	 * @todo	move to an extra class
 	 */
-	function GetPingParams($server, $tag, $user, $changelog = "") {
+	function GetPingParams($server, $tag, $user, $changelog = '')
+	{
 		$ping = array();
-		if ($server) {
-			$ping["server"] = $server;
-			if ($tag) $ping["tag"] = $tag; else return false; // set page-title
-			if (!$ping["taglink"] = $this->Href("", $tag)) return false; // set page-url
-				if (!$ping["wiki"] = $this->config["wakka_name"]) return false; // set site-name
-			$ping["history"] = $this->Href("revisions", $tag); // set url to history
-
-			if ($user) {
-				$ping["author"] = $user; // set username
-				if ($this->LoadPage($user)) $ping["authorpage"] = $this->Href("", $user); // set link to user page
+		if ($server)
+		{
+			$ping['server'] = $server;
+			if ($tag)
+			{
+				$ping['tag'] = $tag;
 			}
-			if ($changelog) $ping["changelog"] = $changelog;
+			else
+			{
+				return false; // set page-title
+			}
+			if (!$ping['taglink'] = $this->Href('', $tag))
+			{
+				return false; // set page-url
+			}
+			if (!$ping['wiki'] = $this->config['wakka_name'])
+			{
+				return false; // set site-name
+			}
+			$ping['history'] = $this->Href('revisions', $tag); // set url to history
+
+			if ($user)
+			{
+				$ping['author'] = $user; // set username
+				if ($this->LoadPage($user))
+				{
+					$ping['authorpage'] = $this->Href('', $user); // set link to user page
+				}
+			}
+			if ($changelog)
+			{
+				$ping['changelog'] = $changelog;
+			}
 			return $ping;
-		} else return false;
+		}
+		else
+		{
+			return false;
+		}
 	}
 
 	/**
@@ -1508,15 +1540,29 @@ class Wakka
 	/**
 	 * Set a temporary Cookie.
 	 */
-	function SetSessionCookie($name, $value) { SetCookie($name.$this->config['wiki_suffix'], $value, 0, "/"); $_COOKIE[$name.$this->config['wiki_suffix']] = $value; $this->cookies_sent = true; }
+	function SetSessionCookie($name, $value)
+	{
+		SetCookie($name.$this->config['wiki_suffix'], $value, 0, '/');
+		$_COOKIE[$name.$this->config['wiki_suffix']] = $value;
+		$this->cookies_sent = TRUE;
+	}
 	/**
 	 * Set a Cookie.
 	 */
-	function SetPersistentCookie($name, $value) { SetCookie($name.$this->config['wiki_suffix'], $value, time() + 90 * 24 * 60 * 60, "/"); $_COOKIE[$name.$this->config['wiki_suffix']] = $value; $this->cookies_sent = true; }
+	function SetPersistentCookie($name, $value)
+	{
+		SetCookie($name.$this->config['wiki_suffix'], $value, time() + 90 * 24 * 60 * 60, '/');
+		$_COOKIE[$name.$this->config['wiki_suffix']] = $value;
+		$this->cookies_sent = TRUE;
+	}
 	/**
 	 * Delete a Cookie.
 	 */
-	function DeleteCookie($name) { SetCookie($name.$this->config['wiki_suffix'], "", 1, "/"); $_COOKIE[$name.$this->config['wiki_suffix']] = ""; $this->cookies_sent = true; }
+	function DeleteCookie($name) {
+		SetCookie($name.$this->config['wiki_suffix'], '', 1, '/');
+		$_COOKIE[$name.$this->config['wiki_suffix']] = '';
+		$this->cookies_sent = TRUE;
+		}
 	/**
 	 * Get the value of a Cookie.
 	 */
@@ -1540,7 +1586,10 @@ class Wakka
 	 *
 	 * @param	string $message text to be stored
 	 */
-	function SetRedirectMessage($message) { $_SESSION["redirectmessage"] = $message; }
+	function SetRedirectMessage($message)
+	{
+		$_SESSION['redirectmessage'] = $message;
+	}
 	/**
 	 * Get a message, if one was stored before redirection.
 	 *
@@ -1549,18 +1598,18 @@ class Wakka
 	function GetRedirectMessage()
 	{
 		$message = '';
-		if (isset($_SESSION["redirectmessage"]))
+		if (isset($_SESSION['redirectmessage']))
 		{
-			$message = $_SESSION["redirectmessage"];
-			$_SESSION["redirectmessage"] = "";
+			$message = $_SESSION['redirectmessage'];
+			$_SESSION['redirectmessage'] = '';
 		}
 		return $message;
 	}
 	/**
 	 * Perform a redirection to another page.
 	 *
-	 * On IIS server, and if the page had sent any cookies, the redirection must not be performed
-	 * by using the 'Location:' header: We use meta http-equiv OR javascript OR link (Credits MarceloArmonas)
+	 * On IIS server, and if the page has sent any cookies, the redirection must not be performed
+	 * by using the 'Location:' header. We use meta http-equiv OR javascript OR link (Credits MarceloArmonas).
 	 * @author {@link http://wikkawiki.org/DotMG Mahefa Randimbisoa} (added IIS support)
 	 * @access	public
 	 * @since	Wikka 1.1.6.2
@@ -1570,9 +1619,12 @@ class Wakka
 	 */
 	function Redirect($url='', $message='')
 	{
-		if ($message != '') $_SESSION["redirectmessage"] = $message;
+		if ($message != '')
+		{
+			$_SESSION['redirectmessage'] = $message;
+		}
 		$url = ($url == '' ) ? $this->config['base_url'].$this->tag : $url;
-		if ((eregi('IIS', $_SERVER["SERVER_SOFTWARE"])) && ($this->cookies_sent))
+		if ((eregi('IIS', $_SERVER['SERVER_SOFTWARE'])) && ($this->cookies_sent))
 		{
 			@ob_end_clean(); 
 			$redirlink = '<a href="'.$this->Href($url).'">'.REDIR_LINK_DESC.'</a>';
@@ -1583,32 +1635,42 @@ class Wakka
 		}
 		else
 		{
-			header("Location: ".$url);
+			header('Location: '.$url);
 		}
 		exit;
 	}
 	/**
-	 * Get the Pagename (and the method).
+	 * Return the pagename (with optional handler appended).
 	 */
-	function MiniHref($method = "", $tag = "") { if (!$tag = trim($tag)) $tag = $this->tag; return $tag.($method ? "/".$method : ""); }
+	function MiniHref($handler = '', $tag = '')
+	{
+		if (!$tag = trim($tag))
+		{
+			$tag = $this->tag;
+		}
+		return $tag.($handler ? '/'.$handler : '');
+	}
 	/**
-	 * Get the full url to a page/method.
+	 * Return the full URL to a page/handler.
 	 *
 	 * @uses	Wakka::MiniHref()
 	 */
-	function Href($method = "", $tag = "", $params = "")
+	function Href($handler = '', $tag = '', $params = '')
 	{
 		$href = $this->config['base_url'];
-		if ($this->config['rewrite_mode'] == 0) $href .= 'wikka.php?wakka=';
-		$href .= $this->MiniHref($method, $tag);
+		if ($this->config['rewrite_mode'] == 0)
+		{
+			$href .= 'wikka.php?wakka=';
+		}
+		$href .= $this->MiniHref($handler, $tag);
 		if ($params)
 		{
-			$href .= ($this->config["rewrite_mode"] ? "?" : "&amp;").$params;
+			$href .= ($this->config['rewrite_mode'] ? '?' : '&amp;').$params;
 		}
 		return $href;
 	}
 	/**
-	 * Turn text with certain types of markup into the appropriate link.
+	 * Creates a link from Wikka markup.
 	 *
 	 * Beware of the $title parameter: quotes and backslashes should be previously escaped before passed to
 	 * this method.
@@ -1621,74 +1683,105 @@ class Wakka
 	 * @uses	Wakka::LoadPage()
 	 *
 	 * @param	mixed $tag mandatory:
-	 * @param	string $method optional:
+	 * @param	string $handler optional:
 	 * @param	 string $text optional:
 	 * @param	 boolean $track optional:
 	 * @param	 boolean $escapeText optional:
 	 * @param	 string $title optional:
 	 * @return	string
 	 * @todo	i18n
+	 * @todo	add class depending on link type
 	 * @todo	move regexps to regexp-library
+	 * @todo	remove link tail (should be generated by the stylesheet)
 	 */
-	function Link($tag, $method='', $text='', $track=TRUE, $escapeText=TRUE, $title='') {
-		if (!$text) $text = $tag;
+	function Link($tag, $handler='', $text='', $track=TRUE, $escapeText=TRUE, $title='')
+	{
+		if (!$text)
+		{
+			$text = $tag;
+		}
 		// escape text?
-		if ($escapeText) $text = $this->htmlspecialchars_ent($text);
+		if ($escapeText)
+		{
+			$text = $this->htmlspecialchars_ent($text);
+		}
 		$tag = $this->htmlspecialchars_ent($tag); #142 & #148
-		$method = $this->htmlspecialchars_ent($method);
+		$handler = $this->htmlspecialchars_ent($handler);
 		$title_attr = $title ? ' title="'.$this->htmlspecialchars_ent($title).'"' : '';
 		$url = '';
 
 		// is this an interwiki link?
 		// before the : should be a WikiName; anything after can be (nearly) anything that's allowed in a URL
-		if (preg_match("/^([A-ZÄÖÜ][A-Za-zÄÖÜßäöü]+)[:](\S*)$/", $tag, $matches))	// @@@ FIXME #34 (inconsistent with Formatter) 
+		if (preg_match('/^([A-ZÄÖÜ][A-Za-zÄÖÜßäöü]+)[:](\S*)$/', $tag, $matches))	// @@@ FIXME #34 (inconsistent with Formatter) 
 		{
 			$url = $this->GetInterWikiUrl($matches[1], $matches[2]);
 		}
-		elseif (preg_match("/^(http|https|ftp|news|irc|gopher):\/\/([^\\s\"<>]+)$/", $tag))
+		elseif (preg_match('/^(http|https|ftp|news|irc|gopher):\/\/([^\\s\"<>]+)$/', $tag))
 		{
 			$url = $tag; // this is a valid external URL
 		}
 		// is this a full link? ie, does it contain something *else* than valid WikiName (alpha-numeric) characters?
 		// FIXME just use (!IsWikiName($tag)) here (then fix the RE there!)
-		elseif (preg_match("/[^[:alnum:],ÄÖÜ,ßäöü]/", $tag))	// @@@ FIXME #34 (inconsistent with Formatter! ) remove all ',' from RE (comma should not be allowed in WikiNames!)
+		elseif (preg_match('/[^[:alnum:],ÄÖÜ,ßäöü]/', $tag))	// @@@ FIXME #34 (inconsistent with Formatter! ) remove all ',' from RE (comma should not be allowed in WikiNames!)
 		{
 			// check for email addresses
-			if (preg_match("/^.+\@.+$/", $tag))
+			if (preg_match('/^.+\@.+$/', $tag))
 			{
-				$url = "mailto:".$tag;
+				$url = 'mailto:'.$tag;
 			}
 			// check for protocol-less URLs
-			else if (!preg_match("/:/", $tag))
+			else if (!preg_match('/:/', $tag))
 			{
-				$url = "http://".$tag;
+				$url = 'http://'.$tag;
 			}
 		}
 		else
 		{
 			// it's a wiki link
-			if (isset($_SESSION['linktracking']) && $_SESSION["linktracking"] && $track) $this->TrackLinkTo($tag);
+			if (isset($_SESSION['linktracking']) && $_SESSION['linktracking'] && $track)
+			{
+				$this->TrackLinkTo($tag);
+			}
 			$linkedPage = $this->LoadPage($tag);
-			return ($linkedPage ? '<a href="'.$this->Href($method, $linkedPage['tag']).'"'.$title_attr.'>'.$text.'</a>' : '<a class="missingpage" href="'.$this->Href("edit", $tag).'" title="'.CREATE_THIS_PAGE_LINK_TITLE.'">'.$text.'</a>'); #i18n
+			return ($linkedPage ? '<a href="'.$this->Href($handler, $linkedPage['tag']).'"'.$title_attr.'>'.$text.'</a>' : '<a class="missingpage" href="'.$this->Href("edit", $tag).'" title="'.CREATE_THIS_PAGE_LINK_TITLE.'">'.$text.'</a>'); #i18n
 		}
-		$external_link_tail = $this->GetConfigValue("external_link_tail");
+		$external_link_tail = $this->GetConfigValue('external_link_tail');
 		return $url ? '<a class="ext" href="'.$url.'">'.$text.'</a>'.$external_link_tail : $text;
 	}
 
 	// function PregPageLink($matches) { return $this->Link($matches[1]); }
 	/**
-	 * Check if a given text is in the Camelcase format.
+	 * Check if a given string is in CamelCase format.
+	 * @todo	move regexps to regexp-library
 	 */
-	function IsWikiName($text) { return preg_match("/^[A-Z,ÄÖÜ][a-z,ßäöü]+[A-Z,0-9,ÄÖÜ][A-Z,a-z,0-9,ÄÖÜ,ßäöü]*$/", $text); }	// @@@ FIXME #34 (inconsistent with Formatter!) remove all ',' from RE (comma should not be allowed in WikiNames!)
-	function TrackLinkTo($tag) { $_SESSION["linktable"][] = $tag; }
-	function GetLinkTable() { return $_SESSION["linktable"]; }
-	function ClearLinkTable() { $_SESSION["linktable"] = array(); }
-	function StartLinkTracking() { $_SESSION["linktracking"] = 1; }
-	function StopLinkTracking() { $_SESSION["linktracking"] = 0; }
+	function IsWikiName($text)
+	{
+		return preg_match("/^[A-Z,ÄÖÜ][a-z,ßäöü]+[A-Z,0-9,ÄÖÜ][A-Z,a-z,0-9,ÄÖÜ,ßäöü]*$/", $text); // @@@ FIXME #34 (inconsistent with Formatter!) remove all ',' from RE (comma should not be allowed in WikiNames!)
+	}
+	function TrackLinkTo($tag)
+	{
+		$_SESSION['linktable'][] = $tag;
+	}
+	function GetLinkTable()
+	{
+		return $_SESSION['linktable'];
+	}
+	function ClearLinkTable()
+	{
+		$_SESSION['linktable'] = array();
+	}
+	function StartLinkTracking()
+	{
+		$_SESSION['linktracking'] = 1;
+	}
+	function StopLinkTracking()
+	{
+		$_SESSION['linktracking'] = 0;
+	}
 	function WriteLinkTable()
 	{
 		// delete old link table
-		$this->Query("delete from ".$this->config["table_prefix"]."links where from_tag = '".mysql_real_escape_string($this->GetPageTag())."'");
+		$this->Query('DELETE FROM '.$this->config['table_prefix'].'links WHERE from_tag = "'.mysql_real_escape_string($this->GetPageTag()).'"');
 		// build new link table
 		if ($linktable = $this->GetLinkTable())
 		{
@@ -1701,13 +1794,13 @@ class Wakka
 				if ((!$written[$lower_to_tag]) && ($lower_to_tag != strtolower($from_tag)))
 				{
 					if ($sql) $sql .= ', ';
-					$sql .= "('".$from_tag."', '".mysql_real_escape_string($to_tag)."')";
+					$sql .= '("'.$from_tag.'", "'.mysql_real_escape_string($to_tag).'")';
 					$written[$lower_to_tag] = 1;
 				}
 			}
 			if ($sql)
 			{
-				$this->Query("INSERT INTO {$this->config['table_prefix']}links VALUES $sql");
+				$this->Query('INSERT INTO '.$this->config['table_prefix'].'links VALUES '.$sql);
 			}
 		}
 	}
@@ -1715,32 +1808,46 @@ class Wakka
 	 * Output the Header for Wikka-pages.
 	 *
 	 * @uses	Wakka::Action()
+	 * @todo	move to templating class
 	 */
-	function Header() { return $this->Action($this->config['header_action'], 0); }
+	function Header()
+	{
+		return $this->Action($this->config['header_action'], 0);
+	}
 	/**
 	 * Output the Footer for Wikka-pages.
 	 *
 	 * @uses	Wakka::Action()
+	 * @todo	move to templating class
 	 */
-	function Footer() { return $this->Action($this->config['footer_action'], 0); }
+	function Footer()
+	{
+		return $this->Action($this->config['footer_action'], 0);
+	}
 
 	/**
 	 * FORMS
 	 */
-	function FormOpen($method = "", $tag = "", $formMethod = "post")
+	/**
+	 * Open form
+	 */
+	function FormOpen($method = '', $tag = '', $formMethod = 'post')
 	{
 		$result = '<form action="'.$this->Href($method, $tag).'" method="'.$formMethod."\">\n";
-		if (!$this->config["rewrite_mode"]) $result .= '<input type="hidden" name="wakka" value="'.$this->MiniHref($method, $tag)."\" />\n";
+		if (!$this->config['rewrite_mode'])
+		{
+			$result .= '<input type="hidden" name="wakka" value="'.$this->MiniHref($method, $tag)."\" />\n";
+		}
 		return $result;
 	}
 	/**
-	 * Provide the html to close a form.
+	 * Close form
 	 *
-	 * @return string the html-tag to close a form and a newline.
+	 * @return string the XHTML tag to close a form and a newline.
 	 */
 	function FormClose()
 	{
-		return "</form>\n";
+		return '</form>'."\n";
 	}
 
 	/**
@@ -1760,13 +1867,13 @@ class Wakka
 	 */
 	function ReadInterWikiConfig()
 	{
-		if ($lines = file("interwiki.conf"))
+		if ($lines = file('interwiki.conf'))
 		{
 			foreach ($lines as $line)
 			{
 				if ($line = trim($line))
 				{
-					list($wikiName, $wikiUrl) = explode(" ", trim($line));
+					list($wikiName, $wikiUrl) = explode(' ', trim($line));
 					$this->AddInterWiki($wikiName, $wikiUrl);
 				}
 			}
@@ -1786,7 +1893,8 @@ class Wakka
 	 * @param  string $tag	mandatory: name of a page in the other wiki
 	 * @return string the full URL for $tag or VOID
 	 */
-	function GetInterWikiUrl($name, $tag) {
+	function GetInterWikiUrl($name, $tag)
+	{
 		if (isset($this->interWiki[strtolower($name)]))
 		{
 			return $this->interWiki[strtolower($name)].$tag;
@@ -1796,31 +1904,41 @@ class Wakka
 	/**
 	 * REFERRERS
 	 */
-	function LogReferrer($tag = "", $referrer = "")
+	function LogReferrer($tag = '', $referrer = '')
 	{
 		// fill values
-		if (!$tag = trim($tag)) $tag = $this->GetPageTag();
-		if (!isset($_SERVER['HTTP_REFERER'])) return; #38
-		if (!$referrer = trim($referrer) && isset($_SERVER["HTTP_REFERER"])) $referrer = $_SERVER["HTTP_REFERER"];
+		if (!$tag = trim($tag))
+		{
+			$tag = $this->GetPageTag();
+		}
+		if (!isset($_SERVER['HTTP_REFERER']))
+		{
+			return; #38
+		}
+		if (!$referrer = trim($referrer) && isset($_SERVER['HTTP_REFERER']))
+		{
+			$referrer = $_SERVER['HTTP_REFERER'];
+		}
 		$referrer = $this->cleanUrl($referrer);			# secured JW 2005-01-20
 
 		// check if it's coming from another site
-		if ($referrer && !preg_match("/^".preg_quote($this->GetConfigValue("base_url"), "/")."/", $referrer))
+		if ($referrer && !preg_match('/^'.preg_quote($this->GetConfigValue('base_url'), '/').'/', $referrer))
 		{
 			$parsed_url = parse_url($referrer);
-			$spammer = $parsed_url["host"];
-			$blacklist = $this->LoadSingle("select * from ".$this->config["table_prefix"]."referrer_blacklist WHERE spammer = '".mysql_real_escape_string($spammer)."'");
-			if (!$blacklist) {
-			$this->Query("insert into ".$this->config["table_prefix"]."referrers set ".
-				"page_tag = '".mysql_real_escape_string($tag)."', ".
-				"referrer = '".mysql_real_escape_string($referrer)."', ".
-				"time = now()");
+			$spammer = $parsed_url['host'];
+			$blacklist = $this->LoadSingle('SELECT * FROM '.$this->config['table_prefix'].'referrer_blacklist WHERE spammer = "'.mysql_real_escape_string($spammer).'"');
+			if (!$blacklist)
+			{
+				$this->Query('INSERT INTO '.$this->config['table_prefix'].'referrers SET '.
+				'page_tag = "'.mysql_real_escape_string($tag).'", '.
+				'referrer = "'.mysql_real_escape_string($referrer).'", '.
+				'time = now()');
 			}
 		}
 	}
-	function LoadReferrers($tag = "")
+	function LoadReferrers($tag = '')
 	{
-		return $this->LoadAll("select referrer, count(referrer) as num from ".$this->config["table_prefix"]."referrers ".($tag = trim($tag) ? "where page_tag = '".mysql_real_escape_string($tag)."'" : "")." group by referrer order by num desc");
+		return $this->LoadAll('SELECT referrer, COUNT(referrer) AS num FROM '.$this->config['table_prefix'].'referrers '.($tag = trim($tag) ? 'WHERE page_tag = "'.mysql_real_escape_string($tag).'"' : '').' GROUP BY referrer ORDER BY num DESC');
 	}
 
 	/**
@@ -1832,6 +1950,8 @@ class Wakka
 	 * @uses	Wakka::IncludeBuffered()
 	 * @uses	Wakka::StartLinkTracking()
 	 * @uses	Wakka::StopLinkTracking()
+	 * 
+	 * @todo	move regex to central regex library
 	 */
 	function Action($action, $forceLinkTracking = 0)
 	{
@@ -1846,22 +1966,30 @@ class Wakka
 			// extract $action and $vars_temp ("raw" attributes)
 			list(, $action, $vars_temp) = $matches;
 
-			if ($action) {
+			if ($action)
+			{
 				// match all attributes (key and value)
 				preg_match_all('/([A-Za-z0-9]*)=("|\')(.*)\\2/U', $vars_temp, $matches);
 
 				// prepare an array for extract() to work with (in $this->IncludeBuffered())
-				if (is_array($matches)) {
-					for ($a = 0; $a < count($matches[0]); $a++) {
+				if (is_array($matches))
+				{
+					for ($a = 0; $a < count($matches[0]); $a++)
+					{
 						$vars[$matches[1][$a]] = $matches[3][$a];
 					}
 				}
 				$vars['wikka_vars'] = trim($vars_temp); // <<< add the buffered parameter-string to the array
-			} else {
+			}
+			else
+			{
 				return '<em class="error">'.ACTION_UNKNOWN_SPECCHARS.'</em>'; // <<< the pattern ([A-Za-z0-9])\s+ didn't match!
 			}
 		}
-		if (!preg_match('/^[a-zA-Z0-9]+$/', $action)) return '<em class="error">'.ACTION_UNKNOWN_SPECCHARS.'</em>';
+		if (!preg_match('/^[a-zA-Z0-9]+$/', $action))
+		{
+			return '<em class="error">'.ACTION_UNKNOWN_SPECCHARS.'</em>';
+		}
 		if (!$forceLinkTracking)
 		{
 			/**
@@ -1896,18 +2024,21 @@ class Wakka
 		return $this->IncludeBuffered($handler_location, '<div class="page"><em class="error">'.sprintf(HANDLER_UNKNOWN,$handler_location_disp).'</em></div>', '', $this->config['handler_path']);
 	}
 	/**
-	 * Format a text using a given or the standard "wakka" formatter.
+	 * Render a string using a given formatter or the standard Wakka by default.
 	 *
 	 * @uses	Wakka::IncludeBuffered()
 	 * @param	$text
 	 */
-	function Format($text, $formatter="wakka") { return $this->IncludeBuffered($formatter.'.php', '<em class="error">'.sprintf(FORMATTER_UNKNOWN,$formatter).'</em>', compact('text'), $this->config['wikka_formatter_path']); }
+	function Format($text, $formatter='wakka')
+	{
+		return $this->IncludeBuffered($formatter.'.php', '<em class="error">'.sprintf(FORMATTER_UNKNOWN,$formatter).'</em>', compact('text'), $this->config['wikka_formatter_path']);
+	}
 
 	/**
 	 * USERS
 	 */
 	/**
-	 * Load a (given) user.
+	 * Load a given user.
 	 *
 	 * <p>If a second parameter $password is supplied, this method checks if this password is valid, thus a false return value would mean
 	 * nonexistent user or invalid password. Note that this parameter is the <strong>hashed value</strong> of the password usually typed in 
@@ -1948,7 +2079,10 @@ class Wakka
 	 * @uses	Wakka::LoadAll()
 	 * @return	array contains all users data
 	 */
-	function LoadUsers() { return $this->LoadAll("select * from ".$this->config['table_prefix']."users order by name"); }
+	function LoadUsers()
+	{
+		return $this->LoadAll('SELECT * FROM '.$this->config['table_prefix'].'users ORDER BY name');
+	}
 	/**
 	 * Get the name or address of the current user.
 	 *
@@ -1985,60 +2119,68 @@ class Wakka
 	 *
 	 * @return string/NULL either a string with the user name or NULL
 	 */
-	function GetUser() { return (isset($_SESSION["user"])) ? $_SESSION["user"] : NULL; }
+	function GetUser()
+	{
+		return (isset($_SESSION['user'])) ? $_SESSION['user'] : NULL;
+	}
 	/**
-	 * Log-in a (given) user.
+	 * Log-in a given user.
 	 *
-	 * The data of the user is stored in the session; but name and password are stored in a Cookie.
+	 * User data are stored in the session, whereas name and password are stored in a cookie.
 	 * 
 	 * @uses	Wakka::SetPersistentCookie()
 	 * @uses	Wakka::Query()
 	 * @param	array $user mandatory: must contain the userdata
-	 * @todo	name should be made made persistent with opposite function LogoutUser()
+	 * @todo	name should be made made consistent with opposite function LogoutUser()
 	 */
 	function SetUser($user)
 	{
-		$_SESSION["user"] = $user;
-		$this->SetPersistentCookie("user_name", $user["name"]);
+		$_SESSION['user'] = $user;
+		$this->SetPersistentCookie('user_name', $user['name']);
 		$user['challenge'] = dechex(crc32(rand()));
-		$this->Query('update '.$this->config['table_prefix'].'users set `challenge` = \''.$user['challenge'].'\' where name = \''.mysql_real_escape_string($user['name']).'\'');
-		$this->SetPersistentCookie("pass", md5($user['challenge'].$user['password']));
+		$this->Query('UPDATE '.$this->config['table_prefix'].'users set `challenge` = "'.$user['challenge'].'" WHERE name = "'.mysql_real_escape_string($user['name']).'"');
+		$this->SetPersistentCookie('pass', md5($user['challenge'].$user['password']));
 	}
 	/**
 	 * Log-out the current user.
 	 *
-	 * The data of the user is deleted from the session and name and password Cookies are deleted, too.
+	 * User data are removed from the session and name and password cookies are deleted.
 	 * 
 	 * @uses	Wakka::DeleteCookie()
 	 * @uses	Wakka::GetUserName()
 	 * @uses	Wakka::Query()
-	 * @todo	name should be made made persistent with opposite function SetUser()
+	 * @todo	name should be made made consistent with opposite function SetUser()
 	 */
 	function LogoutUser()
 	{
 		// Choosing an arbitrary challenge that the DB server only knows.
 		$user['challenge'] = dechex(crc32(rand()));
-		$this->Query('update '.$this->config['table_prefix'].'users set `challenge` = \''.$user['challenge'].'\' where name = \''.mysql_real_escape_string($this->GetUserName()).'\'');
-		$_SESSION["user"] = "";
-		$this->DeleteCookie("user_name");
-		$this->DeleteCookie("pass");
+		$this->Query('UPDATE '.$this->config['table_prefix'].'users set `challenge` = "'.$user['challenge'].'" WHERE name = "'.mysql_real_escape_string($this->GetUserName()).'"');
+		$_SESSION['user'] = '';
+		$this->DeleteCookie('user_name');
+		$this->DeleteCookie('pass');
 	}
 	/**
-	 * Find out if the current user wants comments to be shown by default.
+	 * Check if current user wants comments to be displayed by default.
 	 *
-	 * If the user is not logged-in, it is assumed that he does not want
-	 * the comments be shown by default.
+	 * If the user is not logged-in, comments are hidden by default.
 	 *
 	 * @uses	Wakka::GetUser()
-	 * @return	boolean TRUE if the user wants Comments, FALSE otherwise
+	 * @return	boolean TRUE if the user wants comments, FALSE otherwise
 	 */
-	function UserWantsComments() { if (!$user = $this->GetUser()) return false; return ($user["show_comments"] == "Y"); }
+	function UserWantsComments()
+	{
+		if (!$user = $this->GetUser())
+		{
+			return false;
+		}
+		return ($user['show_comments'] == 'Y');
+	}
 
 	/**
 	 * COMMENTS
 	 *
 	/**
-
 	 * Load the comments for a (given) page.
 	 *
 	 * @uses	Wakka::LoadAll()
@@ -2047,14 +2189,18 @@ class Wakka
 	 * @param   integer $order optional: order of comments. Default: COMMENT_ORDER_DATE_ASC
 	 * @return	array All the comments for this page ordered by $order
 	 */
-	function LoadComments($tag, $order=COMMENT_ORDER_DATE_ASC) {
-		if($order==COMMENT_ORDER_DATE_ASC) { // Return ASC by date
-			return $this->LoadAll("SELECT * FROM ".$this->config["table_prefix"]."comments WHERE page_tag = '".mysql_real_escape_string($tag)."' AND deleted IS NULL ORDER BY time"); 
+	function LoadComments($tag, $order=COMMENT_ORDER_DATE_ASC)
+	{
+		if ($order==COMMENT_ORDER_DATE_ASC)
+		{ // Return ASC by date
+			return $this->LoadAll('SELECT * FROM '.$this->config['table_prefix'].'comments WHERE page_tag = "'.mysql_real_escape_string($tag).'" AND deleted IS NULL ORDER BY time'); 
 		}
-		if($order==COMMENT_ORDER_DATE_DESC) {
-			return $this->LoadAll("SELECT * FROM ".$this->config["table_prefix"]."comments WHERE page_tag = '".mysql_real_escape_string($tag)."' AND deleted IS NULL ORDER BY time DESC"); 
+		if ($order==COMMENT_ORDER_DATE_DESC)
+		{
+			return $this->LoadAll('SELECT * FROM '.$this->config['table_prefix'].'comments WHERE page_tag = "'.mysql_real_escape_string($tag).'" AND deleted IS NULL ORDER BY time DESC'); 
 		}
-		if($order==COMMENT_ORDER_THREADED) {
+		if ($order==COMMENT_ORDER_THREADED)
+		{
 			$record = array();
 			$this->TraverseComments($tag, $record);
 			return $record;
@@ -2063,6 +2209,7 @@ class Wakka
 
 	/**
 	 * Updates modified table fields in bulk. 
+	 * 
 	 * WARNING: Do not add, delete, or reorder records or fields in
 	 *          queries prior to calling this function!!
 	 * @uses    Query()
@@ -2075,33 +2222,53 @@ class Wakka
 	 * @todo    Does not currently handle deletions or insertions of
 	 *			records or fields.
 	 */
-	 function Update($tablename, $keyfield, $old_res, $new_res) {
-		 // Sanity checks!
-		 if(count($old_res) != count($new_res)) return;
-		 if(!$tablename || ! $keyfield) return;
+	 function Update($tablename, $keyfield, $old_res, $new_res)
+	 {
+		 // security checks!
+		 if(count($old_res) != count($new_res))
+		 {
+		 	return;
+		 }
+		 if(!$tablename || !$keyfield)
+		 {
+		 	return;
+		 }
 		 // Reference:
 		 // http://www.php.net/manual/en/function.mysql-query.php,
 		 // annotation by babba@nurfuerspam.de
-		 for($i=0; $i<count($old_res); $i++) {
-			 // Sanity check
-			 if($old_res[0][$keyfield] != $new_res[0][$keyfield]) return;
+		 for($i=0; $i<count($old_res); $i++)
+		 {
+			 // security check
+			 if($old_res[0][$keyfield] != $new_res[0][$keyfield])
+			 {
+			 	return;
+			 }
 			 $changedvals = "";
-			 foreach($old_res[$i] as $key=>$oldval) {
+			 foreach($old_res[$i] as $key=>$oldval)
+			 {
 				 $newval = $new_res[$i][$key];
-				 if($oldval != $newval) {
-					 if($changedvals != "") {
-						 $changedvals .= ", ";
+				 if($oldval != $newval)
+				 {
+					 if($changedvals != '')
+					 {
+						 $changedvals .= ', ';
 					 }
-					 $changedvals .= "`".$key."`=";
-					 if(!is_numeric($newval)) {
-						 $changedvals .= "'".$newval."'";
-					 } else {
+					 $changedvals .= '`'.$key.'`=';
+					 if(!is_numeric($newval))
+					 {
+						 $changedvals .= '"'.$newval.'"';
+					 }
+					 else
+					 {
 						 $changedvals .= $newval;
 					 }
 				 }
 			 }
-			 if($changedvals == "") return;
-			 $this->Query("UPDATE ".$tablename." SET ".$changedvals." WHERE ".$keyfield."=".$old_res[$i][$keyfield]);
+			 if($changedvals == '')
+			 {
+			 	return;
+			 }
+			 $this->Query('UPDATE '.$tablename.' SET '.$changedvals.' WHERE '.$keyfield.'='.$old_res[$i][$keyfield]);
 		 }
 	}
 
@@ -2116,47 +2283,64 @@ class Wakka
 	 * @param   array &$graph mandatory: empty array 
 	 * @return	array Ordered graph of comments and indent levels (values) for this page
 	 */
-	function TraverseComments($tag, &$graph) {
+	function TraverseComments($tag, &$graph)
+	{
 		static $level = -1;
 		static $visited = array();
 		static $transformed_map = array();
-		if(!$transformed_map) {
+		if (!$transformed_map)
+		{
 			array_push($visited, 'NULL');
 			$count = $this->CountComments($tag);
-			$initial_map = $this->LoadAll("SELECT id, parent FROM ".$this->config["table_prefix"]."comments WHERE page_tag='".$tag."' ORDER BY id asc");
+			$initial_map = $this->LoadAll('SELECT id, parent FROM '.$this->config['table_prefix'].'comments WHERE page_tag="'.$tag.'" ORDER BY id ASC');
 			// Create an array of arrays, with the (unique) key of
 			// 'parent' pointing to an array of date-ordered
 			// children.
-			for($i=0; $i<$count; ++$i) {
+			for ($i=0; $i<$count; ++$i)
+			{
 				$id = $initial_map[$i]['id'];
 				$parent = $initial_map[$i]['parent'];
 				if(!$parent)
+				{
 					$parent = 'NULL';
-				if(!array_key_exists($parent, $transformed_map))
-						$transformed_map[$parent] = array();
+				}
+				if (!array_key_exists($parent, $transformed_map))
+				{
+					$transformed_map[$parent] = array();
+				}
 				array_push($transformed_map[$parent], $id);
 			}
 		}
-		if(is_array($transformed_map[end($visited)]))
+		if (is_array($transformed_map[end($visited)]))
+		{
 			$id = array_shift($transformed_map[end($visited)]);
-		if(isset($id)) {
+		}
+		if (isset($id))
+		{
 			// Limit recursions to COMMENT_MAX_TRAVERSAL_DEPTH
-			if($level >= COMMENT_MAX_TRAVERSAL_DEPTH) {
+			if($level >= COMMENT_MAX_TRAVERSAL_DEPTH)
+			{
 				--$level;
 				array_pop($visited);
 				$this->TraverseComments($tag, $graph); 
-			} else {
+			}
+			else
+			{
 				// Traverse children
 				++$level;
 				array_push($visited, $id);
-				$graph[] = $this->LoadSingle("SELECT * FROM ".$this->config["table_prefix"]."comments WHERE id = ".$id);
+				$graph[] = $this->LoadSingle('SELECT * FROM '.$this->config['table_prefix'].'comments WHERE id = '.$id);
 				end($graph);
 				$graph[key($graph)]['level'] = $level;
 				$this->TraverseComments($tag, $graph);
 			}
-		} else if($level < 0) { // End traversal
+		}
+		else if($level < 0)
+		{ // End traversal
 			return;
-		} else {
+		}
+		else
+		{
 			// Step back to the parent to find next child
 			--$level;
 			array_pop($visited);
@@ -2171,22 +2355,26 @@ class Wakka
 	 * @param	string $tag mandatory: name of the page
 	 * @return	integer Count of comments 
 	 */
-	function CountComments($tag) {
-			$data = $this->LoadSingle("SELECT count(*) FROM ".$this->config["table_prefix"]."comments WHERE page_tag = '".mysql_real_escape_string($tag)."'"); 
-			return $data['count(*)'];
+	function CountComments($tag)
+	{
+		$data = $this->LoadSingle('SELECT COUNT(*) FROM '.$this->config['table_prefix'].'comments WHERE page_tag = "'.mysql_real_escape_string($tag).'"');
+		return $data['count(*)'];
 	}
 
 	/**
-	 * Load the last 50 comments on the wiki.
+	 * Load the last comments on the wiki.
 	 *
 	 *
 	 * @uses	Wakka::LoadAll()
 	 * @param	integer $limit optional: number of last comments. default: 50
 	 * @return	array the last x comments
 	 */
-	function LoadRecentComments($limit = 50) { return $this->LoadAll("SELECT * FROM ".$this->config["table_prefix"]."comments ORDER BY time DESC LIMIT ".intval($limit)); }
+	function LoadRecentComments($limit = 50)
+	{
+		return $this->LoadAll('SELECT * FROM '.$this->config['table_prefix'].'comments ORDER BY time DESC LIMIT '.intval($limit));
+	}
 	/**
-	 * Load the last 50 comments on different pages on the wiki.
+	 * Load recently commented pages on the wiki.
 	 *
 	 * @uses	Wakka::LoadAll()
 	 * @param	integer $limit optional: number of last comments on different pages. default: 50
@@ -2194,16 +2382,16 @@ class Wakka
 	 */
 	function LoadRecentlyCommented($limit = 50)
 	{
-		$sql = "SELECT comments.id, comments.page_tag, comments.time, comments.comment, comments.user"
-			. " FROM ".$this->config["table_prefix"]."comments AS comments"
-			. " LEFT JOIN ".$this->config["table_prefix"]."comments AS c2 ON comments.page_tag = c2.page_tag AND comments.id < c2.id"
-			. " WHERE c2.page_tag IS NULL "
-			. " ORDER BY time DESC "
-			. " LIMIT ".intval($limit);
+		$sql = 'SELECT comments.id, comments.page_tag, comments.time, comments.comment, comments.user'
+			. ' FROM '.$this->config['table_prefix'].'comments AS comments'
+			. ' LEFT JOIN '.$this->config['table_prefix'].'comments AS c2 ON comments.page_tag = c2.page_tag AND comments.id < c2.id'
+			. ' WHERE c2.page_tag IS NULL '
+			. ' ORDER BY time DESC '
+			. ' LIMIT '.intval($limit);
 		return $this->LoadAll($sql);
 	}
 	/**
-	 * Save a (given) comment for a (given) page.
+	 * Save a given comment posted on a given page.
 	 *
 	 * @uses	Wakka::GetUserName()
 	 * @uses	Wakka::Query()
@@ -2217,14 +2405,16 @@ class Wakka
 
 		// add new comment
 		$parent_id = mysql_real_escape_string($parent_id);
-		if(!$parent_id) 
+		if(!$parent_id)
+		{
 			$parent_id = "NULL";
-		$this->Query("INSERT INTO ".$this->config["table_prefix"]."comments SET ".
-			"page_tag = '".mysql_real_escape_string($page_tag)."', ".
-			"time = now(), ".
-			"comment = '".mysql_real_escape_string($comment)."', ".
-			"parent = $parent_id, ".
-			"user = '".mysql_real_escape_string($user)."'");
+		}
+		$this->Query('INSERT INTO '.$this->config['table_prefix'].'comments SET '.
+			'page_tag = "'.mysql_real_escape_string($page_tag).'", '.
+			'time = now(), '.
+			'comment = "'.mysql_real_escape_string($comment).'", '.
+			'parent = $parent_id, '.
+			'user = "'.mysql_real_escape_string($user).'"');
 	}
 
 	/**
@@ -2243,18 +2433,28 @@ class Wakka
 	 * @param	   string  $tag optional: page to be checked. Default: current page.
 	 * @return	  boolean TRUE if the user is the owner, FALSE otherwise.
 	 */
-	function UserIsOwner($tag = "")
+	function UserIsOwner($tag = '')
 	{
 		// if not logged in, user can't be owner!
-		if (!$this->GetUser()) return false;
-
+		if (!$this->GetUser())
+		{
+			return FALSE;
+		}
 		// if user is admin, return true. Admin can do anything!
-		if ($this->IsAdmin()) return true;
-
+		if ($this->IsAdmin())
+		{
+			return TRUE;
+		}
 		// set default tag & check if user is owner
-		if (!$tag = trim($tag)) $tag = $this->GetPageTag();
-		if ($this->GetPageOwner($tag) == $this->GetUserName()) return true;
-		return false;
+		if (!$tag = trim($tag))
+		{
+			$tag = $this->GetPageTag();
+		}
+		if ($this->GetPageOwner($tag) == $this->GetUserName())
+		{
+			return TRUE;
+		}
+		return FALSE;
 	}
 	/**
 	 * Check if current user is listed in configuration list as admin.
@@ -2263,14 +2463,19 @@ class Wakka
 	 * @uses		Wakka::GetUserName()
 	 * @return	  boolean TRUE if the user is an admin, FALSE otherwise.
 	 */
-	function IsAdmin() {
-		$adminstring = $this->config["admin_users"];
+	function IsAdmin()
+	{
+		$adminstring = $this->config['admin_users'];
 		$adminarray = explode(',' , $adminstring);
 
-		foreach ($adminarray as $admin) {
-			if (trim($admin) == $this->GetUserName()) return true;
+		foreach ($adminarray as $admin)
+		{
+			if (trim($admin) == $this->GetUserName())
+			{
+				return TRUE;
+			}
 		}
-		return false;
+		return FALSE;
 	}
 	/**
 	 * Return the owner for a given/the current page at a given/the current version.
@@ -2281,7 +2486,18 @@ class Wakka
 	 * @param	? $time optional: time of the page-revision. default: current one?
 	 * @return	string the owner of the page
 	 */
-	function GetPageOwner($tag = "", $time = "") { if (!$tag = trim($tag)) $tag = $this->GetPageTag(); if ($page = $this->LoadPage($tag, $time)) return $page["owner"]; return (false);}
+	function GetPageOwner($tag = '', $time = '')
+	{
+		if (!$tag = trim($tag))
+		{
+			$tag = $this->GetPageTag();
+		}
+		if ($page = $this->LoadPage($tag, $time))
+		{
+			return $page['owner'];
+		}
+		return FALSE;
+	}
 	/**
 	 * Set an (given) owner for a (given) page.
 	 *
@@ -2295,11 +2511,14 @@ class Wakka
 	function SetPageOwner($tag, $user)
 	{
 		// check if user exists
-		if( $user <> '' && ($this->LoadUser($user) || $user == "(Public)" || $user == "(Nobody)"))
+		if( $user <> '' && ($this->LoadUser($user) || $user == '(Public)' || $user == '(Nobody)'))
 		{
-			if ($user == "(Nobody)") $user = "";
+			if ($user == '(Nobody)')
+			{
+				$user = '';
+			}
 			// update latest revision with new owner
-			$this->Query("update ".$this->config["table_prefix"]."pages set owner = '".mysql_real_escape_string($user)."' where tag = '".mysql_real_escape_string($tag)."' and latest = 'Y' limit 1");
+			$this->Query('UPDATE '.$this->config['table_prefix'].'pages SET owner = "'.mysql_real_escape_string($user).'" WHERE tag = "'.mysql_real_escape_string($tag).'" AND latest = "Y" LIMIT 1');
 		}
 	}
 	/**
@@ -2314,9 +2533,12 @@ class Wakka
 	 */
 	function LoadACL($tag, $privilege, $useDefaults = 1)
 	{
-		if ((!$acl = $this->LoadSingle("SELECT ".mysql_real_escape_string($privilege)."_acl FROM ".$this->config["table_prefix"]."acls WHERE page_tag = '".mysql_real_escape_string($tag)."' LIMIT 1")) && $useDefaults)
+		if ((!$acl = $this->LoadSingle('SELECT '.mysql_real_escape_string($privilege).'_acl FROM '.$this->config['table_prefix'].'acls WHERE page_tag = "'.mysql_real_escape_string($tag).'" LIMIT 1')) && $useDefaults)
 		{
-			$acl = array("page_tag" => $tag, $privilege."_acl" => $this->GetConfigValue("default_".$privilege."_acl"));
+			$acl = array(
+				'page_tag' => $tag,
+				$privilege.'_acl' => $this->GetConfigValue('default_'.$privilege.'_acl')
+				);
 		}
 		return $acl;
 	}
@@ -2331,9 +2553,14 @@ class Wakka
 	 */
 	function LoadAllACLs($tag, $useDefaults = 1)
 	{
-		if ((!$acl = $this->LoadSingle("SELECT * FROM ".$this->config["table_prefix"]."acls WHERE page_tag = '".mysql_real_escape_string($tag)."' LIMIT 1")) && $useDefaults)
+		if ((!$acl = $this->LoadSingle('SELECT * FROM '.$this->config['table_prefix'].'acls WHERE page_tag = "'.mysql_real_escape_string($tag).'" LIMIT 1')) && $useDefaults)
 		{
-			$acl = array("page_tag" => $tag, "read_acl" => $this->GetConfigValue("default_read_acl"), "write_acl" => $this->GetConfigValue("default_write_acl"), "comment_acl" => $this->GetConfigValue("default_comment_acl"));
+			$acl = array(
+				'page_tag' => $tag,
+				'read_acl' => $this->GetConfigValue('default_read_acl'),
+				'write_acl' => $this->GetConfigValue('default_write_acl'),
+				'comment_acl' => $this->GetConfigValue('default_comment_acl')
+				);
 		}
 		return $acl;
 	}
@@ -2350,27 +2577,34 @@ class Wakka
 	 * @param	string $privilege mandatory: name of the privilege
 	 * @param	string $list mandatory: a string containing the AC-Syntax   
 	 */
-	function SaveACL($tag, $privilege, $list) {
+	function SaveACL($tag, $privilege, $list)
+	{
 		$insert = 0;
-		if(!$acls = $this->LoadAllACLs($tag, 0)) { # Load defaults
+		if(!$acls = $this->LoadAllACLs($tag, 0))
+		{
+			// Load defaults
 			$insert = 1;
 			$acls['read_acl'] = $this->GetConfigValue('default_read_acl');
 			$acls['write_acl'] = $this->GetConfigValue('default_write_acl');
 			$acls['comment_acl'] = $this->GetConfigValue('default_comment_acl');
 		}
-		$priv = mysql_real_escape_string($privilege)."_acl";
+		$priv = mysql_real_escape_string($privilege).'_acl';
 		$acls[$priv] = 
-			mysql_real_escape_string(trim(str_replace("\r", "", $list))); 
-		if(!$insert) {
-			$this->Query("UPDATE ".$this->config["table_prefix"]."acls SET ".$priv." = '".$acls[$priv]."' WHERE page_tag = '".mysql_real_escape_string($tag)."' LIMIT 1");
-		} else {
-			$acl_list = "";
-			foreach($acls as $acl => $value) {
-				$acl_list .= $acl." = '".$value."', ";
+			mysql_real_escape_string(trim(str_replace('\r', '', $list))); 
+		if(!$insert)
+		{
+			$this->Query('UPDATE '.$this->config['table_prefix'].'acls SET '.$priv.' = "'.$acls[$priv].'" WHERE page_tag = "'.mysql_real_escape_string($tag).'" LIMIT 1');
+		}
+		else
+		{
+			$acl_list = '';
+			foreach ($acls as $acl => $value)
+			{
+				$acl_list .= $acl.' = "'.$value.'", ';
 			}
-			# Remove the trailing comma
-			$acl_list = trim($acl_list, ", ");
-			$this->Query("INSERT INTO ".$this->config["table_prefix"]."acls SET page_tag = '".mysql_real_escape_string($tag)."', ".$acl_list);
+			// Remove the trailing comma
+			$acl_list = trim($acl_list, ', ');
+			$this->Query('INSERT INTO '.$this->config['table_prefix'].'acls SET page_tag = "'.mysql_real_escape_string($tag).'", '.$acl_list);
 		}
 	}
 
@@ -2385,20 +2619,25 @@ class Wakka
 	 * @param	string $from_tag mandatory: Source page for ACLs 
 	 * @param	string $to_tag mandatory: Target page for ACLs 
 	 */
-	function CloneACLs($from_tag, $to_tag) {
+	function CloneACLs($from_tag, $to_tag)
+	{
 		$acls = $this->LoadAllACLs($from_tag, 1); # Load defaults
-		$acl_list = "";
-		foreach($acls as $acl => $value) {
+		$acl_list = '';
+		foreach ($acls as $acl => $value)
+		{
 			if($acl === 'page_tag') continue;
-			$acl_list .= $acl." = '".$value."', ";
+			$acl_list .= $acl.' = "'.$value.'", ';
 		}
-		# Remove the trailing comma
-		$acl_list = trim($acl_list, ", ");
+		// Remove the trailing comma
+		$acl_list = trim($acl_list, ', ');
 
-		if($this->LoadAllACLs($to_tag, 0)) {
-			$this->Query("UPDATE ".$this->config["table_prefix"]."acls SET ".$acl_list." WHERE page_tag = '".mysql_real_escape_string($to_tag)."' LIMIT 1");
-		} else {
-			$this->Query("INSERT INTO ".$this->config["table_prefix"]."acls SET page_tag = '".mysql_real_escape_string($to_tag)."', ".$acl_list);
+		if($this->LoadAllACLs($to_tag, 0))
+		{
+			$this->Query('UPDATE '.$this->config['table_prefix'].'acls SET '.$acl_list.' WHERE page_tag = "'.mysql_real_escape_string($to_tag).'" LIMIT 1');
+		}
+		else
+		{
+			$this->Query('INSERT INTO '.$this->config['table_prefix'].'acls SET page_tag = "'.mysql_real_escape_string($to_tag).'", '.$acl_list);
 		}
 	}
 
@@ -2408,11 +2647,12 @@ class Wakka
 	 * to remove carriage returns.
 	 * @param string $list mandatory: List of ACLs to trim
 	 **/
-	function TrimACLs($list) {
-		foreach (preg_split("/[\s,]+/", $list) as $line)
+	function TrimACLs($list)
+	{
+		foreach (preg_split('/[\s,]+/', $list) as $line)
 		{
 			$line = trim($line);
-			$trimmed_list .= $line." ";
+			$trimmed_list .= $line.' ';
 		}
 		return $trimmed_list;
 	}
@@ -2431,36 +2671,46 @@ class Wakka
 	 * @param	string $tag optional: name of the user default: current user
 	 * @return	 FALSE/0 or TRUE/1
 	 * @todo	make this function return only a boolean value
+	 * @todo	move regex to central regex library
 	 */
-	function HasAccess($privilege, $tag = "", $user = "")
+	function HasAccess($privilege, $tag = '', $user = '')
 	{
 		// set defaults
-		if (!$tag) $tag = $this->GetPageTag();
-		if (!$user) $user = $this->GetUserName();
-
+		if (!$tag)
+		{
+			$tag = $this->GetPageTag();
+		}
+		if (!$user)
+		{
+			$user = $this->GetUserName();
+		}
 		// if current user is owner, return true. owner can do anything!
-		if ($this->UserIsOwner($tag)) return true;
-
+		if ($this->UserIsOwner($tag))
+		{
+			return TRUE;
+		}
 		// see whether user is registered and logged in
 		$registered = FALSE;
-		if ($this->GetUser()) $registered = true;
-
+		if ($this->GetUser())
+		{
+			$registered = TRUE;
+		}
 		// load acl
 		if ($tag == $this->GetPageTag())
 		{
-			$acl = $this->ACLs[$privilege."_acl"];
+			$acl = $this->ACLs[$privilege.'_acl'];
 		}
 		else
 		{
 			$tag_ACLs = $this->LoadAllACLs($tag);
-			$acl = $tag_ACLs[$privilege."_acl"];
+			$acl = $tag_ACLs[$privilege.'_acl'];
 		}
 
 		// fine fine... now go through acl
-		foreach (preg_split("/[\s,]+/", $acl) as $line)
+		foreach (preg_split('/[\s,]+/', $acl) as $line)
 		{
 			// check for inversion character "!"
-			if (preg_match("/^[!](.*)$/", $line, $matches))
+			if (preg_match('/^[!](.*)$/', $line, $matches))
 			{
 				$negate = 1;
 				$line = $matches[1];
@@ -2511,13 +2761,15 @@ class Wakka
 	function Maintenance()
 	{
 		// purge referrers
-		if ($days = $this->GetConfigValue("referrers_purge_time")) {
-			$this->Query("DELETE FROM ".$this->config["table_prefix"]."referrers WHERE time < date_sub(now(), interval '".mysql_real_escape_string($days)."' day)");
+		if ($days = $this->GetConfigValue('referrers_purge_time'))
+		{
+			$this->Query('DELETE FROM '.$this->config['table_prefix'].'referrers WHERE time < date_sub(now(), interval "'.mysql_real_escape_string($days).'" day)');
 		}
 
 		// purge old page revisions
-		if ($days = $this->GetConfigValue("pages_purge_time")) {
-			$this->Query("delete from ".$this->config["table_prefix"]."pages where time < date_sub(now(), interval '".mysql_real_escape_string($days)."' day) and latest = 'N'");
+		if ($days = $this->GetConfigValue('pages_purge_time'))
+		{
+			$this->Query('DELETE FROM '.$this->config['table_prefix'].'pages WHERE time < date_sub(now(), interval "'.mysql_real_escape_string($days).'" day) AND latest = "N"');
 		}
 	}
 	/**
@@ -2544,14 +2796,24 @@ class Wakka
 	 * @param	string $method optional: the method which should be used. default: "show"
 	 * 
 	 * @todo	rewrite the handler call routine and move handler specific settings to handler config files #446 #452
+	 * @todo	comment each step to make it understandable to contributors
 	 */
-	function Run($tag, $handler = "")
+	function Run($tag, $handler = '')
 	{
 		// do our stuff!
-		if (!$this->handler = trim($handler)) $this->handler = "show";
-		if (!$this->tag = trim($tag)) $this->Redirect($this->Href("", $this->config["root_page"]));
-		if ($user = $this->LoadUser($this->GetCookie('user_name'), $this->GetCookie('pass'))) $this->SetUser($user);
-		if (isset($_COOKIE["wikka_user_name"]) && (isset($_COOKIE['wikka_pass'])))
+		if (!$this->handler = trim($handler))
+		{
+			$this->handler = 'show';
+		}
+		if (!$this->tag = trim($tag))
+		{
+			$this->Redirect($this->Href('', $this->config['root_page']));
+		}
+		if ($user = $this->LoadUser($this->GetCookie('user_name'), $this->GetCookie('pass')))
+		{
+			$this->SetUser($user);
+		}
+		if (isset($_COOKIE['wikka_user_name']) && (isset($_COOKIE['wikka_pass'])))
 		{
 		 //Old cookies : delete them
 			$this->DeleteCookie('wikka_pass');
@@ -2567,17 +2829,17 @@ class Wakka
 		//HTTP headers (to be moved to handler config files - #452)
 		if (preg_match('/\.(xml|mm)$/', $this->handler))
 		{
-			header("Content-type: text/xml");
+			header('Content-type: text/xml');
 			print($this->Handler($this->handler));
 		}
 		// raw page handler
-		elseif ($this->handler == "raw")
+		elseif ($this->handler == 'raw')
 		{
-			header("Content-type: text/plain");
+			header('Content-type: text/plain');
 			print($this->Handler($this->handler));
 		}
 		// grabcode page handler
-		elseif ($this->handler == "grabcode")
+		elseif ($this->handler == 'grabcode')
 		{
 			print($this->Handler($this->handler));
 		}
