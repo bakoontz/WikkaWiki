@@ -15,6 +15,8 @@
  * @uses	Wakka::GetHandler()
  * @uses	Wakka::Href()
  * @uses	Wakka::Format()
+ *
+ * @todo Move rss autodiscovery to handlers/show/show.php
  */
 
 /**
@@ -47,6 +49,13 @@ if ($this->GetHandler() != 'edit' && $this->config['enable_rss_autodiscovery'] !
 	$rsslink .= '	<link rel="alternate" type="application/rss+xml" title="'.sprintf(RSS_RECENTCHANGES_TITLE,$wikiname).' (RSS '.RSS_RECENTCHANGES_VERSION.')" href="'.$this->Href('recentchanges.xml', $this->tag).'" />'."\n";
 	echo $rsslink;	
 }
+ if (isset($this->additional_headers) && is_array($this->additional_headers) && count($this->additional_headers))
+	{
+		foreach ($this->additional_headers as $additional_headers)
+		{
+			echo $additional_headers;
+		}
+	}
 ?>
 </head>
 <body <?php echo $message ? "onload=\"alert('".$message."');\" " : "" ?> >

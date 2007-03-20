@@ -84,6 +84,15 @@ class Wakka
 	 * @access public
 	 */
 	var $do_not_send_anticaching_headers = false;
+	/**
+	 * $additional_headers.
+	 * Array one may use to add customized tags inside <head>, like additional stylesheet, customized javascript, ...
+	 * Handlers and/or actions implementing this variable are responsible for sanitizing values passed to it.
+	 * Use {@link Wakka::AddCustomHeader()} to populate this array.
+	 * @var array
+	 * @access public
+	 */
+	var $additional_headers = array();
 
 	/**
 	 * Constructor
@@ -2024,6 +2033,21 @@ class Wakka
 		return $this->IncludeBuffered($handler_location, '<div class="page"><em class="error">'.sprintf(HANDLER_UNKNOWN,$handler_location_disp).'</em></div>', '', $this->config['handler_path']);
 	}
 	/**
+	 * Add a custom header to be inserted inside the <meta> tag. 
+	 * 
+	 * @uses Wakka::$additional_headers
+	 * @param string $additional_headers any valid XHTML code that is legal inside the <meta> tag.
+	 * @param string $indent optional indent string, default is a tabulation. This will be inserted before $additional_headers
+	 * @param string $sep optional separator string, this will separate you additional headers. This will be inserted after
+	 *	$additional_headers, default value is a line feed.
+	 * @access public
+	 * @return void
+	 */
+	function AddCustomHeader($additional_headers, $indent = "\t", $sep = "\n")
+	{
+		$this->additional_headers[] = $indent.$additional_headers.$sep;
+	}
+	/**
 	 * Render a string using a given formatter or the standard Wakka by default.
 	 *
 	 * @uses	Wakka::IncludeBuffered()
@@ -2853,7 +2877,8 @@ class Wakka
 		}
 		else
 		{
-			print($this->Header().$this->Handler($this->handler).$this->Footer());
+			$content_body = $this->Handler($this->handler);
+			print($this->Header().$content_body.$this->Footer());
 		}
 	}
 }
