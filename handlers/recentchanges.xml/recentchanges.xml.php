@@ -107,7 +107,7 @@ if ($pages = $this->LoadRecentlyChanged())
 	foreach ($pages as $page)
 	{
 		$c++;
-		if (($c <= $max) || !$max)
+		if (($this->HasAccess('read', $page['tag'])) && (($c <= $max) || !$max))
 		{
 			$item = new FeedItem(); 
 			$item->title = $page['tag']; 

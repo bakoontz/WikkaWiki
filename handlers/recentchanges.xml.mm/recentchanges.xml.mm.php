@@ -4,7 +4,7 @@
  * 
  * @package		Handlers
  * @subpackage	Mindmaps
- * @version		$Id$
+ * @version		$Id:recentchanges.xml.mm.php 407 2007-03-13 05:59:51Z DarTar $
  * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
  * 
@@ -37,7 +37,7 @@ if ($pages = $this->LoadRecentlyChanged())
 	foreach ($pages as $page)
 	{
 		$c++;
-		if (($c <= $max) || !$max)
+		if (($this->HasAccess('read', $page['tag'])) && (($c <= $max) || !$max))
 		{
 			$pageuser = $this->htmlspecialchars_ent($page['user'],ENT_COMPAT,'XML'); #Just in case...
 			$pagetag = $this->htmlspecialchars_ent($page['tag'],ENT_COMPAT,'XML');
