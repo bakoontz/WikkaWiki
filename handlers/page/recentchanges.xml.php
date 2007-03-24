@@ -42,7 +42,7 @@ if ($pages = $this->LoadRecentlyChanged())
 	foreach ($pages as $page)
 	{
 		$c++;
-		if (($c <= $max) || !$max)
+		if (($this->HasAccess('read', $page['tag'])) && (($c <= $max) || !$max))
 		{
 			$xml .= "<item>\n";
 			$xml .= "<title>".$this->htmlspecialchars_ent($page["tag"])."</title>\n";

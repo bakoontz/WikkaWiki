@@ -31,7 +31,7 @@ if ($pages = $this->LoadRecentlyChanged())
 	foreach ($pages as $page)
 	{
 		$c++;
-		if (($c <= $max) || !$max)
+		if (($this->HasAccess('read', $page['tag']))  && (($c <= $max) || !$max))
 		{
 
 			// day header
@@ -96,4 +96,4 @@ $xml .= "</map>\n";
 
 print($xml);
 
-?> 
+?>

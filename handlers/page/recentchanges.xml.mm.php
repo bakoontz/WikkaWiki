@@ -22,7 +22,7 @@ if ($pages = $this->LoadRecentlyChanged())
 	foreach ($pages as $page)
 	{
 		$c++;
-		if (($c <= $max) || !$max)
+		if (($this->HasAccess('read', $page['tag'])) && (($c <= $max) || !$max))
 		{
 			$pageuser = $this->htmlspecialchars_ent($page['user'],ENT_COMPAT,'XML'); #Just in case...
 			$pagetag = $this->htmlspecialchars_ent($page['tag'],ENT_COMPAT,'XML');
