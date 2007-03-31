@@ -132,34 +132,10 @@ class Wakka
 	function GetMicroTime() { list($usec, $sec) = explode(" ",microtime()); return ((float)$usec + (float)$sec); }
 	function IncludeBuffered($filename, $notfoundText='', $vars='', $path='')
 	{
-		# Observations - MK 2007-03-30
-		# $path is passed as $this->config["handler_path"] from Method();
-		# similarly, Action() passes $this->config['action_path']
-		# and Format() passes $this->config['wikka_formatter_path'].
-		#
-		# Apparently these can contain a LIST of several (base) paths for (page...) handler directories, separated by ':'
-		# Is this ever used? This usage is NOT documented (http://wikkawiki.org/ConfigurationOptions).
-		# It may serve as a handy shortcut to allow direct execution of the iframe action without moving the action file (!)
-		# but invalidates any control or security imposed by a strictly-defined directory structure.
-		# Also, the handling here indicates that at least ONE path MUST be passed, since otherwise
-		# no method will get executed, and the $notfoundtext is displayed instead.
-		# Another issue: the format for specifying a list is inconsistent since other config
-		# variables use a comma (or a space).
-		#
-		# Contacted DarTar - agreed we kill this "undocumented feature"!
-		# Leave order of parameters unchanged (for now!); but we'll check if $path is supplied since
-		# it really is a required parameter
-		#
-		# TODO: change parameter order, so $path (no default) comes after $filename and
-		# only $notfoundtext and $vars will actually be optional with a default of ''.    
-#		if ($path) $dirs = explode(":", $path);
-#		else $dirs = array("");
+		# TODO: change parameter order, so $path (no default,. it's required) 
+		# comes after $filename and only $notfoundtext and $vars will actually 
+		# be optional with a default of ''. MK/2007-03-31    
 
-#		foreach ($dirs as $dir)	# this loops through each of the POSSIBLE base directories specified via $path (separated by ':')
-#		{
-#			#if ($dir) $dir .= "/";
-#			$fullfilename = $dir.$filename;
-#			if (file_exists($fullfilename))
 		// check if required parameter $path is supplied (see TODO)
 		if ('' != trim($path))
 		{ 
@@ -172,19 +148,16 @@ class Wakka
 				{
 					// make the parameters also available by name (apart from the array itself):
 					// some callers rely on these separate values, so we extract them, too
-					// taking care not to overwrite any already-existing variable [SEC]
-					#extract($vars);	# [SEC] here $fullfilename is overwritten if fullfilename=<path> is provided as an action parameter (or otherwise??) 
+					// taking care not to overwrite any already-existing variable
 					extract($vars, EXTR_SKIP);	# [SEC] EXTR_SKIP avoids collision with existing filenames
 				}
 				ob_start();
-#				include($fullfilename);
 				include($fullfilepath);
 				$output = ob_get_contents();
 				ob_end_clean();
 				return $output;
 			}
 		}
-#		if ($notfoundText) return $notfoundText;	# [SEC] output is not sanitized!!
 		if ('' != trim($notfoundText))
 		{
 			return $this->htmlspecialchars_ent(trim($notfoundText));	# [SEC] make error (including (part of) request) safe to display
@@ -1007,9 +980,6 @@ class Wakka
 	// PLUGINS
 	function Action($actionspec, $forceLinkTracking = 0)
 	{
-		#$action = trim($action);
-		#$vars=array();
-
 		// parse action spec and check if we have a syntactically valid action name	[SEC]
 		// allows action name consisting of letters and numbers ONLY
 		// and thus provides defense against directory traversal or XSS
@@ -1023,46 +993,31 @@ class Wakka
 			$action_name	= strtolower($matches[1]);
 			$paramlist		= trim($matches[2]);
 		}
-		#// only search for parameters if there is a space
-		#if (is_int(strpos($action, ' ')))
+
 		// search for parameters if there was more than just a (syntactically valid) action name
 		if ('' != $paramlist)
 		{
-			#// treat everything after the first whitespace as parameter
-			#preg_match('/^([A-Za-z0-9]*)\s+(.*)$/', $action, $matches);
-			#// extract $action and $vars_temp ("raw" attributes)
-			#list(, $action, $vars_temp) = $matches;
+			// match all attributes (key and value)
+			preg_match_all('/([a-zA-Z0-9]+)=(\"|\')(.*)\\2/U', $paramlist, $matches);	# [SEC] parameter name should not be empty
 
-			#if ($action) {
-				// match all attributes (key and value)
-				#preg_match_all('/([A-Za-z0-9]*)=("|\')(.*)\\2/U', $vars_temp, $matches);
-				preg_match_all('/([a-zA-Z0-9]+)=(\"|\')(.*)\\2/U', $paramlist, $matches);	# [SEC] parameter name should not be empty
-
-				// prepare an array for extract() to work with (in $this->IncludeBuffered())
-				$vars = array();
-				if (is_array($matches)) 
+			// prepare an array for extract() (in $this->IncludeBuffered()) to work with
+			$vars = array();
+			if (is_array($matches)) 
+			{
+				for ($a = 0; $a < count($matches[0]); $a++) 
 				{
-					for ($a = 0; $a < count($matches[0]); $a++) 
-					{
-						# value needs to be sanitized here... -or- better in IncludeBuffered() ? [SEC]
-						# Nope, doing it in IncludeBuffered() causes problems for the Formatter
-						# which then gets the whole page contents "sanitized" - it needs to be free to
-						# do its own sanitizing! So  we must do it here.
-						# using htmlspecialchars_ent() instead of DotMG's strip_tags suggestion;
-						# this allows any HTML still to be displayed _as code_, but not interpreted.
-#						$vars[$matches[1][$a]] = $matches[3][$a];	// parameter name = value
-						$vars[$matches[1][$a]] = $this->htmlspecialchars_ent($matches[3][$a]);	// parameter name = sanitized value [SEC]
-					}
+					// parameter value is sanitized using htmlspecialchars_ent(); if an
+					// action really needs "raw" HTML as input it can still be "unescaped"by the action
+					// itself; for any other action this guards against XSS or directory traversal
+					// via user-supplied action parameters. Any HTML will be displayed _as code_, 
+					// but not interpreted.
+					$vars[$matches[1][$a]] = $this->htmlspecialchars_ent($matches[3][$a]);	// parameter name = sanitized value [SEC]
 				}
-				#$vars['wikka_vars'] = trim($vars_temp); // <<< add the buffered parameter-string to the array
-				$vars['wikka_vars'] = $paramlist; // <<< add the complete parameter-string to the array
-			#} else {
-			#	return '<em class="error">Unknown action; the action name must not contain special characters.</em>'; // <<< the pattern ([A-Za-z0-9])\s+ didn't match!
-			#}
+			}
+			$vars['wikka_vars'] = $paramlist; // <<< add the complete parameter-string to the array
 		}
-		#if (!preg_match('/^[a-zA-Z0-9]+$/', $action)) return '<em class="error">Unknown action; the action name must not contain special characters.</em>';	# [SEC] moved ^
 		if (!$forceLinkTracking) $this->StopLinkTracking();
-		#$result = $this->IncludeBuffered(strtolower($action).'.php', '<em class="error">Unknown action "'.$action.'"</em>', $vars, $this->config['action_path']);
+
 		$result = $this->IncludeBuffered($action_name.'.php', '<em class="error">Unknown action "'.$action_name.'"</em>', $vars, $this->config['action_path']);
 		$this->StartLinkTracking();
 		return $result;
@@ -1073,13 +1028,14 @@ class Wakka
 		{
 			# Observations - MK 2007-03-30 
 			# extract part after the last slash (if the whole request contained multiple slashes)
+			# TODO:
 			# but should such requests be accepted in the first place?
-			# at least it is a SORT of defense against directory traversal (but not necessarily XSS) 
+			# at least it is a SORT of defense against directory traversal (but not necessarily XSS)
+			# NOTE that name syntax check now takes care of XSS 
 			$method = substr($method, strrpos($method, '/')+1);
 		}
 		// check valid method name syntax (similar to Action())
-		# need to allow at least letters, underscore, dot (as used now) 
-		if (!preg_match('/^([a-zA-Z0-9_.-]+)$/', $method)) # allow letters, numbers, underscores, dashes and dots only (for now); see also #34
+		if (!preg_match('/^([a-zA-Z0-9_.-]+)$/', $method)) // allow letters, numbers, underscores, dashes and dots only (for now); see also #34
 		{
 			return '<em class="error">Unknown method; the method name must not contain special characters.</em>';	# [SEC]			
 		}
@@ -1089,15 +1045,13 @@ class Wakka
 			$method	= strtolower($method);
 		}
 		if (!$handler = $this->page['handler']) $handler = 'page';	# there are no other handlers (yet)
-		#$methodLocation = $handler."/".$method.".php";
 		$methodLocation = $handler.DIRECTORY_SEPARATOR.$method.'.php';	#89
 		return $this->IncludeBuffered($methodLocation, '<em class="error">Unknown method "'.$methodLocation.'"</em>', '', $this->config['handler_path']);
 	}
 	function Format($text, $formatter='wakka') 
 	{ 
 		// check valid formatter name syntax (similar to Action())
-		# need to allow at least letters (as used now); GeSHi also uses dash and numbers
-		if (!preg_match('/^([a-zA-Z0-9_.-]+)$/', $formatter)) # allow letters, numbers, underscores, dashes and dots only (for now); see also #34
+		if (!preg_match('/^([a-zA-Z0-9_.-]+)$/', $formatter)) // allow letters, numbers, underscores, dashes and dots only (for now); see also #34
 		{
 			return '<em class="error">Unknown formatter; the formatter name must not contain special characters.</em>';	# [SEC]			
 		}
