@@ -275,6 +275,9 @@ $wakka = preg_replace("/^\//", "", $wakka);
 
 /**
  * Split into page/method.
+ * 
+ * Note this splits at the FIRST / so $method may contain one or more slashes;
+ * this is not allowed, and ultimately handled in the Method() method. [SEC]
  */
 if (preg_match("#^(.+?)/(.*)$#", $wakka, $matches)) list(, $page, $method) = $matches;
 else if (preg_match("#^(.*)$#", $wakka, $matches)) list(, $page) = $matches;
