@@ -198,9 +198,9 @@ if (!isset($wakkaConfig['wakka_version']))
 }
 if ($wakkaConfig['wakka_version'] !== WAKKA_VERSION)
 {
-	if (file_exists('setup/index.php'))
+	if (file_exists('setup'.DIRECTORY_SEPARATOR.'index.php'))	#89
 	{
-		include('setup/index.php');
+		include('setup'.DIRECTORY_SEPARATOR.'index.php');		#89
 	}
 	else
 	{
