@@ -152,7 +152,7 @@ class Wakka
 	 * @uses	Wakka::LoadAll()
 	 * @param	string $query mandatory: the query to be executed
 	 * @return	string? the first result of the query.
-	 * @todo	perhaps add 'LIMIT 1' here instead depending on it beeing in every $query
+	 * @todo	perhaps add 'LIMIT 1' here instead depending on it being in every $query
 	 * @todo	move into a database class.
 	 */
 	function LoadSingle($query)
@@ -215,6 +215,7 @@ class Wakka
 				return 0;
 			}
 		}
+
 		$mysql_major = $match[0];
 		$mysql_minor = $match[1];
 		$mysql_subminor = $match[2][0].$match[2][1];
@@ -416,7 +417,6 @@ class Wakka
 	/**
 	 * Make sure a (user-provided) URL does use &amp; instead of & and is protected from attacks.
 	 *
-	 * Any already-present '&amp;' is first turned into '&'; then htmlspecialchars() is applied so
 	 * Any already-present '&amp;' is first turned into '&'; then hsc_secure() 
 	 * is applied so all ampersands are "escaped" while characters that could be 
 	 * used to create a script attack (< > or ") are "neutralized" by escaping 
@@ -498,7 +498,7 @@ class Wakka
 	 * 
 	 * @todo	(maybe) recognize valid html entities and only leave those 
 	 * 			alone, thus transform &error; to &amp;error;
-	 * @todo	later - maybe) support full range of situations where (in SGML) 
+	 * @todo	(later - maybe) support full range of situations where (in SGML) 
 	 * 			a terminating ; may legally be omitted (end, newline and tag are 
 	 * 			merely the most common ones); such usage is quite rare though 
 	 * 			and may not be worth the effort
@@ -587,7 +587,7 @@ class Wakka
 	 * 
 	 * @author 		{@link http://wikkawiki.org/JavaWoman Marjolein Katsma}
 	 *
-	 * @since		Wikka 1.1.7
+	 * @since		Wikka 1.1.6.3
 	 * @version		1.0
 	 * @license		http://www.gnu.org/copyleft/lgpl.html 
 	 * 				GNU Lesser General Public License
@@ -1194,6 +1194,7 @@ class Wakka
 			   body LIKE "%'.mysql_real_escape_string($phrase).'%")
 			   ORDER BY time DESC');
 		}
+
 		return($data);
 	}
 	/**
@@ -2203,7 +2204,7 @@ class Wakka
 
 	/**
 	 * COMMENTS
-	 *
+	 */
 	/**
 	 * Load the comments for a (given) page.
 	 *
@@ -2360,7 +2361,8 @@ class Wakka
 			}
 		}
 		else if($level < 0)
-		{ // End traversal
+		{
+			// End traversal
 			return;
 		}
 		else
