@@ -118,6 +118,31 @@ if (get_magic_quotes_gpc())
 /**
  * Default configuration.
  */
+// attempt to derive base URL fragments and whether rewrite mode is enabled (#438)
+echo 'request URI:  '.$_SERVER['REQUEST_URI']."<br/>\n";
+echo 'query string: '.$_SERVER['QUERY_STRING']."<br/>\n";
+$t_domain	= $_SERVER['SERVER_NAME'];
+$t_port		= $_SERVER['SERVER_PORT'] != 80 ? ':'.$_SERVER['SERVER_PORT'] : '';
+#$t_request	=( preg_match('@(\.php|/)$@', $_SERVER['REQUEST_URI'])) ? $_SERVER['REQUEST_URI'] : $_SERVER['REQUEST_URI'].'/'; // ensure trailing slash where necessary
+$t_request = $_SERVER['REQUEST_URI'];
+if (preg_match('@\.php$@', $t_request) && !preg_match('@wikka\.php$@', $t_request))
+{
+	$t_request = preg_replace('@/[^.]+\.php@', '/wikka.php', $t_request);	// handle "missing" redirect from index.php (or plain wrong file name)
+}
+#if ( preg_match('@'.preg_quote('wikka.php').'$@', $_SERVER['REQUEST_URI']) && isset($_SERVER['QUERY_STRING']) )
+if ( !preg_match('@wakka=@',$_SERVER['REQUEST_URI']) && isset($_SERVER['QUERY_STRING']) && preg_match('@wakka=@',$_SERVER['QUERY_STRING']))
+{
+	// looks like we got a rewritten request via .htaccess 
+	$t_query = '';
+	$t_request = preg_replace('@'.preg_quote('wikka.php').'@', '', $t_request);
+	$t_rewrite_mode = 1;
+}
+else
+{
+	// no rewritten request apparent
+	$t_query = '?wakka=';
+	$t_rewrite_mode = 0;
+}
 $wakkaDefaultConfig = array(
 	'mysql_host'				=> 'localhost',
 	'mysql_database'			=> 'wikka',
@@ -126,8 +151,10 @@ $wakkaDefaultConfig = array(
 
 	'root_page'				=> 'HomePage',
 	'wakka_name'				=> 'MyWikkaSite',
-	'base_url'				=> 'http://'.$_SERVER['SERVER_NAME'].($_SERVER['SERVER_PORT'] != 80 ? ':'.$_SERVER['SERVER_PORT'] : '').$_SERVER['REQUEST_URI'].(preg_match('/'.preg_quote('wikka.php').'$/', $_SERVER['REQUEST_URI']) ? '?wakka=' : ''),
-	'rewrite_mode'			=> (preg_match('/'.preg_quote('wikka.php').'$/', $_SERVER['REQUEST_URI']) ? '0' : '1'),
+#	'base_url'				=> 'http://'.$_SERVER['SERVER_NAME'].($_SERVER['SERVER_PORT'] != 80 ? ':'.$_SERVER['SERVER_PORT'] : '').$_SERVER['REQUEST_URI'].(preg_match('/'.preg_quote('wikka.php').'$/', $_SERVER['REQUEST_URI']) ? '?wakka=' : ''),
+#	'rewrite_mode'			=> (preg_match('/'.preg_quote('wikka.php').'$/', $_SERVER['REQUEST_URI']) ? '0' : '1'),
+	'base_url'				=> 'http://'.$t_domain.$t_port.$t_request.$t_query,
+	'rewrite_mode'			=> $t_rewrite_mode,
 	'wiki_suffix'			=> '@wikka',
 
 	'action_path'			=> 'actions',
@@ -251,7 +278,7 @@ $wakka = $_GET['wakka']; #312
 $wakka = preg_replace("/^\//", "", $wakka);
 
 /**
- * Split into page/method
+ * Split into page/method.
  */
 if (preg_match("#^(.+?)/(.*)$#", $wakka, $matches)) list(, $page, $method) = $matches;
 else if (preg_match("#^(.*)$#", $wakka, $matches)) list(, $page) = $matches;
