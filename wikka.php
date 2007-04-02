@@ -33,6 +33,16 @@
  * 			necessary) - #312  
  */
 
+// If you need to use this installation with a configuration file outside the 
+// installation directory uncomment the following line and adapt it to reflect 
+// the (filesystem) path to where your configuration file is located.
+// This would make it possible to store the configuration file outside of the
+// webroot, or to share one configuration file between several Wikka Wiki
+// installations.
+// This replaces the use of the environment variable WAKKA_CONFIG for security
+// reasons. [SEC]      
+#if (!defined('WAKKA_CONFIG')) define('WAKKA_CONFIG','path/to/your/wikka.config.php');
+
 if(!defined('ERROR_WAKKA_LIBRARY_MISSING')) define ('ERROR_WAKKA_LIBRARY_MISSING','The necessary file "libs/Wakka.class.php" could not be found. To run Wikka, please make sure the file exists and is placed in the right directory!');
 if(!defined('ERROR_WRONG_PHP_VERSION')) define ('ERROR_WRONG_PHP_VERSION', '$_REQUEST[] not found. Wakka requires PHP 4.1.0 or higher!');
 if(!defined('ERROR_SETUP_FILE_MISSING')) define ('ERROR_SETUP_FILE_MISSING', 'A file of the installer/ upgrader was not found. Please install Wikka again!');
@@ -200,7 +210,15 @@ $wakkaDefaultConfig = array(
 // load config
 $wakkaConfig = array();
 if (file_exists("wakka.config.php")) rename("wakka.config.php", "wikka.config.php");
-if (!$configfile = GetEnv("WAKKA_CONFIG")) $configfile = "wikka.config.php";
+#if (!$configfile = GetEnv("WAKKA_CONFIG")) $configfile = "wikka.config.php";
+if (defined('WAKKA_CONFIG'))	// use a define instead of GetEnv [SEC] 
+{
+	$configfile = WAKKA_CONFIG;
+}
+else
+{
+	$configfile = 'wikka.config.php';
+}
 if (file_exists($configfile)) include($configfile);
 
 $wakkaConfigLocation = $configfile;
