@@ -18,7 +18,7 @@
  */
 
 // i18n strings
-define('WHEN_BY_WHO', '%1$s by %2$s');
+define('WIKKA_REV_WHEN_BY_WHO', '%1$s by %2$s');
 define('ERROR_ACL_READ_INFO', 'You\'re not allowed to access this information.');
 define('LABEL_ERROR', 'Error');
 if (!defined('I18N_LANG')) define('I18N_LANG', 'en-us');

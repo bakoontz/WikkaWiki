@@ -56,8 +56,8 @@ $phrase_disp = $this->htmlspecialchars_ent($phrase);
 <table border="0" cellspacing="0" cellpadding="0">
 	<tr>
 		<td><?php echo SEARCH_FOR; ?>:&nbsp;</td>
-		<td><input name="phrase" size="40" value="<?php if (isset($_REQUEST["phrase"])) echo $this->htmlspecialchars_ent(stripslashes($_REQUEST["phrase"])); ?>" /> <input type="submit" value="Search"/></td>
-		<!--<td><input name="phrase" size="40" value="<?php if (isset($_REQUEST['phrase'])) echo $this->htmlspecialchars_ent(stripslashes($_REQUEST['phrase'])); ?>" /> <input type="submit" value="Search"/></td>-->
+		<!--td><input name="phrase" size="40" value="<?php if (isset($_REQUEST["phrase"])) echo $this->htmlspecialchars_ent(stripslashes($_REQUEST["phrase"])); ?>" /> <input type="submit" value="Search"/></td>
+		<!<td><input name="phrase" size="40" value="<?php if (isset($_REQUEST['phrase'])) echo $this->htmlspecialchars_ent(stripslashes($_REQUEST['phrase'])); ?>" /> <input type="submit" value="Search"/></td>-->
 		<td><input name="phrase" size="40" value="<?php echo $phrase_disp ?>" /> <input type="submit" value="Search"/></td><!--i18n-->
 	</tr>
 </table><br />
