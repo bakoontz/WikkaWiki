@@ -48,37 +48,40 @@ else
 
 echo '<div class="page">'."\n"; //TODO: move to templating class
 
-print("<strong>$title</strong><br />\n");
-print("<em>Note to spammers: This page is not indexed by search engines, so don't waste your time.</em><br /><br />");
+echo '<strong>'.$title.'</strong><br />'."\n";
+echo '<em>Note to spammers: This page is not indexed by search engines, so don\'t waste your time.</em><br /><br />'."\n";
 
-if ($this->GetUser()) {
+if ($this->GetUser())
+{
 	if ($referrers)
 	{
-		print("<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\">\n");
+		echo '<table border="0" cellspacing="0" cellpadding="0">'."\n";
 		foreach ($referrers as $referrer)
 		{
-			print("<tr>");
-			print("<td width=\"30\" align=\"right\" valign=\"top\" style=\"padding-right: 10px\">".$referrer["num"]."</td>");
-			print("<td valign=\"top\"><a href=\"".$this->htmlspecialchars_ent($referrer["referrer"])."\">".$this->htmlspecialchars_ent($referrer["referrer"])."</a> ".($IsAdmin ? "[<a href=\"".$this->href("delete_referrer", "", "spam_link=").$this->htmlspecialchars_ent($referrer["referrer"])."&redirect=".$this->GetMethod()."\">Blacklist</a>]" : "")."</td>");
-			print("</tr>\n");
+			echo '<tr>'."\n";
+			echo '<td width="30" align="right" valign="top" style="padding-right: 10px">'.$referrer['num'].'</td>'."\n";
+			echo '<td valign="top"><a href="'.$this->htmlspecialchars_ent($referrer['referrer']).'">'.$this->htmlspecialchars_ent($referrer['referrer']).'</a> '.($IsAdmin ? '[<a href="'.$this->href('delete_referrer', '', 'spam_link=').$this->htmlspecialchars_ent($referrer['referrer']).'&redirect='.$this->GetMethod().'">Blacklist</a>]' : '').'</td>'."\n";
+			echo '</tr>'."\n";
 		}
-		print("</table>\n");
+		echo '</table>'."\n";
 	}
 	else
 	{
-		print("<em>None</em><br />\n");
+		echo '<em>None</em><br />'."\n";
 	}
-} else {
-	print("<em>You need to login to see referring sites</em><br />\n");
+}
+else
+{
+	echo '<em>You need to login to see referring sites</em><br />'."\n";
 }
 
 if ($global)
 {
-	print("<br />[<a href=\"".$this->href("referrers_sites")."\">View referring sites for ".$this->GetPageTag()." only</a> | <a href=\"".$this->href("referrers")."\">View referrers for ".$this->GetPageTag()." only</a> | <a href=\"".$this->href("review_blacklist")."\">View referrer blacklist</a>]");
+	echo '<br />[<a href="'.$this->href('referrers_sites').'">View referring sites for '.$this->GetPageTag().' only</a> | <a href="'.$this->href('referrers').'">View referrers for '.$this->GetPageTag().' only</a> | <a href="'.$this->href('review_blacklist').'">View referrer blacklist</a>]'."\n";
 }
 else
 {
-	print("<br />[<a href=\"".$this->href("referrers_sites", "", "global=1")."\">View global referring sites</a> | <a href=\"".$this->href("referrers", "", "global=1")."\">View global referrers</a> | <a href=\"".$this->href("review_blacklist")."\">View referrer blacklist</a>]");
+	echo '<br />[<a href="'.$this->href('referrers_sites', '', 'global=1').'">View global referring sites</a> | <a href="'.$this->href('referrers', '', 'global=1').'">View global referrers</a> | <a href="'.$this->href('review_blacklist').'">View referrer blacklist</a>]'."\n";
 }
 
 echo '</div>'."\n" //TODO: move to templating class
