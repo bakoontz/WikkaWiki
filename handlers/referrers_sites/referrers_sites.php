@@ -4,7 +4,7 @@
  * 
  * @package		Handlers
  * @subpackage	Referrers	
- * @version		$Id$
+ * @version		$Id:referrers_sites.php 407 2007-03-13 05:59:51Z DarTar $
  * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
  * 
@@ -22,6 +22,7 @@
  * @todo		$heading should become heading, not bold text
  * @todo	replace $_REQUEST with either $_GET or $_POST (or both if really
  * 			necessary) - #312  
+ * @todo		replace with new handlers - #1
  */
 
 $global = '';
@@ -102,25 +103,25 @@ if ($this->GetUser())
 		reset($referrer_sites);
 
 		// present data
-		print("<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\">\n");
+		echo '<table border="0" cellspacing="0" cellpadding="0">'."\n";
 		foreach ($referrer_sites as $site => $site_count)
 		{
 			$site_esc = $this->htmlspecialchars_ent($site);
-			print("<tr>");
-			print("<td width=\"30\" align=\"right\" valign=\"top\" style=\"padding-right: 10px\">$site_count</td>");
-			print("<td valign=\"top\">" . (($site != "unknown") ? "<a href=\"http://".$site_esc."\">".$site_esc."</a>" : $site) . "</a> ".($IsAdmin ? "[<a href=\"".$this->href("delete_referrer", "", "spam_site=").$site_esc."&amp;redirect=".$this->GetHandler().'">'.BLACKLIST_LINK_DESC."</a>]" : "")."</td>");
-			print("</tr>\n");
+			echo '<tr>'."\n";
+			echo '<td width="30" align="right" valign="top" style="padding-right: 10px">'.$site_count.'</td>'."\n";
+			echo '<td valign="top">' . (($site != 'unknown') ? '<a href="http://'.$site_esc.'">'.$site_esc.'</a>' : $site).'</a> '.($IsAdmin ? '[<a href="'.$this->href('delete_referrer', '', 'spam_site=').$site_esc.'&amp;redirect='.$this->GetHandler().'">'.BLACKLIST_LINK_DESC.'</a>]' : '').'</td>'."\n";
+			echo '</tr>'."\n";
 		}
-		print("</table>\n");
+		echo '</table>'."\n";
 	}
 	else
 	{
-		print('<em>'.NONE_CAPTION."</em><br />\n");
+		echo '<em>'.NONE_CAPTION.'</em><br />'."\n";
 	}
 }
 else
 {
-	print('<em>'.PLEASE_LOGIN_CAPTION."</em><br />\n");
+	echo '<em>'.PLEASE_LOGIN_CAPTION.'</em><br />'."\n";
 }
 
 echo '<br />'.$menu;

@@ -21,6 +21,7 @@
  * @todo		make valid XHTML (can't mix table with ul)
  * @todo	replace $_REQUEST with either $_GET or $_POST (or both if really
  * 			necessary) - #312  
+ * @todo		replace with new handlers - #1
  */
 
 $IsAdmin = $this->IsAdmin();
@@ -29,8 +30,8 @@ $IsAdmin = $this->IsAdmin();
 if ($IsAdmin && isset($_GET["whitelist"]))
 {
 	#$whitelist = $_REQUEST["whitelist"];
-	$whitelist = $_GET["whitelist"];
-	$this->Query("DELETE FROM ".$this->config["table_prefix"]."referrer_blacklist WHERE spammer = '".mysql_real_escape_string($whitelist)."'");
+	$whitelist = $_GET['whitelist'];
+	$this->Query('DELETE FROM '.$this->config['table_prefix'].'referrer_blacklist WHERE spammer = "'.mysql_real_escape_string($whitelist).'"');
 	$this->Redirect($this->Href("review_blacklist"));
 }
 
@@ -50,18 +51,18 @@ echo '<strong>'.BLACKLIST_HEADING.'</strong><br /><br />'."\n";
 // present data
 if ($blacklist)
 {
-	print("<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\"><ul>\n");
+	echo '<table border="0" cellspacing="0" cellpadding="0">'."\n";
 	foreach ($blacklist as $spammer)
 	{
-		print('<tr>');
-		print('<td valign="top"><li>'.$spammer['spammer'].' '.($IsAdmin ? '[<a href="'.$this->Href('review_blacklist', '', 'whitelist=').$this->htmlspecialchars_ent($spammer['spammer']).'">'.BLACKLIST_REMOVE_LINK_DESC.'</a>]' : '').'</li></td>');
-		print("</tr>\n");
+		echo '<tr>'."\n";
+		echo '<td valign="top"><li>'.$spammer['spammer'].' '.($IsAdmin ? '[<a href="'.$this->Href('review_blacklist', '', 'whitelist=').$this->htmlspecialchars_ent($spammer['spammer']).'">'.BLACKLIST_REMOVE_LINK_DESC.'</a>]' : '').'</li></td>'."\n";
+		echo '</tr>'."\n";
 	}
-	print("</ul></table><br />\n");
+	echo '</table><br />'."\n";
 }
 else
 {
-	print('<em>'.STATUS_BLACKLIST_EMPTY."</em><br /><br />\n");
+	echo '<em>'.STATUS_BLACKLIST_EMPTY.'</em><br /><br />'."\n";
 }
 
 echo '<br />'.$menu;

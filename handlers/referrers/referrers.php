@@ -4,7 +4,7 @@
  * 
  * @package		Handlers
  * @subpackage	Referrers
- * @version		$Id$
+ * @version		$Id:referrers.php 407 2007-03-13 05:59:51Z DarTar $
  * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
  * 
@@ -24,6 +24,7 @@
  * @todo		$heading should become heading, not bold text
  * @todo	replace $_REQUEST with either $_GET or $_POST (or both if really
  * 			necessary) - #312  
+ * @todo		replace with new handlers - #1
  */
 
 $global = '';
@@ -87,24 +88,24 @@ if ($this->GetUser())
 	if ($referrers)
 	{
 		// present data
-		print("<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\">\n");
+		echo '<table border="0" cellspacing="0" cellpadding="0">'."\n";
 		foreach ($referrers as $referrer)
 		{
-			print("<tr>");
-			print("<td width=\"30\" align=\"right\" valign=\"top\" style=\"padding-right: 10px\">".$referrer["num"]."</td>");
-			print("<td valign=\"top\"><a href=\"".$this->htmlspecialchars_ent($referrer["referrer"])."\">".$this->htmlspecialchars_ent($referrer["referrer"])."</a> ".($IsAdmin ? "[<a href=\"".$this->Href("delete_referrer", "", "spam_link=").$this->htmlspecialchars_ent($referrer["referrer"])."&amp;redirect=".$this->GetHandler()."\">".BLACKLIST_LINK_DESC."</a>]" : "")."</td>");
-			print("</tr>\n");
+			echo '<tr>'."\n";
+			echo '<td width="30" align="right" valign="top" style="padding-right: 10px">'.$referrer['num'].'</td>'."\n";
+			echo '<td valign="top"><a href="'.$this->htmlspecialchars_ent($referrer['referrer']).'">'.$this->htmlspecialchars_ent($referrer['referrer']).'</a> '.($IsAdmin ? '[<a href="'.$this->Href('delete_referrer', '', 'spam_link=').$this->htmlspecialchars_ent($referrer['referrer']).'&amp;redirect='.$this->GetHandler().'">'.BLACKLIST_LINK_DESC.'</a>]' : '').'</td>'."\n";
+			echo '</tr>'."\n";
 		}
-		print("</table>\n");
+		echo '</table>'."\n";
 	}
 	else
 	{
-		print('<em>'.NONE_CAPTION."</em><br />\n");
+		echo '<em>'.NONE_CAPTION.'</em><br />'."\n";
 	}
 }
 else
 {
-	print('<em>'.PLEASE_LOGIN_CAPTION."</em><br />\n");
+	echo '<em>'.PLEASE_LOGIN_CAPTION.'</em><br />'."\n";
 }
 
 echo '<br />'.$menu;
