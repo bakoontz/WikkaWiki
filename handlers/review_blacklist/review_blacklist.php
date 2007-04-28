@@ -55,7 +55,7 @@ if ($blacklist)
 	foreach ($blacklist as $spammer)
 	{
 		echo '<tr>'."\n";
-		echo '<td valign="top"><li>'.$spammer['spammer'].' '.($IsAdmin ? '[<a href="'.$this->Href('review_blacklist', '', 'whitelist=').$this->htmlspecialchars_ent($spammer['spammer']).'">'.BLACKLIST_REMOVE_LINK_DESC.'</a>]' : '').'</li></td>'."\n";
+		echo '<td valign="top">'.$spammer['spammer'].' '.($IsAdmin ? '[<a href="'.$this->Href('review_blacklist', '', 'whitelist=').$this->htmlspecialchars_ent($spammer['spammer']).'">'.BLACKLIST_REMOVE_LINK_DESC.'</a>]' : '').'</td>'."\n";
 		echo '</tr>'."\n";
 	}
 	echo '</table><br />'."\n";
