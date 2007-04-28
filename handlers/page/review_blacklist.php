@@ -23,6 +23,8 @@
 
 $IsAdmin = $this->IsAdmin();
 
+echo '<div class="page">'."\n"; //TODO: move to templating class
+
 #if ($IsAdmin && isset($_REQUEST["whitelist"]))
 if ($IsAdmin && isset($_GET["whitelist"]))
 {
