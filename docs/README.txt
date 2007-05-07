@@ -1,15 +1,28 @@
-Wikka
+WikkaWiki
 
-A Wiki-esque website toolkit originally developed by Hendrik Mans named WakkaWiki.
-Devolopment was forked by Jason Tourtelotte and renamed Wikka.
+What is Wikka?
+--------------
+WikkaWiki (aka Wikka) is a flexible, standards-compliant and lightweight wiki engine written in PHP, which uses MySQL to store pages. Forked from WakkaWiki. Designed for speed, extensibility, and security. Released under the GPL license.
 
-Not much to read here. For some quick installation instructions, please
-check out INSTALL.
+Installing Wikka
+----------------
+For some quick installation instructions, please check out INSTALL.txt.
 
-Most of the Wikka documentation is available online only. Please visit
-the official Wikka homepage at <http://wikkawiki.org>. You'll
-find everything else there. (Eventually. :b)
+Documentation
+-------------
+Most of the Wikka documentation is available online. Please visit the official Wikka website at http://wikkawiki.org to find help and tutorials.
 
+The Wikka Development Team
+--------------------------
 
-Maintainers:
-  Jason Tourtelotte <wikka-admin@jsnx.com>
+- DarTar [Dario Taraborelli]
+- JavaWoman [Marjolein Katsma]
+- DotMG [Mahefa Randimbisoa]
+- NilsLindenberg
+- YanB [Yan Brailowsky]
+- BrianKoontz
+- TormodHaugen
+
+Wikka Hall of Fame
+- JsnX [Jason Tourtelotte]
+- DreckFehler [Sebastian]

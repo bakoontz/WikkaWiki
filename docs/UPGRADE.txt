@@ -1,4 +1,5 @@
-UPGRADING FROM AN EARLIER VERSION:
+Wikka: Upgrading from an earlier version
+----------------------------------------
 
 Just unpack the new distribution archive wherever you need/want it; all you need from
 your old Wikka installation is wikka.config.php. You can also just copy the new files

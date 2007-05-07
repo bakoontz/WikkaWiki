@@ -1,5 +1,5 @@
 Third-party software bundled with Wikka
-=======================================
+---------------------------------------
 
 Wikka bundles a number of third-party packages to provide some of its
 functionality. All these open-source packages are either released under
@@ -18,7 +18,7 @@ download the full package or contact the author. The software is written
 in PHP unless indicated otherwise.
 
 Name       : WikiEdit
-Bundled    : Version 2 (2.01/2.15)
+Bundled    : Version 2 (2.15)
 Description: GUI toolbar for editing Wiki pages (requires JavaScript)
 For Wikka  : Scripts are modified for Wikka syntax, toolbar is activated
              through the configuration file
@@ -37,7 +37,7 @@ Author     : Roman Ivanov: thingol [at] mail [dot] ru
 Note       : License file missing in the current distribution
 
 Name       : GeSHi
-Bundled    : version 1.0.4
+Bundled    : version 1.0.7.18
 Description: Generic Syntax Highlighter
 For Wikka  : Used by formatter to provide syntax highlighting in code
              blocks (between %%...%%)
