@@ -2383,8 +2383,8 @@ class Wakka
 	 */
 	function CountComments($tag)
 	{
-		$data = $this->LoadSingle('SELECT COUNT(*) FROM '.$this->config['table_prefix'].'comments WHERE page_tag = "'.mysql_real_escape_string($tag).'"');
-		return $data['count(*)'];
+		$data = $this->LoadSingle('SELECT COUNT(*) as countcomments FROM '.$this->config['table_prefix'].'comments WHERE page_tag = "'.mysql_real_escape_string($tag).'"');
+		return $data['countcomments'];
 	}
 
 	/**
@@ -2439,7 +2439,7 @@ class Wakka
 			'page_tag = "'.mysql_real_escape_string($page_tag).'", '.
 			'time = now(), '.
 			'comment = "'.mysql_real_escape_string($comment).'", '.
-			'parent = $parent_id, '.
+			'parent = "'.mysql_real_escape_string($parent_id).'", '.
 			'user = "'.mysql_real_escape_string($user).'"');
 	}
 
