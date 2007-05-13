@@ -47,7 +47,6 @@ case "0":
   			"user varchar(75) NOT NULL default '',".
   			"latest enum('Y','N') NOT NULL default 'N',".
   			"note varchar(100) NOT NULL default '',".
-  			"handler varchar(30) NOT NULL default 'page',".
   			"PRIMARY KEY  (id),".
   			"KEY idx_tag (tag),".
   			"FULLTEXT KEY body (body),".
@@ -314,6 +313,11 @@ case "1.1.6.2":
 	mysql_query("alter table ".$config["table_prefix"]."comments add parent int(10) unsigned default NULL", $dblink), "Already done? OK!", 0);
 	test(__('Adding fields to comments table to enable threading').'...', 
 	mysql_query("alter table ".$config["table_prefix"]."comments add deleted char(1) default NULL", $dblink), "Already done? OK!", 0);
+case "1.1.6.3":
+	//dropping obsolete "handler" field from pages table #452
+	test(__('Removing handler field from the pages table').'...', 
+		@mysql_query("ALTER TABLE ".$config["table_prefix"]."pages DROP handler", $dblink), __('Already done? Hmm!'), 1);
+	break;
 case "trunk": //latest development version from the SVN repository - do not remove
 	break;
 }
