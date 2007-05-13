@@ -350,6 +350,7 @@ define('RECENTLYCOMMENTED_NONE_ACCESSIBLE','There are no recently commented page
  */
 // system
 define('SYSTEM_HOST_CAPTION','(%s)'); // %s - host name
+define('WIKKA_STATUS_NOT_AVAILABLE', 'n/a'); 
 /**#@-*/
 
 /**#@+
