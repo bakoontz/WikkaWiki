@@ -8,7 +8,6 @@
  * @filesource
  * 
  * @todo i18n;
- * @todo drop handler column from pages table as part of #452
  */
 
 // i18n section
