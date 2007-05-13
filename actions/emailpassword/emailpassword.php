@@ -3,7 +3,7 @@
  * Send the user a reminder with the md5 checksum of his or her password via email.
  * 
  * @package		Actions
- * @version		$Id$
+ * @version		$Id:emailpassword.php 369 2007-03-01 14:38:59Z DarTar $
  * @license http://comawiki.martignier.net/LizenzenUndBedingungen
  * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
@@ -39,11 +39,11 @@ if (isset($_POST['wikiname'])) // get posted values
 	switch(TRUE)
 	{
 		case ($input == ''): // empty user
-			$output .= '<em class="error">'.WIKKA_ERROR_EMPTY_USERNAME.'</em><br />'."\n";
+			$output .= '<em class="error">'.WIKKA_ERROR_EMPTY_USERNAME.'</em>'."\n";
 			$highlight = INPUT_ERROR_STYLE;
 			break;
 		case ($input != '' && !$user): // non-existing user
-			$output .= '<em class="error">'.ERROR_UNKNOWN_USER.'</em><br />'."\n";
+			$output .= '<em class="error">'.ERROR_UNKNOWN_USER.'</em>'."\n";
 			$highlight = INPUT_ERROR_STYLE;
 			break;
 		case ($input != '' && $user): // user exists, proceed
@@ -53,7 +53,7 @@ if (isset($_POST['wikiname'])) // get posted values
 			if (mail($user['email'], $reference, $mail, $header))
 			{
 				$mailsent = TRUE;
-				$output .= '<br /><em class="success">'.sprintf(PW_CHK_SENT, $user['name']).'</em><br />'."\n";
+				$output .= '<br /><em class="success">'.sprintf(PW_CHK_SENT, $user['name']).'</em>'."\n";
 				$usersettings_wlink = '[[UserSettings '.WIKKA_LOGIN_LINK_DESC.']]';
 				$output .= $this->Format(sprintf(USERSETTINGS_REF,$usersettings_wlink));
 			}
@@ -68,11 +68,13 @@ if (isset($_POST['wikiname'])) // get posted values
 // display input form
 if (!$mailsent)
 {
-	$output .= '<p>'.PW_FORM_TEXT.'</p>'; 
-//	$output .= '<form name="getwikiname" action="'.$this->href().'" method="post">';
+	$output .= '<p>'.PW_FORM_TEXT.'</p>'."\n";
 	$output .= $this->FormOpen();
-	$output .= '<input '.$highlight.' type="text" name="wikiname" value="" />';
-	$output .= '<input type="submit" value="'.PW_SEND_BUTTON.'" />';
+	$output .= '<fieldset>'."\n";
+	$output .= '<legend>'.PW_FORM_FIELDSET_LEGEND.'</legend>'."\n";
+	$output .= '<input '.$highlight.' type="text" name="wikiname" value="" />'."\n";
+	$output .= '<input type="submit" value="'.BUTTON_SEND_PW.'" />'."\n";
+	$output .= '</fieldset>'."\n";
 	$output .= $this->FormClose();   
 }
 

@@ -39,6 +39,7 @@ define('WIKKA_ERROR_ACL_READ_SOURCE','You aren\'t allowed to read the source of 
 define('WIKKA_ERROR_ACL_READ_INFO','You aren\'t allowed to access this information.');
 define('WIKKA_ERROR_LABEL','Error');
 define('WIKKA_ERROR_PAGE_NOT_EXIST','Sorry, page %s does not exist.'); // %s (source) page name
+define('WIKKA_ERROR_EMPTY_USERNAME','Please fill in your username!');
 define('WIKKA_LOGIN_LINK_DESC','login');
 define('WIKKA_MAINPAGE_LINK_DESC','main page');
 define('WIKKA_NOT_AVAILABLE','n/a');
@@ -138,7 +139,7 @@ define('PW_CHK_SENT','A password reminder has been sent to %s\'s registered emai
 define('PW_FORGOTTEN_MAIL','Hello, %1$s\n\n\nSomeone requested that we send to this email address a password reminder to login at %2$s. If you did not request this reminder, disregard this email. -- No action is necessary. -- Your password will stay the same.\n\nYour wikiname: %1$s \nPassword reminder: %3$s \nURL: %4$s \n\nDo not forget to change the password immediately after logging in.'); // %1$s - username; %2$s - wiki name; %3$s - md5 sum of pw; %4$s - login url of the wiki  
 define('PW_FORGOTTEN_MAIL_REF','Password reminder for %s'); // %s - wiki name
 define('PW_FORM_TEXT','Enter your WikiName and a password reminder will be sent to your registered email address.');
-define('ERROR_EMPTY_USER','Please fill in your username!');
+define('PW_FORM_FIELDSET_LEGEND','Your WikiName:');
 define('ERROR_UNKNOWN_USER','You have entered a non-existent user!');
 define('ERROR_MAIL_NOT_SENT','An error occurred while trying to send the password. Outgoing mail might be disabled. Please contact your server administrator.');
 define('BUTTON_SEND_PW','Send reminder');
