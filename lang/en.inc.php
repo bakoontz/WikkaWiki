@@ -244,9 +244,11 @@ define('LASTEDIT_DIFF_LINK_TITLE','Show differences from last revision');
  * Language constant used by the {@link lastusers.php lastusers} action
  */
 // lastusers
-define('NAME','Name');
-define('OWNED_PAGES','Owned Pages');
+define('LASTUSERS_CAPTION', 'Recently registered users');
 define('SIGNUP_DATE_TIME','Signup Date/Time');
+define('NAME_TH', 'Username');
+define('OWNED_PAGES_TH', 'Owned pages');
+define('SIGNUP_DATE_TIME_TH', 'Signup date/time');
 /**#@-*/
 
 /**#@+
