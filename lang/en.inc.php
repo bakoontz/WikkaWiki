@@ -430,11 +430,9 @@ define('USER_REGISTERED_SUCCESS','You have successfully registered!');
 define('USER_SETTINGS_STORED_SUCCESS','User settings stored!');
 define('USER_PASSWORD_CHANGED_SUCCESS','Password successfully changed!');
 // - captions
-define('NEW_USER_REGISTER_CAPTION','Fields required if you are signing up as a new user:');
-define('REGISTERED_USER_LOGIN_CAPTION','If you\'re already a registered user, log in here:');
-define('RETRIEVE_PASSWORD_LINK_DESC','here'); // TODO rephrase with functional name and avoid 'here'
-define('RETRIEVE_PASSWORD_CAPTION1','If you need a password reminder, click %s.'); // %s PasswordForgotten link 
-define('RETRIEVE_PASSWORD_CAPTION2','You can login here using your password reminder.');
+define('NEW_USER_REGISTER_CAPTION','If you are signing up as a new user:');
+define('REGISTERED_USER_LOGIN_CAPTION','If you already have a login, sign in here:');
+define('RETRIEVE_PASSWORD_CAPTION','Log in with your [[%s password reminder]]:'); //%s PasswordForgotten link
 define('USER_LOGGED_IN_AS_CAPTION','You are logged in as %s'); // %s user name
 // - form legends
 define('USER_ACCOUNT_LEGEND','Your account');
@@ -445,7 +443,7 @@ define('LOGIN_LEGEND','Login');
 define('CHANGE_PASSWORD_LEGEND','Change your password');
 define('RETRIEVE_PASSWORD_LEGEND','Password forgotten');
 // - form field labels (should end in ':' _unless_ it's a checkbox or radio button option)
-define('DONT_GO_BACK_LABEL','Don\'t go back to %s'); // %s page user came from
+define('STAY_HERE_LABEL','Show preferences after login');
 define('USER_EMAIL_LABEL','Your email address:');
 define('DOUBLECLICK_LABEL','Doubleclick editing:');
 define('SHOW_COMMENTS_LABEL','Show comments by default:');

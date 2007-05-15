@@ -756,8 +756,27 @@ fieldset.feedback br {
 /* Usersettings action */
 
 fieldset#account {
+	display: block;
+	min-width: 600px;
+	padding: 10px;
 	background-color: #F6F6F6;
+	text-align: left;
 }
+
+fieldset#account span#account_info {
+	display: block;
+	width: 230px;
+	float: left;
+	margin-bottom: 10px;
+	text-align: right;
+	padding-right: 10px;
+}
+
+fieldset#account input#logout {
+	float: left;
+	margin-left: 0;
+}
+
 
 fieldset.usersettings {
 	display: block;
@@ -766,9 +785,24 @@ fieldset.usersettings {
 }
 
 fieldset.usersettings em {
+	clear: left;
 	float: left;
 	display: block;
 	margin: 0 0 0 240px;
+}
+
+fieldset.usersettings em.usersettings_info {
+	clear: left;
+	float: left;
+	display: block;
+	width: 246px;
+	margin: 0 0 5px 240px;
+	font-style: normal;
+	font-size: 85%;
+	color: #666;
+	border: 1px solid #CCC;
+	background-color: #F0F0F0;
+	padding: 2px;
 }
 
 fieldset.usersettings label {

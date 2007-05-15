@@ -3,7 +3,7 @@
  * Display a form to register, login and change user settings.
  *
  * @package		Actions
- * @version		$Id$
+ * @version		$Id:usersettings.php 369 2007-03-01 14:38:59Z DarTar $
  * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
  *
@@ -78,18 +78,15 @@ $params = ($this->config['rewrite_mode'] == 1) ? '?' : '&';
 
 // BEGIN *** Logout ***
 // is user trying to log out?
-#if (isset($_REQUEST['action']) && ($_REQUEST['action'] == 'logout'))	// JavaScript button with GET
 if (isset($_POST['logout']) && $_POST['logout'] == LOGOUT_BUTTON)		// replaced with normal form button #353, #312
 {
 	$this->LogoutUser();
-	$params .= 'out=true';
-	$this->Redirect($url.$params);
 }
 // END *** Logout ***
 
 // BEGIN *** Usersettings ***
 // user is still logged in
-else if ($user = $this->GetUser())
+if ($user = $this->GetUser())
 {
 	// is user trying to update user settings?
 	if (isset($_POST['action']) && ($_POST['action'] == 'update'))
@@ -130,14 +127,10 @@ else if ($user = $this->GetUser())
 					"WHERE name = '".$user['name']."' LIMIT 1");
 				unset($this->specialCache['user'][strtolower($user['name'])]);  //invalidate cache if exists #368
 				$this->SetUser($this->LoadUser($user["name"]));
-			
-				// forward
-				$params .= 'stored=true';
-				$this->Redirect($url.$params);
 		}
 	}
 	//user just logged in
-	else 
+	else
 	{
 		// get stored settings
 		$email = $user['email'];
@@ -150,13 +143,12 @@ else if ($user = $this->GetUser())
 	// display user settings form
 	echo $this->FormOpen();
 ?>
-	<fieldset id="account" class="usersettings"><legend><?php echo USER_ACCOUNT_LEGEND ?></legend>
-	<input type="hidden" name="action" value="update" />
+	<fieldset id="account"><legend><?php echo USER_ACCOUNT_LEGEND ?></legend>
+	<span id="account_info">
 	<?php printf(USER_LOGGED_IN_AS_CAPTION, $this->Link($user['name'])); ?>
-	<!--input id="logout" type="button" value="<?php echo LOGOUT_BUTTON; ?>" onclick="document.location='<?php echo $this->Href('', '', 'action=logout'); ?>'" /-->
-	<input id="logout" name="logout" type="submit" value="<?php echo LOGOUT_BUTTON; ?>" /><!--#353,#312-->
-	</fieldset>
-	
+	</span><input id="logout" name="logout" type="submit" value="<?php echo LOGOUT_BUTTON; ?>" /><!--#353,#312-->
+	<br class="clear" />
+	</fieldset>	
 	<fieldset id="usersettings" class="usersettings"><legend><?php echo USER_SETTINGS_LEGEND ?></legend>
 <?php
 
@@ -166,11 +158,10 @@ else if ($user = $this->GetUser())
 		case (isset($_GET['registered']) && $_GET['registered'] == 'true'):
 			$success = USER_REGISTERED_SUCCESS;
 			break;
-		case (isset($_GET['stored']) && $_GET['stored'] == 'true'):
+		//case (isset($_GET['stored']) && $_GET['stored'] == 'true'):
+		case ($_POST['action'] == 'update' && !isset($error)):
 			$success = USER_SETTINGS_STORED_SUCCESS;
 			break;
-		case (isset($_GET['newpassword']) && $_GET['newpassword'] == 'true'):
-			$success = USER_PASSWORD_CHANGED_SUCCESS;
 	}
 
 	// display error or confirmation message
@@ -182,31 +173,7 @@ else if ($user = $this->GetUser())
 		case (isset($success)):
 			echo '<em class="success">'.$success.'</em><br />'."\n";
 			break;
-		default:	// TODO needed?
 	}
-?>
-	<label for="email"><?php echo USER_EMAIL_LABEL ?></label>
-	<input id="email" type="text" <?php echo $email_highlight; ?> name="email" value="<?php echo $this->htmlspecialchars_ent($email) ?>" size="40" />
-	<br />
-	<label for="doubleclick"><?php echo DOUBLECLICK_LABEL ?></label>
-	<input type="hidden" name="doubleclickedit" value="N" />
-	<input id="doubleclick" type="checkbox" name="doubleclickedit" value="Y" <?php echo $doubleclickedit == 'Y' ? 'checked="checked"' : '' ?> />
-	<br />
-	<label for="showcomments"><?php echo SHOW_COMMENTS_LABEL ?></label>
-	<input type="hidden" name="show_comments" value="N" />
-	<input id="showcomments" type="checkbox" name="show_comments" value="Y" <?php echo $show_comments == 'Y' ? 'checked="checked"' : '' ?> />
-	<br />
-	<label for="revisioncount"><?php echo PAGEREVISION_LIST_LIMIT_LABEL ?></label>
-	<input id="revisioncount" type="text" <?php echo $revisioncount_highlight; ?> name="revisioncount" value="<?php echo $this->htmlspecialchars_ent($revisioncount) ?>" size="40" />
-	<br />
-	<label for="changescount"><?php echo RECENTCHANGES_DISPLAY_LIMIT_LABEL ?></label>
-	<input id="changescount" type="text" <?php echo $changescount_highlight; ?> name="changescount" value="<?php echo $this->htmlspecialchars_ent($changescount) ?>" size="40" />
-	<br />
-	<input id="updatesettingssubmit" type="submit" value="<?php echo UPDATE_SETTINGS_BUTTON ?>" />
-	<br />
-	</fieldset>
-<?php	
-	echo $this->FormClose(); //close user settings form
 
 	if (isset($_POST['action']) && ($_POST['action'] == 'changepass'))
 	{
@@ -260,14 +227,38 @@ else if ($user = $this->GetUser())
 				$password_confirm_highlight = INPUT_ERROR_STYLE;
 				break;
 			default:
-				$this->Query('UPDATE '.$this->config['table_prefix'].'users set '."password = md5('".mysql_real_escape_string($password)."') "."WHERE name = '".$user['name']."'");
+				$this->Query('UPDATE '.$this->config['table_prefix'].'users SET '."password = md5('".mysql_real_escape_string($password)."') "."WHERE name = '".$user['name']."'");
 				unset($this->specialCache['user'][strtolower($name)]);  //invalidate cache if exists #368
 				$user['password'] = md5($password);
 				$this->SetUser($user);
-				$params .= 'newpassword=true';
-				$this->Redirect($url.$params);
+				$passsuccess = USER_PASSWORD_CHANGED_SUCCESS;
 		}
 	}
+
+?>
+	<input type="hidden" name="action" value="update" />
+	<label for="email"><?php echo USER_EMAIL_LABEL ?></label>
+	<input id="email" type="text" <?php echo $email_highlight; ?> name="email" value="<?php echo $this->htmlspecialchars_ent($email) ?>" size="40" />
+	<br />
+	<label for="doubleclick"><?php echo DOUBLECLICK_LABEL ?></label>
+	<input type="hidden" name="doubleclickedit" value="N" />
+	<input id="doubleclick" type="checkbox" name="doubleclickedit" value="Y" <?php echo $doubleclickedit == 'Y' ? 'checked="checked"' : '' ?> />
+	<br />
+	<label for="showcomments"><?php echo SHOW_COMMENTS_LABEL ?></label>
+	<input type="hidden" name="show_comments" value="N" />
+	<input id="showcomments" type="checkbox" name="show_comments" value="Y" <?php echo $show_comments == 'Y' ? 'checked="checked"' : '' ?> />
+	<br />
+	<label for="revisioncount"><?php echo PAGEREVISION_LIST_LIMIT_LABEL ?></label>
+	<input id="revisioncount" type="text" <?php echo $revisioncount_highlight; ?> name="revisioncount" value="<?php echo $this->htmlspecialchars_ent($revisioncount) ?>" size="40" />
+	<br />
+	<label for="changescount"><?php echo RECENTCHANGES_DISPLAY_LIMIT_LABEL ?></label>
+	<input id="changescount" type="text" <?php echo $changescount_highlight; ?> name="changescount" value="<?php echo $this->htmlspecialchars_ent($changescount) ?>" size="40" />
+	<br />
+	<input id="updatesettingssubmit" type="submit" value="<?php echo UPDATE_SETTINGS_BUTTON ?>" />
+	<br />
+	</fieldset>
+<?php	
+	echo $this->FormClose(); //close user settings form
 
 	//display password update form
 	echo $this->FormOpen();
@@ -277,7 +268,11 @@ else if ($user = $this->GetUser())
 <?php
 		if (isset($passerror))
 		{
-			print('<em class="error">'.$passerror.'</em><br />'."\n");
+			echo '<em class="error">'.$passerror.'</em><br />'."\n";
+		}
+		else if (isset($passsuccess))
+		{
+			echo '<em class="success">'.$passsuccess.'</em><br />'."\n";			
 		}
 ?>
 	<select id="update_option" name="update_option">
@@ -303,7 +298,7 @@ else if ($user = $this->GetUser())
 else // user is not logged in
 {
 	// print confirmation message on successful logout
-	if (isset($_GET['out']) && ($_GET['out'] == 'true'))
+	if (isset($_POST['logout']) && $_POST['logout'] == LOGOUT_BUTTON)
 	{
 		$success = USER_LOGGED_OUT_SUCCESS;
 	}
@@ -466,14 +461,14 @@ else // user is not logged in
 	switch (true)
 	{
 		case (isset($error)):
-			echo '<em class="error">'.$error.'</em>'."\n";
+			echo '<em class="error">'.$error.'</em><br />'."\n";
 			break;
 		case (isset($success)):
-			echo '<em class="success">'.$success.'</em>'."\n";
+			echo '<em class="success">'.$success.'</em><br />'."\n";
 			break;
 	}
 ?>
-	<em><?php echo REGISTERED_USER_LOGIN_CAPTION; ?></em>
+	<em class="usersettings_info"><?php echo REGISTERED_USER_LOGIN_CAPTION; ?></em>
 	<br />
 	<label for="name"><?php printf(WIKINAME_LABEL,$wikiname_expanded) ?></label>
 	<input id="name" type="text" <?php echo $username_highlight; ?> name="name" size="40" value="<?php echo $this->GetSafeVar('name', 'post'); ?>" />
@@ -487,7 +482,7 @@ else // user is not logged in
 		// FIXME @@@ label for a checkbox should come AFTER it, not before
 		// FIXME @@@ 'go_back_tag' should be stripped of parameters 
 	?>
-	<label for="no_go_back"><?php printf(DONT_GO_BACK_LABEL, $_SESSION['go_back_tag']); ?></label>
+	<label for="no_go_back"><?php echo STAY_HERE_LABEL; ?></label>
 	<input type="checkbox" name="no_go_back" id="no_go_back"<?php if (isset($_POST['no_go_back'])) echo ' checked="checked"';?> />
 	<br />
 <?php
@@ -501,7 +496,7 @@ else // user is not logged in
 	if ($register == '1' || $register == '2')
 	{
 ?>
-	<em><?php echo NEW_USER_REGISTER_CAPTION; ?></em>
+	<em class="usersettings_info"><?php echo NEW_USER_REGISTER_CAPTION; ?></em>
 	<br />
 	<label for="confpassword"><?php echo CONFIRM_PASSWORD_LABEL ?></label>
 	<input id="confpassword" <?php echo $password_confirm_highlight; ?> type="password" name="confpassword" size="40" />
@@ -534,12 +529,12 @@ else // user is not logged in
 <?php   
 	if (isset($newerror))
 	{
-		print('<em class="error">'.$newerror.'</em>'."\n");
+		echo '<em class="error">'.$newerror.'</em><br />'."\n";
 	}
-	$retrieve_password_link = '[[PasswordForgotten '.RETRIEVE_PASSWORD_LINK_DESC.']]';
-	$retrieve_password_caption = $this->Format(sprintf(RETRIEVE_PASSWORD_CAPTION1,$retrieve_password_link).' --- '.RETRIEVE_PASSWORD_CAPTION2);
+	$retrieve_password_link = 'PasswordForgotten';
+	$retrieve_password_caption = $this->Format(sprintf(RETRIEVE_PASSWORD_CAPTION,$retrieve_password_link));
 ?>
-	<em><?php echo $retrieve_password_caption ?></em>
+	<em class="usersettings_info"><?php echo $retrieve_password_caption ?></em>
 	<br />
 	<label for="yourname"><?php printf(WIKINAME_LABEL,$wikiname_expanded) ?></label>
 	<input id="yourname" type="text" <?php echo $username_temp_highlight; ?> name="yourname" value="<?php echo $this->GetSafeVar('yourname', 'post'); ?>" size="40" />
@@ -548,7 +543,7 @@ else // user is not logged in
 	<input id="temppassword" type="text" <?php echo $password_temp_highlight; ?> name="temppassword" size="40" />
 	<br />
 	<input id="temppassloginsubmit" type="submit" value="<?php echo LOGIN_BUTTON ?>" size="40" />
-	<br />
+	<br class="clear" />
 	</fieldset>
 <?php
 	print($this->FormClose());
