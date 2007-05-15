@@ -82,13 +82,13 @@ if (ALLOW_FEEDBACK_FROM_UNREGISTERED || $this->GetUser)
 	$template = 
 <<<TPLFEEDBACKFORM
 	$form_open
-	<fieldset><legend>$form_caption</legend>
+	<fieldset class="feedback"><legend>$form_caption</legend>
 	<input type="hidden" name="mail" value="result" />
 	<label for="fb_name">$label_name</label> $username<br />
 	<label for="fb_email">$label_email</label> $useremail<br />
-	<label for="fb_message">$label_message</label><br />
+	<label for="fb_message">$label_message</label>
 	<textarea id="fb_message" name="comments" rows="15" cols="40">{$_POST['comments']}</textarea><br />
-	<input type="submit" value="$button_send" />
+	<input type="submit" value="$button_send" /><br class="clear" />
 	</fieldset>
 	$form_close
 TPLFEEDBACKFORM;
