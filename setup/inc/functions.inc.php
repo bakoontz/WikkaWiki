@@ -156,18 +156,19 @@ function ACL_show_selectbox($type)
 	$default_acl['read'] = '*';
 	$default_acl['write'] = '+';
 	$default_acl['comment'] = '+';
-	if (!isset($wakkaConfig['acl_'.$type])) $wakkaConfig['acl_'.$type] = $default_acl[$type];
+	$config_name = 'default_'.$type.'_acl';
+	if (!isset($wakkaConfig[$config_name])) $wakkaConfig[$config_name] = $default_acl[$type];
 	$predef_acl = array(
 		'!*' => __('No one (admin only)'),
 		'+' => __('Registered users only'),
 		'*' => __('Anyone'));
 	echo ' <tr><td align="right" nowrap="nowrap">';
 	printf(__('Default %s access'), __($type.'---<Default X access'));
-	echo '</td><td><select name="config[acl_'.$type.']">'."\n";
+	echo '</td><td><select name="config['.$config_name.']">'."\n";
 	foreach ($predef_acl as $value => $text)
 	{
 		echo '<option value="'.$value.'"';
-		if ($value == $wakkaConfig['acl_'.$type]) echo ' selected="selected"';
+		if ($value == $wakkaConfig[$config_name]) echo ' selected="selected"';
 		echo '>'.$text;
 		if ($value == $default_acl[$type]) echo ' ('.__('recommended').')';
 		echo '</option>'."\n";
