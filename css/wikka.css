@@ -715,13 +715,13 @@ table.calendar a:active {
 
 fieldset.feedback {
 	display: block;
-	min-width: 400px;
+	width: 350px;
 	padding: 10px;
 }
 
 fieldset.feedback label {
 	display: block;
-	width: 120px;
+	width: 110px;
 	float: left;
 	margin-bottom: 10px;
 	text-align: right;
@@ -730,12 +730,12 @@ fieldset.feedback label {
 
 fieldset.feedback input[type=submit] {
 	float: left;
-	margin-left: 130px;
+	margin-left: 120px;
 }
 
 fieldset.feedback input[type=text] {
 	display: block;
-	width: 250px;
+	width: 220px;
 	float: left;
 	margin-bottom: 10px;
 	border:1px solid #CCC;
@@ -743,7 +743,7 @@ fieldset.feedback input[type=text] {
 
 fieldset.feedback textarea {
 	display: block;
-	width: 250px;
+	width: 220px;
 	float: left;
 	margin-bottom: 10px;
 	border:1px solid #CCC;
