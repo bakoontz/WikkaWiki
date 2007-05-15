@@ -159,7 +159,7 @@ if ($user = $this->GetUser())
 			$success = USER_REGISTERED_SUCCESS;
 			break;
 		//case (isset($_GET['stored']) && $_GET['stored'] == 'true'):
-		case ($_POST['action'] == 'update' && !isset($error)):
+		case (isset($_POST['action']) && $_POST['action'] == 'update' && !isset($error)):
 			$success = USER_SETTINGS_STORED_SUCCESS;
 			break;
 	}
