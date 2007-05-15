@@ -291,6 +291,7 @@ case "1.1.6.1":
 	//adding SysInfo page
 	update_default_page('SysInfo', $dblink, $config);
 case "1.1.6.2":
+case "1.1.6.3":
 	test(sprintf(ADDING_CONFIG_ENTRY, '<tt>allow_user_registration</tt>'), 1);
 	$config["allow_user_registration"] = '1';
 	test(sprintf(ADDING_CONFIG_ENTRY, '<tt>invitation_code</tt>'), 1);
@@ -312,10 +313,9 @@ case "1.1.6.2":
 	mysql_query("alter table ".$config["table_prefix"]."comments add parent int(10) unsigned default NULL", $dblink), "Already done? OK!", 0);
 	test(__('Adding fields to comments table to enable threading').'...', 
 	mysql_query("alter table ".$config["table_prefix"]."comments add deleted char(1) default NULL", $dblink), "Already done? OK!", 0);
-case "1.1.6.3":
 	//dropping obsolete "handler" field from pages table #452
 	test(__('Removing handler field from the pages table').'...', 
-		@mysql_query("ALTER TABLE ".$config["table_prefix"]."pages DROP handler", $dblink), __('Already done? Hmm!'), 1);
+	@mysql_query("ALTER TABLE ".$config["table_prefix"]."pages DROP handler", $dblink), __('Already done? Hmm!'), 1);
 	break;
 case "trunk": //latest development version from the SVN repository - do not remove
 	break;
