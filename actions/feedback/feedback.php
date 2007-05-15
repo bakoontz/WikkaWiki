@@ -39,6 +39,12 @@ define('DISPLAY_SENT_MESSAGE', TRUE); #move to action configuration file
 //only display form when feedback is allowed
 if (ALLOW_FEEDBACK_FROM_UNREGISTERED || $this->GetUser)
 {
+	if (isset($_POST))
+	{
+		$name = $_POST['name'];
+		$email = $_POST['email'];
+		$comments = $_POST['comments'];
+	}
 
 	//set recipient
 	switch(TRUE)
@@ -75,8 +81,8 @@ if (ALLOW_FEEDBACK_FROM_UNREGISTERED || $this->GetUser)
 	}
 	else
 	{
-		$username = '<input id="fb_name" name="name" value="'.$_POST['name'].'" type="text" />'."\n";
-		$useremail = '<input id="fb_email" name="email" value="'.$_POST['email'].'" type="text" />'."\n";
+		$username = '<input id="fb_name" name="name" value="'.$name.'" type="text" />'."\n";
+		$useremail = '<input id="fb_email" name="email" value="'.$email.'" type="text" />'."\n";
 	}
 	// construct form template
 	$template = 
@@ -87,7 +93,7 @@ if (ALLOW_FEEDBACK_FROM_UNREGISTERED || $this->GetUser)
 	<label for="fb_name">$label_name</label> $username<br />
 	<label for="fb_email">$label_email</label> $useremail<br />
 	<label for="fb_message">$label_message</label>
-	<textarea id="fb_message" name="comments" rows="15" cols="40">{$_POST['comments']}</textarea><br />
+	<textarea id="fb_message" name="comments" rows="15" cols="40">{$comments}</textarea><br />
 	<input type="submit" value="$button_send" /><br class="clear" />
 	</fieldset>
 	$form_close
@@ -96,10 +102,6 @@ TPLFEEDBACKFORM;
 	// action
 	if ($_POST['mail'] == 'result')
 	{
-		// process input
-		$name = $_POST['name'];
-		$email = $_POST['email'];
-		$comments = $_POST['comments'];
 		list($user, $host) = sscanf($email, "%[a-zA-Z0-9._-]@%[a-zA-Z0-9._-]"); //TODO use central regex library
 		if (strlen($name) == 0)
 		{
