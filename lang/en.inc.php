@@ -156,7 +156,7 @@ define('FEEDBACK_EMAIL_LABEL','Your email:');
 define('FEEDBACK_MESSAGE_LABEL','Your message:');
 define('ERROR_EMPTY_NAME','Please enter your name');
 define('ERROR_INVALID_EMAIL','Please enter a valid email address');
-define('ERROR_EMPTY_COMMENT','Please enter some text');
+#define('ERROR_EMPTY_COMMENT','Please enter some text');
 define('FEEDBACK_SUBJECT','Feedback from %s'); // %s - name of the wiki
 define('FEEDBACK_SENT','Thanks for your feedback, %s! Your message has been sent'); //%s - name of the sender
 define('FEEDBACK_SEND_BUTTON','Send');
