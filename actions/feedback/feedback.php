@@ -116,7 +116,7 @@ TPLFEEDBACKFORM;
 		else if (strlen($comments) == 0)
 		{
 			// some text must be entered
-			echo '<em class="error">'.ERROR_EMPTY_COMMENT.'</em>';
+			echo '<em class="error">'.ERROR_EMPTY_MESSAGE.'</em>';
 			echo $alert;
 			echo $template;
 		}
