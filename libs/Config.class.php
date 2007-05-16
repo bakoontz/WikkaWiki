@@ -356,6 +356,13 @@ class Config
 	 * Sets the number of revisions displayed by default in the {@link history.php history} and {@link revisions.php revisions} handlers.
 	 */
 	var $default_revisioncount;
+	/** Default comment display.  
+	 * Select one of the following:
+	 * (1) comments displayed ascending by date (oldest to newest);
+	 * (2) comment displayed descending by date (newest to oldest); or
+	 * (3) threaded comments
+	 */
+	var $default_comment_display = 1;
 	/**#@-*/
 
 	/**#@+
@@ -377,16 +384,6 @@ class Config
 	 * This option enables (by default) or disables the Wikka edit toolbar. If set to 0, shortcuts and toolbar buttons will not be available in the {@link edit.php edit screen}.
 	 */
 	var $gui_editor = '1';
-	/** Default comment display.  
-	* Select one of the following: (1)
-	* comments displayed ascending by date (oldest to newest); (2)
-	* comment displayed descending by date (newest to oldest); or (3)
-	* threaded comments If this option is set to true
-	* <tt>rewrite_mode</tt> is enabled so as to generate shorter URIs.
-	* Do not manually change this value unless you are aware of your
-	* system configuration.
-	*/
-	var $default_comment_display = 1;
 
 }
 ?>
