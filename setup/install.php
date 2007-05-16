@@ -10,10 +10,6 @@
  * @todo i18n;
  */
 
-// i18n section
-if (!defined('ADDING_CONFIG_ENTRY')) define('ADDING_CONFIG_ENTRY', 'Adding a new option to the Wikka config file: %s'); // %s - name of the config option
-# Removed DELETING_COOKIES, as Cookies must not be deleted on install, but on wikka.php
-
 // test configuration
 if ($wakkaConfig['wakka_version'])
 {
@@ -38,111 +34,111 @@ case "0":
 	test(sprintf(__('Creating %s table'), __('page')).'...',
 		@mysql_query(
 			"CREATE TABLE ".$config["table_prefix"]."pages (".
-  			"id int(10) unsigned NOT NULL auto_increment,".
-  			"tag varchar(75) NOT NULL default '',".
-  			"time datetime NOT NULL default '0000-00-00 00:00:00',".
-  			"body mediumtext NOT NULL,".
-  			"owner varchar(75) NOT NULL default '',".
-  			"user varchar(75) NOT NULL default '',".
-  			"latest enum('Y','N') NOT NULL default 'N',".
-  			"note varchar(100) NOT NULL default '',".
-  			"PRIMARY KEY  (id),".
-  			"KEY idx_tag (tag),".
-  			"FULLTEXT KEY body (body),".
-  			"KEY idx_time (time),".
-  			"KEY idx_latest (latest)".
+			 "id int(10) unsigned NOT NULL auto_increment,".
+			 "tag varchar(75) NOT NULL default '',".
+			 "time datetime NOT NULL default '0000-00-00 00:00:00',".
+			 "body mediumtext NOT NULL,".
+			 "owner varchar(75) NOT NULL default '',".
+			 "user varchar(75) NOT NULL default '',".
+			 "latest enum('Y','N') NOT NULL default 'N',".
+			 "note varchar(100) NOT NULL default '',".
+			 "PRIMARY KEY  (id),".
+			 "KEY idx_tag (tag),".
+			 "FULLTEXT KEY body (body),".
+			 "KEY idx_time (time),".
+			 "KEY idx_latest (latest)".
 			") TYPE=MyISAM;", $dblink), __('Already exists?'), 0);
 	test(sprintf(__('Creating %s table'), __('ACL')).'...',
 		@mysql_query(
 			"CREATE TABLE ".$config["table_prefix"]."acls (".
-  			"page_tag varchar(75) NOT NULL default '',".
-  			"read_acl text NOT NULL,".
-  			"write_acl text NOT NULL,".
-  			"comment_acl text NOT NULL,".
- 			"PRIMARY KEY  (page_tag)".
+			 "page_tag varchar(75) NOT NULL default '',".
+			 "read_acl text NOT NULL,".
+			 "write_acl text NOT NULL,".
+			 "comment_acl text NOT NULL,".
+			 "PRIMARY KEY  (page_tag)".
 			") TYPE=MyISAM", $dblink), __('Already exists?'), 0);
 	test(sprintf(__('Creating %s table'), __('link tracking')).'...',
 		@mysql_query(
 			"CREATE TABLE ".$config["table_prefix"]."links (".
-			"from_tag varchar(75) NOT NULL default '',".
-  			"to_tag varchar(75) NOT NULL default '',".
-  			"UNIQUE KEY from_tag (from_tag,to_tag),".
-  			"KEY idx_from (from_tag),".
-  			"KEY idx_to (to_tag)".
+			 "from_tag varchar(75) NOT NULL default '',".
+			 "to_tag varchar(75) NOT NULL default '',".
+			 "UNIQUE KEY from_tag (from_tag,to_tag),".
+			 "KEY idx_from (from_tag),".
+			 "KEY idx_to (to_tag)".
 			") TYPE=MyISAM", $dblink), __('Already exists?'), 0);
 	test(sprintf(__('Creating %s table'), __('referrer')).'...',
 		@mysql_query(
 			"CREATE TABLE ".$config["table_prefix"]."referrers (".
-  			"page_tag varchar(75) NOT NULL default '',".
-  			"referrer varchar(150) NOT NULL default '',".
-  			"time datetime NOT NULL default '0000-00-00 00:00:00',".
-  			"KEY idx_page_tag (page_tag),".
-  			"KEY idx_time (time)".
+			 "page_tag varchar(75) NOT NULL default '',".
+			 "referrer varchar(150) NOT NULL default '',".
+			 "time datetime NOT NULL default '0000-00-00 00:00:00',".
+			 "KEY idx_page_tag (page_tag),".
+			 "KEY idx_time (time)".
 			") TYPE=MyISAM", $dblink), __('Already exists?'), 0);
 	test(sprintf(__('Creating %s table'), __('referrer blacklist')).'...',
 		@mysql_query(
 			"CREATE TABLE ".$config["table_prefix"]."referrer_blacklist (".
-  			"spammer varchar(150) NOT NULL default '',".
-  			"KEY idx_spammer (spammer)".
+			 "spammer varchar(150) NOT NULL default '',".
+			 "KEY idx_spammer (spammer)".
 			") TYPE=MyISAM", $dblink), __('Already exists?'), 0);
 	test(sprintf(__('Creating %s table'), __('user')).'...',
 		@mysql_query(
 			"CREATE TABLE ".$config["table_prefix"]."users (".
-  			"name varchar(75) NOT NULL default '',".
-  			"password varchar(32) NOT NULL default '',".
-  			"email varchar(50) NOT NULL default '',".
-  			"revisioncount int(10) unsigned NOT NULL default '20',".
-  			"changescount int(10) unsigned NOT NULL default '50',".
-  			"doubleclickedit enum('Y','N') NOT NULL default 'Y',".
-  			"signuptime datetime NOT NULL default '0000-00-00 00:00:00',".
-  			"show_comments enum('Y','N') NOT NULL default 'N',".
-            "default_comment_display int(10) unsigned NOT NULL default '1',".
-  			"challenge char(8) NOT NULL default '00000000',".
-  			"PRIMARY KEY  (name),".
-  			"KEY idx_signuptime (signuptime)".
+			 "name varchar(75) NOT NULL default '',".
+			 "password varchar(32) NOT NULL default '',".
+			 "email varchar(50) NOT NULL default '',".
+			 "revisioncount int(10) unsigned NOT NULL default '20',".
+			 "changescount int(10) unsigned NOT NULL default '50',".
+			 "doubleclickedit enum('Y','N') NOT NULL default 'Y',".
+			 "signuptime datetime NOT NULL default '0000-00-00 00:00:00',".
+			 "show_comments enum('Y','N') NOT NULL default 'N',".
+			 "default_comment_display int(10) unsigned NOT NULL default '1',".
+			 "challenge char(8) NOT NULL default '00000000',".
+			 "PRIMARY KEY  (name),".
+			 "KEY idx_signuptime (signuptime)".
 			") TYPE=MyISAM", $dblink), __('Already exists?'), 0);
 	test(sprintf(__('Creating %s table'), __('comment')).'...',
 		@mysql_query(
 			"CREATE TABLE ".$config["table_prefix"]."comments (".
-  			"id int(10) unsigned NOT NULL auto_increment,".
-  			"page_tag varchar(75) NOT NULL default '',".
-  			"time datetime NOT NULL default '0000-00-00 00:00:00',".
-  			"comment text NOT NULL,".
-  			"user varchar(75) NOT NULL default '',".
-  			"parent int(10) unsigned default NULL,".
-            "status varchar(10) default NULL,".
-  			"PRIMARY KEY  (id),".
-  			"KEY idx_page_tag (page_tag),".
-  			"KEY idx_time (time)".
+			 "id int(10) unsigned NOT NULL auto_increment,".
+			 "page_tag varchar(75) NOT NULL default '',".
+			 "time datetime NOT NULL default '0000-00-00 00:00:00',".
+			 "comment text NOT NULL,".
+			 "user varchar(75) NOT NULL default '',".
+			 "parent int(10) unsigned default NULL,".
+			 "status varchar(10) default NULL,".
+			 "PRIMARY KEY  (id),".
+			 "KEY idx_page_tag (page_tag),".
+			 "KEY idx_time (time)".
 			") TYPE=MyISAM;", $dblink), __('Already exists?'), 0);
 
-    test(__('Adding admin user').'...', 
-    @mysql_query("insert into ".$config["table_prefix"]."users set name = '".$config["admin_users"]."', password = md5('".mysql_real_escape_string($_SESSION['wikka']['install']['password'])."'), email = '".$config["admin_email"]."', signuptime = now()", $dblink), "Hmm!", 0);
+	test(__('Adding admin user').'...', 
+	@mysql_query("insert into ".$config["table_prefix"]."users set name = '".$config["admin_users"]."', password = md5('".mysql_real_escape_string($_SESSION['wikka']['install']['password'])."'), email = '".$config["admin_email"]."', signuptime = now()", $dblink), "Hmm!", 0);
 
 	update_default_page(array(
-    $config["root_page"], 
-    'RecentChanges', 
-    'RecentlyCommented', 
-    'UserSettings', 
-    'PageIndex', 
-    'WikkaReleaseNotes', 
-    'WikkaDocumentation', 
-    'WantedPages', 
-    'OrphanedPages', 
-    'TextSearch', 
-    'TextSearchExpanded', 
-    'MyPages', 
-    'MyChanges', 
-    'InterWiki', 
-    'PasswordForgotten', 
-    'WikiCategory', 
-    'CategoryWiki', 
-    'CategoryCategory', 
-    'FormattingRules', 
-    'HighScores', 
-    'OwnedPages', 
-    'SandBox', 
-    'SysInfo'), $dblink, $config); 
+	$config["root_page"], 
+	'RecentChanges', 
+	'RecentlyCommented', 
+	'UserSettings', 
+	'PageIndex', 
+	'WikkaReleaseNotes', 
+	'WikkaDocumentation', 
+	'WantedPages', 
+	'OrphanedPages', 
+	'TextSearch', 
+	'TextSearchExpanded', 
+	'MyPages', 
+	'MyChanges', 
+	'InterWiki', 
+	'PasswordForgotten', 
+	'WikiCategory', 
+	'CategoryWiki', 
+	'CategoryCategory', 
+	'FormattingRules', 
+	'HighScores', 
+	'OwnedPages', 
+	'SandBox', 
+	'SysInfo'), $dblink, $config); 
 
 	test(__('Setting default ACL').'...', 1);
 	mysql_query("insert into ".$config["table_prefix"]."acls set page_tag = 'UserSettings', read_acl = '*', write_acl = '+', comment_acl = '+'", $dblink);
@@ -179,22 +175,20 @@ case "1.0.3":
 case "1.0.4":
 // from 1.0.4 to 1.0.5
 	print('<strong>'.sprintf(__('%1$s to %2$s changes'), '1.0.4', '1.0.5').':</strong><br />'."\n");
-	test(sprintf(ADDING_CONFIG_ENTRY, 'double_doublequote_html'), 1);
-	$config['double_doublequote_html'] = 'safe';
 case "1.0.5":
 case "1.0.6":
 	print('<strong>'.sprintf(__('%1$s to %2$s changes'), '1.0.6', '1.1.0').':</strong><br />'."\n");
 	test(sprintf(__('Creating %s table'), 'comment').'...',
 		@mysql_query(
 			"CREATE TABLE ".$config["table_prefix"]."comments (".
-  			"id int(10) unsigned NOT NULL auto_increment,".
-  			"page_tag varchar(75) NOT NULL default '',".
-  			"time datetime NOT NULL default '0000-00-00 00:00:00',".
-  			"comment text NOT NULL,".
-  			"user varchar(75) NOT NULL default '',".
-  			"PRIMARY KEY  (id),".
-  			"KEY idx_page_tag (page_tag),".
-  			"KEY idx_time (time)".
+			 "id int(10) unsigned NOT NULL auto_increment,".
+			 "page_tag varchar(75) NOT NULL default '',".
+			 "time datetime NOT NULL default '0000-00-00 00:00:00',".
+			 "comment text NOT NULL,".
+			 "user varchar(75) NOT NULL default '',".
+			 "PRIMARY KEY  (id),".
+			 "KEY idx_page_tag (page_tag),".
+			 "KEY idx_time (time)".
 			") TYPE=MyISAM", $dblink), __('Already done? Hmm!'), 1);
 	test(__('Copying comments from the pages table to the new comments table').'...', 
 		@mysql_query("INSERT INTO ".$config["table_prefix"]."comments (page_tag, time, comment, user) SELECT comment_on, time, body, user FROM ".$config["table_prefix"]."pages WHERE comment_on != '';", $dblink), __('Already done? Hmm!'), 1);
@@ -211,11 +205,11 @@ case "1.1.0":
 	test(__('Creating new ACL table structure').'...',
 		@mysql_query(
 			"CREATE TABLE ".$config["table_prefix"]."acls (".
-  			"page_tag varchar(75) NOT NULL default '',".
-  			"read_acl text NOT NULL,".
-  			"write_acl text NOT NULL,".
-  			"comment_acl text NOT NULL,".
- 			"PRIMARY KEY  (page_tag)".
+			 "page_tag varchar(75) NOT NULL default '',".
+			 "read_acl text NOT NULL,".
+			 "write_acl text NOT NULL,".
+			 "comment_acl text NOT NULL,".
+			 "PRIMARY KEY  (page_tag)".
 			") TYPE=MyISAM", $dblink), __('Already exists?'), 1);
 case "1.1.2":
 case "1.1.3":
@@ -245,8 +239,8 @@ case "1.1.3":
 	test(sprintf(__('Creating %s table'), 'referrer_blacklist').'...',
 		@mysql_query(
 			"CREATE TABLE ".$config["table_prefix"]."referrer_blacklist (".
-  			"spammer varchar(150) NOT NULL default '',".
-  			"KEY idx_spammer (spammer)".
+			 "spammer varchar(150) NOT NULL default '',".
+			 "KEY idx_spammer (spammer)".
 			") TYPE=MyISAM", $dblink), __('Already done? Hmm!'), 1);
 	test(sprintf(__('Altering a %s table index'), 'pages').'...', 
 		@mysql_query("alter table ".$config["table_prefix"]."pages DROP INDEX tag", $dblink), __('Already done? Hmm!'), 0);
@@ -257,8 +251,6 @@ case "1.1.3":
 case "1.1.3.1":
 case "1.1.3.2":
 	print('<strong>'.sprintf(__('%1$s to %2$s changes'), '1.1.3.2', '1.1.3.3').':</strong><br />'."\n");
-	test(sprintf(ADDING_CONFIG_ENTRY, 'wikiping_server'), 1);
-	$config["wikiping_server"] = '';
 case "1.1.3.3":
 case "1.1.3.4":
 case "1.1.3.5":
@@ -281,30 +273,10 @@ case "1.1.5.3":
 	rmdirr("xml");
 case "1.1.6.0":
 case "1.1.6.1":
-	test(sprintf(ADDING_CONFIG_ENTRY, 'grabcode_button' ), 1);
-	$config["grabcode_button"] = '1';
-	test(sprintf(ADDING_CONFIG_ENTRY, 'wiki_suffix'), 1);
-	$config["wiki_suffix"] = '@wikka';
-	test(sprintf(ADDING_CONFIG_ENTRY, 'require_edit_note'), 1);
-	$config["require_edit_note"] = '0';
-	test(sprintf(ADDING_CONFIG_ENTRY, 'public_sysinfo'), 1);
-	$config["public_sysinfo"] = '0';
 	//adding SysInfo page
 	update_default_page('SysInfo', $dblink, $config);
 case "1.1.6.2":
 case "1.1.6.3":
-	test(sprintf(ADDING_CONFIG_ENTRY, '<tt>allow_user_registration</tt>'), 1);
-	$config["allow_user_registration"] = '1';
-	test(sprintf(ADDING_CONFIG_ENTRY, '<tt>invitation_code</tt>'), 1);
-	$config["invitation_code"] = '';
-	test(sprintf(ADDING_CONFIG_ENTRY, '<tt>enable_user_host_lookup</tt>'), 1);
-	$config["enable_user_host_lookup"] = '1';	
-	test(sprintf(ADDING_CONFIG_ENTRY, '<tt>enable_rss_autodiscovery</tt>'), 1);
-	$config["enable_rss_autodiscovery"] = '1';	
-	test(sprintf(ADDING_CONFIG_ENTRY, '<tt>edit_buttons_position</tt>'), 1);
-	$config["edit_buttons_position"] = 'bottom';
-	test(sprintf(ADDING_CONFIG_ENTRY, '<tt>owner_delete_page</tt>'), 1);
-	$config["owner_delete_page"] = '0';	
 	update_default_page(array('HighScores', 'FormattingRules'), $dblink, $config);
 	test("Altering table users : adding field named `challenge'...", 
 	@mysql_query("alter table ".$config["table_prefix"]."users add `challenge` char( 8 ) default '00000000' null", $dblink), "", 0); 
@@ -317,11 +289,11 @@ case "1.1.6.3":
 	//dropping obsolete "handler" field from pages table #452
 	test(__('Removing handler field from the pages table').'...', 
 	@mysql_query("ALTER TABLE ".$config["table_prefix"]."pages DROP handler", $dblink), __('Already done? Hmm!'), 1);
-    // Comment threading
-    test(__('Adding field to comment table to enable threading').'...', 
-    @mysql_query("alter table ".$config["table_prefix"]."comments add status varchar(10) default NULL", $dblink), __('Already done?  OK!'), 0);
-    test(__('Adding field to users table to specify comment display default').'...', 
-    @mysql_query("alter table ".$config["table_prefix"]."users add default_comment_display int(10) unsigned NOT NULL default '1'", $dblink), __('Already done?  OK!'), 0);
+	// Comment threading
+	test(__('Adding field to comment table to enable threading').'...', 
+	@mysql_query("alter table ".$config["table_prefix"]."comments add status varchar(10) default NULL", $dblink), __('Already done?  OK!'), 0);
+	test(__('Adding field to users table to specify comment display default').'...', 
+	@mysql_query("alter table ".$config["table_prefix"]."users add default_comment_display int(10) unsigned NOT NULL default '1'", $dblink), __('Already done?  OK!'), 0);
 
 	break;
 case "trunk": //latest development version from the SVN repository - do not remove
