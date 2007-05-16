@@ -99,6 +99,35 @@ body {
 	margin: 5px 5px 5px 5px;
 }
 
+/* comments navigation */
+
+div#commentsnav {
+/*	border:1px solid #CCC; */
+/*	background-color:#EEE; */
+	float:right;
+	width:auto;
+	padding:3px;
+	text-align: center;
+}
+
+div#commentsnav img.icon {
+	border: 1px solid #CCC;
+	padding:3px;
+	background-color:#EEE;
+	margin:1px;
+}
+
+div#commentsnav img.icon_on {
+	border: 1px solid #CCC;
+	padding:3px;
+	background-color:#DEDEDE;
+	margin:1px;
+}
+
+div#commentsnav img.icon:hover {
+	background-color:#DEDEDE;
+}
+
 /* links */
 
 a {
