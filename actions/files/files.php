@@ -170,7 +170,7 @@ $upload_path = $this->config['upload_path'].DIRECTORY_SEPARATOR.$this->tag; #89
 // 1. check if main upload path is writable
 if (!is_writable($this->config['upload_path']))
 {
-	echo '<div class="alertbox">'.sprintf(ERROR_UPLOAD_DIRECTORY_NOT_WRITABLE, '<tt>'.DIRECTORY_SEPARATOR.$this->config['upload_path'].'</tt>').'</div>'; #89
+	echo '<div class="alertbox">'.sprintf(ERROR_UPLOAD_DIRECTORY_NOT_WRITABLE, '<tt>'.$this->config['upload_path'].'</tt>').'</div>'; #89
 }
 else
 {
@@ -340,7 +340,7 @@ if (is_readable($upload_path))
 // cannot read the folder contents
 else
 {
-	echo '<div class="alertbox">'.sprintf(ERROR_UPLOAD_DIRECTORY_NOT_READABLE, '<tt>'.DIRECTORY_SEPARATOR.$upload_path.'</tt>').'</div>'; #89
+	echo '<div class="alertbox">'.sprintf(ERROR_UPLOAD_DIRECTORY_NOT_READABLE, '<tt>'.$upload_path.'</tt>').'</div>'; #89
 
 }
 
