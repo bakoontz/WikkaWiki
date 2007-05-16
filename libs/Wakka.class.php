@@ -2223,10 +2223,10 @@ class Wakka
 			}
 		}
 		if($order==COMMENT_ORDER_DATE_ASC) { // Return ASC by date
-			return $this->LoadAll("SELECT * FROM ".$this->config["table_prefix"]."comments WHERE page_tag = '".mysql_real_escape_string($tag)."' AND status != 'deleted'  ORDER BY time"); 
+			return $this->LoadAll("SELECT * FROM ".$this->config["table_prefix"]."comments WHERE page_tag = '".mysql_real_escape_string($tag)."' AND (status IS NULL or status != 'deleted')  ORDER BY time"); 
 		}
 		if($order==COMMENT_ORDER_DATE_DESC) {
-			return $this->LoadAll("SELECT * FROM ".$this->config["table_prefix"]."comments WHERE page_tag = '".mysql_real_escape_string($tag)."' AND status = 'deleted'  ORDER BY time DESC"); 
+			return $this->LoadAll("SELECT * FROM ".$this->config["table_prefix"]."comments WHERE page_tag = '".mysql_real_escape_string($tag)."' AND (status IS NULL or status != 'deleted')  ORDER BY time DESC"); 
 		}
 		if ($order==COMMENT_ORDER_THREADED)
 		{
