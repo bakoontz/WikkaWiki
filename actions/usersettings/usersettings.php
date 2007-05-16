@@ -60,10 +60,13 @@ $invitation_code_highlight = '';
 $wikiname_expanded = '<abbr title="'.WIKINAME_LONG.'">'.WIKINAME_SHORT.'</abbr>';
 
 //create URL
-$url = $this->config['base_url'].$this->tag;
+$url = $this->Href();
 
 //Remember referring page if internal.
-if (isset($_SERVER['HTTP_REFERER']) && preg_match('/^'.preg_quote($this->config['base_url'], '/')."([^\\/\\?]*)/", $_SERVER['HTTP_REFERER'], $match))
+// - Getting correct regex to fing the tag of referring page
+preg_match('/^(.*)ReferrerMarker/', $this->Href('', 'ReferrerMarker'), $match);
+$regex_referrer = '/^'.preg_quote($match[1], '/')."([^\\/\\?]*)/";
+if (isset($_SERVER['HTTP_REFERER']) && preg_match($regex_referrer, $_SERVER['HTTP_REFERER'], $match))
 {
 	if (strcasecmp($this->tag, $match[1]))
 	{
@@ -150,7 +153,7 @@ if ($user = $this->GetUser())
 	<fieldset id="account"><legend><?php echo USER_ACCOUNT_LEGEND ?></legend>
 	<span id="account_info">
 	<?php printf(USER_LOGGED_IN_AS_CAPTION, $this->Link($user['name'])); ?>
-	</span><input id="logout" name="logout" type="submit" value="<?php echo LOGOUT_BUTTON; ?>" /><!--#353,#312-->
+	</span><input id="logout" name="logout" type="submit" value="<?php echo LOGOUT_BUTTON; ?>" /><!-- #353,#312-->
 	<br class="clear" />
 	</fieldset>	
 	<fieldset id="usersettings" class="usersettings"><legend><?php echo USER_SETTINGS_LEGEND ?></legend>
@@ -159,7 +162,8 @@ if ($user = $this->GetUser())
 	// create confirmation message if needed
 	switch(TRUE)
 	{
-		case (isset($_GET['registered']) && $_GET['registered'] == 'true'):
+		case (isset($_SESSION['usersettings_registered']) && $_SESSION['usersettings_registered'] == 'true'):
+			unset($_SESSION['usersettings_registered']);
 			$success = USER_REGISTERED_SUCCESS;
 			break;
 		//case (isset($_GET['stored']) && $_GET['stored'] == 'true'):
@@ -332,7 +336,7 @@ else // user is not logged in
 					break;
 				default:
 					$this->SetUser($existingUser);
-					if ((isset($_SESSION['go_back'])) && (!isset($_POST['no_go_back'])))
+					if ((isset($_SESSION['go_back'])) && (isset($_POST['do_redirect'])))
 					{
 						$go_back = $_SESSION['go_back'];
 						unset($_SESSION['go_back']);
@@ -414,13 +418,13 @@ else // user is not logged in
 
 					// log in
 					$this->SetUser($this->LoadUser($name));
-					$params .= 'registered=true';
-					if ((isset($_SESSION['go_back'])) && (!isset($_POST['no_go_back'])))
+					if ((isset($_SESSION['go_back'])) && (isset($_POST['do_redirect'])))
 					{
 						$go_back = $_SESSION['go_back'];
 						unset($_SESSION['go_back']);
 						$this->Redirect($go_back);
 					}
+					$_SESSION['usersettings_registered'] = true;
 					$this->Redirect($url.$params);
 			}
 		}
@@ -490,10 +494,9 @@ else // user is not logged in
 	if (isset($_SESSION['go_back']))
 	{
 		// FIXME @@@ label for a checkbox should come AFTER it, not before
-		// FIXME @@@ 'go_back_tag' should be stripped of parameters 
 	?>
-	<label for="no_go_back"><?php echo STAY_HERE_LABEL; ?></label>
-	<input type="checkbox" name="no_go_back" id="no_go_back"<?php if (isset($_POST['no_go_back'])) echo ' checked="checked"';?> />
+	<label for="do_redirect"><?php printf(USERSETTINGS_REDIRECT_AFTER_LOGIN, $_SESSION['go_back_tag']); ?></label>
+	<input type="checkbox" name="do_redirect" id="do_redirect"<?php if (isset($_POST['do_redirect']) || empty($_POST)) echo ' checked="checked"';?> />
 	<br />
 <?php
 	}

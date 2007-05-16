@@ -443,7 +443,7 @@ define('LOGIN_LEGEND','Login');
 define('CHANGE_PASSWORD_LEGEND','Change your password');
 define('RETRIEVE_PASSWORD_LEGEND','Password forgotten');
 // - form field labels (should end in ':' _unless_ it's a checkbox or radio button option)
-define('STAY_HERE_LABEL','Show preferences after login');
+define('USERSETTINGS_REDIRECT_AFTER_LOGIN','Redirect to %s after login');
 define('USER_EMAIL_LABEL','Your email address:');
 define('DOUBLECLICK_LABEL','Doubleclick editing:');
 define('SHOW_COMMENTS_LABEL','Show comments by default:');
