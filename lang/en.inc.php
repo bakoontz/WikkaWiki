@@ -447,6 +447,12 @@ define('STAY_HERE_LABEL','Show preferences after login');
 define('USER_EMAIL_LABEL','Your email address:');
 define('DOUBLECLICK_LABEL','Doubleclick editing:');
 define('SHOW_COMMENTS_LABEL','Show comments by default:');
+define('DEFAULT_COMMENT_STYLE_LABEL', 'Default comment style');
+define('COMMENT_ASC_LABEL', 'Date ascending');
+define('COMMENT_DEC_LABEL', 'Date descending');
+define('COMMENT_THREADED_LABEL', 'Threaded'); 
+define('COMMENT_DELETED_LABEL', '[Comment deleted]');
+define('COMMENT_BY_LABEL', 'Comment by ');
 define('RECENTCHANGES_DISPLAY_LIMIT_LABEL','RecentChanges display limit:');
 define('PAGEREVISION_LIST_LIMIT_LABEL','Page revisions list limit:');
 define('NEW_PASSWORD_LABEL','Your new password:');
@@ -665,7 +671,8 @@ define('COMMENT_NEW_BUTTON','New Comment');
 define('ERROR_NO_COMMENT_DEL_ACCESS','Sorry, you\'re not allowed to delete this comment!');
 define('ERROR_NO_COMMENT_WRITE_ACCESS','Sorry, you\'re not allowed to post comments to this page');
 define('ERROR_EMPTY_COMMENT','Comment body was empty -- not saved!');
-define('ADD_COMMENT_LABEL','Add a comment to this page:');
+define('ADD_COMMENT_LABEL','In reply to:');
+define('NEW_COMMENT_LABEL','Post a new comment:');
 /**#@-*/
 
 /**#@+
@@ -753,7 +760,7 @@ define('SHOW_RE_EDIT_BUTTON','Re-edit this old revision');
 define('SHOW_ASK_CREATE_PAGE_CAPTION','This page doesn\'t exist yet. Maybe you want to %s it?'); // %s - page create link
 define('SHOW_OLD_REVISION_CAPTION','This is an old revision of %1$s from %2$s.'); // %1$s - page link; %2$s - timestamp
 define('COMMENTS_CAPTION','Comments');
-define('DISPLAY_COMMENTS_LABEL','Display comments: ');
+define('DISPLAY_COMMENTS_LABEL','Show comments');
 define('DISPLAY_COMMENT_LINK_DESC','Display comment');
 define('DISPLAY_COMMENTS_EARLIEST_LINK_DESC','Earliest first');
 define('DISPLAY_COMMENTS_LATEST_LINK_DESC','Latest first');

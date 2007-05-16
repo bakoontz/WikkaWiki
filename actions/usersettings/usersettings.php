@@ -38,6 +38,7 @@ $url = '';
 $email = '';
 $doubleclickedit = '';
 $show_comments = '';
+$default_comment_display = '';
 $revisioncount = '';
 $changescount = '';
 $password = '';
@@ -95,6 +96,7 @@ if ($user = $this->GetUser())
 		$email = $this->GetSafeVar('email', 'post');
 		$doubleclickedit = $this->GetSafeVar('doubleclickedit', 'post');
 		$show_comments = $this->GetSafeVar('show_comments', 'post');
+		$default_comment_display = $this->GetSafeVar('default_comment_display', 'post');
 		$revisioncount = (int) $this->GetSafeVar('revisioncount', 'post');
 		$changescount = (int) $this->GetSafeVar('changescount', 'post');
 
@@ -122,6 +124,7 @@ if ($user = $this->GetUser())
 					"email = '".mysql_real_escape_string($email)."', ".
 					"doubleclickedit = '".mysql_real_escape_string($doubleclickedit)."', ".
 					"show_comments = '".mysql_real_escape_string($show_comments)."', ".
+					"default_comment_display = '".mysql_real_escape_string($default_comment_display)."', ".
 					"revisioncount = '".mysql_real_escape_string($revisioncount)."', ".
 					"changescount = '".mysql_real_escape_string($changescount)."' ".
 					"WHERE name = '".$user['name']."' LIMIT 1");
@@ -136,6 +139,7 @@ if ($user = $this->GetUser())
 		$email = $user['email'];
 		$doubleclickedit = $user['doubleclickedit'];
 		$show_comments = $user['show_comments'];
+		$default_comment_display = $user['default_comment_display'];
 		$revisioncount = $user['revisioncount'];
 		$changescount = $user['changescount'];
 	}
@@ -247,6 +251,12 @@ if ($user = $this->GetUser())
 	<label for="showcomments"><?php echo SHOW_COMMENTS_LABEL ?></label>
 	<input type="hidden" name="show_comments" value="N" />
 	<input id="showcomments" type="checkbox" name="show_comments" value="Y" <?php echo $show_comments == 'Y' ? 'checked="checked"' : '' ?> />
+	<br />
+	<label for="defaultcommentdisplay"><?php echo DEFAULT_COMMENT_STYLE_LABEL ?></label>
+    <input type="hidden" name="default_comment_display" value="1"/>
+	<input id="default_comment_display" type="radio" name="default_comment_display" value="1" <?php echo ($default_comment_display==1) ? "checked" : null ?> ><?php echo COMMENT_ASC_LABEL ?></input>
+	<input id="default_comment_display" type="radio" name="default_comment_display" value="2" <?php echo ($default_comment_display==2) ? "checked" : null ?> ><?php echo COMMENT_DEC_LABEL ?></input>
+	<input id="default_comment_display" type="radio" name="default_comment_display" value="3" <?php echo ($default_comment_display==3) ? "checked" : null ?> ><?php echo COMMENT_THREADED_LABEL ?></input>
 	<br />
 	<label for="revisioncount"><?php echo PAGEREVISION_LIST_LIMIT_LABEL ?></label>
 	<input id="revisioncount" type="text" <?php echo $revisioncount_highlight; ?> name="revisioncount" value="<?php echo $this->htmlspecialchars_ent($revisioncount) ?>" size="40" />

@@ -96,6 +96,7 @@ case "0":
   			"doubleclickedit enum('Y','N') NOT NULL default 'Y',".
   			"signuptime datetime NOT NULL default '0000-00-00 00:00:00',".
   			"show_comments enum('Y','N') NOT NULL default 'N',".
+            "default_comment_display int(10) unsigned NOT NULL default '1',".
   			"challenge char(8) NOT NULL default '00000000',".
   			"PRIMARY KEY  (name),".
   			"KEY idx_signuptime (signuptime)".
@@ -109,7 +110,7 @@ case "0":
   			"comment text NOT NULL,".
   			"user varchar(75) NOT NULL default '',".
   			"parent int(10) unsigned default NULL,".
-  			"deleted char(1) default NULL,".
+            "status varchar(10) default NULL,".
   			"PRIMARY KEY  (id),".
   			"KEY idx_page_tag (page_tag),".
   			"KEY idx_time (time)".
@@ -316,6 +317,12 @@ case "1.1.6.3":
 	//dropping obsolete "handler" field from pages table #452
 	test(__('Removing handler field from the pages table').'...', 
 	@mysql_query("ALTER TABLE ".$config["table_prefix"]."pages DROP handler", $dblink), __('Already done? Hmm!'), 1);
+    // Comment threading
+    test(__('Adding field to comment table to enable threading').'...', 
+    @mysql_query("alter table ".$config["table_prefix"]."comments add status varchar(10) default NULL", $dblink), __('Already done?  OK!'), 0);
+    test(__('Adding field to users table to specify comment display default').'...', 
+    @mysql_query("alter table ".$config["table_prefix"]."users add default_comment_display int(10) unsigned NOT NULL default '1'", $dblink), __('Already done?  OK!'), 0);
+
 	break;
 case "trunk": //latest development version from the SVN repository - do not remove
 	break;

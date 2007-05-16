@@ -5,11 +5,7 @@ order deny,allow
 deny from env=BadReferrer
 
 <IfModule mod_rewrite.c>
-#---WIKKA-REWRITING-BEGIN
- RewriteEngine Off
- RewriteBase /
- SetEnv WIKKA_MOD_REWRITE OK
- Options +FollowSymLinks
+ RewriteEngine on
  RewriteCond %{REQUEST_FILENAME} -d
  RewriteRule ^(.*/[^\./]*[^/])$ $1/
  RewriteRule ^(.*)$ wikka.php?wakka=$1 [QSA,L]

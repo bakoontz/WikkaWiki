@@ -83,6 +83,22 @@ body {
 	padding: 10px;
 }
 
+.commentauthor {
+	font-family: Verdana, Tahoma, Arial, Helvetica, sans-serif;	
+	font-size: 15px;
+	line-height: 20px;
+	color: #000000;
+	margin: 5px 5px 0 0;
+}
+
+.commentparent {
+	font-family: Verdana, Tahoma, Arial, Helvetica, sans-serif;	
+	font-size: 12px;
+	line-height: 20px;
+	color: #555555;
+	margin: 5px 5px 5px 5px;
+}
+
 /* links */
 
 a {

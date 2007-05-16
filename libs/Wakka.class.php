@@ -2214,15 +2214,19 @@ class Wakka
 	 * @param   integer $order optional: order of comments. Default: COMMENT_ORDER_DATE_ASC
 	 * @return	array All the comments for this page ordered by $order
 	 */
-	function LoadComments($tag, $order=COMMENT_ORDER_DATE_ASC)
-	{
-		if ($order==COMMENT_ORDER_DATE_ASC)
-		{ // Return ASC by date
-			return $this->LoadAll('SELECT * FROM '.$this->config['table_prefix'].'comments WHERE page_tag = "'.mysql_real_escape_string($tag).'" AND deleted IS NULL ORDER BY time'); 
+	function LoadComments($tag, $order=null) {
+		if($order==null) {
+			if(isset($_SESSION['show_comments'][$tag])) {
+				$order = $_SESSION['show_comments'][$tag];
+			} else {
+				$order = COMMENT_ORDER_DATE_ASC;
+			}
 		}
-		if ($order==COMMENT_ORDER_DATE_DESC)
-		{
-			return $this->LoadAll('SELECT * FROM '.$this->config['table_prefix'].'comments WHERE page_tag = "'.mysql_real_escape_string($tag).'" AND deleted IS NULL ORDER BY time DESC'); 
+		if($order==COMMENT_ORDER_DATE_ASC) { // Return ASC by date
+			return $this->LoadAll("SELECT * FROM ".$this->config["table_prefix"]."comments WHERE page_tag = '".mysql_real_escape_string($tag)."' AND status != 'deleted'  ORDER BY time"); 
+		}
+		if($order==COMMENT_ORDER_DATE_DESC) {
+			return $this->LoadAll("SELECT * FROM ".$this->config["table_prefix"]."comments WHERE page_tag = '".mysql_real_escape_string($tag)."' AND status = 'deleted'  ORDER BY time DESC"); 
 		}
 		if ($order==COMMENT_ORDER_THREADED)
 		{
@@ -2301,7 +2305,7 @@ class Wakka
 	 * Traverse comments in threaded order 
 	 *
 	 * @uses	Wakka::LoadAll()
-	 * @uses	Wakka::CountComments()
+	 * @uses	Wakka::CountAllComments()
 	 * @uses	Wakka::LoadSingle()
 	 * @uses	Wakka::TraverseComments()
 	 * @param	string $tag mandatory: name of the page
@@ -2316,7 +2320,7 @@ class Wakka
 		if (!$transformed_map)
 		{
 			array_push($visited, 'NULL');
-			$count = $this->CountComments($tag);
+			$count = $this->CountAllComments($tag);
 			$initial_map = $this->LoadAll('SELECT id, parent FROM '.$this->config['table_prefix'].'comments WHERE page_tag="'.$tag.'" ORDER BY id ASC');
 			// Create an array of arrays, with the (unique) key of
 			// 'parent' pointing to an array of date-ordered
@@ -2375,16 +2379,27 @@ class Wakka
 	}
 
 	/**
-	 * Count the comments for a (given) page.
+	 * Count the undeleted comments for a (given) page.
 	 *
 	 * @uses	Wakka::LoadSingle()
 	 * @param	string $tag mandatory: name of the page
 	 * @return	integer Count of comments 
 	 */
-	function CountComments($tag)
-	{
-		$data = $this->LoadSingle('SELECT COUNT(*) as countcomments FROM '.$this->config['table_prefix'].'comments WHERE page_tag = "'.mysql_real_escape_string($tag).'"');
-		return $data['countcomments'];
+	function CountComments($tag) {
+			$data = $this->LoadSingle("SELECT count(*) FROM ".$this->config["table_prefix"]."comments WHERE page_tag = '".mysql_real_escape_string($tag)."' and (status IS NULL or status != 'deleted')"); 
+			return $data['count(*)'];
+	}
+
+	/**
+	 * Count all comments (deleted and undeleted) for a (given) page.
+	 *
+	 * @uses	Wakka::LoadSingle()
+	 * @param	string $tag mandatory: name of the page
+	 * @return	integer Count of comments 
+	 */
+	function CountAllComments($tag) {
+			$data = $this->LoadSingle("SELECT count(*) FROM ".$this->config["table_prefix"]."comments WHERE page_tag = '".mysql_real_escape_string($tag)."'"); 
+			return $data['count(*)'];
 	}
 
 	/**
