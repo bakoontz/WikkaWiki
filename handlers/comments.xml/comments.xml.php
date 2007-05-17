@@ -27,6 +27,7 @@
  * @todo	add better phpdoc documentation
  * @todo	move i18n strings to language file
  * @todo	use stylesheet compatible with multiple feed formats
+ * @todo	allow feed for one page only, e.g. Feed for comments on my userpage only. Perhaps by adding params in $_GET.
  *
  * @input	string	$f	optional: output format, can be any of the following: 
  * 				RSS0.91, RSS1.0, RSS2.0, ATOM1.0
@@ -58,10 +59,10 @@ define('FEED_ITEM_DESCRIPTION',"By %s");
 
 //initialize variables
 $f = ''; #feed format
+$n = 50; #number of items
 /*
 $u = ''; #user
 $d = ''; #days limit
-$n = ''; #number of items
 */
 //get URL parameters
 $formats = explode(",",FEED_VALID_FORMATS);
@@ -92,29 +93,33 @@ $image->descriptionHtmlSyndicated = FEED_DESCRIPTION_HTML;
 $rss->image = $image;
 
 
-
+$n = intval($n);
 //get feed items
-
-if ($comments = $this->LoadRecentComments())
+// To optimize memory usage, we should load the minimum item. But, we must load 
+// more than what we need, because we may have no rights on some items.
+// Twice the number we need is just an arbitrary value!!! (2*$n)
+if ($comments = $this->LoadRecentComments(2*$n))
 {
 	$c = 0;
 	foreach ($comments as $comment)
 	{
-		$c++;
-		if (($c <= $n) || !$n)
+		if (!$this->HasAccess('comment', $comment['page_tag']))
 		{
-			$item = new FeedItem(); 
-			$item->title = $comment['page_tag']; 
-			$item->link = $this->Href('', $comment['page_tag'], 'show_comments=1').'#comment_'.$comment['id'];
-			$item->date = date('r', strtotime($comment['time'])); 
-			$item->description = 'By '.$comment['user'].': '.$comment['comment']."\n";
-			$item->source = $this->config['base_url'];
-			if ($f == 'ATOM1.0' || $f == 'RSS1.0') 
-			{
-				$item->author = $comment['user']; # RSS0.91 and RSS2.0 require authorEmail
-			}
-			$rss->addItem($item); 
+			continue;
 		}
+		$c++;
+		$item = new FeedItem(); 
+		$item->title = $comment['page_tag']; 
+		$item->link = $this->Href('', $comment['page_tag'], 'show_comments=1').'#comment_'.$comment['id'];
+		$item->date = date('r', strtotime($comment['time'])); 
+		$item->description = 'By '.$comment['user'].': '.$comment['comment']."\n";
+		$item->source = $this->config['base_url'];
+		if ($f == 'ATOM1.0' || $f == 'RSS1.0') 
+		{
+			$item->author = $comment['user']; # RSS0.91 and RSS2.0 require authorEmail
+		}
+		$rss->addItem($item); 
+		if ($c == $n) break;
 	}
 } 
 

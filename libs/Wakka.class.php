@@ -2406,16 +2406,19 @@ class Wakka
 	}
 
 	/**
-	 * Load the last comments on the wiki.
+	 * Load the last comments on the wiki, or, if specified, the last comments on a specific page.
 	 *
 	 *
 	 * @uses	Wakka::LoadAll()
 	 * @param	integer $limit optional: number of last comments. default: 50
 	 * @return	array the last x comments
 	 */
-	function LoadRecentComments($limit = 50)
+	function LoadRecentComments($limit = 50, $tag='*all')
 	{
-		return $this->LoadAll('SELECT * FROM '.$this->config['table_prefix'].'comments ORDER BY time DESC LIMIT '.intval($limit));
+		$limit = intval($limit);
+		if ($limit < 1) $limit = 50;
+		$where = ('*all' == $tag) ? '' : ' WHERE tag = "'.mysql_real_escape_string($tag).'"';
+		return $this->LoadAll('SELECT * FROM '.$this->config['table_prefix'].'comments'.$where.' ORDER BY time DESC LIMIT '.$limit);
 	}
 	/**
 	 * Load recently commented pages on the wiki.
