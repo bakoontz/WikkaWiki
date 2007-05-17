@@ -725,7 +725,7 @@ $text = preg_replace_callback(
 	"\b([A-ZÄÖÜ]+[a-zßäöü]+[A-Z0-9ÄÖÜ][A-Za-z0-9ÄÖÜßäöü]*)\b|".								# CamelWords
 	'\\&([#a-zA-Z0-9]+;)?|'. #ampersands! Track single ampersands or any htmlentity-like (&...;)
 	"\n".																					# new line
-	"/ms", "wakka2callback", $text);
+	"/ms", "wakka2callback", $text."\n"); #append \n (#444)
 
 // we're cutting the last <br />
 $text = preg_replace("/<br \/>$/","", $text);
