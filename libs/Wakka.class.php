@@ -1651,14 +1651,17 @@ class Wakka
 	}
 	/**
 	 * Return the pagename (with optional handler appended).
+	 *
+	 * @uses Wakka::htmlspecialchars_ent()
+	 * @uses Wakka::GetPageTag()
 	 */
 	function MiniHref($handler = '', $tag = '')
 	{
 		if (!$tag = trim($tag))
 		{
-			$tag = $this->tag;
+			$tag = $this->GetPageTag();
 		}
-		return $tag.($handler ? '/'.$handler : '');
+		return $this->htmlspecialchars_ent($tag.($handler ? '/'.$handler : ''));
 	}
 	/**
 	 * Return the full URL to a page/handler.

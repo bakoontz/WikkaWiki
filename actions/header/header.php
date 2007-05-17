@@ -14,6 +14,7 @@
  * @uses	Wakka::PageTitle()
  * @uses	Wakka::GetHandler()
  * @uses	Wakka::Href()
+ * @uses	Wakka::htmlspecialchars_ent()
  * @uses	Wakka::Format()
  *
  * @todo Move rss autodiscovery to handlers/show/show.php
@@ -32,7 +33,7 @@ if ( substr_count($site_base, 'wikka.php?wakka=') > 0 ) $site_base = substr($sit
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
 <head>
-	<title><?php printf(GENERIC_DOCTITLE,$this->GetWakkaName(),$this->PageTitle()); ?></title>
+	<title><?php printf(GENERIC_DOCTITLE, $this->htmlspecialchars_ent($this->GetWakkaName(), ENT_NOQUOTES), $this->htmlspecialchars_ent($this->PageTitle(), ENT_NOQUOTES)); ?></title>
 	<base href="<?php echo $site_base ?>" />
 	<?php if ($this->GetHandler() != 'show' || $this->page["latest"] == 'N' || $this->page["tag"] == 'SandBox') echo "<meta name=\"robots\" content=\"noindex, nofollow, noarchive\" />\n"; ?>
 	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
@@ -44,9 +45,10 @@ if ( substr_count($site_base, 'wikka.php?wakka=') > 0 ) $site_base = substr($sit
 	<link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon" />
 <?php
 if ($this->GetHandler() != 'edit' && $this->config['enable_rss_autodiscovery'] != 0) {
-	$wikiname = $this->GetWakkaName();
-	$rsslink  = '	<link rel="alternate" type="application/rss+xml" title="'.sprintf(RSS_REVISIONS_TITLE,$wikiname,$this->tag).' (RSS '.RSS_REVISIONS_VERSION.')" href="'.$this->Href('revisions.xml', $this->tag).'" />'."\n";
-	$rsslink .= '	<link rel="alternate" type="application/rss+xml" title="'.sprintf(RSS_RECENTCHANGES_TITLE,$wikiname).' (RSS '.RSS_RECENTCHANGES_VERSION.')" href="'.$this->Href('recentchanges.xml', $this->tag).'" />'."\n";
+	$wikiname = $this->htmlspecialchars_ent($this->GetWakkaName());
+	$pagetag = $this->htmlspecialchars_ent($this->GetPageTag());
+	$rsslink  = '	<link rel="alternate" type="application/rss+xml" title="'.sprintf(RSS_REVISIONS_TITLE,$wikiname,$pagetag).' (RSS '.RSS_REVISIONS_VERSION.')" href="'.$this->Href('revisions.xml', $this->GetPageTag()).'" />'."\n";
+	$rsslink .= '	<link rel="alternate" type="application/rss+xml" title="'.sprintf(RSS_RECENTCHANGES_TITLE,$wikiname).' (RSS '.RSS_RECENTCHANGES_VERSION.')" href="'.$this->Href('recentchanges.xml', $this->GetPageTag()).'" />'."\n";
 	echo $rsslink;	
 }
  if (isset($this->additional_headers) && is_array($this->additional_headers) && count($this->additional_headers))
@@ -60,7 +62,7 @@ if ($this->GetHandler() != 'edit' && $this->config['enable_rss_autodiscovery'] !
 </head>
 <body <?php echo $message ? "onload=\"alert('".$message."');\" " : "" ?> >
 <div class="header">
-	<h2><?php echo $this->config["wakka_name"] ?> : <a href="<?php echo $this->href('backlinks', '', ''); ?>" title="<?php printf(LINKING_PAGES_LINK_TITLE, $this->tag); ?>"><?php echo $this->GetPageTag(); ?></a></h2>
+	<h2><?php echo $this->config["wakka_name"] ?> : <a href="<?php echo $this->href('backlinks', '', ''); ?>" title="<?php printf(LINKING_PAGES_LINK_TITLE, $pagetag); ?>"><?php echo $pagetag; ?></a></h2>
 	<?php echo $this->Link($this->config["root_page"]); ?> ::
 	<?php 
 		if ($this->GetUser()) {

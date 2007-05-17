@@ -18,6 +18,7 @@
  * @uses	Wakka::Link()
  * @uses	Wakka::FormClose()
  * @uses	Wakka::GetWakkaVersion()
+ * @uses	Wakka::htmlspecialchars_ent()
  * 
  * @todo	move <div class="footer"> to template
  */
@@ -25,7 +26,7 @@
 	echo $this->FormOpen("", "TextSearch", "get"); 
 	echo $this->HasAccess("write") ? '<a href="'.$this->Href("edit").'" title="'.sprintf(WIKKA_PAGE_EDIT_LINK_TITLE,$this->page).'">'.FOOTER_PAGE_EDIT_LINK_DESC.'</a> ::'."\n" : "";
 	echo '<a href="'.$this->Href("history").'" title="'.PAGE_HISTORY_LINK_TITLE.'">'.PAGE_HISTORY_LINK_DESC.'</a> ::'."\n";
-	echo $this->GetPageTime() ? '<a href="'.$this->Href("revisions").'" title="'.PAGE_REVISION_LINK_TITLE.'">'.$this->GetPageTime().'</a> <a href="'.$this->href("revisions.xml").'" title="'.PAGE_REVISION_XML_LINK_TITLE.'"><img src="images/xml.png" width="36" height="14" align="middle" style="border: 0px;" alt="XML" /></a> ::'."\n" : "";
+	echo $this->GetPageTime() ? '<a href="'.$this->Href("revisions").'" title="'.PAGE_REVISION_LINK_TITLE.'">'.$this->GetPageTime().'</a> <a href="'.$this->href("revisions.xml").'" title="'.PAGE_REVISION_XML_LINK_TITLE.'"><img src="images/xml.png" width="36" height="14" style="vertical-align: middle; border: 0px;" alt="XML" /></a> ::'."\n" : "";
 
 	// if this page exists
 	if ($this->page)
@@ -78,7 +79,7 @@ Powered by <?php echo $this->Link("http://wikkawiki.org/", "", "Wikka Wakka Wiki
 		echo '<div class="smallprint"><strong>Query log:</strong><br />'."\n";
 		foreach ($this->queryLog as $query)
 		{
-			echo $query['query'].' ('.$query['time'].')<br />'."\n";
+			echo $this->htmlspecialchars_ent($query['query'], ENT_NOQUOTES).' ('.$query['time'].')<br />'."\n";
 		}
 		echo '</div>';
 	}
