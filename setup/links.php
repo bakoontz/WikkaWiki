@@ -28,13 +28,13 @@ set_time_limit(30);
 // This avoid the script from crashing if you have thousands of pages.
 function LoadSomePages($start='', $limit=100)
 {
-	global $config;
+	global $config, $dblink;
 	//Less RAM: select tag and body only
 	// Note that LoadSomePages needs result to be sorted by tag.
 	$result = mysql_query("SELECT tag, body FROM {$config['table_prefix']}pages 
 	 WHERE tag > '".mysql_real_escape_string($start)."' AND latest = 'Y' 
 		ORDER BY tag ASC  
-		LIMIT $limit");
+		LIMIT $limit", $dblink);
 	$pages = array();
 	if ($result)
 	{
@@ -48,7 +48,7 @@ $start = '';
 $GLOBALS['sql'] = '';
 $GLOBALS['written'] = '';
 // Delete from wikka_links once for all
-mysql_query("TRUNCATE TABLE {$config['table_prefix']}links");
+mysql_query("TRUNCATE TABLE {$config['table_prefix']}links", $dblink);
 while ($pages = LoadSomePages($start))
 {
 	foreach ($pages as $page)
@@ -82,7 +82,7 @@ while ($pages = LoadSomePages($start))
 // It's a mini wakka2callback, only the necessary to relink.
 function relinkcallback($thing)
 {
-	global $tag, $written, $config;
+	global $tag, $written, $config, $dblink;
 	static $sql = '';
 	if ($thing === 'cleanup') 
 	{
@@ -90,7 +90,7 @@ function relinkcallback($thing)
 		// Then reinitialize $sql and return
 		if ($sql)
 		{
-			mysql_query("INSERT INTO {$config['table_prefix']}links VALUES $sql");
+			mysql_query("INSERT INTO {$config['table_prefix']}links VALUES $sql", $dblink);
 		}
 		$sql = '';
 		return;
