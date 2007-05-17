@@ -35,15 +35,21 @@
 
 /**
  * Include language file if it exists.
- * @see /lang/en.inc.php
+ * 
+ * Language files are bundled under <tt>lang/</tt> in a folder named after their ISO 639-1 code (e.g. 'en' for English).
  */
-if (file_exists('lang/en.inc.php'))
+//sets default language
+if (!defined('DEFAULT_LANGUAGE')) define('DEFAULT_LANGUAGE', 'en');
+//check if a custom language definition is specified
+$config['default_lang'] = (isset($config['default_lang']))? $config['default_lang'] : DEFAULT_LANGUAGE;
+//check if language package exists
+if (file_exists('lang'.DIRECTORY_SEPARATOR.$config['default_lang'].DIRECTORY_SEPARATOR.$config['default_lang'].'.inc.php'))
 {
-	require_once('lang/en.inc.php');
+	require_once('lang'.DIRECTORY_SEPARATOR.$config['default_lang'].DIRECTORY_SEPARATOR.$config['default_lang'].'.inc.php');
 }
 else
 {
-	die('Language File (/lang/en.inc.php) not found! Please add the file.');
+	die('Language file (lang'.DIRECTORY_SEPARATOR.$config['default_lang'].DIRECTORY_SEPARATOR.$config['default_lang'].'.inc.php) not found!'); //TODO i18n
 }
 ob_start();
 
