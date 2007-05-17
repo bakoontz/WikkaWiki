@@ -1,0 +1,8 @@
+{{image url="images/wikka_logo.jpg" alt="wikka logo" title="Welcome to your Wikka site!"}}
+
+Thanks for installing [[Wikka:HomePage WikkaWiki]]! This site is running on version ##{{wikkaversion}}## (see WikkaReleaseNotes). 
+You need to [[UserSettings login]] and then double-click on any page or click on the "Edit page" link at the bottom to get started. 
+
+Also don't forget to visit the [[Wikka:HomePage WikkaWiki website]]! 
+
+Useful pages: FormattingRules, WikkaDocumentation, OrphanedPages, WantedPages, TextSearch.
