@@ -363,6 +363,13 @@ class Config
 	 * (3) threaded comments
 	 */
 	var $default_comment_display = 1;
+	/**
+	 * Default language-code used in the wiki.
+	 * 
+	 * @var string
+	 * @access public
+	 */
+	var $default_lang = 'en';
 	/**#@-*/
 
 	/**#@+

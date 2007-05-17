@@ -94,15 +94,20 @@ function update_default_page($tag, $dblink, $config)
 		}
 		return;
 	}
+	$admin_users = explode(',', $config['admin_users']);
+	$admin_main_user = trim($admin_users[0]);
+	$txt_filename = 'lang'.DIRECTORY_SEPARATOR.$config['default_lang'].DIRECTORY_SEPARATOR.'defaults'.DIRECTORY_SEPARATOR.$tag.'.txt';
+	if (!file_exists($txt_filename) || !is_readable($txt_filename))
+	{
+		$txt_filename = 'lang'.DIRECTORY_SEPARATOR.'en'.DIRECTORY_SEPARATOR.'defaults'.DIRECTORY_SEPARATOR.$tag.'.txt';
+	}
 	if ($tag == 'HomePage')
 	{
 		$tag = $config['root_page'];
 	}
-	$admin_users = explode(',', $config['admin_users']);
-	$admin_main_user = trim($admin_users[0]);
-	if (file_exists('setup/default_pages/'.$tag.'.txt') && is_readable('setup/default_pages/'.$tag.'.txt'))
+	if (file_exists($txt_filename) && is_readable($txt_filename))
 	{
-		$body = implode('', file('setup/default_pages/'.$tag.'.txt'));
+		$body = implode('', file($txt_filename));
 		mysql_query('update '.$config['table_prefix'].'pages set latest = "N" where tag = \''.$tag.'\'', $dblink);
 		test (sprintf(__('Adding/Updating default page %s'.'...'), $tag),
 		@mysql_query('insert into '.$config['table_prefix'].'pages set tag=\''.$tag.'\', body = \''.mysql_real_escape_string($body).'\', user=\'WikkaInstaller\', owner = \''.$admin_main_user.'\', time=now(), latest =\'Y\'', $dblink),
@@ -111,7 +116,7 @@ function update_default_page($tag, $dblink, $config)
 	}
 	else
 	{
-		test (sprintf(__('Adding/Updating default page %s'.'...'), $tag), false, sprintf(__('File setup/default_pages/%s.txt not found or not readable'), $tag), 0);
+		test (sprintf(__('Adding/Updating default page %s'.'...'), $tag), false, sprintf(__('Default page not found or file not readable (%s, %s)'), $tag, $txt_filename), 0);
 	}
 }
 
@@ -174,5 +179,34 @@ function ACL_show_selectbox($type)
 		echo '</option>'."\n";
 	}
 	echo '</select></td></tr>'."\n";
+}
+/**
+ * Facility to echo a <select>...</select> for language packs availables. A simple check is performed on all 
+ * subdirectories of the lang/ folder: if a file called PageIndex.txt if found inside it, then, it's a valid
+ * language pack subfolder. (To avoid treating some obscure system dependent special folders).
+ * 
+ * @access public
+ * @return void
+ */
+function Language_selectbox($default_lang)
+{
+	echo '<select name="config[default_lang]">';
+	/** @todo fill the array. */
+	$human_lang = array (
+		'en' => 'English',
+		'fr' => 'Français',
+		'de' => 'Deutsch');
+	$hdl = opendir('lang');
+	while ($f = readdir($hdl))
+	{
+		if ($f[0] == '.') continue;
+		if (file_exists('lang'.DIRECTORY_SEPARATOR.$f.DIRECTORY_SEPARATOR.'defaults'.DIRECTORY_SEPARATOR.'PageIndex.txt'))
+		{
+			echo "\n ".'<option value="'.$f.'"';
+			if ($f == $default_lang) echo ' selected="selected"';
+			echo '>'.(isset($human_lang[$f]) ? $human_lang[$f] : $f).'</option>';
+		}
+	}
+	echo '</select>';
 }
 ?>
