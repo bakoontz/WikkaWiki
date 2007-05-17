@@ -714,7 +714,7 @@ $text = preg_replace_callback(
 	"\b[a-z]+:\/\/\S+|".																	# URL
 	"\*\*|\'\'|\#\#|\#\%|@@|::c::|\>\>|\<\<|&pound;&pound;|&yen;&yen;|\+\+|__|<|>|\/\/|".	# Wiki markup
 	"======|=====|====|===|==|".															# headings
-	"\n[\t~]+(-|&|([0-9]+|[a-zA-Z]+)\))?|".														# indents and lists
+	"\n[\t~]+(-(?!-)|&|([0-9]+|[a-zA-Z]+)\))?|".														# indents and lists
 	"\|(?:[^\|])?\|(?:\(.*?\))?(?:\{[^\{\}]*?\})?(?:\n)?|".									# Simple Tables	
 	"\{\{.*?\}\}|".																			# action
 	"\b[A-ZÄÖÜ][A-Za-zÄÖÜßäöü]+[:](?![=_])\S*\b|".											# InterWiki link
