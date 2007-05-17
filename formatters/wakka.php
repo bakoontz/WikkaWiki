@@ -644,6 +644,10 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 		{
 			return $wakka->Action("mindmap ".$wakka->Href()."/mindmap.mm");
 		}
+		elseif ($thing[0] == '&')
+		{
+			return ($wakka->htmlspecialchars_ent($thing));
+		}
 		// if we reach this point, it must have been an accident.
 		return $thing;
 	}
@@ -719,6 +723,7 @@ $text = preg_replace_callback(
 	"\{\{.*?\}\}|".																			# action
 	"\b[A-ZÄÖÜ][A-Za-zÄÖÜßäöü]+[:](?![=_])\S*\b|".											# InterWiki link
 	"\b([A-ZÄÖÜ]+[a-zßäöü]+[A-Z0-9ÄÖÜ][A-Za-z0-9ÄÖÜßäöü]*)\b|".								# CamelWords
+	'\\&([#a-zA-Z0-9]+;)?|'. #ampersands! Track single ampersands or any htmlentity-like (&...;)
 	"\n".																					# new line
 	"/ms", "wakka2callback", $text);
 
