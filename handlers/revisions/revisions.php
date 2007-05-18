@@ -19,7 +19,7 @@
  * 
  * @package		Handlers
  * @subpackage	Page
- * @version		$Id$
+ * @version		$Id:revisions.php 407 2007-03-13 05:59:51Z DarTar $
  * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * 
  * @uses		Wakka::HasAccess()
@@ -31,6 +31,7 @@
  * @uses		Wakka::Link()
  * @uses		Wakka::htmlspecialchars_ent()
  * @uses		Wakka::Href()
+ * @uses		Wakka::FormatUser()
  * 
  * @todo		move main <div> to templating class
  * @todo		make operation (buttons) independent of JavaScript
@@ -76,7 +77,7 @@ if ($this->HasAccess("read"))
 			$output .= "<tr>";
 			$output .= "<td><input type=\"radio\" name=\"a\" value=\"".$page["id"]."\" ".($c == 1 ? "checked=\"checked\"" : "")." /></td>";
 			$output .= "<td><input type=\"radio\" name=\"b\" value=\"".$page["id"]."\" ".($c == 2 ? "checked=\"checked\"" : "")." /></td>";
-			$output .= '<td>'.sprintf(WIKKA_REV_WHEN_BY_WHO, '<a href="'.$this->Href('show','','time='.urlencode($page["time"])).'">'.$page['time'].'</a>', $this->Link($page["user"])).' <span class="pagenote smaller">'.$note.'</span></td>';
+			$output .= '<td>'.sprintf(WIKKA_REV_WHEN_BY_WHO, '<a href="'.$this->Href('show','','time='.urlencode($page["time"])).'">'.$page['time'].'</a>', $this->FormatUser($page["user"])).' <span class="pagenote smaller">'.$note.'</span></td>';
 			$output .= "</tr>\n";
 		}
 		$output .= "</table><br />\n";
