@@ -120,14 +120,13 @@ else
 ?>
 				<!--starting comments header (show)-->
 				<div class="commentsheader">
+					<div id="commentsnav">
+						<a href="<?php echo $this->Href('', '', 'show_comments='.COMMENT_ORDER_DATE_ASC.'#comments') ?>"><?php echo '<img class="'.($display_mode==COMMENT_ORDER_DATE_ASC ?  "icon_on" : "icon").'" alt="flat" title="Flat (oldest first)" src="images/icons/sort_asc.gif" />' ?></a>
+						<a href="<?php echo $this->Href('', '', 'show_comments='.COMMENT_ORDER_DATE_DESC.'#comments') ?>"><?php echo '<img class="'.($display_mode==COMMENT_ORDER_DATE_DESC ?  "icon_on" : "icon").'" alt="flat" title="Flat (newest first)" src="images/icons/sort_desc.gif" />' ?></a>
+						<a href="<?php echo $this->Href('', '', 'show_comments='.COMMENT_ORDER_THREADED.'#comments') ?>"><?php echo '<img class="'.($display_mode==COMMENT_ORDER_THREADED ?  "icon_on" : "icon").'" alt="threaded" title="Threaded" src="images/icons/comment.gif" />' ?></a> 
+					</div><!-- closing commentsnav div -->
 				<!--<span id="comments">&nbsp;</span>--><?php echo COMMENTS_CAPTION ?><?php // TODO what is this span for?? ?>
 				[<a href="<?php echo $this->Href('', '', 'show_comments='.COMMENT_NO_DISPLAY) ?>"><?php echo HIDE_COMMENTS_LINK_DESC ?></a>]
-                </div><!-- closing commentsheader div -->
-                <div id="commentsnav">
-				<a href="<?php echo $this->Href('', '', 'show_comments='.COMMENT_ORDER_DATE_ASC.'#comments') ?>"><?php echo '<img class="'.($display_mode==COMMENT_ORDER_DATE_ASC ?  "icon_on" : "icon").' alt="flat" title="Flat (oldest first)" src="images/icons/sort_asc.gif" />' ?></a>
-				<a href="<?php echo $this->Href('', '', 'show_comments='.COMMENT_ORDER_DATE_DESC.'#comments') ?>"><?php echo '<img class="'.($display_mode==COMMENT_ORDER_DATE_DESC ?  "icon_on" : "icon").' alt="flat" title="Flat (newest first)" src="images/icons/sort_desc.gif" />' ?></a>
-				<a href="<?php echo $this->Href('', '', 'show_comments='.COMMENT_ORDER_THREADED.'#comments') ?>"><?php echo '<img class="'.($display_mode==COMMENT_ORDER_THREADED ?  "icon_on" : "icon").' alt="threaded" title="Threaded" src="images/icons/comment.gif" />' ?></a> 
-                </div><!-- closing commentsnav div -->
                 <?php echo $this->FormOpen("processcomment") ?>
 				<input type="submit" name="submit" value="<?php echo COMMENT_NEW_BUTTON ?>" />
 				<?php echo $this->FormClose() ?>
