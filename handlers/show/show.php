@@ -56,7 +56,7 @@ else
 		if ($this->page['latest'] == 'N')
 		{
 			$pagelink = '<a href="'.$this->Href().'">'.$this->tag.'</a>';
-			echo '<div class="revisioninfo">'.printf(SHOW_OLD_REVISION_CAPTION,$pagelink,$this->page['time']).'</div>';
+			echo '<div class="revisioninfo">'.sprintf(SHOW_OLD_REVISION_CAPTION,$pagelink,$this->page['time']).'</div>';
 		}
 
 		// display page

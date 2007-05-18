@@ -506,9 +506,24 @@ em.success {
 
 .comments {display: none;}
 
+/* old-style revision header
 .revisioninfo {
 	color: #AAAAAA;
 	padding-bottom: 20px;
+}
+*/
+
+.revisioninfo {
+	margin: auto;
+	z-index:20;
+	position:fixed;
+	top: 35px;
+	left: 10px;
+	color: #000000;
+	background-color: #E9F9E9;
+	border: 1px solid #ACA;
+	padding: 5px 10px;
+	font-size: 90%;
 }
 
 .copyright {
