@@ -14,7 +14,7 @@
  *
  * @package         Handlers
  * @subpackage        Page
- * @version           $Id$
+ * @version           $Id:clone.php 407 2007-03-13 05:59:51Z DarTar $
  * @since             Wikka 1.1.6.0
  * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
@@ -111,7 +111,7 @@ if (!$this->ExistsPage($from))
 					if ($this->ExistsPage($to))
 					{ 
 						// page already exists!
-						$box = '<em class="error">'.ERROR_PAGE_ALREADY_EXIST.'</em>';
+						$box = '<em class="error">'.WIKKA_ERROR_PAGE_ALREADY_EXIST.'</em>';
 					}
 					else
 					{

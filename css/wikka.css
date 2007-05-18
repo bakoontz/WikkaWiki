@@ -808,6 +808,20 @@ fieldset.feedback br {
 	clear: left;
 }
 
+/* Newpage action */
+
+fieldset.newpage {
+	display: block;
+	width: 350px;
+	padding: 10px;
+}
+
+fieldset.newpage input[type=text] {
+	width: 250px;
+	border:1px solid #CCC;
+}
+
+
 /* Usersettings action */
 
 fieldset#account {

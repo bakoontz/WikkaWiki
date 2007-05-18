@@ -40,6 +40,8 @@ define('WIKKA_ERROR_ACL_READ_INFO','You aren\'t allowed to access this informati
 define('WIKKA_ERROR_LABEL','Error');
 define('WIKKA_ERROR_PAGE_NOT_EXIST','Sorry, page %s does not exist.'); // %s (source) page name
 define('WIKKA_ERROR_EMPTY_USERNAME','Please fill in your username!');
+define('WIKKA_ERROR_INVALID_PAGE_NAME','The page name %s is invalid. Valid page names must start with a capital letter, contain only letters and numbers, and be in CamelCase format.'); // %s - page name
+define('WIKKA_ERROR_PAGE_ALREADY_EXIST','Sorry, the target page already exists');
 define('WIKKA_LOGIN_LINK_DESC','login');
 define('WIKKA_MAINPAGE_LINK_DESC','main page');
 define('WIKKA_NOT_AVAILABLE','n/a');
@@ -288,8 +290,8 @@ define('OWNED_NOT_LOGGED_IN', "You're not logged in, thus the list of your pages
  * Language constant used by the {@link newpage.php newpage} action
  */
 // newpage
-define('ERROR_INVALID_PAGE_NAME','The page name %s is invalid. Valid page names must start with a capital letter, contain only letters and numbers, and be in CamelCase format.'); // %s - page name
-define('NEWPAGE_CREATE_BUTTON','Create and Edit');
+define('NEWPAGE_CREATE_LEGEND','Create a new page');
+define('NEWPAGE_CREATE_BUTTON','Create');
 /**#@-*/
 
 /**#@+
@@ -568,7 +570,6 @@ define('USER_IS_NOW_OWNER','You are now the owner of this page.');
  */
 // clone
 define('ERROR_ACL_WRITE','Sorry! You don\'t have write-access to %s');
-define('ERROR_PAGE_ALREADY_EXIST','Sorry, the destination page already exists');
 define('CLONE_VALID_TARGET','Please fill in a valid target page name and an (optional) edit note.');
 define('CLONE_LEGEND','Clone %s'); // %s source page name
 define('CLONED_FROM','Cloned from %s'); // %s source page name

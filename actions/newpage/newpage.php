@@ -3,7 +3,7 @@
  * Display a form to create a new page.
  * 
  * @package Actions
- * @version	$Id$
+ * @version	$Id:newpage.php 369 2007-03-01 14:38:59Z DarTar $
  * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
  * 
@@ -11,10 +11,12 @@
  * @author	{@link http://wikkawiki.org/JsnX JsnX} (modified 2005-1-17)
  * @author	{@link http://wikkawiki.org/JavaWoman JavaWoman} (modified 2005-1-17)
  * 
- * @uses	Wakka::redirect()
+ * @uses	Wakka::Redirect()
  * @uses	Wakka::FormOpen()
  * @uses	Wakka::FormClose()
  * @filesource
+ * 
+ * @todo user central regex library #34
  */
 
 $showform = TRUE;
@@ -25,22 +27,27 @@ if (isset($_POST['pagename']))
 
 	if (!(preg_match("/^[A-ZÄÖÜ]+[a-zßäöü]+[A-Z0-9ÄÖÜ][A-Za-z0-9ÄÖÜßäöü]*$/s", $pagename))) #34 (use !IsWikiName()) 
 	{
-		echo '<em>'.sprintf(WIKKA_ERROR_INVALID_PAGE_NAME, $pagename).'</em>';
+		echo '<em class="error">'.sprintf(WIKKA_ERROR_INVALID_PAGE_NAME, $pagename).'</em>';
+	}
+	else if ($this->ExistsPage($pagename))
+	{
+		echo '<em class="error">'.WIKKA_ERROR_PAGE_ALREADY_EXIST.'</em>';		
 	}
 	else 
 	{
-		$url = $this->config['base_url'];
-		$this->redirect($url.$pagename.'/edit');
+		$url = $this->Href('edit', $pagename);
+		$this->Redirect($url);
 		$showform = FALSE;
 	}
 }
 
 if ($showform)
 { ?>
-	<br />
 	<?php echo $this->FormOpen(); ?>
-		<input type="text" name="pagename" size="50" value="<?php echo $pagename; ?>" />  
+		<fieldset class="newpage"><legend><?php echo NEWPAGE_CREATE_LEGEND; ?></legend>
+		<input type="text" name="pagename" size="40" value="<?php echo $pagename; ?>" />  
 		<input type="submit" value="<?php echo NEWPAGE_CREATE_BUTTON; ?>" />
+		</fieldset>
 	<?php echo $this->FormClose(); 
 } 
 ?>
