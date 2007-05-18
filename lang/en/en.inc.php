@@ -766,7 +766,7 @@ define('DISPLAY_COMMENT_LINK_DESC','Display comment');
 define('DISPLAY_COMMENTS_EARLIEST_LINK_DESC','Earliest first');
 define('DISPLAY_COMMENTS_LATEST_LINK_DESC','Latest first');
 define('DISPLAY_COMMENTS_THREADED_LINK_DESC','Threaded');
-define('HIDE_COMMENTS_LINK_DESC','Hide comments/form');
+define('HIDE_COMMENTS_LINK_DESC','Hide comments');
 define('STATUS_NO_COMMENTS','There are no comments on this page.');
 define('STATUS_ONE_COMMENT','There is one comment on this page.');
 define('STATUS_SOME_COMMENTS','There are %d comments on this page.'); // %d - number of comments

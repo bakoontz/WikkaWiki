@@ -66,16 +66,16 @@ body {
 
 .comment {
 	background-color: #EEEEEE;
-	padding: 10px;
+	padding: 5px;
 	border: 1px solid #CCCCCC;
-	margin: 15px;
+	margin: 10px;
 }
 
 .comment2 {
 	background-color: #DDDDDD;
-	padding: 10px;
+	padding: 5px;
 	border: 1px solid #CCCCCC;
-	margin: 15px;
+	margin: 10px;
 }
 
 .commentinfo {
@@ -88,19 +88,21 @@ body {
 }
 
 .commentauthor {
-	font-family: Verdana, Tahoma, Arial, Helvetica, sans-serif;	
-	font-size: 15px;
+	font-size: 1.2em;
 	line-height: 20px;
 	color: #000000;
 	margin: 5px 5px 0 0;
 }
 
 .commentparent {
-	font-family: Verdana, Tahoma, Arial, Helvetica, sans-serif;	
-	font-size: 12px;
+	font-size: 1em;
 	line-height: 20px;
 	color: #555555;
 	margin: 5px 5px 5px 5px;
+}
+
+#comments form input[type=submit] {
+	font-size: 80%;
 }
 
 /* comments navigation */
