@@ -56,28 +56,28 @@ else
 		if ($this->page['latest'] == 'N')
 		{
 			$pagelink = '<a href="'.$this->Href().'">'.$this->tag.'</a>';
-			echo '<div class="revisioninfo">'.sprintf(SHOW_OLD_REVISION_CAPTION,$pagelink,$this->page['time']).'</div>';
-		}
-
-		// display page
-		echo $this->Format($this->page['body'], 'wakka');
-
-		// if this is an old revision, display some buttons
-		if ($this->page['latest'] == 'N' && $this->HasAccess('write'))
-		{
-			// added if encapsulation : in case where some pages were brutally deleted from database
-			if ($latest = $this->LoadPage($this->tag))
+			echo '<div class="revisioninfo">'.sprintf(SHOW_OLD_REVISION_CAPTION,$pagelink,$this->Link($this->tag, 'revisions', $this->page['time']));
+			// if this is an old revision, display some buttons
+			if ($this->page['latest'] == 'N' && $this->HasAccess('write'))
 			{
+				// added if encapsulation : in case where some pages were brutally deleted from database
+				if ($latest = $this->LoadPage($this->tag))
+				{
 ?>
-		<br />
+			<br />
 				<?php echo $this->FormOpen('edit') ?>
 				<input type="hidden" name="previous" value="<?php echo $latest['id'] ?>" />
 				<input type="hidden" name="body" value="<?php echo $this->htmlspecialchars_ent($this->page['body']) ?>" />
 				<input type="submit" value="<?php echo SHOW_RE_EDIT_BUTTON ?>" />
 				<?php echo $this->FormClose(); ?>
 <?php
+				}
 			}
+		echo '</div>';
 		}
+
+		// display page
+		echo $this->Format($this->page['body'], 'wakka');
 		echo "\n".'</div><!--closing page content-->'."\n\n";
 
 		if ($this->GetConfigValue('hide_comments') != 1)
