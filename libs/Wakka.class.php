@@ -2204,6 +2204,46 @@ class Wakka
 		}
 		return ($user['show_comments'] == 'Y');
 	}
+     /**
+     * Formatter for usernames.
+     *
+     * Renders usernames as links only when needed, avoiding the creation of missing page links 
+     * for users without userpage. Makes other options configurable (like truncating long 
+     * hostnames or disabling link formatting).
+     *
+     * @author        {@link http://www.wikkawiki.org/DarTar Dario Taraborelli} 
+     *
+     * @param    string    $user    required: name of user or hostname retrieved from the DB;
+     * @param    string    $link    optional: enables/disables linking to userpage;
+     * @param    string    $maxhostlength    optional: max length for hostname, hostnames longer
+     *                                 than this will be truncated with an ellipsis;
+     * @param    string    $ellipsis    optional: character to be use at the end of truncated hosts;
+     * @return string    $formatted_user: formatted username.
+     */
+	function FormatUser ($user, $link='1', $maxhostlength='10', $ellipsis='&#8230;')
+	{
+		if (strlen($user)>0)
+		{
+			// check if user is registered
+			if ($this->LoadUser($user))
+			{
+				// check if userpage exists and if linking is enabled
+				$formatted_user = ($this->ExistsPage($user) && ($link == 1))? $this->Link($user) : $user;
+			}
+			else
+			{
+				// truncate long host names
+				$user = (strlen($user) > $maxhostlength) ? '<span title="'.$user.'">'.substr($user, 0, $maxhostlength).$ellipsis.'</span>' : $user;
+				$formatted_user = '<tt>'.$user.'</tt>';
+			}
+		}
+		else
+		{
+			// page has empty user field
+			$formatted_user = 'anonymous'; //TODO #i18n
+		}
+		return $formatted_user;
+	}
 
 	/**
 	 * COMMENTS
