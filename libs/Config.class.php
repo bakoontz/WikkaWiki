@@ -261,11 +261,6 @@ class Config
 	 */
 	var $double_doublequote_html = 'safe';
 	/**
-	 * External link tail.
-	 * Tail appended when rendering external links. Any valid XHTML can be used. The default is an infinite symbol.
-	 */
-	var $external_link_tail = '<span class="exttail">&#8734;</span>';
-	/**
 	 * SQL debugging.
 	 * Setting this value to 1 activates SQL debugging. Instructions passed to the database are displayed at the bottom of the page. SQL debug information
 	 * is visible only by wiki administrators, so this option can safely be enabled without compromising the security of your wiki.

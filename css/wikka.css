@@ -153,12 +153,6 @@ a.ext:hover {
 	color: #993333;
 }
 
-.exttail {
-	color: #999;
-	position: relative;
-	bottom: 0.5ex;
-}
-
 .header a:hover {
 	color: #993333;
 	background: transparent;
@@ -172,6 +166,11 @@ a.ext:hover {
 .page a:hover {
 	color: #993333;
 	text-decoration: underline;
+}
+
+.page a.ext {
+	background: url('../images/icons/ext.gif') right bottom no-repeat;
+	padding-right: 12px;
 }
 
 a.keys:hover {
