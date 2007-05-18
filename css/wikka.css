@@ -517,14 +517,23 @@ em.success {
 	margin: auto;
 	z-index:20;
 	position:fixed;
-	top: 35px;
-	left: 10px;
+	top: 70px;
+	right: 10px;
 	color: #000000;
 	background-color: #E9F9E9;
 	border: 1px solid #ACA;
 	padding: 5px 10px;
 	font-size: 90%;
 }
+
+.history_revisioninfo {
+	float: left;
+	text-align: left;
+	padding: 4px;
+	background: #EEE;
+	border: 1px solid #CCC; 		
+}
+
 
 .copyright {
 	font-size: 11px;

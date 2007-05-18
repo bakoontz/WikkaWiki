@@ -19,7 +19,7 @@
  * 
  * @package		Handlers
  * @subpackage	Page
- * @version		$Id$
+ * @version		$Id:history.php 407 2007-03-13 05:59:51Z DarTar $
  * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
  * 
@@ -73,11 +73,11 @@ if ($this->HasAccess("read")) {
 
 					if (($c == 2) && (!$start))
 					{
-						$output .= '<strong>'.sprintf(MOST_RECENT_EDIT, '<a href="'.$this->Href('', '', 'time='.urlencode($pageA['time'])).'">'.$pageA['time'].'</a>', $EditedByUser).'</strong> <span class="pagenote smaller">'.$note."</span><br />\n";
+						$output .= '<div class="history_revisioninfo">'.sprintf(MOST_RECENT_EDIT, '<a href="'.$this->Href('', '', 'time='.urlencode($pageA['time'])).'">'.$pageA['time'].'</a>', $EditedByUser).' <span class="pagenote smaller">'.$note.'</span></div><br class="clear" />'."\n";
 					}
 					else 
 					{
-						$output .= '<strong>'.sprintf(EDITED_ON,        '<a href="'.$this->Href('', '', 'time='.urlencode($pageA['time'])).'">'.$pageA['time'].'</a>', $EditedByUser).'</strong> <span class="pagenote smaller">'.$note."</span><br />\n";
+						$output .= '<div class="history_revisioninfo">'.sprintf(EDITED_ON,        '<a href="'.$this->Href('', '', 'time='.urlencode($pageA['time'])).'">'.$pageA['time'].'</a>', $EditedByUser).' <span class="pagenote smaller">'.$note.'</span></div><br class="clear" />'."\n";
 					}
 
 					if ($added)
@@ -105,20 +105,20 @@ if ($this->HasAccess("read")) {
 				break;
 			}
 			$pageA = $this->LoadPageById($page["id"]);
-			$EditedByUser = $this->Format($page["user"]);
+			$EditedByUser = $this->FormatUser($page["user"]);
 		}
 		$oldest_revision = $this->LoadOldestRevision($this->tag);
 		if ($oldest_revision['id'] != $pageB['id'])
 		{
 			$history_more_link = '<a href="'.$this->Href('history', '', 'start='.($c>1 ? $c+$start-1 : $c+$start)).'">'.HISTORY_MORE_LINK_DESC.'here</a>';
-			$additional_output .= "\n".'<br /><strong>'.sprintf(HISTORY_MORE,$history_more_link).'</strong>';
-			$output .= '<strong>'.sprintf(EDITED_ON, '<a href="'.$this->href('', '', 'time='.urlencode($pageB['time'])).'">'.$pageB['time'].'</a>', $this->Format($pageB['user'])).'</strong> <span class="pagenote smaller">['.$this->htmlspecialchars_ent($pageB['note'])."]</span><br />\n";
+			$additional_output .= "\n".'<br /><div class="history_revisioninfo">'.sprintf(HISTORY_MORE,$history_more_link).'</div><br class="clear" />'."\n";
+			$output .= '<div class="history_revisioninfo">'.sprintf(EDITED_ON, '<a href="'.$this->href('', '', 'time='.urlencode($pageB['time'])).'">'.$pageB['time'].'</a>', $this->FormatUser($pageB['user'])).' <span class="pagenote smaller">['.$this->htmlspecialchars_ent($pageB['note']).']</span></div><br class="clear" />'."\n";
 		}
 		else
 		{
-			$output .= '<strong>'.sprintf(OLDEST_VERSION_EDITED_ON_BY, '<a href="'.$this->href('', '', 'time='.urlencode($pageB['time'])).'">'.$pageB['time'].'</a>', $this->Format($pageB['user'])).'</strong> <span class="pagenote smaller">['.$this->htmlspecialchars_ent($pageB['note'])."]</span><br />\n";
+			$output .= '<div class="history_revisioninfo">'.sprintf(OLDEST_VERSION_EDITED_ON_BY, '<a href="'.$this->href('', '', 'time='.urlencode($pageB['time'])).'">'.$pageB['time'].'</a>', $this->FormatUser($pageB['user'])).'<span class="pagenote smaller">['.$this->htmlspecialchars_ent($pageB['note']).']</span></div><br class="clear" />'."\n";
 		}
-		$output .= '<div class="revisioninfo">'.HISTORY_PAGE_VIEW.'</div>'.$this->Format(implode("\n", $bodyB));
+		$output .= '<div class="revisioninfo">'.sprintf(HISTORY_PAGE_VIEW, $this->Link($this->tag)).'</div>'.$this->Format(implode("\n", $bodyB));
 		print($output.$additional_output);
 	}
 } else {
