@@ -60,6 +60,10 @@ body {
 	border-top: 1px solid #CCCCCC;
 }
 
+.commentsheader form {
+	padding: 5px 0;	
+}
+
 .comment {
 	background-color: #EEEEEE;
 	padding: 10px;
