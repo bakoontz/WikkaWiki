@@ -6,7 +6,7 @@
  * 
  * @package 		Language
  * 
- * @version		$Id$
+ * @version		$Id:en.inc.php 481 2007-05-17 16:34:24Z DarTar $
  * @license 		http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
  * 
@@ -448,8 +448,8 @@ define('USER_EMAIL_LABEL','Your email address:');
 define('DOUBLECLICK_LABEL','Doubleclick editing:');
 define('SHOW_COMMENTS_LABEL','Show comments by default:');
 define('DEFAULT_COMMENT_STYLE_LABEL', 'Default comment style');
-define('COMMENT_ASC_LABEL', 'Date ascending');
-define('COMMENT_DEC_LABEL', 'Date descending');
+define('COMMENT_ASC_LABEL', 'Flat (oldest first)');
+define('COMMENT_DEC_LABEL', 'Flat (newest first)');
 define('COMMENT_THREADED_LABEL', 'Threaded'); 
 define('COMMENT_DELETED_LABEL', '[Comment deleted]');
 define('COMMENT_BY_LABEL', 'Comment by ');
