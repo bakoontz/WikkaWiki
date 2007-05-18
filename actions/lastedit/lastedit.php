@@ -24,8 +24,9 @@
  * @uses	Wakka::GetPageTag()
  * @uses	Wakka::Href()
  * @uses	Wakka::htmlspecialchars_ent()
+ * @uses	Wakka::FormatUser()
+ * 
  * @todo		make date/time format system-configurable;
- * @todo 	use FormatUser() method to render author name;
  */
 /**
  * defaults
@@ -48,7 +49,7 @@ if ($this->handler == 'show')
 {
 	$page = $this->page;
 	$pagetag = $page['tag'];
-	$user = ($this->LoadUser($page['user'])) ? $this->Link($page['user']) : WIKKA_ANONYMOUS_USER; // @@@ or WIKKA_UNREGISTERED_USER
+	$user = $this->FormatUser($page['user']);
 
 	switch($show)
 	{
