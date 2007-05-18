@@ -71,29 +71,30 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 
 		if ((!is_array($things)) && ($things == 'closetags'))
 		{
-			if (3 < $trigger_table) echo ('</caption>');
-			else if (2 < $trigger_table) echo ('</th></tr>');
-			else if (1 < $trigger_table) echo ('</td></tr>');
-			if (2 < $trigger_rowgroup) echo ('</tbody>');
-			else if (1 < $trigger_rowgroup) echo ('</tfoot>');
-			else if (0 < $trigger_rowgroup) echo ('</thead>');
-			if (0 < $trigger_table) echo ('</table>');
-			if ($trigger_strike % 2) echo ('</span>');
-			if ($trigger_notes % 2) echo ('</span>');
-			if ($trigger_inserted % 2) echo ('</span>');
-			if ($trigger_underline % 2) echo('</span>');
-			if ($trigger_floatl % 2) echo ('</div>');
-			if ($trigger_floatr % 2) echo ('</div>');
-			if ($trigger_center % 2) echo ('</div>');
-			if ($trigger_italic % 2) echo('</em>');
-			if ($trigger_monospace % 2) echo('</tt>');
-			if ($trigger_bold % 2) echo('</strong>');
+			$result = '';
+			if (3 < $trigger_table) $result .=  '</caption>';
+			else if (2 < $trigger_table) $result .=  '</th></tr>';
+			else if (1 < $trigger_table) $result .=  '</td></tr>';
+			if (2 < $trigger_rowgroup) $result .=  '</tbody>';
+			else if (1 < $trigger_rowgroup) $result .=  '</tfoot>';
+			else if (0 < $trigger_rowgroup) $result .=  '</thead>';
+			if (0 < $trigger_table) $result .=  '</table>';
+			if ($trigger_strike % 2) $result .=  '</span>';
+			if ($trigger_notes % 2) $result .=  '</span>';
+			if ($trigger_inserted % 2) $result .=  '</span>';
+			if ($trigger_underline % 2) $result .= '</span>';
+			if ($trigger_floatl % 2) $result .=  '</div>';
+			if ($trigger_floatr % 2) $result .=  '</div>';
+			if ($trigger_center % 2) $result .=  '</div>';
+			if ($trigger_italic % 2) $result .= '</em>';
+			if ($trigger_monospace % 2) $result .= '</tt>';
+			if ($trigger_bold % 2) $result .= '</strong>';
 			for ($i = 1; $i<=5; $i ++)
-				if ($trigger_l[$i] % 2) echo ("</h$i>");
+				if ($trigger_l[$i] % 2) $result .=  "</h$i>";
 			$trigger_bold = $trigger_center = $trigger_floatl = $trigger_floatr = $trigger_inserted = $trigger_deleted = $trigger_italic = $trigger_keys = $trigger_table = 0;
 			$trigger_l = array(-1, 0, 0, 0, 0, 0);
 			$trigger_monospace = $trigger_notes = $trigger_strike = $trigger_underline = 0;
-			return;
+			return ($result);
 		}
 
 		// Ignore the closing delimiter if there is nothing to close.
@@ -732,7 +733,7 @@ $text = preg_replace_callback(
 // we're cutting the last <br />
 $text = preg_replace("/<br \/>$/","", $text);
 
+$text .= wakka2callback('closetags');
 echo ($text);
-wakka2callback('closetags');
 
 ?>
