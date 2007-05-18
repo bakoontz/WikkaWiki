@@ -56,6 +56,7 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 		static $trigger_inserted = 0;
 		static $trigger_deleted = 0;
 		static $trigger_floatl = 0;
+		static $trigger_floatr = 0;
 		static $trigger_keys = 0;
 		static $trigger_strike = 0;
 		static $trigger_inserted = 0;
@@ -82,13 +83,14 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 			if ($trigger_inserted % 2) echo ('</span>');
 			if ($trigger_underline % 2) echo('</span>');
 			if ($trigger_floatl % 2) echo ('</div>');
+			if ($trigger_floatr % 2) echo ('</div>');
 			if ($trigger_center % 2) echo ('</div>');
 			if ($trigger_italic % 2) echo('</em>');
 			if ($trigger_monospace % 2) echo('</tt>');
 			if ($trigger_bold % 2) echo('</strong>');
 			for ($i = 1; $i<=5; $i ++)
 				if ($trigger_l[$i] % 2) echo ("</h$i>");
-			$trigger_bold = $trigger_center = $trigger_floatl = $trigger_inserted = $trigger_deleted = $trigger_italic = $trigger_keys = $trigger_table = 0;
+			$trigger_bold = $trigger_center = $trigger_floatl = $trigger_floatr = $trigger_inserted = $trigger_deleted = $trigger_italic = $trigger_keys = $trigger_table = 0;
 			$trigger_l = array(-1, 0, 0, 0, 0, 0);
 			$trigger_monospace = $trigger_notes = $trigger_strike = $trigger_underline = 0;
 			return;
@@ -311,12 +313,12 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 		// float box left
 		else if ($thing == "<<")
 		{
-			return (++$trigger_floatl % 2 ? "<div class=\"floatl\">\n" : "\n</div>\n");
+			return (++$trigger_floatl % 2 ? '<div class="floatl">' : '</div>');
 		}
 		// float box right
 		else if ($thing == ">>")
 		{
-			return (++$trigger_floatl % 2 ? "<div class=\"floatr\">\n" : "\n</div>\n");
+			return (++$trigger_floatr % 2 ? '<div class="floatr">' : '</div>');
 		}
 		// clear floated box
 		else if ($thing == "::c::")
