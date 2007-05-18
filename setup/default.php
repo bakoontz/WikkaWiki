@@ -1,4 +1,5 @@
 <?php
+	echo '<pre>'; print_r($config);echo '</pre>';
 /**
  * Display a configuration form to set default ACL.
  * 
@@ -28,7 +29,16 @@
 		echo '<tr><td>&nbsp;</td><td>'.__('To start the installation, please fill in the form below').'.</td></tr>'."\n";
 	}
 
+	// Language select
+	if (!isset($wakkaConfig['default_lang']))
+	{
+		$config['default_lang'] = 'en';
+	}
 	?>
+	<tr><td>&nbsp;</td></tr>
+	<tr><td>&nbsp;</td><td><h2><?php echo __('Language settings'); ?></h2></td></tr>
+	<tr><td>&nbsp;</td><td><?php echo __('Default language'); ?></td></tr>
+	<tr><td><?php echo __('Choose a default language'); ?>:</td><td><?php Language_selectbox($config['default_lang']); ?></td></tr>
 <?php 
 	if (!isset($wakkaConfig['wakka_version']) || (!$wakkaConfig['wakka_version']))
 	{
