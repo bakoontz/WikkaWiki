@@ -6,7 +6,7 @@
  * is displayed, ordered alphabetically or by date and time (last edit first).
  * 
  * @package Actions
- * @version	$Id$
+ * @version	$Id:mypages.php 369 2007-03-01 14:38:59Z DarTar $
  * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
  * 
@@ -22,7 +22,7 @@
 
 if ($user = $this->GetUser())
 {
-	print '<strong>'.OWNED_PAGES_TXT.'</strong><br /><br />'."\n";
+	print '<div class="floatl">'.OWNED_PAGES_TXT.'</div><div class="clear">&nbsp;</div>'."\n";
 	$curChar = '';
 
 
