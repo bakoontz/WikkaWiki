@@ -270,8 +270,8 @@ define('PROPER_USAGE_MM_SYNTAX','Proper usage: %1$s or %2$s'); // %1$s - syntax 
 define('NO_PAGES_EDITED','You have not edited any pages yet.');
 define('MYCHANGES_ALPHA_LIST', "This is a list of pages you've edited, along with the time of your last change.");
 define('MYCHANGES_DATE_LIST', "This is a list of pages you've edited, ordered by the time of your last change.");
-define('ORDER_DATE','order by date');
-define('ORDER_ALPHA','order alphabetically');
+define('ORDER_DATE_LINK_DESC','order by date');
+define('ORDER_ALPHA_LINK_DESC','order alphabetically');
 define('MYCHANGES_NOT_LOGGED_IN', "You're not logged in, thus the list of pages you've edited couldn't be retrieved.");
 /**#@-*/
 

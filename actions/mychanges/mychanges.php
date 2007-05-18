@@ -6,7 +6,7 @@
  * is displayed, ordered alphabetically or by date and time (last edit first).
  * 
  * @package Actions
- * @version	$Id$
+ * @version	$Id:mychanges.php 369 2007-03-01 14:38:59Z DarTar $
  * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
  * 
@@ -34,10 +34,16 @@ if ($user = $this->GetUser())
 	$my_edits_count = 0;
 	
 	// header
-	$output .= '<strong>';
-	if ($alpha) $output .= MYCHANGES_ALPHA_LIST.' (<a href="'.$this->href("", $tag).'">'.ORDER_DATE_LINK_DESC;
- 	else $output .= MYCHANGES_DATE_LIST.' (<a href="'.$this->href("", $tag, "alphabetically=1").'">'.ORDER_ALPHA_LINK_DESC;
-	$output .= '</a>)</strong><br /><br />'."\n";
+	$output .= '<div class="floatl">';
+	if ($alpha)
+	{
+		$output .= MYCHANGES_ALPHA_LIST.' (<a href="'.$this->href("", $tag).'">'.ORDER_DATE_LINK_DESC;
+	}
+ 	else
+ 	{
+ 		$output .= MYCHANGES_DATE_LIST.' (<a href="'.$this->href("", $tag, "alphabetically=1").'">'.ORDER_ALPHA_LINK_DESC;
+ 	}
+ 	$output .= '</a>)</div><div class="clear">&nbsp;</div>'."\n";
 
 	// get the pages
 	$query = "SELECT tag, time FROM ".$this->config["table_prefix"]."pages WHERE user = '".mysql_real_escape_string($this->GetUserName())."' AND latest = 'Y' ";
