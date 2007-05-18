@@ -3,7 +3,7 @@
  * Display a list of recent comments.
  *
  * @package		Actions
- * @version		$Id$
+ * @version		$Id:recentcomments.php 369 2007-03-01 14:38:59Z DarTar $
  * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
  *
@@ -53,7 +53,7 @@ if ($comments = $this->LoadRecentComments())
 				$comment_preview = $comment_preview.'&#8230;';
 			}
 			// print entry
-			echo '&nbsp;&nbsp;&nbsp;'.sprintf(RECENTCOMMENTS_TIMESTAMP_CAPTION,$timeformatted).' <a href="'.$this->href('', $comment['page_tag'], 'show_comments=1').'#comment_'.$comment['id'].'">'.$comment['page_tag'].'</a>'.WIKKA_COMMENT_AUTHOR_DIVIDER.$this->Format($comment['user'])."\n<blockquote>".$comment_preview."</blockquote>\n";
+			echo sprintf(RECENTCOMMENTS_TIMESTAMP_CAPTION,$timeformatted).' <a href="'.$this->href('', $comment['page_tag'], 'show_comments=1').'#comment_'.$comment['id'].'">'.$comment['page_tag'].'</a>'.WIKKA_COMMENT_AUTHOR_DIVIDER.$this->FormatUser($comment['user'])."\n<blockquote>".$comment_preview."</blockquote>\n";
 		}
 	}
 	if ($readable == 0)
