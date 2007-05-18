@@ -82,7 +82,7 @@ if ($pages = $this->LoadRecentlyChanged())
 			{
 				$note = '';
 			}
-				echo '&nbsp;&nbsp;&nbsp;&nbsp;('.$this->Link($page['tag'], 'revisions', $timeformatted, 0, 1, sprintf(REVISIONS_LINK_TITLE, $page['tag'])).') ['.$this->Link($page['tag'], 'history', WIKKA_HISTORY, 0, 1, sprintf(HISTORY_LINK_TITLE, $page['tag'])).'] - &nbsp;'.$this->Link($page['tag'], '', '', 0).' '.PAGE_EDITOR_DIVIDER.' '.$page_edited_by.' '.$note.'<br />'."\n";
+				echo '&nbsp;&nbsp;&nbsp;&nbsp;('.$this->Link($page['tag'], 'revisions', $timeformatted, 0, 1, sprintf(REVISIONS_LINK_TITLE, $page['tag'])).') ['.$this->Link($page['tag'], 'history', WIKKA_HISTORY, 0, 1, sprintf(HISTORY_LINK_TITLE, $page['tag'])).'] - &nbsp;'.$this->Link($page['tag'], '', '', 0).' '.PAGE_EDITOR_DIVIDER.' '.$this->FormatUser($page_edited_by).' '.$note.'<br />'."\n";
 		}
 	}
 	if ($readable == 0)

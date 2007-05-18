@@ -24,12 +24,13 @@
  * @copyright Copyright 2006-2007, {@link http://wikkawiki.org/CreditsPage Wikka Development Team}
  */
 
-// Comments
+// Defaults
 if (!defined('COMMENT_NO_DISPLAY')) define('COMMENT_NO_DISPLAY', 0);
 if (!defined('COMMENT_ORDER_DATE_ASC')) define('COMMENT_ORDER_DATE_ASC', 1);
 if (!defined('COMMENT_ORDER_DATE_DESC')) define('COMMENT_ORDER_DATE_DESC', 2);
 if (!defined('COMMENT_ORDER_THREADED')) define('COMMENT_ORDER_THREADED', 3);
 if (!defined('COMMENT_MAX_TRAVERSAL_DEPTH')) define('COMMENT_MAX_TRAVERSAL_DEPTH', 10);
+if (!defined('MAX_HOSTNAME_LENGTH_DISPLAY')) define('MAX_HOSTNAME_LENGTH_DISPLAY', 50);
 
 /**
  * The Wikka core.
@@ -2226,7 +2227,7 @@ class Wakka
 	 * @param	string	$ellipsis	optional: character to be use at the end of truncated hosts;
 	 * @return string	$formatted_user: formatted username.
 	 */
-	function FormatUser ($user, $link='1', $maxhostlength='10', $ellipsis='&#8230;')
+	function FormatUser ($user, $link='1', $maxhostlength=MAX_HOSTNAME_LENGTH_DISPLAY, $ellipsis='&#8230;')
 	{
 		if (strlen($user)>0)
 		{
@@ -2239,8 +2240,7 @@ class Wakka
 			else
 			{
 				// truncate long host names
-				$user = (strlen($user) > $maxhostlength) ? '<span title="'.$user.'">'.substr($user, 0, $maxhostlength).$ellipsis.'</span>' : $user;
-				$formatted_user = '<tt>'.$user.'</tt>';
+				$formatted_user = (strlen($user) > $maxhostlength) ? '<span class="user_anonymous" title="'.$user.'">'.substr($user, 0, $maxhostlength).$ellipsis.'</span>' : '<span class="user_anonymous">'.$user.'</span>';
 			}
 		}
 		else

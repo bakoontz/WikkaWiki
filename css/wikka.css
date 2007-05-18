@@ -330,6 +330,10 @@ h1 {
 	border-bottom: 1px solid #999;
 }
 
+span.user_anonymous {
+	color: #666;	
+}
+
 /* other HTML elements */
 
 acronym {
