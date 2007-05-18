@@ -1,5 +1,4 @@
 <?php
-	echo '<pre>'; print_r($config);echo '</pre>';
 /**
  * Display a configuration form to set default ACL.
  * 
@@ -30,7 +29,7 @@
 	}
 
 	// Language select
-	if (!isset($wakkaConfig['default_lang']))
+	if (!isset($config['default_lang']))
 	{
 		$config['default_lang'] = 'en';
 	}

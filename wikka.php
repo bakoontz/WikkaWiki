@@ -33,24 +33,6 @@
  * 			necessary) - #312  
  */
 
-/**
- * Include language file if it exists.
- * 
- * Language files are bundled under <tt>lang/</tt> in a folder named after their ISO 639-1 code (e.g. 'en' for English).
- */
-//sets default language
-if (!defined('DEFAULT_LANGUAGE')) define('DEFAULT_LANGUAGE', 'en');
-//check if a custom language definition is specified
-$config['default_lang'] = (isset($config['default_lang']))? $config['default_lang'] : DEFAULT_LANGUAGE;
-//check if language package exists
-if (file_exists('lang'.DIRECTORY_SEPARATOR.$config['default_lang'].DIRECTORY_SEPARATOR.$config['default_lang'].'.inc.php'))
-{
-	require_once('lang'.DIRECTORY_SEPARATOR.$config['default_lang'].DIRECTORY_SEPARATOR.$config['default_lang'].'.inc.php');
-}
-else
-{
-	die('Language file (lang'.DIRECTORY_SEPARATOR.$config['default_lang'].DIRECTORY_SEPARATOR.$config['default_lang'].'.inc.php) not found!'); //TODO i18n
-}
 ob_start();
 
 /**
@@ -107,12 +89,12 @@ if (file_exists('libs/Wakka.class.php'))
 }
 else
 {
-	die(ERROR_WAKKA_LIBRARY_MISSING);
+	die(ERROR_WAKKA_LIBRARY_MISSING); #fatalerror
 }
 // stupid version check
 if (!isset($_REQUEST))
 {
-	die(ERROR_WRONG_PHP_VERSION); //TODO replace with php version_compare
+	die(ERROR_WRONG_PHP_VERSION); //TODO replace with php version_compare #fatalerror
 }
 /** 
  * Workaround for the amazingly annoying magic quotes.
@@ -190,9 +172,8 @@ if (file_exists('locked'))
 	{
 		header('WWW-Authenticate: Basic realm="'.$wakkaConfig['wakka_name'].' Install/Upgrade Interface"');
 		header('HTTP/1.0 401 Unauthorized');
-		print STATUS_WIKI_UPGRADE_NOTICE;
-		exit;
-    }
+		die(STATUS_WIKI_UPGRADE_NOTICE); #fatalerror
+	}
 }
 
 /**
@@ -210,11 +191,31 @@ if ($wakkaConfig['wakka_version'] !== WAKKA_VERSION)
 	}
 	else
 	{
-		print '<em>'.ERROR_SETUP_FILE_MISSING.'</em>';
+		print '<em>'.ERROR_SETUP_FILE_MISSING.'</em>'; #fatalerror
 	}
-	exit;
+	die();
 }
 
+/**
+ * Include language file if it exists.
+ * 
+ * Language files are bundled under <tt>lang/</tt> in a folder named after their ISO 639-1 code (e.g. 'en' for English).
+ */
+//sets default language
+if (!defined('DEFAULT_LANGUAGE')) define('DEFAULT_LANGUAGE', 'en');
+//check if a custom language definition is specified
+$wakkaConfig['default_lang'] = (isset($wakkaConfig['default_lang']))? $wakkaConfig['default_lang'] : DEFAULT_LANGUAGE;
+//check if language package exists
+if (file_exists('lang'.DIRECTORY_SEPARATOR.$wakkaConfig['default_lang'].DIRECTORY_SEPARATOR.$wakkaConfig['default_lang'].'.inc.php'))
+{
+	require_once('lang'.DIRECTORY_SEPARATOR.$wakkaConfig['default_lang'].DIRECTORY_SEPARATOR.$wakkaConfig['default_lang'].'.inc.php');
+}
+else
+{
+	$error_message = 'Language file (lang'.DIRECTORY_SEPARATOR.$wakkaConfig['default_lang'].DIRECTORY_SEPARATOR.$wakkaConfig['default_lang'].'.inc.php) not found!'; //TODO i18n
+	#if (($wakkaConfig['default_lang'] != DEFAULT_LANGUAGE) && (file_exists('lang'.DIRECTORY_SEPARATOR.DEFAULT_LANGUAGE.DIRECTORY_SEPARATOR.DEFAULT_LANGUAGE.'.inc.php'))) {}/** @todo: Should try to fall back to default language ... */
+	die ($error_message);
+}
 /**
  * Start session.
  */
@@ -272,8 +273,8 @@ $wakka =& new Wakka($wakkaConfig);
 if (!$wakka->dblink)
 {
 	// set up template variables
-	$wiki_unavail = STATUS_WIKI_UNAVAILABLE;
-	$err_no_db = ERROR_NO_DB_ACCESS;
+	$wiki_unavail = STATUS_WIKI_UNAVAILABLE; #FatalErrorAfterLangFileIncluded
+	$err_no_db = ERROR_NO_DB_ACCESS; #FatalErrorAfterLangFileIncluded
 
 	// define template @@@ FIXME: make more structural code JW
 	$template = <<<TPLERRDBACCESS
@@ -281,8 +282,7 @@ if (!$wakka->dblink)
 TPLERRDBACCESS;
 
 	// print template
-	echo $template;
-	exit;
+	die($template);
 }
 
 /** 
