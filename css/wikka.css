@@ -832,11 +832,38 @@ fieldset#account input#logout {
 	margin-left: 0;
 }
 
-
 fieldset.usersettings {
 	display: block;
 	min-width: 600px;
 	padding: 10px;
+}
+
+fieldset.usersettings fieldset {
+	clear: left;
+	display: block;
+	width: 236px;
+	float: left;
+	margin: 0 0 10px 240px;
+}
+
+fieldset.usersettings fieldset legend {
+	margin: 0;
+}
+
+fieldset.usersettings fieldset input{
+	display: block;
+	float: left;
+	padding: 0;
+	margin: 0;
+}
+
+fieldset.usersettings fieldset label {
+	vertical-align: top;
+	margin: 0 0 0 10px;
+	display: inline;
+	text-align: left;
+	width: auto;
+	float:left;
 }
 
 fieldset.usersettings em {

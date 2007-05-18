@@ -255,12 +255,11 @@ if ($user = $this->GetUser())
 	<label for="showcomments"><?php echo SHOW_COMMENTS_LABEL ?></label>
 	<input type="hidden" name="show_comments" value="N" />
 	<input id="showcomments" type="checkbox" name="show_comments" value="Y" <?php echo $show_comments == 'Y' ? 'checked="checked"' : '' ?> />
-	<br />
-	<label for="defaultcommentdisplay"><?php echo DEFAULT_COMMENT_STYLE_LABEL ?></label>
-    <input type="hidden" name="default_comment_display" value="1"/>
-	<input id="default_comment_display" type="radio" name="default_comment_display" value="1" <?php echo ($default_comment_display==1) ? "checked" : null ?> ><?php echo COMMENT_ASC_LABEL ?></input>
-	<input id="default_comment_display" type="radio" name="default_comment_display" value="2" <?php echo ($default_comment_display==2) ? "checked" : null ?> ><?php echo COMMENT_DEC_LABEL ?></input>
-	<input id="default_comment_display" type="radio" name="default_comment_display" value="3" <?php echo ($default_comment_display==3) ? "checked" : null ?> ><?php echo COMMENT_THREADED_LABEL ?></input>
+	<fieldset><legend><?php echo DEFAULT_COMMENT_STYLE_LABEL ?></legend>
+	<input id="default_comment_flat_asc" type="radio" name="default_comment_display" value="1" <?php echo ($default_comment_display==1) ? 'checked="checked"' : '' ?> /><label for="default_comment_flat_asc"><?php echo COMMENT_ASC_LABEL ?></label><br />
+	<input id="default_comment_flat_desc" type="radio" name="default_comment_display" value="2" <?php echo ($default_comment_display==2) ? 'checked="checked"' : '' ?> /><label for="default_comment_flat_desc"><?php echo COMMENT_DEC_LABEL ?></label><br />
+	<input id="default_comment_threaded" type="radio" name="default_comment_display" value="3" <?php echo ($default_comment_display==3) ? 'checked="checked"' : '' ?> /><label for="default_comment_threaded"><?php echo COMMENT_THREADED_LABEL ?></label><br /> 
+	</fieldset>
 	<br />
 	<label for="revisioncount"><?php echo PAGEREVISION_LIST_LIMIT_LABEL ?></label>
 	<input id="revisioncount" type="text" <?php echo $revisioncount_highlight; ?> name="revisioncount" value="<?php echo $this->htmlspecialchars_ent($revisioncount) ?>" size="40" />
