@@ -33,7 +33,7 @@
 	{
 		if ($owner = $this->GetPageOwner())
 		{
-			$page_owner_link = $this->Link($owner,'','',0);
+			$page_owner_link = $this->FormatUser($owner);
 			if ($owner == "(Public)")
 			{
 				print(PUBLIC_PAGE.' '.($this->IsAdmin() ? '<a href="'.$this->Href("acls").'">'.PAGE_ACLS_EDIT_ADMIN_LINK_DESC.'</a> ::'."\n" : "::\n"));

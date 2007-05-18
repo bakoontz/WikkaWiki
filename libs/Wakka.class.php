@@ -1763,7 +1763,7 @@ class Wakka
 				$this->TrackLinkTo($tag);
 			}
 			$linkedPage = $this->LoadPage($tag);
-			return ($linkedPage ? '<a href="'.$this->Href($handler, $linkedPage['tag']).'"'.$title_attr.'>'.$text.'</a>' : '<a class="missingpage" href="'.$this->Href("edit", $tag).'" title="'.CREATE_THIS_PAGE_LINK_TITLE.'">'.$text.'</a>'); #i18n
+			return ($linkedPage ? '<a class="'.$class.'" href="'.$this->Href($handler, $linkedPage['tag']).'"'.$title_attr.'>'.$text.'</a>' : '<a class="missingpage" href="'.$this->Href("edit", $tag).'" title="'.CREATE_THIS_PAGE_LINK_TITLE.'">'.$text.'</a>'); #i18n
 		}
 		return $url ? '<a class="'.$class.'" href="'.$url.'">'.$text.'</a>' : $text;
 	}
@@ -2234,7 +2234,7 @@ class Wakka
 			if ($this->LoadUser($user))
 			{
 				// check if userpage exists and if linking is enabled
-				$formatted_user = ($this->ExistsPage($user) && ($link == 1))? $this->Link($user) : $user;
+				$formatted_user = ($this->ExistsPage($user) && ($link == 1))? $this->Link($user,'','','','','Open user profile for '.$user,'user') : '<span class="user">'.$user.'</span>'; //TODO i18n
 			}
 			else
 			{

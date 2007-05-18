@@ -152,7 +152,7 @@ if ($user = $this->GetUser())
 ?>
 	<fieldset id="account"><legend><?php echo USER_ACCOUNT_LEGEND ?></legend>
 	<span id="account_info">
-	<?php printf(USER_LOGGED_IN_AS_CAPTION, $this->Link($user['name'])); ?>
+	<?php printf(USER_LOGGED_IN_AS_CAPTION, $this->FormatUser($user['name'])); ?>
 	</span><input id="logout" name="logout" type="submit" value="<?php echo LOGOUT_BUTTON; ?>" /><!-- #353,#312-->
 	<br class="clear" />
 	</fieldset>	

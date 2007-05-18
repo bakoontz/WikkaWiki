@@ -67,7 +67,7 @@ if ($this->GetHandler() != 'edit' && $this->config['enable_rss_autodiscovery'] !
 	<?php 
 		if ($this->GetUser()) {
 			echo $this->config["logged_in_navigation_links"] ? $this->Format($this->config["logged_in_navigation_links"])." :: " : ""; 
-			printf(YOU_ARE, $this->Link($this->GetUserName()));
+			printf(YOU_ARE, $this->FormatUser($this->GetUserName()));
 		} else { 
 			echo $this->config["navigation_links"] ? $this->Format($this->config["navigation_links"]) : ""; 
 		} 

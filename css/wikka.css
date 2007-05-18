@@ -177,6 +177,11 @@ a.ext:hover {
 	padding-right: 12px;
 }
 
+a.user {
+	background: url('../images/icons/user.gif') right bottom no-repeat;
+	padding-right: 12px;
+}
+
 a.keys:hover {
 	text-decoration: none;
 	color: #333;	
