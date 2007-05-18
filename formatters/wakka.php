@@ -429,19 +429,41 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 		// escaped text
 		else if (preg_match("/^\"\"(.*)\"\"$/s", $thing, $matches))
 		{
-			$allowed_double_doublequote_html = $wakka->GetConfigValue("double_doublequote_html");
-			if ($allowed_double_doublequote_html == 'safe')
+			$ddquotes_policy = $wakka->GetConfigValue("double_doublequote_html");
+			$embedded = $matches[1];
+			if (($ddquotes_policy == 'safe') || ($ddquotes_policy == 'raw'))
 			{
-				$filtered_output = $wakka->ReturnSafeHTML($matches[1]);
-				return $filtered_output;
+				// get tags with id attributes
+				# use backref to match both single and double quotes
+				$patTagWithId = '((<[a-z][^>]*)((?<=\\s)id=("|\')(.*?)\\4)(.*?>))';
+				// with PREG_SET_ORDER we get an array for each match: easy to use with list()!
+				// we do the match case-insensitive so we catch uppercase HTML as well;
+				// SafeHTML will treat this but 'raw' may end up with invalid code!
+				$tags2 = preg_match_all('/'.$patTagWithId.'/i', $embedded, $matches2, PREG_SET_ORDER);
+				// step through code, replacing tags with ids with tags with new ('repaired') ids
+				$tmpembedded = $embedded;
+				$newembedded = '';
+				for ($i=0; $i < $tags2; $i++)
+				{
+					list( , $tag, $tagstart, $attrid, $quote, $id, $tagend) = $matches2[$i];    # $attrid not needed, just for clarity
+					$parts = explode($tag, $tmpembedded, 2); # split in two at matched tag
+					if ($id != ($newid = $wakka->makeId('embed', $id)))    # replace if we got a new value
+					{
+						$tag = $tagstart.'id='.$quote.$newid.$quote.$tagend;
+					}
+					$newembedded .= $parts[0].$tag; # append (replacement) tag to first part
+					$tmpembedded  = $parts[1]; # after tag: next bit to handle
+				}
+				$newembedded .= $tmpembedded; # add last part
 			}
-			elseif ($allowed_double_doublequote_html == 'raw')
+			switch ($ddquotes_policy)
 			{
-				return $matches[1];
-			}
-			else
-			{
-				return $wakka->htmlspecialchars_ent($matches[1]);
+				case 'safe':
+					return $wakka->ReturnSafeHTML($newembedded);
+				case 'raw':
+					return $newembedded; # may still be invalid code - 'raw' will not be corrected!
+				default:
+					return $wakka->htmlspecialchars_ent($embedded);	# display only
 			}
 		}
 		// code text
