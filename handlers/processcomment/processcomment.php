@@ -8,6 +8,8 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
  * 
+ * @author {http://wikkawiki.org/BrianKoontz Brian Koontz}
+ * 
  * @uses	Wakka::GetUserName()
  * @uses	Wakka::Href()
  * @uses	Wakka::LoadSingle()
@@ -21,11 +23,12 @@
  */
 
 // Get comment id
-$comment_id = intval(trim($_POST["comment_id"]));
+$comment_id = intval(trim($_POST['comment_id']));
 
 // Delete comment
-if($_POST['submit']==COMMENT_DELETE_BUTTON) {
-	$comment = $this->LoadSingle("select user, parent from ".$this->config["table_prefix"]."comments where id = '".$comment_id."' limit 1");
+if ($_POST['submit']==COMMENT_DELETE_BUTTON)
+{
+	$comment = $this->LoadSingle("SELECT user, parent FROM ".$this->config["table_prefix"]."comments WHERE id = '".$comment_id."' LIMIT 1");
 	$current_user = $this->GetUserName();
 
 	if ($this->UserIsOwner() || $comment["user"]==$current_user)
@@ -36,24 +39,25 @@ if($_POST['submit']==COMMENT_DELETE_BUTTON) {
 	}
 	else
 	{
-		print('<div class="page"><em class="error">'.ERROR_NO_COMMENT_DEL_ACCESS.'</em></div>'."\n");
+		echo '<div class="page"><em class="error">'.ERROR_NO_COMMENT_DEL_ACCESS.'</em></div>'."\n";
 	}
 }
 
 // Display entry area for comment
-if($_POST['submit']==COMMENT_REPLY_BUTTON ||
- $_POST['submit']==COMMENT_NEW_BUTTON) {
+if($_POST['submit']==COMMENT_REPLY_BUTTON || $_POST['submit']==COMMENT_NEW_BUTTON)
+{
 	// display comment form
 	if ($this->HasAccess('comment'))
 	{
 		$comment = '';
-		if(isset($comment_id)) {
-			$comment = $this->LoadSingle("select comment from ".$this->config["table_prefix"]."comments where id = '".$comment_id."' limit 1");
+		if(isset($comment_id))
+		{
+			$comment = $this->LoadSingle("SELECT comment FROM ".$this->config["table_prefix"]."comments WHERE id = '".$comment_id."' LIMIT 1");
 		}
 	?>
 		<div class="commentform">
 		<?php echo $this->FormOpen('processcomment'); ?>
-		<input type="hidden" name="comment_id" value="<?php echo $comment_id ?>" >
+		<input type="hidden" name="comment_id" value="<?php echo $comment_id ?>" />
 		<?php if($_POST['submit']==COMMENT_REPLY_BUTTON) { ?>
 		<label for="commentbox"><?php echo ADD_COMMENT_LABEL; ?></label><br />
 		<div class="commentparent"><?php echo $comment['comment']; ?></div>
@@ -69,14 +73,13 @@ if($_POST['submit']==COMMENT_REPLY_BUTTON ||
 }
 
 // Save comment
-if($_POST['submit']==COMMENT_ADD_BUTTON) {
-	$parent_id = intval(trim($_POST["comment_id"]));
-	if ($this->HasAccess("comment") || $this->IsAdmin())
+if ($_POST['submit']==COMMENT_ADD_BUTTON)
+{
+	$parent_id = intval(trim($_POST['comment_id']));
+	if ($this->HasAccess('comment') || $this->IsAdmin())
 	{
-		$redirectmessage = "";
-
-		$body = nl2br($this->htmlspecialchars_ent(trim($_POST["body"])));
-
+		$redirectmessage = '';
+		$body = nl2br($this->htmlspecialchars_ent(trim($_POST['body'])));
 		if (!$body)
 		{
 			$redirectmessage = ERROR_EMPTY_COMMENT;
@@ -92,7 +95,7 @@ if($_POST['submit']==COMMENT_ADD_BUTTON) {
 	}
 	else
 	{
-		print('<div class="page"><em class="error">'.ERROR_NO_COMMENT_WRITE_ACCESS.'</em></div>'."\n");
+		echo '<div class="page"><em class="error">'.ERROR_NO_COMMENT_WRITE_ACCESS.'</em></div>'."\n";
 	}
 }
 ?>
