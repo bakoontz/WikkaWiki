@@ -13,6 +13,9 @@
  * @uses		Wakka::LoadRecentlyCommented()
  * @uses		Wakka::HasAccess()
  * @uses		Wakka::LoadUser()
+ * @uses		Wakka::FormatUser()
+ * 
+ * @todo		make datetime format configurable;
  */
 
 /**
@@ -64,10 +67,10 @@ if ($comments = $this->LoadRecentlyCommented())
 			$comment_by = $comment['user'];
 			if (!$this->LoadUser($comment_by))
 			{
-				$comment_by .= WIKKA_ANONYMOUS_AUTHOR_CAPTION;
+				$comment_by .= ' '.WIKKA_ANONYMOUS_AUTHOR_CAPTION;
 			}
 			// print entry
-			echo '&nbsp;&nbsp;&nbsp;'.$commentlink.WIKKA_COMMENT_AUTHOR_DIVIDER.$comment_by.'<blockquote>'.$comment_preview.'</blockquote>'."\n";
+			echo $commentlink.WIKKA_COMMENT_AUTHOR_DIVIDER.$this->FormatUser($comment_by).'<blockquote>'.$comment_preview.'</blockquote>'."\n";
 		}
 	}
 	if ($readable == 0)

@@ -16,6 +16,7 @@
  * @uses		Wakka::GetUser()
  * @uses		Wakka::HasAccess()
  * @uses		Wakka::LoadUser()
+ * @uses		Wakka::FormatUser()
  * @uses		Wakka::htmlspecialchars_ent()
  * 
  * @todo		make datetime format configurable;
