@@ -94,6 +94,14 @@ class Wakka
 	 * @access public
 	 */
 	var $additional_headers = array();
+	/**
+	 * This value keeps track of recursion level of inclusion of the formatter wakka.php. Closing opened tags should 
+	 * not occur when a call to the function wakka2callback didn't yet finish.
+	 * 
+	 * @var integer
+	 * @access public
+	 */
+	var $formatter_recursion = 0;
 
 	/**
 	 * Constructor

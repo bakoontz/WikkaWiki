@@ -733,6 +733,7 @@ $text = str_replace("\r\n", "\n", $text);
 
 if ($this->handler == "show") $mind_map_pattern = "<map.*?<\/map>|"; else $mind_map_pattern = "";
 
+$this->formatter_recursion++; # recursion level: getting in
 $text = preg_replace_callback(
 	"/".
 	"%%.*?%%|".																				# code
@@ -755,7 +756,11 @@ $text = preg_replace_callback(
 // we're cutting the last <br />
 $text = preg_replace("/<br \/>$/","", $text);
 
-$text .= wakka2callback('closetags');
+$this->formatter_recursion--; # recursion level: getting out
+if (0 == $this->formatter_recursion) # only for "outmost" call level
+{
+	$text .= wakka2callback('closetags');
+}
 echo ($text);
 
 ?>
