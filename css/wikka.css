@@ -53,10 +53,18 @@ body {
 
 /* comments */
 
-.commentscontainer {
+/* wrapper for the whole comments block, contains the header and the actual comments */
+#comments {
+	margin: 0px;
 	background-color: #E3E3E3;
+	padding-bottom: 10px;
 }
 
+#comments form input[type=submit] {
+	font-size: 80%;
+}
+
+/* contains the comments form and the navigation bar */
 .commentsheader {
 	clear: both;
 	background-color: #E3E3E3;
@@ -68,6 +76,12 @@ body {
 	padding: 5px 0;	
 }
 
+/* wrapper for the comment lists */
+.commentscontainer {
+	background-color: #E3E3E3;
+}
+
+/* alternate color for single comments */
 .comment2 {
 	background-color: #EEEEEE;
 	padding: 5px;
@@ -82,13 +96,13 @@ body {
 	margin: 10px;
 }
 
-.commentinfo {
-	color: #AAAAAA;
-}
-
 .commentform {
 	background-color: #EEEEEE;
 	padding: 10px;
+}
+
+.commentinfo {
+	color: #AAAAAA;
 }
 
 .commentauthor {
@@ -105,10 +119,6 @@ body {
 	margin: 5px 5px 5px 5px;
 }
 
-#comments form input[type=submit] {
-	font-size: 80%;
-}
-
 /* comments navigation */
 
 div#commentsnav {
@@ -121,19 +131,19 @@ div#commentsnav {
 div#commentsnav img.icon {
 	border: 1px solid #CCC;
 	padding:3px;
-	background-color:#EEE;
+	background-color:#EFEFEF;
 	margin:1px;
 }
 
 div#commentsnav img.icon_on {
 	border: 1px solid #CCC;
 	padding:3px;
-	background-color:#DEDEDE;
+	background-color:#DDD;
 	margin:1px;
 }
 
 div#commentsnav img.icon:hover {
-	background-color:#DEDEDE;
+	background-color:#DDD;
 }
 
 /* links */
