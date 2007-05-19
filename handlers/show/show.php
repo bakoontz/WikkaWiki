@@ -193,7 +193,6 @@ function displayComments(&$obj, &$comments, $tag)
 	$is_owner = $obj->UserIsOwner();
 	$prev_level = null;
 	$threaded = 0;
-	//$flipflop = 0;
 	if($_SESSION['show_comments'][$tag] == COMMENT_ORDER_THREADED)
 		$threaded = 1;
 
@@ -211,12 +210,9 @@ function displayComments(&$obj, &$comments, $tag)
 			for($i=0; $i<$prev_level-$comment['level']+1; ++$i) {
 				echo '</div><!--closing comment level '.$i.'-->'."\n";
 			}
-			//$flipflop ^= 1;
 		}
 
-		# Alternate light/dark comment styles
-		//$flipflop ? $comment_class = "comment" : $comment_class = "comment2";
-		//$flipflop ^= 1;
+		# Alternate light/dark comment styles per level
 		$comment_class = '';
 	    if($comment['level'] % 2 == 1) {
 			$comment_class = "comment";
