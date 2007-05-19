@@ -86,10 +86,13 @@ else
 			echo '<div id="comments">'."\n";
 			// store comments display in session
 			$tag = $this->GetPageTag();
-			if (!isset($_SESSION['show_comments'][$tag]))
+            $wantComments = $this->UserWantsComments($tag);
+			if (!isset($_SESSION['show_comments'][$tag]) && $wantComments !== false)
 			{
-				$_SESSION['show_comments'][$tag] = ($this->UserWantsComments()) ? '1' : '0';
+				$_SESSION['show_comments'][$tag] = $wantComments;
 			}
+
+            # A GET comment style always overrides the SESSION comment style
 			if (isset($_GET['show_comments']))
 			{
 				switch($_GET['show_comments'])
@@ -190,10 +193,13 @@ function displayComments(&$obj, &$comments, $tag)
 	$is_owner = $obj->UserIsOwner();
 	$prev_level = null;
 	$threaded = 0;
-	$flipflop = 0;
+	//$flipflop = 0;
 	if($_SESSION['show_comments'][$tag] == COMMENT_ORDER_THREADED)
 		$threaded = 1;
 
+	?>
+	<div class="commentscontainer">
+	<?php
 	foreach ($comments as $comment)
 	{
 		# Handle legacy or non-threaded comments
@@ -205,12 +211,18 @@ function displayComments(&$obj, &$comments, $tag)
 			for($i=0; $i<$prev_level-$comment['level']+1; ++$i) {
 				echo '</div><!--closing comment level '.$i.'-->'."\n";
 			}
-			$flipflop ^= 1;
+			//$flipflop ^= 1;
 		}
 
 		# Alternate light/dark comment styles
-		$flipflop ? $comment_class = "comment" : $comment_class = "comment2";
-		$flipflop ^= 1;
+		//$flipflop ? $comment_class = "comment" : $comment_class = "comment2";
+		//$flipflop ^= 1;
+		$comment_class = '';
+	    if($comment['level'] % 2 == 1) {
+			$comment_class = "comment";
+		} else {
+			$comment_class = "comment2";
+		}
 
 		if($comment['status'] == 'deleted') {
 ?>
@@ -254,5 +266,8 @@ function displayComments(&$obj, &$comments, $tag)
 	{
 		print '</div><!--closing comment level (end)-->'."\n";
 	}
+	?>
+	</div>
+	<?php
 }
 ?>

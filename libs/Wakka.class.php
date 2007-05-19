@@ -2192,24 +2192,39 @@ class Wakka
 		$user['challenge'] = dechex(crc32(rand()));
 		$this->Query('UPDATE '.$this->config['table_prefix'].'users set `challenge` = "'.$user['challenge'].'" WHERE name = "'.mysql_real_escape_string($this->GetUserName()).'"');
 		$_SESSION['user'] = '';
+		unset($_SESSION['show_comments']);
 		$this->DeleteCookie('user_name');
 		$this->DeleteCookie('pass');
 	}
 	/**
-	 * Check if current user wants comments to be displayed by default.
+	 * Returns user comment default style.
 	 *
 	 * If the user is not logged-in, comments are hidden by default.
+     *
+     * Must test for false condition with
+     * "false===UserWantsComments()" since this function may also
+     * legally return a zero value.
 	 *
 	 * @uses	Wakka::GetUser()
-	 * @return	boolean TRUE if the user wants comments, FALSE otherwise
+     * @param   tag     Page title
+	 * @return	boolean threadtype if the user wants comments, FALSE otherwise
 	 */
-	function UserWantsComments()
+	function UserWantsComments($tag)
 	{
 		if (!$user = $this->GetUser())
 		{
 			return false;
 		}
-		return ($user['show_comments'] == 'Y');
+		if(!isset($user['show_comments'][$tag])) {
+			if(isset($user['default_comment_display'])) {
+				return $user['default_comment_display'];
+            } else if(isset($config['default_comment_display'])) {
+				return $config['default_comment_display'];
+			} else {
+				return COMMENT_ORDER_DATE_ASC;
+			}
+		}
+		return $user['show_comments'][$tag];
 	}
 	 /**
 	 * Formatter for usernames.

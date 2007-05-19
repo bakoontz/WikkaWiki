@@ -63,7 +63,7 @@ $wikiname_expanded = '<abbr title="'.WIKINAME_LONG.'">'.WIKINAME_SHORT.'</abbr>'
 $url = $this->Href();
 
 //Remember referring page if internal.
-// - Getting correct regex to fing the tag of referring page
+// - Getting correct regex to find the tag of referring page
 preg_match('/^(.*)ReferrerMarker/', $this->Href('', 'ReferrerMarker'), $match);
 $regex_referrer = '/^'.preg_quote($match[1], '/')."([^\\/\\?&]*)/";
 if (isset($_SERVER['HTTP_REFERER']) && preg_match($regex_referrer, $_SERVER['HTTP_REFERER'], $match))

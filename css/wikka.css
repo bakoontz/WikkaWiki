@@ -53,10 +53,14 @@ body {
 
 /* comments */
 
+.commentscontainer {
+	background-color: #E3E3E3;
+}
+
 .commentsheader {
 	clear: both;
 	background-color: #E3E3E3;
-	padding: 2px 10px;
+	padding: 2px 10px 0 10px;
 	border-top: 1px solid #CCCCCC;
 }
 
@@ -64,14 +68,14 @@ body {
 	padding: 5px 0;	
 }
 
-.comment {
+.comment2 {
 	background-color: #EEEEEE;
 	padding: 5px;
 	border: 1px solid #CCCCCC;
 	margin: 10px;
 }
 
-.comment2 {
+.comment {
 	background-color: #DDDDDD;
 	padding: 5px;
 	border: 1px solid #CCCCCC;

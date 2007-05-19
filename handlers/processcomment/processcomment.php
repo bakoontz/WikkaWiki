@@ -52,14 +52,14 @@ if($_POST['submit']==COMMENT_REPLY_BUTTON || $_POST['submit']==COMMENT_NEW_BUTTO
 		$comment = '';
 		if(isset($comment_id))
 		{
-			$comment = $this->LoadSingle("SELECT comment FROM ".$this->config["table_prefix"]."comments WHERE id = '".$comment_id."' LIMIT 1");
+			$comment = $this->LoadSingle("SELECT user, comment FROM ".$this->config["table_prefix"]."comments WHERE id = '".$comment_id."' LIMIT 1");
 		}
 	?>
 		<div class="commentform">
 		<?php echo $this->FormOpen('processcomment'); ?>
 		<input type="hidden" name="comment_id" value="<?php echo $comment_id ?>" />
 		<?php if($_POST['submit']==COMMENT_REPLY_BUTTON) { ?>
-		<label for="commentbox"><?php echo ADD_COMMENT_LABEL; ?></label><br />
+        <label for="commentbox"><?php printf(ADD_COMMENT_LABEL, $this->FormatUser($comment['user'])); ?></label><br />
 		<div class="commentparent"><?php echo $comment['comment']; ?></div>
 		<?php } else { ?>
 		<label for="commentbox"><?php echo NEW_COMMENT_LABEL; ?></label><br />
