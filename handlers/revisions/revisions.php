@@ -61,6 +61,8 @@ if ($this->HasAccess("read"))
 	if ($pages)
 	{
 		$output = $this->FormOpen("diff", "", "get");
+		$output .= "<fieldset>"."\n";
+		$output .= "<legend>".sprintf(REVISIONS_CAPTION, $this->Link($this->tag))."</legend>"."\n";		
 		$output .= "<table border=\"0\" cellspacing=\"0\" cellpadding=\"1\">\n";
 		$output .= "<tr>\n";
 		$output .= '<td><input type="submit" value="'.REVISIONS_SHOW_DIFFERENCES_BUTTON.'" /></td>';
@@ -77,10 +79,11 @@ if ($this->HasAccess("read"))
 			$output .= "<tr>";
 			$output .= "<td><input type=\"radio\" name=\"a\" value=\"".$page["id"]."\" ".($c == 1 ? "checked=\"checked\"" : "")." /></td>";
 			$output .= "<td><input type=\"radio\" name=\"b\" value=\"".$page["id"]."\" ".($c == 2 ? "checked=\"checked\"" : "")." /></td>";
-			$output .= '<td>'.sprintf(WIKKA_REV_WHEN_BY_WHO, '<a href="'.$this->Href('show','','time='.urlencode($page["time"])).'">'.$page['time'].'</a>', $this->FormatUser($page["user"])).' <span class="pagenote smaller">'.$note.'</span></td>';
+			$output .= '<td>'.sprintf(WIKKA_REV_WHEN_BY_WHO, '<a href="'.$this->Href('show','','time='.urlencode($page["time"])).'">'.$page['time'].'</a>', $this->FormatUser($page["user"])).((strlen($note)>0)? ' <span class="pagenote smaller">'.$note.'</span>' : '').'</td>';
 			$output .= "</tr>\n";
 		}
-		$output .= "</table><br />\n";
+		$output .= "</table>\n";
+		$output .= "</fieldset>"."\n";
 		$output .= '<input type="button" value="'.REVISIONS_RETURN_TO_NODE_BUTTON.'" onclick="document.location=\''.$this->Href('').'\';" />'."\n";
 		$oldest_revision = $this->LoadOldestRevision($this->tag);
 		if ($oldest_revision['id'] != $page['id'])

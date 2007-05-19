@@ -738,6 +738,7 @@ define('STATUS_BLACKLIST_EMPTY','Blacklist is empty.');
  * Language constant used by the {@link revisions.php revisions} (page) handler
  */
 // revisions
+define('REVISIONS_CAPTION','Revisions for %s'); // %s pagename
 define('REVISIONS_SIMPLE_DIFF','Simple Diff');
 define('REVISIONS_MORE_CAPTION','There are more revisions that were not shown here, click the button labelled %s below to view these entries'); // %S - text of REVISIONS_MORE_BUTTON
 define('REVISIONS_RETURN_TO_NODE_BUTTON','Return To Node / Cancel');
