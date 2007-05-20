@@ -11,6 +11,7 @@
  * @uses	Wakka::FormOpen()
  * @uses	Wakka::HasAccess()
  * @uses	Wakka::Href()
+ * @uses	Wakka::GetHandler()
  * @uses	Wakka::GetPageTag()
  * @uses	Wakka::GetPageTime()
  * @uses	Wakka::GetPageOwner()
@@ -25,12 +26,18 @@
  */
 
 	echo $this->FormOpen("", "TextSearch", "get"); 
-	echo $this->HasAccess("write") ? '<a href="'.$this->Href("edit").'" title="'.sprintf(WIKKA_PAGE_EDIT_LINK_TITLE,$this->GetPageTag()).'">'.FOOTER_PAGE_EDIT_LINK_DESC.'</a> ::'."\n" : "";
-	echo '<a href="'.$this->Href("history").'" title="'.PAGE_HISTORY_LINK_TITLE.'">'.PAGE_HISTORY_LINK_DESC.'</a> ::'."\n";
+	if ($this->GetHandler() != 'edit')
+	{
+		echo $this->HasAccess("write") ? '<a href="'.$this->Href("edit").'" title="'.sprintf(WIKKA_PAGE_EDIT_LINK_TITLE,$this->GetPageTag()).'">'.FOOTER_PAGE_EDIT_LINK_DESC.'</a> ::'."\n" : "";
+	}
+	if ($this->GetHandler() != 'history')
+	{
+		echo '<a href="'.$this->Href("history").'" title="'.PAGE_HISTORY_LINK_TITLE.'">'.PAGE_HISTORY_LINK_DESC.'</a> ::'."\n";
+	}
 	echo $this->GetPageTime() ? '<a href="'.$this->Href("revisions").'" title="'.PAGE_REVISION_LINK_TITLE.'">'.$this->GetPageTime().'</a> <a href="'.$this->href("revisions.xml").'" title="'.PAGE_REVISION_XML_LINK_TITLE.'"><img src="images/xml.png" width="36" height="14" style="vertical-align: middle; border: 0px;" alt="XML" /></a> ::'."\n" : "";
 
 	// if this page exists
-	if ($this->page)
+	if (($this->page) && ($this->GetHandler() != 'acls'))
 	{
 		if ($owner = $this->GetPageOwner())
 		{
