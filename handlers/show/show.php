@@ -171,7 +171,7 @@ else
 					} else {
 						$comment_ordering = COMMENT_ORDER_DATE_ASC;
 					}
-					$showcomments_text .= '[<a href="'.$this->Href('', '', 'show_comments='.$comment_ordering.'#comments').'">'.DISPLAY_COMMENTS_LABEL.'</a>]';
+					$showcomments_text = '[<a href="'.$this->Href('', '', 'show_comments='.$comment_ordering.'#comments').'">'.DISPLAY_COMMENTS_LABEL.'</a>]';
 					$comment_form_link = 1;
 				}
 

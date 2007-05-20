@@ -44,9 +44,9 @@ if ( substr_count($site_base, 'wikka.php?wakka=') > 0 ) $site_base = substr($sit
 	<link rel="icon" href="images/favicon.ico" type="image/x-icon" />
 	<link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon" />
 <?php
+$pagetag = $this->htmlspecialchars_ent($this->GetPageTag());
 if ($this->GetHandler() != 'edit' && $this->config['enable_rss_autodiscovery'] != 0) {
 	$wikiname = $this->htmlspecialchars_ent($this->GetWakkaName());
-	$pagetag = $this->htmlspecialchars_ent($this->GetPageTag());
 	$rsslink  = '	<link rel="alternate" type="application/rss+xml" title="'.sprintf(RSS_REVISIONS_TITLE,$wikiname,$pagetag).' (RSS '.RSS_REVISIONS_VERSION.')" href="'.$this->Href('revisions.xml', $this->GetPageTag()).'" />'."\n";
 	$rsslink .= '	<link rel="alternate" type="application/rss+xml" title="'.sprintf(RSS_RECENTCHANGES_TITLE,$wikiname).' (RSS '.RSS_RECENTCHANGES_VERSION.')" href="'.$this->Href('recentchanges.xml', $this->GetPageTag()).'" />'."\n";
 	echo $rsslink;	
