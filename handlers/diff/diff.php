@@ -12,7 +12,7 @@
  *
  * @package     Handlers
  * @subpackage  Page
- * @version 	$Id$
+ * @version 	$Id:diff.php 407 2007-03-13 05:59:51Z DarTar $
  * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
  * 
@@ -76,7 +76,7 @@ if ($this->HasAccess("read"))
 		$deleted = array_diff($bodyB, $bodyA);
 
 		//$output = sprintf('<h5>'.DIFF_FAST_COMPARISON_HEADER.'</h5><br />'."\n", $this->Href('', '', 'time='.urlencode($pageA['time'])), $pageA['time'], $this->Href('', '', 'time='.urlencode($pageB['time'])), $pageB['time']);
-		$head = '<h5>'.sprintf(DIFF_FAST_COMPARISON_HEADER,$linkPageA,$linkPageB).'</h5>'."\n";
+		$head = '<div class="revisioninfo">'.sprintf(DIFF_FAST_COMPARISON_HEADER,$linkPageA,$linkPageB).'</div>'."\n";
 		// TODO add legend
 
 		$output = '';
@@ -133,7 +133,7 @@ if ($this->HasAccess("read"))
 
 		$sample_addition = '<ins>'.DIFF_SAMPLE_ADDITION.'</ins>';
 		$sample_deletion = '<del>'.DIFF_SAMPLE_DELETION.'</del>';
-		$head  = '<h5>'.sprintf(DIFF_COMPARISON_HEADER,$linkPageA,$linkPageB).'</h5>'."\n";
+		$head  = '<div class="revisioninfo">'.sprintf(DIFF_COMPARISON_HEADER,$linkPageA,$linkPageB).'</div>'."\n";
 		$head .= sprintf(HIGHLIGHTING_LEGEND,$sample_addition,$sample_deletion);
 
 		$output = '';
