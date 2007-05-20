@@ -18,7 +18,7 @@
  * below : <ul>
  * <li>count : number of distinct pages linking to the wanted page,</li>
  * <li>time : date last modified of any page linking to the wanted page,</li>
- * <li>tag : the name of the wanted page, alphabetically.</li></ul></p>
+ * <li>page_tag : the name of the wanted page, alphabetically.</li></ul></p>
  * 
  * @package	Actions
  * @version $Id:wantedpages.php 369 2007-03-01 14:38:59Z DarTar $
@@ -58,9 +58,9 @@ if ((isset($vars) && is_array($vars) && isset($vars['option']) && $vars['option'
 	{
 		foreach ($pages as $page)
 		{
-			print($this->Link($page["tag"]));
+			print($this->Link($page['page_tag']));
 			if ($page['count'] > 1)
-			{
+			{ #Use LINKING_PAGES_LINK_TITLE instead of WIKKA_BACKLINKS_LINK_TITLE ?
 				print(' (<a href="'.$this->Href('backlinks', $page['page_tag']).'" title="'.sprintf(WIKKA_BACKLINKS_LINK_TITLE, $page['page_tag']).'">'.$page['count']."</a>)<br />\n");
 			}
 			else

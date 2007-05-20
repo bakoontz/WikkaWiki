@@ -489,6 +489,7 @@ define('SORTING_NUMBER_LABEL','Sorting #%d:');
 define('SORTING_DESC_LABEL','desc');
 define('OK_BUTTON','   OK   ');
 define('NO_WANTED_PAGES','No wanted pages. Good!');
+define('WIKKA_BACKLINKS_LINK_TITLE','Click to view all pages linking to %s'); // %s page name 
 /**#@-*/
 
 
