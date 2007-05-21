@@ -1339,7 +1339,8 @@ class Wakka
 		}
 		if ($title)
 		{
-			return strip_tags($this->Format($title));				# fix for forced links in heading
+			$title = strip_tags($this->Format($title));				# fix for forced links in heading
+			return trim($title);				# trim spaces #500
 		}
 		else
 		{
