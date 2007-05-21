@@ -31,7 +31,7 @@ $xml = '<?xml version="1.0" encoding="'.I18N_ENCODING_UTF8.'"?>'."\n";
 $xml .= '<rss version="'.RSS_REVISIONS_VERSION.'">'."\n";
 $xml .= "<channel>\n";
 $xml .= "<title>".$this->GetConfigValue("wakka_name")." - ".$this->tag."</title>\n";
-$xml .= "<link>".$this->GetConfigValue("base_url").$this->tag."</link>\n";
+$xml .= "<link>".$this->Href()."</link>\n";
 $xml .= '<description>'.sprintf(RECENTCHANGES_LABEL, $this->GetConfigValue('wakka_name').'/'.$this->tag)."</description>\n";
 $xml .= '<language>'.I18N_LANG."</language>\n";
 

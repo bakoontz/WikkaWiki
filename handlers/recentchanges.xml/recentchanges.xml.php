@@ -22,6 +22,7 @@
  * @uses	Wakka::Href()
  * @uses	Wakka::htmlspecialchars_ent()
  * @uses	Wakka::LoadRecentlyChanged()
+ * @uses	Wikka::StaticHref()
  *
  * @todo	move some defaults to wiki configuration files
  * @todo	add flexible filtering support
@@ -52,7 +53,7 @@ define('FEED_DEFAULT_ITEMS_LIMIT', 20); #default number of items to display
 
 //stylesheets & images
 define('FEED_CSS',"xml.css");
-define('FEED_IMAGE_PATH',"/images/wikka_logo.jpg");
+define('FEED_IMAGE_PATH', $this->StaticHref('images/wikka_logo.jpg'));
 
 //i18n strings
 define('FEED_TITLE',"%s - recently changed pages");
@@ -83,17 +84,17 @@ $rss = new UniversalFeedCreator();
 $rss->useCached(); //TODO: make this configurable
 $rss->title = sprintf(FEED_TITLE, $this->config['wakka_name']); 
 $rss->description = sprintf(FEED_DESCRIPTION, $this->config['wakka_name']); 
-$rss->cssStyleSheet = $this->config['base_url'].'css/'.FEED_CSS;
+$rss->cssStyleSheet = $this->StaticHref('css/'.FEED_CSS);
 $rss->descriptionTruncSize = FEED_DESCRIPTION_TRUNCATE_SIZE; 
 $rss->descriptionHtmlSyndicated = FEED_DESCRIPTION_HTML; 
-$rss->link = $this->config['base_url'].$this->config['root_page']; 
+$rss->link = $this->Href('', $this->config['root_page']); 
 $rss->syndicationURL = $this->Href($this->method,'','f='.$f); 
 
 //create feed image
 $image = new FeedImage(); 
 $image->title = FEED_IMAGE_TITLE;
 $image->url = $PHP_SELF.FEED_IMAGE_PATH;
-$image->link = $this->config['base_url'].$this->config['root_page'];  //FIXME
+$image->link = $this->Href('', $this->config['root_page']);
 $image->description = FEED_IMAGE_DESCRIPTION;
 $image->descriptionTruncSize = FEED_DESCRIPTION_TRUNCATE_SIZE;
 $image->descriptionHtmlSyndicated = FEED_DESCRIPTION_HTML;

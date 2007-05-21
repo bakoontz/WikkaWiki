@@ -1777,6 +1777,23 @@ class Wakka
 		}
 		return $url ? '<a class="'.$class.'" href="'.$url.'">'.$text.'</a>' : $text;
 	}
+	/**
+	 * Create a href for a static file.
+	 * 
+	 * It takes a parameter $filename, the path of the static file relative to the root of the Wikka installation,
+	 * and returns a string representing a standard URL or URI scheme. This function should be used everywhere a static 
+	 * file should be attached to a wikkapage inside href, src parameters of XHTML, or in image in XML/RSS.
+	 * @param string $filename 
+	 * @access public
+	 * @return string a standardized URL or URI
+	 */
+	function StaticHref($filename)
+	{
+		$result = $this->Href('handler', 'pagename');
+		$result = str_replace('wikka.php?wakka=', '', $result);
+		$result = str_replace('pagename/handler', $filename, $result);
+		return ($result);
+	}
 
 	// function PregPageLink($matches) { return $this->Link($matches[1]); }
 	/**

@@ -7,6 +7,15 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
  * 
+ * @uses Config::$base_url
+ * @uses Config::$enable_rss_autodiscovery
+ * @uses Config::$logged_in_navigation_links
+ * @uses Config::$meta_description
+ * @uses Config::$meta_keywords
+ * @uses Config::$navigation_links
+ * @uses Config::$root_page
+ * @uses Config::$stylesheet
+ * @uses Config::$wakka_name
  * @uses	Wakka::GetRedirectMessage()
  * @uses	Wakka::GetUser()
  * @uses	Wakka::GetConfigValue()
@@ -16,6 +25,7 @@
  * @uses	Wakka::Href()
  * @uses	Wakka::htmlspecialchars_ent()
  * @uses	Wakka::Format()
+ * @uses	Wakka::StaticHref()
  *
  * @todo Move rss autodiscovery to handlers/show/show.php
  */
@@ -28,7 +38,6 @@ if (!defined('RSS_RECENTCHANGES_VERSION')) define('RSS_RECENTCHANGES_VERSION','0
 
 $message = $this->GetRedirectMessage();
 $site_base = $this->GetConfigValue("base_url");
-if ( substr_count($site_base, 'wikka.php?wakka=') > 0 ) $site_base = substr($site_base,0,-16);
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
@@ -39,10 +48,10 @@ if ( substr_count($site_base, 'wikka.php?wakka=') > 0 ) $site_base = substr($sit
 	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
 	<meta name="keywords" content="<?php echo $this->GetConfigValue("meta_keywords") ?>" />
 	<meta name="description" content="<?php echo $this->GetConfigValue("meta_description") ?>" />
-	<link rel="stylesheet" type="text/css" href="css/<?php echo $this->GetConfigValue("stylesheet") ?>" />
-	<link rel="stylesheet" type="text/css" href="css/print.css" media="print" />
-	<link rel="icon" href="images/favicon.ico" type="image/x-icon" />
-	<link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon" />
+	<link rel="stylesheet" type="text/css" href="<?php echo $this->StaticHref('css/'.$this->GetConfigValue('stylesheet')); ?>" />
+	<link rel="stylesheet" type="text/css" href="<?php echo $this->StaticHref('css/print.css'); ?>" media="print" />
+	<link rel="icon" href="<?php echo $this->StaticHref('images/favicon.ico'); ?>" type="image/x-icon" />
+	<link rel="shortcut icon" href="<?php echo $this->StaticHref('images/favicon.ico') ?>" type="image/x-icon" />
 <?php
 $pagetag = $this->htmlspecialchars_ent($this->GetPageTag());
 if ($this->GetHandler() != 'edit' && $this->config['enable_rss_autodiscovery'] != 0) {
