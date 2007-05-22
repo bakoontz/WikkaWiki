@@ -9,6 +9,7 @@
  * 
  * @uses	Wakka::cleanUrl()
  * @uses	Wakka::htmlspecialchars_ent()
+ * @uses	Wakka::StaticHref()
  */
 
 if (!defined('FREEMIND_PROJECT_URL')) define('FREEMIND_PROJECT_URL', 'http://freemind.sourceforge.net/');
@@ -17,7 +18,8 @@ if (!defined('SAMPLE_SYNTAX_URL')) define('SAMPLE_SYNTAX_URL','http://example.co
 if (!defined('SAMPLE_SYNTAX1')) define('SAMPLE_SYNTAX1','{{mindmap '.SAMPLE_SYNTAX_URL.'}}');
 if (!defined('SAMPLE_SYNTAX2')) define('SAMPLE_SYNTAX2','{{mindmap url="'.SAMPLE_SYNTAX_URL.'"}}');
 
-
+//Initialization
+$mm_url_archive = $this->StaticHref('3rdparty/plugins/freemind/freemindbrowser.jar');
 // get action input
 $mindmap_url = $vars['url'];
 if ((!$mindmap_url && !$height) && $wikka_vars)
@@ -39,7 +41,7 @@ if ($mindmap_url)
 
 	$mm_download_link = '<a href="'.$mindmap_url.'">'.MM_DOWNLOAD_LINK_DESC.'</a>';
 	$mm_edit = sprintf(MM_EDIT,$freemind_link);
-	$mm_url_fullscreen = "3rdparty/plugins/freemind/fullscreen.php?url=$mindmap_url";
+	$mm_url_fullscreen = $this->StaticHref('3rdparty/plugins/freemind/fullscreen.php?url='.($mindmap_url)); //todo: use urlencode here.
 	$mm_fullscreen_link = '<a href="'.$mm_url_fullscreen.'" onclick="return popup(this,\'fullmindmap\')">'.MM_FULLSCREEN_LINK_DESC.'</a>';
 
 	// define template
@@ -62,7 +64,7 @@ if ($mindmap_url)
 		}
 	//-->
 	</script>
-	<applet code="freemind.main.FreeMindApplet.class" archive="3rdparty/plugins/freemind/freemindbrowser.jar" width="100%" height="$height">
+	<applet code="freemind.main.FreeMindApplet.class" archive="{$mm_url_archive}" width="100%" height="$height">
 		<param name="type" value="application/x-java-applet;version=1.4" />
 		<param name="scriptable" value="false" />
 		<param name="modes" value="freemind.modes.browsemode.BrowseMode" />
