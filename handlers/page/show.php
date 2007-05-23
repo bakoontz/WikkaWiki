@@ -2,7 +2,7 @@
 <?php
 
 // constant section
-define('ERROR_NO_READ_ACCESS', 'You aren't allowed to read this page.');
+define('ERROR_NO_READ_ACCESS', "You aren't allowed to read this page.");
 
 if (!$this->HasAccess("read"))
 {
@@ -12,7 +12,7 @@ else
 {
 	if (!$this->page)
 	{
-		print("<p>This page doesn't exist yet. Maybe you want to <a href=\"".$this->Href("edit")."\">create</a> it?</p></div>");
+		echo '<p>This page doesn\'t exist yet. Maybe you want to <a href="'.$this->Href('edit').'">create</a> it?</p></div>';
 	}
 	else
 	{
