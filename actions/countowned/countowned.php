@@ -8,14 +8,12 @@
  * @filesource
  * 
  * @uses	Wakka::GetUserName()
- * @uses	Wakka::Query()
+ * @uses	Wakka::getCount()
  * @uses	Wakka::Link()
  */
 
-$str = 'SELECT COUNT(*) FROM '.$this->config["table_prefix"].'pages WHERE `owner` ';
-$str .= "= '" . $this->GetUserName() . "' AND `latest` = 'Y'";
-$countquery = $this->Query($str);
-$count  = mysql_result($countquery, 0);
+$where = "`owner` = '".mysql_real_escape_string($this->GetUserName())."' AND `latest` = 'Y'";
+$count = $this->getCount('pages', $where);
 echo $this->Link('MyPages', '', $count,'','', DISPLAY_MYPAGES_LINK_TITLE);
 
 ?>

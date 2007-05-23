@@ -7,11 +7,12 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
  * 
- * @uses	Wakka::LoadSingle()
+ * @uses	Wakka::getCount()
  * @uses	Wakka::Link()
  */
 
-$pagedata = $this->LoadSingle("SELECT count(*) as num FROM ".$this->config["table_prefix"]."pages WHERE latest = 'Y'");
-echo $this->Link('PageIndex', '', $pagedata['num'],'','',INDEX_LINK_TITLE);
+$where = "`latest` = 'Y'";
+$count = $this->getCount('pages', $where);
+echo $this->Link('PageIndex', '', $count, '', '', INDEX_LINK_TITLE);
 
 ?>

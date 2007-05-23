@@ -7,9 +7,8 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
  * 
- * @uses	Wakka::LoadSingle()
+ * @uses	Wakka::getCount()
  */ 
 
-$userdata = $this->LoadSingle("SELECT count(*) as num FROM ".$this->config["table_prefix"]."users ");
-echo $userdata["num"];
+echo $this->getCount('users');
 ?>

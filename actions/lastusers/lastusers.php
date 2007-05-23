@@ -8,11 +8,13 @@
  * @filesource
  * 
  * @uses	Wakka::LoadAll()
- * @uses	Wakka::LoadSingle()
+ * @uses	Wakka::getCount()
  * @uses	Wakka::Link()
  * 
  * @todo	needs to be rewritten following coding guidelines;
  */
+if (!isset($stat)) $stat = 0;
+if (!isset($max)) $max = 0;
 
 if ($stat===0) $limit = 1000;
 else $limit = 100;
@@ -32,10 +34,17 @@ $htmlout = '<table class="wikka">'."\n".
 
 foreach($last_users as $user)
 {
- $htmlout .= "  <tr>\n";
- if ($stat!=="0") $num = $this->LoadSingle("SELECT COUNT(*) AS n FROM ".$this->config["table_prefix"]."pages WHERE owner='".$user["name"]."' AND latest = 'Y'");
- $htmlout .= "    <td>".$this->Link($user["name"])."</td>\n    <td style=\"text-align: right;\">".(($stat !== "0")? $num['n'] : '')."</td>\n    <td><tt>".$user["signuptime"]."</tt></td>\n";
- $htmlout .= "  </tr>\n";
+	$htmlout .= "  <tr>\n";
+	if (0 !== $stat)
+	{
+		$where = "`owner` = '".mysql_real_escape_string($user['name'])."' AND `latest` = 'Y'";
+		$htmlout .= "    <td>".$this->Link($user['name'])."</td>\n    <td>"." . . . . . (".$this->getCount('pages', $where).")"."</td>\n    <td>(".$user['signuptime'].")</td>\n";
+	}
+	else
+	{
+		$htmlout .= "    <td>".$this->Link($user['name'])."</td>\n    <td></td>\n    <td>(".$user['signuptime'].")</td>\n";
+	}
+	$htmlout .= "  </tr>\n";
 }
 
 $htmlout .= "</table>\n";

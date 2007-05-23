@@ -186,6 +186,30 @@ class Wakka
 		return $data;
 	}
 	/**
+	 * Generic 'count' query.
+	 *
+	 * Get a count of the number of records in a given table that would be matched
+	 * by the given (optional) WHERE criteria. Only a single table can be queried.
+	 *
+	 * @access	 public
+	 * @uses	 Wakka::Query()
+	 *
+	 * @param	 string	 $table	 required: (logical) table name to query;
+	 *         prefix will be automatically added
+	 * @param	 string	 $where	 optional: criteria to be specified for a WHERE clause;
+	 *         do not include WHERE
+	 * @return	 integer	 number of matches returned by MySQL
+	 */
+	function getCount($table, $where='') # JW 2005-07-16
+	{
+		// build query
+		$where = ('' != $where) ? ' where '.$where : '';
+		$query = 'select count(*) from '.$this->GetConfigValue('table_prefix').$table.$where;
+
+		// get and return the count as an integer
+		return (int)mysql_result($this->Query($query),0);
+	}
+	/**
 	 * Check if the MySQL-Version is higher or equal to a given one.
 	 *
 	 * @param	integer $major mandatory:
@@ -1348,23 +1372,16 @@ class Wakka
 	 * @version		1.0
 	 *
 	 * @access		public
-	 * @uses		Query()
+	 * @uses		Wakka::getCount()
 	 *
 	 * @param		string  $page  page name to check
 	 * @return		boolean  TRUE if page exists, FALSE otherwise
 	 */
 	function ExistsPage($page)
 	{
-		$count = 0;
-		$query = 'SELECT COUNT(tag)
-					FROM '.$this->config['table_prefix'].'pages
-					WHERE tag="'.mysql_real_escape_string($page).'"';
-		if ($r = $this->Query($query))
-		{
-			$count = mysql_result($r,0);
-			mysql_free_result($r);
-		}
-		return ($count > 0) ? TRUE : FALSE;
+		$where = "`tag` = '".mysql_real_escape_string($page)."'";
+		$count = $this->getCount('pages', $where);
+		return ($count > 0);
 	}
 
 	/**
@@ -2467,13 +2484,13 @@ class Wakka
 	/**
 	 * Count the undeleted comments for a (given) page.
 	 *
-	 * @uses	Wakka::LoadSingle()
+	 * @uses	Wakka::getCount()
 	 * @param	string $tag mandatory: name of the page
 	 * @return	integer Count of comments 
 	 */
-	function CountComments($tag) {
-			$data = $this->LoadSingle("SELECT count(*) FROM ".$this->config["table_prefix"]."comments WHERE page_tag = '".mysql_real_escape_string($tag)."' and (status IS NULL or status != 'deleted')"); 
-			return $data['count(*)'];
+	function CountComments($tag)
+	{
+		return $this->getCount('comments', "page_tag = '".mysql_real_escape_string($tag)."' and (status IS NULL or status != 'deleted')"); 
 	}
 
 	/**
@@ -2483,9 +2500,9 @@ class Wakka
 	 * @param	string $tag mandatory: name of the page
 	 * @return	integer Count of comments 
 	 */
-	function CountAllComments($tag) {
-			$data = $this->LoadSingle("SELECT count(*) FROM ".$this->config["table_prefix"]."comments WHERE page_tag = '".mysql_real_escape_string($tag)."'"); 
-			return $data['count(*)'];
+	function CountAllComments($tag)
+	{
+		return $this->getCount('comments', 'page_tag = \''.mysql_real_escape_string($tag)."'"); 
 	}
 
 	/**

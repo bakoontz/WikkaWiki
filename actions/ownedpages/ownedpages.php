@@ -10,19 +10,14 @@
  * @author Chris Tessmer
  * 
  * @uses	Wakka::GetUserName()
- * @uses	Wakka::Query()
+ * @uses	Wakka::getCount()
  */
 
-$str  = 'SELECT COUNT(*) FROM '.$this->config["table_prefix"].'pages WHERE `owner` ';
-$str .= "= '" . $this->GetUserName() . "' AND `latest` = 'Y'";
-$countQuery = $this->Query( $str );
+$whereOwner = "`owner` = '" . $this->GetUserName() . "' AND `latest` = 'Y'";
+$whereTotal   = "`latest` = 'Y'";
+$count = $this->getCount('pages', $whereOwner);
+$total = $this->getCount('pages',$whereTotal);
 
-// get the total # of pages
-$str = 'SELECT COUNT(*) FROM '.$this->config["table_prefix"].'pages WHERE `latest` = \'Y\' ';
-$totalQuery = $this->Query( $str );    
-
-$count   = mysql_result($countQuery, 0); 
-$total   = mysql_result($totalQuery, 0); 
 $percent = round( ($count/$total )*100, 2 ) ;
 
 $disp_count = '<strong>'.$count.'</strong>';

@@ -10,6 +10,7 @@
  * @author	Chris Tessmer (19 Dec 2002)
  * 
  * @uses	Wakka::Query()
+ * @uses	Wakka::getCount()
  * @uses	Wakka::Format()
  */
 
@@ -19,9 +20,8 @@ $str .= $this->config["table_prefix"].'pages ';
 $str .= "WHERE `name` = `owner` AND `latest` = 'Y' GROUP BY name ORDER BY cnt DESC;";
 $rankQuery = $this->Query($str);
 
-$str = 'SELECT COUNT(*) FROM '.$this->config["table_prefix"].'pages WHERE `latest` = \'Y\' ';
-$totalQuery = $this->Query($str);
-$total  = mysql_result($totalQuery, 0);
+$where = "`latest` = 'Y'";
+$total = $this->getCount('pages', $where);
 
 print("<blockquote><table>");
 
