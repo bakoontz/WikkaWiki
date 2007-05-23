@@ -21,7 +21,7 @@
  */
 
 if (!defined('SEARCH_MAX_SNIPPETS')) define('SEARCH_MAX_SNIPPETS', 3);
-if (!defined('SEARCH_MYSQL_IDENTICAL_CHARS')) define('SEARCH_MYSQL_IDENTICAL_CHARS', 'aàáâã,eèéêë,iìîï,oòóôõ,uùúû,cç,nñ,yý');
+if (!defined('SEARCH_MYSQL_IDENTICAL_CHARS')) define('SEARCH_MYSQL_IDENTICAL_CHARS', 'aÃ Ã¡Ã¢Ã£,eÃ¨Ã©ÃªÃ«,iÃ¬Ã®Ã¯,oÃ²Ã³Ã´Ãµ,uÃ¹ÃºÃ»,cÃ§,nÃ±,yÃ½');
 
 // init
 $result_page_list = '';
@@ -31,15 +31,12 @@ $phrase = (isset($_GET['phrase'])) ? stripslashes(trim($_GET['phrase'])) : ''; #
 $phrase_disp = $this->htmlspecialchars_ent($phrase);
 
 // display form
+// TODO i18n
 ?>
 <?php echo $this->FormOpen("", "", "get"); ?>
-<table border="0" cellspacing="0" cellpadding="0">
-	<tr>
-		<td><?php echo SEARCH_FOR; ?>:&nbsp;</td>
-		<!--<td><input name="phrase" size="40" value="<?php if (isset($_REQUEST['phrase'])) echo $this->htmlspecialchars_ent(stripslashes($_REQUEST['phrase'])); ?>" /> <input type="submit" value="Search"/></td>-->
-		<td><input name="phrase" size="40" value="<?php echo $phrase_disp ?>" /> <input type="submit" value="Search"/></td><!--i18n-->
-	</tr>
-</table><br />
+<fieldset><legend><?php echo SEARCH_FOR; ?></legend>
+<input name="phrase" size="40" value="<?php echo $phrase_disp ?>" /> <input type="submit" value="Search" />
+</fieldset>
 <?php echo $this->FormClose(); ?>
 
 <?php
@@ -79,7 +76,7 @@ if ('' !== $phrase)
 		// BEWARE: $phrase_re must not contain .*, that could replace replacement terms like </span>
 		// We ensure we never replace the < and > characters
 		$phrase_re = preg_replace(array('/^ +| +$/', '/ \*/', '/\*/', '/ +/'), array('', '|', '[^\s<>]*', '|'), $phrase_re);
-		// Let preg_match find rêve when searching for reve
+		// Let preg_match find rï¿½ve when searching for reve
 		$pattern    = '/['.str_replace(',', ']/i,/[', SEARCH_MYSQL_IDENTICAL_CHARS).']/i';
 		$replacement = '['.str_replace(',', '],[', SEARCH_MYSQL_IDENTICAL_CHARS).']';
 		$phrase_re = preg_replace(explode(',', $pattern), explode(',', $replacement) , $phrase_re);
