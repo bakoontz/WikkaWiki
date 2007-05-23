@@ -673,7 +673,7 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 			}
 		}
 		// indented text
-		elseif (preg_match("/\n([\t~]+)(-|&|([0-9a-zA-Z]+)\))?(\n|$)/s", $thing, $matches))
+		elseif (preg_match("/(^|\n)([\t~]+)(-|&|([0-9a-zA-Z]+)\))?(\n|$)/s", $thing, $matches))
 		{
 			// new line
 			$result .= ($br ? "<br />\n" : "\n");
@@ -682,7 +682,7 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 			$br = 0;
 
 			// find out which indent type we want
-			$newIndentType = $matches[2];
+			$newIndentType = $matches[3];
 			
 			if (!$newIndentType) { $opener = "<div class=\"indent\">"; $closer = "</div>"; $br = 1; }
 			elseif ($newIndentType == "-") { $opener = "<ul><li>"; $closer = "</li></ul>"; $li = 1; }
@@ -691,7 +691,7 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 			else { $newIndentType = 'a'; $opener = '<ol type="a"><li>'; $closer = '</li></ol>'; $li = 1; }
 
 			// get new indent level
-			$newIndentLevel = strlen($matches[1]);
+			$newIndentLevel = strlen($matches[2]);
 			if (($newIndentType != $curIndentType) && ($oldIndentLevel > 0))
 			{
 				for (; $oldIndentLevel > 0; $oldIndentLevel --)
@@ -848,7 +848,7 @@ $text = preg_replace_callback(
 	"\b[a-z]+:\/\/\S+|".																	# URL
 	"\*\*|\'\'|\#\#|\#\%|@@|::c::|\>\>|\<\<|&pound;&pound;|&yen;&yen;|\+\+|__|<|>|\/\/|".	# Wiki markup
 	"======|=====|====|===|==|".															# headings
-	"\n[\t~]+(-(?!-)|&|([0-9]+|[a-zA-Z]+)\))?|".														# indents and lists
+	"(^|\n)[\t~]+(-(?!-)|&|([0-9]+|[a-zA-Z]+)\))?|".														# indents and lists
 	"\|(?:[^\|])?\|(?:\(.*?\))?(?:\{[^\{\}]*?\})?(?:\n)?|".									# Simple Tables	
 	"\{\{.*?\}\}|".																			# action
 	"\b[A-ZÄÖÜ][A-Za-zÄÖÜßäöü]+[:](?![=_])\S*\b|".											# InterWiki link
