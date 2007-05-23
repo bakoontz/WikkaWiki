@@ -276,7 +276,7 @@ echo "Hello, World!";
 |=|T-SQL||##tsql##|=|Text||##text##|=|thinBasic||##thinbasic##||
 |=|Unoidl||##idl##|=|VB.NET||##vbnet##|=|VHDL||##vhdl##||
 |=|Visual BASIC||##vb##|=|Visual Fox Pro||##visualfoxpro##|=|""WinBatch""||##winbatch##||
-|=|XML||##xml##||ZiLOG Z80 Assembler||##z80##|| || ||
+|=|XML||##xml##|=|""ZiLOG"" Z80 Assembler||##z80##|=| || ||
 
 
 ===13. Mindmaps===
