@@ -77,7 +77,7 @@ else
 		}
 
 		// display page
-		echo $this->Format($this->page['body'], 'wakka');
+		echo $this->Format($this->page['body'], 'wakka', 'page');
 		echo "\n".'</div><!--closing page content-->'."\n\n";
 
 		if ($this->GetConfigValue('hide_comments') != 1)

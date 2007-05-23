@@ -191,7 +191,7 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 		{
 			$output .= $preview_form;
 		}
-		$output .= $this->Format($body);
+		$output .= $this->Format($body, 'wakka', 'page');
 		if ($buttons_position == 'bottom')
 		{
 			$output .= $preview_form;

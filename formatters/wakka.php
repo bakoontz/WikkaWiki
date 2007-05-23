@@ -29,7 +29,112 @@ if (!defined('PATTERN_LINE_NUMBER')) define('PATTERN_LINE_NUMBER', '(;(\d*?))?')
 if (!defined('PATTERN_FILENAME')) define('PATTERN_FILENAME', '(;([^\)\x01-\x1f\*\?\"<>\|]*)([^\)]*))?');
 if (!defined('PATTERN_CLOSE_BRACKET')) define('PATTERN_CLOSE_BRACKET', '\)');
 if (!defined('PATTERN_CODE')) define('PATTERN_CODE', '(.*)');
+/**
+ * Match heading tags. 
+ * - $result[0] : the entire node representation, including the closing tag
+ * - $result[1] : the nodename (h1, h2, .. , h6)
+ * - $result[2] : the heading attribute, ie all the strings after the tagname and before the first ">" character
+ * - $result[3] : the content of the heading tag, just like the innerHTML method in DOM.
+ * This pattern requires that the text applied into it is valid XHTML: it should use lowercase in the tagName,
+ * it should not contain the character ">" inside attributes.
+ */
+if (!defined('PATTERN_MATCH_HEADINGS')) define('PATTERN_MATCH_HEADINGS', '#^<(h[1-6])(.*?)>(.*?)</\\1>$#s');
+/**
+ * Replace img tags having an alt attribute with that value of the alt attribute, trimmed. Img tags missing an alt
+ * attribute are not replaced.
+ * - $result[0] : the entire img tag
+ * - $result[1] : If the alt attribute exists, this holds the single character used to delimit the alt string.
+ * - $result[2] : The content of the alt attribute, after it has been trimmed, if the attribute exists.
+ */
+if (!defined('PATTERN_REPLACE_IMG_WITH_ALTTEXT')) define('PATTERN_REPLACE_IMG_WITH_ALTTEXT', '/<img[^>]*(?<=\\s)alt=("|\')\s*(.*?)\s*\\1.*?>/');
+/**
+ * Match id in attributes.
+ * - $result[0] : a string like <code>id="h1_id"</code>, starting with the letters id=, and followed by a string
+ *   enclosed in either single or double quote. It doesn't match if the term id is not preceded by any space character.
+ * - $result[1] : The single character used to enclose the string, either a single or a double quote.
+ * - $result[2] : The content of the string, ie the value of the id attribute.
+ */
+if (!defined('PATTERN_MATCH_ID_ATTRIBUTES')) define('PATTERN_MATCH_ID_ATTRIBUTES', '/(?<=\\s)id=("|\')(.*?)\\1/');
+/**
+ * The string $format_option is a semicolon separated list of string, including the word `page'
+ */
+if (!defined('PATTERN_MATCH_PAGE_FORMATOPTION')) define('PATTERN_MATCH_PAGE_FORMATOPTION', '/(^|;)page(;|$)/');
 
+if (($format_option) && preg_match(PATTERN_MATCH_PAGE_FORMATOPTION, $format_option))
+{
+	if (!function_exists('wakka3callback'))
+	{
+		/**
+	 * "Afterburner" formatting: extra handling of already-generated XHTML code.
+	 *
+	 * 1.
+	 * Ensure every heading has an id, either specified or generated. (May be
+	 * extended to generate section TOC data.)
+	 * If an id is specified, that is used without any modification.
+	 * If no id is specified, it is generated on the basis of the heading context:
+	 * - any image tag is replaced by its alt text (if specified)
+	 * - all tags are stripped
+	 * - all characters that are not valid in an id are stripped (except whitespace)
+	 * - the resulting string is then used by makedId() to generate an id out of it
+	 *
+	 * @access	private
+	 * @uses	Wakka::makeId()
+	 *
+	 * @param	array	$things	required: matches of the regex in the preg_replace_callback
+	 * @return	string	heading with an id attribute
+	 */
+		function wakka3callback($things)
+		{
+			global $wakka;
+			$thing = $things[1];
+	
+			// heading
+			if (preg_match(PATTERN_MATCH_HEADINGS, $thing, $matches))	# note that we don't match headings that are not valid XHTML!
+			{
+				list($h_element, $h_tagname, $h_attribs, $h_heading) = $matches;
+	
+				if (preg_match(PATTERN_MATCH_ID_ATTRIBUTES, $h_attribs))			# use backref to match both single and double quotes
+				{
+					// existing id attribute: nothing to do (assume already treated as embedded code)
+					// @@@ we *may* want to gather ids and heading text for a TOC here ...
+					// heading text should then get partly the same treatment as when we're creating ids:
+					// at least replace images and strip tags - we can leave entities etc. alone - so we end up with
+					// plain text-only
+					// do this if we have a condition set to generate a TOC
+					return $h_element;
+				}
+				else
+				{
+					// no id: we'll have to create one
+					$tmpheading = trim($h_heading);
+					// first find and replace any image having an alt attribute with its alt text
+					$headingtext = preg_replace(PATTERN_REPLACE_IMG_WITH_ALTTEXT, '\\2', $tmpheading);
+					// remove all other tags, including img tags that missed an alt attribute
+					$headingtext = strip_tags($headingtext);
+					// @@@ this all-text result is usable for a TOC!!!
+					// do this if we have a condition set to generate a TOC
+	
+					if (function_exists('html_entity_decode'))
+					{
+						// replace entities that can be interpreted
+						// use default charset ISO-8859-1 because other chars won't be valid for an id anyway
+						$headingtext = html_entity_decode($headingtext, ENT_NOQUOTES);
+					}
+					// remove any remaining entities (so we don't end up with strange words and numbers in the id text)
+					$headingtext = preg_replace('/&[#]?.+?;/','',$headingtext);
+					// finally remove non-id characters (except whitespace which is handled by makeId())
+					$headingtext = preg_replace('/[^A-Za-z0-9_:.-\s]/', '', $headingtext);
+					// now create id based on resulting heading text
+					$h_id = $wakka->makeId('hn', $headingtext);
+	
+					// rebuild element, adding id
+					return '<'.$h_tagname.$h_attribs.' id="'.$h_id.'">'.$h_heading.'</'.$h_tagname.'>';
+				}
+			}
+			// other elements to be treated go here (tables, images, code sections...)
+		}
+	}
+}
 // Note: all possible formatting tags have to be in a single regular expression for this to work correctly.
 
 if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix!
@@ -733,7 +838,6 @@ $text = str_replace("\r\n", "\n", $text);
 
 if ($this->handler == "show") $mind_map_pattern = "<map.*?<\/map>|"; else $mind_map_pattern = "";
 
-$this->formatter_recursion++; # recursion level: getting in
 $text = preg_replace_callback(
 	"/".
 	"%%.*?%%|".																				# code
@@ -756,10 +860,16 @@ $text = preg_replace_callback(
 // we're cutting the last <br />
 $text = preg_replace("/<br \/>$/","", $text);
 
-$this->formatter_recursion--; # recursion level: getting out
-if (0 == $this->formatter_recursion) # only for "outmost" call level
+if ($format_option && preg_match(PATTERN_MATCH_PAGE_FORMATOPTION, $format_option))
 {
 	$text .= wakka2callback('closetags');
+	$idstart = getmicrotime();
+	$text = preg_replace_callback(
+		'#('.
+		'<h[1-6].*?>.*?</h[1-6]>'.
+		// other elements to be treated go here
+		')#ms','wakka3callback', $text);
+	printf('<!-- Header id generation took %.6f seconds -->', (getmicrotime() - $idstart)); 
 }
 echo ($text);
 

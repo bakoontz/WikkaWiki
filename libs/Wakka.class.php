@@ -94,14 +94,6 @@ class Wakka
 	 * @access public
 	 */
 	var $additional_headers = array();
-	/**
-	 * This value keeps track of recursion level of inclusion of the formatter wakka.php. Closing opened tags should 
-	 * not occur when a call to the function wakka2callback didn't yet finish.
-	 * 
-	 * @var integer
-	 * @access public
-	 */
-	var $formatter_recursion = 0;
 
 	/**
 	 * Constructor
@@ -2087,12 +2079,16 @@ class Wakka
 	/**
 	 * Render a string using a given formatter or the standard Wakka by default.
 	 *
+	 * @uses	Config::$wikka_formatter_path
 	 * @uses	Wakka::IncludeBuffered()
-	 * @param	$text
+	 * @param	string $text the source text to format
+	 * @param string $formatter the name of the formatter. This name is linked to a file with the same name, located in the folder
+		*  specified by {@link Config::$wikka_formatter_path}, and with extension .php; which is called to process the text $text
+	 * @param string $format_option a comma separated list of string options, in the form of 'option1;option2;option3'
 	 */
-	function Format($text, $formatter='wakka')
+	function Format($text, $formatter='wakka', $format_option='')
 	{
-		return $this->IncludeBuffered($formatter.'.php', '<em class="error">'.sprintf(FORMATTER_UNKNOWN,$formatter).'</em>', compact('text'), $this->config['wikka_formatter_path']);
+		return $this->IncludeBuffered($formatter.'.php', '<em class="error">'.sprintf(FORMATTER_UNKNOWN,$formatter).'</em>', compact('text', 'format_option'), $this->GetConfigValue('wikka_formatter_path'));
 	}
 
 	/**
