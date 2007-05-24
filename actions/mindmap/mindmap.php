@@ -27,7 +27,7 @@ if ((!$mindmap_url && !$height) && $wikka_vars)
 	$mindmap_url = $wikka_vars;
 }
 $mindmap_url = $this->cleanUrl(trim($mindmap_url));
-$height = $this->htmlspecialchars_ent(trim($vars['height']));
+$height = isset($vars['height']) ? $this->htmlspecialchars_ent(trim($vars['height'])) : '550';
 if (!$height) $height = '550';
 
 // output
@@ -36,12 +36,12 @@ if ($mindmap_url)
 	// set up template variables
 	$jre_download_link = '<a href="'.WIKKA_JRE_DOWNLOAD_URL.'">'.WIKKA_JRE_LINK_DESC.'</a>';
 	$jre_install_req = sprintf(MM_JRE_INSTALL_REQ,$jre_download_link);
-	$jre_install_req_js = str_replace('/','\/',$jre_install_req);	// escape slashes for JavaScript 
+	$jre_install_req_js = str_replace(array('\\', '\'', "\r", "\n"), array('\\\\', '\\\'', '', '\\n'), $jre_install_req);	
 	$freemind_link = '<a href="'.FREEMIND_PROJECT_URL.'">Freemind</a>';
 
 	$mm_download_link = '<a href="'.$mindmap_url.'">'.MM_DOWNLOAD_LINK_DESC.'</a>';
 	$mm_edit = sprintf(MM_EDIT,$freemind_link);
-	$mm_url_fullscreen = $this->StaticHref('3rdparty/plugins/freemind/fullscreen.php?url='.($mindmap_url)); //todo: use urlencode here.
+	$mm_url_fullscreen = $this->StaticHref('3rdparty/plugins/freemind/fullscreen.php?url='.urlencode($mindmap_url));
 	$mm_fullscreen_link = '<a href="'.$mm_url_fullscreen.'" onclick="return popup(this,\'fullmindmap\')">'.MM_FULLSCREEN_LINK_DESC.'</a>';
 
 	// define template

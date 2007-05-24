@@ -66,7 +66,7 @@ if ($pages = $this->LoadRecentlyChanged())
 			$xml .= "<node LINK=\"$pagelink/history\" TEXT=\"View History\"/>\n";
 				$xml .= "</node>\n";
 				// $xml .= "<arrowlink ENDARROW=\"Default\" DESTINATION=\"Freemind_Link_".$page["user"]."\" STARTARROW=\"None\"/>\n";
-			if (is_array($users[$pageuser])) {
+			if (isset($users[$pageuser]) && (is_array($users[$pageuser]))) {
 				$u_count = count($users[$pageuser]);
 				$users[$pageuser][$u_count] = $pagetag;
 			} else {
