@@ -687,8 +687,18 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 			if (!$newIndentType) { $opener = "<div class=\"indent\">"; $closer = "</div>"; $br = 1; }
 			elseif ($newIndentType == "-") { $opener = "<ul><li>"; $closer = "</li></ul>"; $li = 1; }
 			elseif ($newIndentType == "&") { $opener = "<ul class=\"thread\"><li>"; $closer = "</li></ul>"; $li = 1; } #inline comments
-			elseif (ereg('[0-9]', $newIndentType[0])) { $newIndentType = '1'; $opener = '<ol type="1"><li>'; $closer = '</li></ol>'; $li = 1; }
-			else { $newIndentType = 'a'; $opener = '<ol type="a"><li>'; $closer = '</li></ol>'; $li = 1; }
+			else
+			{
+				if (ereg('[0-9]', $newIndentType[0])) { $newIndentType = '1'; }
+				elseif (ereg('[IVX]', $newIndentType[0])) { $newIndentType = 'I'; }
+				elseif (ereg('[ivx]', $newIndentType[0])) { $newIndentType = 'i'; }
+				elseif (ereg('[A-Z]', $newIndentType[0])) { $newIndentType = 'A'; }
+				elseif (ereg('[a-z]', $newIndentType[0])) { $newIndentType = 'a'; }
+				
+				$opener = '<ol type="'.$newIndentType.'"><li>';
+				$closer = '</li></ol>';
+				$li = 1;
+			}
 
 			// get new indent level
 			$newIndentLevel = strlen($matches[2]);

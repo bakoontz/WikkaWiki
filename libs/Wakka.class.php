@@ -1348,19 +1348,14 @@ class Wakka
 	{
 		$title = '';
 		$pagecontent = $this->page['body'];
-		if (ereg( '(=){3,5}([^=\n]+)(=){3,5}', $pagecontent, $title))
+		if (preg_match('/={3,}([^=].+[^=])={3,}/', $pagecontent, $title))
 		{
-			$formatting_tags = array('**', '//', '__', '##', "''", '++', '#%', '@@', '""');
-			$title = str_replace($formatting_tags, '', $title[2]);
-		}
-		if ($title)
-		{
-			$title = strip_tags($this->Format($title));				# fix for forced links in heading
+			$title = strip_tags($this->Format($title[1]));				# fix for forced links in heading
 			return trim($title);				# trim spaces #500
 		}
 		else
 		{
-			return $this->tag;
+			return $this->GetPageTag();
 		}
 	}
 	/**
