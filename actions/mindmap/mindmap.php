@@ -41,7 +41,7 @@ if ($mindmap_url)
 
 	$mm_download_link = '<a href="'.$mindmap_url.'">'.MM_DOWNLOAD_LINK_DESC.'</a>';
 	$mm_edit = sprintf(MM_EDIT,$freemind_link);
-	$mm_url_fullscreen = $this->StaticHref('3rdparty/plugins/freemind/fullscreen.php?url='.urlencode($mindmap_url));
+	$mm_url_fullscreen = $this->Href('mindmap_fullscreen', '', 'url='.urlencode($mindmap_url));
 	$mm_fullscreen_link = '<a href="'.$mm_url_fullscreen.'" onclick="return popup(this,\'fullmindmap\')">'.MM_FULLSCREEN_LINK_DESC.'</a>';
 
 	// define template

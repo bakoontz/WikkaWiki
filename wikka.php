@@ -298,7 +298,7 @@ $wakka->Run($page, $handler);
  * Calculate microtime
  * @todo move handler check to handler configuration
  */
-if (!preg_match('/(xml|raw|mm|grabcode)$/', $handler))
+if (!preg_match('/(xml|raw|mm|grabcode|mindmap_fullscreen)$/', $handler))
 {
 	$tend = getmicrotime();
 	//calculate the difference

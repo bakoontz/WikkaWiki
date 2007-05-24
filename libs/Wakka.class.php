@@ -2919,6 +2919,7 @@ class Wakka
 	 *
 	 * @uses	Wakka::Footer()
 	 * @uses	Wakka::GetCookie()
+	 * @uses	Wakka::GetHandler()
 	 * @uses	Wakka::GetMicrotime()
 	 * @uses	Wakka::GetUser()
 	 * @uses	Wakka::Header()
@@ -2981,7 +2982,7 @@ class Wakka
 			print($this->Handler($this->handler));
 		}
 		// grabcode page handler
-		elseif ($this->handler == 'grabcode')
+		elseif (($this->GetHandler() == 'grabcode') || ($this->GetHandler() == 'mindmap_fullscreen'))
 		{
 			print($this->Handler($this->handler));
 		}
