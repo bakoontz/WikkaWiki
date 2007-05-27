@@ -10,5 +10,5 @@
  * @filesource
  */
 
-include($this->config['action_path'].'/color/color.php'); 
+include($this->config['action_path'].DIRECTORY_SEPARATOR.'color'.DIRECTORY_SEPARATOR.'color.php'); 
 ?>

@@ -51,7 +51,7 @@ if (preg_match("/^(http|https):\/\/([^\\s\"<>]+)$/i", $rss_path))
 	/**
 	 * Include 3rdParty plugin
 	 */
-	include_once('3rdparty/plugins/onyx-rss/onyx-rss.php');
+	include_once('3rdparty'.DIRECTORY_SEPARATOR.'plugins'.DIRECTORY_SEPARATOR.'onyx-rss'.DIRECTORY_SEPARATOR.'onyx-rss.php');
 	if (!class_exists('Wikka_Onyx'))
 	{
 		class Wikka_Onyx extends ONYX_RSS

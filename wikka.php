@@ -83,9 +83,9 @@ if (!function_exists('mysql_real_escape_string'))
  * Include main library if it exists.
  * @see /libs/Wakka.class.php
  */
-if (file_exists('libs/Wakka.class.php'))
+if (file_exists('libs'.DIRECTORY_SEPARATOR.'Wakka.class.php'))
 {
-	require_once('libs/Wakka.class.php');
+	require_once('libs'.DIRECTORY_SEPARATOR.'Wakka.class.php');
 }
 else
 {
@@ -127,7 +127,7 @@ if (get_magic_quotes_gpc())
 /**
  * Load the configuration.
  */
-require_once('libs/Config.class.php');
+require_once('libs'.DIRECTORY_SEPARATOR.'Config.class.php');
 $buff = new Config;
 $wakkaDefaultConfig = get_object_vars($buff);
 unset($buff);
@@ -146,7 +146,8 @@ if (file_exists($configfile))
 }
 $wakkaConfigLocation = $configfile;
 $wakkaConfig = array_merge($wakkaDefaultConfig, $wakkaConfig);
-$htaccessLocation = str_replace('\\', '/', dirname(__FILE__)).'/.htaccess';
+$htaccessLocation = str_replace('\\', '/',
+dirname(__FILE__)).DIRECTORY_SEPARATOR.'.htaccess';
 
 /**
  * Check for locking.

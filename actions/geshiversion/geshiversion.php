@@ -11,9 +11,9 @@
  * @since		Wikka 1.1.6.2
  */
 
-if (file_exists($this->config['geshi_path'].'/geshi.php'))
+if (file_exists($this->config['geshi_path'].DIRECTORY_SEPARATOR.'geshi.php'))
 {
-	include_once($this->config['geshi_path'].'/geshi.php');
+	include_once($this->config['geshi_path'].DIRECTORY_SEPARATOR.'geshi.php');
 	if (defined('GESHI_VERSION'))
 	{
 		echo GESHI_VERSION;

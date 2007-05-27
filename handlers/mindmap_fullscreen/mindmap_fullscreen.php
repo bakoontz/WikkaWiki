@@ -29,9 +29,10 @@ if (!isset($_GET['url'])) return;
  * Include language file if it exists.
  * @see /lang/en/en.inc.php
  */
-$language_file = 'lang/'.$this->GetConfigValue('default_lang').'/'.$this->GetConfigValue('default_lang').'.inc.php';
+$language_file =
+'lang/'.$this->GetConfigValue('default_lang').DIRECTORY_SEPARATOR.$this->GetConfigValue('default_lang').'.inc.php';
 if (file_exists($language_file)) require_once($language_file); // todo add base dir
-elseif (file_exists('lang/en/en.inc.php')) require_once('lang/en/en.inc.php');
+elseif (file_exists('lang'.DIRECTORY_SEPARATOR.'en'.DIRECTORY_SEPARATOR.'en.inc.php')) require_once('lang'.DIRECTORY_SEPARATOR.'en'.DIRECTORY_SEPARATOR.'en.inc.php');
 else die('Language file ('.$language_file.') not found! Please add the file.');
 ?>
 <?php header("Content-Type: text/html; charset=ISO-8859-1");  ?>

@@ -603,7 +603,8 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 			$code = preg_replace('/^\s*\n+|\n+\s*$/','',$code);
 			
 			// check if GeSHi path is set and we have a GeSHi highlighter for this language
-			if (isset($language) && isset($wakka->config['geshi_path']) && file_exists($geshi_hi_path.'/'.$language.'.php'))
+			if (isset($language) &&
+			isset($wakka->config['geshi_path']) && file_exists($geshi_hi_path.DIRECTORY_SEPARATOR.$language.'.php'))
 			{
 				// check if specified filename is valid and generate code block header
 				if (isset($filename) && strlen($filename) > 0 && strlen($invalid) == 0) # #34 TODO: use central regex library for filename validation
@@ -623,7 +624,8 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 				$output .= $wakka->GeSHi_Highlight($code, $language, $start);
 			}
 			// check Wikka highlighter path is set and if we have an internal Wikka highlighter
-			elseif (isset($language) && isset($wakka->config['wikka_formatter_path']) && file_exists($wikka_hi_path.'/'.$language.'.php') && 'wakka' != $language)
+			elseif (isset($language) &&
+			isset($wakka->config['wikka_formatter_path']) && file_exists($wikka_hi_path.DIRECTORY_SEPARATOR.$language.'.php') && 'wakka' != $language)
 			{
 				// use internal Wikka highlighter
 				$output = '<div class="code">'."\n";

@@ -45,7 +45,7 @@ if (isset($_GET['nonce']))
 define('DEFAULT_SETUP_ACTION', 'default');
 
 // get utilities
-require_once('setup/inc/functions.inc.php');
+require_once('setup'.DIRECTORY_SEPARATOR.'inc'.DIRECTORY_SEPARATOR.'functions.inc.php');
 
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -79,7 +79,8 @@ else
 	$installAction = DEFAULT_SETUP_ACTION;
 }
 // load subpage
-if (file_exists('setup/'.$installAction.'.php')) include('setup/'.$installAction.'.php'); else print '<em>'.ERROR_SETUP_FILE_MISSING.'</em>';
+if (file_exists('setup'.DIRECTORY_SEPARATOR.$installAction.'.php'))
+include('setup'.DIRECTORY_SEPARATOR.$installAction.'.php'); else print '<em>'.ERROR_SETUP_FILE_MISSING.'</em>';
 ?>
 </div>
 <!--END page body -->

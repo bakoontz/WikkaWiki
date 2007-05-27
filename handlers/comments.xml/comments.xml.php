@@ -70,7 +70,7 @@ $formats = explode(",",FEED_VALID_FORMATS);
 $f = (in_array($_GET['f'], $formats))? $_GET['f'] : FEED_DEFAULT_OUTPUT_FORMAT;
 
 //create object
-include_once('3rdparty/core/feedcreator/feedcreator.class.php'); //TODO: MAKE THIS CONFIGURABLE
+include_once('3rdparty'.DIRECTORY_SEPARATOR.'core'.DIRECTORY_SEPARATOR.'feedcreator'.DIRECTORY_SEPARATOR.'feedcreator.class.php'); //TODO: MAKE THIS CONFIGURABLE
 
 //initialize feed (general settings)
 $rss = new UniversalFeedCreator(); 

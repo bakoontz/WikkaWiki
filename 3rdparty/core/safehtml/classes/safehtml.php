@@ -22,7 +22,7 @@
 /**
  * Require plugin
  */
-require_once(dirname(__FILE__).'/HTMLSax.php');
+require_once(dirname(__FILE__).DIRECTORY_SEPARATOR.'HTMLSax.php');
 
 class safehtml {
   var $xhtml = "";

@@ -429,7 +429,7 @@ class Wakka
 	 */
 	function ReturnSafeHTML($html)
 	{
-		require_once('3rdparty/core/safehtml/classes/safehtml.php');
+		require_once('3rdparty'.DIRECTORY_SEPARATOR.'core'.DIRECTORY_SEPARATOR.'safehtml'.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'safehtml.php');
 
 		// Instantiate the handler
 		$safehtml =& new safehtml();
@@ -717,7 +717,7 @@ class Wakka
 	function GeSHi_Highlight($sourcecode, $language, $start=0)
 	{
 		// create GeSHi object
-		include_once($this->config['geshi_path'].'/geshi.php');
+		include_once($this->config['geshi_path'].DIRECTORY_SEPARATOR.'geshi.php');
 		$geshi =& new GeSHi($sourcecode, $language, $this->config['geshi_languages_path']);				# create object by reference
 
 		$geshi->enable_classes();								# use classes for hilighting (must be first after creating object)
