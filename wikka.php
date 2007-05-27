@@ -63,7 +63,8 @@ function getmicrotime() {
 	return ((float)$usec + (float)$sec);
 }
 
-$tstart = getmicrotime();
+$tstart = substr(microtime(),11).substr(microtime(),1,9); 
+
 if (!function_exists('mysql_real_escape_string'))
 {
 /**
@@ -301,12 +302,11 @@ $wakka->Run($page, $handler);
  */
 if (!preg_match('/(xml|raw|mm|grabcode|mindmap_fullscreen)$/', $handler))
 {
-	$tend = getmicrotime();
+	$tend = substr(microtime(),11).substr(microtime(),1,9); 
 	//calculate the difference
 	$totaltime = ($tend - $tstart);
 	//output result
-	print '<div class="smallprint">'.sprintf(PAGE_GENERATION_TIME, $totaltime)."</div>\n</body>\n</html>";
-}
+	print '<div class="smallprint">'.sprintf(PAGE_GENERATION_TIME, $totaltime)."</div>\n</body>\n</html>"; }
 
 $content =  ob_get_contents();
 /** 
