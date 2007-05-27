@@ -2513,7 +2513,7 @@ class Wakka
 		$limit = intval($limit);
 		if ($limit < 1) $limit = 50;
 		$where = ('*all' == $tag) ? '' : ' WHERE tag = "'.mysql_real_escape_string($tag).'"';
-		return $this->LoadAll('SELECT * FROM '.$this->config['table_prefix'].'comments'.$where.' ORDER BY time DESC LIMIT '.$limit);
+		return $this->LoadAll('SELECT * FROM '.$this->config['table_prefix'].'comments'.$where.'and (status IS NULL or status != \'deleted\') ORDER BY time DESC LIMIT '.$limit);
 	}
 	/**
 	 * Load recently commented pages on the wiki.
@@ -2528,6 +2528,7 @@ class Wakka
 			. ' FROM '.$this->config['table_prefix'].'comments AS comments'
 			. ' LEFT JOIN '.$this->config['table_prefix'].'comments AS c2 ON comments.page_tag = c2.page_tag AND comments.id < c2.id'
 			. ' WHERE c2.page_tag IS NULL '
+			. ' and (comments.status IS NULL or comments.status != \'deleted\')'
 			. ' ORDER BY time DESC '
 			. ' LIMIT '.intval($limit);
 		return $this->LoadAll($sql);
