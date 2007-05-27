@@ -59,6 +59,10 @@ if(!defined('MAX_UPLOAD_SIZE')) define('MAX_UPLOAD_SIZE', 2097152);
 if(!defined('ALLOWED_FILE_EXTENSIONS')) define('ALLOWED_FILE_EXTENSIONS', 'gif|jpeg|jpg|jpe|png|doc|xls|csv|ppt|ppz|pps|pot|pdf|asc|txt|zip|gtar|gz|bz2|tar|rar|vpp|mpp|vsd|mm|htm|html');
 /** Displayed date format */
 if(!defined('UPLOAD_DATE_FORMAT')) define('UPLOAD_DATE_FORMAT', 'Y-m-d H:i'); //TODO use general config settings for date format 
+/** Sort routines */
+if(!defined('SORT_BY_FILENAME')) define('SORT_BY_FILENAME', 'filename');
+if(!defined('SORT_BY_DATE')) define('SORT_BY_DATE', 'date');
+if(!defined('SORT_BY_SIZE')) define('SORT_BY_SIZE', 'size');
 
 // ---- Error code constants ----
 if (!defined('UPLOAD_ERR_OK')) define('UPLOAD_ERR_OK', 0);
@@ -88,7 +92,7 @@ if (!function_exists('userCanUpload'))
 	function userCanUpload()
 	{
 		global $wakka;
-		switch(TRUE)
+		switch(TRUE) 
 		{
 			case ($wakka->IsAdmin()):
 			case (INTRANET_MODE && $wakka->HasAccess('write')):
@@ -282,38 +286,75 @@ if (is_readable($upload_path))
 	$is_readable = TRUE;
 	$dir = opendir($upload_path);
 	$n = 0;
-	// build file interface
-	while ($file = readdir($dir))
-	{
-		if ($file{0} != '.')
-		{
-			$n++;
-			$delete_link = '<!-- delete -->';
-			if (userCanUpload())
-			{
-				// TODO #72
-				$delete_link = '<a class="keys" href="'
-				.$this->Href('files.xml',$this->tag,'action=delete&amp;file='.rawurlencode($file))
-				.'" title="'.sprintf(DELETE_LINK_TITLE, $file).'">x</a>';
-			}
-			$download_link = '<a href="'
-				.$this->Href('files.xml',$this->tag,'action=download&amp;file='.rawurlencode($file))
-				.'" title="'.sprintf(DOWNLOAD_LINK_TITLE, $file).'">'.urldecode($file).'</a>';
-			$size = bytesToHumanReadableUsage(filesize($upload_path.DIRECTORY_SEPARATOR.$file)); #89
-			$date = date(UPLOAD_DATE_FORMAT, filemtime($upload_path.DIRECTORY_SEPARATOR.$file)); #89
+	// Build file interface
 
-			$output_files .= '<tr>'."\n";
-			if (userCanUpload())
-			{
-				$output_files .=	'<td>'.$delete_link.'</td>'."\n";	// TODO #72
-			}
-			$output_files .=	'<td>'.$download_link.'</td>'."\n"
-				.'<td>'.$date.'</td>'."\n"
-				.'<td align="right"><tt>'.$size.'</tt></td>'."\n"
-				.'</tr>'."\n";
+	// Construct ordered array of filename, date, and size arrays for
+	// sorting
+	$filenameArr = array();
+	$dateArr = array();
+	$sizeArr = array();
+	while (false !== ($file = readdir($dir)))
+	{
+		if($file{0} == '.')
+		{
+			continue;
 		}
+		array_push($filenameArr, $file);
+        array_push($dateArr, filemtime($upload_path.DIRECTORY_SEPARATOR.$file));
+        array_push($sizeArr, filesize($upload_path.DIRECTORY_SEPARATOR.$file));
 	}
 	closedir($dir);
+
+	// Sort file array
+	$sortby = SORT_BY_FILENAME;
+	if(isset($_GET['sortby']))
+	{
+		$sortby = $_GET['sortby'];
+	}
+	switch($sortby) 
+	{  
+		case SORT_BY_DATE : 
+			array_multisort($dateArr, SORT_ASC, SORT_NUMERIC, $filenameArr, $sizeArr); 
+			break;
+		case SORT_BY_SIZE : 
+			array_multisort($sizeArr, SORT_ASC, SORT_NUMERIC, $filenameArr, $dateArr); 
+			break;
+		case SORT_BY_FILENAME: 
+		default:      
+			array_multisort($filenameArr, SORT_ASC, SORT_STRING, $dateArr, $sizeArr); 
+	}
+
+	for($i=0; $i<count($filenameArr); ++$i)
+	{
+		$file = $filenameArr[$i];
+		$filedate = $dateArr[$i];
+		$filesize = $sizeArr[$i];
+
+		$n++;
+		$delete_link = '<!-- delete -->';
+		if (userCanUpload())
+		{
+			// TODO #72
+			$delete_link = '<a class="keys" href="'
+			.$this->Href('files.xml',$this->tag,'action=delete&amp;file='.rawurlencode($file))
+			.'" title="'.sprintf(DELETE_LINK_TITLE, $file).'">x</a>';
+		}
+		$download_link = '<a href="' .$this->Href('files.xml',$this->tag,'action=download&amp;file='.rawurlencode($file))
+			.'" title="'.sprintf(DOWNLOAD_LINK_TITLE, $file).'">'.urldecode($file).'</a>';
+		$size = bytesToHumanReadableUsage($filesize); #89
+		$date = date(UPLOAD_DATE_FORMAT, $filedate); #89
+
+		$output_files .= '<tr>'."\n";
+		if (userCanUpload())
+		{
+			$output_files .=	'<td>'.$delete_link.'</td>'."\n";	// TODO #72
+		}
+		$output_files .=	'<td>'.$download_link.'</td>'."\n"
+			.'<td>'.$date.'</td>'."\n"
+			.'<td align="right"><tt>'.$size.'</tt></td>'."\n"
+			.'</tr>'."\n";
+	}
+
 	if ($n > 0)
 	{
 		$output .=	'<div class="files">'."\n";
@@ -326,9 +367,9 @@ if (is_readable($upload_path))
 		{
 			$output .= '<th>&nbsp;</th>'."\n"; //For the delete link. Only needed when user has file upload privs.
 		}
-		$output .= '<th>'.FILE_TABLE_HEADER_NAME.'</th>'."\n"
-			.'<th>'.FILE_TABLE_HEADER_DATE.'</th>'."\n"
-			.'<th>'.FILE_TABLE_HEADER_SIZE.'</th>'."\n"
+		$output .= '<th><a href="'.$this->Href('', $this->tag, 'sortby=filename').'">'.FILE_TABLE_HEADER_NAME.'</a></th>'."\n"
+		.'<th><a href="'.$this->Href('', $this->tag, 'sortby=date').'">'.FILE_TABLE_HEADER_DATE.'</a></th>'."\n"
+		.'<th><a href="'.$this->Href('', $this->tag, 'sortby=size').'">'.FILE_TABLE_HEADER_SIZE.'</a></th>'."\n"
 			.'</tr>'."\n"
 			.'</thead>'."\n"
 			.'<tbody>'."\n";
