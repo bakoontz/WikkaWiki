@@ -157,12 +157,12 @@ function _p($s)
  */
 function ACL_show_selectbox($type)
 {
-	global $wakkaConfig;
+	global $config;
 	$default_acl['read'] = '*';
 	$default_acl['write'] = '+';
 	$default_acl['comment'] = '+';
 	$config_name = 'default_'.$type.'_acl';
-	if (!isset($wakkaConfig[$config_name])) $wakkaConfig[$config_name] = $default_acl[$type];
+	if (!isset($config[$config_name])) $config[$config_name] = $default_acl[$type];
 	$predef_acl = array(
 		'!*' => __('No one (admin only)'),
 		'+' => __('Registered users only'),
@@ -173,7 +173,7 @@ function ACL_show_selectbox($type)
 	foreach ($predef_acl as $value => $text)
 	{
 		echo '<option value="'.$value.'"';
-		if ($value == $wakkaConfig[$config_name]) echo ' selected="selected"';
+		if ($value == $config[$config_name]) echo ' selected="selected"';
 		echo '>'.$text;
 		if ($value == $default_acl[$type]) echo ' ('.__('recommended').')';
 		echo '</option>'."\n";
