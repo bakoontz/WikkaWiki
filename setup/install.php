@@ -263,7 +263,7 @@ case "1.1.5.0":
 case "1.1.5.1":
 case "1.1.5.2":
 case "1.1.5.3":
-	update_default_page(array('WikkaReleaseNotes', 'WikkaDocumentation'));
+	update_default_page(array('WikkaReleaseNotes', 'WikkaDocumentation'), $dblink, $config);
 	// delete files removed from previous version
 	@unlink('actions/wakkabug.php');
 	// delete directories that have been moved
