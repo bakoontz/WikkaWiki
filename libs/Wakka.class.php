@@ -32,6 +32,15 @@ if (!defined('COMMENT_ORDER_THREADED')) define('COMMENT_ORDER_THREADED', 3);
 if (!defined('COMMENT_MAX_TRAVERSAL_DEPTH')) define('COMMENT_MAX_TRAVERSAL_DEPTH', 10);
 if (!defined('MAX_HOSTNAME_LENGTH_DISPLAY')) define('MAX_HOSTNAME_LENGTH_DISPLAY', 50);
 
+// Patterns
+/**
+ * Replace img tags having an alt attribute with that value of the alt attribute, trimmed. Img tags missing an alt
+ * attribute are not replaced.
+ * - $result[0] : the entire img tag
+ * - $result[1] : If the alt attribute exists, this holds the single character used to delimit the alt string.
+ * - $result[2] : The content of the alt attribute, after it has been trimmed, if the attribute exists.
+ */
+if (!defined('PATTERN_REPLACE_IMG_WITH_ALTTEXT')) define('PATTERN_REPLACE_IMG_WITH_ALTTEXT', '/<img[^>]*(?<=\\s)alt=("|\')\s*(.*?)\s*\\1.*?>/');
 /**
  * The Wikka core.
  *
@@ -94,6 +103,13 @@ class Wakka
 	 * @access public
 	 */
 	var $additional_headers = array();
+	/**
+	 * Title of the page to insert in the <title> tag.
+	 * 
+	 * @var string
+	 * @access public
+	 */
+	var $page_title = '';
 
 	/**
 	 * Constructor
@@ -1335,28 +1351,92 @@ class Wakka
 		}
 	}
 	/**
+	 * 
+	 * 
+	 * @param string $textvalue the text to be cleaned
+	 * @param string $pattern_prohibited_chars optional valid regular expression pattern. Characters that do
+	 *     not validate this expression will be stripped. If this is set to an empty string, every character will be valid.
+	 * @param boolean $decode_html_entities should htmlentities be decoded?
+	 * @access public
+	 * @return string The text after some characters stripped
+	 */
+	function CleanTextNode($textvalue, $pattern_prohibited_chars = '/[^A-Za-z0-9_:.-\s]/', $decode_html_entities = true)
+	{
+		// no id: we'll have to create one
+		$textvalue = trim($textvalue);
+		// first find and replace any image having an alt attribute with its alt text
+		$textvalue = preg_replace(PATTERN_REPLACE_IMG_WITH_ALTTEXT, '\\2', $textvalue);
+		// remove all other tags, including img tags that missed an alt attribute
+		$textvalue = strip_tags($textvalue);
+		// @@@ this all-text result is usable for a TOC!!!
+		// do this if we have a condition set to generate a TOC
+
+		if ($decode_html_entities)
+		{
+			if (function_exists('html_entity_decode'))
+			{
+				// replace entities that can be interpreted
+				// use default charset ISO-8859-1 because other chars won't be valid for an id anyway
+				$textvalue = html_entity_decode($textvalue, ENT_NOQUOTES);
+			}
+			// remove any remaining entities (so we don't end up with strange words and numbers in the id text)
+			$textvalue = preg_replace('/&[#]?.+?;/','',$textvalue);
+		}
+		// finally remove non-id characters (except whitespace which is handled by makeId())
+		if ($pattern_prohibited_chars)
+		{
+			$textvalue = preg_replace($pattern_prohibited_chars, '', $textvalue);
+		}
+		return ($textvalue);
+	}
+	/**
+	 * Check whether the page is already assigned a title to set in the <title> tag.
+	 * 
+	 * @uses	Wakka::$page_title
+	 * @access public
+	 * @return boolean
+	 */
+	function HasPageTitle()
+	{
+		return ($this->page_title != '');
+	}
+	/**
+	 * Set the title of a page. Actually, the title of the page is chosen from the text inside headings
+	 * h1 through h4, that is encountered first.
+	 * 
+	 * @uses	Wakka::$page_title
+	 * @param string $page_title the new title of the page.
+	 * @access public
+	 * @return void
+	 */
+	function SetPageTitle($page_title)
+	{
+		if (trim($page_title))
+		{
+			$this->page_title = $page_title;
+		}
+	}
+	/**
 	 * Return the title of the current page.
 	 *
-	 * It is retrieved either from the first level 1-3 header in the page body
-	 * or, if there is none such headline, from the page name.
+	 * The page title is cleaned and trimmed. See {@link Wakka::SetPageTitle()} to find how it is choosen.
+	 * If SetPageTitle() was unable to choose a title for the page, the page name is used by default.
 	 *
-	 * @uses	Wakka::Format()
+	 * @uses	Wakka::$page_title
+	 * @uses	Wakka::CleanTextNode()
 	 * @uses	Wakka::GetPageTag()
+	 * @uses	Wakka::HasPageTitle()
 	 * @return	string the title of the current page
 	 */
 	function PageTitle()
 	{
-		$title = '';
-		$pagecontent = $this->page['body'];
-		if (preg_match('/={3,}([^=].+[^=])={3,}/', $pagecontent, $title))
+		if (!$this->HasPageTitle()) 
 		{
-			$title = strip_tags($this->Format($title[1]));				# fix for forced links in heading
-			return trim($title);				# trim spaces #500
+			return ($this->GetPageTag());
 		}
-		else
-		{
-			return $this->GetPageTag();
-		}
+		// We clean the title, note that unlike makeId(), the characters " and ' are allowed here.
+		$result = $this->CleanTextNode($this->page_title, '');
+		return trim($result);				# trim spaces #500
 	}
 	/**
 	 * Check by name if a page exists.
