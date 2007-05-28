@@ -40,14 +40,6 @@ if (!defined('PATTERN_CODE')) define('PATTERN_CODE', '(.*)');
  */
 if (!defined('PATTERN_MATCH_HEADINGS')) define('PATTERN_MATCH_HEADINGS', '#^<(h[1-6])(.*?)>(.*?)</\\1>$#s');
 /**
- * Replace img tags having an alt attribute with that value of the alt attribute, trimmed. Img tags missing an alt
- * attribute are not replaced.
- * - $result[0] : the entire img tag
- * - $result[1] : If the alt attribute exists, this holds the single character used to delimit the alt string.
- * - $result[2] : The content of the alt attribute, after it has been trimmed, if the attribute exists.
- */
-if (!defined('PATTERN_REPLACE_IMG_WITH_ALTTEXT')) define('PATTERN_REPLACE_IMG_WITH_ALTTEXT', '/<img[^>]*(?<=\\s)alt=("|\')\s*(.*?)\s*\\1.*?>/');
-/**
  * Match id in attributes.
  * - $result[0] : a string like <code>id="h1_id"</code>, starting with the letters id=, and followed by a string
  *   enclosed in either single or double quote. It doesn't match if the term id is not preceded by any space character.
@@ -92,6 +84,10 @@ if (($format_option) && preg_match(PATTERN_MATCH_PAGE_FORMATOPTION, $format_opti
 			if (preg_match(PATTERN_MATCH_HEADINGS, $thing, $matches))	# note that we don't match headings that are not valid XHTML!
 			{
 				list($h_element, $h_tagname, $h_attribs, $h_heading) = $matches;
+				if ((!$wakka->HasPageTitle()) && ('h5' > $h_tagname))
+				{
+					$wakka->SetPageTitle($h_heading);
+				}
 	
 				if (preg_match(PATTERN_MATCH_ID_ATTRIBUTES, $h_attribs))			# use backref to match both single and double quotes
 				{
@@ -105,28 +101,10 @@ if (($format_option) && preg_match(PATTERN_MATCH_PAGE_FORMATOPTION, $format_opti
 				}
 				else
 				{
-					// no id: we'll have to create one
-					$tmpheading = trim($h_heading);
-					// first find and replace any image having an alt attribute with its alt text
-					$headingtext = preg_replace(PATTERN_REPLACE_IMG_WITH_ALTTEXT, '\\2', $tmpheading);
-					// remove all other tags, including img tags that missed an alt attribute
-					$headingtext = strip_tags($headingtext);
-					// @@@ this all-text result is usable for a TOC!!!
-					// do this if we have a condition set to generate a TOC
-	
-					if (function_exists('html_entity_decode'))
-					{
-						// replace entities that can be interpreted
-						// use default charset ISO-8859-1 because other chars won't be valid for an id anyway
-						$headingtext = html_entity_decode($headingtext, ENT_NOQUOTES);
-					}
-					// remove any remaining entities (so we don't end up with strange words and numbers in the id text)
-					$headingtext = preg_replace('/&[#]?.+?;/','',$headingtext);
-					// finally remove non-id characters (except whitespace which is handled by makeId())
-					$headingtext = preg_replace('/[^A-Za-z0-9_:.-\s]/', '', $headingtext);
+					$headingtext = $wakka->CleanTextNode($h_heading);
 					// now create id based on resulting heading text
 					$h_id = $wakka->makeId('hn', $headingtext);
-	
+
 					// rebuild element, adding id
 					return '<'.$h_tagname.$h_attribs.' id="'.$h_id.'">'.$h_heading.'</'.$h_tagname.'>';
 				}
