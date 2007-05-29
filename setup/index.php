@@ -19,10 +19,10 @@ if (isset($_GET['nonce']))
 	session_cache_limiter('public');
 }
 @session_start();
+	if (!isset($_SESSION['config'])) $_SESSION['config'] = $wakkaConfig;
 	if (isset($_POST) && !empty($_POST))
 	{
 		$config = isset($_POST['config']) ? $_POST['config'] : array();
-		if (!isset($_SESSION['config'])) $_SESSION['config'] = $wakkaConfig;
 		unset ($_POST['config']);
 		$_SESSION['wikka'][$_POST['installAction']] = $_POST;
 		$_SESSION['config'] = array_merge( $_SESSION['config'], $config);
