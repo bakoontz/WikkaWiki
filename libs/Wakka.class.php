@@ -1739,6 +1739,7 @@ class Wakka
 		}
 		else
 		{
+			session_write_close(); # Always use session_write_close() before any header('Location: ...')
 			header('Location: '.$url);
 		}
 		exit;

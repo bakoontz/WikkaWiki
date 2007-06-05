@@ -26,6 +26,7 @@ if (isset($_GET['nonce']))
 		unset ($_POST['config']);
 		$_SESSION['wikka'][$_POST['installAction']] = $_POST;
 		$_SESSION['config'] = array_merge( $_SESSION['config'], $config);
+		session_write_close(); 
 		header('Location: '.$url.'wikka.php?installAction='.$_POST['installAction'].'&nonce='.dechex(crc32(rand())));
 		die();
 	}
