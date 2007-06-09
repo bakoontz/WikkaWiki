@@ -48,7 +48,7 @@
 /**
  * Defaults
  */
-if (!defined('VALID_PAGENAME_PATTERN')) define ('VALID_PAGENAME_PATTERN', '/^[A-Za-zÄÖÜßäöü]+[A-Za-z0-9ÄÖÜßäöü]*$/s'); //TODO not needed: use IsWikiName() to validate 
+if (!defined('VALID_PAGENAME_PATTERN')) define ('VALID_PAGENAME_PATTERN', '/^[A-Za-zï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½]+[A-Za-z0-9ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½]*$/s'); //TODO not needed: use IsWikiName() to validate 
 if (!defined('MAX_TAG_LENGTH')) define ('MAX_TAG_LENGTH', 75);
 if (!defined('MAX_EDIT_NOTE_LENGTH')) define ('MAX_EDIT_NOTE_LENGTH', 50);
 if (!defined('DEFAULT_BUTTONS_POSITION')) define('DEFAULT_BUTTONS_POSITION', 'bottom');
@@ -259,7 +259,7 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 }
 else
 {
-	$message = '<em>'.ERROR_NO_WRITE_ACCESS.'</em><br />'."\n<br />\n";
+	$message = '<em>'.$this->Format(ERROR_NO_WRITE_ACCESS).'</em><br />'."\n<br />\n";
 	if ($this->ExistsPage($this->tag)) $message .= '<a href="'.$this->Href('showcode').'" title="'.SHOWCODE_LINK_TITLE.'">'.SHOWCODE_LINK.'</a>'."<br />\n";		
 	echo $message;
 }

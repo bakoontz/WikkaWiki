@@ -618,7 +618,7 @@ define('ERROR_OVERWRITE_ALERT1','OVERWRITE ALERT: This page was modified by some
 define('ERROR_OVERWRITE_ALERT2','Please copy your changes and re-edit this page.');
 define('ERROR_MISSING_EDIT_NOTE','MISSING EDIT NOTE: Please fill in an edit note!');
 define('ERROR_TAG_TOO_LONG','Tag too long! %d characters max.'); // %d - maximum page name length // TODO: use 'Page name' instead of 'Tag'
-define('ERROR_NO_WRITE_ACCESS','You don\'t have write access to this page. You might need to register an account to be able to edit this page.');
+define('ERROR_NO_WRITE_ACCESS','You don\'t have write access to this page. You might need to [[UserSettings login]] or [[UserSettings register an account]] to be able to edit this page.'); //TODO Distinct links for login and register actions
 define('EDIT_STORE_PAGE_LEGEND','Store page');
 define('EDIT_PREVIEW_HEADER','Preview');
 define('EDIT_NOTE_LABEL','Please add a note on your edit'); // label after field, so no colon!
