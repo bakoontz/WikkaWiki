@@ -113,7 +113,7 @@ else
 			}
 
 			// display comments!
-			if ($_SESSION['show_comments'][$tag] != COMMENT_NO_DISPLAY)
+			if (isset($_SESSION['show_comments'][$tag]) && $_SESSION['show_comments'][$tag] != COMMENT_NO_DISPLAY)
 			{
 				// load comments for this page
 				$comments = $this->LoadComments($this->tag, $_SESSION['show_comments'][$tag]);

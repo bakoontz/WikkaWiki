@@ -2519,7 +2519,7 @@ class Wakka
 				array_push($transformed_map[$parent], $id);
 			}
 		}
-		if (is_array($transformed_map[end($visited)]))
+		if (is_int(end($visited)) && is_array($transformed_map[end($visited)]))
 		{
 			$id = array_shift($transformed_map[end($visited)]);
 		}
