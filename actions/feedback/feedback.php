@@ -30,21 +30,21 @@
  * 
  * @todo	Use central regex library for validation #34
  * @todo	Update documentation for feedback action
+ * @todo	Implement antispam measures to prevent scripted form posting
  */
 
 //defaults
 define('ALLOW_FEEDBACK_FROM_UNREGISTERED', TRUE); #move to action configuration file
 define('DISPLAY_SENT_MESSAGE', TRUE); #move to action configuration file
+define('VALID_EMAIL_RE', "%[a-zA-Z0-9._-]@%[a-zA-Z0-9._-]"); //TODO Move to central regex library #34
 
 //only display form when feedback is allowed
 if (ALLOW_FEEDBACK_FROM_UNREGISTERED || $this->GetUser)
 {
-	if (isset($_POST))
-	{
-		$name = $_POST['name'];
-		$email = $_POST['email'];
-		$comments = $_POST['comments'];
-	}
+	//get user input
+	$name = (isset($_POST['name']))? $_POST['name'] : '';
+	$email = (isset($_POST['email']))? $_POST['email'] : '';
+	$comments = (isset($_POST['comments']))? $_POST['comments'] : '';
 
 	//set recipient
 	switch(TRUE)
@@ -100,9 +100,9 @@ if (ALLOW_FEEDBACK_FROM_UNREGISTERED || $this->GetUser)
 TPLFEEDBACKFORM;
 
 	// action
-	if ($_POST['mail'] == 'result')
+	if (isset($_POST['mail']) && $_POST['mail'] == 'result')
 	{
-		list($user, $host) = sscanf($email, "%[a-zA-Z0-9._-]@%[a-zA-Z0-9._-]"); //TODO use central regex library
+		list($user, $host) = sscanf($email, VALID_EMAIL_RE); //TODO use central regex library #34
 		if (strlen($name) == 0)
 		{
 			// a non empty name must be entered
@@ -119,7 +119,6 @@ TPLFEEDBACKFORM;
 		{
 			// some text must be entered
 			echo '<em class="error">'.ERROR_EMPTY_MESSAGE.'</em>';
-			echo $alert;
 			echo $template;
 		}
 		else
