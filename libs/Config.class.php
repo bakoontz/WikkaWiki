@@ -166,12 +166,12 @@ class Config
 	 * Navigation links displayed to anonymous users. This value should be formatted in Wikka markup so as to be passed to 
 	 * {@link Wakka::Format()}. 
 	 */
-	var $navigation_links = '[[CategoryCategory Categories]] :: PageIndex ::  RecentChanges :: RecentlyCommented :: [[UserSettings Login/Register]]';
+	var $navigation_links = 'HomePage :: [[CategoryCategory Categories]] :: PageIndex ::  RecentChanges :: RecentlyCommented :: [[UserSettings Login/Register]]';
 	/**
 	 * Logged-in navigation links.
 	 * Navigation links for logged-in users. See {@link Config::$navigation_links}.
 	 */
-	var $logged_in_navigation_links = '[[CategoryCategory Categories]] :: PageIndex :: RecentChanges :: RecentlyCommented :: [[UserSettings Change settings/Logout]]';
+	var $logged_in_navigation_links = 'HomePage :: [[CategoryCategory Categories]] :: PageIndex :: RecentChanges :: RecentlyCommented :: [[UserSettings Change settings/Logout]]';
 
 	/**
 	 * Referrers purge time in days.
