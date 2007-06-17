@@ -29,10 +29,12 @@ if ($this->UserIsOwner())
 	{
 		$default_read_acl = $this->GetConfigValue('default_read_acl');
 		$default_write_acl = $this->GetConfigValue('default_write_acl');
-		$default_comment_acl = $this->GetConfigValue('default_comment_acl');
+		$default_comment_read_acl = $this->GetConfigValue('default_comment_read_acl');
+		$default_comment_post_acl = $this->GetConfigValue('default_comment_post_acl');
 		$posted_read_acl = $_POST['read_acl'];
 		$posted_write_acl = $_POST['write_acl'];
-		$posted_comment_acl = $_POST['comment_acl'];
+		$posted_comment_read_acl = $_POST['comment_read_acl'];
+		$posted_comment_post_acl = $_POST['comment_post_acl'];
 		$message = '';
 
 		// store lists only if ACLs have previously been defined,
@@ -43,13 +45,15 @@ if ($this->UserIsOwner())
 		    "' LIMIT 1");
 
 		if ($page ||
-		    ($posted_read_acl != $default_read_acl||
-		     $posted_write_acl != $default_write_acl||
-		     $posted_comment_acl != $default_comment_acl))
+		    ($posted_read_acl != $default_read_acl ||
+		     $posted_write_acl != $default_write_acl ||
+		     $posted_comment_read_acl != $default_comment_read_acl ||
+			 $posted_comment_post_acl != $default_comment_post_acl))
 		{
 			$this->SaveACL($this->GetPageTag(), 'read', $this->TrimACLs($posted_read_acl));
 			$this->SaveACL($this->GetPageTag(), 'write', $this->TrimACLs($posted_write_acl));
-			$this->SaveACL($this->GetPageTag(), 'comment', $this->TrimACLs($posted_comment_acl));
+			$this->SaveACL($this->GetPageTag(), 'comment_read', $this->TrimACLs($posted_comment_read_acl));
+			$this->SaveACL($this->GetPageTag(), 'comment_post', $this->TrimACLs($posted_comment_post_acl));
 			$message = ACLS_UPDATED;
 		}
 
@@ -89,9 +93,15 @@ if ($this->UserIsOwner())
 	</td>
 
 	<td>
-	<label for="comment_acl"><strong><?php echo ACLS_COMMENT_LABEL ?></strong></label><br />
-	<textarea id="comment_acl" name="comment_acl" rows="4" cols="20"><?php echo preg_replace("/[\s,]+/", "\n", $this->ACLs['comment_acl']) ?></textarea>
+	<label for="comment_read_acl"><strong><?php echo ACLS_COMMENT_READ_LABEL ?></strong></label><br />
+	<textarea id="comment_read_acl" name="comment_read_acl" rows="4" cols="20"><?php echo preg_replace("/[\s,]+/", "\n", $this->ACLs['comment_read_acl']) ?></textarea>
 	</td>
+
+	<td>
+	<label for="comment_post_acl"><strong><?php echo ACLS_COMMENT_POST_LABEL ?></strong></label><br />
+	<textarea id="comment_post_acl" name="comment_post_acl" rows="4" cols="20"><?php echo preg_replace("/[\s,]+/", "\n", $this->ACLs['comment_post_acl']) ?></textarea>
+	</td>
+
 </tr>
 
 <tr>

@@ -54,7 +54,8 @@ case "0":
 			 "page_tag varchar(75) NOT NULL default '',".
 			 "read_acl text NOT NULL,".
 			 "write_acl text NOT NULL,".
-			 "comment_acl text NOT NULL,".
+			 "comment_read_acl text NOT NULL,".
+			 "comment_post_acl text NOT NULL,".
 			 "PRIMARY KEY  (page_tag)".
 			") TYPE=MyISAM", $dblink), __('Already exists?'), 0);
 	test(sprintf(__('Creating %s table'), __('link tracking')).'...',
@@ -141,8 +142,7 @@ case "0":
 	'SysInfo'), $dblink, $config); 
 
 	test(__('Setting default ACL').'...', 1);
-	mysql_query("insert into ".$config["table_prefix"]."acls set page_tag = 'UserSettings', read_acl = '*', write_acl = '+', comment_acl = '+'", $dblink);
-	test(__('Building links table').'...', 1);
+	mysql_query("insert into ".$config["table_prefix"]."acls set page_tag = 'UserSettings', read_acl = '*', write_acl = '+', comment_read_acl = '*', comment_post_acl = '+'", $dblink); test(__('Building links table').'...', 1);
 	include('links.php');
 
 	break;
@@ -294,7 +294,14 @@ case "1.1.6.3":
 	@mysql_query("alter table ".$config["table_prefix"]."comments add status varchar(10) default NULL", $dblink), __('Already done?  OK!'), 0);
 	test(__('Adding field to users table to specify comment display default').'...', 
 	@mysql_query("alter table ".$config["table_prefix"]."users add default_comment_display int(10) unsigned NOT NULL default '1'", $dblink), __('Already done?  OK!'), 0);
-
+	// Create new fields for comment_read_acl and comment_post_acl,
+	// and copy existing comment_acl values to these new fields
+	test(__('Creating new comment_read_acl field').'...',
+	@mysql_query("alter table ".$config['table_prefix']."acls add comment_read_acl text not null", $dblink), __('Already done?  OK!'), 0);
+	test(__('Creating new comment_post_acl field').'...',
+	@mysql_query("alter table ".$config['table_prefix']."acls add comment_post_acl text not null", $dblink), __('Already done?  OK!'), 0);
+	test(__('Copying existing comment_acls to new fields').'...',
+	@mysql_query("update ".$config['table_prefix']."acls as a inner join(select page_tag, comment_acl from wikka_acls) as b on a.page_tag = b.page_tag set a.comment_read_acl=b.comment_acl, a.comment_post_acl=b.comment_acl", $dblink), __('Failed').'. ?', 1);
 	break;
 case "trunk": //latest development version from the SVN repository - do not remove
 	break;

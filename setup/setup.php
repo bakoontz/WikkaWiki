@@ -98,7 +98,8 @@ if (!file_exists($wakkaConfigLocation) || !is_writeable($wakkaConfigLocation))
  // Showing select boxes for choosing ACL options
 	ACL_show_selectbox('read');
 	ACL_show_selectbox('write');
-	ACL_show_selectbox('comment');
+	ACL_show_selectbox('comment_read');
+	ACL_show_selectbox('comment_post');
 	
 	if (!$wakkaConfig["wakka_version"])
  	{

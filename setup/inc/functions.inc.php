@@ -160,7 +160,8 @@ function ACL_show_selectbox($type)
 	global $config;
 	$default_acl['read'] = '*';
 	$default_acl['write'] = '+';
-	$default_acl['comment'] = '+';
+	$default_acl['comment_read'] = '*';
+	$default_acl['comment_post'] = '+';
 	$config_name = 'default_'.$type.'_acl';
 	if (!isset($config[$config_name])) $config[$config_name] = $default_acl[$type];
 	$predef_acl = array(

@@ -104,7 +104,7 @@ if ($comments = $this->LoadRecentComments(2*$n))
 	$c = 0;
 	foreach ($comments as $comment)
 	{
-		if (!$this->HasAccess('comment', $comment['page_tag']))
+		if (!$this->HasAccess('comment_read', $comment['page_tag']))
 		{
 			continue;
 		}

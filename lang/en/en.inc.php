@@ -530,7 +530,8 @@ define('PAGE_OWNERSHIP_CHANGED','Ownership changed to %s'); // %s - name of new 
 define('ACLS_LEGEND','Access Control Lists for %s'); // %s - name of current page
 define('ACLS_READ_LABEL','Read ACL:');
 define('ACLS_WRITE_LABEL','Write ACL:');
-define('ACLS_COMMENT_LABEL','Comment ACL:');
+define('ACLS_COMMENT_READ_LABEL','Comment Read ACL:');
+define('ACLS_COMMENT_POST_LABEL','Comment Post ACL:');
 define('SET_OWNER_LABEL','Set Page Owner:');
 define('SET_OWNER_CURRENT_OPTION','(Current Owner)');
 define('SET_OWNER_PUBLIC_OPTION','(Public)'); // actual DB value will remain '(Public)' even if this option text is translated!

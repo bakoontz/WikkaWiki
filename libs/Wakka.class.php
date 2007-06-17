@@ -2783,7 +2783,8 @@ class Wakka
 				'page_tag' => $tag,
 				'read_acl' => $this->GetConfigValue('default_read_acl'),
 				'write_acl' => $this->GetConfigValue('default_write_acl'),
-				'comment_acl' => $this->GetConfigValue('default_comment_acl')
+				'comment_read_acl' => $this->GetConfigValue('default_comment_read_acl'),
+				'comment_post_acl' => $this->GetConfigValue('default_comment_post_acl')
 				);
 		}
 		return $acl;
@@ -2810,7 +2811,8 @@ class Wakka
 			$insert = 1;
 			$acls['read_acl'] = $this->GetConfigValue('default_read_acl');
 			$acls['write_acl'] = $this->GetConfigValue('default_write_acl');
-			$acls['comment_acl'] = $this->GetConfigValue('default_comment_acl');
+			$acls['comment_read_acl'] = $this->GetConfigValue('default_comment_read_acl');
+			$acls['comment_post_acl'] = $this->GetConfigValue('default_comment_post_acl');
 		}
 		$priv = mysql_real_escape_string($privilege).'_acl';
 		$acls[$priv] = 

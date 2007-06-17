@@ -26,7 +26,7 @@
 $comment_id = intval(trim($_POST['comment_id']));
 
 // Delete comment
-if ($_POST['submit']==COMMENT_DELETE_BUTTON)
+if ($_POST['submit']==COMMENT_DELETE_BUTTON && $this->HasAccess('comment_post'))
 {
 	$comment = $this->LoadSingle("SELECT user, parent FROM ".$this->config["table_prefix"]."comments WHERE id = '".$comment_id."' LIMIT 1");
 	$current_user = $this->GetUserName();
@@ -44,39 +44,36 @@ if ($_POST['submit']==COMMENT_DELETE_BUTTON)
 }
 
 // Display entry area for comment
-if($_POST['submit']==COMMENT_REPLY_BUTTON || $_POST['submit']==COMMENT_NEW_BUTTON)
+if(($_POST['submit']==COMMENT_REPLY_BUTTON || $_POST['submit']==COMMENT_NEW_BUTTON) && $this->HasAccess('comment_post'))
 {
 	// display comment form
-	if ($this->HasAccess('comment'))
+	$comment = '';
+	if(isset($comment_id))
 	{
-		$comment = '';
-		if(isset($comment_id))
-		{
-			$comment = $this->LoadSingle("SELECT user, comment FROM ".$this->config["table_prefix"]."comments WHERE id = '".$comment_id."' LIMIT 1");
-		}
-	?>
-		<div class="commentform">
-		<?php echo $this->FormOpen('processcomment'); ?>
-		<input type="hidden" name="comment_id" value="<?php echo $comment_id ?>" />
-		<?php if($_POST['submit']==COMMENT_REPLY_BUTTON) { ?>
-        <label for="commentbox"><?php printf(ADD_COMMENT_LABEL, $this->FormatUser($comment['user'])); ?></label><br />
-		<div class="commentparent"><?php echo $comment['comment']; ?></div>
-		<?php } else { ?>
-		<label for="commentbox"><?php echo NEW_COMMENT_LABEL; ?></label><br />
-		<?php } ?>	
-		<textarea id="commentbox" name="body" rows="6" cols="78"></textarea><br />
-		<input type="submit" name="submit" value="<?php echo COMMENT_ADD_BUTTON; ?>" accesskey="s" />
-		<?php echo $this->FormClose(); ?>
-		</div>
-	<?php
+		$comment = $this->LoadSingle("SELECT user, comment FROM ".$this->config["table_prefix"]."comments WHERE id = '".$comment_id."' LIMIT 1");
 	}
+?>
+	<div class="commentform">
+	<?php echo $this->FormOpen('processcomment'); ?>
+	<input type="hidden" name="comment_id" value="<?php echo $comment_id ?>" />
+	<?php if($_POST['submit']==COMMENT_REPLY_BUTTON) { ?>
+	<label for="commentbox"><?php printf(ADD_COMMENT_LABEL, $this->FormatUser($comment['user'])); ?></label><br />
+	<div class="commentparent"><?php echo $comment['comment']; ?></div>
+	<?php } else { ?>
+	<label for="commentbox"><?php echo NEW_COMMENT_LABEL; ?></label><br />
+	<?php } ?>	
+	<textarea id="commentbox" name="body" rows="6" cols="78"></textarea><br />
+	<input type="submit" name="submit" value="<?php echo COMMENT_ADD_BUTTON; ?>" accesskey="s" />
+	<?php echo $this->FormClose(); ?>
+	</div>
+<?php
 }
 
 // Save comment
 if ($_POST['submit']==COMMENT_ADD_BUTTON)
 {
 	$parent_id = intval(trim($_POST['comment_id']));
-	if ($this->HasAccess('comment') || $this->IsAdmin())
+	if ($this->HasAccess('comment_post') || $this->IsAdmin())
 	{
 		$redirectmessage = '';
 		$body = nl2br($this->htmlspecialchars_ent(trim($_POST['body'])));

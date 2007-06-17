@@ -80,7 +80,8 @@ else
 		echo $this->Format($this->page['body'], 'wakka', 'page');
 		echo "\n".'</div><!--closing page content-->'."\n\n";
 
-		if ($this->GetConfigValue('hide_comments') != 1)
+		if ($this->GetConfigValue('hide_comments') != 1 &&
+			$this->HasAccess('comment_read'))
 		{
 			echo '<!-- starting comments block-->'."\n";
 			echo '<div id="comments">'."\n";
@@ -130,9 +131,15 @@ else
 					</div><!-- closing commentsnav div -->
 				<!--<span id="comments">&nbsp;</span>--><?php echo COMMENTS_CAPTION ?><?php // TODO what is this span for?? ?>
 				[<a href="<?php echo $this->Href('', '', 'show_comments='.COMMENT_NO_DISPLAY) ?>"><?php echo HIDE_COMMENTS_LINK_DESC ?></a>]
+<?php
+			if($this->HasAccess('comment_post')) {	
+?>
                 <?php echo $this->FormOpen("processcomment") ?>
 				<input type="submit" name="submit" value="<?php echo COMMENT_NEW_BUTTON ?>" />
 				<?php echo $this->FormClose() ?>
+<?php
+			}
+?>
 				</div><!--closing commentsheader (show)-->
 
 <?php
@@ -151,15 +158,15 @@ else
 				{
 				case 0:
 					$comments_message = STATUS_NO_COMMENTS.' ';
-					$showcomments_text = $this->FormOpen("processcomment");
-					$showcomments_text .= '<input type="submit" name="submit" value="'.COMMENT_NEW_BUTTON.'" />';
-					$showcomments_text .= $this->FormClose();
-					$comment_form_link = ($this->HasAccess('comment')) ? 1 : 0;
+					if($this->HasAccess('comment_post')) {
+						$showcomments_text = $this->FormOpen("processcomment");
+						$showcomments_text .= '<input type="submit" name="submit" value="'.COMMENT_NEW_BUTTON.'" />';
+						$showcomments_text .= $this->FormClose();
+					}
 					break;
 				case 1:
 					$comments_message = STATUS_ONE_COMMENT.' ';
 					$showcomments_text = '[<a href="'.$this->Href('', '', 'show_comments=1#comments').'">'.DISPLAY_COMMENT_LINK_DESC.'</a>]';
-					$comment_form_link = 1;
 					break;
 				default:
 					$comments_message = sprintf(STATUS_SOME_COMMENTS, $commentCount).' ';
@@ -172,14 +179,10 @@ else
 						$comment_ordering = COMMENT_ORDER_DATE_ASC;
 					}
 					$showcomments_text = '[<a href="'.$this->Href('', '', 'show_comments='.$comment_ordering.'#comments').'">'.DISPLAY_COMMENTS_LABEL.'</a>]';
-					$comment_form_link = 1;
 				}
 
 				echo $comments_message;
-				if ($comment_form_link == 1)
-				{
-					echo $showcomments_text;
-				}
+				echo $showcomments_text;
 				echo "\n".'</div><!--closing commentsheader (hide)-->'."\n"; //TODO: move to templating class
 			}
 			echo '</div><!--closing comments block-->'."\n\n";
@@ -236,7 +239,7 @@ function displayComments(&$obj, &$comments, $tag)
 		<div class="commentinfo"><?php echo $comment_ts ?></div>
 		<?php echo $comment['comment'] ?>
 <?php
-			if($obj->HasAccess('comment'))
+			if($obj->HasAccess('comment_post'))
 			{
 				echo $obj->FormOpen("processcomment");
 ?>
