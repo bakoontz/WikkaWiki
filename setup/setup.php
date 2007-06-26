@@ -69,8 +69,8 @@ if (!file_exists($wakkaConfigLocation))
 
 if (!file_exists($wakkaConfigLocation) || !is_writeable($wakkaConfigLocation))
 {
-	echo ' <tr><td>&nbsp;</td><td><span class="note">'.sprintf(__('NOTE: This installer will try to write the configuration data to a file called %1$s, located in %2$s'), '<tt>'.basename($wakkaConfigLocation).'</tt>', '<tt>['.dirname($wakkaConfigLocation).']</tt>').'. ';
-	echo __('In order for this to work, you must make sure the web server has write access to that file! If you can\'t do this, you will have to edit the file manually (the installer will tell you how)').'.</span></td></tr>'."\n";
+	echo ' <tr><td>&nbsp;</td><td><span class="note">'.sprintf(__('NOTE: The installer will try to write the configuration data to a file called %1$s, located in %2$s'), '<tt>'.basename($wakkaConfigLocation).'</tt>', '<tt>'.dirname(realpath($wakkaConfigLocation)).'</tt>').'. ';
+	echo __('In order for this to work, you must make sure the web server has write access to that file. If you can\'t do this, you will have to edit the file manually (the installer will tell you how)').'.</span></td></tr>'."\n";
 }
 
 //@@@DEBUG
@@ -80,26 +80,6 @@ if (!file_exists($wakkaConfigLocation) || !is_writeable($wakkaConfigLocation))
 
 //@@@DEBUG
 //echo 'BASE_URL: <tt>'.$wakkaConfig['base_url'].'</tt>';
-
-/*
-	<tr><td>&nbsp;</td><td><br /><h2>Default ACL Configuration</h2></td></tr>
-	<tr><td>&nbsp;</td><td>You can select one of the following preselected configurations</td></tr>
-	<tr><td>&nbsp;</td><td>
-	<label><input type="radio" name="config[acl]" checked="checked" value='0'/>private wiki for personal use</label><br />
-	<label><input type="radio" name="config[acl]" value='1' />personal wiki with no comments</label><br />
-	<label><input type="radio" name="config[acl]" value='2' />personal wiki with comments from registered users only</label><br />
-	<label><input type="radio" name="config[acl]" value='3' />personal wiki with comments from any user</label><br />
-	<label><input type="radio" name="config[acl]" value='4' />public wiki with contributions and comments from registered users only</label><br />
-	<label><input type="radio" name="config[acl]" value='5' />public wiki with contributions from registered users only and </label><br />
-	</td></tr>
-	<tr><td>&nbsp;</td><td>&nbsp;</td></tr>	
-	<tr><td>&nbsp;</td><td><label><input type="radio" name="config[acl]" value='6' />Alternatively, you can select any of the following configurations</label></td></tr>
-*/
- // Showing select boxes for choosing ACL options
-	ACL_show_selectbox('read');
-	ACL_show_selectbox('write');
-	ACL_show_selectbox('comment_read');
-	ACL_show_selectbox('comment_post');
 	
 	if (!$wakkaConfig["wakka_version"])
  	{
@@ -110,17 +90,17 @@ if (!file_exists($wakkaConfigLocation) || !is_writeable($wakkaConfigLocation))
 	<?php
 	 }
 	?>
-	<tr><td>&nbsp;</td><td><br /><h2><?php echo __('Wikka Site Configuration'); ?></h2></td></tr>
+	<tr><td>&nbsp;</td><td><br /><h2><?php echo __('Wiki Configuration'); ?></h2></td></tr>
 	<tr><td>&nbsp;</td><td><?php echo __('The name of your Wikka site, as it will be displayed in the title'); ?>.</td></tr>
 	<tr><td align="right" nowrap="nowrap"><?php echo __('Your Wikka site\'s name'); ?>:</td><td><input type="text" size="50" name="config[wakka_name]" value="<?php echo $config["wakka_name"] ?>" /></td></tr>
 
 	<tr><td>&nbsp;</td><td><?php echo __('Your Wikka site\'s home page').'. '.sprintf(__('Should be formatted as a %s'), $wikiname); ?>.</td></tr>
 	<tr><td align="right" nowrap="nowrap"><?php echo __('Home page'); ?>:</td><td><input type="text" size="50" name="config[root_page]" value="<?php echo $config["root_page"] ?>" /></td></tr>
 
-	<tr><td>&nbsp;</td><td><?php echo __('Suffix used for cookies and part of the session name. This allows you to run multiple Wikka installations on the same server by configuring them to use different wiki prefixes.'); ?></td></tr>
+	<tr><td>&nbsp;</td><td><?php echo __('Suffix used for cookies and session name. This allows you to run multiple Wikka installations on the same server by configuring them to use different wiki prefixes.'); ?></td></tr>
 	<tr><td align="right" nowrap="nowrap"><?php echo __('Your Wiki suffix:'); ?></td><td><input type="text" size="50" name="config[wiki_suffix]" value="<?php echo $config["wiki_suffix"] ?>" /></td></tr>
 
-	<tr><td>&nbsp;</td><td><?php echo __('META Keywords/Description that get inserted into the HTML headers'); ?>.</td></tr>
+	<tr><td>&nbsp;</td><td><?php echo __('Optional keywords/description to be inserted in the HTML headers'); ?>.</td></tr>
 	<tr><td align="right" nowrap="nowrap"><?php echo __('Meta Keywords'); ?>:</td><td><input type="text" size="50" name="config[meta_keywords]" value="<?php echo $config["meta_keywords"] ?>" /></td></tr>
 	<tr><td align="right" nowrap="nowrap"><?php echo __('Meta Description'); ?>:</td><td><input type="text" size="50" name="config[meta_description]" value="<?php echo $config["meta_description"] ?>" /></td></tr>
 
@@ -141,7 +121,32 @@ if (!file_exists($wakkaConfigLocation) || !is_writeable($wakkaConfigLocation))
 
 <?php			
 	}
-?>
+
+/*
+	<tr><td>&nbsp;</td><td><br /><h2>Default ACL Configuration</h2></td></tr>
+	<tr><td>&nbsp;</td><td>You can select one of the following preselected configurations</td></tr>
+	<tr><td>&nbsp;</td><td>
+	<label><input type="radio" name="config[acl]" checked="checked" value='0'/>private wiki for personal use</label><br />
+	<label><input type="radio" name="config[acl]" value='1' />personal wiki with no comments</label><br />
+	<label><input type="radio" name="config[acl]" value='2' />personal wiki with comments from registered users only</label><br />
+	<label><input type="radio" name="config[acl]" value='3' />personal wiki with comments from any user</label><br />
+	<label><input type="radio" name="config[acl]" value='4' />public wiki with contributions and comments from registered users only</label><br />
+	<label><input type="radio" name="config[acl]" value='5' />public wiki with contributions from registered users only and </label><br />
+	</td></tr>
+	<tr><td>&nbsp;</td><td>&nbsp;</td></tr>	
+	<tr><td>&nbsp;</td><td><label><input type="radio" name="config[acl]" value='6' />Alternatively, you can select any of the following configurations</label></td></tr>
+*/
+ // Showing select boxes for choosing ACL options
+	 ?>
+	<tr><td>&nbsp;</td><td><br /><h2><?php echo __('Access privileges'); ?></h2></td></tr>
+		<tr><td>&nbsp;</td><td><?php echo __('You can configure who has read/write access to the wiki by default. If you don\'t want to change these settings now, you\'ll be able to modify access privileges later'); ?>.</td></tr>
+	<?php
+	ACL_show_selectbox('read');
+	ACL_show_selectbox('write');
+	ACL_show_selectbox('comment_read');
+	ACL_show_selectbox('comment_post');
+	?>
+ <tr><td>&nbsp;</td><td>
  <tr><td>&nbsp;</td><td>
  <input type="hidden" name="installAction" value="install" />
  <input type="submit" value="<?php echo _p('Continue'); ?>"/>
