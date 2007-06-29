@@ -301,7 +301,7 @@ case "1.1.6.3":
 	test(__('Creating new comment_post_acl field').'...',
 	@mysql_query("alter table ".$config['table_prefix']."acls add comment_post_acl text not null", $dblink), __('Already done?  OK!'), 0);
 	test(__('Copying existing comment_acls to new fields').'...',
-	@mysql_query("update ".$config['table_prefix']."acls as a inner join(select page_tag, comment_acl from wikka_acls) as b on a.page_tag = b.page_tag set a.comment_read_acl=b.comment_acl, a.comment_post_acl=b.comment_acl", $dblink), __('Failed').'. ?', 1);
+	@mysql_query("update ".$config['table_prefix']."acls as a inner join(select page_tag, comment_acl from ".$config['table_prefix']."acls) as b on a.page_tag = b.page_tag set a.comment_read_acl=b.comment_acl, a.comment_post_acl=b.comment_acl", $dblink), __('Failed').'. ?', 1);
 	break;
 case "trunk": //latest development version from the SVN repository - do not remove
 	break;
