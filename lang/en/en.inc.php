@@ -44,6 +44,7 @@ define('WIKKA_ERROR_INVALID_PAGE_NAME','The page name %s is invalid. Valid page 
 define('WIKKA_ERROR_PAGE_ALREADY_EXIST','Sorry, the target page already exists');
 define('WIKKA_LOGIN_LINK_DESC','login');
 define('WIKKA_MAINPAGE_LINK_DESC','main page');
+define('WIKKA_NO_OWNER','Nobody');
 define('WIKKA_NOT_AVAILABLE','n/a');
 define('WIKKA_NOT_INSTALLED','not installed');
 define('WIKKA_ANONYMOUS_USER','anonymous'); // 'name' of non-registered user
@@ -202,7 +203,6 @@ define('PAGE_ACLS_EDIT_LINK_DESC','Edit ACLs');
 define('PAGE_ACLS_EDIT_ADMIN_LINK_DESC','('.PAGE_ACLS_EDIT_LINK_DESC.')');
 define('PUBLIC_PAGE','Public page');
 define('USER_IS_OWNER','You own this page.');
-define('NO_OWNER','Nobody');
 define('TAKE_OWNERSHIP','Take Ownership');
 define('REFERRERS_LINK_TITLE','Click to view a list of URLs referring to this page'); // @@@ TODO 'View a list of URLs referring to this page'
 define('REFERRERS_LINK_DESC','Referrers');
