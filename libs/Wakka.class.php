@@ -80,15 +80,15 @@ class Wakka
 	var $VERSION;
 	var $cookies_sent = false;
 	/**
-	 * $pageCache. 
-	 * This array stores cached pages. Keys are page names (tag) or page id (prepended with /#) and values are the 
+	 * $pageCache.
+	 * This array stores cached pages. Keys are page names (tag) or page id (prepended with /#) and values are the
 	 * page structure. See {@link Wakka::CachePage()}
 	 * @var array
 	 * @access public
 	 */
 	var $pageCache;
 	/**
-	 * $do_not_send_anticaching_headers. 
+	 * $do_not_send_anticaching_headers.
 	 * If this value is set to true, Anti-caching HTTP headers won't be added.
 	 * @var boolean
 	 * @access public
@@ -187,7 +187,7 @@ class Wakka
 	 * @param	string $query mandatory: the query to be executed
 	 * @return	array the result of the query.
 	 * @todo	move into a database class.
-	 */   
+	 */
 	function LoadAll($query)
 	{
 		$data = array();
@@ -207,14 +207,14 @@ class Wakka
 	 * Get a count of the number of records in a given table that would be matched
 	 * by the given (optional) WHERE criteria. Only a single table can be queried.
 	 *
-	 * @access	 public
-	 * @uses	 Wakka::Query()
+	 * @access	public
+	 * @uses	Wakka::Query()
 	 *
-	 * @param	 string	 $table	 required: (logical) table name to query;
-	 *         prefix will be automatically added
-	 * @param	 string	 $where	 optional: criteria to be specified for a WHERE clause;
-	 *         do not include WHERE
-	 * @return	 integer	 number of matches returned by MySQL
+	 * @param	string		$table	required: (logical) table name to query;
+	 *			prefix will be automatically added
+	 * @param	string		$where	optional: criteria to be specified for a WHERE clause;
+	 *			do not include WHERE
+	 * @return	integer		number of matches returned by MySQL
 	 */
 	function getCount($table, $where='') # JW 2005-07-16
 	{
@@ -338,7 +338,7 @@ class Wakka
 			return false;
 		}
 	}
-	
+
 	/**
 	 * Create a unique id for an HTML element.
 	 *
@@ -436,7 +436,7 @@ class Wakka
 		$aIds[$group][] = $id;										# keep track of both specified and generated ids (without suffix)
 		return $idOut;
 	}
-	
+
 	/**
 	 * Strip potentially dangerous tags from embedded HTML.
 	 *
@@ -458,16 +458,16 @@ class Wakka
 	/**
 	 * Make sure a (user-provided) URL does use &amp; instead of & and is protected from attacks.
 	 *
-	 * Any already-present '&amp;' is first turned into '&'; then hsc_secure() 
-	 * is applied so all ampersands are "escaped" while characters that could be 
-	 * used to create a script attack (< > or ") are "neutralized" by escaping 
+	 * Any already-present '&amp;' is first turned into '&'; then hsc_secure()
+	 * is applied so all ampersands are "escaped" while characters that could be
+	 * used to create a script attack (< > or ") are "neutralized" by escaping
 	 * them.
 	 *
-	 * This method should be applied on any user-provided url in actions, 
+	 * This method should be applied on any user-provided url in actions,
 	 * handlers etc.
-	 * 
+	 *
 	 * Note: hsc_secure() is the secure replacement for PHP's htmlspecialchars().
-	 * See #427. 
+	 * See #427.
 	 *
 	 * @author		{@link http://wikkawiki.org/JavaWoman JavaWoman}
 	 * @copyright	Copyright © 2004, Marjolein Katsma
@@ -488,38 +488,38 @@ class Wakka
 	/**
 	 * Wrapper around hsc_secure() which preserves entity references.
 	 *
-	 * The first two parameters for this function as the same as those for 
+	 * The first two parameters for this function as the same as those for
 	 * htmlspecialchars() in PHP: the text to be treated, and an optional
-	 * parameter determining how to handle quotes; both these parameters are 
+	 * parameter determining how to handle quotes; both these parameters are
 	 * passed on to our hsc_secure() replacement for htmlspecialchars().
-	 * 
+	 *
 	 * Since hsc_secure() does not need a character set parameter, we don't
 	 * have that here any more either.
-	 * 
-	 * A third 'doctype' parameter is for local use only and determines how 
-	 * pre-existing entity references are treated after hsc_secure() has done 
+	 *
+	 * A third 'doctype' parameter is for local use only and determines how
+	 * pre-existing entity references are treated after hsc_secure() has done
 	 * its work: numeic entity references are always "unescaped' since they are
 	 * valid for both HTML and XML doctypes; for XML the named entity references
 	 * for the special characters are unescaped as well, while for for HTML any
-	 * named entity reference is unescaped. This parameter is optional and 
-	 * defaults to HTML.   
+	 * named entity reference is unescaped. This parameter is optional and
+	 * defaults to HTML.
 	 *
-	 * The function first applies hsc_secure() to the input string and then 
-	 * "unescapes" character entity references and numeric character references 
+	 * The function first applies hsc_secure() to the input string and then
+	 * "unescapes" character entity references and numeric character references
 	 * (both decimal and hexadecimal).
-	 * Entities are recognized also if the ending semicolon is omitted at the 
-	 * end or before a newline or tag but for consistency the semicolon is 
+	 * Entities are recognized also if the ending semicolon is omitted at the
+	 * end or before a newline or tag but for consistency the semicolon is
 	 * always added in the output where it was omitted.
 	 *
 	 * Usage note:
-	 * Where code should be rendered <em>as code</em> hsc_secure() should be 
-	 * used directly so that entity references are also rendered as such instead 
+	 * Where code should be rendered <em>as code</em> hsc_secure() should be
+	 * used directly so that entity references are also rendered as such instead
 	 * of as their corresponding characters.
-	 * 
+	 *
 	 * Documentation note:
-	 * It seems the $doctype parameter was added in 1.1.6.2; version should have 
+	 * It seems the $doctype parameter was added in 1.1.6.2; version should have
 	 * been bumped up to 1.1, and the param documented. We'll assume the updated
-	 * version was indeed 1.1, and put this one using hsc_secure() at 1.2 (at 
+	 * version was indeed 1.1, and put this one using hsc_secure() at 1.2 (at
 	 * the same time updating the 'XML' doctype with apos as named entity).
 	 *
 	 * @access	public
@@ -528,20 +528,20 @@ class Wakka
 	 *
 	 * @uses	Wakka::hsc_secure()
 	 * @param	string	$text required: text to be converted
-	 * @param	integer	$quote_style optional: quoting style - can be ENT_COMPAT 
-	 * 			(default, escape only double quotes), ENT_QUOTES (escape both 
-	 * 			double and single quotes) or ENT_NOQUOTES (don't escape any 
+	 * @param	integer	$quote_style optional: quoting style - can be ENT_COMPAT
+	 * 			(default, escape only double quotes), ENT_QUOTES (escape both
+	 * 			double and single quotes) or ENT_NOQUOTES (don't escape any
 	 * 			quotes)
 	 * @param	string $doctype 'HTML' (default) or 'XML'; for XML only the XML
 	 * 			standard entities are unescaped so we'll have valid XML content
-	 * @return	string	converted string with escaped special characted but 
+	 * @return	string	converted string with escaped special characted but
 	 * 			entity references intact
-	 * 
-	 * @todo	(maybe) recognize valid html entities and only leave those 
+	 *
+	 * @todo	(maybe) recognize valid html entities and only leave those
 	 * 			alone, thus transform &error; to &amp;error;
-	 * @todo	(later - maybe) support full range of situations where (in SGML) 
-	 * 			a terminating ; may legally be omitted (end, newline and tag are 
-	 * 			merely the most common ones); such usage is quite rare though 
+	 * @todo	(later - maybe) support full range of situations where (in SGML)
+	 * 			a terminating ; may legally be omitted (end, newline and tag are
+	 * 			merely the most common ones); such usage is quite rare though
 	 * 			and may not be worth the effort
 	 */
 	function htmlspecialchars_ent($text,$quote_style=ENT_COMPAT,$doctype='HTML')
@@ -551,9 +551,9 @@ class Wakka
 	    // [ENT_QUOTES] => 3
 	    // [ENT_NOQUOTES] => 0
 		if (!in_array($quote_style,array(ENT_COMPAT,ENT_QUOTES,ENT_NOQUOTES))) {
-			$quote_style = ENT_COMPAT;	
+			$quote_style = ENT_COMPAT;
 		}
-		
+
 		// define patterns
 		$terminator = ';|(?=($|[\n<]|&lt;))';	// semicolon; or end-of-string, newline or tag
 		$numdec = '#[0-9]+';					// numeric character reference (decimal)
@@ -561,7 +561,7 @@ class Wakka
 		if ($doctype == 'XML')					// pure XML allows only named entities for special chars
 		{
 			// only valid named entities in XML (case-sensitive)
-			$named = 'lt|gt|quot|apos|amp';			
+			$named = 'lt|gt|quot|apos|amp';
 			$ignore_case = '';
 			$entitystring = $named.'|'.$numdec.'|'.$numhex;
 		}
@@ -586,62 +586,62 @@ class Wakka
 
 	/**
 	 * Secure replacement for PHP built-in function htmlspecialchars().
-	 * 
-	 * See ticket #427 (http://wush.net/trac/wikka/ticket/427) for the rationale 
+	 *
+	 * See ticket #427 (http://wush.net/trac/wikka/ticket/427) for the rationale
 	 * for this replacement function.
-	 * 
+	 *
 	 * The INTERFACE for this function is almost the same as that for
 	 * htmlspecialchars(), with the same default for quote style; however, there
 	 * is no 'charset' parameter. The reason for this is as follows:
-	 * 
+	 *
 	 * The PHP docs say:
 	 * 	"The third argument charset defines character set used in conversion."
-	 * 
+	 *
 	 * I suspect PHP's htmlspecialchars() is working at the byte-value level and
-	 * thus _needs_ to know (or asssume) a character set because the special 
+	 * thus _needs_ to know (or asssume) a character set because the special
 	 * characters to be replaced could exist at different code points in
-	 * different character sets. (If indeed htmlspecialchars() works at 
-	 * byte-value level that goes some  way towards explaining why the 
-	 * vulnerability would exist in this function, too, and not only in 
+	 * different character sets. (If indeed htmlspecialchars() works at
+	 * byte-value level that goes some  way towards explaining why the
+	 * vulnerability would exist in this function, too, and not only in
 	 * htmlentities() which certainly is working at byte-value level.)
-	 * 
+	 *
 	 * This replacement function however works at character level and should
-	 * therefore be "immune" to character set differences - so no charset 
+	 * therefore be "immune" to character set differences - so no charset
 	 * parameter is needed or provided. If a third parameter is passed, it will
 	 * be silently ignored.
-	 * 
+	 *
 	 * In the OUTPUT there is a minor difference in that we use '&#39;' instead
 	 * of PHP's '&#039;' for a single quote: this provides compatibility with
 	 * 	get_html_translation_table(HTML_SPECIALCHARS, ENT_QUOTES)
-	 * (see comment by mikiwoz at yahoo dot co dot uk on 
-	 * http://php.net/htmlspecialchars); it also matches the entity definition 
-	 * for XML 1.0 
-	 * (http://www.w3.org/TR/xhtml1/dtds.html#a_dtd_Special_characters). 
-	 * Like PHP we use a numeric character reference instead of '&apos;' for the 
-	 * single quote. For the other special characters we use the named entity 
+	 * (see comment by mikiwoz at yahoo dot co dot uk on
+	 * http://php.net/htmlspecialchars); it also matches the entity definition
+	 * for XML 1.0
+	 * (http://www.w3.org/TR/xhtml1/dtds.html#a_dtd_Special_characters).
+	 * Like PHP we use a numeric character reference instead of '&apos;' for the
+	 * single quote. For the other special characters we use the named entity
 	 * references, as PHP is doing.
-	 * 
+	 *
 	 * And finally:
-	 * The name for this function was basically inspired by waawaamilk (GeSHi), 
-	 * kindly provided by BenBE (GeSHi), happily acknowledged by WikkaWiki Dev 
+	 * The name for this function was basically inspired by waawaamilk (GeSHi),
+	 * kindly provided by BenBE (GeSHi), happily acknowledged by WikkaWiki Dev
 	 * Team and finally used by JavaWoman. :)
-	 * 
+	 *
 	 * @author 		{@link http://wikkawiki.org/JavaWoman Marjolein Katsma}
 	 *
 	 * @since		Wikka 1.1.6.3
 	 * @version		1.0
-	 * @license		http://www.gnu.org/copyleft/lgpl.html 
+	 * @license		http://www.gnu.org/copyleft/lgpl.html
 	 * 				GNU Lesser General Public License
-	 * @copyright	Copyright 2007, {@link http://wikkawiki.org/CreditsPage 
+	 * @copyright	Copyright 2007, {@link http://wikkawiki.org/CreditsPage
 	 * 				Wikka Development Team}
-	 * 
+	 *
 	 * @access	public
 	 * @param	string	$string	string to be converted
-	 * @param	integer	$quote_style 
+	 * @param	integer	$quote_style
 	 * 			- ENT_COMPAT:   escapes &, <, > and double quote (default)
 	 * 			- ENT_NOQUOTES: escapes only &, < and >
 	 * 			- ENT_QUOTES:   escapes &, <, >, double and single quotes
-	 * @return	string	converted string   
+	 * @return	string	converted string
 	 */
 	 function hsc_secure($string, $quote_style=ENT_COMPAT)
 	 {
@@ -774,12 +774,12 @@ class Wakka
 
 		// parse and return highlighted code
 		// comments added to make GeSHi-highlighted block visible in code JW/20070220
-		return '<!--start GeSHi-->'."\n".$geshi->parse_code()."\n".'<!--end GeSHi-->'."\n";	
+		return '<!--start GeSHi-->'."\n".$geshi->parse_code()."\n".'<!--end GeSHi-->'."\n";
 	}
 
 	/**
 	 * Variable-related methods
-	 * 
+	 *
 	 * @todo decide if we need these methods
 	 */
 	/**
@@ -842,7 +842,7 @@ class Wakka
 	 */
 	/**
 	 * LoadPage loads the page whose name is $tag.
-	 * 
+	 *
 	 * If parameter $time is provided, LoadPage returns the page as it was at that exact time.
 	 * If parameter $time is not provided, it returns the page as its latest state.
 	 * LoadPage and LoadPageById remember the page tag or page id they've queried by caching them,
@@ -851,9 +851,9 @@ class Wakka
 	 * @uses	Wakka:CachePage()
 	 * @uses	Wakka:CacheNonExistentPage()
 	 * @uses	Wakka:GetCachedPage()
-	 * @param string $tag 
-	 * @param string $time 
-	 * @param int $cache 
+	 * @param string $tag
+	 * @param string $time
+	 * @param int $cache
 	 * @access public
 	 * @return mixed $page
 	 */
@@ -878,8 +878,8 @@ class Wakka
 		if ($page)
 		{
 			$this->CachePage($page);
-		} 
-		else 
+		}
+		else
 		{
 			$this->CacheNonExistentPage($tag);
 		}
@@ -896,7 +896,7 @@ class Wakka
 	}
 	/**
 	 * GetCachedPageById gets a page from cache whose id is $id.
-	 * 
+	 *
 	 * @param mixed $id the id of the page to retrieve from cache
 	 * @access public
 	 * @return mixed an array as returned by LoadPage(), or null if absent from cache.
@@ -907,7 +907,7 @@ class Wakka
 	}
 	/**
 	 * GetCachedPage gets a page from cache whose name is $tag.
-	 * 
+	 *
 	 * @see Wakka::CachePage()
 	 * @uses Wakka::GetConfigValue()
 	 * @uses Config::$pagename_case_sensitive
@@ -916,18 +916,18 @@ class Wakka
 	 * @access public
 	 * @return mixed an array as returned by LoadPage(), or null if absent from cache.
 	 */
-	function GetCachedPage($tag) 
+	function GetCachedPage($tag)
 	{
 		if (!$this->GetConfigValue('pagename_case_sensitive'))
 		{
 			$tag = strtolower($tag);
 		}
-		$page = (isset($this->pageCache[$tag])) ? $this->pageCache[$tag] : null; 
+		$page = (isset($this->pageCache[$tag])) ? $this->pageCache[$tag] : null;
 		if ((is_string($page)) && ($page[0] == '/'))
 		{
 			$page = $this->pageCache[substr($page, 1)];
 		}
-		return ($page); 
+		return ($page);
 	}
 	/**
 	 * CachePage caches a page to prevent reusing mysql operations when reloading it.
@@ -937,24 +937,24 @@ class Wakka
 	 * power of caching by preventing reloading of a page (with mysql) under another case. But if the database
 	 * needs to work with case sensitive collation (like cp1250_czech_cs), you must set a config value named
 	 * `pagename_case_sensitive' to 1, and this lowercasing will be disabled.</p>
-	 * <p>CachePage also stores the page under a key made of a special marker slash+sharp (/#) concatenated with 
-	 * the page id. As example, a page having id=208 will be stored at $this->pageCache['/#208'].This ensures 
+	 * <p>CachePage also stores the page under a key made of a special marker slash+sharp (/#) concatenated with
+	 * the page id. As example, a page having id=208 will be stored at $this->pageCache['/#208'].This ensures
 	 * that a page previously loaded by its name or by id will be retrieved from cache if the page id match.</p>
 	 * <p>Normally, the type of the value of the array is an array containing the page data, as returned by
-	 * LoadPage. However, If this is the latest version of the page, a link will be made between the page id and 
-	 * the page tag. In such case, the value of an entry of $this->pageCache[] will be just a string beginning 
+	 * LoadPage. However, If this is the latest version of the page, a link will be made between the page id and
+	 * the page tag. In such case, the value of an entry of $this->pageCache[] will be just a string beginning
 	 * with a slash (/), and to retrieve the data, you have to use this string as a key for the array
 	 * $this->pageCache[] after suppressing the leading slash.</p>
-	 * 
+	 *
 	 * @uses Wakka::GetConfigValue()
 	 * @uses Config::$pagename_case_sensitive
 	 * @uses Wakka::$pageCache
-	 * @param mixed $page 
+	 * @param mixed $page
 	 * @access public
 	 * @return void
 	 */
-	function CachePage($page) 
-	{ 
+	function CachePage($page)
+	{
 		$page_cache_key = $page ? $page['tag'] : '';
 		$page_cache_key = $this->GetConfigValue('pagename_case_sensitive') ? $page_cache_key : strtolower($page_cache_key);
 		if ($page['latest'] == 'Y')
@@ -969,7 +969,7 @@ class Wakka
 	}
 	/**
 	 * CacheNonExistentPage marks a page name in cache as a non existent page.
-	 * 
+	 *
 	 * @uses Wakka::GetConfigValue()
 	 * @uses Config::$pagename_case_sensitive
 	 * @uses Wakka::$pageCache
@@ -995,7 +995,7 @@ class Wakka
 	}
 	/**
 	 * LoadPageById loads a page whose id is $id.
-	 * 
+	 *
 	 * If the parameter $cache is true, it first tries to retrieve it from cache.
 	 * If the page id was not retrieved from cache, then use sql and cache the page.
 	 * @param int $id Id of the page to load.
@@ -1003,8 +1003,8 @@ class Wakka
 	 * @access public
 	 * @return mixed a page identified by $id
 	 */
-	function LoadPageById($id, $cache = true) 
-	{ 
+	function LoadPageById($id, $cache = true)
+	{
 		// It first tries to retrieve from cache.
 		if ($cache)
 		{
@@ -1019,7 +1019,7 @@ class Wakka
 			}
 		}
 		// If the page id was not retrieved from cache, then use sql and cache the page.
-		$page = $this->LoadSingle('SELECT * FROM '.$this->config['table_prefix'].'pages WHERE id = "'.mysql_real_escape_string($id).'" LIMIT 1'); 
+		$page = $this->LoadSingle('SELECT * FROM '.$this->config['table_prefix'].'pages WHERE id = "'.mysql_real_escape_string($id).'" LIMIT 1');
 		if ($page)
 		{
 			$this->CachePage($page);
@@ -1031,8 +1031,8 @@ class Wakka
 		return $page;
 	}
 	/**
-	 * LoadRevisions: Load revisions of a page. 
-	 * 
+	 * LoadRevisions: Load revisions of a page.
+	 *
 	 * <p>Returns up to $max latest revisions of $page.
 	 * 0 or a negative value for $max means using a default value.
 	 * The default value for $max is the `revisioncount' user's preference if user is logged in,
@@ -1042,10 +1042,10 @@ class Wakka
 	 * (`<b>note</b>' key), the `<b>id</b>' of the revision which permits to retrieve later the
 	 * full edit data (especially the body field), the date of revision (`<b>time</b> key) and the
 	 * `<b>user</b>' who did the modification. </p>
-	 * <p>Since 1.1.7, we replaced `SELECT *' in the sql instruction by 
+	 * <p>Since 1.1.7, we replaced `SELECT *' in the sql instruction by
 	 * `SELECT note, id, time, user' because only these fields are really needed. (Trac:#75)</p>
 	 * <p>If param $start is supplied, LoadRevisions ignore the $start most recent revisions; this
-	 * will allow browsing full history step by step if the pagesize or the number of total revision 
+	 * will allow browsing full history step by step if the pagesize or the number of total revision
 	 * are getting too big.</p>
 	 *
 	 * @uses Wakka::GetUser()
@@ -1053,12 +1053,12 @@ class Wakka
 	 * @uses Config::$default_revisioncount
 	 * @uses Config::$pagename_case_sensitive
 	 * @param string $page Name of the page to view revisions of
-	 * @param int $start 
+	 * @param int $start
 	 * @param int $max Maximum number of revisions to load.
 	 * @access public
 	 * @return array This value contains fields note, id, time and user.
 	 */
-	function LoadRevisions($page, $start='', $max=0) 
+	function LoadRevisions($page, $start='', $max=0)
 	{
 		$max = intval($max);
 		if ($max <= 0)
@@ -1097,7 +1097,7 @@ class Wakka
 	}
 	/**
 	 * LoadOldestRevision: Load the oldest known revision of a page.
-	 * 
+	 *
 	 * @param string $page The name of the page to load oldest revision of.
 	 * @uses Config::$pagename_case_sensitive
 	 * @uses Wakka::$specialCache
@@ -1158,9 +1158,9 @@ class Wakka
 			COUNT(_LINKS.from_tag) AS count,
 			MAX(CONCAT_WS("/", _PAGES2.time, _PAGES2.tag)) AS time
 			FROM '.$this->config['table_prefix'].'links _LINKS LEFT JOIN '.$this->config['table_prefix'].
-			'pages _PAGES ON _LINKS.to_tag = _PAGES.tag 
+			'pages _PAGES ON _LINKS.to_tag = _PAGES.tag
 			INNER JOIN '.$this->config['table_prefix'].'pages _PAGES2 ON _LINKS.from_tag = _PAGES2.tag
-			WHERE _PAGES.tag IS NULL 
+			WHERE _PAGES.tag IS NULL
 			AND _PAGES2.latest = \'Y\'
 			GROUP BY page_tag ORDER BY '.$sort);
 	}
@@ -1250,7 +1250,7 @@ class Wakka
 	 * @param string $class optional: A classname to be attached to the table or unordered list. Default: ''
 	 * @param int $columns optional: Number of columns of the table if compact = 0. Default: 3
 	 * @param int $compact optional: If 0: use table, if 1: use unordered list. Default: 0
-	 * @param boolean $show_edit_link If true, each page is followed by an edit link. Default: false. 
+	 * @param boolean $show_edit_link If true, each page is followed by an edit link. Default: false.
 	 * @return string
 	 */
 	function ListPages($pages, $nopagesText = '', $class = '', $columns = 3, $compact = 0, $show_edit_link=false)
@@ -1273,7 +1273,7 @@ class Wakka
 		$count = 0;
 		foreach ($list as $val)
 		{
-			if ($show_edit_link) 
+			if ($show_edit_link)
 			{
 				$edit_link = ' <small>['.$this->Link($val, 'edit', WIKKA_PAGE_EDIT_LINK_DESC, false, true, sprintf(WIKKA_PAGE_EDIT_LINK_TITLE, $val)).']</small>';
 			}
@@ -1351,14 +1351,16 @@ class Wakka
 		}
 	}
 	/**
+	 * [Short description needed here].
+	 *
+	 * @access	public
 	 * 
-	 * 
-	 * @param string $textvalue the text to be cleaned
-	 * @param string $pattern_prohibited_chars optional valid regular expression pattern. Characters that do
-	 *     not validate this expression will be stripped. If this is set to an empty string, every character will be valid.
-	 * @param boolean $decode_html_entities should htmlentities be decoded?
-	 * @access public
-	 * @return string The text after some characters stripped
+	 * @param	string	$textvalue the text to be cleaned
+	 * @param	string	$pattern_prohibited_chars optional valid regular expression pattern.
+	 * 			Characters that match this expression will be stripped.
+	 * 			If this is set to an empty string, every character will be valid.
+	 * @param	boolean	$decode_html_entities should htmlentities be decoded?
+	 * @return	string	The text after some characters stripped
 	 */
 	function CleanTextNode($textvalue, $pattern_prohibited_chars = '/[^A-Za-z0-9_:.-\s]/', $decode_html_entities = true)
 	{
@@ -1716,7 +1718,7 @@ class Wakka
 	 * by using the 'Location:' header. We use meta http-equiv OR javascript OR link (Credits MarceloArmonas).
 	 * @author {@link http://wikkawiki.org/DotMG Mahefa Randimbisoa} (added IIS support)
 	 * @access	public
-	 * @since	Wikka 1.1.6.2
+	 * @since	Wikka 1.0.0
 	 *
 	 * @param	string	$url optional: destination URL; if not specified redirect to the same page.
 	 * @param	string	$message optional: message that will show as alert in the destination URL
@@ -1730,7 +1732,7 @@ class Wakka
 		$url = ($url == '' ) ? $this->config['base_url'].$this->tag : $url;
 		if ((eregi('IIS', $_SERVER['SERVER_SOFTWARE'])) && ($this->cookies_sent))
 		{
-			@ob_end_clean(); 
+			@ob_end_clean();
 			$redirlink = '<a href="'.$this->Href($url).'">'.REDIR_LINK_DESC.'</a>';
 			die('<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head><title>'.sprintf(REDIR_DOCTITLE,$this->Href($url)).'</title>'.
@@ -1819,7 +1821,7 @@ class Wakka
 
 		// is this an interwiki link?
 		// before the : should be a WikiName; anything after can be (nearly) anything that's allowed in a URL
-		if (preg_match('/^([A-ZÄÖÜ][A-Za-zÄÖÜßäöü]+)[:](\S*)$/', $tag, $matches))	// @@@ FIXME #34 (inconsistent with Formatter) 
+		if (preg_match('/^([A-ZÄÖÜ][A-Za-zÄÖÜßäöü]+)[:](\S*)$/', $tag, $matches))	// @@@ FIXME #34 (inconsistent with Formatter)
 		{
 			$url = $this->GetInterWikiUrl($matches[1], $matches[2]);
 			$class = 'interwiki';
@@ -2081,7 +2083,7 @@ class Wakka
 	 * @uses	Wakka::IncludeBuffered()
 	 * @uses	Wakka::StartLinkTracking()
 	 * @uses	Wakka::StopLinkTracking()
-	 * 
+	 *
 	 * @todo	move regex to central regex library
 	 */
 	function Action($action, $forceLinkTracking = 0)
@@ -2124,7 +2126,7 @@ class Wakka
 		if (!$forceLinkTracking)
 		{
 			/**
-			 * @var boolean holds previous state of LinkTracking before we StopLinkTracking(). It will then be used to test if we should StartLinkTracking() or not. 
+			 * @var boolean holds previous state of LinkTracking before we StopLinkTracking(). It will then be used to test if we should StartLinkTracking() or not.
 			 */
 			$link_tracking_state = isset($_SESSION['linktracking']) ? $_SESSION['linktracking'] : 0; #38
 			$this->StopLinkTracking();
@@ -2139,7 +2141,7 @@ class Wakka
 	/**
 	 * Use a handler on the current page.
 	 *
-	 * @uses	Wakka::IncludeBuffered()   
+	 * @uses	Wakka::IncludeBuffered()
 	 * @todo	 use templating class;
 	 * @todo	 use handler config files; #446
 	 */
@@ -2155,8 +2157,8 @@ class Wakka
 		return $this->IncludeBuffered($handler_location, '<div class="page"><em class="error">'.sprintf(HANDLER_UNKNOWN,$handler_location_disp).'</em></div>', '', $this->config['handler_path']);
 	}
 	/**
-	 * Add a custom header to be inserted inside the <meta> tag. 
-	 * 
+	 * Add a custom header to be inserted inside the <meta> tag.
+	 *
 	 * @uses Wakka::$additional_headers
 	 * @param string $additional_headers any valid XHTML code that is legal inside the <meta> tag.
 	 * @param string $indent optional indent string, default is a tabulation. This will be inserted before $additional_headers
@@ -2175,9 +2177,9 @@ class Wakka
 	 * @uses	Config::$wikka_formatter_path
 	 * @uses	Wakka::IncludeBuffered()
 	 * @param	string $text the source text to format
-	 * @param string $formatter the name of the formatter. This name is linked to a file with the same name, located in the folder
-		*  specified by {@link Config::$wikka_formatter_path}, and with extension .php; which is called to process the text $text
-	 * @param string $format_option a comma separated list of string options, in the form of 'option1;option2;option3'
+	 * @param	string $formatter the name of the formatter. This name is linked to a file with the same name, located in the folder
+	 *			specified by {@link Config::$wikka_formatter_path}, and with extension .php; which is called to process the text $text
+	 * @param	string $format_option a comma separated list of string options, in the form of 'option1;option2;option3'
 	 */
 	function Format($text, $formatter='wakka', $format_option='')
 	{
@@ -2191,10 +2193,10 @@ class Wakka
 	 * Load a given user.
 	 *
 	 * <p>If a second parameter $password is supplied, this method checks if this password is valid, thus a false return value would mean
-	 * nonexistent user or invalid password. Note that this parameter is the <strong>hashed value</strong> of the password usually typed in 
+	 * nonexistent user or invalid password. Note that this parameter is the <strong>hashed value</strong> of the password usually typed in
 	 * by user, and not the password itself.</p>
 	 * <p>If this parameter is not supplied, it checks only for existence of the username, and returns an array containing all information
-	 * about the given user if it exists, or a false value. In this latter case, result is cached in $this->specialCache in order to 
+	 * about the given user if it exists, or a false value. In this latter case, result is cached in $this->specialCache in order to
 	 * improve performance.</p>
 	 *
 	 * @uses	Wakka::LoadSingle()
@@ -2202,7 +2204,7 @@ class Wakka
 	 * @param	string $password optional: password of the user. default: 0 (=none)
 	 * @return	array the data of the user, or false if non-existing user or invalid password supplied.
 	 */
-	function LoadUser($name, $password = 0) 
+	function LoadUser($name, $password = 0)
 	{
 		if (($password === 0) && (isset($this->specialCache['user'][strtolower($name)])))
 		{
@@ -2277,7 +2279,7 @@ class Wakka
 	 * Log-in a given user.
 	 *
 	 * User data are stored in the session, whereas name and password are stored in a cookie.
-	 * 
+	 *
 	 * @uses	Wakka::SetPersistentCookie()
 	 * @uses	Wakka::Query()
 	 * @param	array $user mandatory: must contain the userdata
@@ -2295,7 +2297,7 @@ class Wakka
 	 * Log-out the current user.
 	 *
 	 * User data are removed from the session and name and password cookies are deleted.
-	 * 
+	 *
 	 * @uses	Wakka::DeleteCookie()
 	 * @uses	Wakka::GetUserName()
 	 * @uses	Wakka::Query()
@@ -2315,20 +2317,20 @@ class Wakka
 	 * Returns user comment default style.
 	 *
 	 * If the user is not logged-in, comments are hidden by default.
-     *
-     * Must test for false condition with
-     * "false===UserWantsComments()" since this function may also
-     * legally return a zero value.
+	 *
+	 * Must test for false condition with
+	 * "false===UserWantsComments()" since this function may also
+	 * legally return a zero value.
 	 *
 	 * @uses	Wakka::GetUser()
-     * @param   tag     Page title
-	 * @return	boolean threadtype if the user wants comments, FALSE otherwise
+	 * @param	tag		Page title
+	 * @return	mixed	threadtype if the user wants comments, FALSE otherwise
 	 */
 	function UserWantsComments($tag)
 	{
 		if (!$user = $this->GetUser())
 		{
-			return false;
+			return FALSE;
 		}
 		if(!isset($user['show_comments'][$tag])) {
 			if(isset($user['default_comment_display'])) {
@@ -2393,8 +2395,8 @@ class Wakka
 	 * @param   integer $order optional: order of comments. Default: COMMENT_ORDER_DATE_ASC
 	 * @return	array All the comments for this page ordered by $order
 	 */
-	function LoadComments($tag, $order=null) {
-		if($order==null) {
+	function LoadComments($tag, $order=NULL) {
+		if($order == NULL) {
 			if(isset($_SESSION['show_comments'][$tag])) {
 				$order = $_SESSION['show_comments'][$tag];
 			} else {
@@ -2416,10 +2418,10 @@ class Wakka
 	}
 
 	/**
-	 * Updates modified table fields in bulk. 
-	 * 
-	 * WARNING: Do not add, delete, or reorder records or fields in
-	 * 	queries prior to calling this function!!
+	 * Updates modified table fields in bulk.
+	 *
+	 * WARNING:	Do not add, delete, or reorder records or fields in
+	 *			queries prior to calling this function!!
 	 * @uses    Query()
 	 * @param	string $tablename mandatory: Table to modify
 	 * @param	string $keyfield mandatory: Field name of primary key
@@ -2427,7 +2429,7 @@ class Wakka
 	 *			as generated by mysql_query
 	 * @param	resource $new_res mandatory: New (modified) resource
 	 *			originally created as a copy of $old_res
-	 * @todo    Does not currently handle deletions or insertions of
+	 * @todo	Does not currently handle deletions or insertions of
 	 *			records or fields.
 	 */
 	 function Update($tablename, $keyfield, $old_res, $new_res)
@@ -2481,14 +2483,14 @@ class Wakka
 	}
 
 	/**
-	 * Traverse comments in threaded order 
+	 * Traverse comments in threaded order
 	 *
 	 * @uses	Wakka::LoadAll()
 	 * @uses	Wakka::CountAllComments()
 	 * @uses	Wakka::LoadSingle()
 	 * @uses	Wakka::TraverseComments()
 	 * @param	string $tag mandatory: name of the page
-	 * @param   array &$graph mandatory: empty array 
+	 * @param   array &$graph mandatory: empty array
 	 * @return	array Ordered graph of comments and indent levels (values) for this page
 	 */
 	function TraverseComments($tag, &$graph)
@@ -2530,7 +2532,7 @@ class Wakka
 			{
 				--$level;
 				array_pop($visited);
-				$this->TraverseComments($tag, $graph); 
+				$this->TraverseComments($tag, $graph);
 			}
 			else
 			{
@@ -2553,7 +2555,7 @@ class Wakka
 			// Step back to the parent to find next child
 			--$level;
 			array_pop($visited);
-			$this->TraverseComments($tag, $graph); 
+			$this->TraverseComments($tag, $graph);
 		}
 	}
 
@@ -2619,8 +2621,9 @@ class Wakka
 	 *
 	 * @uses	Wakka::GetUserName()
 	 * @uses	Wakka::Query()
-	 * @param	string $page_tag mandatory: name of the page
-	 * @param	string $comment mandatory: text of the comment
+	 * @param	string	$page_tag mandatory: name of the page
+	 * @param	string	$comment mandatory: text of the comment
+	 * @param	mixed	$parent_id: id of parent comment or NULL
 	 */
 	function SaveComment($page_tag, $comment, $parent_id)
 	{
@@ -2628,16 +2631,17 @@ class Wakka
 		$user = $this->GetUserName();
 
 		// add new comment
-		$parent_id = mysql_real_escape_string($parent_id);
-		if(!$parent_id)
+		$parent_id = mysql_real_escape_string($parent_id);				# should be sanitized as integer, not string JW/2007-07-10
+		if (!$parent_id)
 		{
-			$parent_id = "NULL";
+			$parent_id = 'NULL';
 		}
 		$this->Query('INSERT INTO '.$this->config['table_prefix'].'comments SET '.
 			'page_tag = "'.mysql_real_escape_string($page_tag).'", '.
 			'time = now(), '.
 			'comment = "'.mysql_real_escape_string($comment).'", '.
-			'parent = "'.mysql_real_escape_string($parent_id).'", '.
+			'parent = $parent_id, '.
+			#'parent = "'.mysql_real_escape_string($parent_id).'", '.	# already done above! JW/2007-07-10
 			'user = "'.mysql_real_escape_string($user).'"');
 	}
 
@@ -2646,10 +2650,10 @@ class Wakka
 	 */
 	/**
 	 * Check if current user is the owner of the current or a specified page.
-	 * 
+	 *
 	 * @access	  public
 	 * @uses		Wakka::GetPageOwner()
-	 * @uses		Wakka::GetPageTag() 
+	 * @uses		Wakka::GetPageTag()
 	 * @uses		Wakka::GetUser()
 	 * @uses		Wakka::GetUserName()
 	 * @uses		Wakka::IsAdmin()
@@ -2682,7 +2686,7 @@ class Wakka
 	}
 	/**
 	 * Check if current user is listed in configuration list as admin.
-	 * 
+	 *
 	 * @access	  public
 	 * @uses		Wakka::GetUserName()
 	 * @return	  boolean TRUE if the user is an admin, FALSE otherwise.
@@ -2790,7 +2794,7 @@ class Wakka
 		return $acl;
 	}
 	/**
-	 * Save an Access Control List for a given privilege on a given page to the database. 
+	 * Save an Access Control List for a given privilege on a given page to the database.
 	 * If the ACL record doesn't already exist, create it with the
 	 * config defaults.
 	 *
@@ -2800,7 +2804,7 @@ class Wakka
 	 *
 	 * @param	string $tag mandatory: name of the page
 	 * @param	string $privilege mandatory: name of the privilege
-	 * @param	string $list mandatory: a string containing the AC-Syntax   
+	 * @param	string $list mandatory: a string containing the AC-Syntax
 	 */
 	function SaveACL($tag, $privilege, $list)
 	{
@@ -2815,8 +2819,8 @@ class Wakka
 			$acls['comment_post_acl'] = $this->GetConfigValue('default_comment_post_acl');
 		}
 		$priv = mysql_real_escape_string($privilege).'_acl';
-		$acls[$priv] = 
-			mysql_real_escape_string(trim(str_replace('\r', '', $list))); 
+		$acls[$priv] =
+			mysql_real_escape_string(trim(str_replace('\r', '', $list)));
 		if(!$insert)
 		{
 			$this->Query('UPDATE '.$this->config['table_prefix'].'acls SET '.$priv.' = "'.$acls[$priv].'" WHERE page_tag = "'.mysql_real_escape_string($tag).'" LIMIT 1');
@@ -2837,13 +2841,13 @@ class Wakka
 	/**
 	 * Clone an Access Control List from one page to another. If ACL
 	 * list isn't defined for the source page, use defaults from
-	 * config for the destination page. 
+	 * config for the destination page.
 	 *
 	 * @uses	Wakka::LoadAllACLs()
 	 * @uses	Wakka::Query()
 	 *
-	 * @param	string $from_tag mandatory: Source page for ACLs 
-	 * @param	string $to_tag mandatory: Target page for ACLs 
+	 * @param	string $from_tag mandatory: Source page for ACLs
+	 * @param	string $to_tag mandatory: Target page for ACLs
 	 */
 	function CloneACLs($from_tag, $to_tag)
 	{
@@ -3021,7 +3025,7 @@ class Wakka
 	 *
 	 * @param	string $tag mandatory: name of the single page/image/file etc. to be used
 	 * @param	string $method optional: the method which should be used. default: "show"
-	 * 
+	 *
 	 * @todo	rewrite the handler call routine and move handler specific settings to handler config files #446 #452
 	 * @todo	comment each step to make it understandable to contributors
 	 */
@@ -3065,7 +3069,7 @@ class Wakka
 			header('Content-type: text/plain');
 			print($this->Handler($this->handler));
 		}
-		// grabcode page handler
+		// grabcode handler or fullscreen mindmap handler
 		elseif (($this->GetHandler() == 'grabcode') || ($this->GetHandler() == 'mindmap_fullscreen'))
 		{
 			print($this->Handler($this->handler));
