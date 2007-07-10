@@ -218,15 +218,15 @@ function displayComments(&$obj, &$comments, $tag)
 		# Alternate light/dark comment styles per level
 		$comment_class = '';
 	    if($comment['level'] % 2 == 1) {
-			$comment_class = "comment";
+			$comment_class = "comment-layout-1";
 		} else {
-			$comment_class = "comment2";
+			$comment_class = "comment-layout-2";
 		}
 
 		if($comment['status'] == 'deleted') {
 ?>
 	<div class="<?php echo $comment_class ?>">
-		<div class="commentinfo"><?php echo COMMENT_DELETED_LABEL ?></div>
+		<div class="commentdeleted"><?php echo COMMENT_DELETED_LABEL ?></div>
 <?php
 		} else {
 			# Some stats
@@ -235,12 +235,17 @@ function displayComments(&$obj, &$comments, $tag)
 			$comment_ts = sprintf(COMMENT_TIME_CAPTION,$comment['time']);
 ?>
 	<div id="comment_<?php echo $comment['id'] ?>" class="<?php echo $comment_class ?>" >
+		<div class="commentheader">
 		<div class="commentauthor"><?php echo COMMENT_BY_LABEL.$comment_author ?></div>
 		<div class="commentinfo"><?php echo $comment_ts ?></div>
+		</div>
+		<div class="commentbody">
 		<?php echo $comment['comment'] ?>
+		</div>
 <?php
 			if($obj->HasAccess('comment_post'))
 			{
+				echo "<div class=\"commentaction\">";
 				echo $obj->FormOpen("processcomment");
 ?>
 		<input type="hidden" name="comment_id" value="<?php echo $comment['id'] ?>" />
@@ -257,6 +262,7 @@ function displayComments(&$obj, &$comments, $tag)
 <?php
 				}
 				echo $obj->FormClose();
+				echo "</div>";
 			}
 		}		
 		$prev_level = $comment['level'];

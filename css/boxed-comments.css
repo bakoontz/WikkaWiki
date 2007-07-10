@@ -1,0 +1,114 @@
+/*
+-----------------------------------------------
+Wikka Boxed Comments Stylesheet
+
+This is a "boxed" style, with threaded comments nested inside of
+containing boxes owned by the parent.
+----------------------------------------------- 
+*/
+
+/* wrapper for the whole comments block, contains the header and the actual comments */
+#comments {
+	margin: 0px;
+	background-color: #E3E3E3;
+	padding-bottom: 10px;
+}
+
+#comments form input[type=submit] {
+	font-size: 80%;
+}
+
+/* contains the comments form and the navigation bar */
+.commentsheader {
+	clear: both;
+	background-color: #E3E3E3;
+	padding: 2px 10px 0 10px;
+	border-top: 1px solid #CCCCCC;
+}
+
+.commentsheader form {
+	padding: 5px 0;	
+}
+
+/* wrapper for the comment lists */
+.commentscontainer {
+	background-color: #E3E3E3;
+}
+
+/* alternate color for single comments */
+/* set contents of next 2 selectors the same if not alternation desired */
+.comment-layout-1 {
+	background-color: #DDDDDD;
+	padding: 5px;
+	border: 1px solid #CCCCCC;
+	margin: 10px;
+}
+
+.comment-layout-2 {
+	background-color: #EEEEEE;
+	padding: 5px;
+	border: 1px solid #CCCCCC;
+	margin: 10px;
+}
+
+.commentbody {
+	none;
+}
+
+.commentaction {
+	none;
+}
+
+.commentform {
+	background-color: #EEEEEE;
+	padding: 10px;
+}
+
+.commentinfo {
+	color: #AAAAAA;
+}
+
+.commentdeleted {
+	color: #AAAAAA;
+}
+
+.commentauthor {
+	font-size: 1.2em;
+	line-height: 20px;
+	color: #000000;
+	margin: 5px 5px 0 0;
+}
+
+.commentparent {
+	font-size: 1em;
+	line-height: 20px;
+	color: #555555;
+	margin: 5px 5px 5px 5px;
+}
+
+/* comments navigation */
+
+div#commentsnav {
+/*	border:1px solid #CCC; */
+/*	background-color:#EEE; */
+	float:right;
+	padding:3px;
+}
+
+div#commentsnav img.icon {
+	border: 1px solid #CCC;
+	padding:3px;
+	background-color:#EFEFEF;
+	margin:1px;
+}
+
+div#commentsnav img.icon_on {
+	border: 1px solid #CCC;
+	padding:3px;
+	background-color:#DDD;
+	margin:1px;
+}
+
+div#commentsnav img.icon:hover {
+	background-color:#DDD;
+}

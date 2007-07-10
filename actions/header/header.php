@@ -49,6 +49,7 @@ $site_base = $this->GetConfigValue("base_url");
 	<meta name="keywords" content="<?php echo $this->GetConfigValue("meta_keywords") ?>" />
 	<meta name="description" content="<?php echo $this->GetConfigValue("meta_description") ?>" />
 	<link rel="stylesheet" type="text/css" href="<?php echo $this->StaticHref('css/'.$this->GetConfigValue('stylesheet')); ?>" />
+	<link rel="stylesheet" type="text/css" href="<?php echo $this->StaticHref('css/'.$this->GetConfigValue('comment_stylesheet')); ?>" />
 	<link rel="stylesheet" type="text/css" href="<?php echo $this->StaticHref('css/print.css'); ?>" media="print" />
 	<link rel="icon" href="<?php echo $this->StaticHref('images/favicon.ico'); ?>" type="image/x-icon" />
 	<link rel="shortcut icon" href="<?php echo $this->StaticHref('images/favicon.ico') ?>" type="image/x-icon" />

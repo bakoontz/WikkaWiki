@@ -111,12 +111,22 @@ class Config
 	 * this is the default value).
 	 */
 	var $edit_buttons_position = 'bottom';
+
 	/**
 	 * Stylesheet name.
 	 * Name of the stylesheet used by your Wikka site. This entry must not be empty must point to an existing and valid CSS
 	 * file located under the css folder. The default stylesheet is "wikka.css".
 	 */
 	var $stylesheet = 'wikka.css';
+
+	/**
+	 * Comments stylesheet name.
+	 * Name of the stylesheet used to render comments. 
+	 * This entry must not be empty must point to an existing and valid CSS
+	 * file located under the css folder. The default stylesheet is
+	 * "boxed-comments.css"".
+	 */
+	var $comment_stylesheet = 'boxed-comments.css';
 
 	/**
 	 * Path to the Wikka formatters.
