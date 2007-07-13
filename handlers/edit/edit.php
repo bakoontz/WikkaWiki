@@ -240,7 +240,7 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 			// We need to escape ALL entity refs before display so we display them _as_ entities instead of interpreting them
 			// hence hsc_secure() instead of htmlspecialchars_ent() which UNescapes entities!
 			// JW/2007-02-20: why is this? wouldn't it be  easier for the person editing to show actual characters instead of entities?  
-			'<textarea id="body" name="body">'.$this->hsc_secure($body).'</textarea><br />'."\n";	#427
+			'<textarea id="body" name="body">'.$this->hsc_secure($body).'</textarea>'."\n";	#427
 		if ($buttons_position == 'bottom')
 		{
 			$output .= $edit_buttons;			
