@@ -123,12 +123,13 @@ if (!$this->ExistsPage($from))
 						}
 						$this->SavePage($to, $pagecontent, $note);
 						// Clone ACLs if requested
-						if ($cloneaclsoption == 'checked="checked"')
+						if (!(false===strpos($cloneaclsoption, 'checked="checked"')))
 						{
 							$this->CloneACLs($from, $to);
 						}
 						// Open editor if requested
-						if ($editoption == 'checked="checked"')
+						print $editoption;
+						if (!(false===strpos($editoption, 'checked="checked"')))
 						{
 							// quick edit
 							$this->Redirect($this->Href('edit', $to));
