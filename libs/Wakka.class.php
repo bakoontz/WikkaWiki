@@ -1330,6 +1330,8 @@ class Wakka
 				// aha! page isn't new. keep owner!
 				$owner = $oldPage['owner'];
 			}
+			// Parse page title
+			$page_title = $this->ParsePageTitle($body);
 
 			// set all other revisions to old
 			$this->Query('UPDATE '.$this->config['table_prefix'].'pages SET latest = "N" WHERE tag = "'.mysql_real_escape_string($tag).'"');
@@ -1342,6 +1344,7 @@ class Wakka
 				'user = "'.mysql_real_escape_string($user).'", '.
 				'note = "'.mysql_real_escape_string($note).'", '.
 				'latest = "Y", '.
+				'title = "'.$page_title.'", '.
 				'body = "'.mysql_real_escape_string($body).'"');
 
 			if ($pingdata = $this->GetPingParams($this->config['wikiping_server'], $tag, $user, $note))
@@ -1418,11 +1421,40 @@ class Wakka
 			$this->page_title = $page_title;
 		}
 	}
+
 	/**
-	 * Return the title of the current page.
+	 * Parses the body of a page for a page title
 	 *
-	 * The page title is cleaned and trimmed. See {@link Wakka::SetPageTitle()} to find how it is choosen.
-	 * If SetPageTitle() was unable to choose a title for the page, the page name is used by default.
+	 * Searches for first instance of header markup in page body and
+	 * returns this string as the page title, or null if none found. 
+	 *
+	 * @param   body string page body 
+	 * @return	string the title of the current page, or null
+	 */
+	function ParsePageTitle($body)
+	{
+		$page_title = '';
+		if (preg_match('#(={1,6})([^=].*?)\\1#s', $body, $matches))	# note that we don't match headings that are not valid XHTML!
+		{
+			list($h_fullmatch, $h_markup, $h_heading) = $matches;
+			if (isset($h_markup))
+			{
+				$page_title = $h_heading;
+			}
+		}
+		return $page_title;
+	}
+
+	/**
+	 * Return the title of the current page or as specified by a page
+	 * tag.
+	 *
+	 * The page title is cleaned and trimmed. See {@link
+	 *	Wakka::SetPageTitle()} to find how it is choosen.
+	 * If SetPageTitle() was unable to choose a title for the page,
+	 *	the page name is used by default.
+	 * Attempts to retrieve page title from DB if $tag is specified
+	 *	and is not the current page that's loaded
 	 *
 	 * @uses	Wakka::$page_title
 	 * @uses	Wakka::CleanTextNode()
@@ -1430,14 +1462,34 @@ class Wakka
 	 * @uses	Wakka::HasPageTitle()
 	 * @return	string the title of the current page
 	 */
-	function PageTitle()
+	function PageTitle($tag=null)
 	{
-		if (!$this->HasPageTitle()) 
+		$page_title = null;
+		if(!empty($tag) && ($tag != $this->GetPageTag()))
+		{
+			$query = 'SELECT title FROM '.
+						$this->config['table_prefix'].
+						'pages WHERE tag = "'.
+						mysql_real_escape_string($tag).
+						'" AND latest = "Y" LIMIT 1';
+			$res = $this->LoadSingle($query);
+			if(!empty($res['title']))
+			{
+				$page_title = $res['title'];
+			} else {
+				return $tag;
+			}
+		}
+		else if (!$this->HasPageTitle()) 
 		{
 			return ($this->GetPageTag());
 		}
 		// We clean the title, note that unlike makeId(), the characters " and ' are allowed here.
-		$result = $this->CleanTextNode($this->page_title, '');
+		if(empty($tag))
+		{
+			$page_title = $this->page_title;
+		}
+		$result = $this->CleanTextNode($page_title, '');
 		return trim($result);				# trim spaces #500
 	}
 	/**

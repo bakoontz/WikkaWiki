@@ -65,8 +65,8 @@ if ($pages = $this->LoadPageTitles())
 				$index_output .= "<br />\n<strong>$firstChar</strong><br />\n";
 				$character_changed = false;
 			}
-			$index_output .= $this->Link($page['tag']);
-
+			// Output page title
+			$index_output .= $this->Link($page['tag'])." <span class=\"pagetitle\">[".$this->PageTitle($page['tag'])."]</span>";
 			if ($cached_username == $page_owner) 
 			{                       
 				$index_output .= '*';
