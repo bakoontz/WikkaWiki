@@ -137,7 +137,7 @@ if (!$this->ExistsPage($from))
 						else
 						{
 							// show confirmation message
-							$box = '<em class="success">'.sprintf(CLONE_SUCCESS, $to).'</em>';
+							$box = '<em class="success">'.sprintf(SUCCESS_CLONE_CREATED, $to).'</em>';
 						}
 					}
 				}
