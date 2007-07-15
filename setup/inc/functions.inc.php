@@ -94,16 +94,19 @@ function update_default_page($tag, $dblink, $config)
 		}
 		return;
 	}
-	$admin_users = explode(',', $config['admin_users']);
-	$admin_main_user = trim($admin_users[0]);
-	$txt_filename = 'lang'.DIRECTORY_SEPARATOR.$config['default_lang'].DIRECTORY_SEPARATOR.'defaults'.DIRECTORY_SEPARATOR.$tag.'.txt';
-	if (!file_exists($txt_filename) || !is_readable($txt_filename))
-	{
-		$txt_filename = 'lang'.DIRECTORY_SEPARATOR.'en'.DIRECTORY_SEPARATOR.'defaults'.DIRECTORY_SEPARATOR.$tag.'.txt';
-	}
-	if ($tag == 'HomePage')
+	
+	$filename = $tag;
+	if ($tag == '_rootpage')
 	{
 		$tag = $config['root_page'];
+		$filename = 'HomePage';
+	}
+	$admin_users = explode(',', $config['admin_users']);
+	$admin_main_user = trim($admin_users[0]);
+	$txt_filename = 'lang'.DIRECTORY_SEPARATOR.$config['default_lang'].DIRECTORY_SEPARATOR.'defaults'.DIRECTORY_SEPARATOR.$filename.'.txt';
+	if (!file_exists($txt_filename) || !is_readable($txt_filename))
+	{
+		$txt_filename = 'lang'.DIRECTORY_SEPARATOR.'en'.DIRECTORY_SEPARATOR.'defaults'.DIRECTORY_SEPARATOR.$filename.'.txt';
 	}
 	if (file_exists($txt_filename) && is_readable($txt_filename))
 	{

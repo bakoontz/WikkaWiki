@@ -25,6 +25,8 @@ if (!$version = trim($wakkaConfig["wakka_version"])) $version = "0";
 
 // set upgrade note to be used when overwriting default pages
 $upgrade_note = sprintf(__('Upgrading from %1$s to %2$s'), $version, WAKKA_VERSION);
+$_SESSION['sconfig']['logged_in_navigation_links'] = str_replace('_rootpage', $config['root_page'], $_SESSION['sconfig']['logged_in_navigation_links']);
+$_SESSION['sconfig']['navigation_links'] = str_replace('_rootpage', $config['root_page'], $_SESSION['sconfig']['navigation_links']);
 
 switch ($version)
 {
@@ -117,7 +119,7 @@ case "0":
 	@mysql_query("insert into ".$config["table_prefix"]."users set name = '".$config["admin_users"]."', password = md5('".mysql_real_escape_string($_SESSION['wikka']['install']['password'])."'), email = '".$config["admin_email"]."', signuptime = now()", $dblink), "Hmm!", 0);
 
 	update_default_page(array(
-	$config["root_page"], 
+	'_rootpage', 
 	'RecentChanges', 
 	'RecentlyCommented', 
 	'UserSettings', 
