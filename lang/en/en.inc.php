@@ -99,7 +99,7 @@ define('TODAY','today');
  * Language constant used by the {@link category.php category} action
  */
 // category
-define('ERR_NO_PAGES','Sorry, No items found for %s');
+define('ERROR_NO_PAGES','Sorry, No items found for %s');
 define('PAGES_BELONGING_TO','The following %1$d page(s) belong to %2$s'); // %1$d number found; %2$s category 
 /**#@-*/
 

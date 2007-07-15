@@ -37,7 +37,7 @@ if ($cattag = $_GET['wakka'])	#312 (only files action uses POST for wakka)
 
 	$results = $this->LoadPagesLinkingTo($page);
 
-	$errmsg = '<em class="error">'.sprintf(ERR_NO_PAGES, $page).'</em>';
+	$errmsg = '<em class="error">'.sprintf(ERROR_NO_PAGES, $page).'</em>';
 	$str = $this->ListPages($results, $errmsg, $class, $col, $compact);
 	if ($str != $errmsg)
 	{
