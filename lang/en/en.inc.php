@@ -179,7 +179,7 @@ define('ERROR_EXTENSION_NOT_ALLOWED','Sorry, files with this extension are not a
 define('ERROR_FILE_TOO_BIG','Attempted file upload was too big. Maximum allowed size is %s.'); // %s - allowed filesize 
 define('ERROR_NO_FILE_SELECTED','No file selected.'); 
 define('ERROR_FILE_UPLOAD_IMPOSSIBLE','File upload impossible due to misconfigured server.');
-define('FILE_UPLOAD_SUCCESSFUL','File was successfully uploaded.');
+define('SUCCESS_FILE_UPLOADED','File was successfully uploaded.');
 define('FILE_TABLE_CAPTION','Attachments');
 define('FILE_TABLE_HEADER_NAME','File');
 define('FILE_TABLE_HEADER_SIZE','Size');

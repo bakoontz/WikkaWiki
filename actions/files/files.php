@@ -239,7 +239,7 @@ elseif ($this->page && $this->HasAccess('read') && $this->handler == 'show' && $
 					{
 						if (move_uploaded_file($_FILES['file']['tmp_name'], $destfile))
 						{
-							$notification_msg = FILE_UPLOAD_SUCCESSFUL;
+							$notification_msg = SUCCESS_FILE_UPLOADED;
 						}
 						else
 						{
