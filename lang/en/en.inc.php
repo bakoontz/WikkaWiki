@@ -406,6 +406,7 @@ define('SEARCH_TARGET_5',sprintf("Find pages that contain the exact phrase '%1\$
  * Language constant used by the {@link usersettings.php usersettings} action
  */
 // usersettings
+// - error messages
 define('ERROR_EMPTY_USERNAME','Please fill in your user name.');
 define('ERROR_NONEXISTENT_USERNAME','Sorry, this user name doesn\'t exist.'); // @@@ too specific
 define('ERROR_RESERVED_PAGENAME','Sorry, this name is reserved for a page. Please choose a different name.');
@@ -427,10 +428,10 @@ define('ERROR_INVALID_INVITATION_CODE','This is a private wiki, only invited mem
 define('ERROR_INVALID_REVISION_DISPLAY_LIMIT','The number of page revisions should not exceed %d.'); // %d - maximum revisions to view
 define('ERROR_INVALID_RECENTCHANGES_DISPLAY_LIMIT','The number of recently changed pages should not exceed %d.'); // %d - maximum changed pages to view
 // - success messages
-define('USER_LOGGED_OUT_SUCCESS','You have successfully logged out.');
-define('USER_REGISTERED_SUCCESS','You have successfully registered!');
-define('USER_SETTINGS_STORED_SUCCESS','User settings stored!');
-define('USER_PASSWORD_CHANGED_SUCCESS','Password successfully changed!');
+define('SUCCESS_USER_LOGGED_OUT','You have successfully logged out.');
+define('SUCCESS_USER_REGISTERED','You have successfully registered!');
+define('SUCCESS_USER_SETTINGS_STORED','User settings stored!');
+define('SUCCESS_USER_PASSWORD_CHANGED','Password successfully changed!');
 // - captions
 define('NEW_USER_REGISTER_CAPTION','If you are signing up as a new user:');
 define('REGISTERED_USER_LOGIN_CAPTION','If you already have a login, sign in here:');

@@ -164,11 +164,11 @@ if ($user = $this->GetUser())
 	{
 		case (isset($_SESSION['usersettings_registered']) && $_SESSION['usersettings_registered'] == 'true'):
 			unset($_SESSION['usersettings_registered']);
-			$success = USER_REGISTERED_SUCCESS;
+			$success = SUCCESS_USER_REGISTERED;
 			break;
 		//case (isset($_GET['stored']) && $_GET['stored'] == 'true'):
 		case (isset($_POST['action']) && $_POST['action'] == 'update' && !isset($error)):
-			$success = USER_SETTINGS_STORED_SUCCESS;
+			$success = SUCCESS_USER_SETTINGS_STORED;
 			break;
 	}
 
@@ -239,7 +239,7 @@ if ($user = $this->GetUser())
 				unset($this->specialCache['user'][strtolower($name)]);  //invalidate cache if exists #368
 				$user['password'] = md5($password);
 				$this->SetUser($user);
-				$passsuccess = USER_PASSWORD_CHANGED_SUCCESS;
+				$passsuccess = SUCCESS_USER_PASSWORD_CHANGED;
 		}
 	}
 
@@ -313,7 +313,7 @@ else // user is not logged in
 	// print confirmation message on successful logout
 	if (isset($_POST['logout']) && $_POST['logout'] == LOGOUT_BUTTON)
 	{
-		$success = USER_LOGGED_OUT_SUCCESS;
+		$success = SUCCESS_USER_LOGGED_OUT;
 	}
 
 	// is user trying to log in or register?
