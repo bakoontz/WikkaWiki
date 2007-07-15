@@ -173,7 +173,7 @@ function ACL_show_selectbox($type)
 		'*' => __('Anyone'));
 	echo ' <tr><td align="right" nowrap="nowrap">';
 	printf(__('Default %s access'), __($type.'---<Default X access'));
-	echo '</td><td><select name="config['.$config_name.']">'."\n";
+	echo '</td><td><select name="pconfig['.$config_name.']">'."\n";
 	foreach ($predef_acl as $value => $text)
 	{
 		echo '<option value="'.$value.'"';
@@ -194,7 +194,7 @@ function ACL_show_selectbox($type)
  */
 function Language_selectbox($default_lang)
 {
-	echo '<select name="config[default_lang]">';
+	echo '<select name="pconfig[default_lang]">';
 	/** @todo fill the array. */
 	$human_lang = array (
 		'en' => 'English',
