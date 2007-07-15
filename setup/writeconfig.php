@@ -86,15 +86,6 @@ foreach ($config as $k => $v)
 		$entries[] = "\t'".$k."' => '".preg_replace('/['.$double_backslash.$single_quote.']/', $double_backslash.'$0', $v)."'"; // #5
 	}
 }
-$server_info = "\t'server_info' => array(\n";
-$i = 0;
-foreach ($_SESSION['server_info'] as $k => $v)
-{
-	if ($i) $server_info .= ",\n";
-	else $i++;
-	$server_info .= "\t\t'$k' => '".preg_replace('/['.$double_backslash.$single_quote.']/', $double_backslash.'$0', $v)."'";
-}
-$server_info .= ")";
 $configCode .= implode(",\n", $entries).");\n?>";
 
 // try to write configuration file

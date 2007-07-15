@@ -64,7 +64,7 @@ else
 // Try to create .htaccess and wikka.config.php
 if (!file_exists($wakkaConfigLocation))
 {
-	touch($wakkaConfigLocation);
+	@touch($wakkaConfigLocation);
 }
 
 if (!file_exists($wakkaConfigLocation) || !is_writeable($wakkaConfigLocation))
