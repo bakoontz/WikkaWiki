@@ -35,7 +35,7 @@ if ($this->IsAdmin() || ($this->UserIsOwner($tag) && $this->config["owner_delete
 		$this->Query("delete from ".$this->config["table_prefix"]."referrers where page_tag = '".mysql_real_escape_string($tag)."'");
 
 		// redirect back to main page
-		$this->Redirect($this->config["base_url"], PAGE_DELETION_SUCCESS);
+		$this->Redirect($this->config["base_url"], SUCCESS_PAGE_DELETED);
 	}
 	else
 	{

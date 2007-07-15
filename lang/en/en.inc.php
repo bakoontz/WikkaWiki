@@ -576,7 +576,7 @@ define('ERROR_ACL_WRITE','Sorry! You don\'t have write-access to %s');
 define('CLONE_VALID_TARGET','Please fill in a valid target page name and an (optional) edit note.');
 define('CLONE_LEGEND','Clone %s'); // %s source page name
 define('CLONED_FROM','Cloned from %s'); // %s source page name
-define('CLONE_SUCCESS','%s was succesfully created!'); // %s new page name
+define('SUCCESS_CLONE_CREATED','%s was succesfully created!'); // %s new page name
 define('CLONE_X_TO_LABEL','Clone as:');
 define('CLONE_EDIT_NOTE_LABEL','Edit note:');
 define('CLONE_EDIT_OPTION_LABEL',' Edit after creation');
@@ -590,7 +590,7 @@ define('CLONE_BUTTON','Clone');
 // delete
 define('ERROR_NO_PAGE_DEL_ACCESS','You are not allowed to delete this page.');
 define('PAGE_DELETION_HEADER','Delete %s'); // %s - name of the page
-define('PAGE_DELETION_SUCCESS','Page has been deleted!');
+define('SUCCESS_PAGE_DELETED','Page has been deleted!');
 define('PAGE_DELETION_CAPTION','Completely delete this page, including all comments?');
 define('PAGE_DELETION_DELETE_BUTTON','Delete Page');
 define('PAGE_DELETION_CANCEL_BUTTON','Cancel');
