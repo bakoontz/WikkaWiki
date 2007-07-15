@@ -4,6 +4,11 @@
  *
  * This action checks user read privileges and displays an index of read-accessible pages.
  *
+ * Optionally: {{pageindex showpagetitle="1"}}
+ *
+ * where showpagetitle="1" displays page titles (or page tag by
+ *	default if no page title can be generated)
+ *
  * @package    Actions
  * @version	$Id:pageindex.php 369 2007-03-01 14:38:59Z DarTar $
  * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
@@ -11,6 +16,7 @@
  *
  * @author    {@link http://wikkawiki.org/GiorgosKontopoulos GiorgosKontopoulos} (added ACL check, first code cleanup)
  * @author    {@link http://wikkawiki.org/DarTar DarTar} (adding doc header, minor code and layout refinements, i18n)
+ * @author    {@link http://wikkawiki.org/BrianKoontz BrianKoontz} (added showpagetitle option)
  * 
  * @uses		Wakka::LoadPageTitles()
  * @uses		Wakka::GetUserName()
@@ -24,6 +30,8 @@
  * @todo		fix RE (#104 etc.)
  * @todo		action parameter validation
  */
+
+$showpagetitle = ($vars['showpagetitle'] == 1) ? true : false;
 
 if ($pages = $this->LoadPageTitles())
 {
@@ -65,8 +73,12 @@ if ($pages = $this->LoadPageTitles())
 				$index_output .= "<br />\n<strong>$firstChar</strong><br />\n";
 				$character_changed = false;
 			}
-			// Output page title
-			$index_output .= $this->Link($page['tag'])." <span class=\"pagetitle\">[".$this->PageTitle($page['tag'])."]</span>";
+			$index_output .= $this->Link($page['tag']);
+			// Output page title if $showpagetitle set to 1
+			if(true === $showpagetitle)
+			{
+				$index_output .= "<span class=\"pagetitle\">[".$this->PageTitle($page['tag'])."]</span>";
+			}
 			if ($cached_username == $page_owner) 
 			{                       
 				$index_output .= '*';
