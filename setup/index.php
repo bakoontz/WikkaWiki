@@ -19,20 +19,20 @@ if (isset($_GET['nonce']))
 	session_cache_limiter('public');
 }
 @session_start();
-	if (!isset($_SESSION['config'])) $_SESSION['config'] = $wakkaConfig;
+	if (!isset($_SESSION['sconfig'])) $_SESSION['sconfig'] = $wakkaConfig;
 	if (isset($_POST) && !empty($_POST))
 	{
-		$config = isset($_POST['config']) ? $_POST['config'] : array();
-		unset ($_POST['config']);
+		$config = isset($_POST['pconfig']) ? $_POST['pconfig'] : array();
+		unset ($_POST['pconfig']);
 		$_SESSION['wikka'][$_POST['installAction']] = $_POST;
-		$_SESSION['config'] = array_merge( $_SESSION['config'], $config);
+		$_SESSION['sconfig'] = array_merge( $_SESSION['sconfig'], $config);
 		session_write_close(); 
 		header('Location: '.$url.'wikka.php?installAction='.$_POST['installAction'].'&nonce='.dechex(crc32(rand())));
 		die();
 	}
 	else
 	{
-		$config = isset($_SESSION['config']) ? $_SESSION['config'] : array();
+		$config = isset($_SESSION['sconfig']) ? $_SESSION['sconfig'] : array();
 		if (isset($config['mysql_host']) && isset($config['mysql_user']) && isset($config['mysql_password']))
 		{
 			$dblink = @mysql_connect($config['mysql_host'], $config['mysql_user'], $config['mysql_password']);

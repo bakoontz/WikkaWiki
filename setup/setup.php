@@ -20,7 +20,7 @@ function check() {
  var re;
  var err = '';
  re = new RegExp("^[A-Z][a-z]+[A-Z0-9][A-Za-z0-9]*$");
- if (f.elements["config[admin_users]"].value.search(re)==-1) 
+ if (f.elements["pconfig[admin_users]"].value.search(re)==-1) 
  {
   err += "Admin name must be a WikiName. This means it must start with a capital letter, then have some lowercase letters, then have an uppercase letter.\nExamples: JohnSmith or JsnX\n\n";
  }
@@ -33,7 +33,7 @@ function check() {
   err += "Passwords don't match.\n\n";
  }
  re = new RegExp("[a-z]+@[a-z]+\.[a-z]+", "i");
- if (f.elements["config[admin_email]"].value.search(re)==-1) 
+ if (f.elements["pconfig[admin_email]"].value.search(re)==-1) 
  {
   err += "Email address appears incorrect.\n\n";
  }
@@ -86,23 +86,23 @@ if (!file_exists($wakkaConfigLocation) || !is_writeable($wakkaConfigLocation))
 	?>
 	<tr><td>&nbsp;</td><td><br /><h2><?php echo __('Database Configuration'); ?></h2></td></tr>
 	<tr><td>&nbsp;</td><td><?php echo __('Prefix of all tables used by Wikka. This allows you to run multiple Wikka installations using the same MySQL database by configuring them to use different table prefixes'); ?>.</td></tr>
-	<tr><td align="right" nowrap="nowrap"><?php echo __('Table prefix'); ?>:</td><td><input type="text" size="50" name="config[table_prefix]" value="<?php echo $config["table_prefix"] ?>" /></td></tr>
+	<tr><td align="right" nowrap="nowrap"><?php echo __('Table prefix'); ?>:</td><td><input type="text" size="50" name="pconfig[table_prefix]" value="<?php echo $config["table_prefix"] ?>" /></td></tr>
 	<?php
 	 }
 	?>
 	<tr><td>&nbsp;</td><td><br /><h2><?php echo __('Wiki Configuration'); ?></h2></td></tr>
 	<tr><td>&nbsp;</td><td><?php echo __('The name of your Wikka site, as it will be displayed in the title'); ?>.</td></tr>
-	<tr><td align="right" nowrap="nowrap"><?php echo __('Your Wikka site\'s name'); ?>:</td><td><input type="text" size="50" name="config[wakka_name]" value="<?php echo $config["wakka_name"] ?>" /></td></tr>
+	<tr><td align="right" nowrap="nowrap"><?php echo __('Your Wikka site\'s name'); ?>:</td><td><input type="text" size="50" name="pconfig[wakka_name]" value="<?php echo $config["wakka_name"] ?>" /></td></tr>
 
 	<tr><td>&nbsp;</td><td><?php echo __('Your Wikka site\'s home page').'. '.sprintf(__('Should be formatted as a %s'), $wikiname); ?>.</td></tr>
-	<tr><td align="right" nowrap="nowrap"><?php echo __('Home page'); ?>:</td><td><input type="text" size="50" name="config[root_page]" value="<?php echo $config["root_page"] ?>" /></td></tr>
+	<tr><td align="right" nowrap="nowrap"><?php echo __('Home page'); ?>:</td><td><input type="text" size="50" name="pconfig[root_page]" value="<?php echo $config["root_page"] ?>" /></td></tr>
 
 	<tr><td>&nbsp;</td><td><?php echo __('Suffix used for cookies and session name. This allows you to run multiple Wikka installations on the same server by configuring them to use different wiki prefixes.'); ?></td></tr>
-	<tr><td align="right" nowrap="nowrap"><?php echo __('Your Wiki suffix:'); ?></td><td><input type="text" size="50" name="config[wiki_suffix]" value="<?php echo $config["wiki_suffix"] ?>" /></td></tr>
+	<tr><td align="right" nowrap="nowrap"><?php echo __('Your Wiki suffix:'); ?></td><td><input type="text" size="50" name="pconfig[wiki_suffix]" value="<?php echo $config["wiki_suffix"] ?>" /></td></tr>
 
 	<tr><td>&nbsp;</td><td><?php echo __('Optional keywords/description to be inserted in the HTML headers'); ?>.</td></tr>
-	<tr><td align="right" nowrap="nowrap"><?php echo __('Meta Keywords'); ?>:</td><td><input type="text" size="50" name="config[meta_keywords]" value="<?php echo $config["meta_keywords"] ?>" /></td></tr>
-	<tr><td align="right" nowrap="nowrap"><?php echo __('Meta Description'); ?>:</td><td><input type="text" size="50" name="config[meta_description]" value="<?php echo $config["meta_description"] ?>" /></td></tr>
+	<tr><td align="right" nowrap="nowrap"><?php echo __('Meta Keywords'); ?>:</td><td><input type="text" size="50" name="pconfig[meta_keywords]" value="<?php echo $config["meta_keywords"] ?>" /></td></tr>
+	<tr><td align="right" nowrap="nowrap"><?php echo __('Meta Description'); ?>:</td><td><input type="text" size="50" name="pconfig[meta_description]" value="<?php echo $config["meta_description"] ?>" /></td></tr>
 
 	<?php
 	if (!$wakkaConfig["wakka_version"])
@@ -111,13 +111,13 @@ if (!file_exists($wakkaConfigLocation) || !is_writeable($wakkaConfigLocation))
 	 <tr><td>&nbsp;</td><td><br /><h2><?php echo __('Admin Account Configuration'); ?></h2></td></tr>
 
 		<tr><td>&nbsp;</td><td><?php printf(__('This is the username of the person running this wiki. Later you\'ll be able to add other admins. The admin username should be formatted as a %s'), $wikiname); ?>.</td></tr>
-		<tr><td align="right" nowrap="nowrap"><?php echo __('Admin name'); ?>:</td><td><input type="text" size="50" name="config[admin_users]" value="<?php echo $config["admin_users"] ?>" /></td></tr>
+		<tr><td align="right" nowrap="nowrap"><?php echo __('Admin name'); ?>:</td><td><input type="text" size="50" name="pconfig[admin_users]" value="<?php echo $config["admin_users"] ?>" /></td></tr>
 
 		<tr><td>&nbsp;</td><td><?php echo __('Choose a password for administrator (5+ chars)'); ?></td></tr>
 		<tr><td align="right" nowrap="nowrap"><?php echo __('Enter password'); ?>:</td><td><input type="password" size="50" name="password" value="" /></td></tr>
 		<tr><td align="right" nowrap="nowrap"><?php echo __('Confirm password'); ?>:</td><td><input type="password" size="50" name="password2" value="" /></td></tr>
 		<tr><td>&nbsp;</td><td><?php echo __('Administrator email'); ?>.</td></tr>
-		<tr><td align="right" nowrap="nowrap"><?php echo __('Email'); ?>:</td><td><input type="text" size="50" name="config[admin_email]" value="<?php echo $config["admin_email"] ?>" /></td></tr>
+		<tr><td align="right" nowrap="nowrap"><?php echo __('Email'); ?>:</td><td><input type="text" size="50" name="pconfig[admin_email]" value="<?php echo $config["admin_email"] ?>" /></td></tr>
 
 <?php			
 	}
@@ -126,15 +126,15 @@ if (!file_exists($wakkaConfigLocation) || !is_writeable($wakkaConfigLocation))
 	<tr><td>&nbsp;</td><td><br /><h2>Default ACL Configuration</h2></td></tr>
 	<tr><td>&nbsp;</td><td>You can select one of the following preselected configurations</td></tr>
 	<tr><td>&nbsp;</td><td>
-	<label><input type="radio" name="config[acl]" checked="checked" value='0'/>private wiki for personal use</label><br />
-	<label><input type="radio" name="config[acl]" value='1' />personal wiki with no comments</label><br />
-	<label><input type="radio" name="config[acl]" value='2' />personal wiki with comments from registered users only</label><br />
-	<label><input type="radio" name="config[acl]" value='3' />personal wiki with comments from any user</label><br />
-	<label><input type="radio" name="config[acl]" value='4' />public wiki with contributions and comments from registered users only</label><br />
-	<label><input type="radio" name="config[acl]" value='5' />public wiki with contributions from registered users only and </label><br />
+	<label><input type="radio" name="pconfig[acl]" checked="checked" value='0'/>private wiki for personal use</label><br />
+	<label><input type="radio" name="pconfig[acl]" value='1' />personal wiki with no comments</label><br />
+	<label><input type="radio" name="pconfig[acl]" value='2' />personal wiki with comments from registered users only</label><br />
+	<label><input type="radio" name="pconfig[acl]" value='3' />personal wiki with comments from any user</label><br />
+	<label><input type="radio" name="pconfig[acl]" value='4' />public wiki with contributions and comments from registered users only</label><br />
+	<label><input type="radio" name="pconfig[acl]" value='5' />public wiki with contributions from registered users only and </label><br />
 	</td></tr>
 	<tr><td>&nbsp;</td><td>&nbsp;</td></tr>	
-	<tr><td>&nbsp;</td><td><label><input type="radio" name="config[acl]" value='6' />Alternatively, you can select any of the following configurations</label></td></tr>
+	<tr><td>&nbsp;</td><td><label><input type="radio" name="pconfig[acl]" value='6' />Alternatively, you can select any of the following configurations</label></td></tr>
 */
  // Showing select boxes for choosing ACL options
 	 ?>
