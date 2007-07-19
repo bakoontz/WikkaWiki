@@ -2,30 +2,31 @@
 /**
 * Render a string as colored text.
 *
-* You can specifiy either one of HTML defined names or hex-values (with the former one 
+* You can specifiy either one of HTML defined names or hex-values (with the former one
 * taking priority). An optional background color can also be specified.
 *
-* @package    Actions
-* @version    $Id$
-* @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
+* @package		Actions
+* @version		$Id$
+* @license		http://www.gnu.org/copyleft/gpl.html GNU General Public License
 * @filesource
 *
-* @author    {@link http://www.mornography.de/ Hendrik Mans}
-* @author    {@link http://wikkawiki.org/NilsLindenberg Nils Lindenberg} (modifications)
-* @author    {@link http://wikkawiki.org/DotMG Mahefa Randimbisoa} (modification - RGB syntax)
+* @author	{@link http://www.mornography.de/ Hendrik Mans}
+* @author	{@link http://wikkawiki.org/NilsLindenberg Nils Lindenberg} (modifications)
+* @author	{@link http://wikkawiki.org/DotMG Mahefa Randimbisoa} (modification - RGB syntax)
 *
 * @uses		Wakka::htmlspecialchars_ent()
 * @uses		color_syntax_is_valid()
-* @input    string $text mandatory: the text which should be colored.    
-* @input    string $c optional: (html)name or hex-value of the color for the text;
-* @input    string $hex optional: alias for $c
-*           kept for backwards-compatibility;
-* @input    string fg optional: alias for $c
-*           introduced to fit with $bg
-* @input    string $bg optional: (html)name or hex-value for the backgroundcolor;
-* @output   colored text
+* @input	string	$text	mandatory: the text which should be colored.
+* @input	string	$c		optional: (html)name or hex-value of the color for the text;
+* @input	string	$hex	optional: alias for $c
+*				kept for backwards-compatibility;
+* @input	string	$fg		optional: alias for $c
+*				introduced to fit with $bg
+* @input	string	$bg		optional: (html)name or hex-value for the backgroundcolor;
+* @output	colored text
 *
-* @todo     make it part of the formatter instead of using an action
+* @todo		make it part of the formatter instead of using an action
+*				note that most of the color names are not valid in CSS!
 */
 
 // ***Internal function to test if syntax is valid
@@ -33,14 +34,14 @@ if (!function_exists('color_syntax_is_valid'))
 {
 	/**
 	 * Validates a html color syntax.
-	 * 
+	 *
 	 * @author	{@link http://wikkawiki.org/DotMG Mahefa Randimbisoa}
 	 * @since	1.1.6.2
 	 * @version	$Id$
-	 * 
+	 *
 	 * @input	string $syntax requiered: the color syntax to be validated
-	 * @todo	To be more strict, ensure that when using rgb(r, g, b) syntax, 
-	 * 			integer values for r, g, and b are less than 256, or if % is used, 
+	 * @todo	To be more strict, ensure that when using rgb(r, g, b) syntax,
+	 * 			integer values for r, g, and b are less than 256, or if % is used,
 	 * 			those values are not greater than 100%
 	 */
 	function color_syntax_is_valid($syntax)
@@ -83,7 +84,7 @@ $style = '';
 $output = '';
 
 // *** User input section ***
-if (is_array($vars)) 
+if (is_array($vars))
 {
 	foreach ($vars as $param => $value) 
 	{
