@@ -4,7 +4,7 @@
  *
  * @package		Actions
  * @version		$Id:usersettings.php 369 2007-03-01 14:38:59Z DarTar $
- * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
+ * @license		http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
  *
  * @author		{@link http://wikkawiki.org/MinusF MinusF} (code cleanup and validation)
@@ -19,8 +19,7 @@
  * 				invalid input fields;
  * @todo		remove useless redirections;
  * @todo		[accessibility] make logout independent of JavaScript
- * @todo	replace $_REQUEST with either $_GET or $_POST (or both if really
- * 			necessary) - #312  
+ * @todo		remove mysql_real_escape_string from password storage #531
  */
 
 // defaults
