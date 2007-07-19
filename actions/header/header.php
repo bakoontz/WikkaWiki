@@ -72,7 +72,7 @@ if ($this->GetHandler() != 'edit' && $this->config['enable_rss_autodiscovery'] !
 </head>
 <body <?php echo $message ? "onload=\"alert('".$message."');\" " : "" ?> >
 <div class="header">
-	<h2><?php echo $this->config["wakka_name"] ?> : <a href="<?php echo $this->href('backlinks', '', ''); ?>" title="<?php printf(LINKING_PAGES_LINK_TITLE, $pagetag); ?>"><?php echo $pagetag; ?></a></h2>
+	<h2><?php echo $this->config["wakka_name"] ?> : <a href="<?php echo $this->href('backlinks', '', ''); ?>" title="<?php printf(WIKKA_BACKLINKS_LINK_TITLE, $pagetag); ?>"><?php echo $pagetag; ?></a></h2>
 	<?php 
 		if ($this->GetUser()) {
 			echo $this->config["logged_in_navigation_links"] ? $this->Format($this->config["logged_in_navigation_links"])." :: " : ""; 

@@ -60,7 +60,7 @@ if ((isset($vars) && is_array($vars) && isset($vars['option']) && $vars['option'
 		{
 			print($this->Link($page['page_tag']));
 			if ($page['count'] > 1)
-			{ #Use LINKING_PAGES_LINK_TITLE instead of WIKKA_BACKLINKS_LINK_TITLE ?
+			{
 				print(' (<a href="'.$this->Href('backlinks', $page['page_tag']).'" title="'.sprintf(WIKKA_BACKLINKS_LINK_TITLE, $page['page_tag']).'">'.$page['count']."</a>)<br />\n");
 			}
 			else

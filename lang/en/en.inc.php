@@ -33,6 +33,7 @@
 /**#@+
  * Language constant shared among several Wikka files
  */
+// NOTE: all common names (used in multiple files) should start with WIKKA_ !
 define('WIKKA_ERROR_CAPTION','Error');
 define('WIKKA_ERROR_ACL_READ','You aren\'t allowed to read this page.');
 define('WIKKA_ERROR_ACL_READ_SOURCE','You aren\'t allowed to read the source of this page.');
@@ -60,7 +61,7 @@ define('WIKKA_COMMENT_AUTHOR_DIVIDER',', comment by '); //TODo check if we can c
 define('WIKKA_PAGE_EDIT_LINK_DESC','edit');
 define('WIKKA_PAGE_CREATE_LINK_DESC','create');
 define('WIKKA_PAGE_EDIT_LINK_TITLE','Click to edit %s'); // %s page name @@@ 'Edit %s'
-define('LINKING_PAGES_LINK_TITLE','Display a list of pages linking to %s'); // %s page name
+define('WIKKA_BACKLINKS_LINK_TITLE','Display a list of pages linking to %s'); // %s page name 
 define('WIKKA_JRE_LINK_DESC','Java Runtime Environment');
 define('WIKKA_NOTE','NOTE:');
 define('WIKKA_JAVA_PLUGIN_NEEDED','Java 1.4.1 (or later) Plug-in is needed to run this applet,');
@@ -446,7 +447,7 @@ define('LOGIN_LEGEND','Login');
 define('CHANGE_PASSWORD_LEGEND','Change your password');
 define('RETRIEVE_PASSWORD_LEGEND','Password forgotten');
 // - form field labels (should end in ':' _unless_ it's a checkbox or radio button option)
-define('USERSETTINGS_REDIRECT_AFTER_LOGIN','Redirect to %s after login');
+define('USERSETTINGS_REDIRECT_AFTER_LOGIN_LABEL','Redirect to %s after login');
 define('USER_EMAIL_LABEL','Your email address:');
 define('DOUBLECLICK_LABEL','Doubleclick editing:');
 define('SHOW_COMMENTS_LABEL','Show comments by default:');
@@ -490,7 +491,6 @@ define('SORTING_NUMBER_LABEL','Sorting #%d:');
 define('SORTING_DESC_LABEL','desc');
 define('OK_BUTTON','   OK   ');
 define('NO_WANTED_PAGES','No wanted pages. Good!');
-define('WIKKA_BACKLINKS_LINK_TITLE','Click to view all pages linking to %s'); // %s page name 
 /**#@-*/
 
 

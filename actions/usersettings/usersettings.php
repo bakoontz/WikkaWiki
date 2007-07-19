@@ -493,7 +493,7 @@ else // user is not logged in
 	{
 		// FIXME @@@ label for a checkbox should come AFTER it, not before
 	?>
-	<label for="do_redirect"><?php printf(USERSETTINGS_REDIRECT_AFTER_LOGIN, $_SESSION['go_back_tag']); ?></label>
+	<label for="do_redirect"><?php printf(USERSETTINGS_REDIRECT_AFTER_LOGIN_LABEL, $_SESSION['go_back_tag']); ?></label>
 	<input type="checkbox" name="do_redirect" id="do_redirect"<?php if (isset($_POST['do_redirect']) || empty($_POST)) echo ' checked="checked"';?> />
 	<br />
 <?php
