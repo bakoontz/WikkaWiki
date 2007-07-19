@@ -2,17 +2,17 @@
 /**
  * Download a code block as a file.
  *
- * When called by a grab button, forces the download of the associate code block.
- * 
+ * When called by a grab button, forces the download of the associated code block.
+ *
  * @package	Handlers
  * @subpackage Codeblocks
  * @version	$Id$
  * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
- * 
+ *
  * @author	{@link http://wikkawiki.org/DarTar Dario Taraborelli}
  * @since	Wikka 1.1.6.2
- * 
+ *
  * @uses	Wakka::GetConfigValue()
  * @uses	Config::$grabcode_button
  * @todo add configurable filename max. length;
@@ -31,7 +31,7 @@ $code = '';
 $filename = '';
 
 // check if grabcode is allowed
-if ($this->GetConfigValue('grabcode_button') == 1) 
+if ($this->GetConfigValue('grabcode_button') == 1)
 {
 
 	//get URL parameters
