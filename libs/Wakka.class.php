@@ -2692,8 +2692,7 @@ class Wakka
 			'page_tag = "'.mysql_real_escape_string($page_tag).'", '.
 			'time = now(), '.
 			'comment = "'.mysql_real_escape_string($comment).'", '.
-			'parent = $parent_id, '.
-			#'parent = "'.mysql_real_escape_string($parent_id).'", '.	# already done above! JW/2007-07-10
+			'parent = "'.$parent_id.'", '.
 			'user = "'.mysql_real_escape_string($user).'"');
 	}
 
