@@ -447,7 +447,7 @@ define('LOGIN_LEGEND','Login');
 define('CHANGE_PASSWORD_LEGEND','Change your password');
 define('RETRIEVE_PASSWORD_LEGEND','Password forgotten');
 // - form field labels (should end in ':' _unless_ it's a checkbox or radio button option)
-define('USERSETTINGS_REDIRECT_AFTER_LOGIN_LABEL','Redirect to %s after login');
+define('USERSETTINGS_REDIRECT_AFTER_LOGIN_LABEL','Redirect to %s after login');	// %s page to redirect to
 define('USER_EMAIL_LABEL','Your email address:');
 define('DOUBLECLICK_LABEL','Doubleclick editing:');
 define('SHOW_COMMENTS_LABEL','Show comments by default:');
@@ -462,7 +462,7 @@ define('PAGEREVISION_LIST_LIMIT_LABEL','Page revisions list limit:');
 define('NEW_PASSWORD_LABEL','Your new password:');
 define('NEW_PASSWORD_CONFIRM_LABEL','Confirm new password:');
 define('NO_REGISTRATION','Registration on this wiki is disabled.');
-define('PASSWORD_LABEL','Password (%s+ chars):'); //
+define('PASSWORD_LABEL','Password (%s+ chars):'); // %s minimum number of characters
 define('CONFIRM_PASSWORD_LABEL','Confirm password:');
 define('TEMP_PASSWORD_LABEL','Password reminder:');
 define('INVITATION_CODE_SHORT','Invitation Code');
