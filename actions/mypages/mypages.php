@@ -5,12 +5,12 @@
  * If the current user is logged-in and owns at least one page, a list of pages owned by the current user
  * is displayed, ordered alphabetically or by date and time (last edit first).
  * 
- * @package Actions
- * @version	$Id:mypages.php 369 2007-03-01 14:38:59Z DarTar $
- * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
+ * @package		Actions
+ * @version		$Id:mypages.php 369 2007-03-01 14:38:59Z DarTar $
+ * @license		http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
  * 
- * @author Carlo Zottmann
+ * @author	{@link http://web.archive.org/web/20040616194824/http://www.wakkawiki.com/CarloZottmann Carlo Zottmann}
  * 
  * @uses	Wakka::GetUser()
  * @uses	Wakka::LoadPagesByOwner()
@@ -26,7 +26,7 @@ if ($user = $this->GetUser())
 	$curChar = '';
 
 
-	if ($pages = $this->LoadPagesByOwner($this->GetUserName()))
+	if ($pages = $this->LoadPagesByOwner($user['name']))
 	{
 		foreach ($pages as $page)
 		{
@@ -37,14 +37,14 @@ if ($user = $this->GetUser())
 				{
 					$firstChar = "#";
 				}
-	
+
 				if ($firstChar != $curChar) 
 				{
 					if ($curChar) print("<br />\n");
 					print("<strong>$firstChar</strong><br />\n");
 					$curChar = $firstChar;
 				}
-	
+
 				print($this->Link($page["tag"])."<br />\n");
 				
 			//}
