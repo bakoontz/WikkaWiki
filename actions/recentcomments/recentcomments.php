@@ -3,14 +3,16 @@
  * Display a list of recent comments.
  *
  * @package		Actions
+ * @name		RecentComments
  * @version		$Id:recentcomments.php 369 2007-03-01 14:38:59Z DarTar $
- * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
+ * @license		http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
  *
  * @author		{@link http://wikkawiki.org/DarTar Dario Taraborelli} (preliminary code cleanup)
  * @author		{@link http://wikkawiki.org/NickDamoulakis Nick Damoulakis} (ACL check)
+ * @since		Wikka 1.0.0
  *
- * @todo			make datetime format configurable
+ * @todo		make datetime format configurable
  */
 
 /**
@@ -30,7 +32,7 @@ if ($comments = $this->LoadRecentComments())
 	{
 		$page_tag = $comment['page_tag'];
 		if ($this->HasAccess('read', $page_tag) &&
-	        $this->HasAccess('comment_read', $page_tag))
+			$this->HasAccess('comment_read', $page_tag))
 		{
 			$readable++;
 			// day header
@@ -38,7 +40,7 @@ if ($comments = $this->LoadRecentComments())
 			if ($day != $curday)
 			{
 				$dateformatted = date(COMMENT_DATE_FORMAT, strtotime($day));
-	
+
 				if ($curday)
 				{
 					echo "<br />\n";
