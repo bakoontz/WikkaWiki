@@ -1,7 +1,7 @@
 <?php
 /**
  * Compare two versions of a page and output the differences.
- * 
+ *
  * Parameters to this handler are passed through $_GET. <ul>
  * <li>$_GET['a'] is the id of the base revision of the page</li>
  * <li>$_GET['b'] is the id of the revision to compare</li>
@@ -10,29 +10,24 @@
  * was on the {@link revisions.php revision handler}, so the page is redirected to that handler, with the
  * parameters $a and $start.</em></li></ul>
  *
- * @package     Handlers
- * @subpackage  Page
+ * @package		Handlers
+ * @subpackage	Page
  * @version 	$Id:diff.php 407 2007-03-13 05:59:51Z DarTar $
- * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
+ * @license		http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
- * 
- * @author David Delon
- * 
+ *
+ * @author	David Delon
+ *
  * @uses	Wakka::HasAccess()
  * @uses	Wakka::LoadPageById()
  * @uses	Wakka::Href()
  * @uses	Wakka::Format()
  * @uses	Wakka::Redirect()
  * @uses	Diff
- * 
- * @todo	move main <div> to templating class;
+ *
  * @todo 	This is a really cheap way to do it. I think it may be more intelligent to write the two pages to temporary files and run /usr/bin/diff over them. Then again, maybe not.
  * 			JW: that may be nice but won't work on a Windows system ;) 
- * @todo	replace $_REQUEST with either $_GET or $_POST (or both if really
- * 			necessary) - #312  
  */
-
-echo '<div class="page">'."\n"; //TODO: move to templating class //TODO move _after_ redirect
 
 // If javascript is disabled, user may get here after pressing button Next... on the /revisions handler. 
 if ((isset($_GET['more_revisions'])) && (isset($_GET['a'])) && (isset($_GET['start'])))
@@ -40,14 +35,14 @@ if ((isset($_GET['more_revisions'])) && (isset($_GET['a'])) && (isset($_GET['sta
 	$this->Redirect($this->Href('revisions', '', 'a='.$_GET['a'].'&start='.$_GET['start']));
 }
 
-if ($this->HasAccess("read")) 
+if ($this->HasAccess("read"))
 {
 	// looking for the diff-classes
 	// @@@ TODO needed only if we're NOT doing a 'fastdiff'
 	// instead of copping out we could use fastdiff as fallback if the library is missing:
 	// first determine diff method based on params AND presense of library; then do it
 	if (file_exists('libs'.DIRECTORY_SEPARATOR.'diff.lib.php')) require_once('libs'.DIRECTORY_SEPARATOR.'diff.lib.php');	#89
-	else die(ERROR_DIFF_LIBRARY_MISSING);	// @@@ ERROR: end div won't be produced here
+	else die(ERROR_DIFF_LIBRARY_MISSING);	// NO wrapper div will be produced here!
 
 	// load pages
 	#$pageA = $this->LoadPageById($_REQUEST['a']);
@@ -56,9 +51,12 @@ if ($this->HasAccess("read"))
 	$pageB = $this->LoadPageById($_GET['b']);	#312
 	if (!$pageA || !$pageB)
 	{
+		echo '<div class="page">'."\n";
 		echo '<em class="error">'.ERROR_BAD_PARAMETERS.'</em><br />';
-		return;	// @@@ ERROR: end div won't be produced here
+		echo '</div>'."\n";
+		return;
 	}
+
 	// set up heading variables
 	$linkPageA = '<a href="'.$this->Href('', '', 'time='.urlencode($pageA['time'])).'">'.$pageA['time'].'</a>';
 	$linkPageB = '<a href="'.$this->Href('', '', 'time='.urlencode($pageB['time'])).'">'.$pageB['time'].'</a>';
@@ -93,12 +91,12 @@ if ($this->HasAccess("read"))
 			$output .= '<br />'."\n".'<strong>'.DIFF_DELETIONS_HEADER.'</strong><br />'."\n"; //TODO make real heading
 			$output .= '<del>'.$this->Format(implode("\n", $deleted)).'</del>';
 		}
-	
+
 		if (!$added && !$deleted)
 		{
 			$output .= "<br />\n".DIFF_NO_DIFFERENCES;
 		}
-		echo $head.$output;
+		#echo $head.$output;
 	}
 	else
 	{
@@ -168,7 +166,7 @@ if ($this->HasAccess("read"))
 				}
 				$sideA->skip_until_ordinal($resync_left);
 				$sideB->copy_until_ordinal($resync_right,$output);
-   
+
 				// deleted word
 				if (($letter=='d') || ($letter=='c'))
 				{
@@ -194,13 +192,17 @@ if ($this->HasAccess("read"))
 		$sideB->copy_whitespace($output);
 
 		$out = $this->Format($output);
-		echo $head.$out;
-
 	}
+
+	// show output
+	echo '<div class="page">'."\n";
+	echo $head.$out;
+	echo '</div>'."\n";
 }
 else
 {
+	echo '<div class="page">'."\n";
 	echo '<em class="error">'.WIKKA_ERROR_ACL_READ.'</em>';
+	echo '</div>'."\n";
 }
-echo '</div>'."\n" //TODO: move to templating class
 ?>
