@@ -3,25 +3,28 @@
  * Display a form to manage ACL for the current page.
  *
  * @package		Handlers
- * @subpackage 	Page
+ * @subpackage	Page
+ * @name		ACLs
  * @version		$Id$
- * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
+ * @license		http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
- * 
- * @uses Config::$default_comment_acl
- * @uses Config::$default_read_acl
- * @uses Config::$default_write_acl
- * @uses Wakka::htmlspecialchars_ent()
  *
- * @author		{@link http://wikkawiki.org/MinusF MinusF} (preliminary code cleanup, css selectors)
- * @author		{@link http://wikkawiki.org/DarTar Dario Taraborelli} (further cleanup)
- * @author		{@link http://wikkawiki.org/NilsLindenberg Nils Lindenberg} (i18n)
+ * @uses	Config::$default_comment_read_acl
+ * @uses	Config::$default_comment_write_acl
+ * @uses	Config::$default_read_acl
+ * @uses	Config::$default_write_acl
+ * @uses	Wakka::htmlspecialchars_ent()
  *
- * @todo		move main <div> to templating class
- * @todo		show Cancel button only if JavaScript is available
+ * @author	{@link http://wikkawiki.org/MinusF MinusF} (preliminary code cleanup, css selectors)
+ * @author	{@link http://wikkawiki.org/DarTar Dario Taraborelli} (further cleanup)
+ * @author	{@link http://wikkawiki.org/NilsLindenberg Nils Lindenberg} (i18n)
+ * @since	Wikka 1.0.0
+ *
+ * @todo	show Cancel button only if JavaScript is available	#35
+ * @todo	do NOT use whitespace as ACL delimiter see #226 comment:8
+ * @todo	produce ACLs syntax help directly as HTML, using constants for the
+ *			the ACL symbols (and implement these symbols as constants elsewhere!) #539
  */
-
-echo '<div class="page">'."\n"; //TODO: move to templating class
 
 if ($this->UserIsOwner())
 {
@@ -41,13 +44,13 @@ if ($this->UserIsOwner())
 		// or if the posted values are different than the defaults
 
 		$page = $this->LoadSingle('SELECT * FROM '.$this->config['table_prefix'].
-		    "acls WHERE page_tag = '".mysql_real_escape_string($this->GetPageTag()).
-		    "' LIMIT 1");
+			"acls WHERE page_tag = '".mysql_real_escape_string($this->GetPageTag()).
+			"' LIMIT 1");
 
 		if ($page ||
-		    ($posted_read_acl != $default_read_acl ||
-		     $posted_write_acl != $default_write_acl ||
-		     $posted_comment_read_acl != $default_comment_read_acl ||
+			($posted_read_acl != $default_read_acl ||
+			 $posted_write_acl != $default_write_acl ||
+			 $posted_comment_read_acl != $default_comment_read_acl ||
 			 $posted_comment_post_acl != $default_comment_post_acl))
 		{
 			$this->SaveACL($this->GetPageTag(), 'read', $this->TrimACLs($posted_read_acl));
@@ -61,7 +64,7 @@ if ($this->UserIsOwner())
 		$newowner = $_POST['newowner'];
 
 		if (($newowner != 'same') &&
-		    ($this->GetPageOwner($this->GetPageTag()) != $newowner))
+			($this->GetPageOwner($this->GetPageTag()) != $newowner))
 		{
 			if ($newowner == '')
 			{
@@ -77,8 +80,9 @@ if ($this->UserIsOwner())
 	}
 	else // show form
 	{
+		echo '<div class="page">'."\n";
+		echo $this->FormOpen('acls')
 ?>
-<?php echo $this->FormOpen('acls') ?>
 <fieldset><legend><?php echo $this->Format(sprintf(ACLS_LEGEND, '[['.$this->tag.']]').' --- ');?></legend>
 <table class="acls">
 <tr>
@@ -103,7 +107,6 @@ if ($this->UserIsOwner())
 	</td>
 
 </tr>
-
 <tr>
 	<td colspan="2">
 	<br />
@@ -122,7 +125,7 @@ if ($this->UserIsOwner())
 		{
 			foreach($users as $user)
 			{
-				echo "\t".'<option value="'.$this->htmlspecialchars_ent($user['name']).'">'.$user['name'].'</option>'."\n";
+				echo '	<option value="'.$this->htmlspecialchars_ent($user['name']).'">'.$user['name'].'</option>'."\n";
 			}
 		}
 ?>
@@ -133,28 +136,28 @@ if ($this->UserIsOwner())
 </fieldset>
 <br />
 <?php
-	$acls_sample_wiki_name_escaped = '""'.WIKKA_SAMPLE_WIKINAME.'""';
+		$acls_sample_wiki_name_escaped = '""'.WIKKA_SAMPLE_WIKINAME.'""';
 
-	$acls_syntax_help  = '==='.ACLS_SYNTAX_HEADING.'===';
-	$acls_syntax_help .= ' ---##*## = '.ACLS_EVERYONE;
-	$acls_syntax_help .= ' ---##+## = '.ACLS_REGISTERED_USERS;
-	$acls_syntax_help .= ' ---##'.$acls_sample_wiki_name_escaped.'## = '.sprintf(ACLS_LIST_USERNAMES,$acls_sample_wiki_name_escaped);
-	$acls_syntax_help .= ' --- --- '.sprintf(ACLS_NEGATION,'##!##');
-	$acls_syntax_help .= ' ---##!*## = '.ACLS_NONE_BUT_ADMINS;
-	$acls_syntax_help .= ' ---##!+## = '.ACLS_ANON_ONLY;
-	$acls_syntax_help .= ' ---##!'.$acls_sample_wiki_name_escaped.'## = '.sprintf(ACLS_DENY_USER_ACCESS,$acls_sample_wiki_name_escaped);
-	$acls_syntax_help .= ' --- --- //'.ACLS_TESTING_ORDER1.'//';
-	$acls_syntax_help .= ' --- '.sprintf(ACLS_TESTING_ORDER2,'##*##','//'.ACLS_AFTER.'//');
+		$acls_syntax_help  = '==='.ACLS_SYNTAX_HEADING.'===';
+		$acls_syntax_help .= ' ---##*## = '.ACLS_EVERYONE;
+		$acls_syntax_help .= ' ---##+## = '.ACLS_REGISTERED_USERS;
+		$acls_syntax_help .= ' ---##'.$acls_sample_wiki_name_escaped.'## = '.sprintf(ACLS_LIST_USERNAMES,$acls_sample_wiki_name_escaped);
+		$acls_syntax_help .= ' --- --- '.sprintf(ACLS_NEGATION,'##!##');
+		$acls_syntax_help .= ' ---##!*## = '.ACLS_NONE_BUT_ADMINS;
+		$acls_syntax_help .= ' ---##!+## = '.ACLS_ANON_ONLY;
+		$acls_syntax_help .= ' ---##!'.$acls_sample_wiki_name_escaped.'## = '.sprintf(ACLS_DENY_USER_ACCESS,$acls_sample_wiki_name_escaped);
+		$acls_syntax_help .= ' --- --- //'.ACLS_TESTING_ORDER1.'//';
+		$acls_syntax_help .= ' --- '.sprintf(ACLS_TESTING_ORDER2,'##*##','//'.ACLS_AFTER.'//');
 
-	echo $this->Format($acls_syntax_help);
-?>
-<?php
+		echo $this->Format($acls_syntax_help);
 		print($this->FormClose());
+		echo '</div>'."\n";
 	}
 }
 else
 {
-	echo '<em class="error">'.NOT_PAGE_OWNER.'</em>'."\n";
+	echo '<div class="page">'."\n";
+	echo '	<em class="error">'.NOT_PAGE_OWNER.'</em>'."\n";
+	echo '</div>'."\n";
 }
-echo '</div>'."\n" //TODO: move to templating class
 ?>
