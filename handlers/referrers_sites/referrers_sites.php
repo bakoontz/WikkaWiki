@@ -1,14 +1,14 @@
 <?php
 /**
  * Show domains linking to the page/ the wiki.
- * 
+ *
  * @package		Handlers
  * @subpackage	Referrers	
  * @version		$Id:referrers_sites.php 407 2007-03-13 05:59:51Z DarTar $
- * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
+ * @license		http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
- * 
- * @uses  Config::$referrers_purge_time
+ *
+ * @uses		Config::$referrers_purge_time
  * @uses		Wakka::IsAdmin()
  * @uses		Wakka::LoadReferrers()
  * @uses		Wakka::GetConfigValue()
@@ -16,12 +16,9 @@
  * @uses		Wakka::GetUser()
  * @uses		Wakka::Href()
  * @uses		Wakka::htmlspecialchars_ent()
- * 
- * @todo		move <div> to template
+ *
  * @todo		better separation between data gathering and output
  * @todo		$heading should become heading, not bold text
- * @todo	replace $_REQUEST with either $_GET or $_POST (or both if really
- * 			necessary) - #312  
  * @todo		replace with new handlers - #1
  */
 
@@ -35,12 +32,10 @@ $ref_domains_to_page_url = $this->Href('referrers_sites');
 $ref_urls_to_wiki_url = $this->Href('referrers','','global=1');
 $ref_urls_to_page_url = $this->Href('referrers');
 $ref_blacklist_url = $this->Href('review_blacklist');
-#if (isset($_REQUEST["global"]))
 if (isset($_GET["global"])) #312
 {
 	// referrers to this wiki
 	// prepare UI
-	#$global = $_REQUEST["global"];
 	$global = $_GET["global"]; #312
 	$referrers_urls_link = '<a href="'.$ref_urls_to_wiki_url.'">'.REFERRERS_URLS_LINK_DESC.'</a>';
 	$heading = sprintf(REFERRERS_DOMAINS_TO_WIKI, $referrers_urls_link);
@@ -74,7 +69,7 @@ else
 	$menu = '['.$ref_domains_to_wiki_link.' | '.$ref_urls_to_wiki_link.' | '.$ref_blacklist_link.']';
 }
 
-echo '<div class="page">'."\n"; //TODO: move to templating class
+echo '<div class="page">'."\n";
 echo '<strong>'.$heading.'</strong><br />'."\n";
 echo '<em>'.REFERRERS_NO_SPAM.'</em><br /><br />'."\n";
 
@@ -125,5 +120,5 @@ else
 }
 
 echo '<br />'.$menu;
-echo '</div>'."\n" //TODO: move to templating class
+echo '</div>'."\n";
 ?>
