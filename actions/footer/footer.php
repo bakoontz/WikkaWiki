@@ -1,11 +1,10 @@
-<div class="footer">
 <?php
 /**
  * Generates the page footer.
  * 
  * @package		Template
  * @version		$Id$
- * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
+ * @license		http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
  * 
  * @uses	Wakka::FormOpen()
@@ -21,11 +20,13 @@
  * @uses	Wakka::FormClose()
  * @uses	Wakka::GetWakkaVersion()
  * @uses	Wakka::htmlspecialchars_ent()
- * 
- * @todo	move <div class="footer"> to template
  */
 
-	echo $this->FormOpen("", "TextSearch", "get"); 
+?>
+
+<div class="footer">
+<?php
+	echo $this->FormOpen("", "TextSearch", "get");
 	if ($this->GetHandler() != 'edit')
 	{
 		echo $this->HasAccess("write") ? '<a href="'.$this->Href("edit").'" title="'.sprintf(WIKKA_PAGE_EDIT_LINK_TITLE,$this->GetPageTag()).'">'.FOOTER_PAGE_EDIT_LINK_DESC.'</a> ::'."\n" : "";
@@ -49,12 +50,12 @@
 			// if owner is current user
 			elseif ($this->UserIsOwner())
 			{
-           		if ($this->IsAdmin())
-           		{
+				if ($this->IsAdmin())
+				{
 					print(sprintf(WIKKA_PAGE_OWNER,$page_owner_link).' :: <a href="'.$this->href("acls").'">'.PAGE_ACLS_EDIT_ADMIN_LINK_DESC.'</a> ::'."\n");
-            	} 
-            	else 
-            	{
+				}
+				else
+				{
 					print(USER_IS_OWNER.' :: <a href="'.$this->href("acls").'">'.PAGE_ACLS_EDIT_LINK_DESC.'</a> ::'."\n");
 				}
 			}
@@ -72,7 +73,7 @@
 <?php echo ($this->GetUser() ? '<a href="'.$this->href("referrers").'" title="'.REFERRERS_LINK_TITLE.'">'.REFERRERS_LINK_DESC.'</a> :: ' : "") ?> 
 <label for="src_phrase"><?php echo SEARCH_LABEL;?></label> <input id="src_phrase" name="phrase" size="15" class="searchbox" />
 <?php echo $this->FormClose(); ?>
-</div>
+</div><!-- end footer -->
 
 <div class="smallprint">
 <?php echo $this->Link("http://validator.w3.org/check/referer", "", "Valid XHTML 1.0 Transitional") ?> ::
