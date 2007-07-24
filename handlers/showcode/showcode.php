@@ -4,12 +4,14 @@
  *
  * @package		Handlers
  * @subpackage	Page
+ * @name		Showcode
  * @version		$Id:showcode.php 407 2007-03-13 05:59:51Z DarTar $
- * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
+ * @license		http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
  *
  * @author		{@link http://wikkawiki.org/JsnX JsnX} (first draft)
  * @author		{@link http://wikkawiki.org/DarTar Dario Taraborelli} (code cleanup, i18n strings and DB check)
+ * @version		0.3
  * @since		Wikka 1.1.6.0
  *
  * @uses		Wakka::ExistsPage()
@@ -18,11 +20,10 @@
  * @uses		Wakka::href()
  * @uses		Wakka::htmlspecialchars_ent()
  * @output		Wiki source of current page (if it exists).
- * @todo		move structural elements to templating class;
  * @todo		create GeSHi highlighter for Wikka markup; #144
  */
 
-echo '<div class="page">'."\n";//TODO: move to templating class
+echo '<div class="page">'."\n";
 
 //check if page exists
 if ($this->ExistsPage($this->tag))
@@ -46,5 +47,5 @@ else
 	echo '<em class="error">'.sprintf(WIKKA_ERROR_PAGE_NOT_EXIST,$this->tag).'</em>';
 }
 
-echo '</div>';//TODO: move to templating class
+echo '</div>';
 ?>
