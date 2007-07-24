@@ -1,21 +1,21 @@
 <?php
 /**
  * Generates the page header.
- * 
+ *
  * @package		Template
  * @version		$Id:header.php 369 2007-03-01 14:38:59Z DarTar $
- * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
+ * @license		http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
- * 
- * @uses Config::$base_url
- * @uses Config::$enable_rss_autodiscovery
- * @uses Config::$logged_in_navigation_links
- * @uses Config::$meta_description
- * @uses Config::$meta_keywords
- * @uses Config::$navigation_links
- * @uses Config::$root_page
- * @uses Config::$stylesheet
- * @uses Config::$wakka_name
+ *
+ * @uses	Config::$base_url
+ * @uses	Config::$enable_rss_autodiscovery
+ * @uses	Config::$logged_in_navigation_links
+ * @uses	Config::$meta_description
+ * @uses	Config::$meta_keywords
+ * @uses	Config::$navigation_links
+ * @uses	Config::$root_page
+ * @uses	Config::$stylesheet
+ * @uses	Config::$wakka_name
  * @uses	Wakka::GetRedirectMessage()
  * @uses	Wakka::GetUser()
  * @uses	Wakka::GetConfigValue()
@@ -28,6 +28,12 @@
  * @uses	Wakka::StaticHref()
  *
  * @todo Move rss autodiscovery to handlers/show/show.php
+ *			JW: ??? Wikka does no autodiscovery
+ *			- is this a reference to generating feed link tags? if so, why *not*
+ *			generate them in the header?
+ *			- config 'enable_rss_autodiscovery' is misnamed: we also generate
+ *			RSS links in the body and some programs can "autodiscover" those as
+ *			well, not just links in the head section.
  */
 
 /**
@@ -55,30 +61,31 @@ $site_base = $this->GetConfigValue("base_url");
 	<link rel="shortcut icon" href="<?php echo $this->StaticHref('images/favicon.ico') ?>" type="image/x-icon" />
 <?php
 $pagetag = $this->htmlspecialchars_ent($this->GetPageTag());
-if ($this->GetHandler() != 'edit' && $this->config['enable_rss_autodiscovery'] != 0) {
+if ($this->GetHandler() != 'edit' && $this->config['enable_rss_autodiscovery'] != 0)
+{
 	$wikiname = $this->htmlspecialchars_ent($this->GetWakkaName());
 	$rsslink  = '	<link rel="alternate" type="application/rss+xml" title="'.sprintf(RSS_REVISIONS_TITLE,$wikiname,$pagetag).' (RSS '.RSS_REVISIONS_VERSION.')" href="'.$this->Href('revisions.xml', $this->GetPageTag()).'" />'."\n";
 	$rsslink .= '	<link rel="alternate" type="application/rss+xml" title="'.sprintf(RSS_RECENTCHANGES_TITLE,$wikiname).' (RSS '.RSS_RECENTCHANGES_VERSION.')" href="'.$this->Href('recentchanges.xml', $this->GetPageTag()).'" />'."\n";
-	echo $rsslink;	
+	echo $rsslink;
 }
- if (isset($this->additional_headers) && is_array($this->additional_headers) && count($this->additional_headers))
+if (isset($this->additional_headers) && is_array($this->additional_headers) && count($this->additional_headers))
+{
+	foreach ($this->additional_headers as $additional_headers)
 	{
-		foreach ($this->additional_headers as $additional_headers)
-		{
-			echo $additional_headers;
-		}
+		echo $additional_headers;
 	}
+}
 ?>
 </head>
 <body <?php echo $message ? "onload=\"alert('".$message."');\" " : "" ?> >
 <div class="header">
 	<h2><?php echo $this->config["wakka_name"] ?> : <a href="<?php echo $this->href('backlinks', '', ''); ?>" title="<?php printf(WIKKA_BACKLINKS_LINK_TITLE, $pagetag); ?>"><?php echo $pagetag; ?></a></h2>
-	<?php 
+	<?php
 		if ($this->GetUser()) {
 			echo $this->config["logged_in_navigation_links"] ? $this->Format($this->config["logged_in_navigation_links"])." :: " : ""; 
 			printf(YOU_ARE, $this->FormatUser($this->GetUserName()));
-		} else { 
+		} else {
 			echo $this->config["navigation_links"] ? $this->Format($this->config["navigation_links"]) : ""; 
-		} 
-	?> 	
+		}
+	?>
 </div>
