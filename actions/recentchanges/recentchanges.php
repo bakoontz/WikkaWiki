@@ -3,13 +3,14 @@
  * Display a list of recently changed pages.
  *
  * @package		Actions
+ * @name		RecentChanges
  * @version		$Id$
- * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
+ * @license		http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
  *
- * @author    	{@link http://www.mornography.de/ Hendrik Mans} (wakka code)
+ * @author		{@link http://www.mornography.de/ Hendrik Mans} (wakka code)
  * @author		{@link http://wikkawiki.org/DarTar Dario Taraborelli} (preliminary code cleanup)
- * 
+ *
  * @uses		Wakka::Format()
  * @uses		Wakka::LoadRecentlyChanged()
  * @uses		Wakka::Href()
@@ -18,7 +19,7 @@
  * @uses		Wakka::LoadUser()
  * @uses		Wakka::FormatUser()
  * @uses		Wakka::htmlspecialchars_ent()
- * 
+ *
  * @todo		make datetime format configurable;
  * @todo		add configurable option for non-accessible pages {@link http://wush.net/trac/wikka/ticket/178 #178};
  * @todo		added extensive logging of events such as page deletion, cloning, ACL change {@link http://wush.net/trac/wikka/ticket/143 #143};
@@ -43,10 +44,10 @@ if ($pages = $this->LoadRecentlyChanged())
 	//print feed link icon
 	echo '<p><a href="'.$this->href('recentchanges.xml', $this->page['tag']).'"><img src="images/xml.png" width="36" height="14" alt="XML" /></a></p>'."\n";
 
-	if ($user = $this->GetUser()) 
+	if ($user = $this->GetUser())
 	{
 		$max = $user['changescount'];
-	} else 
+	} else
 	{
 		$max = MAX_REVISION_NUMBER;
 	}
