@@ -4,7 +4,7 @@
  *
  * @package		Actions
  * @version		$Id$
- * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
+ * @license		http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
  * 
  * @author		{@link http://wikkawiki.org/DarTar Dario Taraborelli} (preliminary code cleanup, ACL check)
@@ -33,7 +33,7 @@ if(isset($user['default_comment_display'])) {
 } else {
 	$show_comments = $this->config['default_comment_display'];
 }
-	
+
 echo '<h2>'.RECENTLYCOMMENTED_HEADING.'</h2><br />'."\n";
 if ($comments = $this->LoadRecentlyCommented())
 {
@@ -42,7 +42,7 @@ if ($comments = $this->LoadRecentlyCommented())
 	{
 		$page_tag = $comment['page_tag'];
 		if ($this->HasAccess('read', $page_tag) &&
-	        $this->HasAccess('comment_read', $page_tag))
+			$this->HasAccess('comment_read', $page_tag))
 		{
 			$readable++;
 			// day header
@@ -50,7 +50,7 @@ if ($comments = $this->LoadRecentlyCommented())
 			if ($day != $curday)
 			{
 				$dateformatted = date(COMMENT_DATE_FORMAT, strtotime($day));
-	
+
 				if ($curday)
 				{
 					echo "<br />\n";
