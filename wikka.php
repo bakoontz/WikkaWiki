@@ -4,39 +4,37 @@
  * 
  * This file is called each time a request is made from the browser.
  * Most of the core methods used by the engine are located in the Wakka class.
- * @see Wakka
+ * @see	Wakka
  * This file was originally written by Hendrik Mans for WakkaWiki
  * and released under the terms of the modified BSD license
- * @see /docs/WakkaWiki.LICENSE
+ * @see	/docs/WakkaWiki.LICENSE
  *
- * @package Wikka
- * @subpackage Core
- * @version $Id$
- * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
- * @see /docs/Wikka.LICENSE
+ * @package		Wikka
+ * @subpackage	Core
+ * @version		$Id$
+ * @license		http://www.gnu.org/copyleft/gpl.html GNU General Public License
+ * @see			/docs/Wikka.LICENSE
  * @filesource
  * 
- * @author Hendrik Mans <hendrik@mans.de>
- * @author Jason Tourtelotte <wikka-admin@jsnx.com>
- * @author {@link http://wikkawiki.org/JavaWoman Marjolein Katsma}
- * @author {@link http://wikkawiki.org/NilsLindenberg Nils Lindenberg}
- * @author {@link http://wikkawiki.org/DotMG Mahefa Randimbisoa}
- * @author {@link http://wikkawiki.org/DarTar Dario Taraborelli}
+ * @author	{@link http://www.mornography.de/ Hendrik Mans}
+ * @author	{@link http://wikkawiki.org/JsnX Jason Tourtelotte}
+ * @author	{@link http://wikkawiki.org/JavaWoman Marjolein Katsma}
+ * @author	{@link http://wikkawiki.org/NilsLindenberg Nils Lindenberg}
+ * @author	{@link http://wikkawiki.org/DotMG Mahefa Randimbisoa}
+ * @author	{@link http://wikkawiki.org/DarTar Dario Taraborelli}
  * 
- * @copyright Copyright 2002-2003, Hendrik Mans <hendrik@mans.de>
- * @copyright Copyright 2004-2005, Jason Tourtelotte <wikka-admin@jsnx.com>
- * @copyright Copyright 2006, {@link http://wikkawiki.org/CreditsPage Wikka Development Team}
+ * @copyright	Copyright 2002-2003, Hendrik Mans <hendrik@mans.de>
+ * @copyright	Copyright 2004-2005, Jason Tourtelotte <wikka-admin@jsnx.com>
+ * @copyright	Copyright 2006-2007, {@link http://wikkawiki.org/CreditsPage Wikka Development Team}
  * 
- * @todo use templating class for page generation;
- * @todo add phpdoc documentation for configuration array elements;
- * @todo	replace $_REQUEST with either $_GET or $_POST (or both if really
- * 			necessary) - #312  
+ * @todo	use templating class for page generation;
+ * @todo	add phpdoc documentation for configuration array elements;
  */
 
 ob_start();
 
 /**
- * Display PHP errors only or errors and warnings
+ * Display PHP errors only, or errors and warnings
  * @todo	make this configurable
  */
 //error_reporting(E_ALL);
@@ -53,7 +51,7 @@ if(!defined('BASIC_COOKIE_NAME')) define('BASIC_COOKIE_NAME', 'Wikkawiki');
 /**
  * Length to use for generated part of id attribute.
  */
-if(!defined('ID_LENGTH')) define('ID_LENGTH',10);   
+if(!defined('ID_LENGTH')) define('ID_LENGTH',10);
 
 /**
  * Calculate page generation time.
@@ -71,8 +69,8 @@ if (!function_exists('mysql_real_escape_string'))
  * Escape special characters in a string for use in a SQL statement.
  * 
  * This function is added for back-compatibility with MySQL 3.23.
- * @param string $string the string to be escaped
- * @return string a string with special characters escaped
+ * @param	string	$string	the string to be escaped
+ * @return	string	a string with special characters escaped
  */
 	function mysql_real_escape_string($string)
 	{
@@ -82,7 +80,7 @@ if (!function_exists('mysql_real_escape_string'))
 
 /**
  * Include main library if it exists.
- * @see /libs/Wakka.class.php
+ * @see		/libs/Wakka.class.php
  */
 if (file_exists('libs'.DIRECTORY_SEPARATOR.'Wakka.class.php'))
 {
@@ -127,6 +125,10 @@ if (get_magic_quotes_gpc())
 
 /**
  * Load the configuration.
+ * @todo	remove the parts that are no longer used (config files)
+ *			installer should take care of picking up old files - just once
+ * @todo	then let Wikka class just include the Config class, and remove
+ *			this whole section!
  */
 require_once('libs'.DIRECTORY_SEPARATOR.'Config.class.php');
 $buff = new Config;
@@ -145,10 +147,9 @@ if (file_exists($configfile))
 {
 	include($configfile);
 }
-$wakkaConfigLocation = $configfile;
+$wakkaConfigLocation = $configfile;		// @@@ won't work if doesn't exist
 $wakkaConfig = array_merge($wakkaDefaultConfig, $wakkaConfig);
-$htaccessLocation = str_replace('\\', '/',
-dirname(__FILE__)).DIRECTORY_SEPARATOR.'.htaccess';
+$htaccessLocation = str_replace('\\', '/', dirname(__FILE__)).DIRECTORY_SEPARATOR.'.htaccess';
 
 /**
  * Check for locking.
@@ -231,7 +232,6 @@ session_start();
  * @todo files action uses POST, everything else uses GET #312
  * @todo use different name - $wakka clashes with $wakka object (which should be #Wakka)
  */
-#$wakka = $_REQUEST["wakka"];
 $wakka = $_GET['wakka']; #312
 
 /**
@@ -306,19 +306,23 @@ if (!preg_match('/(xml|raw|mm|grabcode|mindmap_fullscreen)$/', $handler))
 	//calculate the difference
 	$totaltime = ($tend - $tstart);
 	//output result
-	print '<div class="smallprint">'.sprintf(PAGE_GENERATION_TIME, $totaltime)."</div>\n</body>\n</html>"; }
+	print '<div class="smallprint">'.sprintf(PAGE_GENERATION_TIME, $totaltime)."</div>\n</body>\n</html>";
+}
 
 $content =  ob_get_contents();
 /** 
  * Use gzip compression if possible.
+ * @todo	use config value to optionally turn off gzip-encoding here #541
  */
 if ( isset($_SERVER['HTTP_ACCEPT_ENCODING']) && strstr ($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip') && function_exists('gzencode') ) #38
 {
 	// Tell the browser the content is compressed with gzip
-	header ('Content-Encoding: gzip');
+	header('Content-Encoding: gzip');
 	$page_output = gzencode($content);
 	$page_length = strlen($page_output);
-} else {
+}
+else
+{
 	$page_output = $content;
 	$page_length = strlen($page_output);
 }
@@ -326,8 +330,8 @@ if ( isset($_SERVER['HTTP_ACCEPT_ENCODING']) && strstr ($_SERVER['HTTP_ACCEPT_EN
 $etag =  md5($content);
 header('ETag: '.$etag);
 
-if (!isset($wakka->do_not_send_anticaching_headers) || (!$wakka->do_not_send_anticaching_headers))
-{ #279
+if (!isset($wakka->do_not_send_anticaching_headers) || (!$wakka->do_not_send_anticaching_headers)) #279
+{
 	header('Expires: Thu, 19 Nov 1981 08:52:00 GMT');
 	header('Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0');
 	header('Pragma: no-cache');
