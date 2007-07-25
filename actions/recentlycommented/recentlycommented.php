@@ -28,9 +28,12 @@ if (!defined('COMMENT_SNIPPET_LENGTH')) define('COMMENT_SNIPPET_LENGTH', 120);
 $readable = 0;
 $user = $this->GetUser();
 $show_comments = '';
-if(isset($user['default_comment_display'])) {
+if (isset($user['default_comment_display']))
+{
 	$show_comments = $user['default_comment_display'];
-} else {
+}
+else
+{
 	$show_comments = $this->config['default_comment_display'];
 }
 
