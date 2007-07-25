@@ -97,7 +97,7 @@ if (!file_exists($wakkaConfigLocation) || !is_writeable($wakkaConfigLocation))
 	<tr><td>&nbsp;</td><td><?php echo __('Your Wikka site\'s home page').'. '.sprintf(__('Should be formatted as a %s'), $wikiname); ?>.</td></tr>
 	<tr><td align="right" nowrap="nowrap"><?php echo __('Home page'); ?>:</td><td><input type="text" size="50" name="pconfig[root_page]" value="<?php echo $config["root_page"] ?>" /></td></tr>
 
-	<tr><td>&nbsp;</td><td><?php echo __('Suffix used for cookies and session name. This allows you to run multiple Wikka installations on the same server by configuring them to use different wiki prefixes.'); ?></td></tr>
+	<tr><td>&nbsp;</td><td><?php echo __('Suffix used for cookies and session name. This allows you to run multiple Wikka installations on the same server by configuring them to use different wiki suffixes.'); ?></td></tr>
 	<tr><td align="right" nowrap="nowrap"><?php echo __('Your Wiki suffix:'); ?></td><td><input type="text" size="50" name="pconfig[wiki_suffix]" value="<?php echo $config["wiki_suffix"] ?>" /></td></tr>
 
 	<tr><td>&nbsp;</td><td><?php echo __('Optional keywords/description to be inserted in the HTML headers'); ?>.</td></tr>
