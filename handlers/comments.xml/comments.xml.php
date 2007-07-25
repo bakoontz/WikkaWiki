@@ -60,7 +60,7 @@ define('FEED_ITEM_DESCRIPTION',"By %s");
 
 //initialize variables
 $f = ''; #feed format
-$n = 50; #number of items
+$n = 50; #number of items	// @@@ turn this (back) into constant!
 /*
 $u = ''; #user
 $d = ''; #days limit
@@ -73,21 +73,21 @@ $f = (in_array($_GET['f'], $formats))? $_GET['f'] : FEED_DEFAULT_OUTPUT_FORMAT;
 include_once('3rdparty'.DIRECTORY_SEPARATOR.'core'.DIRECTORY_SEPARATOR.'feedcreator'.DIRECTORY_SEPARATOR.'feedcreator.class.php'); //TODO: MAKE THIS CONFIGURABLE
 
 //initialize feed (general settings)
-$rss = new UniversalFeedCreator(); 
+$rss = new UniversalFeedCreator();
 $rss->useCached(); //TODO: make this configurable
 $rss->title = sprintf(FEED_TITLE, $this->config['wakka_name']); 
-$rss->description = sprintf(FEED_DESCRIPTION, $this->config['wakka_name']); 
+$rss->description = sprintf(FEED_DESCRIPTION, $this->config['wakka_name']);
 $rss->cssStyleSheet = $this->StaticHref('css/'.FEED_CSS);
-$rss->descriptionTruncSize = FEED_DESCRIPTION_TRUNCATE_SIZE; 
+$rss->descriptionTruncSize = FEED_DESCRIPTION_TRUNCATE_SIZE;
 $rss->descriptionHtmlSyndicated = FEED_DESCRIPTION_HTML; 
-$rss->link = $this->Href('', $this->GetConfigValue('root_page')); 
-$rss->syndicationURL = $this->Href($this->method,'','f='.$f); 
+$rss->link = $this->Href('', $this->GetConfigValue('root_page'));
+$rss->syndicationURL = $this->Href($this->method,'','f='.$f);
 
 //create feed image
-$image = new FeedImage(); 
+$image = new FeedImage();
 $image->title = FEED_IMAGE_TITLE;
 $image->url = FEED_IMAGE_URL;
-$image->link = $this->Href('', $this->GetConfigValue('root_page')); 
+$image->link = $this->Href('', $this->GetConfigValue('root_page'));
 $image->description = FEED_IMAGE_DESCRIPTION;
 $image->descriptionTruncSize = FEED_DESCRIPTION_TRUNCATE_SIZE;
 $image->descriptionHtmlSyndicated = FEED_DESCRIPTION_HTML;
