@@ -7,10 +7,10 @@
  * related to line and context display should be removed.
  * @todo	Use a more flexible diff class
  *
- * @package Wikka
- * @subpackage Libs
- * @version $Id$
- * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
+ * @package		Wikka
+ * @subpackage	Libs
+ * @version		$Id$
+ * @license		http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
  * 
  * @author Geoffrey T. Dairiki
@@ -305,7 +305,7 @@ class _DiffOp_Change extends _DiffOp {
 	$this->final = $final;
     }
 
-}     
+}
 /**
  * Class used internally by Diff to actually compute the diffs.
  *
