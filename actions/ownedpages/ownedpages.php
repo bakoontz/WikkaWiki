@@ -7,15 +7,21 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
  * 
- * @author Chris Tessmer
+ * @author	{@link http://web.archive.org/web/20040820215257/http://www.wakkawiki.com/ChrisTessmer Chris Tessmer}
  * 
  * @uses	Wakka::GetUserName()
  * @uses	Wakka::getCount()
  */
 
-$whereOwner = "`owner` = '" . $this->GetUserName() . "' AND `latest` = 'Y'";
-$whereTotal   = "`latest` = 'Y'";
-$count = $this->getCount('pages', $whereOwner);
+$count = 0;
+if ($user = $this->GetUser())				// check if user is logged in
+{
+	#$whereOwner = "`owner` = '" . $this->GetUserName() . "' AND `latest` = 'Y'";
+	$whereOwner = "`owner` = '" . $user['name'] . "' AND `latest` = 'Y'";
+	$count = $this->getCount('pages',$whereOwner);
+}
+$whereTotal = "`latest` = 'Y'";
+#$count = $this->getCount('pages', $whereOwner);
 $total = $this->getCount('pages',$whereTotal);
 
 $percent = round( ($count/$total )*100, 2 ) ;
