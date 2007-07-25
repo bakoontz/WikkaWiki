@@ -25,16 +25,16 @@
  * @uses	Wakka::Format()
  * @uses	Wakka::LoadPagesLinkingTo()
  * @uses	Wakka::ListPages()
- * 
- * @todo	move <div> to templating class
+ *
+ * @todo	Don't use Format() just to create a simple heading; generate HTML!
  */
 
 // define variables
 $page = $this->tag;
 $pages = $this->LoadPagesLinkingTo($page);
 // produce output
-echo '<div class="page">'."\n"; //TODO: move to templating class
+echo '<div class="page">'."\n";
 echo $this->Format('=== '.sprintf(BACKLINKS_HEADING,'[['.$page.']]').' === --- ---');
 echo $this->ListPages($pages, sprintf('<em class="error">'.BACKLINKS_NO_PAGES.'</em>', $page), '', 0, 1, true);
-echo '</div>'."\n" //TODO: move to templating class
+echo '</div>'."\n"
 ?>
