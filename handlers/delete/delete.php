@@ -1,13 +1,13 @@
 <?php
 /**
  * Delete a page if the user is an admin.
- * 
- * @package	 Handlers
- * @subpackage  Page
+ *
+ * @package		Handlers
+ * @subpackage	Page
  * @version		$Id$
- * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
+ * @license		http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
- * 
+ *
  * @uses		Wakka::FormOpen()
  * @uses		Wakka::FormClose()
  * @uses		Wakka::GetPageTag()
@@ -15,11 +15,11 @@
  * @uses		Wakka::Link()
  * @uses		Wakka::Query()
  * @uses		Wakka::Redirect()
- * @todo		move main <div> to templating class;
+ *
  * @todo		don't show cancel button when JavaScript is not active
  */
 
-echo '<div class="page">'."\n"; //TODO: move to templating class
+echo '<div class="page">'."\n";
 
 $tag = $this->GetPageTag();
 
@@ -27,7 +27,7 @@ if ($this->IsAdmin() || ($this->UserIsOwner($tag) && $this->config["owner_delete
 {
 	if ($_POST)
 	{
-		//  delete the page, comments, related links, acls and referrers 
+		//  delete the page, comments, related links, acls and referrers
 		$this->Query("delete from ".$this->config["table_prefix"]."pages where tag = '".mysql_real_escape_string($tag)."'");
 		$this->Query("delete from ".$this->config["table_prefix"]."comments where page_tag = '".mysql_real_escape_string($tag)."'");
 		$this->Query("delete from ".$this->config["table_prefix"]."links where from_tag = '".mysql_real_escape_string($tag)."'");
@@ -64,5 +64,5 @@ else
 {
 	echo '<em class="error">'.ERROR_NO_PAGE_DEL_ACCESS.'</em>';
 }
-echo '</div>'."\n" //TODO: move to templating class
+echo '</div>'."\n"
 ?>
