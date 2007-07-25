@@ -266,7 +266,14 @@ if ((strtolower($page) == $page) && (isset($_SERVER['REQUEST_URI']))) #38
  * Create Wakka object
  * @todo use name with Capital for object; also clashes with $wakka (above) now
  */
-$wakka = new Wakka($wakkaConfig);
+if (version_compare(phpversion(),'5','>='))		// >= PHP 5?
+{
+	$wakka =  new Wakka($wakkaConfig);			// [558] / #496 - comment 3
+}
+else
+{
+	$wakka =& new Wakka($wakkaConfig);			// reverting [558] see #496 - comment 4
+}
 
 /**
  * Check for database access.
