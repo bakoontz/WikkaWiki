@@ -32,7 +32,7 @@ if ($cattag = $_GET['wakka'])	#312 (only files action uses POST for wakka)
 	if (!isset($class)) $class = '';
 	if ($page=="/") $page="CategoryCategory";	// top level category as default 
 
-	// default to current page as (assumed) category
+	// default to current page as (assumed) category @@@ BUT see #232 comment 4
 	if (!$page) {$page=$cattag;}
 
 	$results = $this->LoadPagesLinkingTo($page);
