@@ -54,7 +54,7 @@ if ($this->handler == 'show')
 	switch($show)
 	{
 		case 3:
-		$oldpage = $this->LoadSingle("SELECT * FROM ".$this->config['table_prefix']."pages WHERE tag='".$this->GetPageTag()."' AND latest = 'N' ORDER BY time desc LIMIT 1");
+		$oldpage = $this->LoadSingle("SELECT * FROM ".$this->GetConfigValue('table_prefix')."pages WHERE tag='".$this->GetPageTag()."' AND latest = 'N' ORDER BY time desc LIMIT 1");
 		$newid = $page['id'];
 		$oldid = $oldpage['id'];
 		$difflink = ' [<a title="'.LASTEDIT_DIFF_LINK_TITLE.'" href="'.$this->Href('diff', $pagetag, 'a='.$page['id'].'&amp;b='.$oldpage['id'].'&amp;fastdiff=1').'">diff</a>]';

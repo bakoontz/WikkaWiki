@@ -165,16 +165,16 @@ if (!function_exists('bytesToHumanReadableUsage'))
 // ---- Run action ----
 
 // 0. define upload path for the current page
-if ($this->config['upload_path'] == '')
+if ($this->GetConfigValue('upload_path') == '')
 {
-	$this->config['upload_path'] = 'files';
+	$this->SetConfigValue('upload_path','files');
 }
-$upload_path = $this->config['upload_path'].DIRECTORY_SEPARATOR.$this->tag; #89
+$upload_path = $this->GetConfigValue('upload_path').DIRECTORY_SEPARATOR.$this->tag; #89
 
 // 1. check if main upload path is writable
-if (!is_writable($this->config['upload_path']))
+if (!is_writable($this->GetConfigValue('upload_path')))
 {
-	echo '<div class="alertbox">'.sprintf(ERROR_UPLOAD_DIRECTORY_NOT_WRITABLE, '<tt>'.$this->config['upload_path'].'</tt>').'</div>'; #89
+	echo '<div class="alertbox">'.sprintf(ERROR_UPLOAD_DIRECTORY_NOT_WRITABLE, '<tt>'.$this->GetConfigValue('upload_path').'</tt>').'</div>'; #89
 }
 else
 {
@@ -396,7 +396,7 @@ if ($is_writable && userCanUpload())
 {
 	// upload form
 	$input_for_rewrite_mode = '<!-- rewrite mode disabled -->';
-	if (!$this->config['rewrite_mode'])
+	if (!$this->GetConfigValue('rewrite_mode'))
 	{
 		$input_for_rewrite_mode = '<input type="hidden" name="wakka" value="'.$this->MiniHref().'" />';
 	}

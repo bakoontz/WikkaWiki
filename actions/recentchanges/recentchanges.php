@@ -94,7 +94,7 @@ if ($pages = $this->LoadRecentlyChanged())
 	echo '</span>'."\n";
 
 	//wikiping instructions
-	$wikipingserver = $this->config['wikiping_server'];
+	$wikipingserver = $this->GetConfigValue('wikiping_server');
 	if (!$wikipingserver == '') 
 	{
 		$wikipingserver_url_parsed = parse_url($wikipingserver);

@@ -77,7 +77,7 @@ if (isset($_SERVER['HTTP_REFERER']) && preg_match($regex_referrer, $_SERVER['HTT
 }
 
 // append URL params depending on rewrite_mode
-$params = ($this->config['rewrite_mode'] == 1) ? '?' : '&';
+$params = ($this->GetConfigValue('rewrite_mode') == 1) ? '?' : '&';
 
 // BEGIN *** Logout ***
 // is user trying to log out?
@@ -122,7 +122,7 @@ if ($user = $this->GetUser())
 				$changescount_highlight = INPUT_ERROR_STYLE;
 				break;
 			default: // input is valid
-				$this->Query('UPDATE '.$this->config['table_prefix'].'users SET '.
+				$this->Query('UPDATE '.$this->GetConfigValue('table_prefix').'users SET '.
 					"email = '".mysql_real_escape_string($email)."', ".
 					"doubleclickedit = '".mysql_real_escape_string($doubleclickedit)."', ".
 					"show_comments = '".mysql_real_escape_string($show_comments)."', ".
@@ -234,7 +234,7 @@ if ($user = $this->GetUser())
 				$password_confirm_highlight = INPUT_ERROR_STYLE;
 				break;
 			default:
-				$this->Query('UPDATE '.$this->config['table_prefix'].'users SET '."password = md5('".mysql_real_escape_string($password)."') "."WHERE name = '".$user['name']."'");
+				$this->Query('UPDATE '.$this->GetConfigValue('table_prefix').'users SET '."password = md5('".mysql_real_escape_string($password)."') "."WHERE name = '".$user['name']."'");
 				unset($this->specialCache['user'][strtolower($name)]);  //invalidate cache if exists #368
 				$user['password'] = md5($password);
 				$this->SetUser($user);
@@ -407,7 +407,7 @@ else // user is not logged in
 					$invitation_code_highlight = INPUT_ERROR_STYLE;
 					break;
 				default: //valid input, create user
-					$this->Query("INSERT INTO ".$this->config['table_prefix']."users SET ".
+					$this->Query("INSERT INTO ".$this->GetConfigValue('table_prefix')."users SET ".
 						"signuptime = now(), ".
 						"name = '".mysql_real_escape_string($name)."', ".
 						"email = '".mysql_real_escape_string($email)."', ".

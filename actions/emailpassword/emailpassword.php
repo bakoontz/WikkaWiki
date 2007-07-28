@@ -47,9 +47,9 @@ if (isset($_POST['wikiname'])) // get posted values
 			$highlight = INPUT_ERROR_STYLE;
 			break;
 		case ($input != '' && $user): // user exists, proceed
-			$header = "From: ".$this->config['wakka_name']." <".$this->config['admin_email'].">";
+			$header = "From: ".$this->GetConfigValue('wakka_name')." <".$this->GetConfigValue('admin_email').">";
 			$reference = sprintf(PW_FORGOTTEN_MAIL_REF, $user['name']);
-			$mail = sprintf(PW_FORGOTTEN_MAIL, $user['name'], $this->config['wakka_name'], $user['password'], $this->config['base_url'].'UserSettings')."\n";
+			$mail = sprintf(PW_FORGOTTEN_MAIL, $user['name'], $this->GetConfigValue('wakka_name'), $user['password'], $this->GetConfigValue('base_url').'UserSettings')."\n";
 			if (mail($user['email'], $reference, $mail, $header))
 			{
 				$mailsent = TRUE;

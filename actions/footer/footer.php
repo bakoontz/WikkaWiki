@@ -83,7 +83,7 @@ Powered by <?php echo $this->Link("http://wikkawiki.org/", "", "Wikka Wakka Wiki
 
 <?php
 	// display SQL debug information to admins
-	if ($this->config['sql_debugging'] == 1 && $this->IsAdmin())
+	if ($this->GetConfigValue('sql_debugging') == 1 && $this->IsAdmin())
 	{
 		echo '<div class="smallprint"><strong>Query log:</strong><br />'."\n";
 		foreach ($this->queryLog as $query)

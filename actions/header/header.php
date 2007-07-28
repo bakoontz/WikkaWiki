@@ -61,7 +61,7 @@ $site_base = $this->GetConfigValue("base_url");
 	<link rel="shortcut icon" href="<?php echo $this->StaticHref('images/favicon.ico') ?>" type="image/x-icon" />
 <?php
 $pagetag = $this->htmlspecialchars_ent($this->GetPageTag());
-if ($this->GetHandler() != 'edit' && $this->config['enable_rss_autodiscovery'] != 0)
+if ($this->GetHandler() != 'edit' && $this->GetConfigValue('enable_rss_autodiscovery') != 0)
 {
 	$wikiname = $this->htmlspecialchars_ent($this->GetWakkaName());
 	$rsslink  = '	<link rel="alternate" type="application/rss+xml" title="'.sprintf(RSS_REVISIONS_TITLE,$wikiname,$pagetag).' (RSS '.RSS_REVISIONS_VERSION.')" href="'.$this->Href('revisions.xml', $this->GetPageTag()).'" />'."\n";
@@ -79,13 +79,13 @@ if (isset($this->additional_headers) && is_array($this->additional_headers) && c
 </head>
 <body <?php echo $message ? "onload=\"alert('".$message."');\" " : "" ?> >
 <div class="header">
-	<h2><?php echo $this->config["wakka_name"] ?> : <a href="<?php echo $this->href('backlinks', '', ''); ?>" title="<?php printf(WIKKA_BACKLINKS_LINK_TITLE, $pagetag); ?>"><?php echo $pagetag; ?></a></h2>
+	<h2><?php echo $this->GetConfigValue('wakka_name') ?> : <a href="<?php echo $this->href('backlinks', '', ''); ?>" title="<?php printf(WIKKA_BACKLINKS_LINK_TITLE, $pagetag); ?>"><?php echo $pagetag; ?></a></h2>
 	<?php
 		if ($this->GetUser()) {
-			echo $this->config["logged_in_navigation_links"] ? $this->Format($this->config["logged_in_navigation_links"])." :: " : ""; 
+			echo $this->GetConfigValue('logged_in_navigation_links') ? $this->Format($this->GetConfigValue('logged_in_navigation_links'))." :: " : ""; 
 			printf(YOU_ARE, $this->FormatUser($this->GetUserName()));
 		} else {
-			echo $this->config["navigation_links"] ? $this->Format($this->config["navigation_links"]) : ""; 
+			echo $this->GetConfigValue('navigation_links') ? $this->Format($this->GetConfigValue('navigation_links')) : ""; 
 		}
 	?>
 </div>

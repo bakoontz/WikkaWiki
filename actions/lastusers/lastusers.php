@@ -22,7 +22,7 @@ else $limit = 100;
 if (!$max || $limit<$max)
   $max = $limit;
 
-$last_users = $this->LoadAll("SELECT name, signuptime FROM ".$this->config["table_prefix"]."users ORDER BY signuptime DESC LIMIT ".(int)$max);
+$last_users = $this->LoadAll("SELECT name, signuptime FROM ".$this->GetConfigValue('table_prefix')."users ORDER BY signuptime DESC LIMIT ".(int)$max);
 
 $htmlout = '<table class="wikka">'."\n".
   "<caption>".LASTUSERS_CAPTION."</caption>"."\n".

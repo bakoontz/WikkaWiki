@@ -15,8 +15,8 @@
  */
 
 $str = 'SELECT Count(*) AS cnt, `name`  FROM ';
-$str .= $this->config["table_prefix"].'users, ' ;
-$str .= $this->config["table_prefix"].'pages ';
+$str .= $this->GetConfigValue('table_prefix').'users, ' ;
+$str .= $this->GetConfigValue('table_prefix').'pages ';
 $str .= "WHERE `name` = `owner` AND `latest` = 'Y' GROUP BY name ORDER BY cnt DESC;";
 $rankQuery = $this->Query($str);
 
@@ -25,7 +25,7 @@ $total = $this->getCount('pages', $where);
 
 print("<blockquote><table>");
 
-$i = 0;    
+$i = 0;
 while($row = mysql_fetch_array($rankQuery))
 { 
     $i++;
@@ -40,5 +40,5 @@ while($row = mysql_fetch_array($rankQuery))
     $str .= '</tr>';
     print($str);
 }
-print("</table></blockquote>");    
+print("</table></blockquote>");
 ?>

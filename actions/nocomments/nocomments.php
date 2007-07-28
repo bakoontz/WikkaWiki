@@ -7,5 +7,5 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
  */
-$this->config['hide_comments'] = 1; 
+$this->SetConfigValue('hide_comments',1);
 ?>

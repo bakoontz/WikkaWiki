@@ -46,7 +46,7 @@ if ($user = $this->GetUser())
 	$output .= '</a>)</div><div class="clear">&nbsp;</div>'."\n";
 
 	// get the pages
-	$query = "SELECT tag, time FROM ".$this->config["table_prefix"]."pages WHERE user = '".mysql_real_escape_string($this->GetUserName())."' AND latest = 'Y' ";
+	$query = "SELECT tag, time FROM ".$this->GetConfigValue('table_prefix')."pages WHERE user = '".mysql_real_escape_string($this->GetUserName())."' AND latest = 'Y' ";
 	if ($alpha) $query .= "ORDER BY tag ASC, time DESC";
 	else $query .= "ORDER BY time DESC, tag ASC";
 	

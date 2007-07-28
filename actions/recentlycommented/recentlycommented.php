@@ -34,7 +34,7 @@ if (isset($user['default_comment_display']))
 }
 else
 {
-	$show_comments = $this->config['default_comment_display'];
+	$show_comments = $this->GetConfigValue('default_comment_display');
 }
 
 echo '<h2>'.RECENTLYCOMMENTED_HEADING.'</h2><br />'."\n";

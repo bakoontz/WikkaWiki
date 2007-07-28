@@ -27,7 +27,7 @@ $show = '';
 $out = WIKKA_STATUS_NOT_AVAILABLE;
 
 //check privs
-if ($this->config['public_sysinfo'] == '1' || $this->IsAdmin())
+if ($this->GetConfigValue('public_sysinfo') == '1' || $this->IsAdmin())
 {
 
 	// get param and validation
