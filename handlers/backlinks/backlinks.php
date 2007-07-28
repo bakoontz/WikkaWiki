@@ -11,16 +11,16 @@
  * There is no need to check existence of page here because when a page is deleted,
  * links table should be cleaned up accordingly.
  *
- * @package Handlers
- * @subpackage Page
- * @version $Id$
- * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
+ * @package		Handlers
+ * @subpackage	Page
+ * @version		$Id$
+ * @license		http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
  *
- * @author {@link http://wakkawiki.de/MartinBurger Martin Burger} - original idea and code.
- * @author {@link http://wikkawiki.org/DarTar Dario Taraborelli} - code rewritten, ExistsPage check added, removed links array. 
- * @author {$link http://wikkawiki.org/DotMG DotMG} - ExistsPage check removed, added call to ListPages.
- * @since Wikka 1.1.6.2
+ * @author	{@link http://web.archive.org/web/20040823065044/http://www.wakkawiki.com/MartinBurger Martin Burger} - original idea and code.
+ * @author	{@link http://wikkawiki.org/DarTar Dario Taraborelli} - code rewritten, ExistsPage check added, removed links array.
+ * @author	{$link http://wikkawiki.org/DotMG DotMG} - ExistsPage check removed, added call to ListPages.
+ * @since	Wikka 1.1.6.2
  * 
  * @uses	Wakka::Format()
  * @uses	Wakka::LoadPagesLinkingTo()
@@ -31,10 +31,11 @@
 
 // define variables
 $page = $this->tag;
+// get data
 $pages = $this->LoadPagesLinkingTo($page);
 // produce output
 echo '<div class="page">'."\n";
-echo $this->Format('=== '.sprintf(BACKLINKS_HEADING,'[['.$page.']]').' === --- ---');
-echo $this->ListPages($pages, sprintf('<em class="error">'.BACKLINKS_NO_PAGES.'</em>', $page), '', 0, 1, true);
+echo $this->Format('=== '.sprintf(BACKLINKS_HEADING,'[['.$page.']]').' === --- ---');	// @@@
+echo $this->ListPages($pages, sprintf('<em class="error">'.BACKLINKS_NO_PAGES.'</em>', $page), '', 0, 1, TRUE);
 echo '</div>'."\n"
 ?>
