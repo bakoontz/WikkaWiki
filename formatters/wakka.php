@@ -30,25 +30,28 @@ if (!defined('PATTERN_FILENAME')) define('PATTERN_FILENAME', '(;([^\)\x01-\x1f\*
 if (!defined('PATTERN_CLOSE_BRACKET')) define('PATTERN_CLOSE_BRACKET', '\)');
 if (!defined('PATTERN_CODE')) define('PATTERN_CODE', '(.*)');
 /**
- * Match heading tags. 
+ * Match heading tags.
+ *
  * - $result[0] : the entire node representation, including the closing tag
  * - $result[1] : the nodename (h1, h2, .. , h6)
  * - $result[2] : the heading attribute, ie all the strings after the tagname and before the first ">" character
  * - $result[3] : the content of the heading tag, just like the innerHTML method in DOM.
- * This pattern requires that the text applied into it is valid XHTML: it should use lowercase in the tagName,
+ * This pattern will match only if the text it is applied to is valid XHTML: it should use lowercase in the tagName,
  * it should not contain the character ">" inside attributes.
  */
 if (!defined('PATTERN_MATCH_HEADINGS')) define('PATTERN_MATCH_HEADINGS', '#^<(h[1-6])(.*?)>(.*?)</\\1>$#s');
 /**
  * Match id in attributes.
+ *
  * - $result[0] : a string like <code>id="h1_id"</code>, starting with the letters id=, and followed by a string
- *   enclosed in either single or double quote. It doesn't match if the term id is not preceded by any space character.
+ *   enclosed in either single or double quote. It doesn't match if the term id is not preceded by any whitespace.
  * - $result[1] : The single character used to enclose the string, either a single or a double quote.
  * - $result[2] : The content of the string, ie the value of the id attribute.
+ * The RE uses a backref to match both single and double enclosing quotes.
  */
 if (!defined('PATTERN_MATCH_ID_ATTRIBUTES')) define('PATTERN_MATCH_ID_ATTRIBUTES', '/(?<=\\s)id=("|\')(.*?)\\1/');
 /**
- * The string $format_option is a semicolon separated list of string, including the word `page'
+ * The string $format_option is a semicolon separated list of strings, including the word `page'
  */
 if (!defined('PATTERN_MATCH_PAGE_FORMATOPTION')) define('PATTERN_MATCH_PAGE_FORMATOPTION', '/(^|;)page(;|$)/');
 
@@ -57,39 +60,44 @@ if (($format_option) && preg_match(PATTERN_MATCH_PAGE_FORMATOPTION, $format_opti
 	if (!function_exists('wakka3callback'))
 	{
 		/**
-	 * "Afterburner" formatting: extra handling of already-generated XHTML code.
-	 *
-	 * 1.
-	 * Ensure every heading has an id, either specified or generated. (May be
-	 * extended to generate section TOC data.)
-	 * If an id is specified, that is used without any modification.
-	 * If no id is specified, it is generated on the basis of the heading context:
-	 * - any image tag is replaced by its alt text (if specified)
-	 * - all tags are stripped
-	 * - all characters that are not valid in an id are stripped (except whitespace)
-	 * - the resulting string is then used by makedId() to generate an id out of it
-	 *
-	 * @access	private
-	 * @uses	Wakka::makeId()
-	 *
-	 * @param	array	$things	required: matches of the regex in the preg_replace_callback
-	 * @return	string	heading with an id attribute
-	 */
+		 * "Afterburner" formatting: extra handling of already-generated XHTML code.
+		 *
+		 * 1. For headings:
+		 * a) Use heading to derive a document title
+		 * b) Ensure every heading has an id, either specified or generated. (May be
+		 * extended to generate section TOC data.)
+		 * If an id is already specified, that is used without any modification.
+		 * If no id is specified, it is generated on the basis of the heading context:
+		 * - any image tag is replaced by its alt text (if specified)
+		 * - all tags are stripped
+		 * - all characters that are not valid in an ID are stripped (except whitespace)
+		 * - the resulting string is then used by makedId() to generate an id out of it
+		 *
+		 * @access	private
+		 * @uses	Wakka::HasPageTitle()
+		 * @uses	Wakka::SetPageTitle()
+		 * @uses	Wakka::CleanTextNode()
+		 * @uses	Wakka::makeId()
+		 *
+		 * @param	array	$things	required: matches of the regex in the preg_replace_callback
+		 * @return	string	heading with an id attribute
+		 */
 		function wakka3callback($things)
 		{
 			global $wakka;
 			$thing = $things[1];
-	
+
 			// heading
-			if (preg_match(PATTERN_MATCH_HEADINGS, $thing, $matches))	# note that we don't match headings that are not valid XHTML!
+			if (preg_match(PATTERN_MATCH_HEADINGS, $thing, $matches))
 			{
 				list($h_element, $h_tagname, $h_attribs, $h_heading) = $matches;
+				// @@@ apply nodeToTextOnly() on $h_heading so stored title is always valid
 				if ((!$wakka->HasPageTitle()) && ('h5' > $h_tagname))
 				{
 					$wakka->SetPageTitle($h_heading);
 				}
-	
-				if (preg_match(PATTERN_MATCH_ID_ATTRIBUTES, $h_attribs))			# use backref to match both single and double quotes
+
+				if (preg_match(PATTERN_MATCH_ID_ATTRIBUTES, $h_attribs))
 				{
 					// existing id attribute: nothing to do (assume already treated as embedded code)
 					// @@@ we *may* want to gather ids and heading text for a TOC here ...
@@ -101,7 +109,8 @@ if (($format_option) && preg_match(PATTERN_MATCH_PAGE_FORMATOPTION, $format_opti
 				}
 				else
 				{
-					$headingtext = $wakka->CleanTextNode($h_heading);
+					// no id: we'll have to create one
+					$headingtext = $wakka->CleanTextNode($h_heading);		// @@@ replace with headingToTextOnly()
 					// now create id based on resulting heading text
 					$h_id = $wakka->makeId('hn', $headingtext);
 
@@ -155,38 +164,94 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 		if ((!is_array($things)) && ($things == 'closetags'))
 		{
 			$result = '';
-			if (3 < $trigger_table) $result .=  '</caption>';
-			else if (2 < $trigger_table) $result .=  '</th></tr>';
-			else if (1 < $trigger_table) $result .=  '</td></tr>';
-			if (2 < $trigger_rowgroup) $result .=  '</tbody>';
-			else if (1 < $trigger_rowgroup) $result .=  '</tfoot>';
-			else if (0 < $trigger_rowgroup) $result .=  '</thead>';
-			if (0 < $trigger_table) $result .=  '</table>';
-			if ($trigger_strike % 2) $result .=  '</span>';
-			if ($trigger_notes % 2) $result .=  '</span>';
-			if ($trigger_inserted % 2) $result .=  '</span>';
-			if ($trigger_underline % 2) $result .= '</span>';
-			if ($trigger_floatl % 2) $result .=  '</div>';
-			if ($trigger_floatr % 2) $result .=  '</div>';
-			if ($trigger_center % 2) $result .=  '</div>';
-			if ($trigger_italic % 2) $result .= '</em>';
-			if ($trigger_monospace % 2) $result .= '</tt>';
-			if ($trigger_bold % 2) $result .= '</strong>';
+			if (3 < $trigger_table){
+				$result .=  '</caption>';
+			}
+			elseif (2 < $trigger_table)
+			{
+				$result .=  '</th></tr>';
+			}
+			elseif (1 < $trigger_table)
+			{
+				$result .=  '</td></tr>';
+			}
+
+			if (2 < $trigger_rowgroup)
+			{
+				$result .=  '</tbody>';
+			}
+			elseif (1 < $trigger_rowgroup)
+			{
+				$result .=  '</tfoot>';
+			}
+			elseif (0 < $trigger_rowgroup)
+			{
+				$result .=  '</thead>';
+			}
+
+			if (0 < $trigger_table)
+			{
+				$result .=  '</table>';
+			}
+			if ($trigger_strike % 2)
+			{
+				$result .=  '</span>';
+			}
+			if ($trigger_notes % 2)
+			{
+				$result .=  '</span>';
+			}
+			if ($trigger_inserted % 2)
+			{
+				$result .=  '</span>';
+			}
+			if ($trigger_underline % 2)
+			{
+				$result .= '</span>';
+			}
+			if ($trigger_floatl % 2)
+			{
+				$result .=  '</div>';
+			}
+			if ($trigger_floatr % 2)
+			{
+				$result .=  '</div>';
+			}
+			if ($trigger_center % 2)
+			{
+				$result .=  '</div>';
+			}
+			if ($trigger_italic % 2)
+			{
+				$result .= '</em>';
+			}
+			if ($trigger_monospace % 2)
+			{
+				$result .= '</tt>';
+			}
+			if ($trigger_bold % 2)
+			{
+				$result .= '</strong>';
+			}
+
 			for ($i = 1; $i<=5; $i ++)
+			{
 				if ($trigger_l[$i] % 2) $result .=  "</h$i>";
+			}
+
 			$trigger_bold = $trigger_center = $trigger_floatl = $trigger_floatr = $trigger_inserted = $trigger_deleted = $trigger_italic = $trigger_keys = $trigger_table = 0;
 			$trigger_l = array(-1, 0, 0, 0, 0, 0);
 			$trigger_monospace = $trigger_notes = $trigger_strike = $trigger_underline = 0;
-			return ($result);
+			return $result;
 		}
-
 		// Ignore the closing delimiter if there is nothing to close.
-		else if ( preg_match("/^\|\|\n$/", $thing, $matches) && $trigger_table == 1 ) {
-			return "";
+		elseif ( preg_match("/^\|\|\n$/", $thing, $matches) && $trigger_table == 1 )
+		{
+			return '';
 		}
 
 		// $matches[1] is element, $matches[2] is attributes, $matches[3] is styles and $matches[4] is linebreak
-		else if ( preg_match("/^\|([^\|])?\|(\(.*?\))?(\{.*?\})?(\n)?$/", $thing, $matches) )
+		elseif ( preg_match("/^\|([^\|])?\|(\(.*?\))?(\{.*?\})?(\n)?$/", $thing, $matches) )
 		{
 			for ( $i = 1; $i < 5; $i++ ) #38
 			{
@@ -201,23 +266,24 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 			// $trigger_table == 0 means no table, 1 means in table but no cell, 2 is in datacell, 3 is in headercell, 4 is in caption.
 
 			//If we have parsed the caption, close it, set trigger = 1 and return.
-			if ( $trigger_table == 4 ) {
+			if ( $trigger_table == 4 )
+			{
 				$close_part = '</caption>'."\n";
 				$trigger_table = 1;
 				return $close_part;
 			}
-			
+
 			//If we have parsed a cell - close it, go on to open new.
 			if ( $trigger_table == 3 )
 			{
 				$close_part = '</th>';
 			}
-			else if ( $trigger_table == 2 )
+			elseif ( $trigger_table == 2 )
 			{
 				$close_part = '</td>';
 			}
 			// If no cell, or we want to open a table; then there is nothing to close
-			else if ( $trigger_table == 1 || $matches[1] == '!')
+			elseif ( $trigger_table == 1 || $matches[1] == '!')
 			{
 				$close_part = '';
 			}
@@ -227,7 +293,7 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 				$trigger_table = 1;
 				$close_part = '<table class="wikka">'."\n";
 			}
-			
+
 			//If we are in a cell and there is a linebreak - then it is end of row.
 			if ( $trigger_table > 1 && $matches[4] == "\n" )
 			{
@@ -251,24 +317,24 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 				$linebreak_after_open = "\n";
 			}
 			//Open a caption.
-			else if ( $matches[1] == '?' )
+			elseif ( $matches[1] == '?' )
 			{
 				$trigger_table = 4;
 				$open_part = '<caption';
 			}
 			//Start a rowgroup.
-			else if ( $matches[1] == '#' || $matches[1] == '[' || $matches[1] == ']' )
+			elseif ( $matches[1] == '#' || $matches[1] == '[' || $matches[1] == ']' )
 			{
 				//If we're here, we want to close any open rowgroup.
 				if (2 < $trigger_rowgroup)
 				{
 					$close_part .= '</tbody>'."\n";
 				}
-				else if (1 < $trigger_rowgroup)
+				elseif (1 < $trigger_rowgroup)
 				{
 					$close_part .= '</tfoot>'."\n";
 				}
-				else if (0 < $trigger_rowgroup)
+				elseif (0 < $trigger_rowgroup)
 				{
 					$close_part .= '</thead>'."\n";
 				}
@@ -279,7 +345,7 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 					$open_part .= '<thead';
 					$trigger_rowgroup = 1;
 				}
-				else if ($matches[1] == ']' )
+				elseif ($matches[1] == ']' )
 				{
 					$open_part .= '<tfoot';
 					$trigger_rowgroup = 2;
@@ -293,7 +359,7 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 				$linebreak_after_open = "\n";
 			}
 			//Here we want to add colgroup.
-			else if ( $matches[1] == '_' )
+			elseif ( $matches[1] == '_' )
 			{
 				//close any open colgroup
 				if ( $trigger_colgroup == 1 )
@@ -305,7 +371,7 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 				$open_part .= '<colgroup';
 			}
 			//And col elements
-			else if ( $matches[1] == '-' )
+			elseif ( $matches[1] == '-' )
 			{
 				$open_part .= '<col';
 				$selfclose = ' /';
@@ -340,17 +406,22 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 					$trigger_table = 2;
 					$open_part .= '<td';
 				}
-
 			}
-			
+
 			//If attributes...
 			if ( preg_match("/\((.*)\)/", $matches[2], $attribs ) )
 			{
 //				$hints = array('core' => 'core', 'i18n' => 'i18n');
 				$hints = array();
 				//allow / disallow different attribute keys. (ie. data/header cell only.
-				if ($trigger_table == 2 || $trigger_table == 3) $hints['cell'] = 'cell';
-				else $hints['other_table'] = 'other_table';
+				if ($trigger_table == 2 || $trigger_table == 3)
+				{
+					$hints['cell'] = 'cell';
+				}
+				else
+				{
+					$hints['other_table'] = 'other_table';
+				}
 				$open_part .= parse_attributes($attribs[1], $hints);
 			}
 
@@ -373,94 +444,99 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 			{
 				$close_part .= '</tbody>'."\n";
 			}
-			else if (1 < $trigger_rowgroup)
+			elseif (1 < $trigger_rowgroup)
 			{
 				$close_part .= '</tfoot>'."\n";
 			}
-			else if (0 < $trigger_rowgroup)
+			elseif (0 < $trigger_rowgroup)
 			{
 				$close_part .= '</thead>'."\n";
 			}
-			
+
 			$close_part .= '</table>'."\n";
-			
+
 			$trigger_table = $trigger_rowgroup = 0;
-			
+
 			//And remember to parse what we got.
 			return $close_part.wakka2callback($things);
 		}
+
 		// convert HTML thingies
 		if ($thing == "<")
+		{
 			return "&lt;";
-		else if ($thing == ">")
+		}
+		elseif ($thing == ">")
+		{
 			return "&gt;";
+		}
 		// float box left
-		else if ($thing == "<<")
+		elseif ($thing == "<<")
 		{
 			return (++$trigger_floatl % 2 ? '<div class="floatl">' : '</div>');
 		}
 		// float box right
-		else if ($thing == ">>")
+		elseif ($thing == ">>")
 		{
 			return (++$trigger_floatr % 2 ? '<div class="floatr">' : '</div>');
 		}
-		// clear floated box
-		else if ($thing == "::c::")
+		// clear floated element
+		elseif ($thing == "::c::")
 		{
 			return ("<div class=\"clear\">&nbsp;</div>\n");
 		}
 		// keyboard
-		else if ($thing == "#%")
+		elseif ($thing == "#%")
 		{
 			return (++$trigger_keys % 2 ? "<kbd class=\"keys\">" : "</kbd>");
 		}
 		// bold
-		else if ($thing == "**")
+		elseif ($thing == "**")
 		{
 			return (++$trigger_bold % 2 ? "<strong>" : "</strong>");
 		}
 		// italic
-		else if ($thing == "//")
+		elseif ($thing == "//")
 		{
 			return (++$trigger_italic % 2 ? "<em>" : "</em>");
 		}
 		// underlinue
-		else if ($thing == "__")
+		elseif ($thing == "__")
 		{
 			return (++$trigger_underline % 2 ? "<span class=\"underline\">" : "</span>");
 		}
 		// monospace
-		else if ($thing == "##")
+		elseif ($thing == "##")
 		{
 			return (++$trigger_monospace % 2 ? "<tt>" : "</tt>");
 		}
 		// notes
-		else if ($thing == "''")
+		elseif ($thing == "''")
 		{
 			return (++$trigger_notes % 2 ? "<span class=\"notes\">" : "</span>");
 		}
 		// strikethrough
-		else if ($thing == "++")
+		elseif ($thing == "++")
 		{
 			return (++$trigger_strike % 2 ? "<span class=\"strikethrough\">" : "</span>");
 		}
 		// additions
-		else if ($thing == "&pound;&pound;")
+		elseif ($thing == "&pound;&pound;")
 		{
 			return (++$trigger_inserted % 2 ? "<ins>" : "</ins>");
 		}
 		// deletions
-		else if ($thing == "&yen;&yen;")
+		elseif ($thing == "&yen;&yen;")
 		{
 			return (++$trigger_deleted % 2 ? "<del>" : "</del>");
 		}
 		// center
-		else if ($thing == "@@")
+		elseif ($thing == "@@")
 		{
 			return (++$trigger_center % 2 ? "<div class=\"center\">\n" : "\n</div>\n");
 		}
 		// urls
-		else if (preg_match("/^([a-z]+:\/\/\S+?)([^[:alnum:]^\/])?$/", $thing, $matches))
+		elseif (preg_match("/^([a-z]+:\/\/\S+?)([^[:alnum:]^\/])?$/", $thing, $matches))
 		{
 			$url = $matches[1];
 			/* Inline images are disabled for security reason, use {{image action}} #142
@@ -475,42 +551,42 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 				return $wakka->Link($url).(isset($matches[2]) ? $matches[2] : ''); #38
 		}
 		// header level 5
-		else if ($thing == "==")
+		elseif ($thing == "==")
 		{
 				$br = 0;
 				return (++$trigger_l[5] % 2 ? "<h5>" : "</h5>\n");
 		}
 		// header level 4
-		else if ($thing == "===")
+		elseif ($thing == "===")
 		{
 				$br = 0;
 				return (++$trigger_l[4] % 2 ? "<h4>" : "</h4>\n");
 		}
 		// header level 3
-		else if ($thing == "====")
+		elseif ($thing == "====")
 		{
 				$br = 0;
 				return (++$trigger_l[3] % 2 ? "<h3>" : "</h3>\n");
 		}
 		// header level 2
-		else if ($thing == "=====")
+		elseif ($thing == "=====")
 		{
 				$br = 0;
 				return (++$trigger_l[2] % 2 ? "<h2>" : "</h2>\n");
 		}
 		// header level 1
-		else if ($thing == "======")
+		elseif ($thing == "======")
 		{
 				$br = 0;
 				return (++$trigger_l[1] % 2 ? "<h1>" : "</h1>\n");
 		}
 		// forced line breaks
-		else if ($thing == "---")
+		elseif ($thing == "---")
 		{
 			return "<br />";
 		}
 		// escaped text
-		else if (preg_match("/^\"\"(.*)\"\"$/s", $thing, $matches))
+		elseif (preg_match("/^\"\"(.*)\"\"$/s", $thing, $matches))
 		{
 			$ddquotes_policy = $wakka->GetConfigValue("double_doublequote_html");
 			$embedded = $matches[1];
@@ -518,7 +594,7 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 			{
 				// get tags with id attributes
 				# use backref to match both single and double quotes
-				$patTagWithId = '((<[a-z][^>]*)((?<=\\s)id=("|\')(.*?)\\4)(.*?>))';
+				$patTagWithId = '((<[a-z][^>]*)((?<=\\s)id=("|\')(.*?)\\4)(.*?>))';	// @@@ #34
 				// with PREG_SET_ORDER we get an array for each match: easy to use with list()!
 				// we do the match case-insensitive so we catch uppercase HTML as well;
 				// SafeHTML will treat this but 'raw' may end up with invalid code!
@@ -550,7 +626,7 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 			}
 		}
 		// code text
-		else if (preg_match("/^%%(.*?)%%$/s", $thing, $matches))
+		elseif (preg_match("/^%%(.*?)%%$/s", $thing, $matches))
 		{
 			/*
 			* Note: this routine is rewritten such that (new) language formatters
@@ -579,13 +655,16 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 			// get rid of newlines at start and end (and preceding/following whitespace)
 			// Note: unlike trim(), this preserves any tabs at the start of the first "real" line
 			$code = preg_replace('/^\s*\n+|\n+\s*$/','',$code);
-			
+
 			// check if GeSHi path is set and we have a GeSHi highlighter for this language
 			if (isset($language) &&
-			isset($wakka->config['geshi_path']) && file_exists($geshi_hi_path.DIRECTORY_SEPARATOR.$language.'.php'))
+				isset($wakka->config['geshi_path']) &&
+				file_exists($geshi_hi_path.DIRECTORY_SEPARATOR.$language.'.php'))
 			{
 				// check if specified filename is valid and generate code block header
-				if (isset($filename) && strlen($filename) > 0 && strlen($invalid) == 0) # #34 TODO: use central regex library for filename validation
+				if (isset($filename) &&
+					strlen($filename) > 0 &&
+					strlen($invalid) == 0) # #34 TODO: use central regex library for filename validation
 				{
 					$valid_filename = $filename;
 					// create code block header
@@ -603,7 +682,9 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 			}
 			// check Wikka highlighter path is set and if we have an internal Wikka highlighter
 			elseif (isset($language) &&
-			isset($wakka->config['wikka_formatter_path']) && file_exists($wikka_hi_path.DIRECTORY_SEPARATOR.$language.'.php') && 'wakka' != $language)
+					isset($wakka->config['wikka_formatter_path']) &&
+					file_exists($wikka_hi_path.DIRECTORY_SEPARATOR.$language.'.php') && 
+					'wakka' != $language)
 			{
 				// use internal Wikka highlighter
 				$output = '<div class="code">'."\n";
@@ -664,9 +745,23 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 			// find out which indent type we want
 			$newIndentType = $matches[3];
 			
-			if (!$newIndentType) { $opener = "<div class=\"indent\">"; $closer = "</div>"; $br = 1; }
-			elseif ($newIndentType == "-") { $opener = "<ul><li>"; $closer = "</li></ul>"; $li = 1; }
-			elseif ($newIndentType == "&") { $opener = "<ul class=\"thread\"><li>"; $closer = "</li></ul>"; $li = 1; } #inline comments
+			if (!$newIndentType)
+			{
+				$opener = "<div class=\"indent\">";
+				$closer = "</div>"; $br = 1;
+			}
+			elseif ($newIndentType == "-")
+			{
+				$opener = "<ul><li>";
+				$closer = "</li></ul>";
+				$li = 1;
+			}
+			elseif ($newIndentType == "&")
+			{
+				$opener = "<ul class=\"thread\"><li>";
+				$closer = "</li></ul>";
+				$li = 1;
+			} #inline comments
 			else
 			{
 				if (ereg('[0-9]', $newIndentType[0])) { $newIndentType = '1'; }
@@ -674,7 +769,7 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 				elseif (ereg('[ivx]', $newIndentType[0])) { $newIndentType = 'i'; }
 				elseif (ereg('[A-Z]', $newIndentType[0])) { $newIndentType = 'A'; }
 				elseif (ereg('[a-z]', $newIndentType[0])) { $newIndentType = 'a'; }
-				
+
 				$opener = '<ol type="'.$newIndentType.'"><li>';
 				$closer = '</li></ol>';
 				$li = 1;
@@ -697,7 +792,7 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 					array_push($indentClosers, $closer);
 				}
 			}
-			else if ($newIndentLevel < $oldIndentLevel)
+			elseif ($newIndentLevel < $oldIndentLevel)
 			{
 				for ($i = 0; $i < $oldIndentLevel - $newIndentLevel; $i++)
 				{
@@ -734,33 +829,37 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 			return $result;
 		}
 		// Actions
-		else if (preg_match("/^\{\{(.*?)\}\}$/s", $thing, $matches))
+		elseif (preg_match("/^\{\{(.*?)\}\}$/s", $thing, $matches))
 		{
 			if ($matches[1])
+			{
 				return $wakka->Action($matches[1]);
+			}
 			else
+			{
 				return "{{}}";
+			}
 		}
 		// interwiki links!
-		else if (preg_match("/^[A-ZÄÖÜ][A-Za-zÄÖÜßäöü]+[:]\S*$/s", $thing))
+		elseif (preg_match("/^[A-ZÄÖÜ][A-Za-zÄÖÜßäöü]+[:]\S*$/s", $thing))
 		{
 			return $wakka->Link($thing);
 		}
 		// wiki links!
-		else if (preg_match("/^[A-ZÄÖÜ]+[a-zßäöü]+[A-Z0-9ÄÖÜ][A-Za-z0-9ÄÖÜßäöü]*$/s", $thing))
+		elseif (preg_match("/^[A-ZÄÖÜ]+[a-zßäöü]+[A-Z0-9ÄÖÜ][A-Za-z0-9ÄÖÜßäöü]*$/s", $thing))
 		{
 			return $wakka->Link($thing);
 		}
 		// separators
-		else if (preg_match("/-{4,}/", $thing, $matches))
+		elseif (preg_match("/-{4,}/", $thing, $matches))
 		{
 			// TODO: This could probably be improved for situations where someone puts text on the same line as a separator.
-			//	   Which is a stupid thing to do anyway! HAW HAW! Ahem.
+			//		Which is a stupid thing to do anyway! HAW HAW! Ahem.
 			$br = 0;
 			return "<hr />\n";
 		}
 		// mind map xml
-		else if (preg_match("/^<map.*<\/map>$/s", $thing))
+		elseif (preg_match("/^<map.*<\/map>$/s", $thing))
 		{
 			return $wakka->Action("mindmap ".$wakka->Href()."/mindmap.mm");
 		}
@@ -773,7 +872,7 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 	}
 }
 
-if (!function_exists("parse_attributes"))
+if (!function_exists('parse_attributes'))
 {
 	function parse_attributes($attribs, $hints) {
 
@@ -807,8 +906,8 @@ if (!function_exists("parse_attributes"))
 				//This attribute isn't allowed here / is wrong.
 				// WARNING: JS vulnerability: two minus signs are not allowed in a comment, so we replace any occurence of them by underscore.
 				// Consider the code ||(p--><font size=1px><a href=...<!--:blabla
-				// When migrating to utf-8, we could use str_replace('--', 'âˆ’âˆ’', $key) to make things more pretty. //TODO garbled ... mdash?
-				echo '<!--Cannot find attribute for key "'.str_replace('--', '__', $key).'" from hints given.-->'."\n";
+				// When migrating to UTF-8, we could use str_replace('--', 'âˆ’âˆ’', $key) to make things more pretty. //TODO garbled ... mdash?
+				echo '<!--Cannot find attribute for key "'.str_replace('--', '__', $key).'" from hints given.-->'."\n";	#i18n
 			}
 			else
 			{
@@ -838,7 +937,7 @@ $text = preg_replace_callback(
 	"\b[a-z]+:\/\/\S+|".																	# URL
 	"\*\*|\'\'|\#\#|\#\%|@@|::c::|\>\>|\<\<|&pound;&pound;|&yen;&yen;|\+\+|__|<|>|\/\/|".	# Wiki markup
 	"======|=====|====|===|==|".															# headings
-	"(^|\n)[\t~]+(-(?!-)|&|([0-9]+|[a-zA-Z]+)\))?|".														# indents and lists
+	"(^|\n)[\t~]+(-(?!-)|&|([0-9]+|[a-zA-Z]+)\))?|".										# indents and lists
 	"\|(?:[^\|])?\|(?:\(.*?\))?(?:\{[^\{\}]*?\})?(?:\n)?|".									# Simple Tables	
 	"\{\{.*?\}\}|".																			# action
 	"\b[A-ZÄÖÜ][A-Za-zÄÖÜßäöü]+[:](?![=_])\S*\b|".											# InterWiki link
@@ -859,7 +958,7 @@ if ($format_option && preg_match(PATTERN_MATCH_PAGE_FORMATOPTION, $format_option
 		'<h[1-6].*?>.*?</h[1-6]>'.
 		// other elements to be treated go here
 		')#ms','wakka3callback', $text);
-	printf('<!-- Header id generation took %.6f seconds -->', (getmicrotime() - $idstart)); 
+	printf('<!-- Header ID generation took %.6f seconds -->', (getmicrotime() - $idstart));	#i18n
 }
 echo ($text);
 
