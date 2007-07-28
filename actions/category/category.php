@@ -1,44 +1,55 @@
 <?php
 /**
  * Shows the pages and subcategories belonging to a category.
- * 
+ *
  * See WikiCategory to understand how the system works.
- * 
+ *
  * @package		Actions
- * @version 	$Id$
- * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
+ * @version		$Id$
+ * @license		http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
- * 
- * @input	string $page optional: the category for which you want to display the pages and categories. Default: current page
- * @input	integer $compact optional: produces a columnar layout with a layout table; 1 produces output in the form of an unordered list. Default: 0
- * @input	integer $col optional: number of columns (for compact=0). Default: 1
- * @output	A html table with pages
+ *
  * @uses	Wakka::GetPageTag();
  * @uses	Wakka::ListPages()
  * @uses	Wakka::LoadPagesLinkingTo()
- * 
- * @todo	replace $_REQUEST with either $_GET or $_POST (or both if really
- * 			necessary) - #312  
-*/
- 
-#if ($cattag = $_REQUEST["wakka"])
-if ($cattag = $_GET['wakka'])	#312 (only files action uses POST for wakka)
+ *
+ * @input	string	$page		optional: the category for which you want to display the pages and categories. Default: current page
+ * @input	integer	$compact	optional: produces a columnar layout with a layout table; 1 produces output in the form of an unordered list. Default: 0
+ * @input	integer	$col		optional: number of columns (for compact=0). Default: 1
+ * @input	integer	$class		optional: class to be applied to HTML output structure
+ * @output	string	A html table or unordered list with pages
+ * @todo	replace with advanced category action (which not only produces
+ *			better output but also solves bugs)
+ */
+
+if ($tag = $_GET['wakka'])	#312 (only files action uses POST for wakka)
 {
-	$str ="";
+	// init
+	$str ='';
+	$thispage = (isset($this->_included_page)) ? $this->_included_page : $this->GetPageTag();
+	// @@@	BUT see #232 comment 4 - this is actually a bug!
+	//		The "current" page is not necessarily a category page.
+
+	// get parameters and set defaults
+	// @@@ parameters are not sanitized!!
+	if ($page=='/') $page="CategoryCategory";	// top level category
+	if (!$page) $page = $thispage;
 	if (!isset($col)) $col=1;
 	if (!isset($compact)) $compact=0;
-	if (!isset($page)) $page=$this->GetPageTag(); 
-	if (isset($this->_included_page)) $page = $this->_included_page;
 	if (!isset($class)) $class = '';
-	if ($page=="/") $page="CategoryCategory";	// top level category as default 
 
-	// default to current page as (assumed) category @@@ BUT see #232 comment 4
-	if (!$page) {$page=$cattag;}
+	#if (!isset($page)) $page=$this->GetPageTag();
+	// next line: #232 - partial fix only!
+	#if (isset($this->_included_page)) $page = $this->_included_page;
+
+	// default to current page as (assumed) category
+	#if (!$page) {$page=$cattag;}	// this duplicates the $this->GetPageTag() above!
 
 	$results = $this->LoadPagesLinkingTo($page);
 
 	$errmsg = '<em class="error">'.sprintf(ERROR_NO_PAGES, $page).'</em>';
 	$str = $this->ListPages($results, $errmsg, $class, $col, $compact);
+
 	if ($str != $errmsg)
 	{
 		printf(PAGES_BELONGING_TO.'<br /><br />', count($results), $page);
