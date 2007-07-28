@@ -15,9 +15,10 @@
  *
  * @uses	Wakka::GetConfigValue()
  * @uses	Config::$grabcode_button
- * @todo add configurable filename max. length;
- * @todo use central regex library for filename validation;
- * @todo check time format for consistency;
+ * @todo	add configurable filename max. length;
+ * @todo	use central regex library for filename validation	#34
+ * @todo	check time format for consistency (& store format in constant!)
+ * @todo	make shared download code for this and files handler
  */
 
 /**
@@ -31,17 +32,18 @@ $code = '';
 $filename = '';
 
 // check if grabcode is allowed
-if ($this->GetConfigValue('grabcode_button') == 1)
+if (1 == (int) $this->GetConfigValue('grabcode_button'))
 {
 
 	//get URL parameters
 	$code = urldecode($_POST['code']);
 	// TODO: use central regex library for filename validation
-	$filename = (isset($_POST['filename']) && preg_match('/\w[-.\w]*/', $_POST['filename']))? urldecode($_POST['filename']).FILE_EXTENSION : DEFAULT_FILENAME;
+	$filename = (isset($_POST['filename']) && preg_match('/\w[-.\w]*/', $_POST['filename'])) ? urldecode($_POST['filename']).FILE_EXTENSION : DEFAULT_FILENAME;
 
+	// @@@ shared download code
 	//set HTTP headers
 	header('Content-type: text/plain');
-	header('Expires: ' . gmdate('D, d M Y H:i:s') . ' GMT'); //TODO: check for consistency with server time format
+	header('Expires: ' . gmdate('D, d M Y H:i:s') . ' GMT'); // TODO: check for consistency with server time format
 	header('Content-Length: '.strlen($code));
 	header('Content-Description: '.$filename.' Download Data');
 	header('Pragma: no-cache');
