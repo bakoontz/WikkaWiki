@@ -59,9 +59,9 @@ $highlight_note = '';
 $edit_note_field = '';
 $note = '';
 $ondblclick = ''; //#123
-if ($this->config['edit_buttons_position'] == 'top' || $this->config['edit_buttons_position'] == 'bottom')
+if ($this->GetConfigValue('edit_buttons_position') == 'top' || $this->GetConfigValue('edit_buttons_position') == 'bottom')
 {
-	$buttons_position = $this->config['edit_buttons_position'];
+	$buttons_position = $this->GetConfigValue('edit_buttons_position');
 }
 else
 {
@@ -111,7 +111,7 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 				}
 			}
 			// check for edit note
-			if (($this->config['require_edit_note'] == 1) && $_POST['note'] == '')
+			if (($this->GetConfigValue('require_edit_note') == 1) && $_POST['note'] == '')
 			{
 				$error .= ERROR_MISSING_EDIT_NOTE;
 				$highlight_note = INPUT_ERROR_STYLE;
@@ -143,7 +143,7 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 	}
 
 	// create edit note field if edit_notes are enabled
-	if ($this->config['require_edit_note'] != 2)
+	if ($this->GetConfigValue('require_edit_note') != 2)
 	{
 		// We need to escape ALL entity refs before display so we display them _as_ entities instead of interpreting them
 		// so we use hsc_secure() on the edit note (as on the body)
@@ -159,7 +159,7 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 
 
 	$maxtaglen = MAX_TAG_LENGTH; #38 - #376
-	if ( ($field = $this->LoadSingle("describe ".$this->config['table_prefix']."pages tag"))
+	if ( ($field = $this->LoadSingle("describe ".$this->GetConfigValue('table_prefix')."pages tag"))
 	   && (preg_match("/varchar\((\d+)\)/", $field['Type'], $matches)) )
 	{
 		$maxtaglen = $matches[1];
@@ -246,7 +246,7 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 		}
 		$output .=	$this->FormClose();
 
-		if ($this->config['gui_editor'] == 1)
+		if ($this->GetConfigValue('gui_editor') == 1)
 		{
 			$output .= '<script type="text/javascript" src="'.$this->StaticHref('3rdparty/plugins/wikiedit/protoedit.js').'"></script>'."\n".
 					   '<script type="text/javascript" src="'.$this->StaticHref('3rdparty/plugins/wikiedit/wikiedit2.js').'"></script>'."\n";

@@ -75,8 +75,8 @@ include_once('3rdparty'.DIRECTORY_SEPARATOR.'core'.DIRECTORY_SEPARATOR.'feedcrea
 //initialize feed (general settings)
 $rss = new UniversalFeedCreator();
 $rss->useCached(); //TODO: make this configurable
-$rss->title = sprintf(FEED_TITLE, $this->config['wakka_name']); 
-$rss->description = sprintf(FEED_DESCRIPTION, $this->config['wakka_name']);
+$rss->title = sprintf(FEED_TITLE, $this->GetConfigValue('wakka_name')); 
+$rss->description = sprintf(FEED_DESCRIPTION, $this->GetConfigValue('wakka_name'));
 $rss->cssStyleSheet = $this->StaticHref('css/'.FEED_CSS);
 $rss->descriptionTruncSize = FEED_DESCRIPTION_TRUNCATE_SIZE;
 $rss->descriptionHtmlSyndicated = FEED_DESCRIPTION_HTML; 
@@ -114,7 +114,7 @@ if ($comments = $this->LoadRecentComments(2*$n))
 		$item->link = $this->Href('', $comment['page_tag'], 'show_comments=1').'#comment_'.$comment['id'];
 		$item->date = date('r', strtotime($comment['time'])); 
 		$item->description = 'By '.$comment['user'].': '.$comment['comment']."\n";
-		$item->source = $this->config['base_url'];
+		$item->source = $this->GetConfigValue('base_url');
 		if ($f == 'ATOM1.0' || $f == 'RSS1.0') 
 		{
 			$item->author = $comment['user']; # RSS0.91 and RSS2.0 require authorEmail

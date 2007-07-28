@@ -28,12 +28,12 @@ $comment_id = intval(trim($_POST['comment_id']));
 // Delete comment
 if ($_POST['submit']==COMMENT_DELETE_BUTTON && $this->HasAccess('comment_post'))
 {
-	$comment = $this->LoadSingle("SELECT user, parent FROM ".$this->config["table_prefix"]."comments WHERE id = '".$comment_id."' LIMIT 1");
+	$comment = $this->LoadSingle("SELECT user, parent FROM ".$this->GetConfigValue('table_prefix')."comments WHERE id = '".$comment_id."' LIMIT 1");
 	$current_user = $this->GetUserName();
 
 	if ($this->UserIsOwner() || $comment["user"]==$current_user)
 	{
-		$this->Query("UPDATE ".$this->config["table_prefix"]."comments SET status='deleted' WHERE id='".$comment_id."' LIMIT 1");
+		$this->Query("UPDATE ".$this->GetConfigValue('table_prefix')."comments SET status='deleted' WHERE id='".$comment_id."' LIMIT 1");
 		// redirect to page
 		$this->redirect($this->Href());
 	}
@@ -50,7 +50,7 @@ if(($_POST['submit']==COMMENT_REPLY_BUTTON || $_POST['submit']==COMMENT_NEW_BUTT
 	$comment = '';
 	if(isset($comment_id))
 	{
-		$comment = $this->LoadSingle("SELECT user, comment FROM ".$this->config["table_prefix"]."comments WHERE id = '".$comment_id."' LIMIT 1");
+		$comment = $this->LoadSingle("SELECT user, comment FROM ".$this->GetConfigValue('table_prefix')."comments WHERE id = '".$comment_id."' LIMIT 1");
 	}
 ?>
 	<div class="commentform">

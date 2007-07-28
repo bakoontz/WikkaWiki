@@ -82,19 +82,19 @@ include_once('3rdparty'.DIRECTORY_SEPARATOR.'core'.DIRECTORY_SEPARATOR.'feedcrea
 //initialize feed (general settings)
 $rss = new UniversalFeedCreator(); 
 $rss->useCached(); //TODO: make this configurable
-$rss->title = sprintf(FEED_TITLE, $this->config['wakka_name']); 
-$rss->description = sprintf(FEED_DESCRIPTION, $this->config['wakka_name']); 
+$rss->title = sprintf(FEED_TITLE, $this->GetConfigValue('wakka_name')); 
+$rss->description = sprintf(FEED_DESCRIPTION, $this->GetConfigValue('wakka_name')); 
 $rss->cssStyleSheet = $this->StaticHref('css/'.FEED_CSS);
 $rss->descriptionTruncSize = FEED_DESCRIPTION_TRUNCATE_SIZE; 
 $rss->descriptionHtmlSyndicated = FEED_DESCRIPTION_HTML; 
-$rss->link = $this->Href('', $this->config['root_page']); 
+$rss->link = $this->Href('', $this->GetConfigValue('root_page')); 
 $rss->syndicationURL = $this->Href($this->method,'','f='.$f); 
 
 //create feed image
 $image = new FeedImage(); 
 $image->title = FEED_IMAGE_TITLE;
 $image->url = $PHP_SELF.FEED_IMAGE_PATH;
-$image->link = $this->Href('', $this->config['root_page']);
+$image->link = $this->Href('', $this->GetConfigValue('root_page'));
 $image->description = FEED_IMAGE_DESCRIPTION;
 $image->descriptionTruncSize = FEED_DESCRIPTION_TRUNCATE_SIZE;
 $image->descriptionHtmlSyndicated = FEED_DESCRIPTION_HTML;
@@ -103,7 +103,7 @@ $rss->image = $image;
 //get feed items
 if ($pages = $this->LoadRecentlyChanged())
 {
-	$max = $this->config['xml_recent_changes'];
+	$max = $this->GetConfigValue('xml_recent_changes');
 	$c = 0;
 	foreach ($pages as $page)
 	{
@@ -115,7 +115,7 @@ if ($pages = $this->LoadRecentlyChanged())
 			$item->link = $this->Href('show', $page['tag'], 'time='.urlencode($page['time'])); 
 			$item->date = date('r',strtotime($page['time'])); 
 			$item->description = sprintf(FEED_ITEM_DESCRIPTION, $page['user']).($page['note'] ? ' ('.$page['note'].')' : '')."\n";
-			$item->source = $this->config['base_url']; 
+			$item->source = $this->GetConfigValue('base_url'); 
 			if (($f == 'ATOM1.0' || $f == 'RSS1.0') && $this->LoadUser($page['user'])) 
 			{
 				$item->author = $page['user']; # RSS0.91 and RSS2.0 require authorEmail

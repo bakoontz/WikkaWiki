@@ -26,7 +26,7 @@ $IsAdmin = $this->IsAdmin();
 if ($IsAdmin && isset($_GET["whitelist"]))	# 312
 {
 	$whitelist = $_GET['whitelist'];	# 312
-	$this->Query('DELETE FROM '.$this->config['table_prefix'].'referrer_blacklist WHERE spammer = "'.mysql_real_escape_string($whitelist).'"');
+	$this->Query('DELETE FROM '.$this->GetConfigValue('table_prefix').'referrer_blacklist WHERE spammer = "'.mysql_real_escape_string($whitelist).'"');
 	$this->Redirect($this->Href('review_blacklist'));
 }
 
@@ -38,7 +38,7 @@ $ref_urls_to_wiki_link = '<a href="'.$ref_urls_to_wiki_url.'">'.REFERRERS_URLS_T
 $menu = '['.$ref_domains_to_wiki_link.' | '.$ref_urls_to_wiki_link.']';
 
 // get data
-$blacklist = $this->LoadAll("SELECT * FROM ".$this->config["table_prefix"]."referrer_blacklist");
+$blacklist = $this->LoadAll("SELECT * FROM ".$this->GetConfigValue('table_prefix')."referrer_blacklist");
 
 echo '<div class="page">'."\n";
 echo '<strong>'.BLACKLIST_HEADING.'</strong><br /><br />'."\n";

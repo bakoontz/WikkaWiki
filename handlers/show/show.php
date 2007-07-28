@@ -176,9 +176,9 @@ else
 						{
 							$comment_ordering = $user['default_comment_display'];
 						}
-						elseif (isset($this->config['default_comment_display']))
+						elseif (NULL !== $this->GetConfigValue('default_comment_display'))
 						{
-							$comment_ordering = $this->config['default_comment_display'];
+							$comment_ordering = $this->GetConfigValue('default_comment_display');
 						}
 						else
 						{

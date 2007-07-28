@@ -32,10 +32,10 @@ elseif (isset($_GET['spam_site']))		// coming from referrers_sites handler #312
 
 if (isset($spammer) && $spammer)
 {
-	$this->Query("DELETE FROM ".$this->config["table_prefix"]."referrers WHERE referrer like '%".mysql_real_escape_string($spammer)."%'");
-	if (!$already_blacklisted = $this->LoadSingle("select * from ".$this->config["table_prefix"]."referrer_blacklist WHERE spammer = '".mysql_real_escape_string($spammer)."'"))
+	$this->Query("DELETE FROM ".$this->GetConfigValue('table_prefix')."referrers WHERE referrer like '%".mysql_real_escape_string($spammer)."%'");
+	if (!$already_blacklisted = $this->LoadSingle("select * from ".$this->GetConfigValue('table_prefix')."referrer_blacklist WHERE spammer = '".mysql_real_escape_string($spammer)."'"))
 	{
-		$this->Query("INSERT INTO ".$this->config["table_prefix"]."referrer_blacklist SET spammer = '".mysql_real_escape_string($spammer)."'");
+		$this->Query("INSERT INTO ".$this->GetConfigValue('table_prefix')."referrer_blacklist SET spammer = '".mysql_real_escape_string($spammer)."'");
 	}
 }
 
