@@ -1,7 +1,7 @@
 <?php
 /**
  * The Wikka mainscript.
- * 
+ *
  * This file is called each time a request is made from the browser.
  * Most of the core methods used by the engine are located in the Wakka class.
  * @see	Wakka
@@ -15,18 +15,18 @@
  * @license		http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @see			/docs/Wikka.LICENSE
  * @filesource
- * 
+ *
  * @author	{@link http://www.mornography.de/ Hendrik Mans}
  * @author	{@link http://wikkawiki.org/JsnX Jason Tourtelotte}
  * @author	{@link http://wikkawiki.org/JavaWoman Marjolein Katsma}
  * @author	{@link http://wikkawiki.org/NilsLindenberg Nils Lindenberg}
  * @author	{@link http://wikkawiki.org/DotMG Mahefa Randimbisoa}
  * @author	{@link http://wikkawiki.org/DarTar Dario Taraborelli}
- * 
+ *
  * @copyright	Copyright 2002-2003, Hendrik Mans <hendrik@mans.de>
  * @copyright	Copyright 2004-2005, Jason Tourtelotte <wikka-admin@jsnx.com>
  * @copyright	Copyright 2006-2007, {@link http://wikkawiki.org/CreditsPage Wikka Development Team}
- * 
+ *
  * @todo	use templating class for page generation;
  * @todo	add phpdoc documentation for configuration array elements;
  */
@@ -34,7 +34,8 @@
 ob_start();
 
 /**
- * Display PHP errors only, or errors and warnings
+ * Display PHP errors only, or errors and warnings.
+ *
  * @todo	make this configurable
  */
 //error_reporting(E_ALL);
@@ -44,30 +45,141 @@ error_reporting (E_ALL ^ E_NOTICE);
  * Defines the current Wikka version. Do not change the version number or you will have problems upgrading.
  */
 if (!defined('WAKKA_VERSION')) define('WAKKA_VERSION', 'trunk');
+/**#@+
+ * String constant used as default. May be made a configurable value.
+ */
 /**
  * Defines the default cookie name.
  */
-if(!defined('BASIC_COOKIE_NAME')) define('BASIC_COOKIE_NAME', 'Wikkawiki');
+if (!defined('BASIC_COOKIE_NAME')) define('BASIC_COOKIE_NAME', 'Wikkawiki');
+/**
+ * Defines the default language.
+ */
+if (!defined('DEFAULT_LANGUAGE')) define('DEFAULT_LANGUAGE', 'en');
+/**#@-*/
+/**#@+
+ * String constant defining a directory where a specific type of components can be found.
+ *
+ * @todo	more elements need to be defined (if not configurable!)
+ */
+/**
+ * Defines the default path where libraries are stored.
+ *
+ * May be overridden to share libraries between installations.
+ */
+if (!defined('WIKKA_LIBRARY_PATH')) define('WIKKA_LIBRARY_PATH','libs');
+if (!defined('WIKKA_SETUP_PATH')) define('WIKKA_SETUP_PATH','setup');
+if (!defined('WIKKA_LANG_PATH')) define('WIKKA_LANG_PATH','lang');
+/**#@-*/
+
+/**#@+
+ * Numeric constant used as default. May be made a configurable value.
+ */
 /**
  * Length to use for generated part of id attribute.
+ * @todo move to Wakka class
  */
-if(!defined('ID_LENGTH')) define('ID_LENGTH',10);
+if (!defined('ID_LENGTH')) define('ID_LENGTH',10);				// @@@ maybe make length configurable
+/**#@-*/
 
+// @@@	maybe include this bit from a file in the installation directory?
+//		that would make it easier to edit, and keep this fuile "cleaner"
+/**#@+
+ * String constant used override for a standard Wikka path.
+ *
+ * 'LOCAL' in this context means applicable to this particular instance of Wikka,
+ * although it these constants can actually be used to share system files between
+ * different installations, by pointing this all at the same location in all instances.
+ *
+ * May be used for sites where local configuration is (to be) stored outside the
+ * web root or files are shared between different installations on the same server.
+ */
 /**
- * Calculate page generation time.
+ * Alternative path for local configuration file.
+ *
+ * If you need to use this installation with a site configuration file outside the
+ * installation directory uncomment the following line and adapt it to reflect
+ * the (filesystem) path to where your site configuration file is located.
+ * This would make it possible to store the configuration file outside of the
+ * webroot, or to share one configuration file between several Wikka Wiki
+ * installations.
+ *
+ * This replaces the use of the environment variable WAKKA_CONFIG for security
+ * reasons. [SEC]
+ * @todo		also allow an override for the path to the Class that (now) defines the *default* settings: should be shareable between installations, for instance!
  */
-function getmicrotime() {
-	list($usec, $sec) = explode(' ', microtime());
-	return ((float)$usec + (float)$sec);
-}
+#if (!defined('LOCAL_CONFIG')) define('LOCAL_CONFIG','path/to/your/wikka.config.php');
+/**
+ * Alternative path where (all) libaries are stored.
+ *
+ * The default is 'libs' within the installation directory. The path must be
+ * a (filesystem) path for a directory, and must <b>not</b> end in a slash.
+ * Use this only if <b>all</b> your libraries (including the default configuration
+ * and the main Wakka class are to be found in a different location.
+ *
+ * Note that the location of (some?) other directories can be defined in the
+ * configuration - but that configuration must be found first.
+ */
+#if (!defined('LOCAL_LIBRARY_PATH')) define('LOCAL_LIBRARY_PATH','path/to/your/libs')
+/**
+ * Alternative path for default configuration file.
+ *
+ * If you define a LOCAL_LIBRARY_PATH you don't need this unless Config.class.php
+ * is somewhere else again. If relocate (or share) only Config.class.php, use
+ * this constant to define its full (filesystem) path.
+ */
+#if (!defined('LOCAL_DEFAULT_CONFIG')) define('LOCAL_DEFAULT_CONFIG','path/to/your/Config.class.php');
+/**#@-*/
 
-$tstart = substr(microtime(),11).substr(microtime(),1,9); 
+// more intelligent version check, more intelligently placed ;)
+if (!function_exists('version_compare'))
+{
+	die(ERROR_WRONG_PHP_VERSION);		# fatalerror
+}
+elseif (version_compare(phpversion(),'4.1.0','<'))		// < PHP 4.1.0?
+{
+	die(ERROR_WRONG_PHP_VERSION);		# fatalerror
+}
+// @@@ similar check here for MySQL
+
+// derive paths, taking optional overrides into account
+// this is an (improved and extended) version of the method introduced in 1.1.6.3 to avoid GetEnv #470
+$wikka_library_path = (defined('LOCAL_LIBARY_PATH')) ? LOCAL_LIBARY_PATH : WIKKA_LIBRARY_PATH;
+$default_config = (defined('LOCAL_DEFAULT_CONFIG')) ? LOCAL_DEFAULT_CONFIG : $wikka_library_path.DIRECTORY_SEPARATOR.'Config.class.php';
+// local configuration by default in installation directory
+$configfile = (defined('LOCAL_CONFIG')) ? LOCAL_CONFIG : 'wikka.config.php';
+
+
+// @@@ put all these "core-core" functions in a little library and include them here (using pre-defined lib path, of course) "Compatibility.lib.php"?
+/**
+ * Get a microtime.
+ *
+ * Can be used to calculate page generation time, or SQL or function profiling.
+ *
+ * Serves a wrapper to replicate or use PHP 5 behavior:
+ * Use getmicrotime(TRUE) to get a float for calculations, without a parameter
+ * to get a string.
+ * See {@link http://php.net/microtime microtime} and comments there for the
+ * background of this implementation.
+ */
+function getmicrotime($get_as_float=FALSE)
+{
+	if (version_compare(phpversion(),'5','>='))		// >= PHP 5?
+	{
+		return microtime($get_as_float);
+	}
+	else
+	{
+		$time = strtok(microtime(), ' ') + strtok('');
+		return (FALSE === $get_as_float) ? $time : (float)$time;
+	}
+}
 
 if (!function_exists('mysql_real_escape_string'))
 {
 /**
  * Escape special characters in a string for use in a SQL statement.
- * 
+ *
  * This function is added for back-compatibility with MySQL 3.23.
  * @param	string	$string	the string to be escaped
  * @return	string	a string with special characters escaped
@@ -77,25 +189,7 @@ if (!function_exists('mysql_real_escape_string'))
 		return mysql_escape_string($string);
 	}
 }
-
 /**
- * Include main library if it exists.
- * @see		/libs/Wakka.class.php
- */
-if (file_exists('libs'.DIRECTORY_SEPARATOR.'Wakka.class.php'))
-{
-	require_once('libs'.DIRECTORY_SEPARATOR.'Wakka.class.php');
-}
-else
-{
-	die(ERROR_WAKKA_LIBRARY_MISSING); #fatalerror
-}
-// stupid version check
-if (!isset($_REQUEST))
-{
-	die(ERROR_WRONG_PHP_VERSION); //TODO replace with php version_compare #fatalerror
-}
-/** 
  * Workaround for the amazingly annoying magic quotes.
  */
 function magicQuotesWorkaround(&$a)
@@ -115,6 +209,42 @@ function magicQuotesWorkaround(&$a)
 		}
 	}
 }
+function instantiate($class,$par1=NULL,$par2=NULL,$par3=NULL)
+{
+	if (version_compare(phpversion(),'5','>='))		// >= PHP 5?
+	{
+		$obj =  new $class($par1,$par2,$par3);			// [558] / #496 - comment 3
+	}
+	else
+	{
+		$obj =& new $class($par1,$par2,$par3);			// reverting [558] see #496 - comment 4
+	}
+	return $obj;
+}
+
+#$tstart = substr(microtime(),11).substr(microtime(),1,9);	// @@@ why not use get microtime? not correct anyway since it calls microtime() twice!
+$tstart = getmicrotime(TRUE);
+
+/**
+ * Include main library if it exists.
+ *
+ * @see		/libs/Wakka.class.php
+ */
+if (file_exists($wikka_library_path.DIRECTORY_SEPARATOR.'Wakka.class.php'))
+{
+	require_once $wikka_library_path.DIRECTORY_SEPARATOR.'Wakka.class.php';
+}
+else
+{
+	die(ERROR_WAKKA_LIBRARY_MISSING);	#fatalerror
+}
+
+// stupid version check - see above ;)
+//if (!isset($_REQUEST))
+//{
+//	die(ERROR_WRONG_PHP_VERSION); //TODO replace with php version_compare #fatalerror
+//}
+
 set_magic_quotes_runtime(0);
 if (get_magic_quotes_gpc())
 {
@@ -124,21 +254,31 @@ if (get_magic_quotes_gpc())
 }
 
 /**
- * Load the configuration.
- * @todo	remove the parts that are no longer used (config files)
- *			installer should take care of picking up old files - just once
- * @todo	then let Wikka class just include the Config class, and remove
- *			this whole section!
+ * Get the default configuration.
+ *
+ * @todo	this hard-coded path to the class should also be overrideable with an alternative one (like what we had with the (now replaced) GetEnv)
  */
-require_once('libs'.DIRECTORY_SEPARATOR.'Config.class.php');
-$buff = new Config;
+#require_once('libs'.DIRECTORY_SEPARATOR.'Config.class.php');
+require_once $default_config;
+#$buff = new Config;		// @@@ pass by ref in PHP4!
+$buff = instantiate('Config');
 $wakkaDefaultConfig = get_object_vars($buff);
 unset($buff);
+
+/**
+ * Load the configuration.
+ *
+ * Here, the default configuration is merged with any already-existing site configuration.
+ * If a new install or upgrade is needed, the installer will ultimately write an (updated) site configuration.
+ *
+ * @todo	make a more structural replacement for GetEnv() than the preliminary one we have now
+ */
 $wakkaConfig = array();
 if (file_exists('wakka.config.php'))
 {
-	rename('wakka.config.php', 'wikka.config.php');	
+	rename('wakka.config.php', 'wikka.config.php');
 }
+/*
 if (!$configfile = GetEnv('WAKKA_CONFIG'))
 {
 	$configfile = 'wikka.config.php';
@@ -149,7 +289,12 @@ if (file_exists($configfile))
 }
 $wakkaConfigLocation = $configfile;		// @@@ won't work if doesn't exist
 $wakkaConfig = array_merge($wakkaDefaultConfig, $wakkaConfig);
-$htaccessLocation = str_replace('\\', '/', dirname(__FILE__)).DIRECTORY_SEPARATOR.'.htaccess';
+*/
+if (file_exists($configfile))
+{
+	include $configfile;
+}
+$wakkaConfig = array_merge($wakkaDefaultConfig, $wakkaConfig);
 
 /**
  * Check for locking.
@@ -161,7 +306,8 @@ if (file_exists('locked'))
 	$lockpw = trim($lines[0]);
 
 	// is authentification given?
-	if (isset($_SERVER['PHP_AUTH_USER'])) {
+	if (isset($_SERVER['PHP_AUTH_USER']))
+	{
 		if (!(($_SERVER['PHP_AUTH_USER'] == 'admin') && ($_SERVER['PHP_AUTH_PW'] == $lockpw)))
 		{
 			$ask = 1;
@@ -188,12 +334,18 @@ if (!isset($wakkaConfig['wakka_version']))
 }
 if ($wakkaConfig['wakka_version'] !== WAKKA_VERSION)
 {
-	if (file_exists('setup'.DIRECTORY_SEPARATOR.'index.php'))	#89
+	$wakkaConfigLocation = $configfile;		// record (intended) config location for the installer
+	$htaccessLocation = str_replace('\\', '/', dirname(__FILE__)).DIRECTORY_SEPARATOR.'.htaccess';
+	#if (file_exists('setup'.DIRECTORY_SEPARATOR.'index.php'))	#89
+	if (file_exists(WIKKA_SETUP_PATH.DIRECTORY_SEPARATOR.'index.php'))	#89
 	{
-		include('setup'.DIRECTORY_SEPARATOR.'index.php');		#89
+		// run the installer
+		#include 'setup'.DIRECTORY_SEPARATOR.'index.php';		#89
+		include WIKKA_SETUP_PATH.DIRECTORY_SEPARATOR.'index.php';		#89
 	}
 	else
 	{
+		// installer can not be run
 		print '<em>'.ERROR_SETUP_FILE_MISSING.'</em>'; #fatalerror
 	}
 	die();
@@ -201,24 +353,30 @@ if ($wakkaConfig['wakka_version'] !== WAKKA_VERSION)
 
 /**
  * Include language file if it exists.
- * 
- * Language files are bundled under <tt>lang/</tt> in a folder named after their ISO 639-1 code (e.g. 'en' for English).
+ *
+ * Language files are bundled under <tt>lang/</tt> (default) in a folder named
+ * after their ISO 639-1 code (e.g. 'en' for English).
+ *
+ * @todo: Should try to fall back to default language ...
  */
-//sets default language
-if (!defined('DEFAULT_LANGUAGE')) define('DEFAULT_LANGUAGE', 'en');
 //check if a custom language definition is specified
-$wakkaConfig['default_lang'] = (isset($wakkaConfig['default_lang']))? $wakkaConfig['default_lang'] : DEFAULT_LANGUAGE;
+$wakkaConfig['default_lang'] = (isset($wakkaConfig['default_lang'])) ? $wakkaConfig['default_lang'] : DEFAULT_LANGUAGE;
 //check if language package exists
-if (file_exists('lang'.DIRECTORY_SEPARATOR.$wakkaConfig['default_lang'].DIRECTORY_SEPARATOR.$wakkaConfig['default_lang'].'.inc.php'))
+#if (file_exists('lang'.DIRECTORY_SEPARATOR.$wakkaConfig['default_lang'].DIRECTORY_SEPARATOR.$wakkaConfig['default_lang'].'.inc.php'))
+if (file_exists(WIKKA_LANG_PATH.DIRECTORY_SEPARATOR.$wakkaConfig['default_lang'].DIRECTORY_SEPARATOR.$wakkaConfig['default_lang'].'.inc.php'))
 {
-	require_once('lang'.DIRECTORY_SEPARATOR.$wakkaConfig['default_lang'].DIRECTORY_SEPARATOR.$wakkaConfig['default_lang'].'.inc.php');
+	#require_once('lang'.DIRECTORY_SEPARATOR.$wakkaConfig['default_lang'].DIRECTORY_SEPARATOR.$wakkaConfig['default_lang'].'.inc.php');
+	require_once WIKKA_LANG_PATH.DIRECTORY_SEPARATOR.$wakkaConfig['default_lang'].DIRECTORY_SEPARATOR.$wakkaConfig['default_lang'].'.inc.php';
 }
 else
 {
-	$error_message = 'Language file (lang'.DIRECTORY_SEPARATOR.$wakkaConfig['default_lang'].DIRECTORY_SEPARATOR.$wakkaConfig['default_lang'].'.inc.php) not found!'; //TODO i18n
+	#$error_message = 'Language file (lang'.DIRECTORY_SEPARATOR.$wakkaConfig['default_lang'].DIRECTORY_SEPARATOR.$wakkaConfig['default_lang'].'.inc.php) not found!'; //TODO i18n
+	$error_message = 'Language file ('.WIKKA_LANG_PATH.DIRECTORY_SEPARATOR.$wakkaConfig['default_lang'].DIRECTORY_SEPARATOR.$wakkaConfig['default_lang'].'.inc.php) not found!'; //TODO i18n
+	// @@@ attempt fallback if unsuccessful, create a different error message and *then* die
 	#if (($wakkaConfig['default_lang'] != DEFAULT_LANGUAGE) && (file_exists('lang'.DIRECTORY_SEPARATOR.DEFAULT_LANGUAGE.DIRECTORY_SEPARATOR.DEFAULT_LANGUAGE.'.inc.php'))) {}/** @todo: Should try to fall back to default language ... */
-	die ($error_message);
+	die($error_message);
 }
+
 /**
  * Start session.
  */
@@ -228,7 +386,7 @@ session_start();
 
 /**
  * Fetch wakka location (requested page + parameters)
- * 
+ *
  * @todo files action uses POST, everything else uses GET #312
  * @todo use different name - $wakka clashes with $wakka object (which should be #Wakka)
  */
@@ -236,13 +394,18 @@ $wakka = $_GET['wakka']; #312
 
 /**
  * Remove leading slash.
- * @todo use different name - $wakka clashes with $wakka object (which should be #Wakka)
+ *
+ * @todo	use different name - $wakka clashes with $wakka object (which should be #Wakka)
  */
 $wakka = preg_replace("/^\//", "", $wakka);
 
 /**
  * Extract pagename and handler from URL
- * @todo use different name - $wakka clashes with $wakka object (which should be #Wakka)
+ *
+ * Note this splits at the FIRST / so $method may contain one or more slashes;
+ * this is not allowed, and ultimately handled in the Method() method. [SEC]
+ *
+ * @todo	use different name - $wakka clashes with $wakka object (which should be #Wakka)
  */
 if (preg_match("#^(.+?)/(.*)$#", $wakka, $matches))
 {
@@ -263,9 +426,12 @@ if ((strtolower($page) == $page) && (isset($_SERVER['REQUEST_URI']))) #38
 }
 
 /**
- * Create Wakka object
- * @todo use name with Capital for object; also clashes with $wakka (above) now
+ * Create Wakka object.
+ *
+ * @todo	use name with Capital for object; also clashes with $wakka (above) now
+ * @todo	encapsulate in instantiation function ("compatibility method")
  */
+/*
 if (version_compare(phpversion(),'5','>='))		// >= PHP 5?
 {
 	$wakka =  new Wakka($wakkaConfig);			// [558] / #496 - comment 3
@@ -274,6 +440,8 @@ else
 {
 	$wakka =& new Wakka($wakkaConfig);			// reverting [558] see #496 - comment 4
 }
+*/
+$wakka = instantiate('Wakka',$wakkaConfig);
 
 /**
  * Check for database access.
@@ -294,9 +462,10 @@ TPLERRDBACCESS;
 	die($template);
 }
 
-/** 
+/**
  * Run the engine.
- * @todo use name with Capital for object; also clashes with $wakka (above) now
+ *
+ * @todo	use name with Capital for object; also clashes with $wakka (above) now
  */
 if (!isset($handler))
 {
@@ -304,12 +473,14 @@ if (!isset($handler))
 }
 $wakka->Run($page, $handler);
 /**
- * Calculate microtime
- * @todo move handler check to handler configuration
+ * Calculate elapsed microtime
+ *
+ * @todo	move handler check to handler configuration
  */
 if (!preg_match('/(xml|raw|mm|grabcode|mindmap_fullscreen)$/', $handler))
 {
-	$tend = substr(microtime(),11).substr(microtime(),1,9); 
+	#$tend = substr(microtime(),11).substr(microtime(),1,9);	// @@@ why not use get microtime? not correct anyway since it calls microtime() twice!
+	$tend = getmicrotime(TRUE);
 	//calculate the difference
 	$totaltime = ($tend - $tstart);
 	//output result
@@ -317,8 +488,9 @@ if (!preg_match('/(xml|raw|mm|grabcode|mindmap_fullscreen)$/', $handler))
 }
 
 $content =  ob_get_contents();
-/** 
+/**
  * Use gzip compression if possible.
+ *
  * @todo	use config value to optionally turn off gzip-encoding here #541
  */
 if ( isset($_SERVER['HTTP_ACCEPT_ENCODING']) && strstr ($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip') && function_exists('gzencode') ) #38
@@ -334,7 +506,7 @@ else
 	$page_length = strlen($page_output);
 }
 
-$etag =  md5($content);
+$etag = md5($content);
 header('ETag: '.$etag);
 
 if (!isset($wakka->do_not_send_anticaching_headers) || (!$wakka->do_not_send_anticaching_headers)) #279
