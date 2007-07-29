@@ -9,6 +9,9 @@
  * Some small utilities that may be helpful during debugging (such as 
  * getmicrotime()) which might be helpful when dealing with different
  * implementations are also forced in here as there's no better place yet. ;)
+ * 
+ * The @since tag identifies the first version in which this file appears, though
+ * some of the functions have been around since Wikka 1.0.0.
  *
  * @package		Wikka
  * @subpackage	Libs
@@ -20,6 +23,7 @@
  * @author		{@link http://www.mornography.de/ Hendrik Mans}
  * @author		{@link http://wikkawiki.org/JsnX Jason Tourtelotte}
  * @author		{@link http://wikkawiki.org/JavaWoman Marjolein Katsma}
+ * @since		Wikka 1.1.7
  *
  * @copyright	Copyright 2002-2003, Hendrik Mans <hendrik@mans.de>
  * @copyright	Copyright 2004-2005, Jason Tourtelotte <wikka-admin@jsnx.com>
