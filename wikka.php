@@ -27,8 +27,12 @@
  * @copyright	Copyright 2004-2005, Jason Tourtelotte <wikka-admin@jsnx.com>
  * @copyright	Copyright 2006-2007, {@link http://wikkawiki.org/CreditsPage Wikka Development Team}
  *
+ * @uses	getmicrotime()	for determining page generation time
+ * @uses	magicQuotesWorkaround()	to overcome magic quotes that may be imposed on a system
+ * @uses	instantiate()	for a version-independent method to instantiate a class
+ *
  * @todo	use templating class for page generation;
- * @todo	add phpdoc documentation for configuration array elements;
+ * @todo	add phpdoc documentation for configuration array elements; @see Config !
  */
 
 ob_start();
@@ -131,7 +135,8 @@ if (!defined('ID_LENGTH')) define('ID_LENGTH',10);				// @@@ maybe make length c
 #if (!defined('LOCAL_DEFAULT_CONFIG')) define('LOCAL_DEFAULT_CONFIG','path/to/your/Config.class.php');
 /**#@-*/
 
-// more intelligent version check, more intelligently placed ;)
+// More intelligent version check, more intelligently placed ;)
+// Basically if we are going to fail, we want to do that as soon as possible.
 if (!function_exists('version_compare'))
 {
 	die(ERROR_WRONG_PHP_VERSION);		# fatalerror
@@ -149,80 +154,11 @@ $default_config = (defined('LOCAL_DEFAULT_CONFIG')) ? LOCAL_DEFAULT_CONFIG : $wi
 // local configuration by default in installation directory
 $configfile = (defined('LOCAL_CONFIG')) ? LOCAL_CONFIG : 'wikka.config.php';
 
+// include the "compatibility functions
+require_once $wikka_library_path.'Compatibility.lib.php';
 
-// @@@ put all these "core-core" functions in a little library and include them here (using pre-defined lib path, of course) "Compatibility.lib.php"?
-/**
- * Get a microtime.
- *
- * Can be used to calculate page generation time, or SQL or function profiling.
- *
- * Serves a wrapper to replicate or use PHP 5 behavior:
- * Use getmicrotime(TRUE) to get a float for calculations, without a parameter
- * to get a string.
- * See {@link http://php.net/microtime microtime} and comments there for the
- * background of this implementation.
- */
-function getmicrotime($get_as_float=FALSE)
-{
-	if (version_compare(phpversion(),'5','>='))		// >= PHP 5?
-	{
-		return microtime($get_as_float);
-	}
-	else
-	{
-		$time = strtok(microtime(), ' ') + strtok('');
-		return (FALSE === $get_as_float) ? $time : (float)$time;
-	}
-}
 
-if (!function_exists('mysql_real_escape_string'))
-{
-/**
- * Escape special characters in a string for use in a SQL statement.
- *
- * This function is added for back-compatibility with MySQL 3.23.
- * @param	string	$string	the string to be escaped
- * @return	string	a string with special characters escaped
- */
-	function mysql_real_escape_string($string)
-	{
-		return mysql_escape_string($string);
-	}
-}
-/**
- * Workaround for the amazingly annoying magic quotes.
- */
-function magicQuotesWorkaround(&$a)
-{
-	if (is_array($a))
-	{
-		foreach ($a as $k => $v)
-		{
-			if (is_array($v))
-			{
-				magicQuotesWorkaround($a[$k]);
-			}
-			else
-			{
-				$a[$k] = stripslashes($v);
-			}
-		}
-	}
-}
-function instantiate($class,$par1=NULL,$par2=NULL,$par3=NULL)
-{
-	if (version_compare(phpversion(),'5','>='))		// >= PHP 5?
-	{
-		$obj =  new $class($par1,$par2,$par3);			// [558] / #496 - comment 3
-	}
-	else
-	{
-		$obj =& new $class($par1,$par2,$par3);			// reverting [558] see #496 - comment 4
-	}
-	return $obj;
-}
-
-#$tstart = substr(microtime(),11).substr(microtime(),1,9);	// @@@ why not use get microtime? not correct anyway since it calls microtime() twice!
+// start page generation timer
 $tstart = getmicrotime(TRUE);
 
 /**
@@ -242,7 +178,7 @@ else
 // stupid version check - see above ;)
 //if (!isset($_REQUEST))
 //{
-//	die(ERROR_WRONG_PHP_VERSION); //TODO replace with php version_compare #fatalerror
+//	die(ERROR_WRONG_PHP_VERSION);
 //}
 
 set_magic_quotes_runtime(0);
@@ -260,7 +196,7 @@ if (get_magic_quotes_gpc())
  */
 #require_once('libs'.DIRECTORY_SEPARATOR.'Config.class.php');
 require_once $default_config;
-#$buff = new Config;		// @@@ pass by ref in PHP4!
+#$buff = new Config;		// pass by ref in PHP4!
 $buff = instantiate('Config');
 $wakkaDefaultConfig = get_object_vars($buff);
 unset($buff);
@@ -287,7 +223,7 @@ if (file_exists($configfile))
 {
 	include($configfile);
 }
-$wakkaConfigLocation = $configfile;		// @@@ won't work if doesn't exist
+$wakkaConfigLocation = $configfile;
 $wakkaConfig = array_merge($wakkaDefaultConfig, $wakkaConfig);
 */
 if (file_exists($configfile))
@@ -429,7 +365,6 @@ if ((strtolower($page) == $page) && (isset($_SERVER['REQUEST_URI']))) #38
  * Create Wakka object.
  *
  * @todo	use name with Capital for object; also clashes with $wakka (above) now
- * @todo	encapsulate in instantiation function ("compatibility method")
  */
 /*
 if (version_compare(phpversion(),'5','>='))		// >= PHP 5?
@@ -479,11 +414,11 @@ $wakka->Run($page, $handler);
  */
 if (!preg_match('/(xml|raw|mm|grabcode|mindmap_fullscreen)$/', $handler))
 {
-	#$tend = substr(microtime(),11).substr(microtime(),1,9);	// @@@ why not use get microtime? not correct anyway since it calls microtime() twice!
+	// get new microtime
 	$tend = getmicrotime(TRUE);
 	//calculate the difference
 	$totaltime = ($tend - $tstart);
-	//output result
+	//output result	/// @@@ use paragraph
 	print '<div class="smallprint">'.sprintf(PAGE_GENERATION_TIME, $totaltime)."</div>\n</body>\n</html>";
 }
 
