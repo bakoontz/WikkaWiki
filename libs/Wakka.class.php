@@ -42,6 +42,7 @@ if (!defined('MAX_HOSTNAME_LENGTH_DISPLAY')) define('MAX_HOSTNAME_LENGTH_DISPLAY
  */
 if (!defined('PATTERN_REPLACE_IMG_WITH_ALTTEXT')) define('PATTERN_REPLACE_IMG_WITH_ALTTEXT', '/<img[^>]*(?<=\\s)alt=("|\')\s*(.*?)\s*\\1.*?>/');
 if (!defined('PATTERN_INVALID_ID_CHARS')) define ('PATTERN_INVALID_ID_CHARS','/[^A-Za-z0-9_:.-\s]/');
+
 /**
  * The Wikka core.
  *
@@ -123,7 +124,7 @@ class Wakka
 	 */
 	var $pageCache;
 	/**
-	 * If this value is set to true, Anti-caching HTTP headers won't be added.
+	 * If this value is set to TRUE, Anti-caching HTTP headers won't be added.
 	 *
 	 * @access	public
 	 * @var		boolean
@@ -188,10 +189,11 @@ class Wakka
 	 * @param	string $query mandatory: the query to be executed.
 	 * @return	array the result of the query.
 	 * @todo	move into a database class.
+	 * @todo	implement cleaner time tracking, using "compatibility method"
 	 */
 	function Query($query)
 	{
-		if ($this->GetConfigValue('sql_debugging'))
+		if ($this->GetConfigValue('sql_debugging'))	// @@@
 		{
 			$start = $this->GetMicroTime();
 		}
@@ -200,7 +202,7 @@ class Wakka
 			ob_end_clean();
 			die(QUERY_FAILED.' <pre>'.$query.'</pre> ('.mysql_error($this->dblink).')'); #376
 		}
-		if ($this->GetConfigValue('sql_debugging'))
+		if ($this->GetConfigValue('sql_debugging'))	// @@@
 		{
 			$time = $this->GetMicroTime() - $start;
 			$this->queryLog[] = array(
@@ -415,6 +417,8 @@ class Wakka
 
 	/**
 	 * Generate a timestamp.
+	 *
+	 * @todo	use "compatibility method" - there's an equivalent function already in wikka.php!
 	 */
 	function GetMicroTime()
 	{
@@ -425,52 +429,51 @@ class Wakka
 	/**
 	 * Buffer the output from an included file.
 	 *
-	 * @param	string	$filename mandatory: name of the file to be included
-	 * @param	string	$not_found_text optional: optional text to be returned if the file was not found. default: ""
-	 * @param	string	$vars optional: vars to be passed to the file. default: ""
-	 * @param	string	$path optional: path to the file. default: ""
-	 * @return	string	in case the file has some output or there was a $not_found_text, boolean FALSE otherwise
-	 * @todo	make the function return only one type of variable
-	 * @todo	implement security features from 1.1.6.3
+	 * @param	string	$filename	mandatory: name of the file to be included;
+	 *					note this may already contain a (partial) path!
+	 *					(see {@link http://wush.net/trac/wikka/ticket/446 #446})
+	 * @param	string	$path		mandatory: path to the file
+	 * @param	string	$not_found_text	mandatory: text to be returned if the file was not found;
+	 *					if the intention is to let this fail silently, just pass an empty string here
+	 * @param	string	$vars	optional: vars to be passed to the file to handle. default: ''
+	 * @return	string	the included file's output or the $not_found_text if the file could not be found
+	 * @todo	Although the current "clients" (Action(), Handler() and Format())
+	 *			pass only fully sanitized filenames, the $path parameter comes
+	 *			from a configuration parameter even there. Thus, after building
+	 *			$fullfilepath this value should still be sanitized to prevent
+	 *			external URLs (with PHP5)!
+	 *			a little isLocal() function would be useful here!
+	 *			ref: http://php.net/file_exists and http://php.net/realpaths
 	 */
-	function IncludeBuffered($filename, $not_found_text = '', $vars = '', $path = '')
+	function IncludeBuffered($filename, $path, $not_found_text, $vars='')
 	{
-		if ($path)
+
+		$output = '';
+		$not_found_text = trim($not_found_text);
+		// build full (relative) path to requested plugin (method/action/formatter/...)
+		// @@@ see todo!!
+		$fullfilepath = trim($path).DIRECTORY_SEPARATOR.$filename;	#89
+		// check if requested file (method/action/formatter/...) actually exists
+		if (file_exists($fullfilepath))
 		{
-			$dirs = explode(':', $path);
+			if (is_array($vars))
+			{
+				// make the parameters also available by name (apart from the array itself):
+				// some callers (still) rely on these separate values, so we extract them, too
+				// taking care not to overwrite any already-existing variable
+				// NOTE: this usage is DEPRECATED
+				extract($vars, EXTR_SKIP);	// [SEC] EXTR_SKIP avoids collision with existing filenames
+			}
+			ob_start();
+			include $fullfilepath;			// this is where it all happens!
+			$output = ob_get_contents();
+			ob_end_clean();
 		}
 		else
 		{
-			$dirs = array("");
+			$output = $this->htmlspecialchars_ent($not_found_text);	// [SEC] make error (including (part of) request) safe to display
 		}
-		foreach($dirs as $dir)
-		{
-			if ($dir)
-			{
-				$dir .= "/";
-			}
-			$fullfilename = $dir.$filename;
-			if (file_exists($fullfilename))
-			{
-				if (is_array($vars))
-				{
-					extract($vars);
-				}
-				ob_start();
-				include($fullfilename);
-				$output = ob_get_contents();
-				ob_end_clean();
-				return $output;
-			}
-		}
-		if ($not_found_text)
-		{
-			return $not_found_text;
-		}
-		else
-		{
-			return FALSE;
-		}
+		return $output;
 	}
 
 	/**
@@ -1039,7 +1042,7 @@ class Wakka
 	 * Determine if the current version of the page is the latest.
 	 * @todo	Remove this method? Never called, and the variable does not seem to be set anywhere...
 	 *
-	 * @return boolean? TRUE if it is the latest, false otherwise.
+	 * @return boolean? TRUE if it is the latest, FALSE otherwise.
 	 */
 	function IsLatestPage()
 	{
@@ -1313,11 +1316,12 @@ class Wakka
 	 * @uses	Wakka::CachePage()
 	 * @uses	Wakka::CacheNonExistentPage()
 	 *
-	 * @param int $id Id of the page to load.
-	 * @param boolean $cache if true, an attempt to retrieve from cache will be made first.
-	 * @return mixed a page identified by $id
+	 * @param	int		$id		Id of the page to load.
+	 * @param	boolean	$cache	if TRUE, an attempt to retrieve from cache will be made first.
+	 * @return	mixed	a page identified by $id or NULL if not found in cache, or FALSE if not found in database
+	 * @todo	return a consistent type, or at least only FALSE for failure
 	 */
-	function LoadPageById($id, $cache = true)
+	function LoadPageById($id, $cache = TRUE)
 	{
 		// It first tries to retrieve from cache.
 		if ($cache)
@@ -1325,7 +1329,7 @@ class Wakka
 			$page = $this->GetCachedPageById($id);
 			if ((is_string($page)) && ($page == 'cached_nonexistent_page'))
 			{
-				return null;
+				return NULL;
 			}
 			if (is_array($page))
 			{
@@ -2305,14 +2309,14 @@ class Wakka
 	 * @uses	Wakka::htmlspecialchars_ent()
 	 * @uses	Wakka::LoadPage()
 	 *
-	 * @param	mixed $tag mandatory:
-	 * @param	string $handler optional:
-	 * @param	 string $text optional:
-	 * @param	 boolean $track optional:
-	 * @param	 boolean $escapeText optional:
-	 * @param	 string $title optional:
-	 * @param	string $class optional:
-	 * @return	string
+	 * @param	mixed	$tag mandatory:
+	 * @param	string	$handler optional:
+	 * @param	string	$text optional:
+	 * @param	boolean	$track optional:
+	 * @param	boolean	$escapeText optional:
+	 * @param	string	$title optional:
+	 * @param	string	$class optional:
+	 * @return	string	an HTML hyperlink (a href) element
 	 * @todo	move regexps to regexp-library		#34
 	 */
 	function Link($tag, $handler='', $text='', $track=TRUE, $escapeText=TRUE, $title='', $class='')
@@ -2682,60 +2686,87 @@ class Wakka
 	 * @uses	Wakka::StartLinkTracking()
 	 * @uses	Wakka::StopLinkTracking()
 	 *
+	 * @param	string	$actionspec	mandatory: the complete content of the action "tag"
+	 * @param	int		$forcelinktracking	optional: set to TRUE (or something that evaluates to it...)
+	 *					to ensure that the included content is tracked for links; default: 0
+	 * @return	string	output produced by {@link Wakka::IncludeBuffered()} or an error message
 	 * @todo	move regexes to central regex library			#34
-	 * @todo	implement more secure version from 1.1.6.3
+	 * @todo	use action config files;				#446
+	 * @todo	don't use numbers when booleans are intended! TRUE and FALSE advertize their intention much clearer
+	 * @todo	formatter path config name is inconsistent with those for actions and handlers: make consistent!
 	 */
-	function Action($action, $forceLinkTracking = 0)
+	function Action($actionspec, $forceLinkTracking=0)
 	{
-		$action = trim($action);
-		$vars=array();
-
-		// search for parameters separated by spaces or newlines - #371
-		if (preg_match('/\s/', $action))
+		// parse action spec and check if we have a syntactically valid action name	[SEC]
+		// the regex allows an action name consisting of letters and numbers ONLY
+		// and thus provides defense against directory traversal or XSS (via action *name*)
+		if (!preg_match('/^\s*([a-zA-Z0-9]+)(\s.+?)?\s*$/', $actionspec, $matches))	# see also #34
 		{
-			// parse input for action name and parameters
-			preg_match('/^([A-Za-z0-9]*)\s+(.*)$/s', $action, $matches);
-			// extract $action and $vars_temp ("raw" attributes)
-			list(, $action, $vars_temp) = $matches;
+			$out = '<em class="error">'.ACTION_UNKNOWN_SPECCHARS.'</em>';	# [SEC]
+		}
+		else
+		{
+			// valid action name, so we pull out the parts, and make the action name lowercase
+			$action_name	= strtolower($matches[1]);
+			$paramlist		= trim($matches[2]);
 
-			if ($action)
+			// search for parameters if there was more than just a (syntactically valid) action name
+			if ('' != $paramlist)
 			{
 				// match all attributes (key and value)
-				preg_match_all('/([A-Za-z0-9]*)=("|\')(.*)\\2/U', $vars_temp, $matches);
+				preg_match_all('/([a-zA-Z0-9]+)=(\"|\')(.*)\\2/U', $paramlist, $matches);	# [SEC] parameter name should not be empty #34
+				// $matches[1] contains an array of parameter names
+				// $matches[3] contains an array of corresponding parameter values
 
 				// prepare an array for extract() to work with (in $this->IncludeBuffered())
+				$vars = array();
 				if (is_array($matches))
 				{
 					for ($a = 0; $a < count($matches[0]); $a++)
 					{
-						$vars[$matches[1][$a]] = $matches[3][$a];
+						// The parameter value is sanitized using htmlspecialchars_ent();
+						// if an action really needs "raw" HTML as input it can
+						// still be "unescaped" by the action itself; otherwise,
+						// any HTML will be displayed _as code_, but not interpreted.
+						// For any other action htmlspecialchars_ent() guards against
+						// XSS via user-supplied action parameters.
+						// NOTE 1:	this may not provide *complete* protection against XSS!
+						// NOTE 2:	It is still the responsibility of each action
+						//			to validate its own parameters!
+						//			That includes guarding against directory traversal.
+						$vars[$matches[1][$a]] = $this->htmlspecialchars_ent($matches[3][$a]);	// parameter name = sanitized value [SEC]
 					}
 				}
-				$vars['wikka_vars'] = trim($vars_temp); // <<< add the buffered parameter-string to the array
+				// add the complete parameter-string to the array:
+				// this may be needed for parameters that don't have the keyword="value" format (DEPRECATED)
+				$vars['wikka_vars'] = $paramlist;
 			}
-			else
+
+			// @@@ a little encapsulation here would be nice: move the conditions within the functions!
+			// instead of stop & start maybe suspend and resume (with the beahvior here encapsulated) would be more appropriate here
+			if (!$forceLinkTracking)
 			{
-				return '<em class="error">'.ACTION_UNKNOWN_SPECCHARS.'</em>'; // <<< the pattern ([A-Za-z0-9])\s+ didn't match!
+				/**
+				 * @var	boolean holds previous state of LinkTracking before we StopLinkTracking(). It will then be used to test if we should StartLinkTracking() or not.
+				 * @todo	it's not a boolean if we set it to zero! that's an integer.
+				 */
+				$link_tracking_state = isset($_SESSION['linktracking']) ? $_SESSION['linktracking'] : 0; #38
+				$this->StopLinkTracking();
+			}
+			// prepare variables
+			$action_location		= $action_name.DIRECTORY_SEPARATOR.$action_name.'.php';
+			$action_location_disp	= '<tt>'.$action_location.'</tt>';	// @@@ using a code element is more semantically correct
+			$action_not_found		= '<em class="error">'.sprintf(ACTION_UNKNOWN,$action_location_disp).'</em>';
+			// produce output
+			$out = $this->IncludeBuffered($action_location, $this->GetConfigValue('action_path'), $action_not_found, $vars);
+			// @@@ a little encapsulation here would be nice: move the conditions within the functions!
+			if ($link_tracking_state)
+			{
+				// we were tracking before, so start tracking again
+				$this->StartLinkTracking();
 			}
 		}
-		if (!preg_match('/^[a-zA-Z0-9]+$/', $action))
-		{
-			return '<em class="error">'.ACTION_UNKNOWN_SPECCHARS.'</em>';
-		}
-		if (!$forceLinkTracking)
-		{
-			/**
-			 * @var boolean holds previous state of LinkTracking before we StopLinkTracking(). It will then be used to test if we should StartLinkTracking() or not.
-			 */
-			$link_tracking_state = isset($_SESSION['linktracking']) ? $_SESSION['linktracking'] : 0; #38
-			$this->StopLinkTracking();
-		}
-		$result = $this->IncludeBuffered(strtolower($action).'/'.strtolower($action).'.php', '<em class="error">'.sprintf(ACTION_UNKNOWN,$action).'</em>', $vars, $this->GetConfigValue('action_path'));
-		if ($link_tracking_state)
-		{
-			$this->StartLinkTracking();
-		}
-		return $result;
+		return $out;
 	}
 	/**
 	 * Use a handler (on the current page).
@@ -2743,20 +2774,46 @@ class Wakka
 	 * @uses	Wakka::GetConfigValue()
 	 * @uses	Wakka::IncludeBuffered()
 	 *
-	 * @todo	use templating class;
+	 * @param	string	$handler	mandatory: name of handler to execute
+	 * @return	string	output produced by {@link Wakka::IncludeBuffered()} or an error message
+	 * @todo	use templating class		JW: more likely to be used in handler itself!
 	 * @todo	use handler config files;				#446
-	 * @todo	implement security features from 1.1.6.3
+	 * @todo	move regexes to central regex library			#34
+	 * @todo	implement further validation instead of simply extracting the part after the last slash
+	 * @todo	formatter path config name is inconsistent with those for actions and handlers: make consistent!
 	 */
 	function Handler($handler)
 	{
 		if (strstr($handler, '/'))
 		{
+			// Observations - MK 2007-03-30
+			// extract part after the last slash (if the whole request contained multiple slashes)
+			// @@@
+			// but should such requests be accepted in the first place?
+			// at least it is a SORT of defense against directory traversal (but not necessarily XSS)
 			$handler = substr($handler, strrpos($handler, '/')+1);
 		}
-		//if (!$handler = $this->page['handler']) $handler = 'page';
-		$handler_location = $handler.'/'.$handler.'.php';
-		$handler_location_disp = '<tt>'.$handler_location.'</tt>';
-		$out = $this->IncludeBuffered($handler_location, '<div class="page"><em class="error">'.sprintf(HANDLER_UNKNOWN,$handler_location_disp).'</em></div>', '', $this->GetConfigValue('handler_path'));
+
+		// check valid method name syntax (similar to Action())
+		// the regex allows an action name consisting of letters, numbers, and
+		// underscores, hyphens and dots ONLY and thus provides defense against
+		// directory traversal or XSS (via handler *name*)
+		if (!preg_match('/^([a-zA-Z0-9_.-]+)$/', $handler))	# see also #34
+		{
+			$out = '<em class="error">'.HANDLER_UNKNOWN_SPECCHARS.'</em>';	# [SEC]
+		}
+		else
+		{
+			// valid method name; now make sure it's lower case
+			$handler = strtolower($handler);
+			// prepare variables
+			$handler_location		= $handler.DIRECTORY_SEPARATOR.$handler.'.php';
+			$handler_location_disp	= '<tt>'.$handler_location.'</tt>';	// @@@ using a code element is more semantically correct
+			$handler_not_found		= '<em class="error">'.sprintf(HANDLER_UNKNOWN,$handler_location_disp).'</em>';
+			$handler_error_body		= '<div class="page">'.$handler_not_found.'</div>';
+			// produce output
+			$out = $this->IncludeBuffered($handler_location, $this->GetConfigValue('handler_path'), $handler_error_body);
+		}
 		return $out;
 	}
 	/**
@@ -2770,11 +2827,31 @@ class Wakka
 	 * @param	string	$formatter		the name of the formatter. This name is linked to a file with the same name, located in the folder
 	 *			specified by {@link Config::$wikka_formatter_path}, and with extension .php; which is called to process the text $text
 	 * @param	string	$format_option	a comma separated list of string options, in the form of 'option1;option2;option3'
-	 * @todo	implement security features from 1.1.6.3
+	 * @return	string	output produced by {@link Wakka::IncludeBuffered()} or an error message
+	 * @todo	move regexes to central regex library			#34
+	 * @todo	formatter path config name is inconsistent with those for actions and handlers: make consistent!
 	 */
 	function Format($text, $formatter='wakka', $format_option='')
 	{
-		$out = $this->IncludeBuffered($formatter.'.php', '<em class="error">'.sprintf(FORMATTER_UNKNOWN,$formatter).'</em>', compact('text','format_option'), $this->GetConfigValue('wikka_formatter_path'));
+		// check valid formatter name syntax (same as Handler())
+		// the regex allows an action name consisting of letters, numbers, and
+		// underscores, hyphens and dots ONLY and thus provides defense against
+		// directory traversal or XSS (via handler *name*)
+		if (!preg_match('/^([a-zA-Z0-9_.-]+)$/', $formatter)) # see also #34
+		{
+			$out = '<em class="error">'.FORMATTER_UNKNOWN_SPECCHARS.'</em>';	# [SEC]
+		}
+		else
+		{
+			// valid formatter name; now make sure it's lower case
+			$formatter = strtolower($formatter);
+			// prepare variables
+			$formatter_location			= $formatter.'.php';
+			$formatter_location_disp	= '<tt>'.$formatter_location.'</tt>';	// @@@ using a code element is more semantically correct
+			$formatter_not_found		= '<em class="error">'.sprintf(FORMATTER_UNKNOWN,$formatter_location_disp).'</em>';
+			// produce output
+			$out = $this->IncludeBuffered($formatter_location, $this->GetConfigValue('wikka_formatter_path'), $formatter_not_found, compact('text')); // @@@
+		}
 		return $out;
 	}
 	/**
@@ -3685,8 +3762,8 @@ class Wakka
 		{
 			$tag = $this->GetPageTag();
 		}
+
 		// see whether user is registered and logged in
-		$registered = FALSE;
 		if ($this->GetUser())
 		{
 			$username = $user['name'];		// ignore $username parameter
@@ -3824,6 +3901,7 @@ class Wakka
 	 * @param	string	$handler	optional: the method which should be used. default: "show"
 	 * @todo	rewrite the handler call routine and move handler specific settings to handler config files #446 #452
 	 * @todo	comment each step to make it understandable to contributors
+	 * @todo	implement cleaner time tracking, using "compatibility method"
 	 */
 	function Run($tag, $handler = '')
 	{
@@ -3860,7 +3938,7 @@ class Wakka
 		$this->LogReferrer();
 		$this->ACLs = $this->LoadAllACLs($this->tag);
 		$this->ReadInterWikiConfig();
-		if (!($this->GetMicroTime()%3))
+		if (!($this->GetMicroTime()%3))		// @@@
 		{
 			$this->Maintenance();
 		}

@@ -798,7 +798,9 @@ define('REDIR_MANUAL_CAPTION','If your browser does not redirect you, please fol
 define('CREATE_THIS_PAGE_LINK_TITLE','Create this page');
 define('ACTION_UNKNOWN_SPECCHARS','Unknown action; the action name must not contain special characters.');
 define('ACTION_UNKNOWN','Unknown action "%s"'); // %s - action name
+define('HANDLER_UNKNOWN_SPECCHARS','Unknown handler; the handler name must not contain special characters.');
 define('HANDLER_UNKNOWN','Sorry, %s is an unknown handler.'); // %s handler name
+define('FORMATTER_UNKNOWN_SPECCHARS','Unknown formatter; the formatter name must not contain special characters.');
 define('FORMATTER_UNKNOWN','Formatter "%s" not found'); // %s formatter name
 /**#@-*/
 
