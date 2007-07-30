@@ -692,7 +692,7 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 				$output .= "</div>\n";
 			}
 			// no language defined or no formatter found: make default code block;
-			// IncludeBuffered() will complain if 'code' formatter doesn't exist
+			// IncludeBuffered() will complain if 'code' formatter doesn't exist!
 			else
 			{
 				$output = '<div class="code">'."\n";
@@ -701,7 +701,7 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 			}
 
 			// display grab button if option is set in the config file
-			if ($wakka->config['grabcode_button'] == '1')
+			if ($wakka->GetConfigValue('grabcode_button') == '1')	// @@@ cast to boolean and compare to TRUE
 			{
 				$output .= $wakka->FormOpen("grabcode");
 				// build form
@@ -949,16 +949,17 @@ $text = preg_replace_callback(
 // we're cutting the last <br />
 $text = preg_replace("/<br \/>$/","", $text);
 
+// @@@ don't report generation time unless some "debug mode" is on
 if ($format_option && preg_match(PATTERN_MATCH_PAGE_FORMATOPTION, $format_option))
 {
 	$text .= wakka2callback('closetags');
-	$idstart = getmicrotime();
+	$idstart = getmicrotime(TRUE);
 	$text = preg_replace_callback(
 		'#('.
 		'<h[1-6].*?>.*?</h[1-6]>'.
 		// other elements to be treated go here
 		')#ms','wakka3callback', $text);
-	printf('<!-- Header ID generation took %.6f seconds -->', (getmicrotime() - $idstart));	#i18n
+	printf('<!-- Header ID generation took %.6f seconds -->', (getmicrotime(TRUE) - $idstart));	#i18n
 }
 echo ($text);
 

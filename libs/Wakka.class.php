@@ -184,7 +184,7 @@ class Wakka
 	 * are added to the Query-Log.
 	 *
 	 * @uses	Wakka::GetConfigValue()
-	 * @uses	Wakka::GetMicroTime()
+	 * @uses	getmicrotime()
 	 *
 	 * @param	string $query mandatory: the query to be executed.
 	 * @return	array the result of the query.
@@ -195,7 +195,8 @@ class Wakka
 	{
 		if ($this->GetConfigValue('sql_debugging'))	// @@@
 		{
-			$start = $this->GetMicroTime();
+			#$start = $this->GetMicroTime();
+			$start = getmicrotime(TRUE);
 		}
 		if (!$result = mysql_query($query, $this->dblink))
 		{
@@ -204,7 +205,8 @@ class Wakka
 		}
 		if ($this->GetConfigValue('sql_debugging'))	// @@@
 		{
-			$time = $this->GetMicroTime() - $start;
+			#$time = $this->GetMicroTime() - $start;
+			$time = getmicrotime(TRUE) - $start;
 			$this->queryLog[] = array(
 				'query'		=> $query,
 				'time'		=> $time
@@ -417,14 +419,18 @@ class Wakka
 
 	/**
 	 * Generate a timestamp.
-	 *
-	 * @todo	use "compatibility method" - there's an equivalent function already in wikka.php!
+	 * 
+	 * DISABLED: replaced by getmicrotime() in Compatibility library!
+	 * Left in place but returning just zero for now.
 	 */
 	function GetMicroTime()
 	{
+		/*
 		list($usec, $sec) = explode(' ',microtime());
 		$mtime = ((float)$usec + (float)$sec);
 		return $mtime;
+		*/
+		return 0;
 	}
 	/**
 	 * Buffer the output from an included file.
@@ -3882,7 +3888,7 @@ class Wakka
 	 * @uses	Wakka::GetConfigValue()
 	 * @uses	Wakka::GetCookie()
 	 * @uses	Wakka::GetHandler()
-	 * @uses	Wakka::GetMicrotime()
+	 * @uses	getmicrotime()
 	 * @uses	Wakka::GetUser()
 	 * @uses	Wakka::Header()
 	 * @uses	Wakka::Href()
@@ -3938,7 +3944,8 @@ class Wakka
 		$this->LogReferrer();
 		$this->ACLs = $this->LoadAllACLs($this->tag);
 		$this->ReadInterWikiConfig();
-		if (!($this->GetMicroTime()%3))		// @@@
+		#if (!($this->GetMicroTime()%3))		// @@@
+		if (!getmicrotime(TRUE) % 3)	// see #100
 		{
 			$this->Maintenance();
 		}
