@@ -36,56 +36,85 @@
  *			well, not just links in the head section.
  */
 
-/**
- * Defaults
+/**#@+
+ * Default RSS version.
  */
 if (!defined('RSS_REVISIONS_VERSION')) define('RSS_REVISIONS_VERSION','2.0');
 if (!defined('RSS_RECENTCHANGES_VERSION')) define('RSS_RECENTCHANGES_VERSION','0.92');
+/**#@-*/
 
+// get "input" variables
 $message = $this->GetRedirectMessage();
-$site_base = $this->GetConfigValue("base_url");
+
+// init output variables
+$onload = ('' != $message) ? " onload=\"alert('".$message."');\" " : '';
+$doctitle = sprintf(GENERIC_DOCTITLE, $this->htmlspecialchars_ent($this->GetWakkaName(), ENT_NOQUOTES), $this->htmlspecialchars_ent($this->PageTitle(), ENT_NOQUOTES));
+$site_base = $this->GetConfigValue('base_url');
+$href_main_stylesheet = $this->StaticHref('css/'.$this->GetConfigValue('stylesheet'));
+$href_comment_stylesheet = $this->StaticHref('css/'.$this->GetConfigValue('comment_stylesheet'));
+$href_print_stylesheet = $this->StaticHref('css/print.css');
+$href_favicon = $this->StaticHref('images/favicon.ico');
+$extra_meta = '';
+if ($this->GetHandler() != 'show' || $this->page['latest'] == 'N' || $this->page['tag'] == 'SandBox')
+{
+	$extra_meta .= '	<meta name="robots" content="noindex, nofollow, noarchive" />'."\n";
+}
+if ('' != ($meta_keywords = $this->GetConfigValue("meta_keywords")))
+{
+	$extra_meta .= '	<meta name="keywords" content="'.$meta_keywords.'" />'."\n";
+}
+if ('' != ($meta_description = $this->GetConfigValue("meta_description")))
+{
+	$extra_meta .= '	<meta name="description" content="'.$meta_description.'" />'."\n";
+}
+$pagetag = $this->GetPageTag();
+$pagetag_disp = $this->htmlspecialchars_ent($pagetag);
+$rss_links = '';
+if ($this->GetHandler() != 'edit' && $this->GetConfigValue('enable_rss_autodiscovery') != 0)	// @@@
+{
+	$wikiname = $this->htmlspecialchars_ent($this->GetWakkaName());	// ENT_COMPAT: double quotes need to be escaped here: we use title attribute in double quotes!
+	$rss_links .= '	<link rel="alternate" type="application/rss+xml" title="'.sprintf(RSS_REVISIONS_TITLE,$wikiname,$pagetag_disp).' (RSS '.RSS_REVISIONS_VERSION.')" href="'.$this->Href('revisions.xml', $pagetag).'" />'."\n";
+	$rss_links .= '	<link rel="alternate" type="application/rss+xml" title="'.sprintf(RSS_RECENTCHANGES_TITLE,$wikiname).' (RSS '.RSS_RECENTCHANGES_VERSION.')" href="'.$this->Href('recentchanges.xml', $pagetag).'" />'."\n"; // @@@ pagetag needed for Href??
+}
+$backlinks_url = $this->href('backlinks', '', '');
+$backlinks_title = sprintf(WIKKA_BACKLINKS_LINK_TITLE, $pagetag_disp);
+$header_heading = $this->GetConfigValue('wakka_name').' : '.'<a href="'.$backlinks_url.'" title="'.$backlinks_title.'">'.$pagetag_disp.'</a>';
+$header_navlinks = '';
+if ($user = $this->GetUser())
+{
+	$header_navlinks .= $this->GetConfigValue('logged_in_navigation_links') ? $this->Format($this->GetConfigValue('logged_in_navigation_links')).' :: ' : '';
+	$header_navlinks .= sprintf(YOU_ARE, $this->FormatUser($user['name']));
+}
+else
+{
+	$header_navlinks .= $this->GetConfigValue('navigation_links') ? $this->Format($this->GetConfigValue('navigation_links')) : '';
+}
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
 <head>
-	<title><?php printf(GENERIC_DOCTITLE, $this->htmlspecialchars_ent($this->GetWakkaName(), ENT_NOQUOTES), $this->htmlspecialchars_ent($this->PageTitle(), ENT_NOQUOTES)); ?></title>
+	<title><?php echo $doctitle; ?></title>
 	<base href="<?php echo $site_base ?>" />
-	<?php if ($this->GetHandler() != 'show' || $this->page["latest"] == 'N' || $this->page["tag"] == 'SandBox') echo "<meta name=\"robots\" content=\"noindex, nofollow, noarchive\" />\n"; ?>
 	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-	<meta name="keywords" content="<?php echo $this->GetConfigValue("meta_keywords") ?>" />
-	<meta name="description" content="<?php echo $this->GetConfigValue("meta_description") ?>" />
-	<link rel="stylesheet" type="text/css" href="<?php echo $this->StaticHref('css/'.$this->GetConfigValue('stylesheet')); ?>" />
-	<link rel="stylesheet" type="text/css" href="<?php echo $this->StaticHref('css/'.$this->GetConfigValue('comment_stylesheet')); ?>" />
-	<link rel="stylesheet" type="text/css" href="<?php echo $this->StaticHref('css/print.css'); ?>" media="print" />
-	<link rel="icon" href="<?php echo $this->StaticHref('images/favicon.ico'); ?>" type="image/x-icon" />
-	<link rel="shortcut icon" href="<?php echo $this->StaticHref('images/favicon.ico') ?>" type="image/x-icon" />
+<?php echo $extra_meta; ?>
+	<link rel="stylesheet" type="text/css" href="<?php echo $href_main_stylesheet; ?>" />
+	<link rel="stylesheet" type="text/css" href="<?php echo $href_comment_stylesheet; ?>" />
+	<link rel="stylesheet" type="text/css" href="<?php echo $href_print_stylesheet; ?>" media="print" />
+	<link rel="icon" href="<?php echo $href_favicon; ?>" type="image/x-icon" />
+	<link rel="shortcut icon" href="<?php echo $href_favicon; ?>" type="image/x-icon" />
+<?php echo $rss_links; ?>
 <?php
-$pagetag = $this->htmlspecialchars_ent($this->GetPageTag());
-if ($this->GetHandler() != 'edit' && $this->GetConfigValue('enable_rss_autodiscovery') != 0)
+if (isset($this->additional_headers) && is_array($this->additional_headers) && count($this->additional_headers) > 0)
 {
-	$wikiname = $this->htmlspecialchars_ent($this->GetWakkaName());
-	$rsslink  = '	<link rel="alternate" type="application/rss+xml" title="'.sprintf(RSS_REVISIONS_TITLE,$wikiname,$pagetag).' (RSS '.RSS_REVISIONS_VERSION.')" href="'.$this->Href('revisions.xml', $this->GetPageTag()).'" />'."\n";
-	$rsslink .= '	<link rel="alternate" type="application/rss+xml" title="'.sprintf(RSS_RECENTCHANGES_TITLE,$wikiname).' (RSS '.RSS_RECENTCHANGES_VERSION.')" href="'.$this->Href('recentchanges.xml', $this->GetPageTag()).'" />'."\n";
-	echo $rsslink;
-}
-if (isset($this->additional_headers) && is_array($this->additional_headers) && count($this->additional_headers))
-{
-	foreach ($this->additional_headers as $additional_headers)
+	foreach ($this->additional_headers as $additional_header)
 	{
-		echo $additional_headers;
+		echo $additional_header;
 	}
 }
 ?>
 </head>
-<body <?php echo $message ? "onload=\"alert('".$message."');\" " : "" ?> >
+<body<?php echo $onload; ?>>
 <div class="header">
-	<h2><?php echo $this->GetConfigValue('wakka_name') ?> : <a href="<?php echo $this->href('backlinks', '', ''); ?>" title="<?php printf(WIKKA_BACKLINKS_LINK_TITLE, $pagetag); ?>"><?php echo $pagetag; ?></a></h2>
-	<?php
-		if ($this->GetUser()) {
-			echo $this->GetConfigValue('logged_in_navigation_links') ? $this->Format($this->GetConfigValue('logged_in_navigation_links'))." :: " : ""; 
-			printf(YOU_ARE, $this->FormatUser($this->GetUserName()));
-		} else {
-			echo $this->GetConfigValue('navigation_links') ? $this->Format($this->GetConfigValue('navigation_links')) : ""; 
-		}
-	?>
+	<h2><?php echo $header_heading; ?></h2>
+	<?php echo $header_navlinks; ?>
 </div>
