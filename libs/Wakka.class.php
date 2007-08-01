@@ -24,16 +24,24 @@
  * @copyright	Copyright 2006-2007, {@link http://wikkawiki.org/CreditsPage Wikka Development Team}
  */
 
-// Defaults
+/**#@+
+ * Numeric constant used as default. May be made a configurable value.
+ */
 if (!defined('COMMENT_NO_DISPLAY')) define('COMMENT_NO_DISPLAY', 0);
 if (!defined('COMMENT_ORDER_DATE_ASC')) define('COMMENT_ORDER_DATE_ASC', 1);
 if (!defined('COMMENT_ORDER_DATE_DESC')) define('COMMENT_ORDER_DATE_DESC', 2);
 if (!defined('COMMENT_ORDER_THREADED')) define('COMMENT_ORDER_THREADED', 3);
 if (!defined('COMMENT_MAX_TRAVERSAL_DEPTH')) define('COMMENT_MAX_TRAVERSAL_DEPTH', 10);
 if (!defined('MAX_HOSTNAME_LENGTH_DISPLAY')) define('MAX_HOSTNAME_LENGTH_DISPLAY', 50);
+/**
+ * Length to use for generated part of id attribute.
+ */
+if (!defined('ID_LENGTH')) define('ID_LENGTH',10);		// @@@ maybe make length configurable
+/**#@-*/
 
-// Patterns
-
+/**#@+
+ * String constant defining a regular expresion pattern.
+ */
 /**
  * To be used in replacing img tags having an alt attribute with the value of the alt attribute, trimmed.
  * - $result[0] : the entire img tag
@@ -41,7 +49,15 @@ if (!defined('MAX_HOSTNAME_LENGTH_DISPLAY')) define('MAX_HOSTNAME_LENGTH_DISPLAY
  * - $result[2] : The content of the alt attribute, after it has been trimmed, if the attribute exists.
  */
 if (!defined('PATTERN_REPLACE_IMG_WITH_ALTTEXT')) define('PATTERN_REPLACE_IMG_WITH_ALTTEXT', '/<img[^>]*(?<=\\s)alt=("|\')\s*(.*?)\s*\\1.*?>/');
+/**
+ * Defines characters that are not valid for an ID.
+ * Defined as the negation of a character class comprising the characters that
+ * <i>are</i> valid in an ID. All but valid characters will be stripped when deriving
+ * an ID froma provided string.
+ */
 if (!defined('PATTERN_INVALID_ID_CHARS')) define ('PATTERN_INVALID_ID_CHARS','/[^A-Za-z0-9_:.-\s]/');
+/**#@-*/
+
 
 /**
  * The Wikka core.
@@ -299,31 +315,32 @@ class Wakka
 	 * @param	integer $minor mandatory:
 	 * @param	integer $subminor mandatory:
 	 * @return	boolean TRUE if version is sufficient (higher or equal specified version); FALSE if not or n/a
-	 * @todo	move into a database class.
-	 * @todo	use PHP version_compare() for comparison
+	 * @todo	move into a database class - or BETTER:
+	 * @todo	use Compatibility function getMysqlVersion to get version,
+	 *			then use PHP version_compare() for comparison
 	 */
 	function CheckMySQLVersion($major, $minor, $subminor)
 	{
 		// init
 		$sufficient = FALSE;
 		// get version
-		$version = @mysql_query("SELECT VERSION() AS version");
-		if ($version !== FALSE && @mysql_num_rows($result) > 0)
+		$result = @mysql_query("SELECT VERSION() AS version");
+		if ($result !== FALSE && @mysql_num_rows($result) > 0)
 		{
-			$row   = mysql_fetch_array($version);
+			$row   = mysql_fetch_array($result);
 			$match = explode('.', $row['version']);
 		}
 		else
 		{
-			$version = @mysql_query("SHOW VARIABLES LIKE 'version'");
-			if ($version !== FALSE && @mysql_num_rows($version) > 0)
+			$result = @mysql_query("SHOW VARIABLES LIKE 'version'");
+			if ($version !== FALSE && @mysql_num_rows($result) > 0)
 			{
-				$row   = mysql_fetch_row($version);
+				$row   = mysql_fetch_row($result);
 				$match = explode('.', $row[1]);
 			}
 		}
 
-		if (FALSE !== $version)
+		if (FALSE !== $result)
 		{
 			$mysql_major = $match[0];
 			$mysql_minor = $match[1];
@@ -589,6 +606,7 @@ class Wakka
 	 */
 	function ReturnSafeHTML($html)
 	{
+		// @@@ replace paths using configured value(s)
 		require_once('3rdparty'.DIRECTORY_SEPARATOR.'core'.DIRECTORY_SEPARATOR.'safehtml'.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'safehtml.php');
 
 		// Instantiate the handler
@@ -2148,6 +2166,7 @@ class Wakka
 	 * Set a temporary Cookie.
 	 *
 	 * @uses	Wakka::GetConfigValue()
+	 * @todo	send valid path: '/' is not correct if Wikka is not in the root
 	 */
 	function SetSessionCookie($name, $value)
 	{
@@ -2161,6 +2180,7 @@ class Wakka
 	 * @uses	Wakka::GetConfigValue()
 	 *
 	 * @todo	Avoid magic values: add "days" paramater with default 90, and calculate expiration from that
+	 * @todo	send valid path: '/' is not correct if Wikka is not in the root
 	 */
 	function SetPersistentCookie($name, $value)
 	{
@@ -2172,6 +2192,7 @@ class Wakka
 	 * Delete a Cookie.
 	 *
 	 * @uses	Wakka::GetConfigValue()
+	 * @todo	send valid path: '/' is not correct if Wikka is not in the root
 	 */
 	function DeleteCookie($name)
 	{
@@ -2414,20 +2435,29 @@ class Wakka
 	/**
 	 * Create a href for a static file.
 	 *
-	 * It takes a parameter $filename, the path of the static file relative to the root of the Wikka installation,
-	 * and returns a string representing a standard URL or URI scheme. This function should be used everywhere a static
-	 * file should be attached to a wikkapage inside href, src parameters of XHTML, or in image in XML/RSS.
+	 * It takes a parameter $filepath, the path of the static file relative to
+	 * the root of the Wikka installation, and returns a string representing a
+	 * standard URL. This function should be used everywhere a static
+	 * file should be attached to a wikkapage via XHTML tag attributes that expect
+	 * a URL, such as href, src, or archive tags, or attributes in elements in
+	 * XML/RSS.
 	 *
 	 * @access	public
 	 *
-	 * @param	string	$filename
-	 * @return	string	a standardized URL or URI
+	 * @param	string	$filepath
+	 * @return	string	a standardized URL
+	 * @todo	ensure this also works with an absolute path (i.e., not relative
+	 *			to the Wikka installation, but "relative" to the domain:
+	 *			if $filepath starts with a slash it is an absolute path and
+	 *			can probably just be returned as is: the browser should interpret
+	 *			it correctly. .. TEST!
+	 *			(needed for relocatable components)
 	 */
-	function StaticHref($filename)
+	function StaticHref($filepath)
 	{
-		$result = $this->Href('handler','pagename');
+		$result = $this->Href('dummyhandler','dummypagename');
 		$result = str_replace('wikka.php?wakka=', '', $result);
-		$result = str_replace('pagename/handler', $filename, $result);
+		$result = str_replace('dummypagename/dummyhandler', $filepath, $result);
 		return $result;
 	}
 
@@ -2713,10 +2743,11 @@ class Wakka
 		else
 		{
 			// valid action name, so we pull out the parts, and make the action name lowercase
-			$action_name	= strtolower($matches[1]);
-			$paramlist		= trim($matches[2]);
+			$action_name = strtolower($matches[1]);
+			$paramlist = (isset($matches[2])) ? trim($matches[2]) : '';
 
 			// search for parameters if there was more than just a (syntactically valid) action name
+			$vars = array();
 			if ('' != $paramlist)
 			{
 				// match all attributes (key and value)
@@ -2725,7 +2756,6 @@ class Wakka
 				// $matches[3] contains an array of corresponding parameter values
 
 				// prepare an array for extract() to work with (in $this->IncludeBuffered())
-				$vars = array();
 				if (is_array($matches))
 				{
 					for ($a = 0; $a < count($matches[0]); $a++)
@@ -2765,6 +2795,7 @@ class Wakka
 			$action_not_found		= '<em class="error">'.sprintf(ACTION_UNKNOWN,$action_location_disp).'</em>';
 			// produce output
 			$out = $this->IncludeBuffered($action_location, $this->GetConfigValue('action_path'), $action_not_found, $vars);
+			#$out = $this->IncludeBuffered($action_location, $this->GetConfigValue('wikka_action_path'), $action_not_found, $vars);
 			// @@@ a little encapsulation here would be nice: move the conditions within the functions!
 			if ($link_tracking_state)
 			{
@@ -2816,9 +2847,10 @@ class Wakka
 			$handler_location		= $handler.DIRECTORY_SEPARATOR.$handler.'.php';
 			$handler_location_disp	= '<tt>'.$handler_location.'</tt>';	// @@@ using a code element is more semantically correct
 			$handler_not_found		= '<em class="error">'.sprintf(HANDLER_UNKNOWN,$handler_location_disp).'</em>';
-			$handler_error_body		= '<div class="page">'.$handler_not_found.'</div>';
+			$handler_error_body		= '<div class="page">'.$handler_not_found.'</div>';	// JW: or use an extra parameter on IncludeBuffered to tell it to produce a page
 			// produce output
 			$out = $this->IncludeBuffered($handler_location, $this->GetConfigValue('handler_path'), $handler_error_body);
+			#$out = $this->IncludeBuffered($handler_location, $this->GetConfigValue('wikka_handler_path'), $handler_error_body);
 		}
 		return $out;
 	}
@@ -3759,7 +3791,7 @@ class Wakka
 	 * @todo	move regexps to regexp-library		#34
 	 * @todo	the $username parameter is not currently used anywhere; but it could be leveraged for allowing/denying access by IP address in ALCs #543
 	 */
-	function HasAccess($privilege, $tag ='', $username ='')
+	function HasAccess($privilege, $tag='', $username='')
 	{
 		// set defaults
 		$hasaccess = FALSE;
@@ -3770,7 +3802,7 @@ class Wakka
 		}
 
 		// see whether user is registered and logged in
-		if ($this->GetUser())
+		if ($user = $this->GetUser())
 		{
 			$username = $user['name'];		// ignore $username parameter
 			$registered = TRUE;
@@ -3909,7 +3941,7 @@ class Wakka
 	 * @todo	comment each step to make it understandable to contributors
 	 * @todo	implement cleaner time tracking, using "compatibility method"
 	 */
-	function Run($tag, $handler = '')
+	function Run($tag, $handler='')
 	{
 		// do our stuff!
 		if (!$this->handler = trim($handler))
@@ -3944,7 +3976,7 @@ class Wakka
 		$this->LogReferrer();
 		$this->ACLs = $this->LoadAllACLs($this->tag);
 		$this->ReadInterWikiConfig();
-		#if (!($this->GetMicroTime()%3))		// @@@
+		#if (!($this->GetMicroTime()%3))
 		if (!getmicrotime(TRUE) % 3)	// see #100
 		{
 			$this->Maintenance();

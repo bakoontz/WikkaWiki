@@ -55,7 +55,9 @@ if (!defined('PATTERN_MATCH_ID_ATTRIBUTES')) define('PATTERN_MATCH_ID_ATTRIBUTES
  */
 if (!defined('PATTERN_MATCH_PAGE_FORMATOPTION')) define('PATTERN_MATCH_PAGE_FORMATOPTION', '/(^|;)page(;|$)/');
 
-if (($format_option) && preg_match(PATTERN_MATCH_PAGE_FORMATOPTION, $format_option))
+// @@@	is this condition handy? would prevent generating IDs on a page fragment
+//		- unless formatter is called on those with an explicit foprmat option!
+if (isset($format_option) && preg_match(PATTERN_MATCH_PAGE_FORMATOPTION, $format_option))
 {
 	if (!function_exists('wakka3callback'))
 	{
@@ -950,7 +952,7 @@ $text = preg_replace_callback(
 $text = preg_replace("/<br \/>$/","", $text);
 
 // @@@ don't report generation time unless some "debug mode" is on
-if ($format_option && preg_match(PATTERN_MATCH_PAGE_FORMATOPTION, $format_option))
+if (isset($format_option) && preg_match(PATTERN_MATCH_PAGE_FORMATOPTION, $format_option))
 {
 	$text .= wakka2callback('closetags');
 	$idstart = getmicrotime(TRUE);
@@ -961,6 +963,5 @@ if ($format_option && preg_match(PATTERN_MATCH_PAGE_FORMATOPTION, $format_option
 		')#ms','wakka3callback', $text);
 	printf('<!-- Header ID generation took %.6f seconds -->', (getmicrotime(TRUE) - $idstart));	#i18n
 }
-echo ($text);
-
+echo $text;
 ?>
