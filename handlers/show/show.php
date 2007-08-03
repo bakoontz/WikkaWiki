@@ -117,17 +117,22 @@ else
 				// load comments for this page
 				$comments = $this->LoadComments($this->tag, $_SESSION['show_comments'][$tag]);
 				$display_mode = $_SESSION['show_comments'][$tag];
+				// set up icons
+				$sort_desc_icon_url = StaticHref('images/icons/sort_desc.gif');
+				$sort_ascc_icon_url = StaticHref('images/icons/sort_asc.gif');
+				$sort_comment_icon_url = StaticHref('images/icons/comment.gif');
+
 
 				// display comments header
 ?>
 				<!--starting comments header (show)-->
 				<div class="commentsheader">
 					<div id="commentsnav">
-						<a href="<?php echo $this->Href('', '', 'show_comments='.COMMENT_ORDER_DATE_DESC.'#comments') ?>"><?php echo '<img class="'.($display_mode==COMMENT_ORDER_DATE_DESC ?  "icon_on" : "icon").'" alt="flat" title="Flat (newest first)" src="images/icons/sort_desc.gif" />' ?></a>
-						<a href="<?php echo $this->Href('', '', 'show_comments='.COMMENT_ORDER_DATE_ASC.'#comments') ?>"><?php echo '<img class="'.($display_mode==COMMENT_ORDER_DATE_ASC ?  "icon_on" : "icon").'" alt="flat" title="Flat (oldest first)" src="images/icons/sort_asc.gif" />' ?></a>
-						<a href="<?php echo $this->Href('', '', 'show_comments='.COMMENT_ORDER_THREADED.'#comments') ?>"><?php echo '<img class="'.($display_mode==COMMENT_ORDER_THREADED ?  "icon_on" : "icon").'" alt="threaded" title="Threaded" src="images/icons/comment.gif" />' ?></a> 
+						<a href="<?php echo $this->Href('', '', 'show_comments='.COMMENT_ORDER_DATE_DESC.'#comments') ?>"><?php echo '<img class="'.($display_mode==COMMENT_ORDER_DATE_DESC ?  "icon_on" : "icon").'" alt="flat" title="Flat (newest first)" src="'.$sort_desc_icon_url.'" />' ?></a>
+						<a href="<?php echo $this->Href('', '', 'show_comments='.COMMENT_ORDER_DATE_ASC.'#comments') ?>"><?php echo '<img class="'.($display_mode==COMMENT_ORDER_DATE_ASC ?  "icon_on" : "icon").'" alt="flat" title="Flat (oldest first)" src="'.$sort_asc_icon_url.'" />' ?></a>
+						<a href="<?php echo $this->Href('', '', 'show_comments='.COMMENT_ORDER_THREADED.'#comments') ?>"><?php echo '<img class="'.($display_mode==COMMENT_ORDER_THREADED ?  "icon_on" : "icon").'" alt="threaded" title="Threaded" src="'.$sort_comment_icon_url.'" />' ?></a> 
 					</div><!-- closing commentsnav div -->
-				<!--<span id="comments">&nbsp;</span>--><?php echo COMMENTS_CAPTION ?><?php // TODO what is this span for?? ?>
+				<?php echo COMMENTS_CAPTION ?>
 				[<a href="<?php echo $this->Href('', '', 'show_comments='.COMMENT_NO_DISPLAY) ?>"><?php echo HIDE_COMMENTS_LINK_DESC ?></a>]
 <?php
 			if ($this->HasAccess('comment_post'))
@@ -151,6 +156,7 @@ else
 			else
 			{
 
+				$showcomments_text = '';	// FIXES notice
 				echo '<!--starting comments header (hide)-->'."\n";
 				echo '<div class="commentsheader">'."\n";
 				$commentCount = $this->CountComments($this->tag);
@@ -171,7 +177,7 @@ else
 						break;
 					default:
 						$comments_message = sprintf(STATUS_SOME_COMMENTS, $commentCount).' ';
-						$comment_ordering = null;
+						$comment_ordering = NULL;
 						if (isset($user['default_comment_display']))
 						{
 							$comment_ordering = $user['default_comment_display'];
@@ -189,7 +195,7 @@ else
 
 				echo $comments_message;
 				echo $showcomments_text;
-				echo "\n".'</div><!--closing commentsheader (hide)-->'."\n"; //TODO: move to templating class
+				echo "\n".'</div><!--closing commentsheader (hide)-->'."\n";
 			}
 			echo '</div><!--closing comments block-->'."\n\n";
 		}
@@ -262,7 +268,7 @@ function displayComments(&$obj, &$comments, $tag)
 <?php
 			if ($obj->HasAccess('comment_post'))
 			{
-				echo "<div class=\"commentaction\">";
+				echo '<div class="commentaction">';
 				echo $obj->FormOpen("processcomment");
 ?>
 		<input type="hidden" name="comment_id" value="<?php echo $comment['id'] ?>" />
