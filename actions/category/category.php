@@ -32,8 +32,8 @@ if ($tag = $_GET['wakka'])	#312 (only files action uses POST for wakka)
 
 	// get parameters and set defaults
 	// @@@ parameters are not sanitized!!
+	if (!isset($page)) $page = $thispage;
 	if ($page=='/') $page="CategoryCategory";	// top level category
-	if (!$page) $page = $thispage;
 	if (!isset($col)) $col=1;
 	if (!isset($compact)) $compact=0;
 	if (!isset($class)) $class = '';
