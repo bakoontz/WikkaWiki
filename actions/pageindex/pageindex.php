@@ -31,67 +31,81 @@
  * @todo		action parameter validation
  */
 
-$showpagetitle = ($vars['showpagetitle'] == 1) ? true : false;
+$showpagetitle = FALSE;
+if (isset($vars['showpagetitle']) && 1 == (int) $vars['showpagetitle'])
+{
+	$showpagetitle = TRUE;
+}
 
 if ($pages = $this->LoadPageTitles())
 {
 	// filter by letter
 	$requested_letter = (isset($_GET['letter'])) ? $_GET['letter'] : ''; #312 
-	if (!$requested_letter && isset($letter)) $requested_letter = strtoupper($letter); // TODO action parameter (letter) needs to be validated 
+	if (!$requested_letter && isset($letter))
+	{
+		$requested_letter = strtoupper($letter); // TODO action parameter (letter) needs to be validated and sanitized (make sure it's a single character)
+	}
 
 	// get things started
 	$cached_username = $this->GetUserName();
-	$user_owns_pages = false;
+	$user_owns_pages = FALSE;
 	$link = $this->href('', '', 'letter=');
 	$alpha_bar = '<a href="'.$link.'">'.PAGEINDEX_ALL_PAGES.'</a>&nbsp;'."\n";
 	$index_caption = PAGEINDEX_CAPTION;
 	$index_output = '';
 	$current_character = '';
-	$character_changed = false;
+	$character_changed = FALSE;
 
 	// get page list
 	foreach ($pages as $page)
 	{
 		// check user read privileges
-		if (!$this->HasAccess('read', $page['tag'])) continue;
+		if (!$this->HasAccess('read', $page['tag']))
+		{
+			continue;
+		}
 
 		$page_owner = $page['owner'];
 		// $this->CachePage($page);
 
 		$firstChar = strtoupper($page['tag'][0]);
-		if (!preg_match('/[A-Za-z]/', $firstChar)) $firstChar = '#'; //TODO: (#104 #340, #34) Internationalization (allow other starting chars, make consistent with Formatter REs)
+		if (!preg_match('/[A-Za-z]/', $firstChar))//TODO: (#104 #340, #34) Internationalization (allow other starting chars, make consistent with Formatter REs)
+		{
+			$firstChar = '#';
+		}
 		if ($firstChar != $current_character) 
 		{
 			$alpha_bar .= '<a href="'.$link.$firstChar.'">'.$firstChar.'</a>&nbsp;'."\n";
 			$current_character = $firstChar;
-			$character_changed = true;
+			$character_changed = TRUE;
 		}
 		if ($requested_letter == '' || $firstChar == $requested_letter) 
 		{
 			if ($character_changed) 
 			{
 				$index_output .= "<br />\n<strong>$firstChar</strong><br />\n";
-				$character_changed = false;
+				$character_changed = FALSE;
 			}
 			$index_output .= $this->Link($page['tag']);
 			// Output page title if $showpagetitle set to 1
-			if(true === $showpagetitle)
+			if (TRUE === $showpagetitle)
 			{
 				$index_output .= "<span class=\"pagetitle\">[".$this->PageTitle($page['tag'])."]</span>";
 			}
 			if ($cached_username == $page_owner) 
-			{                       
+			{
 				$index_output .= '*';
-				$user_owns_pages = true;
+				$user_owns_pages = TRUE;
 			} 
-			elseif ($page_owner != '(Public)' && $page_owner != '') 
+			elseif ($page_owner != '(Public)' && $page_owner != '')
 			{
 				$index_output .= sprintf(' . . . . '.WIKKA_PAGE_OWNER, $this->FormatUser($page_owner));
 			}
-		     	$index_output .= "<br />\n";    
+			$index_output .= "<br />\n";
 		}
 	}
 	// generate page
+	// @@@ don't use Format() - generate HTML!
 	if ($user_owns_pages)
 	{
 		$index_caption .= '---'.PAGEINDEX_OWNED_PAGES_CAPTION;
