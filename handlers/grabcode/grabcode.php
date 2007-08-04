@@ -4,10 +4,10 @@
  *
  * When called by a grab button, forces the download of the associated code block.
  *
- * @package	Handlers
- * @subpackage Codeblocks
- * @version	$Id$
- * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
+ * @package		Handlers
+ * @subpackage	Files
+ * @version		$Id$
+ * @license		http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
  *
  * @author	{@link http://wikkawiki.org/DarTar Dario Taraborelli}
@@ -19,6 +19,8 @@
  * @todo	use central regex library for filename validation	#34
  * @todo	check time format for consistency (& store format in constant!)
  * @todo	make shared download code for this and files handler
+ * @todo	avoid adding extension when the provided filename already has one -
+ *			see last issue on WikkaBugs (!)
  */
 
 /**
