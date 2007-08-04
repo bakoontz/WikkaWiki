@@ -28,8 +28,8 @@
 /**
  * defaults
  */
-if (!defined('REVISION_DATE_FORMAT')) define('REVISION_DATE_FORMAT', 'D, d M Y');
-if (!defined('REVISION_TIME_FORMAT')) define('REVISION_TIME_FORMAT', 'H:i T');
+if (!defined('REVISION_DATE_FORMAT')) define('REVISION_DATE_FORMAT', 'D, d M Y');	// @@@ make configurable
+if (!defined('REVISION_TIME_FORMAT')) define('REVISION_TIME_FORMAT', 'H:i T');		// @@@ make configurable
 if (!defined('PAGE_EDITOR_DIVIDER'))  define('PAGE_EDITOR_DIVIDER', '&#8594;');
 if (!defined('MAX_REVISION_NUMBER'))  define('MAX_REVISION_NUMBER', '50');
 
