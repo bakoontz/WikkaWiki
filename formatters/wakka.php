@@ -4,22 +4,23 @@
  * 
  * This is the main formatting engine used by Wikka to parse wiki markup and render valid XHTML.
  * 
- * @package Formatters
- * @version $Id$
- * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
+ * @package		Formatters
+ * @version		$Id$
+ * @license		http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
  *
- * @author {@link http://wikkawiki.org/JsnX Jason Tourtelotte}
- * @author {@link http://wikkawiki.org/DotMG Mahefa Randimbisoa}
- * @author {@link http://wikkawiki.org/JavaWoman Marjolein Katsma}
- * @author {@link http://wikkawiki.org/NilsLindenberg Nils Lindenberg} (code cleanup)
- * @author {@link http://wikkawiki.org/DarTar Dario Taraborelli} (grab handler and filename support for codeblocks)
- * @author {@link http://wikkawiki.org/TormodHaugen Tormod Haugen} (table formatter support)
+ * @author	{@link http://wikkawiki.org/JsnX Jason Tourtelotte}
+ * @author	{@link http://wikkawiki.org/DotMG Mahefa Randimbisoa}
+ * @author	{@link http://wikkawiki.org/JavaWoman Marjolein Katsma}
+ * @author	{@link http://wikkawiki.org/NilsLindenberg Nils Lindenberg} (code cleanup)
+ * @author	{@link http://wikkawiki.org/DarTar Dario Taraborelli} (grab handler and filename support for codeblocks)
+ * @author	{@link http://wikkawiki.org/TormodHaugen Tormod Haugen} (table formatter support)
  * 
  * @uses	Wakka::htmlspecialchars_ent()
  * 
- * @todo		add support for formatter plugins;
- * @todo		use a central RegEx library #34;
+ * @todo	add support for formatter plugins;
+ * @todo	use a central RegEx library #34;
+ * @todo	add further improvements from ImprovedFormatter
  */
 
 // code block patterns
@@ -127,6 +128,8 @@ if (isset($format_option) && preg_match(PATTERN_MATCH_PAGE_FORMATOPTION, $format
 // Note: all possible formatting tags have to be in a single regular expression for this to work correctly.
 
 if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix!
+										# JW: NOT a complete fix!
+										# see http://wikkawiki.org/ImprovedFormatter#hn_Not_a_complete_solution
 {
 	function wakka2callback($things)
 	{
@@ -163,6 +166,10 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 
 		global $wakka;
 
+		// @@@	inline elements should be closed before block-level elements
+		// 		(see ImprovedFormatter solution again)
+		// TEST: are indents closed at end of page now??? (see... again)
+		// @@@	<kbd> is missing
 		if ((!is_array($things)) && ($things == 'closetags'))
 		{
 			$result = '';
@@ -177,7 +184,6 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 			{
 				$result .=  '</td></tr>';
 			}
-
 			if (2 < $trigger_rowgroup)
 			{
 				$result .=  '</tbody>';
@@ -190,11 +196,11 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 			{
 				$result .=  '</thead>';
 			}
-
 			if (0 < $trigger_table)
 			{
 				$result .=  '</table>';
 			}
+
 			if ($trigger_strike % 2)
 			{
 				$result .=  '</span>';
@@ -718,6 +724,7 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 		// forced links
 		// \S : any character that is not a whitespace character
 		// \s : any whitespace character
+		// @@@ regex accepts NO non-whitespace before whitespace, surely not correct? [[  something]]
 		else if (preg_match("/^\[\[(\S*)(\s+(.+))?\]\]$/s", $thing, $matches))		# recognize forced links across lines
 		{
 			if (!isset($matches[1])) $matches[1] = ''; #38
@@ -781,7 +788,7 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 			$newIndentLevel = strlen($matches[2]);
 			if (($newIndentType != $curIndentType) && ($oldIndentLevel > 0))
 			{
-				for (; $oldIndentLevel > 0; $oldIndentLevel --)
+				for (; $oldIndentLevel > 0; $oldIndentLevel--)
 				{
 					$result .= array_pop($indentClosers);
 				}
@@ -954,7 +961,7 @@ $text = preg_replace("/<br \/>$/","", $text);
 // @@@ don't report generation time unless some "debug mode" is on
 if (isset($format_option) && preg_match(PATTERN_MATCH_PAGE_FORMATOPTION, $format_option))
 {
-	$text .= wakka2callback('closetags');
+	$text .= wakka2callback('closetags');	// attempt close open tags @@@ may be needed for more than whole page!
 	$idstart = getmicrotime(TRUE);
 	$text = preg_replace_callback(
 		'#('.
