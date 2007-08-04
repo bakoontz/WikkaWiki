@@ -1,7 +1,7 @@
 <?php
 /**
  * Show a list of revisions for the page sorted after time.
- * 
+ *
  * <p>Like {@link history.php the history handler}, this handler shows the history of revisions of a
  * given page : it lists the date of each revision, the user who modified the page and the edit note
  * supplied for that revision, but the output is more compact as it doesn't show additions and
@@ -16,12 +16,12 @@
  * configured value, a button <kbd>Next ...</kbd> will appear to allow viewing more revisions. The 
  * revision marked at the left column will appear at the top of the next page, this will let the user
  * compare any revision of the current page with another revision on the next (or later) page.</p>
- * 
+ *
  * @package		Handlers
  * @subpackage	Page
  * @version		$Id:revisions.php 407 2007-03-13 05:59:51Z DarTar $
- * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
- * 
+ * @license		http://www.gnu.org/copyleft/gpl.html GNU General Public License
+ *
  * @uses		Wakka::HasAccess()
  * @uses		Wakka::LoadRevisions()
  * @uses		Wakka::FormOpen()
@@ -32,16 +32,15 @@
  * @uses		Wakka::htmlspecialchars_ent()
  * @uses		Wakka::Href()
  * @uses		Wakka::FormatUser()
- * 
- * @todo		move main <div> to templating class
+ *
  * @todo		make operation (buttons) independent of JavaScript
  */
 
 $start = 0;
 
-echo '<div class="page">'."\n"; //TODO: move to templating class
+echo '<div class="page">'."\n";
 
-if ($this->HasAccess("read")) 
+if ($this->HasAccess('read')) 
 {
 	if (isset($_GET['start']))
 	{
@@ -60,45 +59,52 @@ if ($this->HasAccess("read"))
 	// load revisions for this page
 	if ($pages)
 	{
-		$output = $this->FormOpen("diff", "", "get");
-		$output .= "<fieldset>"."\n";
+		$output = $this->FormOpen('diff', '', 'get');
+		$output .= "<fieldset>\n";
 		$output .= "<legend>".sprintf(REVISIONS_CAPTION, $this->Link($this->tag))."</legend>"."\n";		
-		$output .= "<table border=\"0\" cellspacing=\"0\" cellpadding=\"1\">\n";
+		$output .= '<table border="0" cellspacing="0" cellpadding="1">'."\n";
 		$output .= "<tr>\n";
 		$output .= '<td><input type="submit" value="'.REVISIONS_SHOW_DIFFERENCES_BUTTON.'" /></td>';
 		$output .= '<td><input value="1" type="checkbox" checked="checked" name="fastdiff" id="fastdiff" /><label for="fastdiff">'.REVISIONS_SIMPLE_DIFF.'</label></td>';
 		$output .= "</tr>\n";
 		$output .= "</table>\n";
-		$output .= "<table border=\"0\" cellspacing=\"0\" cellpadding=\"1\">\n";
+		$output .= '<table border="0" cellspacing="0" cellpadding="1">'."\n";
 
 		$c = 0;
 		foreach ($pages as $page)
 		{
 			$c++;
-			if ($page['note']) $note='['.$this->htmlspecialchars_ent($page['note']).']'; else $note ='';
-			$output .= "<tr>";
-			$output .= "<td><input type=\"radio\" name=\"a\" value=\"".$page["id"]."\" ".($c == 1 ? "checked=\"checked\"" : "")." /></td>";
-			$output .= "<td><input type=\"radio\" name=\"b\" value=\"".$page["id"]."\" ".($c == 2 ? "checked=\"checked\"" : "")." /></td>";
-			$output .= '<td>'.sprintf(WIKKA_REV_WHEN_BY_WHO, '<a href="'.$this->Href('show','','time='.urlencode($page["time"])).'">'.$page['time'].'</a>', $this->FormatUser($page["user"])).((strlen($note)>0)? ' <span class="pagenote smaller">'.$note.'</span>' : '').'</td>';
+			if ($page['note'])
+			{
+				$note='['.$this->htmlspecialchars_ent($page['note']).']';
+			}
+			else
+			{
+				$note ='';
+			}
+			$output .= '<tr>';
+			$output .= '<td><input type="radio" name="a" value="'.$page['id'].'" '.($c == 1 ? 'checked="checked"' : '').' /></td>';
+			$output .= '<td><input type="radio" name="b" value="'.$page['id'].'" '.($c == 2 ? 'checked="checked"' : '').' /></td>';
+			$output .= '<td>'.sprintf(WIKKA_REV_WHEN_BY_WHO, '<a href="'.$this->Href('show','','time='.urlencode($page['time'])).'">'.$page['time'].'</a>', $this->FormatUser($page['user'])).((strlen($note)>0)? ' <span class="pagenote smaller">'.$note.'</span>' : '').'</td>';
 			$output .= "</tr>\n";
 		}
 		$output .= "</table>\n";
-		$output .= "</fieldset>"."\n";
-		$output .= '<input type="button" value="'.REVISIONS_RETURN_TO_NODE_BUTTON.'" onclick="document.location=\''.$this->Href('').'\';" />'."\n";
+		$output .= "</fieldset>\n";
+		$output .= '<input type="button" value="'.REVISIONS_RETURN_TO_NODE_BUTTON.'" onclick="document.location=\''.$this->Href('').'\';" />'."\n"; // @@@
 		$oldest_revision = $this->LoadOldestRevision($this->tag);
 		if ($oldest_revision['id'] != $page['id'])
 		{
 			$output .= '<input type="hidden" name="start" value="'.($start + $c).'" />'."\n";
 			$output .= '<br />'.sprintf(REVISIONS_MORE_CAPTION, REVISIONS_MORE_BUTTON);
-			$output .= "\n".'<br /><input type="submit" name="more_revisions" value="'.REVISIONS_MORE_BUTTON.'" onclick=\'this.form.action="'.$this->Href('revisions').'"; return true;\' />';
+			$output .= "\n".'<br /><input type="submit" name="more_revisions" value="'.REVISIONS_MORE_BUTTON.'" onclick="this.form.action=\''.$this->Href('revisions').'\'; return true;" />';	// @@@
 		}
 		$output .= $this->FormClose()."\n";
 	}
-	print($output);
+	echo $output;
 } 
 else 
 {
-	print('<em class="error">'.WIKKA_ERROR_ACL_READ.'</em>');
+	echo '<em class="error">'.WIKKA_ERROR_ACL_READ.'</em>';
 }
-echo '</div>'."\n" //TODO: move to templating class
+echo '</div>'."\n";
 ?>
