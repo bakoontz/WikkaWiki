@@ -7,10 +7,10 @@
  * This handler checks the existence of the source page, the validity of the 
  * name of the target page to be created, the user's read-access to the source 
  * page and write-access to the target page.
- * If the "Edit after creation" option is selected, the user is redirected to the target page for
- * edition immediately after its creation.
- * If the "Clone ACL" option is selected, ACL settings are copied to the target page, 
- * otherwise default ACL are applied to the new page.
+ * If the "Edit after creation" option is selected, the user is redirected to the
+ * target page for editing immediately after its creation.
+ * If the "Clone ACL" option is selected, ACL settings are copied to the target
+ * page, otherwise default ACL are applied to the new page.
  *
  * @package         Handlers
  * @subpackage        Page
@@ -23,36 +23,33 @@
  * @author		{@link http://wikkawiki.org/DarTar Dario Taraborelli} - bugs fixed, code improved, removed popup alerts.
  * @author		{@link http://wikkawiki.org/BrianKoontz Brian Koontz} - clone ACL option
  * 
- * @input             string  $to  required: the page to be created
- *                            must be a non-existing page and current user must have privs to create it
- *                            default is source page name 				
- * 
- * @input             string  $note  optional: the note to be added to the page when created
- *                            default is "Cloned from " followed by the name of the source page
- * 
- * @input             boolean $editoption optional: if true, the new page will be opened for edition on creation
- *                            default is false (to allow multiple cloning of the same source)
  *
- * @input             boolean $cloneaclsoption optional: if true, ACLs are copied from the source page to the new page
- *                            default is false
- *
- * @uses			  Wakka::ExistsPage()
- * @uses			  Wakka::Format() 
- * @uses			  Wakka::FormClose() 
- * @uses			  Wakka::FormOpen() 
- * @uses			  Wakka::HasAccess()    
- * @uses			  Wakka::LoadPage() 
- * @uses			  Wakka::Href() 
- * @uses			  Wakka::Redirect() 
- * @uses			  Wakka::SavePage()
+ * @uses	Wakka::ExistsPage()
+ * @uses	Wakka::Format() 
+ * @uses	Wakka::FormClose() 
+ * @uses	Wakka::FormOpen() 
+ * @uses	Wakka::HasAccess()    
+ * @uses	Wakka::LoadPage() 
+ * @uses	Wakka::Href() 
+ * @uses	Wakka::Redirect() 
+ * @uses	Wakka::SavePage()
  * 
- * @todo           use central library for valid pagenames
- * @todo			  move main <div> to templating class
- * @todo			  use input highlight to mark invalid values
- * @todo			  add check for require_edit_note in the config file to enforce note
- * @todo			  make note max. length configurable in a constant
- * 
- * @filesource
+ * @input	string	$to 	required: the page to be created
+ *					must be a non-existing page and current user must have privs to create it
+ *					default is source page name 
+ * @input	string	$note	optional: the note to be added to the page when created
+ *					default is "Cloned from " followed by the name of the source page
+ * @input	boolean	$editoption	optional: if true, the new page will be opened for edition on creation
+ 					default is FALSE (to allow multiple cloning of the same source)
+ * @input	boolean	$cloneaclsoption	optional: if true, ACLs are copied from the source page to the new page
+ *					default is FALSE
+ * @output	... tbd
+ * @todo	use central regex library for valid pagenames #34
+ * @todo	move main <div> to templating class
+ * @todo	use input highlight to mark invalid values
+ * @todo	add check for require_edit_note in the config file to enforce note
+ * @todo	make note max. length configurable in a constant
+ * @todo	standardize form layout (avoidnig table layout)
  */
 
 /**
@@ -187,12 +184,7 @@ TPLCLONEFORM;
 	}
 }
 
-echo '<div class="page">'."\n"; //TODO: move to templating class
-// display messages
-//if (isset($box)) echo $this->Format(' --- '.$box.' --- --- ');
-// print form
-//echo $form;
-//echo sprintf($form, $box);
+echo '<div class="page">'."\n";
 echo $template;
-echo '</div>'."\n" //TODO: move to templating class
+echo '</div>'."\n"
 ?>
