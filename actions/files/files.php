@@ -56,7 +56,7 @@ if(!defined('INTRANET_MODE')) define('INTRANET_MODE', 0);
 /** Size limit for file uploads (in bites) */
 if(!defined('MAX_UPLOAD_SIZE')) define('MAX_UPLOAD_SIZE', 2097152);
 /** Pipe-separated list of allowed file extensions */
-if(!defined('ALLOWED_FILE_EXTENSIONS')) define('ALLOWED_FILE_EXTENSIONS', 'gif|jpeg|jpg|jpe|png|doc|xls|csv|ppt|ppz|pps|pot|pdf|asc|txt|zip|gtar|gz|bz2|tar|rar|vpp|mpp|vsd|mm|htm|html');
+if(!defined('ALLOWED_FILE_EXTENSIONS')) define('ALLOWED_FILE_EXTENSIONS', 'gif|jpeg|jpg|jpe|png|doc|xls|csv|ppt|ppz|pps|pot|pdf|asc|txt|zip|gtar|gz|bz2|tar|rar|vpp|mpp|vsd|mm|htm|html'); #34
 /** Displayed date format */
 if(!defined('UPLOAD_DATE_FORMAT')) define('UPLOAD_DATE_FORMAT', 'Y-m-d H:i'); //TODO use general config settings for date format 
 /** Sort routines */
@@ -300,8 +300,8 @@ if (is_readable($upload_path))
 			continue;
 		}
 		array_push($filenameArr, $file);
-        array_push($dateArr, filemtime($upload_path.DIRECTORY_SEPARATOR.$file));
-        array_push($sizeArr, filesize($upload_path.DIRECTORY_SEPARATOR.$file));
+		array_push($dateArr, filemtime($upload_path.DIRECTORY_SEPARATOR.$file));
+		array_push($sizeArr, filesize($upload_path.DIRECTORY_SEPARATOR.$file));
 	}
 	closedir($dir);
 
@@ -314,14 +314,14 @@ if (is_readable($upload_path))
 	switch($sortby) 
 	{  
 		case SORT_BY_DATE : 
-			array_multisort($dateArr, SORT_ASC, SORT_NUMERIC, $filenameArr, $sizeArr); 
+			array_multisort($dateArr, SORT_ASC, SORT_NUMERIC, $filenameArr, $sizeArr);
 			break;
 		case SORT_BY_SIZE : 
-			array_multisort($sizeArr, SORT_ASC, SORT_NUMERIC, $filenameArr, $dateArr); 
+			array_multisort($sizeArr, SORT_ASC, SORT_NUMERIC, $filenameArr, $dateArr);
 			break;
 		case SORT_BY_FILENAME: 
-		default:      
-			array_multisort($filenameArr, SORT_ASC, SORT_STRING, $dateArr, $sizeArr); 
+		default:
+			array_multisort($filenameArr, SORT_ASC, SORT_STRING, $dateArr, $sizeArr);
 	}
 
 	for($i=0; $i<count($filenameArr); ++$i)
@@ -395,12 +395,14 @@ if ($is_readable && $n < 1)
 if ($is_writable && userCanUpload())
 {
 	// upload form
-	$input_for_rewrite_mode = '<!-- rewrite mode disabled -->';
+	$input_for_no_rewrite_mode = '<!-- rewrite mode disabled -->';
 	if (!$this->GetConfigValue('rewrite_mode'))
 	{
-		$input_for_rewrite_mode = '<input type="hidden" name="wakka" value="'.$this->MiniHref().'" />';
+		$input_for_no_rewrite_mode = '<input type="hidden" name="wakka" value="'.$this->MiniHref().'" />';
 	}
 	$href = $this->Href();
+	// @@@ use (advanced) FormOpen() and FormClose()
+	// @@@ make form accessible
 	$output .=	'<form action="'.$href.'" method="post" enctype="multipart/form-data">'."\n"
 		.$input_for_rewrite_mode."\n"
 		.'<input type="hidden" name="action" value="upload" />'."\n"
