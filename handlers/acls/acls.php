@@ -22,8 +22,12 @@
  *
  * @todo	show Cancel button only if JavaScript is available	#35
  * @todo	do NOT use whitespace as ACL delimiter see #226 comment:8
- * @todo	produce ACLs syntax help directly as HTML, using constants for the
- *			the ACL symbols (and implement these symbols as constants elsewhere!) #539
+ * @todo	produce ACLs syntax help directly as HTML, outside the form, using
+ *			constants for the the ACL symbols (and implement these symbols as
+ *			constants elsewhere! #539)
+ * @todo	generate ACLs reading/loading/handling from list of known ACLs
+ *			(see @todos on ALC-related methods); note that current table layout
+ *			for the ACLs form may have to be dropped as we add more ACLs.
  */
 
 if ($this->UserIsOwner())
@@ -43,9 +47,12 @@ if ($this->UserIsOwner())
 		// store lists only if ACLs have previously been defined,
 		// or if the posted values are different than the defaults
 
-		$page = $this->LoadSingle('SELECT * FROM '.$this->GetConfigValue('table_prefix').
-			"acls WHERE page_tag = '".mysql_real_escape_string($this->GetPageTag()).
-			"' LIMIT 1");
+		$page = $this->LoadSingle("
+			SELECT * 
+			FROM ".$this->GetConfigValue('table_prefix')."acls
+			WHERE page_tag = '".mysql_real_escape_string($this->GetPageTag())."'
+			LIMIT 1"
+			);
 
 		if ($page ||
 			($posted_read_acl != $default_read_acl ||
@@ -150,7 +157,7 @@ if ($this->UserIsOwner())
 		$acls_syntax_help .= ' --- '.sprintf(ACLS_TESTING_ORDER2,'##*##','//'.ACLS_AFTER.'//');
 
 		echo $this->Format($acls_syntax_help);
-		print($this->FormClose());
+		echo $this->FormClose();
 		echo '</div>'."\n";
 	}
 }
