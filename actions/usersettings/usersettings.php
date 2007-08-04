@@ -37,9 +37,9 @@ $url = '';
 $email = '';
 $doubleclickedit = '';
 $show_comments = '';
-$default_comment_display = '';
-$revisioncount = '';
-$changescount = '';
+$default_comment_display = 0;
+$revisioncount = 0;
+$changescount = 0;
 $password = '';
 $oldpass = '';
 $password_confirm = '';
@@ -98,7 +98,7 @@ if ($user = $this->GetUser())
 		$email = $this->GetSafeVar('email', 'post');
 		$doubleclickedit = $this->GetSafeVar('doubleclickedit', 'post');
 		$show_comments = $this->GetSafeVar('show_comments', 'post');
-		$default_comment_display = $this->GetSafeVar('default_comment_display', 'post');
+		$default_comment_display = (int) $this->GetSafeVar('default_comment_display', 'post');	// !!! this is an int, not a string!
 		$revisioncount = (int) $this->GetSafeVar('revisioncount', 'post');
 		$changescount = (int) $this->GetSafeVar('changescount', 'post');
 
@@ -121,20 +121,21 @@ if ($user = $this->GetUser())
 				$error = sprintf(ERROR_INVALID_RECENTCHANGES_DISPLAY_LIMIT, RECENTCHANGES_DISPLAY_LIMIT_MAX);
 				$changescount_highlight = INPUT_ERROR_STYLE;
 				break;
+			// @@@ validate doubleclickedit, show-comments and (especially) default_comment_display
 			default: // input is valid
 				$this->Query('UPDATE '.$this->GetConfigValue('table_prefix').'users SET '.
 					"email = '".mysql_real_escape_string($email)."', ".
 					"doubleclickedit = '".mysql_real_escape_string($doubleclickedit)."', ".
 					"show_comments = '".mysql_real_escape_string($show_comments)."', ".
-					"default_comment_display = '".mysql_real_escape_string($default_comment_display)."', ".
-					"revisioncount = '".mysql_real_escape_string($revisioncount)."', ".
-					"changescount = '".mysql_real_escape_string($changescount)."' ".
+					"default_comment_display = ".$default_comment_display.", ".	// !!! this is an int, not a string!
+					"revisioncount = ".$revisioncount.", ".	// !!! this is an int, not a string!
+					"changescount = ".$changescount." ".	// !!! this is an int, not a string!
 					"WHERE name = '".$user['name']."' LIMIT 1");
 				unset($this->specialCache['user'][strtolower($user['name'])]);  //invalidate cache if exists #368
 				$this->SetUser($this->LoadUser($user["name"]));
 		}
 	}
-	//user just logged in
+	//user just logged in, or just displayed the form
 	else
 	{
 		// get stored settings
