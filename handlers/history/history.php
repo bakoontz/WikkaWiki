@@ -1,40 +1,42 @@
 <?php
 /**
  * Display the history of a page.
- * 
- * <p>The history of a page shows all the additions and deletions that were done by each revision,
- * the time when the revision was committed and the user who revised the page.
- * Those additions and deletions are presented html-formatted, it is not guaranteed that changes 
- * appear emphasized on screen.</p>
- * <p>The number of revisions to show is configured in user preference (Page revisions list limit)
- * or, if viewed by anonymous user, the value of the config entry {@link Config::$default_revisioncount default_revisioncount}. 
- * If both are missing, a hard-coded value of 20 is used. The maximum size of the output html can also be
- * configured (config entry {@link Config::$pagesize_max pagesize_max}) to prevent the history to
- * be unaccessible if the page size and revisions are too big. If more revisions than those that 
- * can be shown exist, a link is provided to view the rest of history.</p>
- * <p>If $_GET['start'] is specified, it must be a positive number and the history must start
- * from this value, ie ignoring the $start newest revisions. This is useful to present the
- * history of the page step by step, in case the full history cannot be displayed within a
- * single file.</p>
- * 
+ *
+ * <p>The history of a page shows all the additions and deletions that were done
+ * by each revision, the time when the revision was committed and the user who
+ * revised the page. Those additions and deletions are presented html-formatted,
+ * it is not guaranteed that changes appear emphasized on screen.</p>
+ * <p>The number of revisions to show is configured in user preference (Page
+ * revisions list limit) or, if viewed by anonymous user, the value of the
+ * config entry {@link Config::$default_revisioncount default_revisioncount}.
+ * If both are missing, a hard-coded value of 20 is used. The maximum size of
+ * the output html can also be configured (config entry
+ * {@link Config::$pagesize_max pagesize_max}) to prevent the history to be
+ * unaccessible if the page size and revisions are too big. If more revisions
+ * than those that can be shown exist, a link is provided to view the rest of
+ * the history.</p>
+ * <p>If $_GET['start'] is specified, it must be a positive number and the
+ * history must start from this value, ie ignoring the $start newest revisions.
+ * This is useful to present the history of the page step by step, in case the
+ * full history cannot be displayed within a single file.</p>
+ *
  * @package		Handlers
  * @subpackage	Page
  * @version		$Id:history.php 407 2007-03-13 05:59:51Z DarTar $
- * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
+ * @license		http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
- * 
- * @uses		Config::$pagesize_max
- * @uses		Wakka::GetSafeVar()
- * @uses		Wakka::HasAccess()
- * @uses		Wakka::LoadRevisions()
- * @uses		Wakka::LoadOldestRevision()
- * @uses		Wakka::LoadPageById()
- * @uses		Wakka::Format()
- * @todo		move <div> to template;
- * @todo  make sure resulting XHTML is valid
+ *
+ * @uses	Config::$pagesize_max
+ * @uses	Wakka::GetSafeVar()
+ * @uses	Wakka::HasAccess()
+ * @uses	Wakka::LoadRevisions()
+ * @uses	Wakka::LoadOldestRevision()
+ * @uses	Wakka::LoadPageById()
+ * @uses	Wakka::Format()
+ * @todo	make sure resulting XHTML is valid
  */
  
-echo '<div class="page">'."\n"; //TODO: move to templating class
+echo '<div class="page">'."\n";
 $start = intval($this->GetSafeVar('start', 'get'));
 if ($this->HasAccess("read")) {
 	// load revisions for this page
@@ -110,7 +112,7 @@ if ($this->HasAccess("read")) {
 		$oldest_revision = $this->LoadOldestRevision($this->tag);
 		if ($oldest_revision['id'] != $pageB['id'])
 		{
-			$history_more_link = '<a href="'.$this->Href('history', '', 'start='.($c>1 ? $c+$start-1 : $c+$start)).'">'.HISTORY_MORE_LINK_DESC.'here</a>';
+			$history_more_link = '<a href="'.$this->Href('history', '', 'start='.($c > 1 ? $c+$start-1 : $c+$start)).'">'.HISTORY_MORE_LINK_DESC.'here</a>';
 			$additional_output .= "\n".'<br /><div class="history_revisioninfo">'.sprintf(HISTORY_MORE,$history_more_link).'</div><br class="clear" />'."\n";
 			$output .= '<div class="history_revisioninfo">'.sprintf(EDITED_ON, '<a href="'.$this->href('', '', 'time='.urlencode($pageB['time'])).'">'.$pageB['time'].'</a>', $this->FormatUser($pageB['user'])).' <span class="pagenote smaller">['.$this->htmlspecialchars_ent($pageB['note']).']</span></div><br class="clear" />'."\n";
 		}
@@ -119,10 +121,12 @@ if ($this->HasAccess("read")) {
 			$output .= '<div class="history_revisioninfo">'.sprintf(OLDEST_VERSION_EDITED_ON_BY, '<a href="'.$this->href('', '', 'time='.urlencode($pageB['time'])).'">'.$pageB['time'].'</a>', $this->FormatUser($pageB['user'])).'<span class="pagenote smaller">['.$this->htmlspecialchars_ent($pageB['note']).']</span></div><br class="clear" />'."\n";
 		}
 		$output .= '<div class="revisioninfo">'.sprintf(HISTORY_PAGE_VIEW, $this->Link($this->tag)).'</div>'.$this->Format(implode("\n", $bodyB));
-		print($output.$additional_output);
+		echo $output.$additional_output;
 	}
-} else {
-	print('<em class="error">'.WIKKA_ERROR_ACL_READ.'</em>');
 }
-echo '</div>'."\n" //TODO: move to templating class
+else
+{
+	echo '<em class="error">'.WIKKA_ERROR_ACL_READ.'</em>';
+}
+echo '</div>'."\n";
 ?>
