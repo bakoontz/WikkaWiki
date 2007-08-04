@@ -10,16 +10,21 @@
  * @uses	Wakka::Link()
  * @uses	Wakka::ReturnSafeHTML()
  * @uses	Wakka::htmlspecialchars_ent()
- * @input	string $url mandatory: URL of image to be embedded
- * @input	string $link optional: target link for image (optional). Supports URL, WikiName links, InterWiki links etc.
- * @input	string $title optional: title text displayed when mouse hovers above image
- * @input	string $class optional: a class for the image
- * @input	string $class optional: an alt text
+ * @uses	Wakka::cleanUrl()
+ * @uses	Wakka::StaticHref()
+ *
+ * @input	string	$url	mandatory: URL of image to be embedded
+ * @input	string	$link	optional: target link for image (optional). Supports URL, WikiName links, InterWiki links etc.
+ * @input	string	$title	optional: title text displayed when mouse hovers above image
+ * @input	string	$class	optional: a class for the image
+ * @input	string	$alt	optional: an alt text
+ * @output	string	img element or image link
+ * @todo	make alt required (wasn't there a better version already?)
  */
 
-$title = 'WikiImage';
+$title = 'WikiImage';	// @@@ don't use title attribute if no title specified
 $class = $link = '';
-$alt = 'image';
+$alt = 'image';			// @@@ don't generate a meaningless alt text: invalid!
 
 if (is_array($vars))
 {
@@ -32,7 +37,7 @@ if (is_array($vars))
     	if ($param == 'link') {$link = $this->htmlspecialchars_ent($vars['link']);}
 	}
 }
-$url = $this->cleanUrl(trim($vars['url']));
+$url = $this->StaticHref($this->cleanUrl(trim($vars['url'])));
 
 $output = '<img class="'.$class.'" src="'.$url.'" alt="'.$alt.'" title="'.$title.'" />';
 
