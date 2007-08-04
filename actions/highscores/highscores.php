@@ -14,7 +14,8 @@
  * @uses	Wakka::Format()
  */
 
-$str = 'SELECT Count(*) AS cnt, `name`  FROM ';
+// @@@ reformat query
+$str = 'SELECT COUNT(*) AS cnt, `name`  FROM ';
 $str .= $this->GetConfigValue('table_prefix').'users, ' ;
 $str .= $this->GetConfigValue('table_prefix').'pages ';
 $str .= "WHERE `name` = `owner` AND `latest` = 'Y' GROUP BY name ORDER BY cnt DESC;";
@@ -23,6 +24,7 @@ $rankQuery = $this->Query($str);
 $where = "`latest` = 'Y'";
 $total = $this->getCount('pages', $where);
 
+// @@@ replace blockqoute by a style !!!
 print("<blockquote><table>");
 
 $i = 0;
