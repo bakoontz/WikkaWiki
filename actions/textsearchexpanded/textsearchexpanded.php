@@ -68,17 +68,17 @@ if ('' !== $phrase)
 			}
 		}
 		// Following is preg_quote, but -, * and + are not quoted
-		$phrase_re = preg_replace('/(\\.|\\\\|\\?|\\[|\\^|\\]|\\$|\\(|\\)|\\{|\\}|\\=|\\!|\\<|\\>|\\||\\:|\\/|~)/', "\\\\$1", $phrase_re);
+		$phrase_re = preg_replace('/(\\.|\\\\|\\?|\\[|\\^|\\]|\\$|\\(|\\)|\\{|\\}|\\=|\\!|\\<|\\>|\\||\\:|\\/|~)/', "\\\\$1", $phrase_re);	#34
 		// Suppress from regexp words beginning with -, replace any suit of whitespace characters by a single space
-		$phrase_re = preg_replace('/\\-\\S*|\\s\\+/', ' ', " $phrase_re ");
-		$phrase_re = preg_replace('/\\\\[<>\\(\\)~]/', '.?', $phrase_re);
+		$phrase_re = preg_replace('/\\-\\S*|\\s\\+/', ' ', " $phrase_re ");	#34
+		$phrase_re = preg_replace('/\\\\[<>\\(\\)~]/', '.?', $phrase_re);	#34
 		// trimming, suppressing *, replace spaces by |. 
 		// BEWARE: $phrase_re must not contain .*, that could replace replacement terms like </span>
 		// We ensure we never replace the < and > characters
-		$phrase_re = preg_replace(array('/^ +| +$/', '/ \*/', '/\*/', '/ +/'), array('', '|', '[^\s<>]*', '|'), $phrase_re);
+		$phrase_re = preg_replace(array('/^ +| +$/', '/ \*/', '/\*/', '/ +/'), array('', '|', '[^\s<>]*', '|'), $phrase_re);	#34
 		// Let preg_match find rêve when searching for reve
-		$pattern    = '/['.str_replace(',', ']/i,/[', SEARCH_MYSQL_IDENTICAL_CHARS).']/i';
-		$replacement = '['.str_replace(',', '],[', SEARCH_MYSQL_IDENTICAL_CHARS).']';
+		$pattern     = '/['.str_replace(',', ']/i,/[', SEARCH_MYSQL_IDENTICAL_CHARS).']/i';	#34
+		$replacement = '['.str_replace(',', '],[', SEARCH_MYSQL_IDENTICAL_CHARS).']';	#34
 		$phrase_re = preg_replace(explode(',', $pattern), explode(',', $replacement) , $phrase_re);
 		// add extracted exact phrases back
 		if ($phrase_re) 
