@@ -4,7 +4,7 @@
  * 
  * @package		Actions
  * @version		$Id:lastusers.php 369 2007-03-01 14:38:59Z DarTar $
- * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
+ * @license		http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
  * 
  * @uses	Wakka::LoadAll()
@@ -12,6 +12,7 @@
  * @uses	Wakka::Link()
  * 
  * @todo	needs to be rewritten following coding guidelines;
+ * $todo	use constants instead of "magic numbers"
  */
 if (!isset($stat)) $stat = 0;
 if (!isset($max)) $max = 0;
@@ -22,6 +23,7 @@ else $limit = 100;
 if (!$max || $limit<$max)
   $max = $limit;
 
+// @@@ reformat query
 $last_users = $this->LoadAll("SELECT name, signuptime FROM ".$this->GetConfigValue('table_prefix')."users ORDER BY signuptime DESC LIMIT ".(int)$max);
 
 $htmlout = '<table class="wikka">'."\n".
