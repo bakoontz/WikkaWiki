@@ -1,7 +1,7 @@
 <?php
 /**
  * Display a list of nonexisting pages to which other pages are linking to.
- * 
+ *
  * <p>This action lists all pagenames that don't exist but are referred to by other pages on the wiki. By default, the 
  * WikkaInstaller creates a page named WantedPages that uses this action.</p>
  * <p>Those non-existing pages are listed as one line per wanted pages. Each line is composed of 2 parts : The name of 
@@ -19,17 +19,19 @@
  * <li>count : number of distinct pages linking to the wanted page,</li>
  * <li>time : date last modified of any page linking to the wanted page,</li>
  * <li>page_tag : the name of the wanted page, alphabetically.</li></ul></p>
- * 
+ *
  * @package	Actions
- * @version $Id:wantedpages.php 369 2007-03-01 14:38:59Z DarTar $
- * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
+ * @version	$Id:wantedpages.php 369 2007-03-01 14:38:59Z DarTar $
+ * @license	http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
- * 
- * @uses	 Wakka::Link()
- * @uses	 Wakka::LoadWantedPages()
- * @uses	 Wakka::LoadWantedPages2()
- * @uses	 Wakka::FormOpen()
- * @uses	 Wakka::FormClose()
+ *
+ * @uses	Wakka::Link()
+ * @uses	Wakka::LoadWantedPages()
+ * @uses	Wakka::LoadWantedPages2()
+ * @uses	Wakka::FormOpen()
+ * @uses	Wakka::FormClose()
+ *
+ * @todo	use new array2list methods to build output
  */
 
 $sorting_fields = array('count', 'time', 'page_tag');
@@ -54,7 +56,9 @@ if ((isset($vars) && is_array($vars) && isset($vars['option']) && $vars['option'
 			}
 		}
 	}
-	if ($pages = $this->LoadWantedPages2($sort))
+	// @@@ really use this if all sort params are empty? You get
+	// different output that way than from the first time without sorting, which is confusing
+	if ($pages = $this->LoadWantedPages2($sort))	// @@@ array -> list
 	{
 		foreach ($pages as $page)
 		{
@@ -67,13 +71,14 @@ if ((isset($vars) && is_array($vars) && isset($vars['option']) && $vars['option'
 			{
 				preg_match('#/(.*)$#', $page['time'], $match);
 				$pagetime = $match[1];
-				print(' (1 : '.$this->Link($pagetime).' <small>['.$this->Link($pagetime, 'edit', WIKKA_PAGE_EDIT_LINK_DESC, false, true, sprintf(WIKKA_PAGE_EDIT_LINK_TITLE, $pagetime))."]</small>)<br />\n");
+				print(' (1 : '.$this->Link($pagetime).' <small>['.$this->Link($pagetime, 'edit', WIKKA_PAGE_EDIT_LINK_DESC, FALSE, TRUE, sprintf(WIKKA_PAGE_EDIT_LINK_TITLE, $pagetime))."]</small>)<br />\n");
 			}
 		}
 	}
 }
 elseif ($pages = $this->LoadWantedPages())
 {
+	// @@@ use array -> list
 	foreach ($pages as $page)
 	{
 		print($this->Link($page['page_tag']).' (<a href="'.$this->Href('backlinks', $page['page_tag']).'" title="'.sprintf(WIKKA_BACKLINKS_LINK_TITLE, $page['page_tag']).'">'.$page['count']."</a>)<br />\n");
