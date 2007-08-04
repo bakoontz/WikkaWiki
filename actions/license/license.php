@@ -9,20 +9,20 @@
  * @version		$Id$
  * @author		{@link http://wikkawiki.org/DarTar Dario Taraborelli}
  * @since		Wikka 1.1.7
- *
+ * @license		http://www.gnu.org/copyleft/gpl.html GNU General Public License
+ * @filesource 
+ *  *
  * @uses		Wakka::Format()
+ *
  * @input		string $type optional: selects the license to be displayed;
  *				"GPL": GNU General Public License (Version 2, June 1991)
  *				"LGPL": GNU Lesser General Public License (Version 2.1, February 1999)
  *				"GFDL": GNU Free Documentation License (Version 1.2, November 2002)
  *				default: "GPL"
  * @output		full text of the specified license
- *
  * @todo		source cleanup
- * @toto		#415
+ * @todo		#415
  *
- * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
- * @filesource 
  */
 
 // defaults
