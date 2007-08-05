@@ -421,9 +421,10 @@ else // user is not logged in
 					{
 						$go_back = $_SESSION['go_back'];
 						unset($_SESSION['go_back']);
+						unset($_SESSION['go_back_tag']);
 						$this->Redirect($go_back);
 					}
-					$_SESSION['usersettings_registered'] = true;
+					$_SESSION['usersettings_registered'] = TRUE;
 					$this->Redirect($url.$params);
 			}
 		}
