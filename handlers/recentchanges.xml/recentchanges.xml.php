@@ -77,10 +77,13 @@ $formats = explode(",",FEED_VALID_FORMATS);
 $f = (in_array($_GET['f'], $formats))? $_GET['f'] : FEED_DEFAULT_OUTPUT_FORMAT;
 
 //create object
-include_once('3rdparty'.DIRECTORY_SEPARATOR.'core'.DIRECTORY_SEPARATOR.'feedcreator'.DIRECTORY_SEPARATOR.'feedcreator.class.php'); //TODO: MAKE THIS CONFIGURABLE
+#include_once('3rdparty'.DIRECTORY_SEPARATOR.'core'.DIRECTORY_SEPARATOR.'feedcreator'.DIRECTORY_SEPARATOR.'feedcreator.class.php'); // MAKE THIS CONFIGURABLE
+$feedcreator_classpath = $this->GetConfigValue('feedcreator_path').DIRECTORY_SEPARATOR.'feedcreator.class.php';
+include_once $feedcreator_classpath;
+#$rss = new UniversalFeedCreator();
+$rss = instantiate('UniversalFeedCreator');
 
 //initialize feed (general settings)
-$rss = new UniversalFeedCreator(); 
 $rss->useCached(); //TODO: make this configurable
 $rss->title = sprintf(FEED_TITLE, $this->GetConfigValue('wakka_name')); 
 $rss->description = sprintf(FEED_DESCRIPTION, $this->GetConfigValue('wakka_name')); 
@@ -115,7 +118,8 @@ if ($pages = $this->LoadRecentlyChanged())
 			$item->link = $this->Href('show', $page['tag'], 'time='.urlencode($page['time'])); 
 			$item->date = date('r',strtotime($page['time'])); 
 			$item->description = sprintf(FEED_ITEM_DESCRIPTION, $page['user']).($page['note'] ? ' ('.$page['note'].')' : '')."\n";
-			$item->source = $this->GetConfigValue('base_url'); 
+			#$item->source = $this->GetConfigValue('base_url');
+			$item->source = $this->base_url;	// home page
 			if (($f == 'ATOM1.0' || $f == 'RSS1.0') && $this->LoadUser($page['user'])) 
 			{
 				$item->author = $page['user']; # RSS0.91 and RSS2.0 require authorEmail

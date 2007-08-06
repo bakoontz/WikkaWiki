@@ -16,6 +16,7 @@
  * @todo	check if we should (copy and) use Wakka::GetSafeVar() and 
  * 			Wakka::Wakka::cleanUrl() to secure our input parameters 
  * 			(cf. mindmap action!)
+ * @todo	since this produces a whole page, turn into a normal handler
  */
 
 if (!defined('FREEMIND_PROJECT_URL')) define('FREEMIND_PROJECT_URL', 'http://freemind.sourceforge.net/');
@@ -26,27 +27,44 @@ if (!defined('SAMPLE_SYNTAX2')) define('SAMPLE_SYNTAX2','{{mindmap url="'.SAMPLE
 
 if (!isset($_GET['url'])) return;
 /**
- * Include language file if it exists.
- * @see /lang/en/en.inc.php
+ * Include language file if one exists.
+ *
+ * @see		en.inc.php
+ * @todo	is this necessary? if so why?
  */
-$language_file =
-'lang/'.$this->GetConfigValue('default_lang').DIRECTORY_SEPARATOR.$this->GetConfigValue('default_lang').'.inc.php';
-if (file_exists($language_file)) require_once($language_file); // todo add base dir
-elseif (file_exists('lang'.DIRECTORY_SEPARATOR.'en'.DIRECTORY_SEPARATOR.'en.inc.php')) require_once('lang'.DIRECTORY_SEPARATOR.'en'.DIRECTORY_SEPARATOR.'en.inc.php');
-else die('Language file ('.$language_file.') not found! Please add the file.');
+$default_lang	= $this->GetConfigValue('default_lang');
+#$fallback_lang	= 'en';							// should always be available
+$fallback_lang	= CONFIG_DEFAULT_LANGUAGE;
+$default_language_file  = WIKKA_LANG_PATH.DIRECTORY_SEPARATOR.$default_lang.DIRECTORY_SEPARATOR.$default_lang.'.inc.php';
+$fallback_language_file = WIKKA_LANG_PATH.DIRECTORY_SEPARATOR.$fallback_lang.DIRECTORY_SEPARATOR.$fallback_lang.'.inc.php';
+$language_file_not_found = sprintf(ERROR_LANGUAGE_FILE_MISSING,$default_language_file);
+if (file_exists($default_language_file))
+{
+	require_once $default_language_file;	// todo add base dir
+}
+elseif (file_exists($fallback_language_file))
+{
+	require_once $fallback_language_file;	// silent fallback
+}
+else
+{
+	// use global constant
+	#die('Language file ('.$default_language_file.') not found! Please add the file.');
+	die($language_file_not_found);
+}
 ?>
-<?php header("Content-Type: text/html; charset=ISO-8859-1");  ?>
+<?php header('Content-Type: text/html; charset=ISO-8859-1'); ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
-   "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+	"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html>
-   <head>
-      <title>mind map fullscreen</title>
-      <style type="text/css">
-    html, body {height: 100%}
-    .floatr {float: right; width: 48%; margin: 0.5%; padding: 0.5%; background: #EEE;}
-      </style>
-   </head>
-   <body>
+<head>
+	<title>Mind map fullscreen</title>
+	<style type="text/css">
+html, body { height: 100%; }
+.floatr { float: right; width: 48%; margin: 0.5%; padding: 0.5%; background: #EEE; }
+	</style>
+</head>
+<body>
 
 <?php
 $mindmap_url = $this->hsc_secure(preg_replace('/&amp;/','&',(trim($_GET['url'])))); #312 // duplicates Wakka::cleanUrl()
@@ -71,24 +89,26 @@ if ($mindmap_url)
 	$mm_plugin_needed = WIKKA_JAVA_PLUGIN_NEEDED;
 	$mm_get_plugin = sprintf(MM_GET_JAVA_PLUGIN,$jre_install_req_sub);
 
-	$mm_archive = $this->StaticHref('3rdparty/plugins/freemind/freemindbrowser.jar');
+	#$mm_archive = $this->StaticHref('3rdparty/plugins/freemind/freemindbrowser.jar');
+	$mm_archivepath = $this->StaticHref($this->GetConfigValue('freemind_uripath').'/freemindbrowser.jar');
 	// define template
 	$mm_template = <<<TPLMMTEMPLATE
 	<span class="floatr"><a href="#" onclick="window.close('fullmindmap')">$close_window</a></span><br />
-	<div class="mindmap" style="height: 100%; clear:both;"><script type="text/javascript">
+	<div class="mindmap" style="height: 100%; clear:both;">
+	<script type="text/javascript">
 	<!--
-	    if(!navigator.javaEnabled()) {
-	        document.write('{$jre_install_req_js}');
-	    }
+		if (!navigator.javaEnabled()) {
+			document.write('{$jre_install_req_js}');
+		}
 	//-->
 	</script>
-	<applet code="freemind.main.FreeMindApplet.class" archive="$mm_archive" width="100%" height="$height">
-	  <param name="type" value="application/x-java-applet;version=1.4" />
-	  <param name="scriptable" value="false" />
-	  <param name="modes" value="freemind.modes.browsemode.BrowseMode" />
-	  <param name="browsemode_initial_map" value="$mindmap_url" />
-	  <param name="initial_mode" value="Browse" />
-	  <param name="selection_method" value="selection_method_direct" />
+	<applet code="freemind.main.FreeMindApplet.class" archive="$mm_archivepath" width="100%" height="$height">
+		<param name="type" value="application/x-java-applet;version=1.4" />
+		<param name="scriptable" value="false" />
+		<param name="modes" value="freemind.modes.browsemode.BrowseMode" />
+		<param name="browsemode_initial_map" value="$mindmap_url" />
+		<param name="initial_mode" value="Browse" />
+		<param name="selection_method" value="selection_method_direct" />
 	</applet>
 	<br />
 	<span class="floatr">$mm_download_link :: $mm_edit :: <a href="#" onclick="window.close('fullmindmap')">$close_window</a></span>
@@ -105,5 +125,5 @@ TPLMMTEMPLATE;
 
 ?>
 
-   </body>
+</body>
 </html>

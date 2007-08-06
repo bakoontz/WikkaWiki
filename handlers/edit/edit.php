@@ -47,7 +47,7 @@
 /**
  * Defaults
  */
-if (!defined('VALID_PAGENAME_PATTERN')) define ('VALID_PAGENAME_PATTERN', '/^[A-Za-zÄÖÜßäöü]+[A-Za-z0-9ÄÖÜßäöü]*$/s'); //TODO not needed: use IsWikiName() to validate
+if (!defined('VALID_PAGENAME_PATTERN')) define ('VALID_PAGENAME_PATTERN', '/^[A-Za-zÄÖÜßäöü]+[A-Za-z0-9ÄÖÜßäöü]*$/s'); //TODO not needed: use IsWikiName() to validate @@@ FIRST move to regex library
 if (!defined('MAX_TAG_LENGTH')) define ('MAX_TAG_LENGTH', 75);
 if (!defined('MAX_EDIT_NOTE_LENGTH')) define ('MAX_EDIT_NOTE_LENGTH', 50);
 if (!defined('DEFAULT_BUTTONS_POSITION')) define('DEFAULT_BUTTONS_POSITION', 'bottom');
@@ -73,7 +73,7 @@ if (isset($_POST['submit']) && ($_POST['submit'] == EDIT_PREVIEW_BUTTON) && ($us
 	$ondblclick = ' ondblclick=\'document.getElementById("reedit_id").click();\'';
 	//history.back() not working on IE. (changes are lost)
 	//however, history.back() works fine in FF, and this is the optimized choice
-	//TODO Optimization: Look $_SERVER['HTTP_USER_AGENT'] and use history.back() for good browsers like FF.
+	//TODO Optimization: Look at $_SERVER['HTTP_USER_AGENT'] and use history.back() for good browsers like FF.
 	// JW: this page may have a solution: http://forums.oracle.com/forums/thread.jspa?messageID=210396
 }
 ?>
@@ -94,7 +94,7 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 		// Note: these codes must remain enclosed in double-quotes to work!
 		$body = str_replace("\r\n", "\n", $_POST['body']);
 
-		$body = preg_replace("/\n[ ]{4}/", "\n\t", $body);	// FIXME: misses first line and multiple sets of four spaces
+		$body = preg_replace("/\n[ ]{4}/", "\n\t", $body);	// FIXME: misses first line and multiple sets of four spaces - solution in formatter??
 
 		// we don't need to escape here, we do that just before display (i.e., treat note just like body!)
 		$note = trim($_POST['note']);
@@ -126,12 +126,14 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 					$this->SavePage($this->tag, $body, $note);
 
 					// now we render it internally so we can write the updated link table.
+					// if we no longer do link tracking for header and footer why are we creating dummy output?
+					// @@@ test!
 					$this->ClearLinkTable();
-					$dummy = $this->Header();
+					#$dummy = $this->Header();		// !!!
 					$this->StartLinkTracking();
 					$dummy .= $this->Format($body);
 					$this->StopLinkTracking();
-					$dummy .= $this->Footer();
+					#$dummy .= $this->Footer();		// !!!
 					$this->WriteLinkTable();
 					$this->ClearLinkTable();
 				}
@@ -155,7 +157,7 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 	$previous = $this->page['id'];
 	if (isset($_POST['previous'])) $previous = $_POST['previous'];
 	if (!isset($body)) $body = $this->page['body'];
-	$body = preg_replace("/\n[ ]{4}/", "\n\t", $body);	// @@@ FIXME misses first line and multiple sets of four spaces - JW 2005-01-16
+	$body = preg_replace("/\n[ ]{4}/", "\n\t", $body);	// FIXME misses first line and multiple sets of four spaces - JW 2005-01-16
 
 
 	$maxtaglen = MAX_TAG_LENGTH; #38 - #376
@@ -246,11 +248,20 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 		}
 		$output .=	$this->FormClose();
 
-		if ($this->GetConfigValue('gui_editor') == 1)
+		if ($this->GetConfigValue('gui_editor') == 1)	// @@@ cast to boolean and compare to TRUE
 		{
-			$output .= '<script type="text/javascript" src="'.$this->StaticHref('3rdparty/plugins/wikiedit/protoedit.js').'"></script>'."\n".
-					   '<script type="text/javascript" src="'.$this->StaticHref('3rdparty/plugins/wikiedit/wikiedit2.js').'"></script>'."\n";
-			$output .= '<script type="text/javascript">'."  wE = new WikiEdit(); wE.init('body','WikiEdit','editornamecss');".'</script>'."\n";
+			// Relocation: replaced paths using configured value(s)
+			#$output .= '<script type="text/javascript" src="'.$this->StaticHref('3rdparty/plugins/wikiedit/protoedit.js').'"></script>'."\n".
+			#		   '<script type="text/javascript" src="'.$this->StaticHref('3rdparty/plugins/wikiedit/wikiedit2.js').'"></script>'."\n";
+			$protoedit_url = $this->StaticHref($this->GetConfigValue('wikiedit_uripath').'/protoedit.js');
+			$wikiedit_path = $this->StaticHref($this->GetConfigValue('wikiedit_uripath').'/wikiedit2.js');
+			$output .= '<script type="text/javascript" src="'.$protoedit_url.'"></script>'."\n".
+					   '<script type="text/javascript" src="'.$wikiedit_path.'"></script>'."\n";
+			#$output .= '<script type="text/javascript">'."  wE = new WikiEdit(); wE.init('body','WikiEdit','editornamecss');".'</script>'."\n";
+			// Relocation: we need to pass image path (ending in '/') relative to configured path as a fourth parameter to wE.init :
+			// that way WikiEdit can find its own images even if it's relocated/shared
+			$wikiedit_imgpath = $this->StaticHref($this->GetConfigValue('wikiedit_uripath').'/images/');	// relative path breaks when not using base_url and with rewrite mode
+			$output .= '<script type="text/javascript">'."  wE = new WikiEdit(); wE.init('body','WikiEdit','editornamecss','".$wikiedit_imgpath."');".'</script>'."\n";
 		}
 	}
 

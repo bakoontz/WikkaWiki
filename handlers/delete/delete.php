@@ -27,15 +27,17 @@ if ($this->IsAdmin() || ($this->UserIsOwner($tag) && $this->GetConfigValue('owne
 {
 	if ($_POST)
 	{
-		//  delete the page, comments, related links, acls and referrers
-		$this->Query("delete from ".$this->GetConfigValue('table_prefix')."pages where tag = '".mysql_real_escape_string($tag)."'");
-		$this->Query("delete from ".$this->GetConfigValue('table_prefix')."comments where page_tag = '".mysql_real_escape_string($tag)."'");
-		$this->Query("delete from ".$this->GetConfigValue('table_prefix')."links where from_tag = '".mysql_real_escape_string($tag)."'");
-		$this->Query("delete from ".$this->GetConfigValue('table_prefix')."acls where page_tag = '".mysql_real_escape_string($tag)."'");
-		$this->Query("delete from ".$this->GetConfigValue('table_prefix')."referrers where page_tag = '".mysql_real_escape_string($tag)."'");
+		// delete the page, comments, related links, acls and referrer
+		// @@@ format queries
+		$this->Query("DELETE FROM ".$this->GetConfigValue('table_prefix')."pages WHERE tag = '".mysql_real_escape_string($tag)."'");
+		$this->Query("DELETE FROM ".$this->GetConfigValue('table_prefix')."comments WHERE page_tag = '".mysql_real_escape_string($tag)."'");
+		$this->Query("DELETE FROM ".$this->GetConfigValue('table_prefix')."links WHERE FROM_tag = '".mysql_real_escape_string($tag)."'");
+		$this->Query("DELETE FROM ".$this->GetConfigValue('table_prefix')."acls WHERE page_tag = '".mysql_real_escape_string($tag)."'");
+		$this->Query("DELETE FROM ".$this->GetConfigValue('table_prefix')."referrers WHERE page_tag = '".mysql_real_escape_string($tag)."'");
 
 		// redirect back to main page
-		$this->Redirect($this->GetConfigValue('base_url'), SUCCESS_PAGE_DELETED);
+		#$this->Redirect($this->GetConfigValue('base_url'), SUCCESS_PAGE_DELETED);
+		$this->Redirect($this->base_url, SUCCESS_PAGE_DELETED);
 	}
 	else
 	{
@@ -44,7 +46,7 @@ if ($this->IsAdmin() || ($this->UserIsOwner($tag) && $this->GetConfigValue('owne
 		<h3><?php printf(PAGE_DELETION_HEADER,$this->Link($tag));?></h3>
 		<br />
 
-		<?php echo $this->FormOpen("delete") ?>
+		<?php echo $this->FormOpen('delete') ?>
 		<table border="0" cellspacing="0" cellpadding="0">
 			<tr>
 				<td><?php echo PAGE_DELETION_CAPTION ?></td>

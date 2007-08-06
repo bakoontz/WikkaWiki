@@ -70,10 +70,13 @@ $formats = explode(",",FEED_VALID_FORMATS);
 $f = (in_array($_GET['f'], $formats))? $_GET['f'] : FEED_DEFAULT_OUTPUT_FORMAT;
 
 //create object
-include_once('3rdparty'.DIRECTORY_SEPARATOR.'core'.DIRECTORY_SEPARATOR.'feedcreator'.DIRECTORY_SEPARATOR.'feedcreator.class.php'); //TODO: MAKE THIS CONFIGURABLE
+#include_once('3rdparty'.DIRECTORY_SEPARATOR.'core'.DIRECTORY_SEPARATOR.'feedcreator'.DIRECTORY_SEPARATOR.'feedcreator.class.php');
+$feedcreator_classpath = $this->GetConfigValue('feedcreator_path').DIRECTORY_SEPARATOR.'feedcreator.class.php';
+include_once $feedcreator_classpath;
 
 //initialize feed (general settings)
-$rss = new UniversalFeedCreator();
+#$rss = new UniversalFeedCreator();
+$rss = instantiate('UniversalFeedCreator');
 $rss->useCached(); //TODO: make this configurable
 $rss->title = sprintf(FEED_TITLE, $this->GetConfigValue('wakka_name')); 
 $rss->description = sprintf(FEED_DESCRIPTION, $this->GetConfigValue('wakka_name'));
@@ -114,7 +117,8 @@ if ($comments = $this->LoadRecentComments(2*$n))
 		$item->link = $this->Href('', $comment['page_tag'], 'show_comments=1').'#comment_'.$comment['id'];
 		$item->date = date('r', strtotime($comment['time'])); 
 		$item->description = 'By '.$comment['user'].': '.$comment['comment']."\n";
-		$item->source = $this->GetConfigValue('base_url');
+		#$item->source = $this->GetConfigValue('base_url');
+		$item->source = $this->base_url;
 		if ($f == 'ATOM1.0' || $f == 'RSS1.0') 
 		{
 			$item->author = $comment['user']; # RSS0.91 and RSS2.0 require authorEmail
