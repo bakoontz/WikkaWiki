@@ -16,16 +16,19 @@
  * @param	boolean $condition mandatory: test failed/passed?
  * @param	string	$errorText optional: text to print out on error; Default: <empty>
  * @param	int		$stopOnError optional: stops the installation on error if set to 1; Default: 1 
+ * @todo	internationalization (#i18n markers)
+ * @todo	should also report any database errors
  */
-function test($text, $condition, $errorText = "", $stopOnError = 1) {
+function test($text, $condition, $errorText = "", $stopOnError = 1)
+{
 	print("$text ");
 	if ($condition)
 	{
-		print('<span class="ok">OK</span><br />'."\n");
+		print('<span class="ok">OK</span><br />'."\n");	#i18n
 	}
 	else
 	{
-		print('<span class="failed">FAILED</span>');
+		print('<span class="failed">FAILED</span>');	#i18n
 		if ($errorText) print(": ".$errorText);
 		print("<br />\n");
 		if ($stopOnError)
@@ -78,19 +81,22 @@ function rmdirr($dirname)
  * If $tag parameter is an array, it just passes elements of this array one by one to itself.
  * The value 'HomePage' is a special one: it will be replaced by the configured value $config['root_page'].
  * The content of the page is read at a file named with $tag, located in setup/default_pages.
- * @param mixed $tag 
- * @param mixed $dblink 
- * @param mixed $config 
+ * @param mixed $tag	string or array of strings
+ * @param resource $dblink
+ * @param mixed $config
+ * @param string $lang_defaults_path	mandatory: validated directory for language-specific default pages
+ * @param string $lang_defaults_fallback_path	mandatory: validated directory for default pages in system default language
  * @access public
  * @return void
+ * @todo avoid recursion: make a single tag into an array of one and then just loop over the tags
  */
-function update_default_page($tag, $dblink, $config)
+function update_default_page($tag, $dblink, $config, $lang_defaults_path, $lang_defaults_fallback_path)
 {
 	if (is_array($tag))
 	{
 		foreach ($tag as $v)
 		{
-			update_default_page($v, $dblink, $config);
+			update_default_page($v, $dblink, $config, $lang_defaults_path, $lang_defaults_fallback_path);
 		}
 		return;
 	}
@@ -103,23 +109,30 @@ function update_default_page($tag, $dblink, $config)
 	}
 	$admin_users = explode(',', $config['admin_users']);
 	$admin_main_user = trim($admin_users[0]);
-	$txt_filename = 'lang'.DIRECTORY_SEPARATOR.$config['default_lang'].DIRECTORY_SEPARATOR.'defaults'.DIRECTORY_SEPARATOR.$filename.'.txt';
-	if (!file_exists($txt_filename) || !is_readable($txt_filename))
+	#$txt_filename = 'lang'.DIRECTORY_SEPARATOR.$config['default_lang'].DIRECTORY_SEPARATOR.'defaults'.DIRECTORY_SEPARATOR.$filename.'.txt';
+	$txt_filepath = $lang_defaults_path.$filename.'.txt';
+	#if (!file_exists($txt_filename) || !is_readable($txt_filename))
+	if (!file_exists($txt_filepath) || !is_readable($txt_filepath))
 	{
-		$txt_filename = 'lang'.DIRECTORY_SEPARATOR.'en'.DIRECTORY_SEPARATOR.'defaults'.DIRECTORY_SEPARATOR.$filename.'.txt';
+		#$txt_filename = 'lang'.DIRECTORY_SEPARATOR.'en'.DIRECTORY_SEPARATOR.'defaults'.DIRECTORY_SEPARATOR.$filename.'.txt';
+		$txt_filepath = $lang_defaults_fallback_path.$filename.'.txt';
 	}
-	if (file_exists($txt_filename) && is_readable($txt_filename))
+	#if (file_exists($txt_filename) && is_readable($txt_filename))
+	if (file_exists($txt_filepath) && is_readable($txt_filepath))
 	{
-		$body = implode('', file($txt_filename));
+		#$body = implode('', file($txt_filename));
+		$body = implode('', file($txt_filepath));
 		mysql_query('update '.$config['table_prefix'].'pages set latest = "N" where tag = \''.$tag.'\'', $dblink);
 		test (sprintf(__('Adding/Updating default page %s'.'...'), $tag),
-		@mysql_query('insert into '.$config['table_prefix'].'pages set tag=\''.$tag.'\', body = \''.mysql_real_escape_string($body).'\', user=\'WikkaInstaller\', owner = \''.$admin_main_user.'\', time=now(), latest =\'Y\'', $dblink),
-  	'',
-  	0);
+			@mysql_query('insert into '.$config['table_prefix'].'pages set tag=\''.$tag.'\', body = \''.mysql_real_escape_string($body).'\', user=\'WikkaInstaller\', owner = \''.$admin_main_user.'\', time=now(), latest =\'Y\'', $dblink),
+			'',
+			0);
+		// @@@ pick up any page-specific ACL here (look in both $lang_defaults_path and $lang_defaults_fallback_path)
 	}
 	else
 	{
-		test (sprintf(__('Adding/Updating default page %s'.'...'), $tag), false, sprintf(__('Default page not found or file not readable (%s, %s)'), $tag, $txt_filename), 0);
+		#test (sprintf(__('Adding/Updating default page %s'.'...'), $tag), false, sprintf(__('Default page not found or file not readable (%s, %s)'), $tag, $txt_filename), 0);
+		test (sprintf(__('Adding/Updating default page %s'.'...'), $tag), false, sprintf(__('Default page not found or file not readable (%s, %s)'), $tag, $txt_filepath), 0);
 	}
 }
 
@@ -200,11 +213,15 @@ function Language_selectbox($default_lang)
 		'en' => 'English',
 		'fr' => 'Français',
 		'de' => 'Deutsch');
-	$hdl = opendir('lang');
+	// use configured path
+	#$hdl = opendir('lang');
+	$hdl = opendir(WIKKA_LANG_PATH);
 	while ($f = readdir($hdl))
 	{
 		if ($f[0] == '.') continue;
-		if (file_exists('lang'.DIRECTORY_SEPARATOR.$f.DIRECTORY_SEPARATOR.'defaults'.DIRECTORY_SEPARATOR.'PageIndex.txt'))
+		// use configured path
+		#if (file_exists('lang'.DIRECTORY_SEPARATOR.$f.DIRECTORY_SEPARATOR.'defaults'.DIRECTORY_SEPARATOR.'PageIndex.txt'))
+		if (file_exists(WIKKA_LANG_PATH.DIRECTORY_SEPARATOR.$f.DIRECTORY_SEPARATOR.'defaults'.DIRECTORY_SEPARATOR.'PageIndex.txt'))
 		{
 			echo "\n ".'<option value="'.$f.'"';
 			if ($f == $default_lang) echo ' selected="selected"';

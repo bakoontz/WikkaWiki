@@ -117,7 +117,19 @@ case "0":
 			") TYPE=MyISAM;", $dblink), __('Already exists?'), 0);
 
 	test(__('Adding admin user').'...', 
-	@mysql_query("insert into ".$config["table_prefix"]."users set name = '".$config["admin_users"]."', password = md5('".mysql_real_escape_string($_SESSION['wikka']['install']['password'])."'), email = '".$config["admin_email"]."', signuptime = now()", $dblink), "Hmm!", 0);
+		@mysql_query("insert into ".$config["table_prefix"]."users set name = '".$config["admin_users"]."', password = md5('".mysql_real_escape_string($_SESSION['wikka']['install']['password'])."'), email = '".$config["admin_email"]."', signuptime = now()", $dblink), "Hmm!", 0);
+
+	// @@@	==> maybe do this check before even starting with database creation for new install?
+	//		actually applies to adding pages on upgrade as well...
+	$lang_defaults_fallback_path = WIKKA_LANG_PATH.DIRECTORY_SEPARATOR.CONFIG_DEFAULT_LANGUAGE.DIRECTORY_SEPARATOR.'defaults'.DIRECTORY_SEPARATOR;
+	test('Checking availability of default pages...', is_dir($lang_defaults_fallback_path), 'default pages not found at '.$lang_defaults_fallback_path, 1);
+	$lang_defaults_path = WIKKA_LANG_PATH.DIRECTORY_SEPARATOR.$config['default_lang'].DIRECTORY_SEPARATOR.'defaults'.DIRECTORY_SEPARATOR;
+	// @@@ use test() here, too? (without stop on error but reporting back we're using sytem default language)
+	if (!is_dir($lang_defaults_path))
+	{
+		// no directory for selected language: set equal to fallback so we can continue
+		$lang_defaults_path = $lang_defaults_fallback_path;
+	}
 
 	update_default_page(array(
 	'_rootpage', 
@@ -142,10 +154,14 @@ case "0":
 	'HighScores', 
 	'OwnedPages', 
 	'SandBox', 
-	'SysInfo'), $dblink, $config); 
+	'SysInfo'), $dblink, $config, $lang_defaults_path, $lang_defaults_fallback_path); 
 
+	// @@@	?? *default* ACLs are in the configuration file; settings on UserSettings page are irrelevant for default ACLs!
+	//		use page-specific "ACL" files to create page-specific ACLs (in update_default_page()!).
+	// @@@	use test() function to report actual results instead of assuming success!
 	test(__('Setting default ACL').'...', 1);
-	mysql_query("insert into ".$config["table_prefix"]."acls set page_tag = 'UserSettings', read_acl = '*', write_acl = '+', comment_read_acl = '*', comment_post_acl = '+'", $dblink); test(__('Building links table').'...', 1);
+	mysql_query("insert into ".$config["table_prefix"]."acls set page_tag = 'UserSettings', read_acl = '*', write_acl = '+', comment_read_acl = '*', comment_post_acl = '+'", $dblink);
+	test(__('Building links table').'...', 1);
 	include('links.php');
 
 	break;
@@ -266,7 +282,7 @@ case "1.1.5.0":
 case "1.1.5.1":
 case "1.1.5.2":
 case "1.1.5.3":
-	update_default_page(array('WikkaReleaseNotes', 'WikkaDocumentation'), $dblink, $config);
+	update_default_page(array('WikkaReleaseNotes', 'WikkaDocumentation'), $dblink, $config, $lang_defaults_path, $lang_defaults_fallback_path);
 	// delete files removed from previous version
 	@unlink('actions/wakkabug.php');
 	// delete directories that have been moved
@@ -277,12 +293,13 @@ case "1.1.5.3":
 case "1.1.6.0":
 case "1.1.6.1":
 	//adding SysInfo page
-	update_default_page('SysInfo', $dblink, $config);
+	update_default_page('SysInfo', $dblink, $config, $lang_defaults_path, $lang_defaults_fallback_path);
 case "1.1.6.2":
 case "1.1.6.3":
-	update_default_page(array('HighScores', 'FormattingRules'), $dblink, $config);
+	update_default_page(array('HighScores', 'FormattingRules'), $dblink, $config, $lang_defaults_path, $lang_defaults_fallback_path);
 	test("Altering table users : adding field named `challenge'...", 
 	@mysql_query("alter table ".$config["table_prefix"]."users add `challenge` char( 8 ) default '00000000' null", $dblink), "", 0); 
+	// @@@	use test() function to report actual results instead of assuming success!
 	test(__('Rebuilding links table').'...', 1);
 	include('links.php');
 	test(__('Adding fields to comments table to enable threading').'...', 
@@ -306,16 +323,20 @@ case "1.1.6.3":
 	test(__('Copying existing comment_acls to new fields').'...',
 	@mysql_query("update ".$config['table_prefix']."acls as a inner join(select page_tag, comment_acl from ".$config['table_prefix']."acls) as b on a.page_tag = b.page_tag set a.comment_read_acl=b.comment_acl, a.comment_post_acl=b.comment_acl", $dblink), __('Failed').'. ?', 1);
 	test(__('Creating new page title field').'...',
-	@mysql_query("alter table ".$config['table_prefix']."pages add title varchar(75) default null", $dblink), __('Already done?  OK!'), 0);
+	@mysql_query("alter table ".$config['table_prefix']."pages add title varchar(75) default null", $dblink), __('Already done?  OK!'), 0);	// @@@ column position? @@@ also add index on 'owner' column
 	break;
 case "trunk": //latest development version from the SVN repository - do not remove
 	break;
 }
 
-if (!file_exists($wakkaConfigLocation) || !is_writeable($wakkaConfigLocation))
+// (directly) use configured location SITE_CONFIGFILE
+#if (!file_exists($wakkaConfigLocation) || !is_writeable($wakkaConfigLocation))
+if (!file_exists(SITE_CONFIGFILE) || !is_writeable(SITE_CONFIGFILE))
 {
 ?>
-<p><?php printf(__('In the next step, the installer will try to write the updated configuration file, %s').'. ', '<tt>'.$wakkaConfigLocation.'</tt>');
+<p><?php
+	#printf(__('In the next step, the installer will try to write the updated configuration file, %s').'. ', '<tt>'.$wakkaConfigLocation.'</tt>');
+	printf(__('In the next step, the installer will try to write the updated configuration file, %s').'. ', '<tt>'.SITE_CONFIGFILE.'</tt>');
 echo __('Please make sure the web server has write access to the file, or you will have to edit it manually').'.';
 printf(__('Once again, see %s for details'), '<a href="http://docs.wikkawiki.org/WikkaInstallation" target="_blank">Wikka:WikkaInstallation</a>');
 ?>.

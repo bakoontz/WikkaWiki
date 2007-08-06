@@ -6,7 +6,7 @@
  * @version	$Id$
  * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
- * 
+ * @todo	make form accessible!
  */
 
 $wikiname = sprintf('<abbr title="%1$s">%2$s</abbr>', _p('A WikiName is formed by two or more capitalized words without space, e.g. JohnDoe'), __('WikiName'));
@@ -46,7 +46,7 @@ function check() {
 }
 </script>
 <?php 
-} 
+}
 ?>
 <form action="<?php echo $action_target; ?>" name="form1" method="post"<?php if (!$wakkaConfig['wakka_version']) echo ' onsubmit="return check();"';?>>
 <table>
@@ -61,28 +61,26 @@ else
 	echo '	<tr><td>&nbsp;</td><td><h1>'.__('Wikka Installation').' (3/5)</h1></td></tr>'."\n";
 	echo ' <tr><td>&nbsp;</td><td>'.__('To start the installation, please fill in the form below').'.</td></tr>'."\n";
 }
-// Try to create .htaccess and wikka.config.php
-if (!file_exists($wakkaConfigLocation))
+// We need to (directly) use the configured location SITE_CONFIGFILE
+// Try to create wikka.config.php
+#if (!file_exists($wakkaConfigLocation))
+if (!file_exists(SITE_CONFIGFILE))
 {
-	@touch($wakkaConfigLocation);
+	#@touch($wakkaConfigLocation);			// check result from touch - error if not successful!
+	test('Creating empty configuration file...',@touch(SITE_CONFIGFILE),'Could not create '.SITE_CONFIGFILE,0);	// @@@ should stop on error! don't stop for debugging only
 }
 
-if (!file_exists($wakkaConfigLocation) || !is_writeable($wakkaConfigLocation))
+echo ' <tr><td>&nbsp;</td><td><span class="note">'.sprintf(__('NOTE: The installer will try to write the configuration data to a file called %1$s, located in %2$s'), '<tt>'.basename(SITE_CONFIGFILE).'</tt>', '<tt>'.dirname(realpath(SITE_CONFIGFILE)).'</tt>').'. ';
+#if (!file_exists($wakkaConfigLocation) || !is_writeable($wakkaConfigLocation))
+if (!file_exists(SITE_CONFIGFILE) || !is_writeable(SITE_CONFIGFILE))
 {
-	echo ' <tr><td>&nbsp;</td><td><span class="note">'.sprintf(__('NOTE: The installer will try to write the configuration data to a file called %1$s, located in %2$s'), '<tt>'.basename($wakkaConfigLocation).'</tt>', '<tt>'.dirname(realpath($wakkaConfigLocation)).'</tt>').'. ';
+	// display first message always, so user can check path! ^^
+	#echo ' <tr><td>&nbsp;</td><td><span class="note">'.sprintf(__('NOTE: The installer will try to write the configuration data to a file called %1$s, located in %2$s'), '<tt>'.basename($wakkaConfigLocation).'</tt>', '<tt>'.dirname(realpath($wakkaConfigLocation)).'</tt>').'. ';
 	echo __('In order for this to work, you must make sure the web server has write access to that file. If you can\'t do this, you will have to edit the file manually (the installer will tell you how)').'.</span></td></tr>'."\n";
 }
 
-//@@@DEBUG
-//echo 'WAKKA: '.$_GET['wakka'].'<br />';
-
-#$wakkaConfig['base_url'] = $url;
-
-//@@@DEBUG
-//echo 'BASE_URL: <tt>'.$wakkaConfig['base_url'].'</tt>';
-	
 	if (!$wakkaConfig["wakka_version"])
- 	{
+	{
 	?>
 	<tr><td>&nbsp;</td><td><br /><h2><?php echo __('Database Configuration'); ?></h2></td></tr>
 	<tr><td>&nbsp;</td><td><?php echo __('Prefix of all tables used by Wikka. This allows you to run multiple Wikka installations using the same MySQL database by configuring them to use different table prefixes'); ?>.</td></tr>
@@ -100,7 +98,7 @@ if (!file_exists($wakkaConfigLocation) || !is_writeable($wakkaConfigLocation))
 	<tr><td>&nbsp;</td><td><?php echo __('Suffix used for cookies and session name. This allows you to run multiple Wikka installations on the same server by configuring them to use different wiki suffixes.'); ?></td></tr>
 	<tr><td align="right" nowrap="nowrap"><?php echo __('Your Wiki suffix:'); ?></td><td><input type="text" size="50" name="pconfig[wiki_suffix]" value="<?php echo $config["wiki_suffix"] ?>" /></td></tr>
 
-	<tr><td>&nbsp;</td><td><?php echo __('Optional keywords/description to be inserted in the HTML headers'); ?>.</td></tr>
+	<tr><td>&nbsp;</td><td><?php echo __('Optional keywords/description to be inserted in the HTML headers of every page'); ?>.</td></tr>
 	<tr><td align="right" nowrap="nowrap"><?php echo __('Meta Keywords'); ?>:</td><td><input type="text" size="50" name="pconfig[meta_keywords]" value="<?php echo $config["meta_keywords"] ?>" /></td></tr>
 	<tr><td align="right" nowrap="nowrap"><?php echo __('Meta Description'); ?>:</td><td><input type="text" size="50" name="pconfig[meta_description]" value="<?php echo $config["meta_description"] ?>" /></td></tr>
 
@@ -108,7 +106,7 @@ if (!file_exists($wakkaConfigLocation) || !is_writeable($wakkaConfigLocation))
 	if (!$wakkaConfig["wakka_version"])
 	{
 	?>
-	 <tr><td>&nbsp;</td><td><br /><h2><?php echo __('Admin Account Configuration'); ?></h2></td></tr>
+		<tr><td>&nbsp;</td><td><br /><h2><?php echo __('Admin Account Configuration'); ?></h2></td></tr>
 
 		<tr><td>&nbsp;</td><td><?php printf(__('This is the username of the person running this wiki. Later you\'ll be able to add other admins. The admin username should be formatted as a %s'), $wikiname); ?>.</td></tr>
 		<tr><td align="right" nowrap="nowrap"><?php echo __('Admin name'); ?>:</td><td><input type="text" size="50" name="pconfig[admin_users]" value="<?php echo $config["admin_users"] ?>" /></td></tr>
@@ -119,7 +117,7 @@ if (!file_exists($wakkaConfigLocation) || !is_writeable($wakkaConfigLocation))
 		<tr><td>&nbsp;</td><td><?php echo __('Administrator email'); ?>.</td></tr>
 		<tr><td align="right" nowrap="nowrap"><?php echo __('Email'); ?>:</td><td><input type="text" size="50" name="pconfig[admin_email]" value="<?php echo $config["admin_email"] ?>" /></td></tr>
 
-<?php			
+<?php
 	}
 
 /*
@@ -141,6 +139,7 @@ if (!file_exists($wakkaConfigLocation) || !is_writeable($wakkaConfigLocation))
 	<tr><td>&nbsp;</td><td><br /><h2><?php echo __('Access privileges'); ?></h2></td></tr>
 		<tr><td>&nbsp;</td><td><?php echo __('You can configure who has read/write access to the wiki by default. If you don\'t want to change these settings now, you\'ll be able to modify access privileges later'); ?>.</td></tr>
 	<?php
+	// @@@ allow manual specification as well?
 	ACL_show_selectbox('read');
 	ACL_show_selectbox('write');
 	ACL_show_selectbox('comment_read');

@@ -6,7 +6,7 @@
  * @version	$Id$
  * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
- * 
+ * @todo	make form accessible!
  */
 ?>
 <div style='display:none;'>
@@ -30,13 +30,15 @@
 	// Language select
 	if (!isset($config['default_lang']))
 	{
-		$config['default_lang'] = 'en';
+		// use constant CONFIG_DEFAULT_LANGUAGE
+		#$config['default_lang'] = 'en';
+		$config['default_lang'] = CONFIG_DEFAULT_LANGUAGE;
 	}
 	?>
 	<tr><td>&nbsp;</td></tr>
 	<tr><td>&nbsp;</td><td><h2><?php echo __('Language settings'); ?></h2></td></tr>
 	<tr><td>&nbsp;</td><td><?php echo __('Please select a language for the default pages that Wikka will create:'); ?></td></tr>
-	<tr><td><?php echo __('Choose a default language'); ?>:</td><td><?php Language_selectbox($config['default_lang']); ?></td></tr>
+	<tr><td><?php echo __('Choose a default language'); ?>:</td><td><?php Language_selectbox($config['default_lang']); // @@@ does not actually display any language choice ?></td></tr>
 <?php 
 	if (!isset($config['wakka_version']) || (!$config['wakka_version']))
 	{
