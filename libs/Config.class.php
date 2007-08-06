@@ -1,31 +1,36 @@
 <?php
 /**
  * Wikka configuration class.
- * 
- * This file includes a pseudo-class, which declares and documents the config entries used by the Wikka engine. 
  *
- * @package Config
- * 
+ * This file includes a pseudo-class, which declares and documents the config
+ * entries used by the Wikka engine. The values assigned here are default values
+ * which may be overridden by the site admin.
+ *
+ * @package		Config
+ *
  * @version		$Id$
- * @license 		http://www.gnu.org/copyleft/gpl.html GNU General Public License
+ * @license 	http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
- * 
+ *
  * @author 		{@link http://wikkawiki.org/DarTar Dario Taraborelli} (phpdoc header, major rewording of the description of each option)
  * @author 		{@link http://wikkawiki.org/DotMG Mahefa Randimbisoa} (original draft)
  *
  * @copyright 	Copyright 2007, {@link http://wikkawiki.org/CreditsPage Wikka Development Team}
- * 
- * @todo			Each setting description should be carefully checked and modified if needed.
- * @todo			We may want to refer to specific config settings from any component using the phpdoc "uses" tag.
+ *
+ * @todo		Each setting description should be carefully checked and modified if needed.
+ * @todo		We may want to refer to specific config settings from any component using the phpdoc "uses" tag.
+ * @todo		Organize by function / functional area rather than data type!
+ * @todo		complete documentation of the variables
  */
- /**
-  * Pseudo-class containing the main config entries for Wikka.
+
+/**
+  * Pseudo-class containing the main configuration entries for Wikka.
   */
 class Config 
 {
 	/**#@+
-	 * @access public   
-	 * @var string   
+	 * @access public
+	 * @var string
 	 */
 	/**
 	 * MySQL hostname.
@@ -34,147 +39,243 @@ class Config
 	var $mysql_host = 'localhost';
 	/**
 	 * MySQL database name.
-	 * The name of the database where wikka tables are stored. This database must exist before installing Wikka.
+	 * The name of the database where wikka tables are stored. This database must
+	 * exist before installing Wikka.
 	 */
 	var $mysql_database = 'wikka';
 	/**
 	 * MySQL user.
-	 * A valid MySQL username to which SELECT/UPDATE/INSERT/DELETE operations to the database are granted.
+	 * A valid MySQL username to which SELECT/UPDATE/INSERT/DELETE operations to
+	 * the database are granted.
 	 */
 	var $mysql_user = 'wikka';
 	/**
 	 * MySQL password.
-	 * The password associated to Config:$mysql_user. This value is stored in {@link wikka.config.php} as clear text.
+	 * The password associated with {@link Config:$mysql_user}. This value is
+	 * {@link wikka.config.php} as clear text.
 	 */
 	var $mysql_password = '';
-	/**
-	 * Keywords describing your wiki's content.
-	 * These optional keywords are put in the <meta name="keywords"> tag of every pages of your wiki. They are aimed to help 
-	 * search engines categorize more efficiently your Wikka-powered website.
-	 */
-	var $meta_keywords = '';
-	/**
-	 * Description of your wiki.
-	 * A short description of your site to be put in the <meta name="description"> tag of every pages of your wiki.
-	 * Just like Config::$meta_keywords, this optional field is intended for search engines and web directories.
-	 */
-	var $meta_description = '';
 	/**
 	 * MySQL table prefix.
 	 * The prefix to be used when the installer generates the tables used by Wikka.
 	 */
 	var $table_prefix = 'wikka_';
+
+	/**
+	 * Keywords for your wiki.
+	 * A list of keywords and keyphrases to be put in the
+	 * <code><meta name="keywords"></code> tag of every page of your wiki.
+	 * While like {@link Config::$meta_description} this optional field is
+	 * intended for search engines and web directories, most such services actually
+	 * don't make use of this meta information.
+	 */
+	var $meta_keywords = '';
+	/**
+	 * Description of your wiki.
+	 * A short description of your site to be put in the
+	 * <code><meta name="description"></code> tag of every page of your wiki.
+	 * Just like {@link Config::$meta_keywords}, this optional field is intended
+	 * for search engines and web directories.
+	 */
+	var $meta_description = '';
 	/**
 	 * Your Wikka website's homepage.
-	 * The root page (or home page) of your Wikka site. This should be formatted as a CamelCased word, e.g. HomePage
+	 * The root page (or home page) of your Wikka site. This should be formatted
+	 * as a CamelCased word, e.g. HomePage
 	 */
 	var $root_page = 'HomePage';
 	/**
 	 * Your Wikka website's name.
-	 * The name of your wikka site. This name will be included in the title of all pages in your wiki as a prefix. It
-	 * doesn't need to be formatted as a CamelCase word and can contain spaces and special characters.
+	 * The name of your wikka site. This name will be included in the title of all
+	 * pages in your wiki as a prefix. It doesn't need to be formatted as a
+	 * CamelCase word and can contain spaces and special characters.
 	 */
 	var $wakka_name = 'MyWikkaSite';
-	/**
-	 * Your Wikka website's base URL.
-	 * The base URL of your site. This should always <b>end with a slash</b> if you enable rewrite_mode! This is in the form of http://www.example.com/ or
-	 * http://www.example.com/wikka.php?wakka=
-	 */
-	var $base_url;
+// OBSOLETE
+//	/**
+//	 * Your Wikka website's base URL.
+//	 * The base URL of your site. This should always <b>end with a slash</b> if
+//	 * you enable rewrite_mode! This is in the form of http://www.example.com/ or
+//	 * http://www.example.com/wikka.php?wakka=
+//	 */
+//	var $base_url;			//  dynamically derived now
 	/**
 	 * Wikka cookie suffix.
-	 * Suffix for cookies generated by Wikka. If you run more than one instance of Wikka on the same server, you should provide two different
-	 * values for this config entry to avoid a session leakage.</p>
-	 * Important note: Wikka's cookies don't include the path and may be shared with other applications on your webserver.
-	 * Some other web applications may require that cookies they receive don't include illegal characters like @.</p>
+	 * Suffix for cookies generated by Wikka. If you run more than one instance
+	 * of Wikka on the same server, you should provide two different
+	 * values for this config entry to avoid a session leakage.	@@@ use path!!
+	 *
+	 * Important note: Wikka's cookies don't include the path and may be shared
+	 * with other applications on your webserver.		@@@ they shouldn't be!
+	 * Some other web applications may require that cookies they receive don't
+	 * include illegal characters like @.
 	 */
+	// @@@ huh? is the '@' invalid? where is it documented? why use what's invalid?
 	var $wiki_suffix = '@wikka';
-	/**
-	 * Path to action files.
-	 * Name of the folder under which Wikka actions files are stored. Actions can be used in a Wikka page with the following markup: 
-	 * <kbd>{{action param1="value1"...}}</kbd>. When such markup is processed, Wikka includes the file named "actionname.php"
-	 * if found in the folder specified by this config entry. See {@link Wakka::Action()}.
-	 */
-	var $action_path = 'actions';
-	/**
-	 * Path to handler files.
-	 * Name of the folder under which Wikka handler files are stored. Handlers determine how the content of a page is rendered.
-	 * In some cases, handlers are used to tell the Wikka engine what to do with a specific page or with user input.
-	 * The default handler is "show". To apply a specific handler to a Wikka page, the handler name preceded by a slash must be appended 
-	 * to the page URL, for instance: http://wikkawiki.org/HomePage/acls evokes the acls handler for HomePage.
-	 */
-	var $handler_path = 'handlers';
+
 	/**
 	 * Edit buttons position.
-	 * Valid values for this config entry are "bottom" and "top". This entry lets you customize the position of the Store/Preview/Cancel buttons 
-	 * displayed when editing a page : whether at the top of the page body (before the wikiedit toolbar), or at the bottom (below the wikiedit toolbar, 
+	 * Valid values for this config entry are "bottom" and "top". This entry lets
+	 * you customize the position of the Store/Preview/Cancel buttons  displayed
+	 * when editing a page : whether at the top of the page body (before the
+	 * wikiedit toolbar), or at the bottom (below the wikiedit toolbar, 
 	 * this is the default value).
 	 */
 	var $edit_buttons_position = 'bottom';
-
 	/**
 	 * Stylesheet name.
-	 * Name of the stylesheet used by your Wikka site. This entry must not be empty must point to an existing and valid CSS
-	 * file located under the css folder. The default stylesheet is "wikka.css".
+	 * Name of the stylesheet used by your Wikka site. This entry must not be
+	 * empty and must point to an existing and valid CSS file located under the
+	 * 'css' folder. The default stylesheet is "wikka.css".
 	 */
 	var $stylesheet = 'wikka.css';
-
 	/**
 	 * Comments stylesheet name.
 	 * Name of the stylesheet used to render comments. 
 	 * This entry must not be empty must point to an existing and valid CSS
 	 * file located under the css folder. The default stylesheet is
-	 * "boxed-comments.css"".
+	 * "boxed-comments.css" which renders comments and their replies as nested
+	 * boxes. The provided alternative is "indented-comments.css" which
+	 * renders comments and their replies in an indented format.
 	 */
 	var $comment_stylesheet = 'boxed-comments.css';
 
 	/**
+	 * Path to action files.
+	 * Name of the directory under which Wikka action files are stored.
+	 * Actions can be used in a Wikka page with the following markup: 
+	 * <kbd>{{actionname param1="value1"...}}</kbd>. When such markup is processed,
+	 * Wikka includes the file named "actionname.php" if found in the folder
+	 * specified by this config entry. See {@link Wakka::Action()}.
+	 */
+	#var $wikka_action_path = 'actions';
+	var $wikka_action_path = CONFIG_ACTION_PATH;				// pick up default from wikka.php
+	/**
+	 * Path to handler files.
+	 * Name of the directory under which Wikka handler files are stored. Handlers
+	 * determine how the content of a page is rendered. In some cases, handlers
+	 * are used to tell the Wikka engine what to do with a specific page or with
+	 * user input.
+	 * The default handler is "show". To apply a specific handler to a Wikka page,
+	 * the handler name preceded by a slash must be appended to the page URL, for
+	 * instance: http://wikkawiki.org/HomePage/acls evokes the acls handler for HomePage.
+	 */
+	#var $wikka_handler_path = 'handlers';
+	var $wikka_handler_path = CONFIG_HANDLER_PATH;				// pick up default from wikka.php
+	/**
 	 * Path to the Wikka formatters.
-	 * Location of the Wikka formatter files. Formatters are special components that translate a page written in
+	 * Formatters are special components that translate a page written in
 	 * wiki markup into valid XHTML. See {@link Wakka::Format()}.
 	 */
-	var $wikka_formatter_path = 'formatters';
+	#var $wikka_formatter_path = 'formatters';
+	var $wikka_formatter_path = CONFIG_FORMATTER_PATH;			// pick up default from wikka.php
 	/**
 	 * Path to the Wikka highlighters.
-	 * Location of the Wikka code highlighters. Highlighters are special components that enhance the
-	 * readability of snippets written in a known language by using special colors for keywords, strings, variables, ... and/or 
-	 * providing links to official documentation of functions. Wikka uses a 3rdparty highlighter named GeSHi (see {@link Config::$geshi_path}
-	 * but when this highlighter cannot process a given language, the highlighting is handled by the default Wikka highlighters.
+	 * Highlighters are special components that enhance the readability of snippets
+	 * written in a known machine language by using special colors for keywords, strings,
+	 * variables, ... and/or providing links to official documentation of functions
+	 * used in the language snippet.
+	 * Wikka can also use the bundled 3rd-party highlighter named GeSHi (see
+	 * {@link Config::$geshi_path} but when this highlighter cannot process a
+	 * given language (or is not installed), the highlighting is handled by the
+	 * default Wikka highlighters.
 	 */
-	var $wikka_highlighters_path = 'formatters';
+	// @@@ name should use singular 'highlighter' to conform to teh other path "names".
+	#var $wikka_highlighters_path = 'formatters';
+	var $wikka_highlighters_path = CONFIG_FORMATTER_PATH;		// pick up default from wikka.php
+	
 	/**
-	 * Path to the GeSHi package.
-	 * Location of the GeSHi package. GeSHi is a 3rdparty package bundled with Wikka for advanced code highlighting. See {@link Config::$wikka_highlighters_path}.
-	 * GeSHi supports about 70 different programming languages, each of them with a dedicated formatter. GeSHi language formatters
-	 * are stored in a folder declared as {@link Config::$geshi_languages_path geshi_language_path}.
+	 * Directory for 3rd-party components.
 	 */
-	var $geshi_path = '3rdparty/plugins/geshi';
+	var $thirdparty_path = CONFIG_3RDPARTY_PATH;				// pick up default from wikka.php
 	/**
-	 * Path to GeSHi language files.
-	 * Location of the GeSHi language formatters.
+	 * Directory for 3rd-party core components; these components are required for
+	 * basic Wikka functionality.
 	 */
-	var $geshi_languages_path = '3rdparty/plugins/geshi/geshi';
+	var $thirdparty_code_path = CONFIG_3RDPARTY_CORE_PATH;		// pick up default from wikka.php
+	/**
+	 * Directory for 3rd-party plugin components; these components are optional
+	 * and extend Wikka functionality.
+	 */
+	var $thirdparty_plugin_path = CONFIG_3RDPARTY_PLUGIN_PATH;	// pick up default from wikka.php
 
 	/**
+	 * Directory for the FeedCreator 3rd-party core component.
+	 */
+	var $feedcreator_path = CONFIG_FEEDCREATOR_PATH;			// pick up default from wikka.php
+	/**
+	 * Directory for the SafeHTML 3rd-party core component.
+	 */
+	var $safehtml_path = CONFIG_SAFEHTML_PATH;					// pick up default from wikka.php
+	/**
+	 * Directory for the optional GeSHi 3rd-party plugin package.
+	 * GeSHi is a 3rd-party package bundled with Wikka for advanced code highlighting.
+	 * See {@link Config::$wikka_highlighters_path}. GeSHi supports about 70 different
+	 * machine languages, each of them with a dedicated formatter. GeSHi
+	 * language formatters are stored in a folder declared as
+	 * {@link Config::$geshi_languages_path geshi_language_path}.
+	 */
+	var $geshi_path = CONFIG_GESHI_PATH;						// pick up default from wikka.php
+	/**
+	 * Directory for the language files for the GeSHi 3rd-party plugin package.
+	 */
+	var $geshi_languages_path = CONFIG_GESHI_LANG_PATH;			// pick up default from wikka.php
+	/**
+	 * Directory for the optional Onyx-RSS 3rd-party plugin component.
+	 */
+	var $onyx_path = CONFIG_ONYX_PATH;							// pick up default from wikka.php
+
+	/**
+	 * <b>URL path component</b> pointing to the location of the WikiEdit scripts.
+	 * This path will be extended by the system with the file name for each of
+	 * the required scripts.
+	 */
+	var $wikiedit_uripath = CONFIG_WIKIEDIT_URIPATH;			// pick up default from wikka.php
+	/**
+	 * <b>URL path component</b> for the FreeMind display applet.
+	 * This path will be extended by the system with the file name for the
+	 * applet's jar archive.
+	 */
+	var $freemind_uripath = CONFIG_FREEMIND_URIPATH;			// pick up default from wikka.php
+
+	/**
+	 * Path to file upload folder.
+	 * Folder under which are stored files uploaded by users. This folder will be
+	 * created at the root of your Wikka installation if you don't specify a full
+	 * path. If the folder doesn't exist, the server will attempt to create it.
+	 * To allow file uploading, the webserver must have write access to this folder.
+	 */
+	var $upload_path = 'uploads';
+
+	// @@@ take these two out of the actions directory and don't document them as "actions"
+	/**
 	 * Name of the page header action.
-	 * Name of the action used to generate the header of Wikka pages. By default, this action inserts everything needed at the 
-	 * top of a valid XHTML file, from the doctype declaration, including the <head> tag as well the main page header and 
-	 * {@link Config::$navigation_links navigation links}. See {@link Config::$action_path} , {@link Wakka::Header()} and 
-	 * {@link Wakka::Action()}. The header and footer actions are not invoked when generating output other than XHTML.
+	 * Name of the action used to generate the header of Wikka pages. By default,
+	 * this action inserts everything needed at the top of a valid XHTML file,
+	 * from the doctype declaration, including the <head> tag as well the main
+	 * page header and {@link Config::$navigation_links navigation links}.
+	 * See {@link Config::$wikka_action_path} , {@link Wakka::Header()} and 
+	 * {@link Wakka::Action()}.
+	 * The header and footer actions are not invoked when generating output other
+	 * than XHTML.
 	 */
 	var $header_action = 'header';
 	/**
 	 * Name of the footer action.
-	 * Name of the action used to generate the footer of Wikka pages. By default, this action inserts the bottom menu containing
-	 * links to handlers, links to validation tools and to the Wikka official website, and system information like page generation time, and an optional log of the 
-	 * queries used for generating the page. The header and footer actions are not invoked when generating output other than XHTML.
+	 * Name of the action used to generate the footer of Wikka pages. By default,
+	 * this action inserts the bottom menu containing links to handlers, links to
+	 * validation tools and to the Wikka official website, and system information
+	 * like page generation time, and an optional log of the queries used for
+	 * generating the page.
+	 * The header and footer actions are not invoked when generating output other
+	 * than XHTML.
 	 */
 	var $footer_action = 'footer';
 
 	/**
 	 * Default navigation links.
-	 * Navigation links displayed to anonymous users. This value should be formatted in Wikka markup so as to be passed to 
-	 * {@link Wakka::Format()}. 
+	 * Navigation links displayed to anonymous users. This value should be
+	 * formatted in Wikka markup so as to be passed to  {@link Wakka::Format()}. 
 	 */
 	var $navigation_links = '_rootpage :: [[CategoryCategory Categories]] :: PageIndex ::  RecentChanges :: RecentlyCommented :: [[UserSettings Login/Register]]';
 	/**
@@ -185,180 +286,203 @@ class Config
 
 	/**
 	 * Referrers purge time in days.
-	 * Number of days to keep referrers list in the database. The {@link Wakka::Maintenance() maintenance} is done automatically, but this setting allows a fine-grained 
-	 * specification of the referrer maintenance cycle. 0 disables purging. Default value is 30.
+	 * Number of days to keep referrers list in the database. The
+	 * {@link Wakka::Maintenance() maintenance} is done automatically, but this
+	 * setting allows a fine-grained  specification of the referrer maintenance
+	 * cycle. 0 disables purging. Default value is 30.
 	 */
 	var $referrers_purge_time = '30';
 	/**
 	 * Pages purge time in days.
-	 * Number of days to keep older revisions of a page in the database. Default value is 0, which means no purging of revisions is performed.
+	 * Number of days to keep older revisions of a page in the database.
+	 * Default value is 0, which means no purging of revisions is performed.
 	 */
 	var $pages_purge_time = '0';
 	/**
 	 * Number of entries to be included in the feed for recent changes.
-	 * Maximum number of {@link recentchanges.xml.php RecentChanges} to be displayed in the feed. 0 means no limits. Default value is 10.
+	 * Maximum number of {@link recentchanges.xml.php RecentChanges} to be
+	 * displayed in the feed. 0 means no limits. Default value is 10.
 	 */
 	var $xml_recent_changes = '10';
 	/**
 	 * Hide comments.
-	 * If this value is set to 1, comments are disabled on the whole wiki. Comments can be disabled on a per-page basis using the {@link nocomments.php nocomments} action.
+	 * If this value is set to 1, comments are disabled on the whole wiki.
+	 * Comments can be disabled on a per-page basis using the
+	 * {@link nocomments.php nocomments} action.
 	 */
-	var $hide_comments = '0';
+	var $hide_comments = '0';				// @@@ UserSettings form? NOTE: name and logic opposite that of the DB column
 	/**
 	 * Allow anonymous users to delete comments.
-	 * If this value is set to 1, anonymous users are allowed to delete their own comments. Anonymous users are identified by
-	 * the IP address they use, or if Config::$enable_user_host_lookup is enabled, by their hostname. So, be aware that users
-	 * having a machine with dynamically attributed adress IP may be unable to delete their comments later even if this 
-	 * config entry is set to 1. Conversely, some other user may be able to delete anonymous comments if her client has the same IP 
-	 * address used to post the original comment.
+	 * If this value is set to 1, anonymous users are allowed to delete their own
+	 * comments. Anonymous users are identified by the IP address they use, or if
+	 * {@link Config::$enable_user_host_lookup} is enabled, by their hostname.
+	 * So, be aware that users using a connection with a dynamically attributed
+	 * IP adress may be unable to delete their comments later even if this config
+	 * entry is set to 1. Conversely, some other user may be able to delete
+	 * anonymous comments if at that moment her connection has the same IP address
+	 * used to post the original comment.
 	 */
 	var $anony_delete_own_comments = '1';
 	/**
 	 * Allow the page owner to delete the page
-	 * If this value is set to 1, the owner of a page is allowed to remove it, including all versions and comments.
+	 * If this value is set to 1, the owner of a page is allowed to remove it,
+	 * including all versions and comments.
 	 */
 	var $owner_delete_page = '0';
 	/**
 	 * Display of system information.
-	 * This config entry enables or disables display of {@link sysinfo.php system information}}. If this value is set to 0 
-	 * (default setting), only administrators have access to system information. Displaying such information to
-	 * untrusted users may be a security risk to your webserver.
+	 * This config entry enables or disables display of
+	 * {@link sysinfo.php system information}}. If this value is set to 0 
+	 * (default setting), only administrators have access to system information.
+	 * Displaying such information to untrusted users may be a security risk to
+	 * your webserver.
 	 */
 	var $public_sysinfo = '0';
 	/**
 	 * RSS autodiscovery.
-	 * This option enables (1, default) or disables (0) RSS autodiscovery for Wikka pages. Disabling feed autodiscovery can be useful on private wikis.
+	 * This option enables (1, default) or disables (0) RSS autodiscovery for
+	 * Wikka pages. Disabling feed autodiscovery can be useful on private wikis.
 	 */
-	var $enable_rss_autodiscovery = '1';
+	var $enable_rss_autodiscovery = '1';	// @@@ rename (convert during installation!)
 	/**
 	 * Require edit note.
-	 * If this option is set to 0 (default), an edit note is optional. If set to 1, an edit note is mandatory anytime a user modifies a page. If set to 2, the edit note field is disabled. As its name suggests,
-	 * edit note is a short description added when modifying a page. It is stored in database, and is displayed in actions such as
-	 * {@link recentchanges.php recentchanges}, {@link pageindex.php pageindex}, {@link lastedit.php lastedit}.
+	 * If this option is set to 0 (default), an edit note is optional. If set to 1,
+	 * an edit note is mandatory anytime a user modifies a page. If set to 2, the
+	 * edit note field is disabled. As its name suggests, edit note is a short
+	 * description added when modifying a page. It is stored in database, and is
+	 * displayed in actions such as {@link recentchanges.php recentchanges},
+	 * {@link pageindex.php pageindex}, {@link lastedit.php lastedit}.
 	 */
 	var $require_edit_note = '0';
 	/**
 	 * Allow user registration.
-	 * This option toggles different user registration options: If set to 0, user registration is disabled: this value should be used if the wiki is private,
-	 * or if you have a user-defined process to control registration. User registration is enabled setting this value to 1 (default): anyone can register to 
-	 * the wiki. Setting this option to 2 enables user registration with an {@link Config::$invitation_code invitation code}.
+	 * This option toggles different user registration options: If set to 0, user
+	 * registration is disabled: this value should be used if the wiki is private,
+	 * or if you have a user-defined process to control registration. User registration
+	 * is enabled setting this value to 1 (default): anyone can register to 
+	 * the wiki. Setting this option to 2 enables user registration with an
+	 * {@link Config::$invitation_code invitation code}.
 	 */
 	var $allow_user_registration = '1';
 	/**
 	 * Invitation code.
-	 * This value is only used if Config::$require_edit_note is set to 2. The invitation code is a string set by the wiki administrator that is required by new users 
-	 * to register an account.
+	 * This value is only used if Config::$require_edit_note is set to 2. The
+	 * invitation code is a string set by the wiki administrator that is required
+	 * by new users to register an account.
 	 */
 	var $invitation_code = '';
 	/**
 	 * User host lookup.
-	 * If this value is set to 1, anonymous users' hostnames are retrieved and used instead of their numeric IP address.
-	 * Setting this option to 0 disables hostname lookup, which may be useful in cases when the server has difficulties connecting to a DNS, which can result in long page generation times.
+	 * If this value is set to 1, anonymous users' hostnames are retrieved and
+	 * used instead of their numeric IP address.
+	 * Setting this option to 0 disables hostname lookup, which may be useful in
+	 * cases when the server has difficulties connecting to a DNS, which can result
+	 * in long page generation times.		@@@
 	 */
 	var $enable_user_host_lookup = '1';
 	/**
 	 * Allow embedded HTML.
-	 * This setting controls how HTML can be embedded in wiki pages. HTML can be embedded in Wikka pages by enclosing it within double doublequotes. Possible
-	 * values for this option are : <ul>
-	 * <li><tt>safe</tt>: this is the default option, which sanitizes HTML using the Wakka::ReturnSafeHTML() method.
-	 * Wikka uses a 3rdparty library (SafeHTML) to remove potentially dangerous tags or attributes. For more information, see
-	 * {@link safehtml.php}.</li>
-	 * <li><tt>raw</tt>: this option assumes that the content of embedded HTML is safe and renders it <em>as is</em>. 
-	 * This option can raise major security issues in an open wiki, so it is strongly recommended to use this value only in trusted environments. When this option is set to <tt>raw</tt>,
-	 * any kind of HTML can be embedded in he page, including <tt>&lt;script&gt;</tt> elements.</li>
-	 * <li><tt>disabled</tt>: this options disables HTML embedding, any potentially dangerous characters (<, > and &) will be escaped.</li></ul>
-	 * Note that disabling this option does not affect the use of double doublequotes to escape wiki formatting (e.g. when unwikifying a CamelCase word).
+	 * This setting controls how HTML can be embedded in wiki pages. HTML can be
+	 * embedded in Wikka pages by enclosing it within double doublequotes. Possible
+	 * values for this option are :
+	 * <ul>
+	 * <li><b>safe</b>: this is the default option, which sanitizes HTML using
+	 * the {@link Wakka::ReturnSafeHTML()} method. Wikka uses a 3rdparty library
+	 * (SafeHTML) to remove potentially dangerous tags or attributes. For more
+	 * information, see {@link safehtml.php}.</li>
+	 * <li><b>raw</b>: this option assumes that the content of embedded HTML is
+	 * safe and renders it <em>as is</em>. 
+	 * This option can raise major security issues in an open wiki, so it is
+	 * strongly recommended to use this value only in trusted environments. When 
+	 * this option is set to <b>raw</b>, any kind of HTML can be embedded in the
+	 * page, including <code>&lt;script&gt;</code> elements.</li>
+	 * <li><b>disabled</b>: this option disables HTML embedding, any potentially
+	 * dangerous characters (<, > and &) will be escaped.</li>
+	 * </ul>
+	 * Note that disabling this option does not affect the use of double
+	 * doublequotes to escape wiki formatting (e.g. when unwikifying a CamelCase
+	 * word).
 	 */
 	var $double_doublequote_html = 'safe';
 	/**
 	 * SQL debugging.
-	 * Setting this value to 1 activates SQL debugging. Instructions passed to the database are displayed at the bottom of the page. SQL debug information
-	 * is visible only by wiki administrators, so this option can safely be enabled without compromising the security of your wiki.
+	 * Setting this value to 1 activates SQL debugging. Instructions passed to the
+	 * database are displayed at the bottom of the page. SQL debug information
+	 * is visible only by wiki administrators, so this option can safely be enabled
+	 * without compromising the security of your wiki.
 	 */
 	var $sql_debugging = '0';
 	/**
 	 * Wiki administrator list.
-	 * A comma separated value of administator usernames. Spaces are allowed in the string. You enter here usernames as they were typed when
-	 * administrator registered. Note that this string is <em>case sensitive</em>.
+	 * A comma separated value of administator usernames. Spaces are allowed in
+	 * the string. You enter here usernames as they were typed when administrator
+	 * registered. Note that this string is <em>case sensitive</em>.
 	 */
 	var $admin_users = '';
 	/**
 	 * Administrator email.
-	 * A valid email address through which the main wiki administrator can be contacted (e.g. using the {@link feedback.php Feedback} action).
+	 * A valid email address through which the main wiki administrator can be
+	 * contacted (e.g. using the {@link feedback.php Feedback} action).
 	 */
 	var $admin_email = '';
 	/**
-	 * Path to file upload folder.
-	 * Folder under which are stored files uploaded by users. This folder will be created at the root of your Wikka installation if you don't
-	 * specify a full path. If the folder doesn't exist, the server will attempt to create it. To allow file uploading, the webserver must have write access to this folder.
-	 */
-	var $upload_path = 'uploads';
-	/**
 	 * Mime types.
 	 * Config entry not used! Documentation not available!
+	 * @@@ Possibly the file is intended only as example for setting mimetypes
+	 * on the server? Or maybe for downloadable files?
+	 * Keep the file, lose the config value. -- JW#
 	 */
-	var $mime_types = 'mime_types.txt'; //FIXME
+	var $mime_types = 'mime_types.txt';
 
 	/**
 	 * GeSHi wrapper.
-	 * Element type to use for code blocks using GeSHi. Possible values are "div" (default) and "pre".
+	 * Element type to use for code blocks using GeSHi. Possible values are "div"
+	 * (default) and "pre".
 	 */
 	var $geshi_header = 'div';
 	/**
 	 * GeSHi line numbering.
-	 * This option controls the use of line numbering in GeSHi: 0 disables line numbers, 1 enables them and 2 uses fancy line numbers.
-	 * Values for this setting are passed as GeSHi parameters GESHI_NO_LINE_NUMBERS, GESHI_NORMAL_LINE_NUMBERS and GESHI_FANCY_LINE_NUMBERS.
+	 * This option controls the use of line numbering in GeSHi: 0 disables line
+	 * numbers, 1 enables them and 2 uses fancy line numbers.
+	 * Values for this setting are passed as GeSHi parameters
+	 * GESHI_NO_LINE_NUMBERS, GESHI_NORMAL_LINE_NUMBERS and GESHI_FANCY_LINE_NUMBERS.
 	 * See {@link GeSHi::enable_line_numbers()}
 	 */
 	var $geshi_line_numbers = '1';
 	/**
 	 * GeSHi tab width.
-	 * Number of non-breaking spaces to replace a tabulation when rendering code blocks. Default value is 4.
+	 * Number of non-breaking spaces to replace a tabulation when rendering code
+	 * blocks. Default value is 4.
 	 */
 	var $geshi_tab_width = '4';
 	/**
 	 * Grabcode buttons.
-	 * This option activates (1, default) or disables (0) buttons displayed at the bottom of code blocks to enable quick code downloading.
+	 * This option activates (1, default) or disables (0) buttons displayed at
+	 * the bottom of code blocks to enable quick code downloading.
 	 */
 	var $grabcode_button = '1';
 
 	/**
 	 * Wikiping server.
-	 * Hostname or IP address of a Wikiping server. If this value is empty, Wikiping functionality will be disabled. See {@link Wakka::WikiPing()}.
+	 * Hostname or IP address of a Wikiping server. If this value is empty,
+	 * Wikiping functionality will be disabled. See {@link Wakka::WikiPing()}.
 	 */
 	var $wikiping_server = '';
 
 	/**
-	 * Default write Access Control List.
-	 * Sets the default write ACL for new pages and for pages with no preset ACL. Write ACL are checked when modifying or creating a new page.
-	 * By default write access is permitted to registered users only. See the {@link http://docs.wikkawiki.org/ACLInfo ACL documentation} for a further 
-	 * explanation of these settings.
-	 */
-	var $default_write_acl = '+';
-	/**
-	 * Default read Access Control List.
-	 * Sets the default read ACL for new pages and for pages with no preset ACL. Read ACL are checked anytime a user requests to display a page.
-	 * By default read access is permitted to anyone. See the {@link http://docs.wikkawiki.org/ACLInfo ACL documentation} for a further 
-	 * explanation of these settings.
-	 */
-	var $default_read_acl = '*';
-	/**
-	 * Default comment Access Control List.
-	 * Sets the default ACL for comments on new pages and for pages with no preset-defined ACL.
-	 * By default anyone is allowed to post comments. See the {@link http://docs.wikkawiki.org/ACLInfo ACL documentation} for a further 
-	 * explanation of these settings.
-	 */
-	var $default_comment_acl = '*';
-	/**
 	 * Maximum size of output HTML.
-	 * This parameter sets the maximum size (in bytes) of dynamically generated XHTML for specific handlers. Currently, this option is used to
-	 * limit the size of {@link history.php page history} and to prevent pages too long to be handled by browsers. 0 or an empty value sets no limit to the output.
-	 * Note that the size of the output is estimated, so if you need to limit the output to an exact size, consider specifying a lesser value.
+	 * This parameter sets the maximum size (in bytes) of dynamically generated
+	 * XHTML for specific handlers. Currently, this option is used to limit the
+	 * size of {@link history.php page history} and to prevent pages too long to
+	 * be handled by browsers. 0 or an empty value sets no limit to the output.
+	 * Note that the size of the output is estimated, so if you need to limit
+	 * the output to an exact size, consider specifying a smaller value.
 	 */
 	var $pagesize_max;
 	/**
 	 * Default number of page revisions to be displayed.
-	 * Sets the number of revisions displayed by default in the {@link history.php history} and {@link revisions.php revisions} handlers.
+	 * Sets the number of revisions displayed by default in the
+	 * {@link history.php history} and {@link revisions.php revisions} handlers.
 	 */
 	var $default_revisioncount;
 	/** Default comment display.  
@@ -367,35 +491,98 @@ class Config
 	 * (2) comment displayed descending by date (newest to oldest); or
 	 * (3) threaded comments
 	 */
+	/**
+	 * Default read Access Control List.
+	 * Sets the default read ACL for new pages and for pages with no preset ACL.
+	 * Read ACL are checked anytime a user requests to display a page.
+	 * By default read access is permitted to anyone.
+	 * See the {@link http://docs.wikkawiki.org/ACLInfo ACL documentation} for a
+	 * further explanation of these settings.
+	 */
+	var $default_read_acl = '*';
+	/**
+	 * Default write Access Control List.
+	 * Sets the default write ACL for new pages and for pages with no preset ACL.
+	 * Write ACL is checked when modifying or creating a new page. By default
+	 * write access is permitted to registered users only.
+	 * See the {@link http://docs.wikkawiki.org/ACLInfo ACL documentation} for a
+	 * further explanation of these settings.
+	 */
+	var $default_post_acl = '+';
+//	/**
+//	 * Default comment Access Control List.
+//	 * Sets the default ACL for comments on new pages and for pages with no
+//	 * preset-defined ACL. By default anyone is allowed to post comments.
+//	 * See the {@link http://docs.wikkawiki.org/ACLInfo ACL documentation} for a
+//	 * further explanation of these settings.
+//	 */
+//	var $default_comment_acl = '*';	// OBSOLETE
+	/**
+	 * Default comment read Access Control List.
+	 * Sets the default read ACL for comments on new pages and for pages with no
+	 * preset-defined ACL. By default anyone is allowed to read comments.
+	 * See the {@link http://docs.wikkawiki.org/ACLInfo ACL documentation} for a
+	 * further explanation of these settings.
+	 */
+	var $default_comment_read_acl = '*';
+	/**
+	 * Default comment write Access Control List.
+	 * Sets the default write ACL for comments on new pages and for pages with no
+	 * preset-defined ACL. By default noly registered users are permitted to
+	 * post comments.
+	 * See the {@link http://docs.wikkawiki.org/ACLInfo ACL documentation} for a
+	 * further explanation of these settings.
+	 */
+	var $default_comment_post_acl = '+';
+
+	/**
+	 * Default display style for comments on any page.
+	 * This is a default user setting; a registered user can override this default
+	 * on the UserSettings page so it will be remembered; anonymous uses initially
+	 * will see the display style according to this value.
+	 * Possible values:
+	 * 1 = Flat, ascending	(default)
+	 * 2 = Flat, descending
+	 * 3 = Threaded
+	 */
 	var $default_comment_display = 1;
 	/**
 	 * Default language-code used in the wiki.
+	 * This can be overridden with another language to be used as default.
+	 * This should be a ISO 639-1 code (e.g. 'en' for English).
 	 * 
-	 * @var string
-	 * @access public
+	 * @access	public
+	 * @var		string
 	 */
-	var $default_lang = 'en';
+	#var $default_lang = 'en';
+	var $default_lang = CONFIG_DEFAULT_LANGUAGE;	// pick up default from wikka.php
 	/**#@-*/
 
 	/**#@+
-	 * @var boolean (true or false)
+	 * @var boolean (TRUE or FALSE)
 	 */
 	/**
 	 * Case sensitive pagenames.
-	 * Specifies if the database should use a case sensitive or case insensitive collation for page names. By default this option is disabled.
+	 * Specifies if the database should use a case-sensitive or case-insensitive
+	 * collation for page names. By default this option is disabled (FALSE).
 	 */
-	var $pagename_case_sensitive = false;
+	var $pagename_case_sensitive = FALSE;
 	/**
 	 * URL Rewrite mode.
-	 * If this option is set to true <tt>rewrite_mode</tt> is enabled so as to generate shorter URIs. Do not manually change this value unless you are aware of your system configuration.
+	 * This option should be set to TRUE if <b>rewrite_mode</b> is enabled so
+	 * as to generate shorter and more search-engine-friendly URIs. Do not manually
+	 * change this value unless you are aware of your system configuration.
 	*/
 	var $rewrite_mode;
 	/**#@-*/
+
 	/**
 	 * Display the Wikka edit toolbar.
-	 * This option enables (by default) or disables the Wikka edit toolbar. If set to 0, shortcuts and toolbar buttons will not be available in the {@link edit.php edit screen}.
+	 * This option enables (by default) or disables the Wikka edit toolbar.
+	 * If set to 0, shortcuts and toolbar buttons will not be available in the
+	 * {@link edit.php edit screen}.
 	 */
-	var $gui_editor = '1';
+	var $gui_editor = '1';			// @@@ allow end-user configuration to turn this off
 
 }
 ?>
