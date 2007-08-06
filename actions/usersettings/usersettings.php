@@ -45,6 +45,7 @@ $oldpass = '';
 $password_confirm = '';
 $pw_selected = '';
 $hash_selected = '';
+
 $username_highlight = '';
 $username_temp_highlight = '';
 $password_temp_highlight = '';
@@ -61,10 +62,10 @@ $wikiname_expanded = '<abbr title="'.WIKINAME_LONG.'">'.WIKINAME_SHORT.'</abbr>'
 //create URL
 $url = $this->Href();
 
-//Remember referring page if internal.
+// Remember referring page if internal.
 // - Getting correct regex to find the tag of referring page
-preg_match('/^(.*)ReferrerMarker/', $this->Href('', 'ReferrerMarker'), $match);
-$regex_referrer = '/^'.preg_quote($match[1], '/')."([^\\/\\?&]*)/";
+preg_match('/^(.*)ReferrerMarker/', $this->Href('', 'ReferrerMarker'), $match);	// @@@ use wikka_url here!
+$regex_referrer = '@^'.preg_quote($match[1], '@').'([^\/\?&]*)@';
 if (isset($_SERVER['HTTP_REFERER']) && preg_match($regex_referrer, $_SERVER['HTTP_REFERER'], $match))
 {
 	if (strcasecmp($this->tag, $match[1]))
@@ -79,15 +80,15 @@ if (isset($_SERVER['HTTP_REFERER']) && preg_match($regex_referrer, $_SERVER['HTT
 // append URL params depending on rewrite_mode
 $params = ($this->GetConfigValue('rewrite_mode') == 1) ? '?' : '&';
 
-// BEGIN *** Logout ***
+// BEGIN *** LOGOUT ***
 // is user trying to log out?
-if (isset($_POST['logout']) && $_POST['logout'] == LOGOUT_BUTTON)		// replaced with normal form button #353, #312
+if (isset($_POST['logout']) && $_POST['logout'] == LOGOUT_BUTTON)	// replaced with normal form button #353, #312
 {
 	$this->LogoutUser();
 }
-// END *** Logout ***
+// END *** LOGOUT ***
 
-// BEGIN *** Usersettings ***
+// BEGIN *** LOGOUT/USERSETTINGS/PASSWORD UPDATE ***
 // user is still logged in
 if ($user = $this->GetUser())
 {
@@ -123,19 +124,22 @@ if ($user = $this->GetUser())
 				break;
 			// @@@ validate doubleclickedit, show-comments and (especially) default_comment_display
 			default: // input is valid
-				$this->Query('UPDATE '.$this->GetConfigValue('table_prefix').'users SET '.
-					"email = '".mysql_real_escape_string($email)."', ".
-					"doubleclickedit = '".mysql_real_escape_string($doubleclickedit)."', ".
-					"show_comments = '".mysql_real_escape_string($show_comments)."', ".
-					"default_comment_display = ".$default_comment_display.", ".	// !!! this is an int, not a string!
-					"revisioncount = ".$revisioncount.", ".	// !!! this is an int, not a string!
-					"changescount = ".$changescount." ".	// !!! this is an int, not a string!
-					"WHERE name = '".$user['name']."' LIMIT 1");
-				unset($this->specialCache['user'][strtolower($user['name'])]);  //invalidate cache if exists #368
-				$this->SetUser($this->LoadUser($user["name"]));
+				$this->Query("
+					UPDATE ".$this->GetConfigValue('table_prefix')."users
+					SET	email = '".mysql_real_escape_string($email)."',
+						doubleclickedit = '".mysql_real_escape_string($doubleclickedit)."',
+						show_comments = '".mysql_real_escape_string($show_comments)."',
+						default_comment_display = ".$default_comment_display.",
+						revisioncount = ".$revisioncount.",
+						changescount = ".$changescount."
+					WHERE name = '".$user['name']."'
+					LIMIT 1"
+					);
+				unset($this->specialCache['user'][strtolower($user['name'])]);	// invalidate cache if exists #368
+				$this->SetUser($this->LoadUser($user['name']));
 		}
 	}
-	//user just logged in, or just displayed the form
+	// user just logged in, or just went to this page
 	else
 	{
 		// get stored settings
@@ -147,15 +151,22 @@ if ($user = $this->GetUser())
 		$changescount = $user['changescount'];
 	}
 
-	// display user settings form
-	echo $this->FormOpen();
+	// *** BEGIN LOGOUT/USERSETTINGS
+	echo $this->FormOpen();	// open logout/usersettings form
+	// *** BEGIN LOGOUT ***
 ?>
 	<fieldset id="account"><legend><?php echo USER_ACCOUNT_LEGEND ?></legend>
 	<span id="account_info">
 	<?php printf(USER_LOGGED_IN_AS_CAPTION, $this->Link($user['name'])); ?>
 	</span><input id="logout" name="logout" type="submit" value="<?php echo LOGOUT_BUTTON; ?>" /><!-- #353,#312-->
 	<br class="clear" />
-	</fieldset>	
+	</fieldset>
+<?php
+	// *** END LOGOUT ***
+
+	// *** BEGIN USERSETTINGS/PASSWORD UPDATE ***
+?>
+
 	<fieldset id="usersettings" class="usersettings"><legend><?php echo USER_SETTINGS_LEGEND ?></legend>
 <?php
 
@@ -183,6 +194,7 @@ if ($user = $this->GetUser())
 			break;
 	}
 
+	// BEGIN *** PASSWORD UPDATE ***
 	if (isset($_POST['action']) && ($_POST['action'] == 'changepass'))
 	{
 		// check password
@@ -200,49 +212,55 @@ if ($user = $this->GetUser())
 			case (($update_option == 'pw') && md5($oldpass) != $user['password']): //wrong old password
 				$passerror = ERROR_INVALID_OLD_PASSWORD;
 				$pw_selected = 'selected="selected"';
-				$password_highlight = INPUT_ERROR_STYLE;			
+				$password_highlight = INPUT_ERROR_STYLE;
 				break;
 			case (($update_option == 'hash') && $oldpass != $user['password']): //wrong reminder (hash)
 				$passerror = ERROR_INVALID_HASH;
 				$hash_selected = 'selected="selected"';
-				$password_highlight = INPUT_ERROR_STYLE;			
+				$password_highlight = INPUT_ERROR_STYLE;
 				break;
 			case (strlen($password) == 0):
 				$passerror = ERROR_EMPTY_NEW_PASSWORD;
-				$password_highlight = INPUT_ERROR_STYLE;			
+				$password_highlight = INPUT_ERROR_STYLE;
 				$password_new_highlight = INPUT_ERROR_STYLE;
 				break;
 			case (preg_match("/ /", $password)):
 				$passerror = ERROR_PASSWORD_NO_BLANK;
-				$password_highlight = INPUT_ERROR_STYLE;			
+				$password_highlight = INPUT_ERROR_STYLE;
 				$password_new_highlight = INPUT_ERROR_STYLE;
 				break;
 			case (strlen($password) < PASSWORD_MIN_LENGTH):
 				$passerror = sprintf(ERROR_PASSWORD_TOO_SHORT, PASSWORD_MIN_LENGTH);
-				$password_highlight = INPUT_ERROR_STYLE;			
+				$password_highlight = INPUT_ERROR_STYLE;
 				$password_new_highlight = INPUT_ERROR_STYLE;
 				break;
 			case (strlen($password_confirm) == 0):
 				$passerror = ERROR_EMPTY_NEW_CONFIRMATION_PASSWORD;
-				$password_highlight = INPUT_ERROR_STYLE;			
+				$password_highlight = INPUT_ERROR_STYLE;
 				$password_new_highlight = INPUT_ERROR_STYLE;
 				$password_confirm_highlight = INPUT_ERROR_STYLE;
 				break;
 			case ($password_confirm != $password):
 				$passerror = ERROR_PASSWORD_MATCH;
 				$password_highlight = INPUT_ERROR_STYLE;
-				$password_new_highlight = INPUT_ERROR_STYLE;			
+				$password_new_highlight = INPUT_ERROR_STYLE;
 				$password_confirm_highlight = INPUT_ERROR_STYLE;
 				break;
 			default:
-				$this->Query('UPDATE '.$this->GetConfigValue('table_prefix').'users SET '."password = md5('".mysql_real_escape_string($password)."') "."WHERE name = '".$user['name']."'");
+				$this->Query("
+					UPDATE ".$this->GetConfigValue('table_prefix')."users
+					SET password = '".md5(mysql_real_escape_string($password))."'
+					WHERE name = '".$user['name']."'"
+					);
 				unset($this->specialCache['user'][strtolower($name)]);  //invalidate cache if exists #368
 				$user['password'] = md5($password);
 				$this->SetUser($user);
 				$passsuccess = SUCCESS_USER_PASSWORD_CHANGED;
 		}
 	}
+	// END *** PASSWORD UPDATE ***
 
+	// BEGIN *** USERSETTINGS ***
 ?>
 	<input type="hidden" name="action" value="update" />
 	<label for="email"><?php echo USER_EMAIL_LABEL ?></label>
@@ -270,11 +288,13 @@ if ($user = $this->GetUser())
 	<input id="updatesettingssubmit" type="submit" value="<?php echo UPDATE_SETTINGS_BUTTON ?>" />
 	<br />
 	</fieldset>
-<?php	
-	echo $this->FormClose(); //close user settings form
+<?php
+	// END *** USERSETTINGS ***
+	echo $this->FormClose();	// close logout/usersettings form
+	// END *** LOGOUT/USERSETTINGS ***
 
-	//display password update form
-	echo $this->FormOpen();
+	// BEGIN *** PASSWORD UPDATE ***
+	echo $this->FormOpen();	// open password update form
 ?>
 	<fieldset class="usersettings" id="changepassword"><legend><?php echo CHANGE_PASSWORD_LEGEND ?></legend>
 	<input type="hidden" name="action" value="changepass" />
@@ -304,22 +324,29 @@ if ($user = $this->GetUser())
 	<br />
 	</fieldset>
 <?php
-	echo $this->FormClose();
+	echo $this->FormClose();	// close password update form
+	// END *** PASSWORD UPDATE
 }
-// END *** Usersettings ***
-// BEGIN *** LOGIN/LOGOUT ***
-else // user is not logged in
+// END *** LOGOUT/USERSETTINGS/PASSWORD UPDATE ***
+
+// BEGIN *** LOGOUT 2/LOGIN/REGISTER/PASSWORD UPDATE ***
+// user is not logged in
+else
 {
-	// print confirmation message on successful logout
+	// BEGIN *** LOGOUT 2 ***
 	if (isset($_POST['logout']) && $_POST['logout'] == LOGOUT_BUTTON)
 	{
+		// print confirmation message on successful logout
 		$success = SUCCESS_USER_LOGGED_OUT;
 	}
+	// END *** LOGOUT 2 ***
 
 	// is user trying to log in or register?
+	// BEGIN *** LOGIN/REGISTER ***
 	$register = $this->GetConfigValue('allow_user_registration'); 
 	if (isset($_POST['action']) && ($_POST['action'] == 'login'))
 	{
+		// BEGIN *** LOGIN ***
 		// if user name already exists, check password
 		if (isset($_POST['name']) && $existingUser = $this->LoadUser($_POST['name']))
 		{
@@ -342,11 +369,14 @@ else // user is not logged in
 						unset($_SESSION['go_back_tag']);
 						$this->Redirect($go_back);
 					}
-					$this->Redirect($url, '');
+					else
+					{
+						$this->Redirect($url);
+					}
 			}
 		}
-		// END *** Login/Logout ***
-		// BEGIN *** Register ***
+		// END *** LOGIN ***
+		// BEGIN *** REGISTER ***
 		else if ($register == '1' || $register == '2') // otherwise, proceed to registration
 		{
 			$name = trim($_POST['name']);
@@ -413,7 +443,7 @@ else // user is not logged in
 						"name = '".mysql_real_escape_string($name)."', ".
 						"email = '".mysql_real_escape_string($email)."', ".
 						"password = md5('".mysql_real_escape_string($_POST['password'])."')");
-					unset($this->specialCache['user'][strtolower($name)]);  //invalidate cache if exists #368
+					unset($this->specialCache['user'][strtolower($name)]);	//invalidate cache if exists #368
 
 					// log in
 					$this->SetUser($this->LoadUser($name));
@@ -428,28 +458,30 @@ else // user is not logged in
 					$this->Redirect($url.$params);
 			}
 		}
+		// END *** REGISTER ***
 	} 
-	// END *** Register ***
-	// BEGIN *** Usersettings ***
-	elseif  (isset($_POST['action']) && ($_POST['action'] == 'updatepass'))
+	// END *** LOGIN/REGISTER ***
+
+	// BEGIN *** USERSETTINGS PW ***
+	elseif (isset($_POST['action']) && ($_POST['action'] == 'updatepass'))
 	{
 			$name = trim($_POST['yourname']);
-		if (strlen($name) == 0) // empty username	
+		if (strlen($name) == 0)	// empty username	
 		{
 			$newerror = WIKKA_ERROR_EMPTY_USERNAME;
 			$username_temp_highlight = INPUT_ERROR_STYLE;
 		}
-		elseif (!$this->IsWikiName($name)) // check if name is WikiName style	
+		elseif (!$this->IsWikiName($name))	// check if name is WikiName style	
 		{
 			$newerror = ERROR_WIKINAME;
 			$username_temp_highlight = INPUT_ERROR_STYLE;
 		}
-		elseif (!($this->LoadUser($_POST['yourname']))) //check if user exists
+		elseif (!($this->LoadUser($_POST['yourname'])))	//check if user exists
 		{
 			$newerror = ERROR_NONEXISTENT_USERNAME;
 			$username_temp_highlight = INPUT_ERROR_STYLE;
 		}
-		elseif ($existingUser = $this->LoadUser($_POST['yourname']))  // if user name already exists, check password
+		elseif ($existingUser = $this->LoadUser($_POST['yourname']))	// if user name already exists, check password
 		{
 			// updatepassword
 			if ($existingUser['password'] == $_POST['temppassword'])
@@ -464,10 +496,10 @@ else // user is not logged in
 			}
 		}
 	}
-	// END *** Usersettings ***
-	// BEGIN *** Login/Logout *** 
-	// BEGIN ***  Register ***
-	print($this->FormOpen());
+	// END *** USERSETTINGS PW ***
+
+	// BEGIN *** LOGIN/REGISTER ***
+	print($this->FormOpen());	// open login/registration form
 ?>
 	<fieldset id="register" class="usersettings"><legend><?php  echo ($register == '1' || $register == '2') ? LOGIN_REGISTER_LEGEND : LOGIN_LEGEND; ?></legend>
 	<input type="hidden" name="action" value="login" />
@@ -504,7 +536,9 @@ else // user is not logged in
 	<input id="loginsubmit" type="submit" value="<?php echo LOGIN_BUTTON ?>" size="40" />
 	<br /><br />
 <?php
-	// END *** Login/Logout ***
+	// END *** LOGIN ***
+
+	// BEGIN *** REGISTER ***
 	$register = $this->GetConfigValue('allow_user_registration');
 	if ($register == '1' || $register == '2')
 	{
@@ -532,14 +566,16 @@ else // user is not logged in
 	<br />
 <?php
 	}
-	echo	'	</fieldset>'."\n";
-	print($this->FormClose());
-	// END *** Register ***
-	print($this->FormOpen());
+	echo '	</fieldset>'."\n";
+	print($this->FormClose());	// close login/registration form
+	// END *** REGISTER ***
+
+	// BEGIN *** LOGIN PW FORGOTTEN ***
+	print($this->FormOpen());	// open login pw forgotten form
 ?>
 	<fieldset id="password_forgotten" class="usersettings"><legend><?php echo RETRIEVE_PASSWORD_LEGEND ?></legend>
 	<input type="hidden" name="action" value="updatepass" />
-<?php   
+<?php
 	if (isset($newerror))
 	{
 		echo '<em class="error">'.$newerror.'</em><br />'."\n";
@@ -559,6 +595,8 @@ else // user is not logged in
 	<br class="clear" />
 	</fieldset>
 <?php
-	print($this->FormClose());
+	print($this->FormClose());	// close login pw forgotten form
+	// END *** LOGIN PW FORGOTTEN ***
 }
+// END *** LOGOUT 2/LOGIN/REGISTER/PASSWORD UPDATE ***
 ?>
