@@ -2,8 +2,9 @@
 /**
  * Cache and display an RSS feed.
  * 
- * Action usage: {{rss http://domain.com/feed.xml}} 
- * or {{rss url="http://domain.com/feed.xml" cachetime="30"}}.
+ * Usage:
+ *		{{rss http://domain.com/feed.xml}} or
+ *		{{rss url="http://domain.com/feed.xml" cachetime="30"}}
  * NOTE 1 : in Onyx-RSS default is "debugMode" which results in all errors being printed
  * this could be suppressed by turning debug mode off, but then we'd never have a
  * clue about the cause of any error.
@@ -15,13 +16,15 @@
  * 
  * @package		Actions
  * @version		$Id$
- * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
+ * @license		http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
  * 
- * @input		string $url mandotary: URL of the feed
- * @input		integer $cachetime optional: time in minutes to cach the feed
+ * @input		string	$url	mandatory: URL of the feed
+ * @input		integer $cachetime	optional: time in minutes to cache the feed
+ * @output		... tbd @@@
  * @uses		Wakka::cleanUrl()
  * @uses		Wakka::ReturnSafeHTML()
+ * @todo		internationalization (#i18n marker)
  * @todo		should use makeList to generate the list; 
  * @todo		maybe better convert to using Magpie first;
  */
@@ -51,7 +54,9 @@ if (preg_match("/^(http|https):\/\/([^\\s\"<>]+)$/i", $rss_path))
 	/**
 	 * Include 3rdParty plugin
 	 */
-	include_once('3rdparty'.DIRECTORY_SEPARATOR.'plugins'.DIRECTORY_SEPARATOR.'onyx-rss'.DIRECTORY_SEPARATOR.'onyx-rss.php');
+	#include_once('3rdparty'.DIRECTORY_SEPARATOR.'plugins'.DIRECTORY_SEPARATOR.'onyx-rss'.DIRECTORY_SEPARATOR.'onyx-rss.php');
+	$onyx_classpath = $this->GetConfigValue('onyx_path').DIRECTORY_SEPARATOR.'onyx-rss.php';
+	include_once $onyx_classpath;
 	if (!class_exists('Wikka_Onyx'))
 	{
 		class Wikka_Onyx extends ONYX_RSS
@@ -71,7 +76,8 @@ if (preg_match("/^(http|https):\/\/([^\\s\"<>]+)$/i", $rss_path))
 
 if (preg_match("/^(http|https):\/\/([^\\s\"<>]+)$/i", $rss_path))
 {
-	if ($caching) {
+	if ($caching)
+	{
 		// Create unique cache file name based on URL
 		$rss_cache_file = md5($rss_path).".xml";
 	}
@@ -93,8 +99,10 @@ if (preg_match("/^(http|https):\/\/([^\\s\"<>]+)$/i", $rss_path))
 	}
 	$cached_output .= "</ul>\n";
 	echo $this->ReturnSafeHTML($cached_output);
-} else {
-	echo '<span class="error"><em>Error: Invalid RSS action syntax. <br /> Proper usage: {{rss http://domain.com/feed.xml}} or {{rss url="http://domain.com/feed.xml"}}</em></span>'; # i18n
+}
+else
+{
+	echo '<em class="error">Error: Invalid RSS action syntax. <br /> Proper usage: {{rss http://domain.com/feed.xml}} or {{rss url="http://domain.com/feed.xml"}}</em>'; # i18n
 }
 
 ?>

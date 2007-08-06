@@ -18,9 +18,9 @@ if (!defined('SAMPLE_SYNTAX_URL')) define('SAMPLE_SYNTAX_URL','http://example.co
 if (!defined('SAMPLE_SYNTAX1')) define('SAMPLE_SYNTAX1','{{mindmap '.SAMPLE_SYNTAX_URL.'}}');
 if (!defined('SAMPLE_SYNTAX2')) define('SAMPLE_SYNTAX2','{{mindmap url="'.SAMPLE_SYNTAX_URL.'"}}');
 
-//Initialization
-$mm_url_archive = $this->StaticHref('3rdparty/plugins/freemind/freemindbrowser.jar');
-// get action input
+// initialization
+$mm_archivepath = $this->StaticHref($this->GetConfigValue('freemind_uripath').'/freemindbrowser.jar');
+// get action parameters
 $mindmap_url = $vars['url'];
 if ((!$mindmap_url && !$height) && $wikka_vars)
 {
@@ -48,9 +48,9 @@ if ($mindmap_url)
 	$mm_template = <<<TPLMINDMAP
 	<script type="text/javascript" language="JavaScript">
 	<!--
-	    if (!navigator.javaEnabled()) {
-	        document.write('{$jre_install_req_js}');
-	    }
+		if (!navigator.javaEnabled()) {
+			document.write('{$jre_install_req_js}');
+		}
 		function popup(mylink, windowname)
 		{
 			if (! window.focus) return true;
@@ -64,7 +64,7 @@ if ($mindmap_url)
 		}
 	//-->
 	</script>
-	<applet code="freemind.main.FreeMindApplet.class" archive="{$mm_url_archive}" width="100%" height="$height">
+	<applet code="freemind.main.FreeMindApplet.class" archive="{$mm_archivepath}" width="100%" height="$height">
 		<param name="type" value="application/x-java-applet;version=1.4" />
 		<param name="scriptable" value="false" />
 		<param name="modes" value="freemind.modes.browsemode.BrowseMode" />
@@ -82,6 +82,6 @@ TPLMINDMAP;
 } 
 else 
 {
-	echo '<span class="error"><em>'.ERROR_INVALID_MM_SYNTAX.'<br />'.sprintf(PROPER_USAGE_MM_SYNTAX,SAMPLE_SYNTAX1,SAMPLE_SYNTAX2).'</em></span>';
+	echo '<em class="error">'.ERROR_INVALID_MM_SYNTAX.'<br />'.sprintf(PROPER_USAGE_MM_SYNTAX,SAMPLE_SYNTAX1,SAMPLE_SYNTAX2).'</em>';
 }
 ?>

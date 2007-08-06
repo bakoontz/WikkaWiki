@@ -49,7 +49,8 @@ $message = $this->GetRedirectMessage();
 // init output variables
 $onload = ('' != $message) ? " onload=\"alert('".$message."');\" " : '';
 $doctitle = sprintf(GENERIC_DOCTITLE, $this->htmlspecialchars_ent($this->GetWakkaName(), ENT_NOQUOTES), $this->htmlspecialchars_ent($this->PageTitle(), ENT_NOQUOTES));
-$site_base = $this->GetConfigValue('base_url');
+#$site_base = $this->GetConfigValue('base_url');
+#$site_base = $this->base_url;	// base_url: no longer needed with StaticHref()
 $href_main_stylesheet = $this->StaticHref('css/'.$this->GetConfigValue('stylesheet'));
 $href_comment_stylesheet = $this->StaticHref('css/'.$this->GetConfigValue('comment_stylesheet'));
 $href_print_stylesheet = $this->StaticHref('css/print.css');
@@ -59,11 +60,11 @@ if ($this->GetHandler() != 'show' || $this->page['latest'] == 'N' || $this->page
 {
 	$extra_meta .= '	<meta name="robots" content="noindex, nofollow, noarchive" />'."\n";
 }
-if ('' != ($meta_keywords = $this->GetConfigValue("meta_keywords")))
+if ('' != ($meta_keywords = $this->GetConfigValue('meta_keywords')))
 {
 	$extra_meta .= '	<meta name="keywords" content="'.$meta_keywords.'" />'."\n";
 }
-if ('' != ($meta_description = $this->GetConfigValue("meta_description")))
+if ('' != ($meta_description = $this->GetConfigValue('meta_description')))
 {
 	$extra_meta .= '	<meta name="description" content="'.$meta_description.'" />'."\n";
 }
@@ -72,7 +73,7 @@ $pagetag_disp = $this->htmlspecialchars_ent($pagetag);
 $rss_links = '';
 if ($this->GetHandler() != 'edit' && $this->GetConfigValue('enable_rss_autodiscovery') != 0)	// @@@
 {
-	$wikiname = $this->htmlspecialchars_ent($this->GetWakkaName());	// ENT_COMPAT: double quotes need to be escaped here: we use title attribute in double quotes!
+	$wikiname = $this->htmlspecialchars_ent($this->GetWakkaName());	// default ENT_COMPAT: double quotes need to be escaped here: we use title attribute in double quotes!
 	$rss_links .= '	<link rel="alternate" type="application/rss+xml" title="'.sprintf(RSS_REVISIONS_TITLE,$wikiname,$pagetag_disp).' (RSS '.RSS_REVISIONS_VERSION.')" href="'.$this->Href('revisions.xml', $pagetag).'" />'."\n";
 	$rss_links .= '	<link rel="alternate" type="application/rss+xml" title="'.sprintf(RSS_RECENTCHANGES_TITLE,$wikiname).' (RSS '.RSS_RECENTCHANGES_VERSION.')" href="'.$this->Href('recentchanges.xml', $pagetag).'" />'."\n"; // @@@ pagetag needed for Href??
 }
@@ -94,7 +95,6 @@ else
 <html>
 <head>
 	<title><?php echo $doctitle; ?></title>
-	<base href="<?php echo $site_base ?>" />
 	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
 <?php echo $extra_meta; ?>
 	<link rel="stylesheet" type="text/css" href="<?php echo $href_main_stylesheet; ?>" />

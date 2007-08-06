@@ -59,7 +59,7 @@ if ('' !== $phrase)
 			if ($this->HasAccess('read',$page['tag']))
 			{
 				$total_results++;
-				$result_page_list .= '<li>'.$this->Link($page['tag']).'</li>'."\n";
+				$result_page_list .= '<li>'.$this->Link($page['tag']).'</li>'."\n";	// @@@ make new array and let new array2list methods do the formatting
 			}
 		}
 	}
@@ -87,7 +87,8 @@ if ('' !== $phrase)
 }
 
 // display search tips
-if ($this->CheckMySQLVersion(4,00,01))	//TODO replace with version_compare
+#if ($this->CheckMySQLVersion(4,00,01))	// DONE replace with version_compare
+if ($this->CheckMySQLVersion('4.00.01'))
 {	
 	// define variables for template
 	$search_tips     = SEARCH_TIPS;
