@@ -34,6 +34,8 @@
  * Language constant shared among several Wikka files
  */
 // NOTE: all common names (used in multiple files) should start with WIKKA_ !
+define('WIKKA_ERROR_SETUP_FILE_MISSING', 'A file of the installer / upgrader was not found. Please install Wikka again!');
+define('WIKKA_ERROR_MYSQL_ERROR', 'MySQL error: %d - %s');	// %d - error number; %s - error text
 define('WIKKA_ERROR_CAPTION','Error');
 define('WIKKA_ERROR_ACL_READ','You aren\'t allowed to read this page.');
 define('WIKKA_ERROR_ACL_READ_SOURCE','You aren\'t allowed to read the source of this page.');
@@ -74,15 +76,17 @@ define('WIKKA_JAVA_PLUGIN_NEEDED','Java 1.4.1 (or later) Plug-in is needed to ru
  * Language constant for the core {@link wikka.php wikka} program 
  */
 // wikka
-define('ERROR_WAKKA_LIBRARY_MISSING','The necessary file "libs/Wakka.class.php" could not be found. To run Wikka, please make sure the file exists and is placed in the right directory!');
-define('ERROR_WRONG_PHP_VERSION','$_REQUEST[] not found. Wakka requires PHP 4.1.0 or higher!'); //TODO remove referral to PHP internals; refer only to required version
-define('ERROR_SETUP_FILE_MISSING','A file of the installer / upgrader was not found. Please install Wikka again!');
-define('ERROR_SETUP_HEADER_MISSING','The file "setup/header.php" was not found. Please install Wikka again!');
-define('ERROR_SETUP_FOOTER_MISSING','The file "setup/footer.php" was not found. Please install Wikka again!');
-define('ERROR_NO_DB_ACCESS','Error: Unable to connect to the MySQL database.'); //TODO Don't mention DB engine JW
-define('STATUS_WIKI_UNAVAILABLE','The wiki is currently unavailable.');
-define('STATUS_WIKI_UPGRADE_NOTICE','This site is currently being upgraded. Please try again later.');
-define('PAGE_GENERATION_TIME','Page was generated in %.4f seconds'); // %.4f - page generation time
+define('ERROR_WAKKA_LIBRARY_MISSING', 'The necessary file "%s" could not be found. To run Wikka, please make sure the file exists and is placed in the right directory!');	// %s - configured path to core class
+define('ERROR_NO_DB_ACCESS','Error: Unable to connect to the database.');
+define('ERROR_RETRIEVAL_MYSQL_VERSION', 'Could not determine MySQL version');
+define('ERROR_WRONG_MYSQL_VERSION', 'Wikka requires MySQL %s or higher!');	// %s - version number
+define('STATUS_WIKI_UPGRADE_NOTICE', 'This site is currently being upgraded. Please try again later.');
+define('STATUS_WIKI_UNAVAILABLE', 'The wiki is currently unavailable.');
+define('PAGE_GENERATION_TIME', 'Page was generated in %.4f seconds'); // %.4f - page generation time
+
+#define('ERROR_WRONG_PHP_VERSION','$_REQUEST[] not found. Wakka requires PHP 4.1.0 or higher!'); //TODO remove referral to PHP internals; refer only to required version
+#define('ERROR_SETUP_HEADER_MISSING','The file "setup/header.php" was not found. Please install Wikka again!');
+#define('ERROR_SETUP_FOOTER_MISSING','The file "setup/footer.php" was not found. Please install Wikka again!');
 /**#@-*/
  
 
@@ -92,7 +96,7 @@ define('PAGE_GENERATION_TIME','Page was generated in %.4f seconds'); // %.4f - p
  * Language constant used by the {@link calendar.php calendar} action
  */
 // calendar
-define('FMT_SUMMARY','Calendar for %s');					
+define('FMT_SUMMARY','Calendar for %s');	// %s - ???@@@
 define('TODAY','today');
 /**#@-*/
 
@@ -100,7 +104,7 @@ define('TODAY','today');
  * Language constant used by the {@link category.php category} action
  */
 // category
-define('ERROR_NO_PAGES','Sorry, No items found for %s');
+define('ERROR_NO_PAGES','Sorry, No items found for %s');	// %s - ???@@@
 define('PAGES_BELONGING_TO','The following %1$d page(s) belong to %2$s'); // %1$d number found; %2$s category 
 /**#@-*/
 
@@ -600,7 +604,7 @@ define('PAGE_DELETION_CANCEL_BUTTON','Cancel');
  * Language constant used by the {@link diff.php diff} (page) handler
  */
 // diff
-define('ERROR_DIFF_LIBRARY_MISSING','The necessary file "libs'.DIRECTORY_SEPARATOR.'diff.lib.php" could not be found. Please make sure the file exists and is placed in the right directory!'); //TODO 'Please make sure' should be 'please inform WikiAdmin' - end user can't "make sure"
+define('ERROR_DIFF_LIBRARY_MISSING','The necessary file "'.WIKKA_LIBRARY_PATH.DIRECTORY_SEPARATOR.'diff.lib.php" could not be found. Please make sure the file exists and is placed in the right directory!'); //TODO 'Please make sure' should be 'please inform WikiAdmin' - end user can't "make sure"
 define('ERROR_BAD_PARAMETERS','There is something wrong with parameters you supplied, it\'s very likely that one of the versions you want to compare has been deleted.');
 define('DIFF_ADDITIONS_HEADER','Additions:');
 define('DIFF_DELETIONS_HEADER','Deletions:');
@@ -619,12 +623,12 @@ define('HIGHLIGHTING_LEGEND','Highlighting Guide: %1$s %2$s'); // %1$s - sample 
 define('ERROR_OVERWRITE_ALERT1','OVERWRITE ALERT: This page was modified by someone else while you were editing it.');
 define('ERROR_OVERWRITE_ALERT2','Please copy your changes and re-edit this page.');
 define('ERROR_MISSING_EDIT_NOTE','MISSING EDIT NOTE: Please fill in an edit note!');
-define('ERROR_TAG_TOO_LONG','Tag too long! %d characters max.'); // %d - maximum page name length // TODO: use 'Page name' instead of 'Tag'
+define('ERROR_TAG_TOO_LONG','Page name too long! %d characters max.'); // %d - maximum page name length
 define('ERROR_NO_WRITE_ACCESS','You don\'t have write access to this page. You might need to [[UserSettings login]] or [[UserSettings register an account]] to be able to edit this page.'); //TODO Distinct links for login and register actions
 define('EDIT_STORE_PAGE_LEGEND','Store page');
 define('EDIT_PREVIEW_HEADER','Preview');
 define('EDIT_NOTE_LABEL','Please add a note on your edit'); // label after field, so no colon!
-define('MESSAGE_AUTO_RESIZE','Clicking on %s will automatically truncate the tag to the correct size'); // %s - rename button text // TODO: use 'page name' instead of 'tag'
+define('MESSAGE_AUTO_RESIZE','Clicking on %s will automatically truncate the page name to the correct size'); // %s - rename button text
 define('EDIT_PREVIEW_BUTTON','Preview');
 define('EDIT_STORE_BUTTON','Store');
 define('EDIT_REEDIT_BUTTON','Re-edit');
@@ -654,7 +658,7 @@ define('HISTORY_PAGE_VIEW','History of recent changes for %s'); // %s pagename
 define('OLDEST_VERSION_EDITED_ON_BY','Oldest known version of this page was edited on %1$s by %2$s'); // %1$s - time; %2$s - user name
 define('MOST_RECENT_EDIT','Latest edit on %1$s by %2$s'); // %1$s - time; %2$s - user name
 define('HISTORY_MORE_LINK_DESC','here'); // used for alternative history link in HISTORY_MORE
-define('HISTORY_MORE','Full history for this page cannot be displayed within a single page, click %s to view more.'); // %s alternative history link # @@@ TODO avoid using 'here'
+define('HISTORY_MORE','Full history for this page cannot be displayed within a single page, click %s to view more.'); // %s alternative history link # @@@ TODO avoid using 'here' ^
 /**#@-*/
 
 /**#@+
@@ -806,7 +810,7 @@ define('FORMATTER_UNKNOWN','Formatter "%s" not found'); // %s formatter name
 
 /* ------------------ SETUP ------------------ */
 /**#@+
- * Language constant used by the {@link default.php setup} program (several files)
+ * Language constant used by the {@link index.php setup} program (and several included files)
  */
 // @@@ later....
 /**#@-*/
