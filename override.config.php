@@ -22,7 +22,7 @@
  *   setup values for a collection of Wikka installations
  * 
  * Naming indicates purpose:
- * - All constants have a prefix "LOCAL": LOCAL' in this context means applicable
+ * - All constants have a prefix "LOCAL": 'LOCAL' in this context means applicable
  *   to this particular instance of Wikka, although it these constants can
  *   actually be used to share system files between different installations, by
  *   pointing this all at the same location in all instances.
