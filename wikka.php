@@ -617,6 +617,9 @@ $wakkaConfig = array_merge($wakkaDefaultConfig, $wakkaConfig);
 //     - CONFIG_DEFAULT_LANGUAGE and WIKKA_LANG_PATH must have been defined
 //     - Error message to show when no language file could be loaded must
 //       have been defined
+// @@@ maybe NOT load this when we don't have a configuration file (and thus
+// need to do a NEW install)? isset($wakkaConfig['default_lang']) - it would
+// prevent dynamic language switching during installation...?
 if ($debug) echo "get language file...<br/>\n";
 /**
  * Include language file if one exists.
@@ -628,7 +631,7 @@ if ($debug) echo "get language file...<br/>\n";
 $wakkaConfig['default_lang'] = (isset($wakkaConfig['default_lang'])) ? $wakkaConfig['default_lang'] : CONFIG_DEFAULT_LANGUAGE;
 // setup variables
 $default_lang	= $wakkaConfig['default_lang'];
-$fallback_lang	= 'en';								// should always be available - @@@ use CONFIG_DEFAULT_LANGUAGE
+$fallback_lang	= CONFIG_DEFAULT_LANGUAGE;			// should always be available
 $default_language_file  = WIKKA_LANG_PATH.DIRECTORY_SEPARATOR.$default_lang.DIRECTORY_SEPARATOR.$default_lang.'.inc.php';
 $fallback_language_file = WIKKA_LANG_PATH.DIRECTORY_SEPARATOR.$fallback_lang.DIRECTORY_SEPARATOR.$fallback_lang.'.inc.php';
 $language_file_not_found = sprintf(ERROR_LANGUAGE_FILE_MISSING,$default_language_file);
@@ -643,7 +646,7 @@ elseif (file_exists($fallback_language_file))
 }
 else
 {
-	die($language_file_not_found);	// fatalerror - local error message in English because we don't _have_ a language file(!)
+	die($language_file_not_found);	# fatalerror - local error message in English because we don't _have_ a language file(!)
 }
 // ---------------------------- END LANGUAGE FILE ------------------------------
 
@@ -740,6 +743,7 @@ if ($debug) echo 'site configuration file (to be) lodated at: '.SITE_CONFIGFILE.
 
 // ---------------------------- GET READY TO ROLL ------------------------------
 if ($debug) echo "get ready to roll...<br/>\n";
+if ($debug) echo '=> register_globals: '.ini_get('register_globals')."</br>\n";
 // --- - requires SOME language file to be loaded for error messages
 //     - constants WIKKA_LIBRARY_PATH, BASIC_SESSION_NAME and MINIMUM_MYSQL_VERSION
 //       must have been defined
@@ -762,8 +766,21 @@ else
 
 /**
  * Start session.
+ * @todo	consider whether to derive the complete set of paths (but earlier)
+ *			and pass them to the Wakka object; that way we still derive only once
+ *			but the installer can use them as well.
  */
+// 1. derive cookie path
+#$scheme = ((isset($_SERVER['HTTPS'])) && !empty($_SERVER['HTTPS']) && 'off' != $_SERVER['HTTPS']) ? 'https://' : 'http://';
+#$base_domain_url = $scheme.$_SERVER['SERVER_NAME'].($_SERVER['SERVER_PORT'] != 80 ? ':'.$_SERVER['SERVER_PORT'] : '');
+$base_url_path = preg_replace('/wikka\.php/', '', $_SERVER['SCRIPT_NAME']);
+#$base_url = $this->base_domain_url.$this->base_url_path;
+#$wikka_url = ((bool) $wakkaConfig['rewrite_mode']) ? $base_url : $base_url.WIKKA_URL_EXTENSION;
+$wikka_cookie_path = substr($base_url_path,0,-1);
+
+// 2. start session
 session_name(md5(BASIC_SESSION_NAME.$wakkaConfig['wiki_suffix']));
+session_set_cookie_params(0, $wikka_cookie_path);	// default path is '/' - we don't want that! call overrides php.ini settings
 session_cache_limiter(''); #279
 session_start();
 

@@ -34,6 +34,10 @@ if (!defined('COMMENT_ORDER_THREADED')) define('COMMENT_ORDER_THREADED', 3);
 if (!defined('COMMENT_MAX_TRAVERSAL_DEPTH')) define('COMMENT_MAX_TRAVERSAL_DEPTH', 10);
 if (!defined('MAX_HOSTNAME_LENGTH_DISPLAY')) define('MAX_HOSTNAME_LENGTH_DISPLAY', 50);
 /**
+ * Default number of hours after which a permanent cookie is to expire: corresponds to 90 days.
+ */
+if (!defined('DEFAULT_COOKIE_EXPIRATION_HOURS')) define('DEFAULT_COOKIE_EXPIRATION_HOURS',90 * 24);
+/**
  * Length to use for generated part of id attribute.
  */
 if (!defined('ID_LENGTH')) define('ID_LENGTH',10);		// @@@ maybe make length configurable
@@ -2237,42 +2241,183 @@ class Wakka
 	 */
 
 	/**
-	 * Set a temporary Cookie.
+	 * Set a (session or persistent) cookie.
+	 *
+	 * This method implements both session and persistent cookies (only
+	 * expiration differs). Cookie path is automatically set to the Wikka path.
+	 * The default action is to set a persistent cookie.
 	 *
 	 * @uses	Wakka::GetConfigValue()
-	 * @todo	send valid path: '/' is not correct if Wikka is not in the root
+	 *
+	 * @param	$name	string	mandatory: name of the cookie (will be supplemented
+	 * 					with configured "wiki_suffix")
+	 * @param	$value	mixed	mandatory: value to assign to the name (will
+	 *					effectively be turned into a string when sent).
+	 * 					From php.net: "Because setting a cookie with a value of
+	 *					FALSE will try to delete the cookie, you should not use
+	 *					boolean values. Instead, use 0 for FALSE and 1 for TRUE."
+	 * @param	$expires	integer	optional:	time in hours after which the
+	 *					cookie is to expire; default {@link DEFAULT_COOKIE_EXPIRATION_HOURS};
+	 *					pass any <b>negative</b> value to create a session cookie
+	 */
+	function SetACookie($name, $value, $expires=DEFAULT_COOKIE_EXPIRATION_HOURS)
+	{
+		// init
+		$this->cookies_sent = FALSE;
+		$valid_until = ($expires < 0) ? 0 : time() + ($expires * 60 * 60);
+		// attempt to set cookie
+		$rc = setcookie($name.$this->GetConfigValue('wiki_suffix'), $value, $valid_until, $this->wikka_cookie_path);
+		if ($rc)
+		{
+			$_COOKIE[$name.$this->GetConfigValue('wiki_suffix')] = $value;
+			$this->cookies_sent = TRUE;
+		}
+	}
+	/**
+	 * Set a persistent Cookie - DEPRECATED.
+	 *
+	 * A wrapper for SetACookie() - kept for backwards compatibility with third-party
+	 * extensions that might use this.
+	 *
+	 * @param	$name	string	mandatory: name of the cookie (will be supplemented
+	 * 					with configured "wiki_suffix")
+	 * @param	$value	mixed	mandatory: value to assign to the name (will
+	 *					effectively be turned into a string when sent).
+	 * 					From php.net: "Because setting a cookie with a value of
+	 *					FALSE will try to delete the cookie, you should not use
+	 *					boolean values. Instead, use 0 for FALSE and 1 for TRUE."
+	 * @param	$expires	integer	optional:	time in hours after which the
+	 *					cookie is to expire; default {@link DEFAULT_COOKIE_EXPIRATION_HOURS}
+	 */
+	function SetPersistentCookie($name, $value, $expires=DEFAULT_COOKIE_EXPIRATION_HOURS)
+	{
+		$this->SetACookie($name, $value, $expires);
+	}
+	/**
+	 * Set a session Cookie - DEPRECATED.
+	 *
+	 *
+	 * A wrapper for SetACookie() - kept for backwards compatibility with third-party
+	 * extensions that might use this.
+	 *
+	 * @param	$name	string	mandatory: name of the cookie (will be supplemented
+	 * 					with configured "wiki_suffix")
+	 * @param	$value	mixed	mandatory: value to assign to the name (will
+	 *					effectively be turned into a string when sent). See also
+	 *					{@link SetPersistentCookie()}
 	 */
 	function SetSessionCookie($name, $value)
 	{
-		SetCookie($name.$this->GetConfigValue('wiki_suffix'), $value, 0, '/');
-		$_COOKIE[$name.$this->GetConfigValue('wiki_suffix')] = $value;
-		$this->cookies_sent = TRUE;
-	}
-	/**
-	 * Set a Cookie.
-	 *
-	 * @uses	Wakka::GetConfigValue()
-	 *
-	 * @todo	Avoid magic values: add "days" paramater with default 90, and calculate expiration from that
-	 * @todo	send valid path: '/' is not correct if Wikka is not in the root
-	 */
-	function SetPersistentCookie($name, $value)
-	{
-		SetCookie($name.$this->GetConfigValue('wiki_suffix'), $value, time() + 90 * 24 * 60 * 60, '/');
-		$_COOKIE[$name.$this->GetConfigValue('wiki_suffix')] = $value;
-		$this->cookies_sent = TRUE;
+		// negative 'expires' tells SetACookie() to make it a session cookie
+		$this->SetACookie($name, $value, -1);
 	}
 	/**
 	 * Delete a Cookie.
 	 *
+	 * Technical note:<br/>
+	 * Unless overridden with $internal set to FALSE, this function will also
+	 * (attempt to) unset the current corresponding value in the $_COOKIE array.
+	 * According to {@link http://php.net/unset} it is not possible to unset a
+	 * global variable from within a function (and still have it unset after the
+	 * function has run) but in my testing variables in teh $_COOKIE array as
+	 * well as variables in the $_SESSION array can be unset from within a
+	 * function and remain unset. This is also independent of the setting for
+	 * register_globals. Just to be sure, we set the value to NULL (after which
+	 * it still exists), before unsetting it; this is in case PHP in a different
+	 * version or on a different platform behaves differently from mine. -- JW
+	 *
 	 * @uses	Wakka::GetConfigValue()
-	 * @todo	send valid path: '/' is not correct if Wikka is not in the root
+	 *
+	 * @param	$name	string	mandatory:	name of the cookie to delete
+	 * @param	$path	string	optional: path the cookie was defined as valid for;
+	 *					defaults to the current Wikka path
+	 * @param	$internal	boolean	optional: if set to TRUE, value in $_COOKIE array
+	 *					will be unset after setting the cookie to "deleted": this
+	 *					is the normal case, deleting permanent cookies on logout,
+	 *					while for clearing up old cookies we cannot always do this;
+	 *					default: TRUE
+	 * @param	$rawname	boolean	optional: if set to TRUE, will use only the
+	 *					specified cookie name, if set to FALSE, the name is
+	 *					"supplemented" with the configured "wiki_suffix";
+	 *					default FALSE
+	 * @return	void	(but if setcookie was successful, $this->cookies_sent will
+	 *					be set to TRUE)
 	 */
-	function DeleteCookie($name)
+	function DeleteCookie($name, $path='', $internal=TRUE, $rawname=FALSE)
 	{
-		SetCookie($name.$this->GetConfigValue('wiki_suffix'), '', 1, '/');
-		$_COOKIE[$name.$this->GetConfigValue('wiki_suffix')] = '';
-		$this->cookies_sent = TRUE;
+		// init
+		$this->cookies_sent = FALSE;
+		if ('' == trim($path))
+		{
+			$path = $this->wikka_cookie_path;	// default
+		}
+		$cookiename = ($rawname) ? $name : $name.$this->GetConfigValue('wiki_suffix');
+
+		if (isset($_COOKIE[$cookiename]))
+		{
+			// FALSE and time in past to immediately delete cookie
+			$rc = setcookie($cookiename, FALSE, 1, $path);
+			if ($rc && $internal)
+			{
+				$_COOKIE[$cookiename] = NULL;	// empties value, but key still exists
+				unset($_COOKIE[$cookiename]);	// actually removes the key (but see docblock)
+				$this->cookies_sent = TRUE;
+			}
+		}
+	}
+	/**
+	 * Delete old cookies (old names, old paths).
+	 *
+	 * This will attempt to remove cookies with old, un-suffixed names (always
+	 * root as path), and cookies with suffixed names that had root as path when
+	 * the current cookie path is <b>not</b> root.
+	 *
+	 * There is a (very) slight risk this might remove a cookie of another Wikka
+	 * installation running on the same server (precisely why we're now using a
+	 * cookie path!) but once all Wikka installations are upgraded this becomes
+	 * highly unlikely.
+	 */
+	function DeleteOldCookies()
+	{
+		// get debug flag from wikka.php
+		global $debug;
+
+		foreach($_COOKIE as $name => $value)
+		{
+			switch ($name)
+			{
+				// old name
+				case 'wikka_user_name':
+if ($debug) echo "deleting 'wikka_user_name' at root<br/>\n";
+					// delete cookie using 'raw' name and also delete from $_COOKIE
+					$this->DeleteCookie('wikka_user_name','/',TRUE,TRUE);
+					break;
+				// old name
+				case 'wikka_pass':
+if ($debug) echo "deleting 'wikka_pass' at root<br/>\n";
+					// delete cookie using 'raw' name and also delete from $_COOKIE
+					$this->DeleteCookie('wikka_pass','/',TRUE,TRUE);
+					break;
+				// old path
+				case 'user_name'.$this->GetConfigValue('wiki_suffix'):
+					if ($this->wikka_cookie_path != '/')
+					{
+if ($debug) echo "deleting 'user_name".$this->GetConfigValue('wiki_suffix')."' at root<br/>\n";
+						// do NOT delete from $_COOKIE since this cannot be path-specific
+						$this->DeleteCookie('user_name','/',FALSE);
+					}
+					break;
+				// old path
+				case 'pass'.$this->GetConfigValue('wiki_suffix'):
+					if ($this->wikka_cookie_path != '/')
+					{
+if ($debug) echo "deleting 'pass".$this->GetConfigValue('wiki_suffix')."' at root<br/>\n";
+						// delete cookie but do NOT delete from $_COOKIE since this cannot be path-specific
+						$this->DeleteCookie('pass','/',FALSE);
+					}
+					break;
+			}
+		}
 	}
 	/**
 	 * Get the value of a Cookie.
@@ -3148,19 +3293,33 @@ class Wakka
 	 */
 	function GetUser()
 	{
+echo 'GetUser() - isset user? ';
+if (isset($_SESSION['user']))
+{
+	echo 'yes!';
+	if (NULL === $_SESSION['user']) echo ' is NULL';
+	elseif (FALSE === $_SESSION['user']) echo ' is FALSE';
+	else echo ' is '.$_SESSION['user'];
+	echo "<br/>\n";
+}
+else
+{
+	echo 'no!'."<br/>\n";
+}
 		$user = (isset($_SESSION['user'])) ? $_SESSION['user'] : NULL;
 		return $user;
 	}
 	/**
 	 * Log-in a given user.
 	 *
-	 * User data are stored in the session, whereas name and password are stored in a cookie.
+	 * User data are stored in the session, whereas name and password are stored
+	 * in a cookie.
 	 *
-	 * @uses	Wakka::SetPersistentCookie()
+	 * @uses	Wakka::SetACookie()
 	 * @uses	Wakka::GetConfigValue()
 	 * @uses	Wakka::Query()
 	 *
-	 * @param	array $user	mandatory: must contain the userdata
+	 * @param	array	$user	mandatory: must contain the user data
 	 * @todo	it seems safer to change the order here, so the query is done first
 	 *			and session and cookies are set only when that succeeds;
 	 *			the function should report successful (or not) completion.
@@ -3174,18 +3333,29 @@ class Wakka
 		$user['challenge'] = dechex(crc32(rand()));
 		// login
 		$_SESSION['user'] = $user;
-		$this->SetPersistentCookie('user_name', $user['name']);
+		$this->SetACookie('user_name', $user['name']);
 		$this->Query("
 			UPDATE ".$this->GetConfigValue('table_prefix')."users
 			SET `challenge` = '".$user['challenge']."'
 			WHERE `name` = '".mysql_real_escape_string($user['name'])."'"
 			);
-		$this->SetPersistentCookie('pass', md5($user['challenge'].$user['password']));
+		$this->SetACookie('pass', md5($user['challenge'].$user['password']));
 	}
 	/**
 	 * Log-out the current user.
 	 *
-	 * User data are removed from the session and name and password cookies are deleted.
+	 * User data are removed from the session and name and password cookies are
+	 * deleted.
+	 *
+	 * Technical note:<br/>
+	 * According to {@link http://php.net/unset} it is not possible to unset a
+	 * global variable from within a function (and still have it unset after the
+	 * function has run) but in my testing variables in the $_COOKIE array as
+	 * well as variables in the $_SESSION array can be unset from within a
+	 * function and remain unset. This is also independent of the setting for
+	 * register_globals. Just to be sure, we set the value to NULL (after which
+	 * it still exists), before unsetting it; this is in case PHP in a different
+	 * version or on a different platform behaves differently from mine. -- JW
 	 *
 	 * @uses	Wakka::GetConfigValue()
 	 * @uses	Wakka::GetUserName()
@@ -3203,14 +3373,18 @@ class Wakka
 	{
 		// init: Choosing an arbitrary challenge that the DB server only knows.
 		$user['challenge'] = dechex(crc32(rand()));
-		// logout
+		// database
 		$this->Query("
 			UPDATE ".$this->GetConfigValue('table_prefix')."users
 			SET `challenge` = '".$user['challenge']."'
 			WHERE `name` = '".mysql_real_escape_string($this->GetUserName())."'"
 			);
-		$_SESSION['user'] = '';				// @@@ unset! GetUser() checks for isset()
-		unset($_SESSION['show_comments']);	// not in login - where does this come from?
+		// session
+		$_SESSION['user'] = NULL;
+		unset($_SESSION['user']);
+		$_SESSION['show_comments'] = NULL;
+		unset($_SESSION['show_comments']);	// is set in show handler
+		// cookies
 		$this->DeleteCookie('user_name');
 		$this->DeleteCookie('pass');
 	}
@@ -3315,6 +3489,7 @@ class Wakka
 	 */
 	function LoadComments($tag, $order=NULL)
 	{
+		// default
 		if ($order == NULL)
 		{
 			if (isset($_SESSION['show_comments'][$tag]))
@@ -3326,6 +3501,7 @@ class Wakka
 				$order = COMMENT_ORDER_DATE_ASC;
 			}
 		}
+		// handle requested order
 		if ($order == COMMENT_ORDER_DATE_ASC)	// Return ASC by date
 		{
 			// always returns an array, but it may be empty
@@ -3337,7 +3513,7 @@ class Wakka
 				ORDER BY time"
 				);
 		}
-		if ($order == COMMENT_ORDER_DATE_DESC)
+		elseif ($order == COMMENT_ORDER_DATE_DESC)
 		{
 			// always returns an array, but it may be empty
 			return $this->LoadAll("
@@ -3348,7 +3524,7 @@ class Wakka
 				ORDER BY time DESC"
 				);
 		}
-		if ($order == COMMENT_ORDER_THREADED)
+		elseif ($order == COMMENT_ORDER_THREADED)
 		{
 			$record = array();
 			$this->TraverseComments($tag, $record);
@@ -4067,12 +4243,14 @@ class Wakka
 	 * @param	string	$handler	optional: the method which should be used. default: "show"
 	 * @return	void
 	 * @todo	rewrite the handler call routine and move handler specific settings to handler config files #446 #452
-	 * @todo	implement cleaner time tracking, using "compatibility method"
 	 */
 	function Run($tag, $handler='')
 	{
 #echo 'Run - tag: '.$tag."<br/>\n";
 #echo 'Run - handler: '.$handler."<br/>\n";
+		// get debug flag from wikka.php
+		global $debug;
+
 		// do our stuff!
 
 		// 1. paths
@@ -4106,34 +4284,54 @@ class Wakka
 			$this->handler = 'show';
 		}
 
-		// 3. user
+		// 3. clean up old (OBSOLETE) cookies
 
-		// authenticate user from persistent cookie; if authenticated, store data in object variable
-		if ($user = $this->LoadUser($this->GetCookie('user_name'), $this->GetCookie('pass')))
-		{
-			$this->SetUser($user);
-		}
-
-		// 4. clean up old (OBSOLETE) cookies
-
-		// clean up cookies with old names (OBSOLETE now)
-		// @@@ make two separate conditions, one for each cookie
-		if (isset($_COOKIE['wikka_user_name']) && (isset($_COOKIE['wikka_pass'])))
-		{
+		//if (isset($_COOKIE['wikka_user_name']) && (isset($_COOKIE['wikka_pass'])))
+		//{
+			/*
 			// Old cookies (old names!): delete them
-			// @@@ JW:	DeleteCookie() will not work for this purpose:
-			//			the old names didn't use a suffix
-			//			(see [79])! DeleteCookie() was introduced here in [413].
+			// JW:	DeleteCookie() will not work for this purpose:
+			//		the old names didn't use a suffix
+			//		(see [79])! DeleteCookie() was introduced here in [413].
 			SetCookie('wikka_user_name', '', 1, '/'); // do use root as path because that is what we used!
 			$_COOKIE['wikka_user_name'] = '';	// better use unset()?
 			SetCookie('wikka_pass', '', 1, '/'); // do use root as path because that is what we used!
 			$_COOKIE['wikka_pass'] = '';	// better use unset()?
+			*/
 			/*
 			$this->DeleteCookie('wikka_pass');
 			$this->DeleteCookie('wikka_user_name');
 			*/
+		//}
+		// clean up cookies with old names or with root path if that's not the
+		// current path (they are OBSOLETE now)
+		// JW:	Updated DeleteCookie() can now handle old names and paths;
+		//		we can now bundle all cleanup in one function call
+if ($debug)
+{
+	echo 'cleaning up old cookies:'."<br/>\n";
+	echo 'BEFORE DeleteOldCookies - current cookies:<pre>';
+	print_r($_COOKIE);
+	echo "</pre>\n";
+}
+		$this->DeleteOldCookies();	// remove all old cookies in one go.
+if ($debug)
+{
+	echo 'AFTER DeleteOldCookies - current cookies:<pre>';
+	print_r($_COOKIE);
+	echo "</pre>\n";
+}
+
+		// 4. user
+
+		// authenticate user from persistent cookie; if authenticated, store data
+		// in object variable.
+		// NOTE: we do this after cleaning up old cookies so we can't authenticate
+		// from an obsolete cookie!
+		if ($user = $this->LoadUser($this->GetCookie('user_name'), $this->GetCookie('pass')))
+		{
+			$this->SetUser($user);	// LoginUser()
 		}
-		// @@@ ADD: clean up cookies with root path if the current cookie path is different
 
 		// 5. log referrers
 
