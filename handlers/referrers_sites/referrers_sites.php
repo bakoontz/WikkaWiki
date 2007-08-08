@@ -49,7 +49,7 @@ else
 {
 	// referrers to this page
 	// prepare UI
-	switch (intval($this->GetConfigValue('referrers_purge_time')))
+	switch ((int) $this->GetConfigValue('referrers_purge_time'))
 	{
 		case 0: 
 			$referrers_purge_time = '';

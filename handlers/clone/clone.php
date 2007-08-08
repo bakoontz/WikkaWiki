@@ -55,7 +55,7 @@
 /**#@+
  * Default value.
  */
-if(!defined('VALID_PAGENAME_PATTERN')) define ('VALID_PAGENAME_PATTERN', '/^[A-Za-zִײÜßהצü]+[A-Za-z0-9ִײÜßהצü]*$/s'); #34
+if (!defined('VALID_PAGENAME_PATTERN')) define ('VALID_PAGENAME_PATTERN', '/^[A-Za-zִײÜßהצü]+[A-Za-z0-9ִײÜßהצü]*$/s'); #34
 /**#@-*/
 
 // initialization

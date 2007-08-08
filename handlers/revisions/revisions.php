@@ -38,14 +38,12 @@
 
 $start = 0;
 
-echo '<div class="page">'."\n";
-
 if ($this->HasAccess('read')) 
 {
 	if (isset($_GET['start']))
 	{
-		$start = intval($this->GetSafeVar('start', 'get'));
-		$a = intval($this->GetSafeVar('a', 'get'));
+		$start = (int) $this->GetSafeVar('start', 'get');
+		$a = (int) $this->GetSafeVar('a', 'get');
 		if ($a)
 		{
 			$pageA = $this->LoadPageById($a);
@@ -59,7 +57,7 @@ if ($this->HasAccess('read'))
 	// load revisions for this page
 	if ($pages)
 	{
-		$output = $this->FormOpen('diff', '', 'get');
+		$output  = $this->FormOpen('diff', '', 'get');
 		$output .= "<fieldset>\n";
 		$output .= "<legend>".sprintf(REVISIONS_CAPTION, $this->Link($this->tag))."</legend>"."\n";		
 		$output .= '<table border="0" cellspacing="0" cellpadding="1">'."\n";
@@ -100,10 +98,13 @@ if ($this->HasAccess('read'))
 		}
 		$output .= $this->FormClose()."\n";
 	}
+
+	echo '<div class="page">'."\n";
 	echo $output;
 } 
 else 
 {
+	echo '<div class="page">'."\n";
 	echo '<em class="error">'.WIKKA_ERROR_ACL_READ.'</em>';
 }
 echo '</div>'."\n";

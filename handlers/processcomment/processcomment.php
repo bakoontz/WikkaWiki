@@ -23,7 +23,7 @@
  */
 
 // Get comment id
-$comment_id = intval(trim($_POST['comment_id']));
+$comment_id = (int) trim($_POST['comment_id']);
 
 // Delete comment
 if ($_POST['submit']==COMMENT_DELETE_BUTTON && $this->HasAccess('comment_post'))
@@ -48,7 +48,7 @@ if(($_POST['submit']==COMMENT_REPLY_BUTTON || $_POST['submit']==COMMENT_NEW_BUTT
 {
 	// display comment form
 	$comment = '';
-	if(isset($comment_id))
+	if (isset($comment_id))
 	{
 		$comment = $this->LoadSingle("SELECT user, comment FROM ".$this->GetConfigValue('table_prefix')."comments WHERE id = '".$comment_id."' LIMIT 1");
 	}
@@ -72,7 +72,7 @@ if(($_POST['submit']==COMMENT_REPLY_BUTTON || $_POST['submit']==COMMENT_NEW_BUTT
 // Save comment
 if ($_POST['submit']==COMMENT_ADD_BUTTON)
 {
-	$parent_id = intval(trim($_POST['comment_id']));
+	$parent_id = (int) trim($_POST['comment_id']);
 	if ($this->HasAccess('comment_post') || $this->IsAdmin())
 	{
 		$redirectmessage = '';

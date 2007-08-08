@@ -52,7 +52,8 @@ switch ($_GET['action'])	#312
 		{
 			if (isset($_SERVER['HTTP_RANGE']) &&
 				(preg_match('/^.*bytes[= ]+(\d+)-(\d+)\s*$/', $_SERVER['HTTP_RANGE'], $range)) &&
-				(intval($range[2]) >= intval($range[1])))
+				((int) $range[2] >= (int) $range[1])
+			   )
 			{
 				$rstart = $range[1];
 				$rend = $range[2];
