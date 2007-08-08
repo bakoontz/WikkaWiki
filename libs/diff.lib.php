@@ -1,11 +1,8 @@
 <?php
 /**
- * A php wdiff (word diff) for wakka, adapted by David Delon
- * based on wdiff and phpwiki diff (copyright below).
+ * A php wdiff (word diff) for wakka.
  *
- * @todo 	Since wdiff use only directive lines, all stuff in diff class 
- * related to line and context display should be removed.
- * @todo	Use a more flexible diff class
+ * Adapted by David Delon based on wdiff and phpwiki diff (copyright below).
  *
  * @package		Wikka
  * @subpackage	Libs
@@ -13,16 +10,22 @@
  * @license		http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
  * 
- * @author Geoffrey T. Dairiki
- * @author Francois Pinard
- * @copyright Copyright (C) 2000, 2001 Geoffrey T. Dairiki <dairiki@dairiki.org>
- * @copyright Copyright (C) 1992 Free Software Foundation, Inc. Francois Pinard <pinard@iro.umontreal.ca>.
+ * @author		Geoffrey T. Dairiki
+ * @author		Francois Pinard
+ * @copyright	Copyright (C) 2000, 2001 Geoffrey T. Dairiki <dairiki@dairiki.org>
+ * @copyright	Copyright (C) 1992 Free Software Foundation, Inc. Francois Pinard <pinard@iro.umontreal.ca>.
+ *
+ * @todo 	Since wdiff use only directive lines, all stuff in diff class
+ *			related to line and context display should be removed.
+ * @todo	Use a more flexible diff class
  */
+
 /**
- * @name Side
- * @package Wikka
- * @subpackage Libs
- */
+ * @name		Side
+ * @package		Wikka
+ * @subpackage	Libs
+ * @access		public
+ *  */
 class Side {
     var $position;
     var $cursor;
@@ -240,7 +243,10 @@ class Side {
 define('USE_ASSERTS', function_exists('assert'));
 
 /**
- * @access private
+ * @name		_DiffOp
+ * @package		Wikka
+ * @subpackage	Libs
+ * @access		private
  */
 class _DiffOp {
     var $type;
@@ -257,7 +263,10 @@ class _DiffOp {
     }
 }
 /**
- * @access private
+ * @name		_DiffOp_Copy
+ * @package		Wikka
+ * @subpackage	Libs
+ * @access		private
  */
 class _DiffOp_Copy extends _DiffOp {
     var $type = 'copy';
@@ -271,7 +280,10 @@ class _DiffOp_Copy extends _DiffOp {
 
 }
 /**
- * @access private
+ * @name		_DiffOp_Delete
+ * @package		Wikka
+ * @subpackage	Libs
+ * @access		private
  */
 class _DiffOp_Delete extends _DiffOp {
     var $type = 'delete';
@@ -283,7 +295,10 @@ class _DiffOp_Delete extends _DiffOp {
 
 }
 /**
- * @access private
+ * @name		_DiffOp_Add
+ * @package		Wikka
+ * @subpackage	Libs
+ * @access		private
  */
 class _DiffOp_Add extends _DiffOp {
     var $type = 'add';
@@ -295,7 +310,10 @@ class _DiffOp_Add extends _DiffOp {
 
 }
 /**
- * @access private
+ * @name		_DiffOp_Change
+ * @package		Wikka
+ * @subpackage	Libs
+ * @access		private
  */
 class _DiffOp_Change extends _DiffOp {
     var $type = 'change';
@@ -323,8 +341,11 @@ class _DiffOp_Change extends _DiffOp {
  * Finally, some ideas (subdivision by NCHUNKS > 2, and some optimizations)
  * are my own.
  *
- * @author Geoffrey T. Dairiki
- * @access private
+ * @author		Geoffrey T. Dairiki
+ * @name		_DiffEngine
+ * @package		Wikka
+ * @subpackage	Libs
+ * @access		private
  */
 class _DiffEngine
 {
@@ -709,8 +730,13 @@ class _DiffEngine
 
 /**
  * Class representing a 'diff' between two sequences of strings.
+ *
+ * @name		Diff
+ * @package		Wikka
+ * @subpackage	Libs
+ * @access		public
  */
-class Diff 
+class Diff
 {
     var $edits;
 
@@ -729,7 +755,7 @@ class Diff
 
 }
 
-	    
+
 
 /**
  * A class to format Diffs
@@ -737,6 +763,11 @@ class Diff
  * This class formats the diff in classic diff format.
  * It is intended that this class be customized via inheritance,
  * to obtain fancier outputs.
+ *
+ * @name		DiffFormatter
+ * @package		Wikka
+ * @subpackage	Libs
+ * @access		public
  */
 class DiffFormatter
 {

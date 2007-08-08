@@ -6,16 +6,16 @@
  * entries used by the Wikka engine. The values assigned here are default values
  * which may be overridden by the site admin.
  *
- * @package		Config
+ * @package		Configuration
  *
  * @version		$Id$
- * @license 	http://www.gnu.org/copyleft/gpl.html GNU General Public License
+ * @license	http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
  *
- * @author 		{@link http://wikkawiki.org/DarTar Dario Taraborelli} (phpdoc header, major rewording of the description of each option)
- * @author 		{@link http://wikkawiki.org/DotMG Mahefa Randimbisoa} (original draft)
+ * @author		{@link http://wikkawiki.org/DarTar Dario Taraborelli} (phpdoc header, major rewording of the description of each option)
+ * @author		{@link http://wikkawiki.org/DotMG Mahefa Randimbisoa} (original draft)
  *
- * @copyright 	Copyright 2007, {@link http://wikkawiki.org/CreditsPage Wikka Development Team}
+ * @copyright	Copyright 2007, {@link http://wikkawiki.org/CreditsPage Wikka Development Team}
  *
  * @todo		Each setting description should be carefully checked and modified if needed.
  * @todo		We may want to refer to specific config settings from any component using the phpdoc "uses" tag.
@@ -24,12 +24,15 @@
  */
 
 /**
-  * Pseudo-class containing the main configuration entries for Wikka.
-  */
+ * Pseudo-class containing the main configuration entries for Wikka.
+ *
+ * @package		Configuration
+ * @subpackage	Defaults
+ */
 class Config 
 {
 	/**#@+
-	 * @access public
+	 * @access	public
 	 * @var string
 	 */
 	/**
@@ -428,11 +431,11 @@ class Config
 	/**
 	 * Mime types.
 	 * Config entry not used! Documentation not available!
-	 * @@@ Possibly the file is intended only as example for setting mimetypes
+	 * Possibly the file is intended only as example for setting mimetypes
 	 * on the server? Or maybe for downloadable files?
 	 * Keep the file, lose the config value. -- JW#
 	 */
-	var $mime_types = 'mime_types.txt';
+	var $mime_types = 'mime_types.txt';	// @@@ example only?
 
 	/**
 	 * GeSHi wrapper.
@@ -550,15 +553,13 @@ class Config
 	 * Default language-code used in the wiki.
 	 * This can be overridden with another language to be used as default.
 	 * This should be a ISO 639-1 code (e.g. 'en' for English).
-	 * 
-	 * @access	public
-	 * @var		string
 	 */
 	#var $default_lang = 'en';
 	var $default_lang = CONFIG_DEFAULT_LANGUAGE;	// pick up default from wikka.php
 	/**#@-*/
 
 	/**#@+
+	 * @access	public
 	 * @var boolean (TRUE or FALSE)
 	 */
 	/**
