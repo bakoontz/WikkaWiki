@@ -59,7 +59,7 @@ if (!defined('PATTERN_REPLACE_IMG_WITH_ALTTEXT')) define('PATTERN_REPLACE_IMG_WI
  * <i>are</i> valid in an ID. All but valid characters will be stripped when deriving
  * an ID froma provided string.
  */
-if (!defined('PATTERN_INVALID_ID_CHARS')) define ('PATTERN_INVALID_ID_CHARS','/[^A-Za-z0-9_:.-\s]/');
+if (!defined('PATTERN_INVALID_ID_CHARS')) define ('PATTERN_INVALID_ID_CHARS', '/[^A-Za-z0-9_:.-\s]/');
 /**#@-*/
 
 /**#@+
@@ -69,7 +69,7 @@ if (!defined('WIKKA_URL_EXTENSION')) define('WIKKA_URL_EXTENSION', 'wikka.php?wa
 /**#@-*/
 
 /**
- * The Wikka core.
+ * The Wikka core class.
  *
  * This class contains all the core methods used to run Wikka.
  * @name		Wakka
@@ -441,6 +441,7 @@ class Wakka
 	 *
 	 * WARNING:	Do not add, delete, or reorder records or fields in
 	 *			queries prior to calling this function!!
+	 *			JW: why not? please expain...
 	 *
 	 * @uses	Wakka::Query()
 	 *
@@ -452,6 +453,8 @@ class Wakka
 	 *			originally created as a copy of $old_res
 	 * @todo	Does not currently handle deletions or insertions of
 	 *			records or fields.
+	 * @todo	use function to build value list BUT we need to know actual column type
+	 * @todo	move into a database class
 	 */
 	function Update($tablename, $keyfield, $old_res, $new_res)
 	{
@@ -476,7 +479,8 @@ class Wakka
 			{
 				return;
 			}
-			$changedvals = "";
+			// @@@ make into function!	buildSQLValueList()
+			$changedvals = '';
 			foreach ($old_res[$i] as $key=>$oldval)
 			{
 				$newval = $new_res[$i][$key];
@@ -484,12 +488,12 @@ class Wakka
 				{
 					if ($changedvals != '')
 					{
-						$changedvals .= ', ';
+						$changedvals .= ', ';	// use newline rather than space for more readable query
 					}
 					$changedvals .= '`'.$key.'`=';
-					if (!is_numeric($newval))
+					if (!is_numeric($newval))	// not strictly safe; we need to now if column type is strng or number
 					{
-						$changedvals .= '"'.$newval.'"';
+						$changedvals .= '"'.mysql_real-escape-string($newval).'"';
 					}
 					else
 					{
@@ -1457,16 +1461,16 @@ class Wakka
 	 *
 	 * <p>Returns up to $max latest revisions of $page.
 	 * 0 or a negative value for $max means using a default value.
-	 * The default value for $max is the `revisioncount' user's preference if user is logged in,
+	 * The default value for $max is the 'revisioncount' user's preference if user is logged in,
 	 * or the (new) config value {@link Config::$default_revisioncount default_revisioncount}, if
 	 * such config entry exists, or falls to a hard-coded value of 20.</p>
 	 * <p>A revision structure consists of an edit note
-	 * (`<b>note</b>' key), the `<b>id</b>' of the revision which permits to retrieve later the
+	 * ('<b>note</b>' key), the '<b>id</b>' of the revision which permits to retrieve later the
 	 * full edit data (especially the body field), the date of revision (`<b>time</b> key) and the
-	 * `<b>user</b>' who did the modification. </p>
-	 * <p>Since 1.1.7, we replaced `SELECT *' in the sql instruction by
-	 * `SELECT note, id, time, user' because only these fields are really needed. (Trac:#75)</p>
-	 * <p>If param $start is supplied, LoadRevisions ignore the $start most recent revisions; this
+	 * '<b>user</b>' who did the modification. </p>
+	 * <p>Since 1.1.7, we replaced 'SELECT *' in the sql instruction by
+	 * 'SELECT note, id, time, user' because only these fields are really needed. (Trac:#75)</p>
+	 * <p>If param $start is supplied, LoadRevisions ignores the $start most recent revisions; this
 	 * will allow browsing full history step by step if the pagesize or the number of total revision
 	 * are getting too big.</p>
 	 *
@@ -1477,51 +1481,58 @@ class Wakka
 	 * @uses	Config::$default_revisioncount
 	 * @uses	Config::$pagename_case_sensitive
 	 *
-	 * @param	string $page Name of the page to view revisions of
+	 * @param	string	$page Name of the page to view revisions of
 	 * @param	int	$start
-	 * @param	int	$max	Maximum number of revisions to load.
+	 * @param	int	$max	Maximum number of revisions to load; zero or a negative number signifies "no limit"
 	 * @return	array	This value contains fields note, id, time and user.
-	 * @todo	avoid "magic numbers"! And why the two different numbers??
+	 * @todo	avoid "magic numbers"!
+	 * @todo	do we really need a limit for "no limit"? why is the imposed limit
+	 *			different for registered and anonymous users?
 	 */
-	function LoadRevisions($page, $start='', $max=0)
+	function LoadRevisions($page, $start=0, $max=0)
 	{
-		$max = intval($max);
+		$max = (int) $max;
 		if ($max <= 0)
 		{
-			if ($user = $this->GetUser())
+			if ($user = $this->GetUser())				// registered user
 			{
-				$max = intval($user['revisioncount']);
+				$limitmax = (int) $user['revisioncount'];	// @@@ this should not be necessary - make sure it always contains an integer!
+				if ($limitmax <= 0)
+				{
+					// 0 or a negative value means no max, so choose a huge number.
+					// @@@ why set a limit for 'no limit'? just don't use the LIMIT clause in the query
+					$limitmax = 1000;	// limit for registered users @@@ should be a defined constant
+				}
 			}
-			elseif (($max = intval($this->GetConfigValue('default_revisioncount'))) <= 0)
+			else										// anonymous user
 			{
-				$max = 20;	// @@@ should be a defined constant
+				$limitmax = (int) $this->GetConfigValue('default_revisioncount');
+				if ($limitmax <= 0)
+				{
+					$limitmax = 20;		// limit for anonymous users @@@ should be a defined constant
+				}
 			}
-		}
-		if ($max <= 0)
-		{
-			// 0 or a negative value means no max, so choose a huge number.
-			// @@@ why set a limit for 'no limit'? just don't use the LIMIT clause in the query
-			$max = 1000;	// @@@ should be a defined constant
-		}
-		if ($start = intval($start))	// @@@ this would match a negative value but that woulds create an invalid query! 
-		{
-			$start .= ', ';
 		}
 		else
 		{
-			$start = '';
+			$limitmax = $max;
+		}
+		$limitstart = '';					// default for query
+		if (($start = (int) $start) > 0)	// do not accept negative values!
+		{
+			$limitstart = $start.', ';
 		}
 		$revisions = $this->LoadAll("
 			SELECT note, id, time, user
 			FROM ".$this->GetConfigValue('table_prefix')."pages
 			WHERE tag = '".mysql_real_escape_string($page)."'
 			ORDER BY time DESC
-			LIMIT ".$start.$max
+			LIMIT ".$limitstart.$limitmax
 			);
-		// @@@ what is the (count($revisions) < $max) doing here? (this will fail if exactly $max results are returned and it cannot be more!)
-		if (is_array($revisions) && (count($revisions) < $max) && (count($revisions) > 0)) #38
+		// @@@ what is the (count($revisions) < $limitmax) doing here? (this will fail if exactly $limitmax results are returned and it cannot be more!)
+		if (is_array($revisions) && (count($revisions) < $limitmax) && (count($revisions) > 0)) #38
 		{
-			if (!$this->GetConfigValue('pagename_case_sensitive'))
+			if (!$this->GetConfigValue('pagename_case_sensitive'))	// @@@ $page_lowercase won't have a value if pagename_case_sensitive is TRUE!
 			{
 				$page_lowercase = strtolower($page);
 			}
@@ -1591,7 +1602,7 @@ class Wakka
 	#function LoadRecentlyChanged()
 	function LoadRecentlyChanged($limit=50)	// @@@
 	{
-		$limit = intval($limit);
+		$limit = (int) $limit;
 		if ($limit < 1)
 		{
 			$limit = 50;		// @@@
@@ -2553,19 +2564,21 @@ if ($debug) echo "deleting 'pass".$this->GetConfigValue('wiki_suffix')."' at roo
 	 * this method.
 	 *
 	 * @access	public
-	 * !uses	Wakka::GetConfigValue()
+	 *
 	 * @uses	Wakka::GetInterWikiUrl()
 	 * @uses	Wakka::Href()
 	 * @uses	Wakka::htmlspecialchars_ent()
 	 * @uses	Wakka::LoadPage()
+	 * @uses	Wakka::TrackLinkTo()
+	 * @uses	Wakka::ExistsPage()
 	 *
-	 * @param	mixed	$tag mandatory:
-	 * @param	string	$handler optional:
-	 * @param	string	$text optional:
-	 * @param	boolean	$track optional:
-	 * @param	boolean	$escapeText optional:
-	 * @param	string	$title optional:
-	 * @param	string	$class optional:
+	 * @param	mixed	$tag		mandatory:
+	 * @param	string	$handler	optional:
+	 * @param	string	$text		optional:
+	 * @param	boolean	$track		optional:
+	 * @param	boolean	$escapeText	optional:
+	 * @param	string	$title		optional:
+	 * @param	string	$class		optional:
 	 * @return	string	an HTML hyperlink (a href) element
 	 * @todo	move regexps to regexp-library		#34
 	 */
@@ -2761,6 +2774,7 @@ if ($debug) echo "deleting 'pass".$this->GetConfigValue('wiki_suffix')."' at roo
 			$from_tag = mysql_real_escape_string($this->GetPageTag());
 			$values = '';
 			$written = array();
+			// @@@ make into function! buildSQLValueList()
 			foreach ($linktable as $to_tag)
 			{
 				$lower_to_tag = strtolower($to_tag);
@@ -3658,7 +3672,7 @@ else
 	 */
 	function LoadRecentComments($limit=50, $tag='')		// @@@
 	{
-		$limit = intval($limit);
+		$limit = (int) $limit;
 		if ($limit < 1)
 		{
 			$limit = 50;		// @@@
@@ -3688,7 +3702,7 @@ else
 	 */
 	function LoadRecentlyCommented($limit = 50)	// @@@
 	{
-		$limit = intval($limit);
+		$limit = (int) $limit;
 		if ($limit < 1)
 		{
 			$limit = 50;		// @@@
@@ -3974,7 +3988,7 @@ else
 
 		// update with specified privilege
 		$priv = mysql_real_escape_string($privilege).'_acl';
-		$acls[$priv] = mysql_real_escape_string(trim(str_replace('\r', '', $list)));	// normalize line endings
+		$acls[$priv] = mysql_real_escape_string(trim(str_replace('\r', '', $list)));	// @@@ normalize line endings
 		if (!$insert)
 		{
 			// update record
@@ -3987,13 +4001,13 @@ else
 		}
 		else
 		{
-			// @@@ JW: make this into a function!
+			// @@@ make into function! buildSQLValueList()
 			// build values list
 			$acl_list = '';
 			foreach ($acls as $acl => $value)
 			{
 				$acl_list .= ('' == $acl_list) ? '' : ",\n";	// use newline rather than space for more readable query layout
-				$acl_list .= $acl." = '".$value."'";
+				$acl_list .= "`".$acl."` = '".mysql_real_escape_string($value)."'";
 			}
 
 			// add record
@@ -4029,7 +4043,7 @@ else
 		{
 			if ($acl === 'page_tag') continue;		// @@@ would not be needed if LoadAllACLs would return just the ACLs, not the page_tag
 			$acl_list .= ('' == $acl_list) ? '' : ",\n";	// use newline rather than space for more readable query layout
-			$acl_list .= $acl." = '".$value."'";
+			$acl_list .= "`".$acl."` = '".mysql_real_escape_string($value)."'";
 		}
 
 		if ($this->LoadAllACLs($to_tag, 0))	// @@@
@@ -4356,14 +4370,14 @@ if ($debug)
 		// @@@ HTTP headers (to be moved to handler config files - #446)
 		if (preg_match('/\.(xml|mm)$/', $this->handler))
 		{
-			header('Content-type: text/xml');		// @@@ #446 not correct for all feed formats!
+			header('Content-type: text/xml');		// @@@ #446; #406/comment7 not correct for all feed formats! Note that FeedCreator generates its own Content-type headers!
 			print($this->Handler($this->handler));
 		}
 		// raw page handler
 		// @@@ HTTP headers (to be moved to handler config files - #446)
 		elseif ($this->handler == 'raw')
 		{
-			header('Content-type: text/plain');		// @@@ #446
+			header('Content-type: text/plain');		// @@@ #446; #406/comment7
 			print($this->Handler($this->handler));
 		}
 		// grabcode handler or fullscreen mindmap handler
@@ -4386,7 +4400,7 @@ if ($debug)
 			header('Location: css/' . $this->handler);
 		}
 		*/
-		else
+		else	// all other handlers need page header and page footer
 		{
 			$content_body = $this->Handler($this->handler);
 			print($this->Header().$content_body.$this->Footer());
