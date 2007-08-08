@@ -44,14 +44,18 @@
  * 			necessary) - #312 => NOT CLEAR here what to do; see also #449
  */
 
-/**
- * Defaults
+/**#@+
+ * Default value.
  */
-if (!defined('VALID_PAGENAME_PATTERN')) define ('VALID_PAGENAME_PATTERN', '/^[A-Za-zִײÜßהצü]+[A-Za-z0-9ִײÜßהצü]*$/s'); //TODO not needed: use IsWikiName() to validate @@@ FIRST move to regex library
+if (!defined('VALID_PAGENAME_PATTERN')) define ('VALID_PAGENAME_PATTERN', '/^[A-Za-zִײÜßהצü]+[A-Za-z0-9ִײÜßהצü]*$/s'); //TODO not needed: use IsWikiName() to validate @@@ FIRST move to regex library #34
 if (!defined('MAX_TAG_LENGTH')) define ('MAX_TAG_LENGTH', 75);
 if (!defined('MAX_EDIT_NOTE_LENGTH')) define ('MAX_EDIT_NOTE_LENGTH', 50);
 if (!defined('DEFAULT_BUTTONS_POSITION')) define('DEFAULT_BUTTONS_POSITION', 'bottom');
+/**
+ * Class attribute to enable styling as error.
+ */
 if (!defined('INPUT_ERROR_STYLE')) define('INPUT_ERROR_STYLE', 'class="highlight"');
+/**#@-*/
 
 //initialization
 $error = '';
