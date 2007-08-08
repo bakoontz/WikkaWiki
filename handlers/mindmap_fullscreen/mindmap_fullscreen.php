@@ -19,18 +19,27 @@
  * @todo	since this produces a whole page, turn into a normal handler
  */
 
+/**#@+
+ * External URL to be linked to.
+ */
 if (!defined('FREEMIND_PROJECT_URL')) define('FREEMIND_PROJECT_URL', 'http://freemind.sourceforge.net/');
 if (!defined('WIKKA_JRE_DOWNLOAD_URL')) define('WIKKA_JRE_DOWNLOAD_URL','http://www.java.com/getjava');
+/**#@-*/
+
+/**#@+
+ * Syntax sample text.
+ */
 if (!defined('SAMPLE_SYNTAX_URL')) define('SAMPLE_SYNTAX_URL','http://example.com/MapName/mindmap.mm');
 if (!defined('SAMPLE_SYNTAX1')) define('SAMPLE_SYNTAX1','{{mindmap '.SAMPLE_SYNTAX_URL.'}}');
 if (!defined('SAMPLE_SYNTAX2')) define('SAMPLE_SYNTAX2','{{mindmap url="'.SAMPLE_SYNTAX_URL.'"}}');
+/**#@-*/
 
 if (!isset($_GET['url'])) return;
 /**
  * Include language file if one exists.
  *
  * @see		en.inc.php
- * @todo	is this necessary? if so why?
+ * @todo	is this (still) necessary? if so why?
  */
 $default_lang	= $this->GetConfigValue('default_lang');
 #$fallback_lang	= 'en';							// should always be available
@@ -40,15 +49,20 @@ $fallback_language_file = WIKKA_LANG_PATH.DIRECTORY_SEPARATOR.$fallback_lang.DIR
 $language_file_not_found = sprintf(ERROR_LANGUAGE_FILE_MISSING,$default_language_file);
 if (file_exists($default_language_file))
 {
-	require_once $default_language_file;	// todo add base dir
+	/**
+	 * Language file for configured default language.
+	 */
+	require_once $default_language_file;
 }
 elseif (file_exists($fallback_language_file))
 {
+	/**
+	 * Language file for system default language: fallback.
+	 */
 	require_once $fallback_language_file;	// silent fallback
 }
 else
 {
-	// use global constant
 	#die('Language file ('.$default_language_file.') not found! Please add the file.');
 	die($language_file_not_found);
 }
