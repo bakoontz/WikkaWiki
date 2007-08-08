@@ -62,7 +62,7 @@ if ($comments = $this->LoadRecentlyCommented())
 				$curday = $day;
 			}
 			$timeformatted = date(COMMENT_TIME_FORMAT, strtotime($comment['time']));
-			$comment_preview = str_replace('<br />', '', $comment['comment']);
+			$comment_preview = str_replace('<br />', '', $comment['comment']);	// @@@ use single space instead of empty string
 			if (strlen($comment_preview) > COMMENT_SNIPPET_LENGTH)
 			{
 				$comment_spillover_link = '<a href="'.$this->href('', $page_tag, 'show_comments='.$show_comments).'#comment_'.$comment['id'].'" title="View comment">[&#8230;]</a>'; # i18n

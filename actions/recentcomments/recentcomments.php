@@ -50,7 +50,7 @@ if ($comments = $this->LoadRecentComments())
 			}
 
 			$timeformatted = date(COMMENT_TIME_FORMAT, strtotime($comment['time']));
-			$comment_preview = str_replace('<br />', '', $comment['comment']);
+			$comment_preview = str_replace('<br />', '', $comment['comment']);	// @@@ use single space instead of empty string
 			$comment_preview = substr($comment_preview, 0, COMMENT_SNIPPET_LENGTH);
 			if (strlen($comment['comment']) > COMMENT_SNIPPET_LENGTH)
 			{

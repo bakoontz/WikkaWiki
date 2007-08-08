@@ -24,6 +24,7 @@
  * @todo	[accessibility] Add a label with a prompt (cf. footer action)
  * @todo	[accessibility] Add signal for the user that the result will open in a
  *			new window
+ * @todo	define maxlength in a constant - no "magic numbers"!
  */
 
 //Note: The classname WBselectonfocus, (WB means Wikka Behaviour) is used to (todo further) let add a behaviour scripts that
@@ -50,7 +51,7 @@ if ($query == '')
 // validation can be broken with syntax like {{googleform q="Wikka's Website"}} if you use singlequote.
 $query = $this->htmlspecialchars_ent($query);
 
-// *** output section ***
+// *** output section *** @@@
 ?>
 <form action="http://www.google.com/search" method="get" target="_blank">
 	<input type="text" value="<?php echo $query; ?>" name="q" size="30" maxlength="2048" class="WBselectonfocus" /> 

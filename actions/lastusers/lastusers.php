@@ -11,8 +11,10 @@
  * @uses	Wakka::getCount()
  * @uses	Wakka::Link()
  * 
+ * @todo	document usage and parameters
  * @todo	needs to be rewritten following coding guidelines;
- * $todo	use constants instead of "magic numbers"
+ * @todo	use constants instead of "magic numbers"
+ * @todo	use standard way to fetch and validate action parameters
  */
 if (!isset($stat)) $stat = 0;
 if (!isset($max)) $max = 0;
@@ -24,7 +26,7 @@ if (!$max || $limit<$max)
   $max = $limit;
 
 // @@@ reformat query
-$last_users = $this->LoadAll("SELECT name, signuptime FROM ".$this->GetConfigValue('table_prefix')."users ORDER BY signuptime DESC LIMIT ".(int)$max);
+$last_users = $this->LoadAll("SELECT name, signuptime FROM ".$this->GetConfigValue('table_prefix')."users ORDER BY signuptime DESC LIMIT ".(int) $max);
 
 $htmlout = '<table class="wikka">'."\n".
   "<caption>".LASTUSERS_CAPTION."</caption>"."\n".
