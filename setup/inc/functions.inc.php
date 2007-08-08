@@ -174,6 +174,7 @@ function _p($s)
 function ACL_show_selectbox($type)
 {
 	global $config;
+	// @@@ use constants for ACL symbols
 	$default_acl['read'] = '*';
 	$default_acl['write'] = '+';
 	$default_acl['comment_read'] = '*';
