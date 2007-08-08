@@ -493,7 +493,7 @@ class Wakka
 					$changedvals .= '`'.$key.'`=';
 					if (!is_numeric($newval))	// not strictly safe; we need to now if column type is strng or number
 					{
-						$changedvals .= '"'.mysql_real-escape-string($newval).'"';
+						$changedvals .= '"'.mysql_real_escape_string($newval).'"';
 					}
 					else
 					{
@@ -525,11 +525,6 @@ class Wakka
 	 */
 	function GetMicroTime()
 	{
-		/*
-		list($usec, $sec) = explode(' ',microtime());
-		$mtime = ((float)$usec + (float)$sec);
-		return $mtime;
-		*/
 		return 0;
 	}
 	/**
