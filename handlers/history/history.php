@@ -34,10 +34,11 @@
  * @uses	Wakka::LoadPageById()
  * @uses	Wakka::Format()
  * @todo	make sure resulting XHTML is valid
+ * @todo	validate the $start parameter (must be positive); use a default if it isn't;
  */
  
 echo '<div class="page">'."\n";
-$start = intval($this->GetSafeVar('start', 'get'));
+$start = (int) $this->GetSafeVar('start', 'get');	// @@@ accept only positive value here
 if ($this->HasAccess("read")) {
 	// load revisions for this page
 	if ($pages = $this->LoadRevisions($this->tag, $start))
@@ -48,8 +49,8 @@ if ($this->HasAccess("read")) {
 		foreach ($pages as $page)
 		{
 			$c++;
-			$pageB = $this->LoadPageById($page["id"]);
-			$bodyB = explode("\n", $pageB["body"]);
+			$pageB = $this->LoadPageById($page['id']);
+			$bodyB = explode("\n", $pageB['body']);
 
 			if (isset($pageA))
 			{
@@ -66,7 +67,7 @@ if ($this->HasAccess("read")) {
 				{
 
 					// prepare bodies
-					$bodyA = explode("\n", $pageA["body"]);
+					$bodyA = explode("\n", $pageA['body']);
 
 					$added = array_diff($bodyA, $bodyB);
 					$deleted = array_diff($bodyB, $bodyA);
