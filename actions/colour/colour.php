@@ -10,5 +10,8 @@
  * @filesource
  */
 
-include($this->GetConfigValue('wikka_action_path').DIRECTORY_SEPARATOR.'color'.DIRECTORY_SEPARATOR.'color.php'); 
+/**
+ * color.php action.
+ */
+include $this->GetConfigValue('wikka_action_path').DIRECTORY_SEPARATOR.'color'.DIRECTORY_SEPARATOR.'color.php';
 ?>
