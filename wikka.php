@@ -638,10 +638,16 @@ $language_file_not_found = sprintf(ERROR_LANGUAGE_FILE_MISSING,$default_language
 // load language package if it exists
 if (file_exists($default_language_file))
 {
+	/**
+	 * Language file for configured default language.
+	 */
 	require_once $default_language_file;
 }
 elseif (file_exists($fallback_language_file))
 {
+	/**
+	 * Language file for system default language: fallback.
+	 */
 	require_once $fallback_language_file;	// silent fallback
 }
 else
@@ -780,7 +786,7 @@ $wikka_cookie_path = substr($base_url_path,0,-1);
 
 // 2. start session
 session_name(md5(BASIC_SESSION_NAME.$wakkaConfig['wiki_suffix']));
-session_set_cookie_params(0, $wikka_cookie_path);	// default path is '/' - we don't want that! call overrides php.ini settings
+session_set_cookie_params(0, $wikka_cookie_path);	// default path is '/' - we don't want that! this call overrides php.ini settings
 session_cache_limiter(''); #279
 session_start();
 

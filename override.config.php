@@ -46,6 +46,9 @@
  * When defining <b>URI path components</b>, you can use the little "Compatibility"
  * function <b>filesys2uri()</b> to convert any backslashes in an already-built
  * or default filesystem path into forward slashes to use as a URI path.
+ * 
+ * @package		Configuration
+ * @subpackage	Overrides
  */
 
 /**#@+
