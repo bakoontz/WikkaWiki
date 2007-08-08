@@ -51,14 +51,19 @@ $rss_path = $this->cleanUrl(trim($rss_path));
 // override
 if (preg_match("/^(http|https):\/\/([^\\s\"<>]+)$/i", $rss_path))
 {
+	$onyx_classpath = $this->GetConfigValue('onyx_path').DIRECTORY_SEPARATOR.'onyx-rss.php';
 	/**
-	 * Include 3rdParty plugin
+	 * 3rdParty plugin; implements feed aggregation.
 	 */
 	#include_once('3rdparty'.DIRECTORY_SEPARATOR.'plugins'.DIRECTORY_SEPARATOR.'onyx-rss'.DIRECTORY_SEPARATOR.'onyx-rss.php');
-	$onyx_classpath = $this->GetConfigValue('onyx_path').DIRECTORY_SEPARATOR.'onyx-rss.php';
 	include_once $onyx_classpath;
 	if (!class_exists('Wikka_Onyx'))
 	{
+		/**
+		 * Extension to plugin; implements error handling.
+		 *
+		 * @package		Actions
+		 */
 		class Wikka_Onyx extends ONYX_RSS
 		{
 			//private function raiseError($line, $err)
@@ -83,7 +88,8 @@ if (preg_match("/^(http|https):\/\/([^\\s\"<>]+)$/i", $rss_path))
 	}
 
 	//Load the RSS Feed: workaround to hide error messages within HTML comments:
-	$rss =& new Wikka_Onyx();
+	#$rss =& new Wikka_Onyx();
+	$rss = instantiate('Wikka_Onyx');
 	$rss->setCachePath($rss_cache_path);
 	$rss->parse($rss_path, $rss_cache_file, $rss_cache_time);
 	$meta = $rss->getData(ONYX_META);
