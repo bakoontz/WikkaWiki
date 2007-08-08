@@ -1,4 +1,12 @@
 <?php
+/**
+ * Allow download of generated information.
+ * 
+ * @package	Setup
+ * @version	$Id$
+ * @license	http://www.gnu.org/copyleft/gpl.html GNU General Public License
+ * @filesource
+ */
 	$code = '';
 	foreach ($_SESSION['server_info'] as $k => $v)
 	{

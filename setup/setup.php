@@ -7,6 +7,9 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
  * @todo	make form accessible!
+ * @todo	do not depend on JavaScript for validation! In fact, do not use
+ *			JavaScript at all, to maintain checks, regexes consistent with
+ *			main application; reuse regexes and error messages
  */
 
 $wikiname = sprintf('<abbr title="%1$s">%2$s</abbr>', _p('A WikiName is formed by two or more capitalized words without space, e.g. JohnDoe'), __('WikiName'));

@@ -4,7 +4,7 @@
  * 
  * @package	Setup
  * @version	$Id$
- * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
+ * @license	http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
  * 
  * @todo i18n;
@@ -162,6 +162,9 @@ case "0":
 	test(__('Setting default ACL').'...', 1);
 	mysql_query("insert into ".$config["table_prefix"]."acls set page_tag = 'UserSettings', read_acl = '*', write_acl = '+', comment_read_acl = '*', comment_post_acl = '+'", $dblink);
 	test(__('Building links table').'...', 1);
+	/**
+	 * Script for (re)building links table.
+	 */
 	include('links.php');
 
 	break;
@@ -301,6 +304,9 @@ case "1.1.6.3":
 	@mysql_query("alter table ".$config["table_prefix"]."users add `challenge` char( 8 ) default '00000000' null", $dblink), "", 0); 
 	// @@@	use test() function to report actual results instead of assuming success!
 	test(__('Rebuilding links table').'...', 1);
+	/**
+	 * Script for (re)building links table.
+	 */
 	include('links.php');
 	test(__('Adding fields to comments table to enable threading').'...', 
 	mysql_query("alter table ".$config["table_prefix"]."comments add parent int(10) unsigned default NULL", $dblink), "Already done? OK!", 0);

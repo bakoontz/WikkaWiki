@@ -11,9 +11,17 @@
  * @filesource
  * @todo	remove meta tags - this page is not going to be indexed by search engines (or at least shouldn't be!)
  */
+
+/**#@+
+ * Default value.
+ */
+define('DEFAULT_SETUP_ACTION', 'default');
+/**#@-*/
+
 // define paths
 $action_target = $_SERVER['SCRIPT_NAME'];
 // @@@ should try to determine scheme, not just assume 'http' - see Wakka::Run() for derivation of object variable "base_url"
+// maybe we'll derive these values in wikka.php so installer can just use them!
 $url = 'http://'.$_SERVER['SERVER_NAME'].($_SERVER['SERVER_PORT'] != 80 ? ':'.$_SERVER['SERVER_PORT'] : '');
 $url .= preg_replace('/wikka\\.php/', '', $_SERVER['SCRIPT_NAME']);	// adds path component @@@ why the _double_ backslash?
 if (isset($_GET['nonce']))
@@ -44,11 +52,14 @@ if (isset($_GET['nonce']))
 			@mysql_select_db($config['mysql_database'], $dblink);
 		}
 	}
-// defaults
-define('DEFAULT_SETUP_ACTION', 'default');
 
 // get utilities
 #require_once 'setup'.DIRECTORY_SEPARATOR.'inc'.DIRECTORY_SEPARATOR.'functions.inc.php';
+/**
+ * Setup function library
+ *
+ * @todo	rename file to functions.lib.php (or setup.lib.php to be more specific!) according to coding guidelines
+ */
 require_once WIKKA_SETUP_PATH.DIRECTORY_SEPARATOR.'inc'.DIRECTORY_SEPARATOR.'functions.inc.php';
 
 ?>
@@ -89,6 +100,9 @@ else
 #if (file_exists('setup'.DIRECTORY_SEPARATOR.$installAction.'.php'))
 #include('setup'.DIRECTORY_SEPARATOR.$installAction.'.php'); else print '<em>'.ERROR_SETUP_FILE_MISSING.'</em>';
 if (file_exists(WIKKA_SETUP_PATH.DIRECTORY_SEPARATOR.$installAction.'.php'))
+	/**
+	 * Installation phase script.
+	 */
 	include(WIKKA_SETUP_PATH.DIRECTORY_SEPARATOR.$installAction.'.php');
 else
 	print '<em>'.WIKKA_ERROR_SETUP_FILE_MISSING.'</em>';

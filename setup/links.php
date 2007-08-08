@@ -23,8 +23,16 @@
  * @todo refactor main documentation header
  */
 set_time_limit(30);
-// You use less RAM if you do the job step by step, but this increases page generation time
-// This avoid the script from crashing if you have thousands of pages.
+
+/**
+ * Load a limited number of pages.
+ *
+ * You use less RAM if you do the job step by step, but this increases page
+ * generation time. This avoid the script from crashing if you have thousands of
+ * pages.
+ *
+ * @todo document @param and @return
+ */
 function LoadSomePages($start='', $limit=100)
 {
 	global $config, $dblink;
