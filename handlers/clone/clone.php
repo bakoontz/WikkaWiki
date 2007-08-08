@@ -52,10 +52,11 @@
  * @todo	standardize form layout (avoidnig table layout)
  */
 
-/**
- * Defaults
+/**#@+
+ * Default value.
  */
 if(!defined('VALID_PAGENAME_PATTERN')) define ('VALID_PAGENAME_PATTERN', '/^[A-Za-zÄÖÜßäöü]+[A-Za-z0-9ÄÖÜßäöü]*$/s'); #34
+/**#@-*/
 
 // initialization
 $from = $this->tag;
