@@ -23,13 +23,17 @@
  * @todo	add further improvements from ImprovedFormatter
  */
 
-// code block patterns
+/**#@+
+ * Code block pattern.
+ */
 if (!defined('PATTERN_OPEN_BRACKET')) define('PATTERN_OPEN_BRACKET', '\(');
 if (!defined('PATTERN_FORMATTER')) define('PATTERN_FORMATTER', '([^;\)]+)');
 if (!defined('PATTERN_LINE_NUMBER')) define('PATTERN_LINE_NUMBER', '(;(\d*?))?');
 if (!defined('PATTERN_FILENAME')) define('PATTERN_FILENAME', '(;([^\)\x01-\x1f\*\?\"<>\|]*)([^\)]*))?');
 if (!defined('PATTERN_CLOSE_BRACKET')) define('PATTERN_CLOSE_BRACKET', '\)');
 if (!defined('PATTERN_CODE')) define('PATTERN_CODE', '(.*)');
+/**#@-*/
+
 /**
  * Match heading tags.
  *
