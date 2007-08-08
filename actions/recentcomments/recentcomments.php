@@ -15,12 +15,13 @@
  * @todo		make datetime format configurable
  */
 
-/**
- * defaults
+/**#@+
+ * Default value.
  */
 if (!defined('COMMENT_DATE_FORMAT'))    define('COMMENT_DATE_FORMAT', 'D, d M Y');	// @@@ make configurable
 if (!defined('COMMENT_TIME_FORMAT'))    define('COMMENT_TIME_FORMAT', 'H:i T');	// @@@ make configurable
 if (!defined('COMMENT_SNIPPET_LENGTH')) define('COMMENT_SNIPPET_LENGTH', 120);
+/**#@-*/
 
 $readable = 0;
 
