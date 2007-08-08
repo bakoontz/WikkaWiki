@@ -202,6 +202,11 @@ else
 	}
 }
 
+/**
+ * Display comments for ...
+ * 
+ * @todo	document (including short description!
+ */
 function displayComments(&$obj, &$comments, $tag)
 {
 	$current_user = $obj->GetUserName(); 
