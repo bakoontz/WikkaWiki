@@ -41,8 +41,20 @@ if ($this->HasAccess("read"))
 	// @@@ TODO needed only if we're NOT doing a 'fastdiff'
 	// instead of copping out we could use fastdiff as fallback if the library is missing:
 	// first determine diff method based on params AND presense of library; then do it
-	if (file_exists('libs'.DIRECTORY_SEPARATOR.'diff.lib.php')) require_once('libs'.DIRECTORY_SEPARATOR.'diff.lib.php');	#89
-	else die(ERROR_DIFF_LIBRARY_MISSING);	// NO wrapper div will be produced here!
+	#if (file_exists('libs'.DIRECTORY_SEPARATOR.'diff.lib.php')) require_once('libs'.DIRECTORY_SEPARATOR.'diff.lib.php');	#89
+	#else die(ERROR_DIFF_LIBRARY_MISSING);	// NO wrapper div will be produced here!
+	$diff_library_path = WIKKA_LIBRARY_PATH.DIRECTORY_SEPARATOR.'diff.lib.php';
+	if (file_exists($diff_library_path))
+	{
+		/**
+		 * Diff library.
+		 */
+		require_once $diff_library_path;
+	}
+	else
+	{
+		die(ERROR_DIFF_LIBRARY_MISSING);	// NO wrapper div will be produced i this case!
+	}
 
 	// load pages
 	#$pageA = $this->LoadPageById($_REQUEST['a']);
