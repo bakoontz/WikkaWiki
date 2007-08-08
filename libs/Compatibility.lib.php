@@ -60,7 +60,7 @@ function getmicrotime($get_as_float=FALSE)
 	else
 	{
 		$time = strtok(microtime(), ' ') + strtok('');
-		return (FALSE === $get_as_float) ? $time : (float)$time;
+		return (FALSE === $get_as_float) ? $time : (float) $time;
 	}
 }
 
