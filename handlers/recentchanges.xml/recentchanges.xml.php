@@ -41,34 +41,34 @@
 /**#@+
  * Default value.
  */
-define('FEED_VALID_FORMATS', 'RSS0.91,RSS1.0,RSS2.0,ATOM1.0');	// no whitespace around commas!
-define('FEED_DESCRIPTION_TRUNCATE_SIZE',"200"); #character limit to truncate description	// @@@ should this really be a string??
-define('FEED_DESCRIPTION_HTML',"TRUE"); #Indicates whether the description field should be rendered in HTML	// @@@ should this really be a string??
-define('FEED_DEFAULT_OUTPUT_FORMAT','RSS2.0'); #any of the valid formats specified in VALID_FORMATS
-//define('FEED_DEFAULT_OWNER_FILTER', ''); #empty, modifications of pages owned by any user
-//define('FEED_DEFAULT_USER_FILTER', ''); #empty, modifications by any user
-//define('FEED_DEFAULT_CATEGORY_FILTER', ''); #empty, pages belonging to any category
-//define('FEED_DEFAULT_DAY_LIMIT', 30); #default number of days
-//define('FEED_DEFAULT_ITEMS_LIMIT', 20); #default number of items to display
+if (!defined('FEED_VALID_FORMATS')) define('FEED_VALID_FORMATS', 'RSS0.91,RSS1.0,RSS2.0,ATOM1.0');	// no whitespace around commas!
+if (!defined('FEED_DESCRIPTION_TRUNCATE_SIZE')) define('FEED_DESCRIPTION_TRUNCATE_SIZE', 200); #character limit to truncate description	// expects integer
+if (!defined('FEED_DESCRIPTION_HTML')) define('FEED_DESCRIPTION_HTML',TRUE); #Indicates whether the description field should be rendered in HTML	// expects boolean
+if (!defined('FEED_DEFAULT_OUTPUT_FORMAT')) define('FEED_DEFAULT_OUTPUT_FORMAT','RSS2.0'); #any of the valid formats specified in VALID_FORMATS
+//if (!defined('FEED_DEFAULT_OWNER_FILTER')) define('FEED_DEFAULT_OWNER_FILTER', ''); #empty, modifications of pages owned by any user
+//if (!defined('FEED_DEFAULT_USER_FILTER')) define('FEED_DEFAULT_USER_FILTER', ''); #empty, modifications by any user
+//if (!defined('FEED_DEFAULT_CATEGORY_FILTER')) define('FEED_DEFAULT_CATEGORY_FILTER', ''); #empty, pages belonging to any category
+//if (!defined('FEED_DEFAULT_DAY_LIMIT')) define('FEED_DEFAULT_DAY_LIMIT', 30); #default number of days
+//if (!defined('FEED_DEFAULT_ITEMS_LIMIT')) define('FEED_DEFAULT_ITEMS_LIMIT', 20); #default number of items to display
 /**#@-*/
 
 /**
  * Stylesheet to be used.
  */
-define('FEED_CSS','xml.css');
+if (!defined('FEED_CSS')) define('FEED_CSS','xml.css');
 /**
  * Logo image to be used.
  */
-define('FEED_IMAGE_PATH', $this->StaticHref('images/wikka_logo.jpg'));
+if (!defined('FEED_IMAGE_PATH')) define('FEED_IMAGE_PATH', $this->StaticHref('images/wikka_logo.jpg'));
 
 /**#@+
  * i18n string.
  */
-define('FEED_TITLE',"%s - recently changed pages");
-define('FEED_DESCRIPTION',"New and recently changed pages from %s");
-define('FEED_IMAGE_TITLE',"Wikka logo");
-define('FEED_IMAGE_DESCRIPTION',"Feed provided by Wikka");
-define('FEED_ITEM_DESCRIPTION',"By %s");
+if (!defined('FEED_TITLE_RECENT_CHANGES')) define('FEED_TITLE_RECENT_CHANGES',"%s - recently changed pages");	// %s - name of the wiki
+if (!defined('FEED_DESCRIPTION_RECENT_CHANGES')) define('FEED_DESCRIPTION_RECENT_CHANGES',"New and recently changed pages from %s");	// %s - name of the wiki
+if (!defined('FEED_IMAGE_TITLE')) define('FEED_IMAGE_TITLE',"Wikka logo");
+if (!defined('FEED_IMAGE_DESCRIPTION')) define('FEED_IMAGE_DESCRIPTION',"Feed provided by Wikka");
+if (!defined('FEED_ITEM_DESCRIPTION')) define('FEED_ITEM_DESCRIPTION',"By %s");	// %s - user name
 /**#@-*/
 
 //initialize variables
@@ -97,11 +97,11 @@ $rss = instantiate('UniversalFeedCreator');
 
 //initialize feed (general settings)
 $rss->useCached(); //TODO: make this configurable
-$rss->title = sprintf(FEED_TITLE, $this->GetConfigValue('wakka_name')); 
-$rss->description = sprintf(FEED_DESCRIPTION, $this->GetConfigValue('wakka_name')); 
+$rss->title = sprintf(FEED_TITLE_RECENT_CHANGES, $this->GetConfigValue('wakka_name')); 
+$rss->description = sprintf(FEED_DESCRIPTION_RECENT_CHANGES, $this->GetConfigValue('wakka_name')); 
 $rss->cssStyleSheet = $this->StaticHref('css/'.FEED_CSS);
-$rss->descriptionTruncSize = FEED_DESCRIPTION_TRUNCATE_SIZE;	// @@@ should this really be a string??
-$rss->descriptionHtmlSyndicated = FEED_DESCRIPTION_HTML;	// @@@ should this really be a string??
+$rss->descriptionTruncSize = FEED_DESCRIPTION_TRUNCATE_SIZE;
+$rss->descriptionHtmlSyndicated = FEED_DESCRIPTION_HTML;
 $rss->link = $this->Href('', $this->GetConfigValue('root_page'));	// just $this->Href() should do it!
 $rss->syndicationURL = $this->Href($this->method,'','f='.$f); 
 
@@ -112,8 +112,8 @@ $image->title = FEED_IMAGE_TITLE;
 $image->url = $PHP_SELF.FEED_IMAGE_PATH;
 $image->link = $this->Href('', $this->GetConfigValue('root_page'));	// just $this->Href() should do it!
 $image->description = FEED_IMAGE_DESCRIPTION;
-$image->descriptionTruncSize = FEED_DESCRIPTION_TRUNCATE_SIZE;	// @@@ should this really be a string??
-$image->descriptionHtmlSyndicated = FEED_DESCRIPTION_HTML;	// @@@ should this really be a string??
+$image->descriptionTruncSize = FEED_DESCRIPTION_TRUNCATE_SIZE;
+$image->descriptionHtmlSyndicated = FEED_DESCRIPTION_HTML;
 $rss->image = $image;
 
 //get feed items
