@@ -12,11 +12,20 @@
  * @uses	Wakka::StaticHref()
  */
 
+/**#@+
+ * External URL to be linked to.
+ */
 if (!defined('FREEMIND_PROJECT_URL')) define('FREEMIND_PROJECT_URL', 'http://freemind.sourceforge.net/');
 if (!defined('WIKKA_JRE_DOWNLOAD_URL')) define('WIKKA_JRE_DOWNLOAD_URL','http://www.java.com/getjava');
+/**#@-*/
+
+/**#@+
+ * Syntax sample text.
+ */
 if (!defined('SAMPLE_SYNTAX_URL')) define('SAMPLE_SYNTAX_URL','http://example.com/MapName/mindmap.mm');
 if (!defined('SAMPLE_SYNTAX1')) define('SAMPLE_SYNTAX1','{{mindmap '.SAMPLE_SYNTAX_URL.'}}');
 if (!defined('SAMPLE_SYNTAX2')) define('SAMPLE_SYNTAX2','{{mindmap url="'.SAMPLE_SYNTAX_URL.'"}}');
+/**#@-*/
 
 // initialization
 $mm_archivepath = $this->StaticHref($this->GetConfigValue('freemind_uripath').'/freemindbrowser.jar');

@@ -33,10 +33,13 @@
  * @todo	Implement antispam measures to prevent scripted form posting
  */
 
-//defaults
+/**#@+
+ * Default value.
+ */
 define('ALLOW_FEEDBACK_FROM_UNREGISTERED', TRUE); #move to action configuration file
 define('DISPLAY_SENT_MESSAGE', TRUE); #move to action configuration file
 define('VALID_EMAIL_RE', "%[a-zA-Z0-9._-]@%[a-zA-Z0-9._-]"); //TODO Move to central regex library #34
+/**#@-*/
 
 //only display form when feedback is allowed
 if (ALLOW_FEEDBACK_FROM_UNREGISTERED || $this->GetUser)

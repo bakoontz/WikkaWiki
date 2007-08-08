@@ -18,6 +18,9 @@
  * @uses	Wakka::FormClose()
  */ 
 
+/**
+ * Class attribute to enable styling as error.
+ */
 if (!defined('INPUT_ERROR_STYLE')) define('INPUT_ERROR_STYLE', 'class="highlight"');
 
 // *** initialization ***

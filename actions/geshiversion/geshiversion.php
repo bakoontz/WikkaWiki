@@ -13,6 +13,9 @@
 
 if (file_exists($this->GetConfigValue('geshi_path').DIRECTORY_SEPARATOR.'geshi.php'))
 {
+	/**
+	 * GeSHi core.
+	 */
 	include_once($this->GetConfigValue('geshi_path').DIRECTORY_SEPARATOR.'geshi.php');
 	if (defined('GESHI_VERSION'))
 	{
