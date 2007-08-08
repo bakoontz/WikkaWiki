@@ -173,7 +173,7 @@ if ($user = $this->GetUser())
 	// create confirmation message if needed
 	switch(TRUE)
 	{
-		case (isset($_SESSION['usersettings_registered']) && $_SESSION['usersettings_registered'] == 'true'):
+		case (isset($_SESSION['usersettings_registered']) && $_SESSION['usersettings_registered'] === TRUE):
 			unset($_SESSION['usersettings_registered']);
 			$success = SUCCESS_USER_REGISTERED;
 			break;
