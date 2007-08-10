@@ -590,10 +590,11 @@ class Wakka
 	 * @param	string	$path		mandatory: path to the file
 	 * @param	string	$not_found_text	mandatory: text to be returned if the file was not found;
 	 *					if the intention is to let this fail silently, just pass an empty string here
+	 * @param	boolean	$makepage	optional: create a "page" div for error; default FALSE
 	 * @param	string	$vars	optional: vars to be passed to the file to handle. default: ''
 	 * @return	string	the included file's output or the $not_found_text if the file could not be found
 	 */
-	function IncludeBuffered($filename, $path, $not_found_text, $vars='')
+	function IncludeBuffered($filename, $path, $not_found_text, $makepage=FALSE, $vars='')
 	{
 #echo 'IncludeBuffered - filename specified: '.$filename."<br/>\n";
 #echo 'IncludeBuffered - path specified: '.$path."<br/>\n";
@@ -621,7 +622,7 @@ class Wakka
 		else
 		{
 			// @@@ wrap in <em class="error"> here, not in callers
-			$output = $this->htmlspecialchars_ent($not_found_text);	// [SEC] make error (including (part of) request) safe to display
+			$output = ($makepage) ? '<div class="page"><em class="error">'.$not_found_text.'</em></div>' : '<em class="error">'.$not_found_text.'</em>';
 		}
 		return $output;
 	}
@@ -3090,7 +3091,7 @@ if ($debug) echo "<br/>\n";
 	 * @todo	use action config files (e.g., pass only specified parameters)	#446
 	 * @todo	don't use numbers when booleans are intended! TRUE and FALSE advertize their intention much clearer
 	 */
-	function Action($actionspec, $forceLinkTracking=0)
+	function Action($actionspec, $forceLinkTracking=0)	// @@@
 	{
 #echo 'Action - actionspec: |'.$actionspec."|<br/>\n";
 		// parse action spec and check if we have a syntactically valid action name	[SEC]
@@ -3154,12 +3155,11 @@ if ($debug) echo "<br/>\n";
 			}
 			// prepare variables
 			$action_location		= $action_name.DIRECTORY_SEPARATOR.$action_name.'.php';
-			$action_location_disp	= '<code>'.$action_location.'</code>';
-			// @@@ do not wrap in <em class="error"> here, let IncludeBuffered ()handle it
-			$action_not_found		= '<em class="error">'.sprintf(ACTION_UNKNOWN,$action_location_disp).'</em>';
+			$action_location_disp	= '<code>'.$this->htmlspecialchars_ent($action_location).'</code>';	// [SEC] make error (including (part of) request) safe to display
+			$action_not_found		= sprintf(ACTION_UNKNOWN,$action_location_disp);
 			// produce output
 			#$out = $this->IncludeBuffered($action_location, $this->GetConfigValue('action_path'), $action_not_found, $vars);
-			$out = $this->IncludeBuffered($action_location, $this->GetConfigValue('wikka_action_path'), $action_not_found, $vars);
+			$out = $this->IncludeBuffered($action_location, $this->GetConfigValue('wikka_action_path'), $action_not_found, FALSE, $vars);
 			// @@@ a little encapsulation here would be nice: move the conditions within the functions! (can do if it's an object variabl!)
 			if ($link_tracking_state)
 			{
@@ -3185,7 +3185,8 @@ if ($debug) echo "<br/>\n";
 	 */
 	function Handler($handler)
 	{
-echo 'Handler - handler specified: '.$handler."<br/>\n";
+		global $debug;
+if ($debug) echo 'Handler - handler specified: '.$handler."<br/>\n";
 		if (strstr($handler, '/'))
 		{
 			// Observations - MK 2007-03-30
@@ -3211,14 +3212,12 @@ echo 'Handler - handler specified: '.$handler."<br/>\n";
 			$handler = strtolower($handler);
 			// prepare variables
 			$handler_location		= $handler.DIRECTORY_SEPARATOR.$handler.'.php';
-			$handler_location_disp	= '<code>'.$handler_location.'</code>';
-			// @@@ do not wrap in <em class="error"> here, let IncludeBuffered ()handle it
-			$handler_not_found		= '<em class="error">'.sprintf(HANDLER_UNKNOWN,$handler_location_disp).'</em>';
-			// @@@ use an extra parameter on IncludeBuffered to tell it to produce a "page" (only for *page* handler? what about grab for instance?)
-			$handler_error_body		= '<div class="page">'.$handler_not_found.'</div>';
+			$handler_location_disp	= '<code>'.$this->htmlspecialchars_ent($handler_location).'</code>';	// [SEC] make error (including (part of) request) safe to display
+			$handler_not_found		= sprintf(HANDLER_UNKNOWN,$handler_location_disp);
 			// produce output
 			#$out = $this->IncludeBuffered($handler_location, $this->GetConfigValue('handler_path'), $handler_error_body);
-			$out = $this->IncludeBuffered($handler_location, $this->GetConfigValue('wikka_handler_path'), $handler_error_body);
+			#$out = $this->IncludeBuffered($handler_location, $this->GetConfigValue('wikka_handler_path'), $handler_error_body,TRUE);
+			$out = $this->IncludeBuffered($handler_location, $this->GetConfigValue('wikka_handler_path'), $handler_not_found, TRUE);
 		}
 		return $out;
 	}
@@ -3253,11 +3252,10 @@ echo 'Handler - handler specified: '.$handler."<br/>\n";
 			$formatter = strtolower($formatter);
 			// prepare variables
 			$formatter_location			= $formatter.'.php';
-			$formatter_location_disp	= '<code>'.$formatter_location.'</code>';
-			// @@@ do not wrap in <em class="error"> here, let IncludeBuffered ()handle it
-			$formatter_not_found		= '<em class="error">'.sprintf(FORMATTER_UNKNOWN,$formatter_location_disp).'</em>';
+			$formatter_location_disp	= '<code>'.$this->htmlspecialchars_ent($formatter_location).'</code>';	// [SEC] make error (including (part of) request) safe to display
+			$formatter_not_found		= sprintf(FORMATTER_UNKNOWN,$formatter_location_disp);
 			// produce output
-			$out = $this->IncludeBuffered($formatter_location, $this->GetConfigValue('wikka_formatter_path'), $formatter_not_found, compact('text')); // @@@
+			$out = $this->IncludeBuffered($formatter_location, $this->GetConfigValue('wikka_formatter_path'), $formatter_not_found, FALSE, compact('text')); // @@@
 		}
 		return $out;
 	}
