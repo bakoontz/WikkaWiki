@@ -8,26 +8,29 @@
  * @license		http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
  *
- * @uses		Wakka::FormOpen()
- * @uses		Wakka::FormClose()
- * @uses		Wakka::GetPageTag()
- * @uses		Wakka::IsAdmin()
- * @uses		Wakka::Link()
- * @uses		Wakka::Query()
- * @uses		Wakka::Redirect()
+ * @uses	Wakka::FormOpen()
+ * @uses	Wakka::FormClose()
+ * @uses	Wakka::IsAdmin()
+ * @uses	Wakka::UserIsOwner()
+ * @uses	Wakka::GetConfigValue()
+ * @uses	Wakka::Link()
+ * @uses	Wakka::Query()
+ * @uses	Wakka::Redirect()
  *
- * @todo		don't show cancel button when JavaScript is not active
+ * @todo	don't show cancel button when JavaScript is not active
+ * @todo	avoid layout table (there are not even virtual columns!)
+ * @todo	check if the "nonsense input" is really needed for rewrite mode;
+ * 			if not (likely) remove!
  */
 
-echo '<div class="page">'."\n";
+#$tag = $this->GetPageTag();
+$tag = $this->tag;
 
-$tag = $this->GetPageTag();
-
-if ($this->IsAdmin() || ($this->UserIsOwner($tag) && $this->GetConfigValue('owner_delete_page') == 1))
+if ($this->IsAdmin() || ($this->UserIsOwner($tag) && (bool) $this->GetConfigValue('owner_delete_page')))
 {
 	if ($_POST)
 	{
-		// delete the page, comments, related links, acls and referrer
+		// delete the page, comments, related "from" links, acls and referrer
 		// @@@ format queries
 		$this->Query("DELETE FROM ".$this->GetConfigValue('table_prefix')."pages WHERE tag = '".mysql_real_escape_string($tag)."'");
 		$this->Query("DELETE FROM ".$this->GetConfigValue('table_prefix')."comments WHERE page_tag = '".mysql_real_escape_string($tag)."'");
@@ -41,6 +44,8 @@ if ($this->IsAdmin() || ($this->UserIsOwner($tag) && $this->GetConfigValue('owne
 	}
 	else
 	{
+		echo '<div class="page">'."\n";
+
 		// show form
 		?>
 		<h3><?php printf(PAGE_DELETION_HEADER,$this->Link($tag));?></h3>
@@ -59,12 +64,15 @@ if ($this->IsAdmin() || ($this->UserIsOwner($tag) && $this->GetConfigValue('owne
 			</tr>
 		</table>
 		<?php
-		print($this->FormClose());
+		echo $this->FormClose();
+
+		echo '</div>'."\n";
 	}
 }
 else
 {
+	echo '<div class="page">'."\n";
 	echo '<em class="error">'.ERROR_NO_PAGE_DEL_ACCESS.'</em>';
+	echo '</div>'."\n";
 }
-echo '</div>'."\n"
 ?>
