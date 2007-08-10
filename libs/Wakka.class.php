@@ -1221,11 +1221,14 @@ class Wakka
 	 */
 	function SetPage($page)
 	{
+		global $debug;
+if ($debug) echo 'SetPage: ';
 		$this->page = $page;
 		if ($this->page['tag'])
 		{
 			$this->tag = $this->page['tag'];
 		}
+if ($debug) echo 'tag is '.$this->tag."<br/>\n";
 	}
 	/**
 	 * Store the title of a page (as derived by the formatter).
@@ -1328,38 +1331,50 @@ class Wakka
 	 *					default: TRUE
 	 * @return	mixed	array with page structure, or FALSE if not retrieved
 	 */
-	function LoadPage($tag, $time='', $cache=TRUE)	// @@@
+	function LoadPage($tag, $time='', $cache=TRUE)
 	{
+		global $debug;
+if ($debug) echo 'LoadPage '.$tag;
 		$page = FALSE;
 		// retrieve from cache
 		if (!$time && (bool) $cache)
 		{
+if ($debug) echo ' looking in cache...';
 			$page = $this->GetCachedPage($tag);
 			if ($page == 'cached_nonexistent_page')
 			{
 				$page = FALSE;
 			}
 		}
-		// load page
+if ($debug) if (is_array($page)) echo ' in cache';
+if ($debug) echo gettype($page);
+		// load page if not yet retrieved
 		if (FALSE === $page)		// Nothing from cache? then get from DB
 		{
-			$page = $this->LoadSingle("
+if ($debug) echo ' not found in cache...';
+			$query ="
 				SELECT *
 				FROM ".$this->GetConfigValue('table_prefix')."pages
 				WHERE tag = '".mysql_real_escape_string($tag)."' ".
 					($time ? "AND time = '".mysql_real_escape_string($time)."'" : "AND latest = 'Y'")."
-				LIMIT 1"
-				);
+				LIMIT 1";
+if ($debug) echo 'query: <pre>'.$query.'</pre>';
+					$page = $this->LoadSingle($query);
 		}
-		// cache result
+if ($debug) if (is_array($page)) echo ' in database';
+
+// cache result
 		if (is_array($page) && !$time)	// existing, current page only
 		{
+if ($debug) echo ' found';
 			$this->CachePage($page);
 		}
 		elseif (FALSE === $page)
 		{
+if ($debug) echo ' not found';
 			$this->CacheNonExistentPage($tag);
 		}
+if ($debug) echo "<br/>\n";
 		return $page;
 	}
 	/**
@@ -1384,8 +1399,7 @@ class Wakka
 	 * @uses	Config::$pagename_case_sensitive
 	 *
 	 * @param	mixed	$tag	the name of the page to retrieve from cache.
-	 * @return	mixed	an array as returned by LoadPage(), or NULL if absent from cache.
-	 * @todo	should probably return FALSE instead of NULL in case of failure, for consistency with LoadPage()
+	 * @return	mixed	an array as returned by LoadPage(), or FALSE if absent from cache.
 	 */
 	function GetCachedPage($tag)
 	{
@@ -1393,7 +1407,7 @@ class Wakka
 		{
 			$tag = strtolower($tag);
 		}
-		$page = (isset($this->pageCache[$tag])) ? $this->pageCache[$tag] : NULL;
+		$page = (isset($this->pageCache[$tag])) ? $this->pageCache[$tag] : FALSE;
 		if ((is_string($page)) && ($page[0] == '/'))
 		{
 			$page = $this->pageCache[substr($page, 1)];
@@ -3171,7 +3185,7 @@ if ($debug) echo "<br/>\n";
 	 */
 	function Handler($handler)
 	{
-#echo 'Handler - handler specified: '.$handler."<br/>\n";
+echo 'Handler - handler specified: '.$handler."<br/>\n";
 		if (strstr($handler, '/'))
 		{
 			// Observations - MK 2007-03-30
@@ -4646,10 +4660,10 @@ if ($debug) echo 'HasAccess calling... ';
 	 */
 	function Run($tag, $handler='')
 	{
-#echo 'Run - tag: '.$tag."<br/>\n";
-#echo 'Run - handler: '.$handler."<br/>\n";
-		// get debug flag from wikka.php
 		global $debug;
+if ($debug) echo 'Run - tag: '.$tag."<br/>\n";
+if ($debug)  echo 'Run - handler: '.$handler."<br/>\n";
+		// get debug flag from wikka.php
 
 		// do our stuff!
 
@@ -4675,6 +4689,7 @@ if ($debug) echo 'HasAccess calling... ';
 		}
 		// if we get here, we have a page name
 		// load requested page and store data in object variables
+if ($debug) echo 'Run calling... ';
 		$this->SetPage($this->LoadPage($tag, (isset($_GET['time']) ? $_GET['time'] :''))); #312
 		// load ACLs for the page
 		$this->ACLs = $this->LoadAllACLs($this->tag);
