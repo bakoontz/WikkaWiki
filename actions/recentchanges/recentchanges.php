@@ -17,7 +17,6 @@
  * @uses		Wakka::StaticHref()
  * @uses		Wakka::GetUser()
  * @uses		Wakka::HasAccess()
- * @uses		Wakka::LoadUser()
  * @uses		Wakka::FormatUser()
  * @uses		Wakka::htmlspecialchars_ent()
  *
@@ -26,13 +25,14 @@
  * @todo		added extensive logging of events such as page deletion, cloning, ACL change {@link http://wush.net/trac/wikka/ticket/143 #143};
  */
 
-/**
- * defaults
+/**#@+
+ * Default value.
  */
 if (!defined('REVISION_DATE_FORMAT')) define('REVISION_DATE_FORMAT', 'D, d M Y');	// @@@ make configurable
 if (!defined('REVISION_TIME_FORMAT')) define('REVISION_TIME_FORMAT', 'H:i T');		// @@@ make configurable
 if (!defined('PAGE_EDITOR_DIVIDER'))  define('PAGE_EDITOR_DIVIDER', '&#8594;');
 if (!defined('MAX_REVISION_NUMBER'))  define('MAX_REVISION_NUMBER', '50');
+/**#@-*/
 
 //initialization
 $max = 0;
@@ -49,7 +49,8 @@ if ($pages = $this->LoadRecentlyChanged())
 	if ($user = $this->GetUser())
 	{
 		$max = $user['changescount'];
-	} else
+	}
+	else
 	{
 		$max = MAX_REVISION_NUMBER;
 	}
@@ -74,10 +75,22 @@ if ($pages = $this->LoadRecentlyChanged())
 			}
 
 			$timeformatted = date(REVISION_TIME_FORMAT, strtotime($page["time"]));
-			$page_edited_by = $page['user'];	
-			if (!$this->LoadUser($page_edited_by)) $page_edited_by .= ' '.WIKKA_ANONYMOUS_AUTHOR_CAPTION; // @@@ or WIKKA_ANONYMOUS_USER
+			/*
+			$page_edited_by = $page['user'];
+			if (!$this->LoadUser($page_edited_by))
+			// @@@	we don't need the whole user record here! We merely need to know
+			//		whether $page['user'] is a registered user (see http://wush.net/trac/wikka/ticket/368)
+			//		In addition, it's possible a page was edited by a user who is
+			//		*no longer* registered but was at the time of editing - how
+			//		do we handle that?
+			//		#368, #452
+			{
+				$page_edited_by .= ' '.WIKKA_ANONYMOUS_AUTHOR_CAPTION; // @@@ or WIKKA_ANONYMOUS_USER
+			}
+			// @@@ instead of all this ^ just use FormatUser() with $page['user'] as input!! vv
+			*/
 
-			// print entry
+			// get note
 			if ($page['note'])
 			{
 				$note = ' <span class="pagenote">['.$this->htmlspecialchars_ent($page['note']).']</span>';
@@ -86,7 +99,21 @@ if ($pages = $this->LoadRecentlyChanged())
 			{
 				$note = '';
 			}
-				echo '&nbsp;&nbsp;&nbsp;&nbsp;('.$this->Link($page['tag'], 'revisions', $timeformatted, 0, 1, sprintf(REVISIONS_LINK_TITLE, $page['tag'])).') ['.$this->Link($page['tag'], 'history', WIKKA_HISTORY, 0, 1, sprintf(HISTORY_LINK_TITLE, $page['tag'])).'] - &nbsp;'.$this->Link($page['tag'], '', '', 0).' '.PAGE_EDITOR_DIVIDER.' '.$this->FormatUser($page_edited_by).' '.$note.'<br />'."\n";
+
+			// print entry
+			#echo '&nbsp;&nbsp;&nbsp;&nbsp;('.$this->Link($page['tag'], 'revisions', $timeformatted, 0, 1, sprintf(REVISIONS_LINK_TITLE, $page['tag'])).') ['.$this->Link($page['tag'], 'history', WIKKA_HISTORY, 0, 1, sprintf(HISTORY_LINK_TITLE, $page['tag'])).'] - &nbsp;'.$this->Link($page['tag'], '', '', 0).' '.PAGE_EDITOR_DIVIDER.' '.$this->FormatUser($page_edited_by).' '.$note.'<br />'."\n";
+			#echo '&nbsp;&nbsp;&nbsp;&nbsp;('.$this->Link($page['tag'], 'revisions', $timeformatted, 0, 1, sprintf(REVISIONS_LINK_TITLE, $page['tag'])).') ['.$this->Link($page['tag'], 'history', WIKKA_HISTORY, 0, 1, sprintf(HISTORY_LINK_TITLE, $page['tag'])).'] - &nbsp;'.$this->Link($page['tag'], '', '', 0).' '.PAGE_EDITOR_DIVIDER.' '.$this->FormatUser($page['user']).' '.$note.'<br />'."\n";
+			#$revision_link = $this->Link($page['tag'], 'revisions', $timeformatted, 0, 1, sprintf(REVISIONS_LINK_TITLE, $page['tag']));
+			#$history_link  = $this->Link($page['tag'], 'history', WIKKA_HISTORY, 0, 1, sprintf(HISTORY_LINK_TITLE, $page['tag']));
+			#$page_link     = $this->Link($page['tag'], '', '', 0);
+			//		shortcut to avoid calling Link() three times for the same page;
+			//		we're not escaping link texts here but that doesn't seem necessary!
+			$page_url = $this->Href('', $page['tag']);
+			$revision_link = '<a href="'.$page_url.'/revisions" title="'.sprintf(REVISIONS_LINK_TITLE, $page['tag']).'">'.$timeformatted.'</a>';
+			$history_link  = '<a href="'.$page_url.'/history" title="'.sprintf(HISTORY_LINK_TITLE, $page['tag']).'">'.WIKKA_HISTORY.'</a>';
+			$page_link     = '<a href="'.$page_url.'">'.$page['tag'].'</a>';
+			$editor        = $this->FormatUser($page['user']);
+			echo '&nbsp;&nbsp;&nbsp;&nbsp;('.$revision_link.') ['.$history_link.'] - &nbsp;'.$page_link.' '.PAGE_EDITOR_DIVIDER.' '.$editor.' '.$note.'<br />'."\n";
 		}
 	}
 	if ($readable == 0)

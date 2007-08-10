@@ -13,7 +13,7 @@
  * @author	{@link http://web.archive.org/web/20040616194824/http://www.wakkawiki.com/CarloZottmann Carlo Zottmann}
  * @author	{@link http://wikkawiki.org/NilsLindenberg Nils Lindenberg} (rewrite, i18n)
  * 
- * @uses	Wakka::GetUser()
+ * @uses	Wakka::existsUser()
  * @uses	Wakka::GetUserName()
  * @uses	Wakka::GetPageTag()
  * @uses	Wakka::href()
@@ -29,7 +29,8 @@ if (isset($_GET["alphabetically"]) && $_GET["alphabetically"] == 1) $alpha = TRU
 $tag = $this->GetPageTag();
 $output = '';
 
-if ($user = $this->GetUser())
+#if ($user = $this->GetUser())
+if ($this->existsUser())
 {
 	$my_edits_count = 0;
 
@@ -46,9 +47,18 @@ if ($user = $this->GetUser())
 	$output .= '</a>)</div><div class="clear">&nbsp;</div>'."\n";
 
 	// get the pages
+	/*
 	$query = "SELECT tag, time FROM ".$this->GetConfigValue('table_prefix')."pages WHERE user = '".mysql_real_escape_string($this->GetUserName())."' AND latest = 'Y' ";
 	if ($alpha) $query .= "ORDER BY tag ASC, time DESC";
 	else $query .= "ORDER BY time DESC, tag ASC";
+	*/
+	$order = ($alpha) ? "tag ASC, time DESC" : "time DESC, tag ASC";
+	$query = "
+		SELECT tag, time
+		FROM ".$this->GetConfigValue('table_prefix')."pages
+		WHERE user = '".mysql_real_escape_string($this->reg_username)."'
+			AND latest = 'Y'
+		ORDER BY ".$order;
 	
 	if ($pages = $this->LoadAll($query))
 	{

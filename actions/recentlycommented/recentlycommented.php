@@ -9,13 +9,13 @@
  * 
  * @author		{@link http://wikkawiki.org/DarTar Dario Taraborelli} (preliminary code cleanup, ACL check)
  *
- * @uses		Wakka::Format()
- * @uses		Wakka::LoadRecentlyCommented()
- * @uses		Wakka::HasAccess()
- * @uses		Wakka::LoadUser()
- * @uses		Wakka::FormatUser()
+ * @uses	Wakka::Format()
+ * @uses	Wakka::GetUser()
+ * @uses	Wakka::LoadRecentlyCommented()
+ * @uses	Wakka::HasAccess()
+ * @uses	Wakka::FormatUser()
  * 
- * @todo		make datetime format configurable;
+ * @todo	make datetime format configurable;
  */
 
 /**#@+
@@ -69,14 +69,18 @@ if ($comments = $this->LoadRecentlyCommented())
 				$comment_spillover_link = '<a href="'.$this->href('', $page_tag, 'show_comments='.$show_comments).'#comment_'.$comment['id'].'" title="View comment">[&#8230;]</a>'; # i18n
 				$comment_preview = substr($comment_preview, 0, COMMENT_SNIPPET_LENGTH).$comment_spillover_link;
 			}
-			$commentlink = '<a href="'.$this->href('', $page_tag, 'show_comments='.$show_comments).'#comment_'.$comment['id'].'" title="View comment">'.$page_tag.'</a>'; # i18n
+			$commentlink = '<a href="'.$this->Href('', $page_tag, 'show_comments='.$show_comments).'#comment_'.$comment['id'].'" title="View comment">'.$page_tag.'</a>'; # i18n
+			/*
 			$comment_by = $comment['user'];
+			// @@@ as in recentchanges: whole user record NOT needed here; we only need to know if page editor is registered #368/comment3
 			if (!$this->LoadUser($comment_by))
 			{
 				$comment_by .= ' '.WIKKA_ANONYMOUS_AUTHOR_CAPTION;
 			}
 			// print entry
 			echo $commentlink.WIKKA_COMMENT_AUTHOR_DIVIDER.$this->FormatUser($comment_by).'<blockquote>'.$comment_preview.'</blockquote>'."\n";
+			*/
+			echo $commentlink.WIKKA_COMMENT_AUTHOR_DIVIDER.$this->FormatUser($comment['user']).'<blockquote>'.$comment_preview.'</blockquote>'."\n";
 		}
 	}
 	if ($readable == 0)

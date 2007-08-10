@@ -13,7 +13,7 @@
  * @author	{@link http://wikkawiki.org/DarTar Dario Taraborelli} further cleanup, error styling and improved logical structure
  * 
  * @uses	Wakka::Format()
- * @uses	Wakka::LoadUser()
+ * @uses	Wakka::loadUserData()
  * @uses	Wakka::FormOpen()
  * @uses	Wakka::FormClose()
  */ 
@@ -37,8 +37,9 @@ $output .= '<h3>'.PW_FORGOTTEN_HEADING.'</h3>';
 if (isset($_POST['wikiname'])) // get posted values
 {
 	$input = $_POST['wikiname'];
-	$user = $this->LoadUser($input);
-
+	#$user = $this->LoadUser($input);
+	$user = $this->loadUserData($input);
+	
 	switch(TRUE)
 	{
 		case ($input == ''): // empty user

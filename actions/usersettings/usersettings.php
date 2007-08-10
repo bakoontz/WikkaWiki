@@ -11,15 +11,18 @@
  * @author		{@link http://wikkawiki.org/DarTar Dario Taraborelli} (further cleanup, i18n, replaced JS dialogs with server-generated messages)
  * @author		{@link http://wikkawiki.org/NilsLindenberg Nils Lindenberg} (possibility to restrict registration)
  *
- * @uses		Wakka::htmlspecialchars_ent()
- * 
- * @todo		use different actions for registration / login / user settings;
- * @todo		add documentation links or short explanations for each option;
- * @todo		use error handler for displaying messages and highlighting
- * 				invalid input fields;
- * @todo		remove useless redirections;
- * @todo		[accessibility] make logout independent of JavaScript
- * @todo		remove mysql_real_escape_string from password storage #531
+ * @uses	Wakka::htmlspecialchars_ent()
+ * @uses	Wakka::loadUserData()
+ * @uses	Wakka::existsUser()
+ *
+ * @todo	use different actions for registration / login / user settings;
+ * @todo	add documentation links or short explanations for each option;
+ * @todo	use error handler for displaying messages and highlighting
+ * 			invalid input fields;
+ * @todo	remove useless redirections;
+ * @todo	[accessibility] make logout independent of JavaScript
+ * @todo	remove mysql_real_escape_string from password storage #531
+ * @todo	complete @uses
  */
 
 /**#@+
@@ -141,8 +144,9 @@ if ($user = $this->GetUser())
 					WHERE name = '".$user['name']."'
 					LIMIT 1"
 					);
-				unset($this->specialCache['user'][strtolower($user['name'])]);	// invalidate cache if exists #368
-				$this->SetUser($this->LoadUser($user['name']));
+				#unset($this->specialCache['user'][strtolower($user['name'])]);	// OBSOLETE invalidate cache if exists #368
+				#$this->SetUser($this->LoadUser($user['name']));
+				$this->SetUser($this->loadUserData($user['name']));
 		}
 	}
 	// user just logged in, or just went to this page
@@ -354,7 +358,8 @@ else
 	{
 		// BEGIN *** LOGIN ***
 		// if user name already exists, check password
-		if (isset($_POST['name']) && $existingUser = $this->LoadUser($_POST['name']))
+		#if (isset($_POST['name']) && $existingUser = $this->LoadUser($_POST['name']))
+		if (isset($_POST['name']) && $existingUser = $this->loadUserData($_POST['name']))
 		{
 			// check password
 			switch(TRUE){
@@ -452,7 +457,8 @@ else
 					unset($this->specialCache['user'][strtolower($name)]);	//invalidate cache if exists #368
 
 					// log in
-					$this->SetUser($this->LoadUser($name));
+					#$this->SetUser($this->LoadUser($name));
+					$this->SetUser($this->loadUserData($name));
 					if ((isset($_SESSION['go_back'])) && (isset($_POST['do_redirect'])))
 					{
 						$go_back = $_SESSION['go_back'];
@@ -482,12 +488,14 @@ else
 			$newerror = ERROR_WIKINAME;
 			$username_temp_highlight = INPUT_ERROR_STYLE;
 		}
-		elseif (!($this->LoadUser($_POST['yourname'])))	//check if user exists
+		#elseif (!($this->LoadUser($_POST['yourname'])))	//check if user exists
+		elseif (!($this->existsUser($_POST['yourname'])))	//check if user exists
 		{
 			$newerror = ERROR_NONEXISTENT_USERNAME;
 			$username_temp_highlight = INPUT_ERROR_STYLE;
 		}
-		elseif ($existingUser = $this->LoadUser($_POST['yourname']))	// if user name already exists, check password
+		#elseif ($existingUser = $this->LoadUser($_POST['yourname']))	// if user name already exists, check password
+		elseif ($existingUser = $this->loadUserData($_POST['yourname']))	// if user name already exists, check password
 		{
 			// updatepassword
 			if ($existingUser['password'] == $_POST['temppassword'])

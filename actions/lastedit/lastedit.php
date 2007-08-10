@@ -20,7 +20,6 @@
  * @output		box with lastedit information
  *
  * @uses	Wakka::Link()
- * @uses	Wakka::LoadUser()
  * @uses	Wakka::GetPageTag()
  * @uses	Wakka::Href()
  * @uses	Wakka::htmlspecialchars_ent()

@@ -17,7 +17,7 @@
  * @uses	Config::$stylesheet
  * @uses	Config::$wakka_name
  * @uses	Wakka::GetRedirectMessage()
- * @uses	Wakka::GetUser()
+ * @uses	Wakka::existsUser()
  * @uses	Wakka::GetConfigValue()
  * @uses	Wakka::GetWakkaName()
  * @uses	Wakka::PageTitle()
@@ -81,14 +81,17 @@ $backlinks_url = $this->href('backlinks', '', '');
 $backlinks_title = sprintf(WIKKA_BACKLINKS_LINK_TITLE, $pagetag_disp);
 $header_heading = $this->GetConfigValue('wakka_name').' : '.'<a href="'.$backlinks_url.'" title="'.$backlinks_title.'">'.$pagetag_disp.'</a>';
 $header_navlinks = '';
-if ($user = $this->GetUser())
+#if ($user = $this->GetUser())
+if ($this->existsUser())
 {
 	$header_navlinks .= $this->GetConfigValue('logged_in_navigation_links') ? $this->Format($this->GetConfigValue('logged_in_navigation_links')).' :: ' : '';
-	$header_navlinks .= sprintf(YOU_ARE, $this->FormatUser($user['name']));
+	#$header_navlinks .= sprintf(YOU_ARE, $this->FormatUser($user['name']));
+	$header_navlinks .= sprintf(YOU_ARE, $this->FormatUser($this->reg_username));
 }
 else
 {
 	$header_navlinks .= $this->GetConfigValue('navigation_links') ? $this->Format($this->GetConfigValue('navigation_links')) : '';
+	// optionally display user's IP address here
 }
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">

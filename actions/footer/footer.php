@@ -10,6 +10,7 @@
  * @uses	Wakka::FormOpen()
  * @uses	Wakka::HasAccess()
  * @uses	Wakka::Href()
+ * @uses	Wakka::existsUser()
  * @uses	Wakka::GetHandler()
  * @uses	Wakka::GetPageTag()
  * @uses	Wakka::GetPageTime()
@@ -67,11 +68,14 @@
 		}
 		else
 		{
-			print(WIKKA_NO_OWNER.($this->GetUser() ? ' (<a href="'.$this->href("claim").'">'.TAKE_OWNERSHIP."</a>) ::\n" : " ::\n"));
+			#print(WIKKA_NO_OWNER.($this->GetUser() ? ' (<a href="'.$this->href("claim").'">'.TAKE_OWNERSHIP."</a>) ::\n" : " ::\n"));
+			print(WIKKA_NO_OWNER.($this->existsUser() ? ' (<a href="'.$this->href("claim").'">'.TAKE_OWNERSHIP."</a>) ::\n" : " ::\n"));
 		}
 	}
 ?>
-<?php echo ($this->GetUser() ? '<a href="'.$this->href("referrers").'" title="'.REFERRERS_LINK_TITLE.'">'.REFERRERS_LINK_DESC.'</a> :: ' : "") ?> 
+<?php #echo ($this->GetUser() ? '<a href="'.$this->href("referrers").'" title="'.REFERRERS_LINK_TITLE.'">'.REFERRERS_LINK_DESC.'</a> :: ' : "") 
+	echo $this->existsUser() ? '<a href="'.$this->href("referrers").'" title="'.REFERRERS_LINK_TITLE.'">'.REFERRERS_LINK_DESC.'</a> :: ' : ''
+?> 
 <label for="src_phrase"><?php echo SEARCH_LABEL;?></label> <input id="src_phrase" name="phrase" size="15" class="searchbox" />
 <?php echo $this->FormClose(); ?>
 </div><!-- end footer -->

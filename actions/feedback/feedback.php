@@ -18,19 +18,23 @@
  * @author	{@link http://wikkawiki.org/NilsLindenberg Nils Lindenberg} (documentation)
  * @author	{@link http://wikkawiki.org/JavaWoman Marjolein Katsma} (l10n, form accessibility)
  *
- * @input	string  $to  optional: recipient username;
+ * @input	string	$to	optional: recipient username;
  *			default: wiki administrator
  *			the default can also be overridden by embedding this action in a userpage
+ *			whose owner will then become the recipient
  * @output	Contact form to send feedback to a specified recipient or to the wiki admin.
  * @uses	Wakka::FormOpen()
  * @uses	Wakka::FormClose()
  * @uses	Wakka::GetConfigValue()
- * @uses	Wakka::LoadUser()
+ * @uses	Wakka::existsUser()
+ * @uses	Wakka::loadUserData()
  * @uses	Wakka::GetUser()
  * 
  * @todo	Use central regex library for validation #34
  * @todo	Update documentation for feedback action
  * @todo	Implement antispam measures to prevent scripted form posting
+ * @todo	This seems to be <b>broken</b>!
+ *			The overrides for recipient are never used (and @to input isn't validated/sanitized)
  */
 
 /**#@+
@@ -42,33 +46,39 @@ define('VALID_EMAIL_RE', "%[a-zA-Z0-9._-]@%[a-zA-Z0-9._-]"); //TODO Move to cent
 /**#@-*/
 
 //only display form when feedback is allowed
-if (ALLOW_FEEDBACK_FROM_UNREGISTERED || $this->GetUser)
+#if (ALLOW_FEEDBACK_FROM_UNREGISTERED || $this->GetUser)	// @@@ just check for *registered* user
+if (ALLOW_FEEDBACK_FROM_UNREGISTERED || $this->existsUser())	// just check for *registered* user
 {
 	//get user input
 	$name = (isset($_POST['name']))? $_POST['name'] : '';
 	$email = (isset($_POST['email']))? $_POST['email'] : '';
 	$comments = (isset($_POST['comments']))? $_POST['comments'] : '';
 
-	//set recipient
+	//set recipient	@@@ broken: never used
 	switch(TRUE)
 	{
-		//recipient specified via action parameter "to"
-		case (isset($to) && $user_specified_recipient = $this->LoadUser($to)):
-		$recipient_name = $to;
-		break;
+		//recipient specified via action parameter "to"		// @@@ param needs to be validated/sanitized!!
+		#case (isset($to) && $user_specified_recipient = $this->LoadUser($to)):
+		case (isset($to) && $user_specified_recipient = $this->loadUserData($to)):
+			$recipient_name = $to;
+			// @@@ retrieve both name and email from actual record retrieved
+			break;
 
-		//recipient specified via pagename
-		case ($userpage_recipient = $this->LoadUser($this->tag)):
-		$recipient_name = $this->tag;
-		break;
+		//recipient specified via pagename (by embedding in userpage)
+		#case ($userpage_recipient = $this->LoadUser($this->tag)):
+		case ($userpage_recipient = $this->loadUserData($this->tag)):
+			// @@@ retrieve both name and email from actual record retrieved
+			$recipient_name = $this->tag;
+			break;
 
 		//default recipient is admin
 		default:
-		$recipient_name = '';
-		break;
+			$recipient_name = '';
+			// @@@ get admin email from config *here*
+			break;
 	}
 	// form elements
-	$form_caption	= sprintf(FEEDBACK_FORM_CAPTION, $recipient_name);
+	$form_caption	= sprintf(FEEDBACK_FORM_CAPTION, $recipient_name);	// @@@ use FormatUser() here
 	$form_open		= $this->FormOpen();
 	$form_close		= $this->FormClose();
 	$label_name		= FEEDBACK_NAME_LABEL;
@@ -76,7 +86,7 @@ if (ALLOW_FEEDBACK_FROM_UNREGISTERED || $this->GetUser)
 	$label_message	= FEEDBACK_MESSAGE_LABEL;
 	$button_send	= FEEDBACK_SEND_BUTTON;
 
-	//check if user is logged in
+	//check if user is logged in; pre-fill data if so
 	if ($user = $this->GetUser())
 	{
 		$username = '<input id="fb_name" name="name" value="'.$user['name'].'" type="text" readonly="readonly" />'."\n";
@@ -130,7 +140,7 @@ TPLFEEDBACKFORM;
 			$msg  = FEEDBACK_NAME_LABEL."\t".$name."\n";
 			$msg .= FEEDBACK_EMAIL_LABEL."\t".$email."\n";
 			$msg .= "\n".$comments."\n";
-			$recipient = $this->GetConfigValue('admin_email');
+			$recipient = $this->GetConfigValue('admin_email');	// @@@ missing overrides
 			$subject = sprintf(FEEDBACK_SUBJECT,$this->GetConfigValue('wakka_name'));
 			$mailheaders  = "From:".$email."\n";
 			$mailheaders .= "Reply-To:".$email;
