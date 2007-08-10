@@ -27,7 +27,7 @@ if ($pages = $this->LoadRecentlyChanged())
 	$users = array();
 	$curday = '';
 	$max = 20;		// @@@
-		// $max = $this->GetConfigValue("xml_recent_changes");
+	//$max = $this->GetConfigValue("xml_recent_changes");
 	//if ($user = $this->GetUser()) {
 	//	$max = $user["changescount"];
 	//} else {

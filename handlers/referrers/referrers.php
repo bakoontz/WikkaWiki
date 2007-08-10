@@ -11,7 +11,7 @@
  * @uses		Config::$referrers_purge_time
  * @uses		Wakka::GetConfigValue()
  * @uses		Wakka::GetPageTag()
- * @uses		Wakka::GetUser()
+ * @uses		Wakka::existsUser()
  * @uses		Wakka::GetHandler()
  * @uses		Wakka::Href()
  * @uses		Wakka::htmlspecialchars_ent()
@@ -76,7 +76,8 @@ echo '<div class="page">'."\n";
 echo '<strong>'.$heading.'</strong><br />'."\n";
 echo '<em>'.REFERRERS_NO_SPAM.'</em><br /><br />'."\n";
 
-if ($this->GetUser())
+#if ($this->GetUser())
+if ($this->existsUser())
 {
 	// get data
 	$referrers = ($global !== '') ? $this->LoadReferrers() : $this->LoadReferrers($thispage);

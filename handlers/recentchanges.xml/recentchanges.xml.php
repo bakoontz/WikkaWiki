@@ -18,6 +18,7 @@
  * @uses	Config::$wakka_name
  * @uses	Config::$root_page
  * @uses	Config::$xml_recent_changes
+ * @uses	Wakka::existsUser()
  * @uses	Wakka::GetConfigValue()
  * @uses	Wakka::Href()
  * @uses	Wakka::htmlspecialchars_ent()
@@ -134,7 +135,8 @@ if ($pages = $this->LoadRecentlyChanged())
 			$item->description = sprintf(FEED_ITEM_DESCRIPTION, $page['user']).($page['note'] ? ' ('.$page['note'].')' : '')."\n";
 			#$item->source = $this->GetConfigValue('base_url');
 			$item->source = $this->base_url;	// home page	// @@@ JW: should link to actual page, I think
-			if (($f == 'ATOM1.0' || $f == 'RSS1.0') && $this->LoadUser($page['user'])) 
+			#if (($f == 'ATOM1.0' || $f == 'RSS1.0') && $this->LoadUser($page['user']))// @@@ only check for existence of user here
+			if (($f == 'ATOM1.0' || $f == 'RSS1.0') && $this->existsUser($page['user']))// @@@ only check for existence of user here
 			{
 				$item->author = $page['user']; # RSS0.91 and RSS2.0 require authorEmail
 			}

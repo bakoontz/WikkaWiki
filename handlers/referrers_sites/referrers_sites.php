@@ -3,7 +3,7 @@
  * Show domains linking to the page/ the wiki.
  *
  * @package		Handlers
- * @subpackage	Referrers	
+ * @subpackage	Referrers
  * @version		$Id:referrers_sites.php 407 2007-03-13 05:59:51Z DarTar $
  * @license		http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
@@ -13,7 +13,7 @@
  * @uses		Wakka::LoadReferrers()
  * @uses		Wakka::GetConfigValue()
  * @uses		Wakka::GetHandler()
- * @uses		Wakka::GetUser()
+ * @uses		Wakka::existsUser()
  * @uses		Wakka::Href()
  * @uses		Wakka::htmlspecialchars_ent()
  *
@@ -73,7 +73,8 @@ echo '<div class="page">'."\n";
 echo '<strong>'.$heading.'</strong><br />'."\n";
 echo '<em>'.REFERRERS_NO_SPAM.'</em><br /><br />'."\n";
 
-if ($this->GetUser())
+#if ($this->GetUser())
+if ($this->existsUser())
 {
 	// get data
 	$referrers = ($global !== '') ? $this->LoadReferrers() : $this->LoadReferrers($thispage);

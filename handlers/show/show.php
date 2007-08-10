@@ -27,7 +27,7 @@
  * @uses		Wakka::htmlspecialchars_ent()
  * @uses		Wakka::LoadComments()
  * @uses		Wakka::LoadPage()
- * @uses		Wakka::LoadUser()
+ * @uses		Wakka::FormatUser()
  * @uses		Wakka::UserIsOwner()
  */
 
@@ -79,7 +79,8 @@ else
 		echo "\n".'</div><!--closing page content-->'."\n\n";
 
 		if ($this->GetConfigValue('hide_comments') != 1 &&
-			$this->HasAccess('comment_read'))
+			$this->HasAccess('comment_read')
+		   )
 		{
 			echo '<!-- starting comments block-->'."\n";
 			echo '<div id="comments">'."\n";
@@ -91,7 +92,7 @@ else
 				$_SESSION['show_comments'][$tag] = $wantComments;
 			}
 
-			# A GET comment style always overrides the SESSION comment style
+			// A GET comment style always overrides the SESSION comment style
 			if (isset($_GET['show_comments']))
 			{
 				switch($_GET['show_comments'])
@@ -119,7 +120,7 @@ else
 				$display_mode = $_SESSION['show_comments'][$tag];
 				// set up icons
 				$sort_desc_icon_url = StaticHref('images/icons/sort_desc.gif');
-				$sort_ascc_icon_url = StaticHref('images/icons/sort_asc.gif');
+				$sort_asc_icon_url = StaticHref('images/icons/sort_asc.gif');
 				$sort_comment_icon_url = StaticHref('images/icons/comment.gif');
 
 
@@ -156,18 +157,17 @@ else
 			else
 			{
 
-				$showcomments_text = '';	// FIXES notice
 				echo '<!--starting comments header (hide)-->'."\n";
 				echo '<div class="commentsheader">'."\n";
 				$commentCount = $this->CountComments($this->tag);
-				$showcomments_text = null;
+				$showcomments_text = '';
 				switch ($commentCount)
 				{
 					case 0:
 						$comments_message = STATUS_NO_COMMENTS.' ';
 						if ($this->HasAccess('comment_post'))
 						{
-							$showcomments_text = $this->FormOpen("processcomment");
+							$showcomments_text  = $this->FormOpen("processcomment");
 							$showcomments_text .= '<input type="submit" name="submit" value="'.COMMENT_NEW_BUTTON.'" />';
 							$showcomments_text .= $this->FormClose();
 						}
@@ -205,14 +205,19 @@ else
 
 /**
  * Display comments for ...
- * 
+ *
+ * @uses	Wakka::reg_username
+ * @uses	Wakka::GetUserName()
+ * @uses	Wakka::UserIsOwner()
+ * @uses	Wakka::FormatUser()
+ *
  * @todo	document (including short description!
  */
 function displayComments(&$obj, &$comments, $tag)
 {
-	$current_user = $obj->GetUserName(); 
+	$current_user = $obj->GetUserName();
 	$is_owner = $obj->UserIsOwner();
-	$prev_level = null;
+	$prev_level = NULL;
 	$threaded = 0;
 	if ($_SESSION['show_comments'][$tag] == COMMENT_ORDER_THREADED)
 	{
@@ -259,8 +264,8 @@ function displayComments(&$obj, &$comments, $tag)
 		else
 		{
 			# Some stats
-			$comment_author = $obj->FormatUser($comment['user']);
 			//$comment_author = $obj->LoadUser($comment['user'])? $obj->Format($comment['user']) : $comment['user'];
+			$comment_author = $obj->FormatUser($comment['user']);
 			$comment_ts = sprintf(COMMENT_TIME_CAPTION,$comment['time']);
 ?>
 	<div id="comment_<?php echo $comment['id'] ?>" class="<?php echo $comment_class ?>" >
@@ -282,12 +287,15 @@ function displayComments(&$obj, &$comments, $tag)
 ?>
 		<input type="submit" name="submit" value="<?php echo COMMENT_REPLY_BUTTON ?>" />
 <?php
+				/*
 				$user = $obj->GetUser();
 				if (isset($user))
 				{
 					$name = $user['name'];
 				}
-				if ($is_owner || $name == $comment['user'] || ($obj->config['anony_delete_own_comments'] && $current_user == $comment['user']))
+				*/
+				#if ($is_owner || $name == $comment['user'] || ($obj->config['anony_delete_own_comments'] && $current_user == $comment['user']))
+				if ($is_owner || $obj->reg_username == $comment['user'] || ($obj->config['anony_delete_own_comments'] && $current_user == $comment['user']))
 				{
 ?>
 		<input type="submit" name="submit" value="<?php echo COMMENT_DELETE_BUTTON ?>" />

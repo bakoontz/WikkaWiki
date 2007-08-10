@@ -13,6 +13,8 @@
  * @uses	in_iarray()
  * @uses	Wakka::Href()
  * @uses	Wakka::LoadRecentlyChanged()
+ * @uses	Wakka::HasAccess()
+ *
  * @todo	replace numbers by constants: no "magic numbers"!)
  */
 

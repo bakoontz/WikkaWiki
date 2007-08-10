@@ -8,20 +8,23 @@
  * @license		http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
  *
+ * @uses	Wakka::reg_username()
  * @uses	Wakka::GetPageOwner()
  * @uses	Wakka::GetPageTag()
- * @uses	Wakka::GetUser()
+ * @uses	Wakka::existsUser()
  * @uses	Wakka::Href()
  * @uses	Wakka::SetRedirectMessager()
  * @uses	Wakka::Redirect()
  */
 
-// only claim ownership if this page has no owner, and if user is logged in.
+// only claim ownership if current page has no owner, and if user is logged in.
 #if ($this->page && !$this->GetPageOwner() && $this->GetUser())
-if ($this->page && !$this->GetPageOwner() && ($user = $this->GetUser()))
+#if ($this->page && !$this->GetPageOwner() && ($user = $this->GetUser()))
+if ($this->page && !$this->GetPageOwner() && $this->existsUser())
 {
 	#$this->SetPageOwner($this->GetPageTag(), $this->GetUserName());
-	$this->SetPageOwner($this->GetPageTag(), $user['name']);
+	#$this->SetPageOwner($this->GetPageTag(), $user['name']);
+	$this->SetPageOwner($this->GetPageTag(), $this->reg_username);
 	$this->SetRedirectMessage(USER_IS_NOW_OWNER);
 }
 
