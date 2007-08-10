@@ -80,6 +80,12 @@ if (!defined('WIKKA_URL_EXTENSION')) define('WIKKA_URL_EXTENSION', 'wikka.php?wa
 class Wakka
 {
 	/**
+	 * Hold the Wikka version.
+	 *
+	 * @var		string
+	 */
+	var $VERSION;
+	/**
 	 * Hold the wikka config.
 	 *
 	 * @access	private
@@ -93,27 +99,7 @@ class Wakka
 	 * @var		resource
 	 */
 	var $dblink;
-	/**
-	 * Hold data about the current page.
-	 *
-	 * @access	private
-	 * @var		array
-	 */
-	var $page;
-	/**
-	 * Hold the name of the current page.
-	 *
-	 * @access	private
-	 * @var		string
-	 */
-	var $tag;
-	/**
-	 * Keep track of included pages to avoid circular references.
-	 *
-	 * @access	private
-	 * @var		array
-	 */
-	var $included_pages = array();
+
 	/**
 	 * Hold a log of queries and the times used for them; used for debugging.
 	 *
@@ -126,28 +112,16 @@ class Wakka
 	 * @var		array
 	 */
 	var $interWiki = array();
-	/**
-	 * Hold the Wikka version.
-	 *
-	 * @var		string
+
+	/**#@+*
+	 * Variable to store data about HTTP headers.
 	 */
-	var $VERSION;
 	/**
 	 * Keep track of whether a (at least one) cookie has been sent to the browser.
 	 *
 	 * @var		boolean
 	 */
 	var $cookies_sent = FALSE;
-	/**
-	 * This associative array stores cached pages.
-	 *
-	 * Keys are page names (tag) or page id (prepended with /#) and values are the
-	 * page structure. See {@link Wakka::CachePage()}
-	 *
-	 * @access	public
-	 * @var		array
-	 */
-	var $pageCache;
 	/**
 	 * If this value is set to TRUE, Anti-caching HTTP headers won't be added.
 	 *
@@ -168,6 +142,25 @@ class Wakka
 	 * @var		array
 	 */
 	var $additional_headers = array();
+	/**#@-*/
+
+	/**#@+*
+	 * Variable to store data about pages.
+	 */
+	/**
+	 * Hold record for the current page.
+	 *
+	 * @access	private
+	 * @var		array
+	 */
+	var $page;
+	/**
+	 * Hold the name of the current page.
+	 *
+	 * @access	private
+	 * @var		string
+	 */
+	var $tag;
 	/**
 	 * Title of the page to insert in the <title> element.
 	 *
@@ -175,6 +168,68 @@ class Wakka
 	 * @var		string
 	 */
 	var $page_title = '';
+	/**
+	 * This associative array stores cached pages.
+	 *
+	 * Keys are page names (tag) or page id (prepended with /#) and values are the
+	 * page structure. See {@link Wakka::CachePage()}
+	 *
+	 * @access	public
+	 * @var		array
+	 */
+	var $pageCache;
+	/**
+	 * Keep track of included pages to avoid circular references.
+	 *
+	 * @access	private
+	 * @var		array
+	 */
+	var $included_pages = array();
+	/**
+	 * Cache for various stuff.
+	 */
+	var $specialCache = array();
+	/**#@-*/
+
+	/**#@+*
+	 * Variable to store data about users.
+	 */
+	/**
+	 * Tracks whether the <b>current</b> user is registered or not.
+	 *
+	 * @access	public
+	 * @var		boolean
+	 */
+	var $registered = FALSE;
+	/**
+	 * Name of <b>current</b> user if registered.
+	 *
+	 * @access	public
+	 * @var		string
+	 */
+	var $reg_username = '';
+	/**
+	 * Name of <b>current</b> user if anonymous (effectively either IP address or host name).
+	 *
+	 * @access	public
+	 * @var		string
+	 */
+	var $anon_username = '';
+	/**
+	 * Cache for usernames that are known to be registered.
+	 *
+	 * @access	public
+	 * @var		array()
+	 */
+	var $registered_users = array();
+	/**
+	 * Cache for usernames/IP addresses/hostnames that are known to be <b>not</b> registered.
+	 *
+	 * @access	public
+	 * @var		array()
+	 */
+	var $anon_users = array();
+	/**#@-*/
 
 	/**#@+*
 	 * URL or URL component, derived just once in {@link Wakka::Run()} for later usage.
@@ -252,10 +307,9 @@ class Wakka
 	 * @uses	Wakka::GetConfigValue()
 	 * @uses	getmicrotime()
 	 *
-	 * @param	string $query mandatory: the query to be executed.
-	 * @return	array the result of the query.
+	 * @param	string	$query	mandatory: the query to be executed.
+	 * @return	array	the result of the query.
 	 * @todo	move into a database class.
-	 * @todo	implement cleaner time tracking, using "compatibility method"
 	 */
 	function Query($query)
 	{
@@ -285,7 +339,7 @@ class Wakka
 	 *
 	 * @uses	Wakka::LoadAll()
 	 *
-	 * @param	string	$query mandatory: the query to be executed
+	 * @param	string	$query	mandatory: the query to be executed
 	 * @return	mixed	an array with the first result row of the query, or FALSE if nothing was returned.
 	 * @todo	move into a database class.
 	 */
@@ -361,7 +415,7 @@ class Wakka
 	/**
 	 * Check if the MySQL-Version is higher or equal to a given (minimum) one.
 	 *
-	 * !param	integer $major mandatory: INTERFACE CHANGED
+	 * !param	integer $major mandatory: INTERFACE CHANGE
 	 * !param	integer $minor mandatory: INTERFACE CHANGE
 	 * !param	integer $subminor mandatory: INTERFACE CHANGE
 	 * @param	string	$min_version	optional; default: 3.23, the minimum for Wikka to run
@@ -441,7 +495,7 @@ class Wakka
 	 *
 	 * WARNING:	Do not add, delete, or reorder records or fields in
 	 *			queries prior to calling this function!!
-	 *			JW: why not? please expain...
+	 *			JW: why not? please explain...
 	 *
 	 * @uses	Wakka::Query()
 	 *
@@ -488,10 +542,10 @@ class Wakka
 				{
 					if ($changedvals != '')
 					{
-						$changedvals .= ', ';	// use newline rather than space for more readable query
+						$changedvals .= ",\n";	// using newline rather than space for more readable query
 					}
 					$changedvals .= '`'.$key.'`=';
-					if (!is_numeric($newval))	// not strictly safe; we need to now if column type is strng or number
+					if (!is_numeric($newval))	// not strictly safe; we need to know if column type is string or number
 					{
 						$changedvals .= '"'.mysql_real_escape_string($newval).'"';
 					}
@@ -518,7 +572,7 @@ class Wakka
 	 */
 
 	/**
-	 * Generate a timestamp.
+	 * Generate a timestamp - OBSOLETE.
 	 * 
 	 * DISABLED: replaced by getmicrotime() in Compatibility library!
 	 * Left in place but returning just zero for now.
@@ -566,6 +620,7 @@ class Wakka
 		}
 		else
 		{
+			// @@@ wrap in <em class="error"> here, not in callers
 			$output = $this->htmlspecialchars_ent($not_found_text);	// [SEC] make error (including (part of) request) safe to display
 		}
 		return $output;
@@ -674,7 +729,6 @@ class Wakka
 	 *
 	 * @param	string $html mandatory: HTML to be secured
 	 * @return	string sanitized HTML
-	 * @todo	make "pass by reference" version-dependent (cf.[606] on wikka.php)
 	 */
 	function ReturnSafeHTML($html)
 	{
@@ -698,21 +752,21 @@ class Wakka
 	/**
 	 * Takes an array of pages returned by LoadAll() and renders it as a table or unordered list.
 	 *
-	 * @author		{@link http://wikkawiki.org/DotMG DotMG}
+	 * @author	{@link http://wikkawiki.org/DotMG DotMG}
 	 *
-	 * @access		public
+	 * @access	public
 	 * @uses	Wakka::Format()
 	 *
-	 * @param	mixed	$pages			required: Array of pages returned by LoadAll
+	 * @param	mixed	$pages			mandatory: Array of pages returned by LoadAll
 	 * @param	string	$nopagesText	optional: Error message returned if $pages is void. Default: ''
 	 * @param	string	$class			optional: A classname to be attached to the table or unordered list. Default: ''
 	 * @param	int		$columns		optional: Number of columns of the table if compact = 0. Default: 3
 	 * @param	int		$compact		optional: If 0: use table, if 1: use unordered list. Default: 0
-	 * @param	boolean	$show_edit_link	If true, each page is followed by an edit link. Default: false.
-	 * @return	string	formated array contents
+	 * @param	boolean	$show_edit_link	If TRUE, each page is followed by an edit link. Default: FALSE.
+	 * @return	string	HTML: formatted array contents
 	 * @todo	Use as a wrapper for the new array functions - avoiding table layout and enhancing scannability of the result!!!
 	 */
-	function ListPages($pages, $nopagesText = '', $class = '', $columns = 3, $compact = 0, $show_edit_link=false)
+	function ListPages($pages, $nopagesText = '', $class = '', $columns = 3, $compact = 0, $show_edit_link=FALSE)	// @@@ use boolean for $compact
 	{
 		$edit_link = '';
 		if (!$pages)
@@ -730,6 +784,7 @@ class Wakka
 			$list[] = $page['page_tag'];	#487 - was not handled in [520]!
 		}
 		sort($list);			// @@@ caller should ensure (via query!) the list is already sorted
+								// this could break an already-sorted list!
 		$count = 0;
 		foreach ($list as $val)
 		{
@@ -913,7 +968,7 @@ class Wakka
 	 * 	"The third argument charset defines character set used in conversion."
 	 *
 	 * I suspect PHP's htmlspecialchars() is working at the byte-value level and
-	 * thus _needs_ to know (or asssume) a character set because the special
+	 * thus _needs_ to know (or assume) a character set because the special
 	 * characters to be replaced could exist at different code points in
 	 * different character sets. (If indeed htmlspecialchars() works at
 	 * byte-value level that goes some  way towards explaining why the
@@ -1138,9 +1193,9 @@ class Wakka
 	}
 	/**
 	 * Determine if the current version of the page is the latest.
-	 * @todo	Remove this method? Never called, and the variable does not seem to be set anywhere...
 	 *
-	 * @return boolean? TRUE if it is the latest, FALSE otherwise.
+	 * @return boolean TRUE if it is the latest, FALSE otherwise.
+	 * @todo	Remove this method? Never called, and the variable does not seem to be set anywhere...
 	 */
 	function IsLatestPage()
 	{
@@ -1207,8 +1262,8 @@ class Wakka
 	 *
 	 * @uses	Wakka::config
 	 *
-	 * @param	$name mandatory: name of a key in the config array
-	 * @return	mixed the value of the configuration item
+	 * @param	$name	mandatory: name of a key in the config array
+	 * @return	mixed	the value of the configuration item, or NULL if not found
 	 */
 	function GetConfigValue($name)
 	{
@@ -1266,26 +1321,27 @@ class Wakka
 	 * @uses	Wakka:CacheNonExistentPage()
 	 * @uses	Wakka:GetCachedPage()
 	 *
-	 * @param	string	$tag
-	 * @param	string	$time
-	 * @param	int		$cache
-	 * @return	mixed	$page structure or NULL if not retrieved
-	 * @todo	don't use numbers when booleans are intended! TRUE and FALSE advertize their intention much clearer
+	 * @param	string	$tag	mandatory: name of the page to load
+	 * @param	string	$time	optional: timestamp if a specific revision should be loaded
+	 * @param	boolean	$cache	optional: if TRUE and the latest version was requested,
+	 *					an attempt to retrieve from cache will be made first.
+	 *					default: TRUE
+	 * @return	mixed	array with page structure, or FALSE if not retrieved
 	 */
-	function LoadPage($tag, $time = '', $cache = 1)	// @@@
+	function LoadPage($tag, $time='', $cache=TRUE)	// @@@
 	{
-		$page = NULL;			// @@@ FALSE might be a better flag
+		$page = FALSE;
 		// retrieve from cache
-		if (!$time && $cache)
+		if (!$time && (bool) $cache)
 		{
 			$page = $this->GetCachedPage($tag);
 			if ($page == 'cached_nonexistent_page')
 			{
-				$page = NULL;
+				$page = FALSE;
 			}
 		}
 		// load page
-		if (!isset($page))		// Nothing from cache? then get from DB (use if (!$page) if we use FALSE as flag instead of NULL)
+		if (FALSE === $page)		// Nothing from cache? then get from DB
 		{
 			$page = $this->LoadSingle("
 				SELECT *
@@ -1327,8 +1383,9 @@ class Wakka
 	 * @uses	Wakka::GetConfigValue()
 	 * @uses	Config::$pagename_case_sensitive
 	 *
-	 * @param	mixed	$tag the name of the page to retrieve from cache.
+	 * @param	mixed	$tag	the name of the page to retrieve from cache.
 	 * @return	mixed	an array as returned by LoadPage(), or NULL if absent from cache.
+	 * @todo	should probably return FALSE instead of NULL in case of failure, for consistency with LoadPage()
 	 */
 	function GetCachedPage($tag)
 	{
@@ -1344,8 +1401,9 @@ class Wakka
 		return $page;
 	}
 	/**
-	 * CachePage caches a page to prevent reusing mysql operations when reloading it.
-	 * <p>Cached pages are stored in the array $this->pageCache.</p>
+	 * CachePage caches a page to prevent reusing MySQL operations when reloading it.
+	 *
+	 * <p>Cached pages are stored in the array {@link Wakka::pageCache}.</p>
 	 * <p>If this is the latest version of the page, the page name is used as a key for the array. That page name
 	 * may be lowercased if the database doesn't work with case sensitive collation. Lowercasing it enhances the
 	 * power of caching by preventing reloading of a page (with mysql) under another case. But if the database
@@ -1383,7 +1441,7 @@ class Wakka
 		}
 	}
 	/**
-	 * CacheNonExistentPage marks a page name in cache as a non existent page.
+	 * CacheNonExistentPage marks a page name in cache as a non-existent page.
 	 *
 	 * @access	public
 	 * @uses	Wakka::$pageCache
@@ -1414,24 +1472,25 @@ class Wakka
 	 * @uses	Wakka::CachePage()
 	 * @uses	Wakka::CacheNonExistentPage()
 	 *
-	 * @param	int		$id		Id of the page to load.
-	 * @param	boolean	$cache	if TRUE, an attempt to retrieve from cache will be made first.
-	 * @return	mixed	a page identified by $id or NULL if not found in cache, or FALSE if not found in database
-	 * @todo	return a consistent type, or at least only FALSE for failure
+	 * @param	int		$id		mandatory: Id of the page to load.
+	 * @param	boolean	$cache	optional: if TRUE, an attempt to retrieve from
+	 *					cache will be made first.
+	 *					default: TRUE
+	 * @return	mixed	array with page structure identified by $id, or FALSE if no page could not be retrieved
 	 */
-	function LoadPageById($id, $cache = TRUE)
+	function LoadPageById($id, $cache=TRUE)
 	{
 		// It first tries to retrieve from cache.
-		if ($cache)
+		if ((bool) $cache)
 		{
 			$page = $this->GetCachedPageById($id);
 			if ((is_string($page)) && ($page == 'cached_nonexistent_page'))
 			{
-				return NULL;
+				return FALSE;
 			}
 			if (is_array($page))
 			{
-				return ($page);
+				return $page;
 			}
 		}
 		// If the page id was not retrieved from cache, then use sql and cache the page.
@@ -1476,22 +1535,23 @@ class Wakka
 	 * @uses	Config::$default_revisioncount
 	 * @uses	Config::$pagename_case_sensitive
 	 *
-	 * @param	string	$page Name of the page to view revisions of
+	 * @param	string	$tag Name of the page to view revisions of
 	 * @param	int	$start
 	 * @param	int	$max	Maximum number of revisions to load; zero or a negative number signifies "no limit"
 	 * @return	array	This value contains fields note, id, time and user.
 	 * @todo	avoid "magic numbers"!
 	 * @todo	do we really need a limit for "no limit"? why is the imposed limit
 	 *			different for registered and anonymous users?
+	 * @todo	review usage of cache - see NOTE & todo in {@link Wakka::LoadOldestRevision}!.
 	 */
-	function LoadRevisions($page, $start=0, $max=0)
+	function LoadRevisions($tag, $start=0, $max=0)
 	{
 		$max = (int) $max;
 		if ($max <= 0)
 		{
-			if ($user = $this->GetUser())				// registered user
+			if ($user = $this->GetUser())				// get registered user
 			{
-				$limitmax = (int) $user['revisioncount'];	// @@@ this should not be necessary - make sure it always contains an integer!
+				$limitmax = (int) $user['revisioncount'];	// @@@ this typecast should not be necessary - make sure it always contains an integer!
 				if ($limitmax <= 0)
 				{
 					// 0 or a negative value means no max, so choose a huge number.
@@ -1520,23 +1580,30 @@ class Wakka
 		$revisions = $this->LoadAll("
 			SELECT note, id, time, user
 			FROM ".$this->GetConfigValue('table_prefix')."pages
-			WHERE tag = '".mysql_real_escape_string($page)."'
+			WHERE tag = '".mysql_real_escape_string($tag)."'
 			ORDER BY time DESC
 			LIMIT ".$limitstart.$limitmax
 			);
-		// @@@ what is the (count($revisions) < $limitmax) doing here? (this will fail if exactly $limitmax results are returned and it cannot be more!)
+		// store oldest *requested* revision in the "special cache"
+		// @@@ what is the (count($revisions) < $limitmax) doing here? (this will FAIL if exactly $limitmax results are returned, and it cannot be more!)
 		if (is_array($revisions) && (count($revisions) < $limitmax) && (count($revisions) > 0)) #38
 		{
-			if (!$this->GetConfigValue('pagename_case_sensitive'))	// @@@ $page_lowercase won't have a value if pagename_case_sensitive is TRUE!
+			if (!$this->GetConfigValue('pagename_case_sensitive'))
 			{
-				$page_lowercase = strtolower($page);
+				$tag_lowercase = strtolower($tag);
 			}
-			$this->specialCache['oldest_revision'][$page_lowercase] = $revisions[count($revisions) - 1];
+			// @@@ $tag_lowercase won't have a value if pagename_case_sensitive is TRUE!
+			$this->specialCache['oldest_revision'][$tag_lowercase] = $revisions[count($revisions) - 1];
 		}
 		return $revisions;
 	}
 	/**
 	 * LoadOldestRevision: Load the oldest known revision of a page.
+	 *
+	 * Attempts to retrieve from "special cache" before looking in the database.
+	 * NOTE: LoadRevisions stores the oldest <b>requested</b> revison in the
+	 * cache, so if this method finds something in the cache, it's not necessarily
+	 * the oldest <b>known</b> revision.
 	 *
 	 * @access	public
 	 * @uses	Config::$pagename_case_sensitive
@@ -1544,35 +1611,45 @@ class Wakka
 	 * @uses	Wakka::$specialCache
 	 * @uses	Wakka::LoadSingle
 	 *
-	 * @param	string	$page	The name of the page to load oldest revision of.
+	 * @param	string	$tag	The name of the page to load oldest revision of.
 	 * @return	array
+	 * @todo	review usage of cache - see NOTES above. Also note that revisions
+	 *			are (intentionally or not) stored only if config flag
+	 *			'pagename_case_sensitive' is FALSE
 	 */
-	function LoadOldestRevision($page)
+	function LoadOldestRevision($tag)
 	{
 		if (!$this->GetConfigValue('pagename_case_sensitive'))
 		{
-			$page_lowercase = strtolower($page);
+			$tag_lowercase = strtolower($tag);
 		}
-		if (isset($this->specialCache['oldest_revision'][$page_lowercase]))
+		// @@@ $tag_lowercase won't have a value if pagename_case_sensitive is TRUE!
+		if (isset($this->specialCache['oldest_revision'][$tag_lowercase]))	// @@@ use getter
 		{
-			$oldest_revision = ($this->specialCache['oldest_revision'][$page_lowercase]);
+			$oldest_revision = $this->specialCache['oldest_revision'][$tag_lowercase];
 		}
 		else
 		{
 			$oldest_revision = $this->LoadSingle("
 				SELECT note, id, time, user
 				FROM ".$this->GetConfigValue('table_prefix')."pages
-				WHERE tag = '".mysql_real_escape_string($page)."'
+				WHERE tag = '".mysql_real_escape_string($tag)."'
 				ORDER BY time
 				LIMIT 1"
 				);
-			if (is_array($revision))
+			if (is_array($oldest_revision))
 			{
-				$this->specialCache['oldest_revision'][$page_lowercase] = $oldest_revision;
+				$this->specialCache['oldest_revision'][$tag_lowercase] = $oldest_revision;	// @@@ use setter
 			}
 		}
 		return $oldest_revision;
 	}
+	/**
+	 * Load pages linking to a given page.
+	 *
+	 * @param	string	$tag	mandatory: name of page to find referring links to
+	 * @return	array	one record with a page name for each page found (empty array if none found).
+	 */
 	function LoadPagesLinkingTo($tag)	// #410
 	{
 		$pages = $this->LoadAll("
@@ -1759,8 +1836,9 @@ class Wakka
 	/**
 	 * Save a page.
 	 *
+	 * @uses	Wakka::reg_username
 	 * @uses	Wakka::GetPingParams()
-	 * @uses	Wakka::GetUser()
+	 * @uses	Wakka::existsUser()
 	 * @uses	Wakka::GetUserName()
 	 * @uses	Wakka::HasAccess()
 	 * @uses	Wakka::LoadPage()
@@ -1773,6 +1851,7 @@ class Wakka
 	 */
 	function SavePage($tag, $body, $note)
 	{
+		global $debug;
 		// get name of current user
 		$username = $this->GetUserName();
 
@@ -1782,9 +1861,11 @@ class Wakka
 			if (!$oldPage = $this->LoadPage($tag))
 			{
 				// current user is owner if user is logged in, otherwise, no owner.
-				if ($this->GetUser())
+				#if ($this->GetUser())
+if ($debug) echo 'SavePage calling... ';
+				if ($this->existsUser())
 				{
-					$owner = $username;
+					$owner = $this->reg_username;
 				}
 			}
 			else
@@ -1944,8 +2025,8 @@ class Wakka
 		$page_title = '';
 		#if (preg_match('#(={1,6})([^=].*?)\\1#s', $body, $matches))	# note that we don't match headings that are not valid Wikka markup!
 		// Wikka markup for headings uses 2 - 6 '=' characters for h5-h1 => ={2,6}
-		// Also, the Formatter uses only h1-h4 to derive a title, which would correspond to ={3,6}!
-		if (preg_match('#(={2,6})([^=].*?)\\1#s', $body, $matches))	# note that we don't match headings that are not valid Wikka markup! @@@
+		// @@@ Also, the Formatter uses only h1-h4 to derive a title, which would correspond to ={3,6}!
+		if (preg_match('#(={2,6})([^=].*?)\\1#s', $body, $matches))	# note that we don't match headings that are not valid Wikka markup!
 		{
 			list($h_fullmatch, $h_markup, $h_heading) = $matches;
 			if (isset($h_markup))
@@ -2262,11 +2343,11 @@ class Wakka
 	 * 					From php.net: "Because setting a cookie with a value of
 	 *					FALSE will try to delete the cookie, you should not use
 	 *					boolean values. Instead, use 0 for FALSE and 1 for TRUE."
-	 * @param	$expires	integer	optional:	time in hours after which the
+	 * @param	$expires	integer	optional: time in <b>hours</b> after which the
 	 *					cookie is to expire; default {@link DEFAULT_COOKIE_EXPIRATION_HOURS};
 	 *					pass any <b>negative</b> value to create a session cookie
 	 */
-	function SetACookie($name, $value, $expires=DEFAULT_COOKIE_EXPIRATION_HOURS)
+	function setWikkaCookie($name, $value, $expires=DEFAULT_COOKIE_EXPIRATION_HOURS)
 	{
 		// init
 		$this->cookies_sent = FALSE;
@@ -2282,7 +2363,7 @@ class Wakka
 	/**
 	 * Set a persistent Cookie - DEPRECATED.
 	 *
-	 * A wrapper for SetACookie() - kept for backwards compatibility with third-party
+	 * A wrapper for setWikkaCookie() - kept for backwards compatibility with third-party
 	 * extensions that might use this.
 	 *
 	 * @param	$name	string	mandatory: name of the cookie (will be supplemented
@@ -2297,13 +2378,13 @@ class Wakka
 	 */
 	function SetPersistentCookie($name, $value, $expires=DEFAULT_COOKIE_EXPIRATION_HOURS)
 	{
-		$this->SetACookie($name, $value, $expires);
+		$this->setWikkaCookie($name, $value, $expires);
 	}
 	/**
 	 * Set a session Cookie - DEPRECATED.
 	 *
 	 *
-	 * A wrapper for SetACookie() - kept for backwards compatibility with third-party
+	 * A wrapper for setWikkaCookie() - kept for backwards compatibility with third-party
 	 * extensions that might use this.
 	 *
 	 * @param	$name	string	mandatory: name of the cookie (will be supplemented
@@ -2314,8 +2395,8 @@ class Wakka
 	 */
 	function SetSessionCookie($name, $value)
 	{
-		// negative 'expires' tells SetACookie() to make it a session cookie
-		$this->SetACookie($name, $value, -1);
+		// negative 'expires' tells setWikkaCookie() to make it a session cookie
+		$this->setWikkaCookie($name, $value, -1);
 	}
 	/**
 	 * Delete a Cookie.
@@ -2349,7 +2430,7 @@ class Wakka
 	 * @return	void	(but if setcookie was successful, $this->cookies_sent will
 	 *					be set to TRUE)
 	 */
-	function DeleteCookie($name, $path='', $internal=TRUE, $rawname=FALSE)
+	function deleteWikkaCookie($name, $path='', $internal=TRUE, $rawname=FALSE)
 	{
 		// init
 		$this->cookies_sent = FALSE;
@@ -2383,7 +2464,7 @@ class Wakka
 	 * cookie path!) but once all Wikka installations are upgraded this becomes
 	 * highly unlikely.
 	 */
-	function DeleteOldCookies()
+	function deleteOldWikkaCookies()
 	{
 		// get debug flag from wikka.php
 		global $debug;
@@ -2396,13 +2477,13 @@ class Wakka
 				case 'wikka_user_name':
 if ($debug) echo "deleting 'wikka_user_name' at root<br/>\n";
 					// delete cookie using 'raw' name and also delete from $_COOKIE
-					$this->DeleteCookie('wikka_user_name','/',TRUE,TRUE);
+					$this->deleteWikkaCookie('wikka_user_name','/',TRUE,TRUE);
 					break;
 				// old name
 				case 'wikka_pass':
 if ($debug) echo "deleting 'wikka_pass' at root<br/>\n";
 					// delete cookie using 'raw' name and also delete from $_COOKIE
-					$this->DeleteCookie('wikka_pass','/',TRUE,TRUE);
+					$this->deleteWikkaCookie('wikka_pass','/',TRUE,TRUE);
 					break;
 				// old path
 				case 'user_name'.$this->GetConfigValue('wiki_suffix'):
@@ -2410,7 +2491,7 @@ if ($debug) echo "deleting 'wikka_pass' at root<br/>\n";
 					{
 if ($debug) echo "deleting 'user_name".$this->GetConfigValue('wiki_suffix')."' at root<br/>\n";
 						// do NOT delete from $_COOKIE since this cannot be path-specific
-						$this->DeleteCookie('user_name','/',FALSE);
+						$this->deleteWikkaCookie('user_name','/',FALSE);
 					}
 					break;
 				// old path
@@ -2419,7 +2500,7 @@ if ($debug) echo "deleting 'user_name".$this->GetConfigValue('wiki_suffix')."' a
 					{
 if ($debug) echo "deleting 'pass".$this->GetConfigValue('wiki_suffix')."' at root<br/>\n";
 						// delete cookie but do NOT delete from $_COOKIE since this cannot be path-specific
-						$this->DeleteCookie('pass','/',FALSE);
+						$this->deleteWikkaCookie('pass','/',FALSE);
 					}
 					break;
 			}
@@ -2430,15 +2511,16 @@ if ($debug) echo "deleting 'pass".$this->GetConfigValue('wiki_suffix')."' at roo
 	 *
 	 * @uses	Wakka::GetConfigValue()
 	 */
-	function GetCookie($name)
+	function getWikkaCookie($name)
 	{
-		if (isset($_COOKIE[$name.$this->GetConfigValue('wiki_suffix')]))
+		// NOTE: see note in GetUser for why we use empty() here!
+		if (empty($_COOKIE[$name.$this->GetConfigValue('wiki_suffix')]))
 		{
-			$cookie = $_COOKIE[$name.$this->GetConfigValue('wiki_suffix')];
+			$cookie = FALSE;
 		}
 		else
 		{
-			$cookie = FALSE;
+			$cookie = $_COOKIE[$name.$this->GetConfigValue('wiki_suffix')];
 		}
 		return $cookie;
 	}
@@ -2477,7 +2559,7 @@ if ($debug) echo "deleting 'pass".$this->GetConfigValue('wiki_suffix')."' at roo
 	 * On IIS server, and if the page has sent any cookies, the redirection must not be performed
 	 * by using the 'Location:' header. We use meta http-equiv OR javascript OR link (Credits MarceloArmonas).
 	 *
-	 * @author {@link http://wikkawiki.org/DotMG Mahefa Randimbisoa} (added IIS support)
+	 * @author	{@link http://wikkawiki.org/DotMG Mahefa Randimbisoa} (added IIS support)
 	 * @since	Wikka 1.0.0
 	 *
 	 * @access	public
@@ -2517,11 +2599,11 @@ if ($debug) echo "deleting 'pass".$this->GetConfigValue('wiki_suffix')."' at roo
 	 * Return the pagename (with optional handler appended).
 	 *
 	 * @uses	Wakka::htmlspecialchars_ent()
-	 * @uses	Wakka::GetPageTag()
 	 */
-	function MiniHref($handler = '', $tag = '')
+	function MiniHref($handler='', $tag='')
 	{
-		if (!$tag = trim($tag))
+		$tag = trim($tag);
+		if (empty($tag))
 		{
 			#$tag = $this->GetPageTag();
 			$tag = $this->tag;
@@ -2544,7 +2626,7 @@ if ($debug) echo "deleting 'pass".$this->GetConfigValue('wiki_suffix')."' at roo
 			$href .= 'wikka.php?wakka=';
 		}
 		*/
-		$href = $this->wikka_url;
+		$href  = $this->wikka_url;
 		$href .= $this->MiniHref($handler, $tag);
 		if ($params)
 		{
@@ -2555,8 +2637,8 @@ if ($debug) echo "deleting 'pass".$this->GetConfigValue('wiki_suffix')."' at roo
 	/**
 	 * Creates a link from Wikka markup.
 	 *
-	 * Beware of the $title parameter: quotes and backslashes should be previously escaped before passed to
-	 * this method.
+	 * Beware of the $title parameter: quotes and backslashes should be previously
+	 * escaped before the title is passed to this method.
 	 *
 	 * @access	public
 	 *
@@ -2579,6 +2661,8 @@ if ($debug) echo "deleting 'pass".$this->GetConfigValue('wiki_suffix')."' at roo
 	 */
 	function Link($tag, $handler='', $text='', $track=TRUE, $escapeText=TRUE, $title='', $class='')
 	{
+		global $debug;
+if ($debug) echo 'Link - tag: '.$tag;
 		// init
 		if (!$text)
 		{
@@ -2598,6 +2682,7 @@ if ($debug) echo "deleting 'pass".$this->GetConfigValue('wiki_suffix')."' at roo
 		// before the : should be a WikiName; anything after can be (nearly) anything that's allowed in a URL
 		if (preg_match('/^([A-ZÄÖÜ][A-Za-zÄÖÜßäöü]+)[:](\S*)$/', $tag, $matches))	// @@@ FIXME #34 (inconsistent with Formatter)
 		{
+if ($debug) echo ': interwiki';
 			$url = $this->GetInterWikiUrl($matches[1], $matches[2]);
 			$class = 'interwiki';
 		}
@@ -2606,6 +2691,7 @@ if ($debug) echo "deleting 'pass".$this->GetConfigValue('wiki_suffix')."' at roo
 		// @@@ move to regex libary!
 		elseif (preg_match('/^(http|https|ftp|news|irc|gopher):\/\/([^\\s\"<>]+)$/', $tag))
 		{
+if ($debug) echo ': external';
 			$url = $tag; // this is a valid external URL
 			// add ext class only if URL is external
 			if (!preg_match('/'.$_SERVER['SERVER_NAME'].'/', $tag))
@@ -2618,6 +2704,7 @@ if ($debug) echo "deleting 'pass".$this->GetConfigValue('wiki_suffix')."' at roo
 		// @@@ First move to regex library
 		elseif (preg_match('/[^[:alnum:]ÄÖÜßäöü]/', $tag))		// FIXED #34 - removed commas
 		{
+if ($debug) echo ': uri missing scheme';
 			// check for email addresses
 			if (preg_match('/^.+\@.+$/', $tag))
 			{
@@ -2633,6 +2720,7 @@ if ($debug) echo "deleting 'pass".$this->GetConfigValue('wiki_suffix')."' at roo
 		}
 		else
 		{
+if ($debug) echo ': wikilink';
 			// it's a wiki link
 			if (isset($_SESSION['linktracking']) && $_SESSION['linktracking'] && $track)
 			{
@@ -2650,6 +2738,7 @@ if ($debug) echo "deleting 'pass".$this->GetConfigValue('wiki_suffix')."' at roo
 				$link = '<a class="'.$class.'" href="'.$this->Href($handler, $tag).'"'.$title_attr.'>'.$text.'</a>';
 			}
 		}
+if ($debug) echo "<br/>\n";
 
 		//return $url ? '<a class="'.$class.'" href="'.$url.'">'.$text.'</a>' : $text;
 		if ('' != $url)
@@ -2686,8 +2775,8 @@ if ($debug) echo "deleting 'pass".$this->GetConfigValue('wiki_suffix')."' at roo
 	 * @param	string	$filepath	path for a static file; this can be either:
 	 *				- a relative path
 	 *				- an absolute path (starting with a slash)
-	 *				- a fully-qualified URL (in which case teh input is simply returned)
-	 * @return	string	a standardized URL
+	 *				- a fully-qualified URL (in which case the input is simply returned)
+	 * @return	string	a standardized fully-qualified URL
 	 */
 	function StaticHref($filepath)
 	{
@@ -2757,16 +2846,16 @@ if ($debug) echo "deleting 'pass".$this->GetConfigValue('wiki_suffix')."' at roo
 	}
 	function WriteLinkTable()
 	{
-		// delete old link table
-		$this->Query('
+		// delete entries for current page from link table
+		$this->Query("
 			DELETE
-			FROM '.$this->GetConfigValue('table_prefix').'links
-			WHERE from_tag = "'.mysql_real_escape_string($this->GetPageTag()).'"'
+			FROM ".$this->GetConfigValue('table_prefix')."links
+			WHERE from_tag = '".mysql_real_escape_string($this->tag)."'"
 			);
-		// build new link table
+		// build and insert new entries for current page in link table
 		if ($linktable = $this->GetLinkTable())
 		{
-			$from_tag = mysql_real_escape_string($this->GetPageTag());
+			$from_tag = $this->tag;
 			$values = '';
 			$written = array();
 			// @@@ make into function! buildSQLValueList()
@@ -2777,9 +2866,9 @@ if ($debug) echo "deleting 'pass".$this->GetConfigValue('wiki_suffix')."' at roo
 				{
 					if ('' != $values)
 					{
-						$values .= ', ';
+						$values .= ",\n";	// newline for better query layout
 					}
-					$values .= '("'.$from_tag.'", "'.mysql_real_escape_string($to_tag).'")';
+					$values .= "('".mysql_real_escape_string($from_tag)."', '".mysql_real_escape_string($to_tag)."')";
 					$written[$lower_to_tag] = 1;
 				}
 			}
@@ -2984,7 +3073,7 @@ if ($debug) echo "deleting 'pass".$this->GetConfigValue('wiki_suffix')."' at roo
 	 *					to ensure that the included content is tracked for links; default: 0
 	 * @return	string	output produced by {@link Wakka::IncludeBuffered()} or an error message
 	 * @todo	move regexes to central regex library			#34
-	 * @todo	use action config files;				#446
+	 * @todo	use action config files (e.g., pass only specified parameters)	#446
 	 * @todo	don't use numbers when booleans are intended! TRUE and FALSE advertize their intention much clearer
 	 */
 	function Action($actionspec, $forceLinkTracking=0)
@@ -3040,21 +3129,24 @@ if ($debug) echo "deleting 'pass".$this->GetConfigValue('wiki_suffix')."' at roo
 			if (!$forceLinkTracking)
 			{
 				/**
-				 * @var	boolean holds previous state of LinkTracking before we StopLinkTracking(). It will then be used to test if we should StartLinkTracking() or not.
+				 * @var	boolean	holds previous state of LinkTracking before we StopLinkTracking().
+				 *				It will then be used to test if we should StartLinkTracking() or not.
 				 * @todo	it's not a boolean if we set it to zero! that's an integer.
-				 * @todo	make this a object variable so we can <b>actually</b> document it
+				 * @todo	make this a object variable so we can <b>actually</b> document it phpDocumentor won't see thi
 				 */
-				$link_tracking_state = isset($_SESSION['linktracking']) ? $_SESSION['linktracking'] : 0; #38
+				// @@@ a little encapsulation here would be nice: move the variable within the functions! (can do if it's an object variable!)
+				$link_tracking_state = (isset($_SESSION['linktracking']) && (bool) $_SESSION['linktracking']) ? $_SESSION['linktracking'] : 0; #38
 				$this->StopLinkTracking();
 			}
 			// prepare variables
 			$action_location		= $action_name.DIRECTORY_SEPARATOR.$action_name.'.php';
 			$action_location_disp	= '<code>'.$action_location.'</code>';
+			// @@@ do not wrap in <em class="error"> here, let IncludeBuffered ()handle it
 			$action_not_found		= '<em class="error">'.sprintf(ACTION_UNKNOWN,$action_location_disp).'</em>';
 			// produce output
 			#$out = $this->IncludeBuffered($action_location, $this->GetConfigValue('action_path'), $action_not_found, $vars);
 			$out = $this->IncludeBuffered($action_location, $this->GetConfigValue('wikka_action_path'), $action_not_found, $vars);
-			// @@@ a little encapsulation here would be nice: move the conditions within the functions!
+			// @@@ a little encapsulation here would be nice: move the conditions within the functions! (can do if it's an object variabl!)
 			if ($link_tracking_state)
 			{
 				// we were tracking before, so start tracking again
@@ -3096,6 +3188,7 @@ if ($debug) echo "deleting 'pass".$this->GetConfigValue('wiki_suffix')."' at roo
 		// directory traversal or XSS (via handler *name*)
 		if (!preg_match('/^([a-zA-Z0-9_.-]+)$/', $handler))	# see also #34
 		{
+			// @@@ this should be wrapped in <div class="page"> for consistent (and valid) layout
 			$out = '<em class="error">'.HANDLER_UNKNOWN_SPECCHARS.'</em>';	# [SEC]
 		}
 		else
@@ -3105,8 +3198,10 @@ if ($debug) echo "deleting 'pass".$this->GetConfigValue('wiki_suffix')."' at roo
 			// prepare variables
 			$handler_location		= $handler.DIRECTORY_SEPARATOR.$handler.'.php';
 			$handler_location_disp	= '<code>'.$handler_location.'</code>';
+			// @@@ do not wrap in <em class="error"> here, let IncludeBuffered ()handle it
 			$handler_not_found		= '<em class="error">'.sprintf(HANDLER_UNKNOWN,$handler_location_disp).'</em>';
-			$handler_error_body		= '<div class="page">'.$handler_not_found.'</div>';	// JW: or use an extra parameter on IncludeBuffered to tell it to produce a page
+			// @@@ use an extra parameter on IncludeBuffered to tell it to produce a "page" (only for *page* handler? what about grab for instance?)
+			$handler_error_body		= '<div class="page">'.$handler_not_found.'</div>';
 			// produce output
 			#$out = $this->IncludeBuffered($handler_location, $this->GetConfigValue('handler_path'), $handler_error_body);
 			$out = $this->IncludeBuffered($handler_location, $this->GetConfigValue('wikka_handler_path'), $handler_error_body);
@@ -3145,6 +3240,7 @@ if ($debug) echo "deleting 'pass".$this->GetConfigValue('wiki_suffix')."' at roo
 			// prepare variables
 			$formatter_location			= $formatter.'.php';
 			$formatter_location_disp	= '<code>'.$formatter_location.'</code>';
+			// @@@ do not wrap in <em class="error"> here, let IncludeBuffered ()handle it
 			$formatter_not_found		= '<em class="error">'.sprintf(FORMATTER_UNKNOWN,$formatter_location_disp).'</em>';
 			// produce output
 			$out = $this->IncludeBuffered($formatter_location, $this->GetConfigValue('wikka_formatter_path'), $formatter_not_found, compact('text')); // @@@
@@ -3152,14 +3248,14 @@ if ($debug) echo "deleting 'pass".$this->GetConfigValue('wiki_suffix')."' at roo
 		return $out;
 	}
 	/**
-	 * Add a custom header to be inserted inside the <head> section.
+	 * Add a custom header(s) to be inserted inside the <head> section.
 	 *
 	 * @access	public
 	 * @uses	Wakka::$additional_headers
 	 *
 	 * @param	string	$additional_headers	any valid XHTML code that is legal inside the <head> section.
 	 * @param	string	$indent	optional: indent string, default is a tabulation. This will be inserted before $additional_headers
-	 * @param	string	$sep	optional: separator string, this will separate you additional headers. This will be inserted after
+	 * @param	string	$sep	optional: separator string, this will separate your additional headers. This will be inserted after
 	 *					$additional_headers, default value is a line feed.
 	 * @return	void
 	 * @todo	Let the "displayer" of these headers handle indent and separator - code layout doesn't belong here
@@ -3174,13 +3270,183 @@ if ($debug) echo "deleting 'pass".$this->GetConfigValue('wiki_suffix')."' at roo
 	 */
 
 	/**
-	 * Load a given user.
+	 * Authenticate a user from (persistent) cookies.
+	 * 
+	 * @uses	Wakka::GetConfigValue()
+	 * @uses	Wakka::LoadAll()
+	 *
+	 * @return	boolean	TRUE if user authenticated from cookie, FALSE if not
+	 */
+	function authenticateUserFromCookies()
+	{
+		// init
+		$result = NULL;
+		$c_username	= $this->getWikkaCookie('user_name');
+		$c_pass		= $this->getWikkaCookie('pass');
+		// find user(s)
+		$users = $this->LoadAll("
+			SELECT *
+			FROM ".$this->GetConfigValue('table_prefix')."users
+			WHERE name = '".mysql_real_escape_string($c_username)."'"
+			);
+		// evaluate result
+		if (is_array($users))
+		{
+			$count = count($users);
+		}
+		switch (TRUE)
+		{
+			case (FALSE === $users):
+				$result = FALSE;		// query failed!!	@@@ notify admin
+				break;
+			case ($count > 1):
+				$result = FALSE;		// multiple users by same name: DB error!!	@@@ notify admin
+				break;
+			case ($count == 0):
+				$result = FALSE;		// not a registered user
+				break;
+			default:					// $count == 1 - OK: one user found
+				break;
+		}
+		// OK so far, check password
+		if (NULL === $result)
+		{
+			$user_rec = $users[0];		// get first (single) row
+			if (isset($user_rec['challenge']) && isset($user_rec['password']))
+			{
+				$pwd = md5($user_rec['challenge'].$user_rec['password']);
+				if ($c_pass != $pwd)
+				{
+					$result = FALSE;	// "No, not authenticated"
+				}
+				else
+				{
+					// valid password supplied: $user data is authenticated:
+					// cache username and login user
+					$result = TRUE;
+					$this->registered_users[] = $user_rec['name'];	// cache actual name as in DB
+					$this->loginUser($user_rec);
+				}
+			}
+			else
+			{
+				$result = FALSE;		// incomplete record: DB error!!
+			}
+		}
+		return $result;					// will be either TRUE or FALSE
+	}
+	/**
+	 * Load data for a given user (by name).
+	 *
+	 * Attempts to load the user data from the database, and if successful,
+	 * adds the user name to the registered user name cache.
+	 *
+	 * If the data was successfully retrieved, the user data is returned
+	 * in an array; if not, FALSE is returned.
+	 *
+	 * @uses	Wakka::registered_users
+	 * @uses	Wakka::LoadSingle()
+	 * @uses	Wakka::GetConfigValue()
+	 *
+	 * @param	string	$username	mandatory: user name to retrieve data for
+	 * @return	mixed	array with user data if successful, FALSE otherwise
+	 */
+	function loadUserData($username)
+	{
+		// data retrieval by name: get from database
+		$user = $this->LoadSingle("
+			SELECT *
+			FROM ".$this->GetConfigValue('table_prefix')."users
+			WHERE name = '".mysql_real_escape_string($username)."'
+			LIMIT 1"
+				);
+		if (is_array($user))
+		{
+			// store user name in cache
+			$this->registered_users[] = $user['name'];	// cache actual name as in DB
+		}
+		// return results
+		return $user;
+	}
+	/**
+	 * Check whether a given (or implied) user is (currently) registered.
+	 *
+	 * If no username is supplied, it simply returns the current "registered"
+	 * state from the object variable. It also maintains a "cache" of registered
+	 * usernames which is checked before resorting to a database query.
+	 *
+	 * @uses	Wakka::registered
+	 * @uses	Wakka::registered_users
+	 * @uses	Wakka::GetConfigValue()
+	 * @uses	Wakka::LoadSingle()
+	 *
+	 * @param	string	$username	optional: when omitted, "registered" state
+	 *					for current user is returned; when given, we check whether
+	 *					the username occurs in the cache or database.
+	 * @return	boolean	TRUE is user is registered, FALSE otherwise
+	 */
+	function existsUser($username=NULL)
+	{
+		global $debug;
+		// init
+		$result = FALSE;
+		// looking for current user
+		if (!is_string($username))
+		{
+if ($debug) echo 'existsUser - no parameter (current user): ';
+			$result = $this->registered;
+if ($debug) print(($result) ? 'TRUE' : 'FALSE');
+		}
+		// named user cached?
+		elseif (in_array($username, $this->registered_users))
+		{
+			$result = TRUE;
+if ($debug) echo 'existsUser - name '.$username.' cached: TRUE';
+		}
+		elseif (in_array($username,$this->anon_users))
+		{
+			$result = FALSE;
+if ($debug) echo 'existsUser - anon. name '.$username.' cached: FALSE';
+		}
+		// look up named user in database & cache name
+		else
+		{
+			$user = $this->LoadSingle("
+				SELECT `name`
+				FROM ".$this->GetConfigValue('table_prefix')."users
+				WHERE `name` = '".mysql_real_escape_string($username)."'
+				LIMIT 1"
+				);
+			if (is_array($user))
+			{
+if ($debug) echo 'existsUser - '.$username.' found in DB: TRUE';
+				$result = TRUE;
+				$this->registered_users[] = $user['name'];	// cache actual name as in DB
+			}
+			else
+			{
+if ($debug) echo 'existsUser - '.$username.' not found in DB: FALSE';
+				// also cache UNregistered usernames
+				$this->anon_users[] = $username;		// @@@ declare & document
+			}
+		}
+if ($debug) echo "<br/>\n";
+		return $result;
+	}
+	/**
+	 * Load a given user - OBSOLETE.
+	 *
+	 * <b>Replaced by {@link Wakka::authenticateUserFromCookies()},
+	 * {@link Wakka::existsUser()} or {@link Wakka::loadUserData()} depending on
+	 * purpose!</b>
+	 * 
+	 * ***Returns FALSE while still existing for reference.***
 	 *
 	 * <p>If a second parameter $password is supplied, this method checks if this password is valid, thus a FALSE return value would mean
 	 * nonexistent user or invalid password. Note that this parameter is the <strong>hashed value</strong> of the password usually typed in
-	 * by user, plus a "challenge" known only to the system, and not the password itself.</p>
+	 * by user plus a "challenge" known only to the system, and not the password itself.</p>
 	 * <p>If the password parameter is not supplied, it checks only for existence of the username, and returns an array containing all information
-	 * about the given user if it exists, or a false value. In this latter case, result is cached in $this->specialCache in order to
+	 * about the given user if it exists, or a FALSE value. In this latter case, result is cached in $this->specialCache in order to
 	 * improve performance.</p>
 	 *
 	 * @uses	Wakka::GetConfigValue()
@@ -3194,10 +3460,10 @@ if ($debug) echo "deleting 'pass".$this->GetConfigValue('wiki_suffix')."' at roo
 	 */
 	function LoadUser($name, $password = 0)
 	{
+		/*
 		if (($password === 0) && (isset($this->specialCache['user'][strtolower($name)])))
 		{
 			// data retrieval by name: get from cache
-			// @@@ should check whether it actually exists in the cache: return FALSE if not
 			$user = $this->specialCache['user'][strtolower($name)];
 		}
 		else
@@ -3238,14 +3504,17 @@ if ($debug) echo "deleting 'pass".$this->GetConfigValue('wiki_suffix')."' at roo
 			}
 		}
 		return $user;
+		*/
+		return FALSE;
 	}
 	/**
-	 * Load all users registered at the wiki.
+	 * Load all users registered at the wiki from the database.
 	 *
 	 * @uses	Wakka::GetConfigValue()
 	 * @uses	Wakka::LoadAll()
 	 *
 	 * @return	array	contains data for all users
+	 * $todo	add 'start' and 'max' parameters to support paging
 	 */
 	function LoadUsers()
 	{
@@ -3257,30 +3526,37 @@ if ($debug) echo "deleting 'pass".$this->GetConfigValue('wiki_suffix')."' at roo
 		return $users;
 	}
 	/**
-	 * Get the name or address of the current user.
+	 * Get the name or (IP/hostname) address of the current user.
 	 *
 	 * If the user is not logged-in, the host name is only looked up if enabled
 	 * in the config (since it can lead to long page generation times).
 	 * Set 'enable_user_host_lookup' in wikka.config.php to 1 to do the look-up.
 	 * Otherwise the ip-address is used.
 	 *
-	 * @uses	Wakka::GetUser()
+	 * @uses	Wakka::reg_username
+	 * @uses	Wakka::existsUser()
 	 * @uses	Wakka::GetConfigValue()
+	 * @uses	Wakka::getAnonUserName()
 	 *
-	 * @return	string	name of registered user, or IP address or host name for anonymous user
-	 * @todo	return IP address or host name only if explicitly requested:
-	 *			we may want IP address even if reverse DNS is allowed in config;
-	 *			but mostly only registered user name is needed.
+	 * @return	string	name of registered user, or IP address or host name for
+	 *			anonymous user
+	 * @todo	return only IP address or host name if explicitly requested:
+	 *			we may want IP address even if reverse DNS is allowed in config!
 	 */
 	function GetUserName()
 	{
+		global $debug;
 		$name = '';
-		if ($user = $this->GetUser())
+		#if ($user = $this->GetUser())
+if ($debug) echo 'GetUserName calling... ';
+		if ($this->existsUser())
 		{
-			$name = $user['name'];
+			#$name = $user['name'];
+			$name = $this->reg_username;
 		}
 		else
 		{
+			/*
 			$ip = $_SERVER['REMOTE_ADDR'];
 			if ($this->GetConfigValue('enable_user_host_lookup') == 1)
 			{
@@ -3290,71 +3566,137 @@ if ($debug) echo "deleting 'pass".$this->GetConfigValue('wiki_suffix')."' at roo
 			{
 				$name = $ip;
 			}
+			*/
+			$name = $this->getAnonUserName();	// @@@
 		}
 		return $name;
 	}
 	/**
-	 * Get data for logged-in user (nothing if user is not logged in).
+	 * Get (and cache) anonymous user "name" for current user.
 	 *
-	 * @return	mixed	array with user data, or NULL if user not logged in
-	 * @todo	return FALSE rather than NULL for not logged-in user since it's
-	 *			often used as a check - review all uses!
+	 * Depending on configuration settings, the "name" can be either an IP
+	 * address pr a host name found by reverse DNS lookup.
+	 *
+	 * @uses	Wakka::GetConfigValue()
+	 *
+	 * @return	string	name found
+	 * @todo	extend cache if we specify IP *or* hostname
+	 */
+	function getAnonUserName()
+	{
+		if (isset($this->anon_username))
+		{
+			// get name from cache
+			$name = $this->anon_username;
+		}
+		else
+		{
+			// lookup name and cache it
+			$ip = $_SERVER['REMOTE_ADDR'];
+			if ((bool) $this->GetConfigValue('enable_user_host_lookup'))
+			{
+				$name = gethostbyaddr($ip) ? gethostbyaddr($ip) : $ip;
+			}
+			else
+			{
+				$name = $ip;
+			}
+			$this->anon_username = $name;
+		}
+		// return name found
+		return $name;
+	}
+	/**
+	 * Get data for logged-in user (FALSE if user is not logged in).
+	 *
+	 * @return	mixed	array with user data, or FALSE if user not logged in
 	 */
 	function GetUser()
 	{
-echo 'GetUser() - isset user? ';
-if (isset($_SESSION['user']))
-{
-	echo 'yes!';
-	if (NULL === $_SESSION['user']) echo ' is NULL';
-	elseif (FALSE === $_SESSION['user']) echo ' is FALSE';
-	else echo ' is '.$_SESSION['user'];
-	echo "<br/>\n";
-}
-else
-{
-	echo 'no!'."<br/>\n";
-}
-		$user = (isset($_SESSION['user'])) ? $_SESSION['user'] : NULL;
+		// NOTE: we use empty() here which will return the same result whether
+		// the session variable does not exist (isset) or whether it contains NULL,
+		// without generating a warning.
+		// this is to get round the possibility that unset() doesn't leave
+		// a global variable unset if used from within a function. See technical
+		// note in logoutUser() docblock.
+		$user = (empty($_SESSION['user'])) ? FALSE : $_SESSION['user'];
 		return $user;
 	}
 	/**
 	 * Log-in a given user.
 	 *
-	 * User data are stored in the session, whereas name and password are stored
-	 * in a cookie.
+	 * The procedure starts with updating the user's record in the database with
+	 * a new 'challenge'.
+	 * If the database update is successful, the user data are stored in the
+	 * session, whereas name and password (the latter using the new challenge)
+	 * are stored in a cookie. In addition, registered user name is stored in an
+	 * object variable, and the "registered" flag is set to TRUE, for fast state
+	 * retrieval by other methods.
 	 *
-	 * @uses	Wakka::SetACookie()
 	 * @uses	Wakka::GetConfigValue()
 	 * @uses	Wakka::Query()
+	 * @uses	Wakka::setWikkaCookie()
 	 *
 	 * @param	array	$user	mandatory: must contain the user data
-	 * @todo	it seems safer to change the order here, so the query is done first
-	 *			and session and cookies are set only when that succeeds;
-	 *			the function should report successful (or not) completion.
-	 * @todo	name should be made made consistent with opposite function LogoutUser():
-	 *			use LoginUser, and keep this method as a wrapper function for backward compatibility
-	 * @todo	return result code
+	 * @return	boolean	result code, TRUE if DB successfully updated, FALSE
 	 */
-	function SetUser($user)
+	function loginUser($user)
 	{
 		// init: Choosing an arbitrary challenge that the DB server only knows.
 		$user['challenge'] = dechex(crc32(rand()));
 		// login
+		$rc = $this->Query("
+			UPDATE ".$this->GetConfigValue('table_prefix')."users
+			SET `challenge` = '".$user['challenge']."'
+			WHERE `name` = '".mysql_real_escape_string($user['name'])."'"
+			);
+		if ($rc)
+		{
+			// set local data
+			// NOTE: data comes from loadUserData() or authenticateUserFromCookies()
+			// which already update registered_users cache
+			$this->reg_username = $user['name'];
+			$this->registered = TRUE;
+			// set session
+			$_SESSION['user'] = $user;
+			// set cookies
+			$this->setWikkaCookie('user_name', $user['name']);
+			$this->setWikkaCookie('pass', md5($user['challenge'].$user['password']));
+		}
+		// return result code
+		return $rc;
+	}
+	/**
+	 * OBSOLETE: use {@link Wakka::loginUser()}.
+	 *
+	 * @param	array	$user
+	 */
+	function SetUser($user)
+	{
+		/*
+		// init: Choosing an arbitrary challenge that the DB server only knows.
+		$user['challenge'] = dechex(crc32(rand()));
+		// login
 		$_SESSION['user'] = $user;
-		$this->SetACookie('user_name', $user['name']);
+		$this->setWikkaCookie('user_name', $user['name']);
 		$this->Query("
 			UPDATE ".$this->GetConfigValue('table_prefix')."users
 			SET `challenge` = '".$user['challenge']."'
 			WHERE `name` = '".mysql_real_escape_string($user['name'])."'"
 			);
-		$this->SetACookie('pass', md5($user['challenge'].$user['password']));
+		$this->setWikkaCookie('pass', md5($user['challenge'].$user['password']));
+		*/
+		$this->loginUser($user);
 	}
 	/**
 	 * Log-out the current user.
 	 *
-	 * User data are removed from the session and name and password cookies are
-	 * deleted.
+	 * We start by creating a new challenge and updating the user record in the
+	 * database. If the update is successful, the "registered" flag is updated
+	 * (note that we don't attempt to remove the username from the registered
+	 * usernames cache: the user by this name is still a regitered user after
+	 * all!). Also, user data are removed from the session and name and password
+	 * cookies are deleted.
 	 *
 	 * Technical note:<br/>
 	 * According to {@link http://php.net/unset} it is not possible to unset a
@@ -3369,33 +3711,35 @@ else
 	 * @uses	Wakka::GetConfigValue()
 	 * @uses	Wakka::GetUserName()
 	 * @uses	Wakka::Query()
-	 * @uses	Wakka::DeleteCookie()
+	 * @uses	Wakka::deleteWikkaCookie()
 	 *
-	 * @todo	it seems safer to change the order here, so the query is done first
-	 *			and session and cookies are cleared only when that succeeds;
-	 *			the function should report successful (or not) completion.
-	 * @todo	name should be made made consistent with opposite function SetUser() (see @todo there0
-	 * @todo	remove session and cookies only when query succeeds
-	 * @todo	return result code
+	 * @return	boolean	result code: TRUE if database was successfully updated and
+	 *					user logged out, FALSE otherwise (and user not logged out)
 	 */
 	function LogoutUser()
 	{
 		// init: Choosing an arbitrary challenge that the DB server only knows.
 		$user['challenge'] = dechex(crc32(rand()));
 		// database
-		$this->Query("
+		$rc = $this->Query("
 			UPDATE ".$this->GetConfigValue('table_prefix')."users
 			SET `challenge` = '".$user['challenge']."'
 			WHERE `name` = '".mysql_real_escape_string($this->GetUserName())."'"
 			);
-		// session
-		$_SESSION['user'] = NULL;
-		unset($_SESSION['user']);
-		$_SESSION['show_comments'] = NULL;
-		unset($_SESSION['show_comments']);	// is set in show handler
-		// cookies
-		$this->DeleteCookie('user_name');
-		$this->DeleteCookie('pass');
+		if ($rc)
+		{
+			// object data
+			$this->registered = FALSE;
+			// session
+			$_SESSION['user'] = NULL;			// just in case
+			unset($_SESSION['user']);
+			$_SESSION['show_comments'] = NULL;	// just in case
+			unset($_SESSION['show_comments']);	// is set in show handler
+			// cookies
+			$this->deleteWikkaCookie('user_name');
+			$this->deleteWikkaCookie('pass');
+		}
+		return $rc;
 	}
 	/**
 	 * Returns user comment default style.
@@ -3407,6 +3751,7 @@ else
 	 * legally return a zero value.
 	 *
 	 * @uses	Wakka::GetUser()
+	 *
 	 * @param	tag		Page title
 	 * @return	mixed	threadtype if the user wants comments, FALSE otherwise
 	 */
@@ -3438,45 +3783,55 @@ else
 		return $showcomments;
 	}
 	 /**
-	 * Formatter for usernames.
+	 * Formatter for user names.
 	 *
-	 * Renders usernames as links only when needed, avoiding the creation of missing page links
-	 * for users without userpage. Makes other options configurable (like truncating long
-	 * hostnames or disabling link formatting).
+	 * Renders usernames as links only when needed, avoiding the creation of
+	 * missing page links for users without a userpage. Makes other options
+	 * configurable (like truncating long hostnames or disabling link formatting).
 	 *
 	 * @author	{@link http://www.wikkawiki.org/DarTar Dario Taraborelli}
 	 *
-	 * @param	string	$user	required: name of user or hostname retrieved from the DB;
-	 * @param	string	$link	optional: enables/disables linking to userpage;
+	 * @uses	Wakka::existsUser()
+	 * @uses	Wakka::ExistsPage()
+	 * @uses	Wakka::Link()
+	 *
+	 * @param	string	$username	mandatory: name of user or hostname retrieved from the DB;
+	 * @param	boolean	$link	optional: enables/disables linking to userpage;
 	 * @param	string	$maxhostlength	optional: max length for hostname, hostnames longer
 	 *					then this will be truncated with an ellipsis;
 	 * @param	string	$ellipsis	optional: character (or string) to be used at the end of truncated hosts;
 	 * @return	string	$formatted_user: formatted username.
-	 * @todo	use boolean (TRUE as default) for link param
 	 * @todo	use constant for ellipsis
-	 * @todo	better title attribute text: a user page is not a profile
+	 * @todo	better title attribute text: a user page is not a 'profile'
 	 * @todo	internationalization (marked with #i18n)
 	 */
-	function FormatUser($user, $link='1', $maxhostlength=MAX_HOSTNAME_LENGTH_DISPLAY, $ellipsis='&#8230;')
+	function FormatUser($username, $link=TRUE, $maxhostlength=MAX_HOSTNAME_LENGTH_DISPLAY, $ellipsis='&#8230;')
 	{
-		if (strlen($user) > 0)
+		global $debug;
+		if (strlen($username) > 0)
 		{
 			// check if user is registered
-			if ($this->LoadUser($user))
+			#if ($this->LoadUser($username))	// only checks if user is registered
+if ($debug) echo 'FormatUser calling... ';
+			if ($this->existsUser($username))
 			{
 				// check if userpage exists and if linking is enabled
-				$formatted_user = ($this->ExistsPage($user) && ($link == 1))? $this->Link($user,'','','','','Open user profile for '.$user,'user') : '<span class="user">'.$user.'</span>'; // @@@ #i18n
+				#$formatted_user = ($this->ExistsPage($username) && ($link == 1)) ? $this->Link($username,'','','','','Open user profile for '.$username,'user') : '<span class="user">'.$username.'</span>'; // @@@ #i18n
+				$formatted_user = ($this->ExistsPage($username) && ((bool) $link)) ? $this->Link($username,'','','','','Open user profile for '.$username,'user') : '<span class="user">'.$username.'</span>'; // @@@ #i18n
 			}
 			else
 			{
-				// truncate long host names
-				$formatted_user = (strlen($user) > $maxhostlength) ? '<span class="user_anonymous" title="'.$user.'">'.substr($user, 0, $maxhostlength).$ellipsis.'</span>' : '<span class="user_anonymous">'.$user.'</span>';
+				// user is not registered (or no longer(!) e.g., user may have
+				// edited a page but since "unregistered": then we have a user
+				// name here, not a host name)
+				// truncate long (host) names
+				$formatted_user = (strlen($username) > $maxhostlength) ? '<span class="user_anonymous" title="'.$username.'">'.substr($username, 0, $maxhostlength).$ellipsis.'</span>' : '<span class="user_anonymous">'.$username.'</span>';
 			}
 		}
 		else
 		{
 			// no user (page has empty user field)
-			$formatted_user = 'anonymous'; // @@@ #i18n
+			$formatted_user = 'anonymous'; // @@@ #i18n WIKKA_ANONYMOUS_AUTHOR_CAPTION or WIKKA_ANONYMOUS_USER
 		}
 		return $formatted_user;
 	}
@@ -3495,6 +3850,7 @@ else
 	 * @param	string	$tag	mandatory: name of the page
 	 * @param	integer	$order	optional: order of comments. Default: COMMENT_ORDER_DATE_ASC
 	 * @return	array	All the comments for this page ordered by $order
+	 * @todo	make single exit point to enable profiling
 	 */
 	function LoadComments($tag, $order=NULL)
 	{
@@ -3561,7 +3917,7 @@ else
 		if (!$transformed_map)
 		{
 			array_push($visited, 'NULL');
-			$count = $this->CountAllComments($tag);
+			$count = $this->CountAllComments($tag);	// redundant: just count($initial_map) after the query
 			// @@@ miss option for sort order here???
 			$initial_map = $this->LoadAll("
 				SELECT id, parent
@@ -3572,7 +3928,7 @@ else
 			// Create an array of arrays, with the (unique) key of
 			// 'parent' pointing to an array of date-ordered
 			// children.
-			for ($i=0; $i<$count; ++$i)
+			for ($i=0; $i<$count; ++$i)	// prefer to use $i++ here (even if equivalent)
 			{
 				$id = $initial_map[$i]['id'];
 				$parent = $initial_map[$i]['parent'];
@@ -3605,7 +3961,11 @@ else
 				// Traverse children
 				++$level;
 				array_push($visited, $id);
-				// @@@ should check first whether LoadSingle actually returns an array, or FALSE in case the query fails
+				// @@@	should check first whether LoadSingle() actually returns an
+				//		array, or FALSE in case the query fails (not found).
+				//		most of the other statements should probably not be
+				//		executed either if no result was returned from the database!
+				// @@@	can't the records be retrieved from $transformed_map instead?
 				$graph[] = $this->LoadSingle("
 					SELECT *
 					FROM ".$this->GetConfigValue('table_prefix')."comments
@@ -3661,8 +4021,9 @@ else
 	 * @uses	Wakka::GetConfigValue()
 	 * @uses	Wakka::LoadAll()
 	 *
-	 * @param	integer $limit optional: number of last comments. default: 50
-	 * @return	array the last x comments
+	 * @param	integer	$limit	optional: number of last comments. default: 50
+	 * @param	string	$tag	optional: name of page to retrieve comments for
+	 * @return	array	the last x comments
 	 * @todo	use constant for default limit value (no "magic numbers!")
 	 */
 	function LoadRecentComments($limit=50, $tag='')		// @@@
@@ -3692,7 +4053,7 @@ else
 	 * @uses	Wakka::LoadAll()
 	 *
 	 * @param	integer	$limit	optional: number of last comments on different pages. default: 50
-	 * @return	array	the last x comments on different pages
+	 * @return	array	the last comments on x different pages
 	 * @todo	use constant for default limit value (no "magic numbers!")
 	 */
 	function LoadRecentlyCommented($limit = 50)	// @@@
@@ -3759,20 +4120,22 @@ else
 	 * Check if current user is the owner of the current or a specified page.
 	 *
 	 * @access		public
-	 * @uses		Wakka::GetPageOwner()
-	 * @uses		Wakka::GetPageTag()
-	 * @uses		Wakka::GetUser()
-	 * @uses		Wakka::GetUserName()
+	 * @uses		Wakka::existsUser()
 	 * @uses		Wakka::IsAdmin()
+	 * @uses		Wakka::GetUserName()
+	 * @uses		Wakka::GetPageOwner()
 	 *
-	 * @param		string	$tag optional: page to be checked. Default: current page.
-	 * @return		boolean	TRUE if the user is the owner, FALSE otherwise.
+	 * @param	string	$tag	optional: page to be checked. Default: current page.
+	 * @return	boolean	TRUE if the user is the owner, FALSE otherwise.
 	 */
-	function UserIsOwner($tag = '')
+	function UserIsOwner($tag='')
 	{
+		global $debug;
 		$isowner = FALSE;		// default
 		// if not logged in, user can't be owner!
-		if (!$this->GetUser())
+		#if (!$this->GetUser())
+if ($debug) echo 'UserIsOwner calling... ';
+		if (!$this->existsUser())
 		{
 			$isowner = FALSE;
 		}
@@ -3784,13 +4147,15 @@ else
 		else
 		{
 			// set default tag
-			if (!$tag = trim($tag))
+			$tag = trim($tag);
+			if (empty($tag))
 			{
 				#$tag = $this->GetPageTag();
 				$tag = $this->tag;
 			}
 			// check if user is owner
-			if ($this->GetPageOwner($tag) == $this->GetUserName())
+			#if ($this->GetPageOwner($tag) == $this->GetUserName())
+			if ($this->GetPageOwner($tag) == $this->reg_username) // anon user can't be owner
 			{
 				$isowner = TRUE;
 			}
@@ -3800,25 +4165,21 @@ else
 	/**
 	 * Check if currently logged in user is listed in configuration list as admin.
 	 *
-	 * @access		public
+	 * @access	public
 	 * @uses	Wakka::GetConfigValue()
-	 * @uses		Wakka::GetUserName()
+	 * @uses	Wakka::GetUserName()
 	 *
-	 * @return		boolean	TRUE if the user is an admin, FALSE otherwise
+	 * @return	boolean	TRUE if the user is an admin, FALSE otherwise
 	 */
 	function IsAdmin()
 	{
 		$isadmin = FALSE;
-		$adminstring = $this->GetConfigValue('admin_users');
-		$adminarray = explode(',' , $adminstring);
-
-		foreach ($adminarray as $admin)
+		// use preg_split to get an array with already-trimmed elements (no looping needed)
+		$adminarray = preg_split('/\s*,\s*/' , trim($this->GetConfigValue('admin_users')), PREG_SPLIT_NO_EMPTY);
+		// only a logged-in user can be admin; check if name occurs in the array
+		if ($this->existsUser() && in_array($this->reg_username, $adminarray))
 		{
-			if (trim($admin) == $this->GetUserName())	// no IP or reverse DNS wanted here!
-			{
-				$isadmin = TRUE;
-				break;
-			}
+			$isadmin = TRUE;
 		}
 		return $isadmin;
 	}
@@ -3830,7 +4191,7 @@ else
 	 *
 	 * @param	string	$tag	optional: name of the page. default: current page
 	 * @param	string	$time	optional: time (datetime format) of the page-revision. default: current version
-	 * @return	string	the owner of the page (empty if there is no owner)
+	 * @return	string	username of the owner of the page (empty if there is no owner)
 	 * @todo	make a more efficient query: we only need the owner column, not the whole page!
 	 */
 	function GetPageOwner($tag='', $time='')
@@ -3891,7 +4252,9 @@ else
 	 * @param	integer	$useDefaults	optional:
 	 * @return	mixed	the page name and the acl or FALSE if not found
 	 * @todo	don't use numbers when booleans are intended! TRUE and FALSE advertize their intention much clearer
-	 * @todo	this should return a result in consistent form (no page_tag for default, or included for DB result), with the ACL itself "normalized" with only newline delimiters #226 comment 8
+	 * @todo	this should return a result in consistent form (no page_tag for
+	 *			default, or included for DB result), with the ACL itself "normalized"
+	 *			with only newline delimiters #226/comment8
 	 * @todo	make this return JUST an acl (normalized), not an array!
 	 */
 	function LoadACL($tag, $privilege, $useDefaults = 1)	// @@@
@@ -3971,7 +4334,7 @@ else
 		if (!$acls = $this->LoadAllACLs($tag, 0))	// @@@
 		{
 			// Load defaults
-			// @@@ JW: use LoadAllAcLs() again here with useDefaults set to TRUE, to keep the list of necessary fields in one place only.
+			// @@@ JW: use LoadAllACLs() again here with useDefaults set to TRUE, to keep the list of necessary fields in one place only.
 			//		better yet: use a function to get all defaults (to be used by LoadAllACLs as well)
 			$insert = TRUE;
 			$acls['read_acl'] = $this->GetConfigValue('default_read_acl');
@@ -4014,9 +4377,9 @@ else
 		}
 	}
 	/**
-	 * Clone an Access Control List from one page to another. If ACL
-	 * list isn't defined for the source page, use defaults from
-	 * config for the destination page.
+	 * Clone all Access Control Lists from one page to another. If ACL
+	 * lists aren't defined for the source page, use defaults from
+	 * config for the destination page.	JW: why not leave it as defaults then??
 	 *
 	 * @uses	Wakka::LoadAllACLs()
 	 * @uses	Wakka::GetConfigValue()
@@ -4064,11 +4427,12 @@ else
 
 	/**
 	 * Split ACL list on whitespace or commas, then trim any remaining
-	 * whitespace.  Return a whitespace-delimited list.  Used mainly
+	 * whitespace. Return a whitespace-delimited list. Used mainly
 	 * to remove carriage returns.
 	 *
 	 * @param	string	$list	mandatory: List of ACLs to trim
-	 * @todo	Using whitespace as delimiter will break things: standardize on returning newline-delimited list
+	 * @todo	Using whitespace as delimiter will break things: standardize on
+	 *			returning newline-delimited list;
 	 *			see {@link http://wush.net/trac/wikka/ticket/226#comment:8}
 	 * @todo	rename to NormalizeACL() (it treats only a single ACL)
 	 */
@@ -4088,32 +4452,34 @@ else
 	 * Returns true if $username (defaults to current user) has $privilege
 	 * access on $page (defaults to current page).
 	 *
-	 * @uses	Wakka::ACLs()
-	 * @uses	Wakka::GetPageTag()
-	 * @uses	Wakka::GetUser()
-	 * @uses	Wakka::GetUserName()
-	 * @uses	Wakka::LoadAllACLs
+	 * @uses	Wakka::ACLs
+	 * @uses	Wakka::existsUser()
 	 * @uses	Wakka::UserIsOwner()
+	 * @uses	Wakka::LoadACL()
 	 *
 	 * @param	string	$privilege	mandatory: privilege which shall be checked
 	 * @param	string	$tag	optional: name of the page default: current page
 	 * @param	string	$username	optional: name of the user default: current user
 	 * @return	boolean	TRUE if user has access, FALSE if not.
 	 * @todo	move regexps to regexp-library		#34
-	 * @todo	the $username parameter is not currently used anywhere; but it could be leveraged for allowing/denying access by IP address in ALCs #543
+	 * @todo	the $username parameter is not currently used consistently; but it could be leveraged for allowing/denying access by IP address in ALCs #543
 	 */
 	function HasAccess($privilege, $tag='', $username='')
 	{
-		// set defaults
+		global $debug;
+		// init & set defaults
 		$hasaccess = FALSE;
-		$registered = FALSE;
+if ($debug) echo 'HasAccess ('.$tag.') calling... ';
+		$registered = $this->existsUser();
 		$tag = trim($tag);
 		if (empty($tag))
 		{
 			#$tag = $this->GetPageTag();
 			$tag = $this->tag;
 		}
+		$username = trim($username);
 
+		/*
 		// see whether user is registered and logged in
 		if ($user = $this->GetUser())
 		{
@@ -4124,9 +4490,26 @@ else
 		{
 			$username = $this->GetUserName();	// expensive if user not logged in and reverse DNS lookup allowed!  @@@ specify IP address #543
 		}
+		*/
+		// get name (or IP/host) of current user if no username specified
+		// (since we already know whether the user is registered, the following
+		// is a fraction faster than just calling GetUserName()
+		if (empty($username))
+		{
+			if ($registered)
+			{
+				$username = $this->reg_username;
+			}
+			else
+			{
+				$username = $this->anon_username;
+			}
+		}
+		// we could actually look if *specified* username is registered
 
 		// if current user is owner (or admin), return true. owner can do anything!
 		// NOTE: this does NOT use (or need) the $username parameter!
+if ($debug) echo 'HasAccess calling... ';
 		if ($this->UserIsOwner($tag))
 		{
 			$hasaccess = TRUE;
@@ -4229,16 +4612,25 @@ else
 	/**
 	 * THE BIG EVIL NASTY ONE!
 	 *
-	 * @uses	Wakka::Footer()
-	 * @uses	Wakka::GetConfigValue()
-	 * @uses	Wakka::GetCookie()
-	 * @uses	Wakka::GetHandler()
+	 * @uses	Wakka::ACLs
+	 * @uses	Wakka::base_domain_url
+	 * @uses	Wakka::base_url_path
+	 * @uses	Wakka::base_url
+	 * @uses	Wakka::handler
+	 * @uses	Wakka::wikka_url
+	 * @uses	Wakka::wikka_cookie_path
 	 * @uses	getmicrotime()
-	 * @uses	Wakka::GetUser()
+	 * @uses	Wakka::authenticateUserFromCookies()
+	 * @uses	Wakka::deleteOldWikkaCookies()
+	 * @uses	Wakka::Footer()
+	 * @uses	Wakka::getAnonUserName()
+	 * @uses	Wakka::GetConfigValue()
+	 * @uses	Wakka::GetHandler()
+	 * @uses	Wakka::Handler()
 	 * @uses	Wakka::Header()
 	 * @uses	Wakka::Href()
 	 * @uses	Wakka::LoadAllACLs()
-	 * @uses	Wakka::LoadUser()
+	 * @uses	Wakka::Loadpage()
 	 * @uses	Wakka::LogReferrer()
 	 * @uses	Wakka::Maintenance()
 	 * @uses	Wakka::Handler()
@@ -4246,7 +4638,6 @@ else
 	 * @uses	Wakka::Redirect()
 	 * @uses	Wakka::SetCookie()
 	 * @uses	Wakka::SetPage()
-	 * @uses	Wakka::SetUser()
 	 *
 	 * @param	string	$tag		mandatory: name of the single page/image/file etc. to be used
 	 * @param	string	$handler	optional: the method which should be used. default: "show"
@@ -4299,23 +4690,23 @@ else
 		//{
 			/*
 			// Old cookies (old names!): delete them
-			// JW:	DeleteCookie() will not work for this purpose:
+			// JW:	deleteWikkaCookie() will not work for this purpose:
 			//		the old names didn't use a suffix
-			//		(see [79])! DeleteCookie() was introduced here in [413].
+			//		(see [79])! deleteWikkaCookie() was introduced here in [413].
 			SetCookie('wikka_user_name', '', 1, '/'); // do use root as path because that is what we used!
 			$_COOKIE['wikka_user_name'] = '';	// better use unset()?
 			SetCookie('wikka_pass', '', 1, '/'); // do use root as path because that is what we used!
 			$_COOKIE['wikka_pass'] = '';	// better use unset()?
 			*/
 			/*
-			$this->DeleteCookie('wikka_pass');
-			$this->DeleteCookie('wikka_user_name');
+			$this->deleteWikkaCookie('wikka_pass');
+			$this->deleteWikkaCookie('wikka_user_name');
 			*/
 		//}
 		// clean up cookies with old names or with root path if that's not the
 		// current path (they are OBSOLETE now)
-		// JW:	Updated DeleteCookie() can now handle old names and paths;
-		//		we can now bundle all cleanup in one function call
+		// JW:	Updated deleteWikkaCookie() can now handle old names and paths, so
+		//		so we can now bundle all cleanup in one function call
 if ($debug)
 {
 	echo 'cleaning up old cookies:'."<br/>\n";
@@ -4323,7 +4714,7 @@ if ($debug)
 	print_r($_COOKIE);
 	echo "</pre>\n";
 }
-		$this->DeleteOldCookies();	// remove all old cookies in one go.
+		$this->deleteOldWikkaCookies();	// remove all old cookies in one go.
 if ($debug)
 {
 	echo 'AFTER DeleteOldCookies - current cookies:<pre>';
@@ -4337,9 +4728,16 @@ if ($debug)
 		// in object variable.
 		// NOTE: we do this after cleaning up old cookies so we can't authenticate
 		// from an obsolete cookie!
-		if ($user = $this->LoadUser($this->GetCookie('user_name'), $this->GetCookie('pass')))
+		/*
+		if ($user = $this->LoadUser($this->getWikkaCookie('user_name'), $this->getWikkaCookie('pass')))
 		{
 			$this->SetUser($user);	// LoginUser()
+		}
+		*/
+		if (!$this->authenticateUserFromCookies())	// logs in user if authenticated
+		{
+			// look up (and cache) anononymous IP/hostname
+			$this->getAnonUserName();
 		}
 
 		// 5. log referrers
@@ -4397,6 +4795,7 @@ if ($debug)
 		*/
 		else	// all other handlers need page header and page footer
 		{
+			// handle body before header and footer: user may be logging in/out!
 			$content_body = $this->Handler($this->handler);
 			print($this->Header().$content_body.$this->Footer());
 		}
