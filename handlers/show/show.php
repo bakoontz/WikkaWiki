@@ -160,6 +160,7 @@ else
 				echo '<!--starting comments header (hide)-->'."\n";
 				echo '<div class="commentsheader">'."\n";
 				$commentCount = $this->CountComments($this->tag);
+				$showcomments_text = null;
 				switch ($commentCount)
 				{
 					case 0:
