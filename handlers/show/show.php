@@ -119,9 +119,9 @@ else
 				$comments = $this->LoadComments($this->tag, $_SESSION['show_comments'][$tag]);
 				$display_mode = $_SESSION['show_comments'][$tag];
 				// set up icons
-				$sort_desc_icon_url = StaticHref('images/icons/sort_desc.gif');
-				$sort_asc_icon_url = StaticHref('images/icons/sort_asc.gif');
-				$sort_comment_icon_url = StaticHref('images/icons/comment.gif');
+				$sort_desc_icon_url = $this->StaticHref('images/icons/sort_desc.gif');
+				$sort_asc_icon_url = $this->StaticHref('images/icons/sort_asc.gif');
+				$sort_comment_icon_url = $this->StaticHref('images/icons/comment.gif');
 
 
 				// display comments header
