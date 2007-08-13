@@ -54,8 +54,8 @@ if ($this->HasAccess('read'))
 	{
 		array_unshift($pages, $pageA);
 	}
-	// load revisions for this page
-	if ($pages)
+	// load revisions for this page - only if there is actually more than one version
+	if (count($pages) > 1)
 	{
 		$output  = $this->FormOpen('diff', '', 'get');
 		$output .= "<fieldset>\n";
@@ -98,14 +98,20 @@ if ($this->HasAccess('read'))
 		}
 		$output .= $this->FormClose()."\n";
 	}
+	else
+	{
+		$output  = '<h3>'.sprintf(REVISIONS_CAPTION, $this->Link($this->tag))."</h3>\n";
+		$output .= '<em>'.REVISIONS_NO_REVISIONS_YET.'</em>'."\n";
+	}
 
 	echo '<div class="page">'."\n";
 	echo $output;
+	echo '</div>'."\n";
 } 
 else 
 {
 	echo '<div class="page">'."\n";
-	echo '<em class="error">'.WIKKA_ERROR_ACL_READ.'</em>';
+	echo '<em class="error">'.WIKKA_ERROR_ACL_READ.'</em>'."\n";
+	echo '</div>'."\n";
 }
-echo '</div>'."\n";
 ?>
