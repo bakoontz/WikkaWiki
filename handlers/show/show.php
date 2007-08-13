@@ -56,13 +56,14 @@ else
 			$pagelink = '<a href="'.$this->Href().'">'.$this->tag.'</a>';
 			echo '<div class="revisioninfo">'.sprintf(SHOW_OLD_REVISION_CAPTION,$pagelink,$this->Link($this->tag, 'revisions', $this->page['time']));
 			// if this is an old revision, display some buttons
-			if ($this->page['latest'] == 'N' && $this->HasAccess('write'))
+			#if ($this->page['latest'] == 'N' && $this->HasAccess('write'))
+			if ($this->HasAccess('write'))
 			{
 				// added if encapsulation: in case where some pages were brutally deleted from database
 				if ($latest = $this->LoadPage($this->tag))
 				{
 ?>
-			<br />
+				<br />
 				<?php echo $this->FormOpen('edit') ?>
 				<input type="hidden" name="previous" value="<?php echo $latest['id'] ?>" />
 				<input type="hidden" name="body" value="<?php echo $this->htmlspecialchars_ent($this->page['body']) ?>" />
