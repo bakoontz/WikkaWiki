@@ -25,7 +25,7 @@
  * @uses	Wakka::Redirect()
  * @uses	Diff
  *
- * @todo 	This is a really cheap way to do it. I think it may be more intelligent to write the two pages to temporary files and run /usr/bin/diff over them. Then again, maybe not.
+ * @todo	This is a really cheap way to do it. I think it may be more intelligent to write the two pages to temporary files and run /usr/bin/diff over them. Then again, maybe not.
  * 			JW: that may be nice but won't work on a Windows system ;) 
  */
 
@@ -35,7 +35,7 @@ if ((isset($_GET['more_revisions'])) && (isset($_GET['a'])) && (isset($_GET['sta
 	$this->Redirect($this->Href('revisions', '', 'a='.$_GET['a'].'&start='.$_GET['start']));
 }
 
-if ($this->HasAccess("read"))
+if ($this->HasAccess('read'))
 {
 	// looking for the diff-classes
 	// @@@ TODO needed only if we're NOT doing a 'fastdiff'
@@ -57,11 +57,9 @@ if ($this->HasAccess("read"))
 	}
 
 	// load pages
-	#$pageA = $this->LoadPageById($_REQUEST['a']);
-	#$pageB = $this->LoadPageById($_REQUEST['b']);
-	$pageA = $this->LoadPageById($_GET['a']);	#312
-	$pageB = $this->LoadPageById($_GET['b']);	#312
-	if (!$pageA || !$pageB)
+	$pageA = (isset($_GET['a'])) ? $this->LoadPageById($_GET['a']) : '';	#312
+	$pageB = (isset($_GET['b'])) ? $this->LoadPageById($_GET['b']) : '';	#312
+	if ('' == $pageA || '' == $pageB)
 	{
 		echo '<div class="page">'."\n";
 		echo '<em class="error">'.ERROR_BAD_PARAMETERS.'</em><br />';
@@ -74,7 +72,6 @@ if ($this->HasAccess("read"))
 	$linkPageB = '<a href="'.$this->Href('', '', 'time='.urlencode($pageB['time'])).'">'.$pageB['time'].'</a>';
 
 	// If asked, call original diff 
-	#if (isset($_REQUEST['fastdiff']) && $_REQUEST['fastdiff'])
 	if (isset($_GET['fastdiff']) && $_GET['fastdiff'])	#312
 	{
 
@@ -108,7 +105,9 @@ if ($this->HasAccess("read"))
 		{
 			$output .= "<br />\n".DIFF_NO_DIFFERENCES;
 		}
+
 		#echo $head.$output;
+		$out = $output;
 	}
 	else
 	{
