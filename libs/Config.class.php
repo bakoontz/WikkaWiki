@@ -511,7 +511,7 @@ class Config
 	 * See the {@link http://docs.wikkawiki.org/ACLInfo ACL documentation} for a
 	 * further explanation of these settings.
 	 */
-	var $default_post_acl = '+';
+	var $default_write_acl = '+';
 //	/**
 //	 * Default comment Access Control List.
 //	 * Sets the default ACL for comments on new pages and for pages with no
