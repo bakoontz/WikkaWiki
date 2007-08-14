@@ -655,7 +655,7 @@ define('ERROR_NO_CODE', 'Sorry, there is no code to download.');
 // history
 define('EDITED_ON', 'Edited on %1$s by %2$s'); // %1$s - time; %2$s - user name
 define('HISTORY_PAGE_VIEW', 'History of recent changes for %s'); // %s pagename
-define('OLDEST_VERSION_EDITED_ON_BY', 'Oldest known version of this page was edited on %1$s by %2$s'); // %1$s - time; %2$s - user name
+define('OLDEST_VERSION_EDITED_ON_BY', 'The oldest known version of this page was created on %1$s by %2$s'); // %1$s - time; %2$s - user name
 define('MOST_RECENT_EDIT', 'Latest edit on %1$s by %2$s'); // %1$s - time; %2$s - user name
 define('HISTORY_MORE_LINK_DESC', 'here'); // used for alternative history link in HISTORY_MORE
 define('HISTORY_MORE', 'Full history for this page cannot be displayed within a single page, click %s to view more.'); // %s alternative history link # @@@ TODO avoid using 'here' ^
