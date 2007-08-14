@@ -149,7 +149,8 @@ define('PW_FORGOTTEN_MAIL_REF', 'Password reminder for %s'); // %s - wiki name
 define('PW_FORM_TEXT', 'Enter your WikiName and a password reminder will be sent to your registered email address.');
 define('PW_FORM_FIELDSET_LEGEND', 'Your WikiName:');
 define('ERROR_UNKNOWN_USER', 'You have entered a non-existent user!');
-define('ERROR_MAIL_NOT_SENT', 'An error occurred while trying to send the password. Outgoing mail might be disabled. Please contact your server administrator.');
+#define('ERROR_MAIL_NOT_SENT', 'An error occurred while trying to send the password. Outgoing mail might be disabled. Please contact your server administrator.');
+define('ERROR_MAIL_NOT_SENT', 'An error occurred while trying to send the password. Outgoing mail might be disabled. Please try to contact your wiki administrator by posting a page comment.');
 define('BUTTON_SEND_PW', 'Send reminder');
 define('USERSETTINGS_REF', 'Return to the %s page.'); // %s - UserSettings link
 /**#@-*/
@@ -158,16 +159,17 @@ define('USERSETTINGS_REF', 'Return to the %s page.'); // %s - UserSettings link
  * Language constant used by the {@link feedback.php feedback} action
  */
 // feedback
-define('FEEDBACK_FORM_CAPTION', 'Contact %s'); //%s - wikiname of the recipient
-define('FEEDBACK_NAME_LABEL', 'Your name:');
-define('FEEDBACK_EMAIL_LABEL', 'Your email:');
-define('FEEDBACK_MESSAGE_LABEL', 'Your message:');
 define('ERROR_EMPTY_NAME', 'Please enter your name');
 define('ERROR_INVALID_EMAIL', 'Please enter a valid email address');
 define('ERROR_EMPTY_MESSAGE', 'Please enter some text');
-define('FEEDBACK_SUBJECT', 'Feedback from %s'); // %s - name of the wiki
-define('FEEDBACK_SENT', 'Thanks for your feedback, %s! Your message has been sent'); //%s - name of the sender
+define('ERROR_FEEDBACK_MAIL_NOT_SENT', 'Sorry, An error occurred while trying to send your email. Outgoing mail might be disabled. Please try another method to contact %s, for instance by posting a page comment'); // %s - name of the recipient
+define('FEEDBACK_FORM_LEGEND', 'Contact %s'); //%s - wikiname of the recipient
+define('FEEDBACK_NAME_LABEL', 'Your name:');
+define('FEEDBACK_EMAIL_LABEL', 'Your email:');
+define('FEEDBACK_MESSAGE_LABEL', 'Your message:');
 define('FEEDBACK_SEND_BUTTON', 'Send');
+define('FEEDBACK_SUBJECT', 'Feedback from %s'); // %s - name of the wiki
+define('SUCCESS_FEEDBACK_SENT', 'Thanks for your feedback, %s! Your message has been sent'); //%s - name of the sender
 /**#@-*/
 
 /**#@+

@@ -8,11 +8,11 @@
  * you share other library files between Wikka installations, each Wikka
  * installation requires its own copy of this file in the predetermined location.
  *
- * This file contains a number of functions that provide compatibility support
- * in various situations: missing functions that are present in other versions
- * of PHP, functions to get around environmental differences (such as settings
- * in php.ini that a Wikka admin may not be able to touch), and similar issues.
- * Some small utilities that may be helpful during debugging (such as 
+ * This file contains a number of defines and functions that provide compatibility
+ * support in various situations: missing functions that are present in other
+ * versions of PHP, functions to get around environmental differences (such as
+ * settings in php.ini that a Wikka admin may not be able to touch), and similar
+ * issues. Some small utilities that may be helpful during debugging (such as 
  * getmicrotime()) which might be helpful when dealing with different
  * implementations are also forced in here as there's no better place yet. ;)
  *
@@ -35,6 +35,15 @@
  * @copyright	Copyright 2004-2005, Jason Tourtelotte <wikka-admin@jsnx.com>
  * @copyright	Copyright 2006-2007, {@link http://wikkawiki.org/CreditsPage Wikka Development Team}
  */
+
+/**#@+
+ * String constant introduced in later PHP versions than our baseline 4.1.
+ */
+/**
+ * Platform-dependent EOL marker (introduced in PHP 5.0.2)
+ */
+if (!defined('PHP_EOL')) define ('PHP_EOL', strtoupper(substr(PHP_OS,0,3) == 'WIN') ? "\r\n" : "\n");
+/**#@-*/
 
 /**
  * Get a microtime, either as a string or as a float.
@@ -243,5 +252,34 @@ function filesys2uri($path)
 {
 	$result = str_replace('\\','/',$path);
 	return $result;
+}
+
+/**
+ * Normalize line endings, optionally applying wordwrap.
+ *
+ * @param	string	$text	mandatory: the text to normalize line endings in
+ * @param	string	$eol	optional: desired line ending; default a single linefeed
+ * @param	int		$wrap	optional: position at which to wrap lines; 0 = don't wrap;
+ *					if a value > 0 is supplied, a minimum of 25 and a maximum or 998 is
+ *					applied; negative values are ignored (no wrap).
+ * @return	string	text with normalized line endings, optionally word-wrapped
+ */
+function normalizeEol($text, $eol="\n", $wrap=0)
+{
+	// replace CRLF with single LF, and replace any remaining single CR with single LF
+	$text = str_replace("\r", "\n", str_replace("\r\n", "\n", trim($text)));
+	// convert line endings to target (if still necessary)
+	if ("\n" != $eol)
+	{
+		$text = str_replace("\n",$eol,$text);
+	}
+	// optionally wrap
+	if ((int) $wrap > 0)
+	{
+		$wrap = max(min($wrap,998),25);
+		$text = wordwrap($text,$wrap,$eol);
+	}
+	// return result
+	return $text;
 }
 ?>
