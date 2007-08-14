@@ -1911,7 +1911,7 @@ if ($debug) echo 'SavePage calling... ';
 					body	= '".mysql_real_escape_string($body)."'"
 				);
 
-			if ($pingdata = $this->GetPingParams($this->GetConfigValue('wikiping_server'), $tag, $user, $note))
+			if ($pingdata = $this->GetPingParams($this->GetConfigValue('wikiping_server'), $tag, $username, $note))
 			{
 				$this->WikiPing($pingdata);
 			}
@@ -3371,7 +3371,7 @@ if ($debug) echo 'Handler - handler specified: '.$handler."<br/>\n";
 			FROM ".$this->GetConfigValue('table_prefix')."users
 			WHERE name = '".mysql_real_escape_string($username)."'
 			LIMIT 1"
-				);
+			);
 		if (is_array($user))
 		{
 			// store user name in cache
