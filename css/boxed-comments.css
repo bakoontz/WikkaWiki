@@ -14,8 +14,15 @@ containing boxes owned by the parent.
 	padding-bottom: 10px;
 }
 
+#comments form {
+	display: inline;
+}
+
 #comments form input[type=submit] {
 	font-size: 80%;
+	line-height: 1em;
+	padding-right: 2px;
+	padding-left: 2px;
 }
 
 /* contains the comments form and the navigation bar */
