@@ -5,7 +5,7 @@
  * The sender is automatically filled in when the user is logged in. The recipient
  * can be specified in several ways. When this action is used in a userpage,
  * feedback is sent to the corresponding user. This behavior can be overridden
- * by specifying a registered username via the optional <b>to</b>  parameter.
+ * by specifying a registered username via the optional <b>to</b> parameter.
  * When no recipient is specified, and the action is not on a user page, feedback
  * is sent to the admin.
  *
@@ -13,7 +13,7 @@
  * function.
  *
  * Notes:<br/>
- * - On some servers outcoming mail via the <b>mail()</b> function may be disabled.
+ * - On some servers outgoing mail via the <b>mail()</b> function may be disabled.
  * - While this action tries to comply with RFC 2822, it does <b>not</b>
  * cater for non-complying mail servers like GMail (does not handle CRLF between
  * headers) or Postfix (converts a single \r\n into double new lines). It does,
@@ -27,7 +27,7 @@
  *
  * @author	{@link http://wikkawiki.org/DarTar Dario Taraborelli} (fixing GUI strings, extended functionality)
  * @author	{@link http://wikkawiki.org/NilsLindenberg Nils Lindenberg} (documentation)
- * @author	{@link http://wikkawiki.org/JavaWoman Marjolein Katsma} (i18n, form accessibility, RFC2822 compliance)
+ * @author	{@link http://wikkawiki.org/JavaWoman Marjolein Katsma} (i18n, form accessibility, RFC2822/3986 compliance)
  *
  * @uses	Wakka::FormOpen()
  * @uses	Wakka::FormClose()
@@ -53,8 +53,6 @@
  *			check). See also codeslinger's security note at {@link http://php.net/sscanf}
  * @todo	Update documentation for feedback action
  * @todo	Implement antispam measures to prevent scripted form posting
- * @todo	This seems to be <b>broken</b>!
- *			The overrides for recipient are never used (and @to input isn't validated/sanitized)
  */
 
 /**#@+
@@ -63,24 +61,27 @@
 define('ALLOW_FEEDBACK_FROM_UNREGISTERED', TRUE); #move to action configuration file
 define('DISPLAY_SENT_MESSAGE', TRUE); #move to action configuration file
 #define('VALID_EMAIL_FORMAT', "%[a-zA-Z0-9._-]@%[a-zA-Z0-9._-]"); // Move to central regex library #34
+define('RFC_RECOMMENDED_EMAIL_LINE_LENGTH', 78);	// RFC 2822	@@@ move to global constants
+define('RFC_MAX_EMAIL_LINE_LENGTH', 998);	// RFC 2822	@@@ move to global constants
+define('RFC_MAX_URI_LENGTH', 255);	// RFC 3696	@@@ move to global constants
 /**#@-*/
 // build pattern for validating email	@@@ move to regex lib #34
 // 1: local part
-// we do not use FWS, CFWS, quoted-string or domain-literal (for now)
+// We do not use FWS, CFWS, quoted-string or domain-literal (for now)
 $pattern_atext_2822 = "[a-zA-Z0-9\^\$\/\\!#%&'*+=?`{|}~_-]+";	// RFC 2822
 $pattern_dot_atom_text_2822 = $pattern_atext_2822.'(\.'.$pattern_atext_2822.')*';	// RFC 2822
 $pattern_valid_local_part_2822	= $pattern_dot_atom_text_2822;	// RFC 2822	# officially: dot-atom / quoted-string
 #$pattern_valid_domain_2822	= $pattern_dot_atom_text_2822;	// RFC 2822, but not used here	# officially: dot-atom / domain-literal
 // 2: domain
-// we do not use IP-literal or IPv4address (for now); only "registered name",
-// and excepting sub-delims as they are not allowed in (sub)domain labels: IOW,
+// We do not use IP-literal or IPv4address (for now); only "registered name",
+// while excepting sub-delims as they are not allowed in (sub)domain labels: IOW,
 // we allow unreserved and pct-encoded for each domain label, and for the TLD only
-// only unreserved chars [a-z0-9-]
+// only unreserved chars [a-z0-9-] (RFC 3986/3696).
 // Note that while RFC 822 still says that for SMTP an IP address must be in [],
 // (see 822/6.2.3 and 1123/5.2.17), since IPv6 and RFC 2822 this is actually no
 // longer allowed for IPv4 - only for IPv6!
-// There must be at least one dot in the whole domain which must not be longer
-// than 255 chars (test separately!)
+// There must be at least one dot in the whole domain while the whole email address
+// must not be longer than 255 chars (test length separately!)
 $pattern_unreserved = '[a-z0-9-]';	// NOTE: RFC 3986 but *excluding* the dot, underscore and tilde (cannot occur in a domain label - cf. rfc3696.txt); case-insensitive
 $pattern_pct_encoded_3986 = '%[0-9a-f]{2}';	// NOTE: case-insensitive
 $pattern_domain_label = '(('.$pattern_unreserved.'|'.$pattern_pct_encoded_3986.'){2,252})';	// the whole domain must not be more than 255; TLD must be at least 2 chars
@@ -98,12 +99,8 @@ $pattern_valid_email = '('.$pattern_valid_local_part_2822.')@('.$pattern_valid_d
 define('RE_VALID_EMAIL_LOCAL', '/'.$pattern_valid_local_part_2822.'/');
 define('RE_VALID_EMAIL_DOMAIN', '/'.$pattern_valid_domain_3986.'/i');
 define('RE_VALID_EMAIL', '/'.$pattern_valid_email.'/i');	// must also not be longer than 255 characters
-#echo 'RE_VALID_EMAIL_LOCAL: '.RE_VALID_EMAIL_LOCAL."<br/>\n";
-#echo 'RE_VALID_EMAIL_DOMAIN: '.RE_VALID_EMAIL_DOMAIN."<br/>\n";
-#echo 'RE_VALID_EMAIL: '.RE_VALID_EMAIL."<br/>\n";
 
 //only display form when feedback is allowed
-#if (ALLOW_FEEDBACK_FROM_UNREGISTERED || $this->GetUser)
 if (ALLOW_FEEDBACK_FROM_UNREGISTERED || $this->existsUser())	// just check for *registered* user
 {
 	// init
@@ -117,17 +114,13 @@ if (ALLOW_FEEDBACK_FROM_UNREGISTERED || $this->existsUser())	// just check for *
 	switch (TRUE)
 	{
 		//recipient specified via action parameter "to"
-		#case (isset($to) && $user_specified_recipient = $this->LoadUser($to)):
 		case (isset($to) && $user_specified_recipient = $this->loadUserData($to)):
-			#$recipient_name = $to;
-			$recipient_name = $user_specified_recipient['name'];	// pick up retrieved name
+			$recipient_name = $user_specified_recipient['name'];	// pick up retrieved name (not input)
 			$recipient_email = $user_specified_recipient['email'];
 			break;
 
 		//recipient specified via pagename (by embedding in userpage)
-		#case ($userpage_recipient = $this->LoadUser($this->tag)):
 		case ($userpage_recipient = $this->loadUserData($this->tag)):
-			#$recipient_name = $this->tag;
 			$recipient_name = $userpage_recipient['name'];			// pick up retrieved name
 			$recipient_email = $userpage_recipient['email'];
 			break;
@@ -140,16 +133,16 @@ if (ALLOW_FEEDBACK_FROM_UNREGISTERED || $this->existsUser())	// just check for *
 			$b_admin = TRUE;
 			break;
 	}
+	// format recipient
 	$disp_recipient = ($b_admin) ? $this->FormatUser($recipient_name).' (admin)' : $this->FormatUser($recipient_name);	#i18n
-	
+
 	// process
-	#if (isset($_POST['mail']) && $_POST['mail'] == 'result')
 	if (isset($_POST['feedback']) && $_POST['feedback'] == FEEDBACK_SEND_BUTTON)	// Send button pressed
 	{
 		//get user input
 		$sender_name = (isset($_POST['name'])) ? trim($_POST['name']) : '';
 		$sender_email = (isset($_POST['email'])) ? trim($_POST['email']) : '';
-		$comments = (isset($_POST['comments'])) ? $_POST['comments'] : '';
+		$comments = (isset($_POST['comments'])) ? trim($_POST['comments']) : '';
 
 		// validate user input
 		#list($local_part, $domain) = sscanf($email, VALID_EMAIL_FORMAT); // use central regex library #34
@@ -168,12 +161,12 @@ if (ALLOW_FEEDBACK_FROM_UNREGISTERED || $this->existsUser())	// just check for *
 #echo "</pre>\n";
 		if (strlen($sender_name) == 0)
 		{
-			// a non empty name must be entered
+			// a non-empty name must be entered
 			$error = '<em class="error">'.ERROR_EMPTY_NAME.'</em>';
 		}
 		#elseif (strlen($sender_email) == 0 || !strchr($sender_email, "@") || strlen($local_part) == 0 || strlen($domain) == 0)
 		elseif (strlen($sender_email) == 0 ||
-				strlen($sender_email) > 255 ||
+				strlen($sender_email) > RFC_MAX_URI_LENGTH ||
 				is_null($email_local_part) ||
 				is_null($email_domain_part)
 			   )
@@ -194,7 +187,7 @@ if (ALLOW_FEEDBACK_FROM_UNREGISTERED || $this->existsUser())	// just check for *
 			$sender		= $sender_name.' <'.$sender_email.'>';	// MUST comply with RFC 2822 3.4
 			$recipient	= $recipient_name.' <'.$recipient_email.'>';	// MUST comply with RFC 2822 3.4
 			$eol = PHP_EOL;	// takes different operation of send mail between Windows and *nix into account
-			$comments = normalizeEol($comments,$eol,78);	// normalize line endings and wrap at 78 (as recommended in RFC 2822)
+			$comments = normalizeEol($comments,$eol,RFC_RECOMMENDED_EMAIL_LINE_LENGTH);	// normalize line endings and wrap at 78 (as recommended in RFC 2822)
 			$add_headers = '';
 			$add_params  = '';
 
@@ -206,6 +199,7 @@ if (ALLOW_FEEDBACK_FROM_UNREGISTERED || $this->existsUser())	// just check for *
 			}
 
 			// build email
+			// @@@ maybe add a Cc: to self for registered user (NOT for anonymous!)
 			$subject = sprintf(FEEDBACK_SUBJECT,$this->GetConfigValue('wakka_name'));
 			$msg  = FEEDBACK_NAME_LABEL."\t".$sender_name.$eol;
 			$msg .= FEEDBACK_EMAIL_LABEL."\t".$sender_email.$eol;
@@ -235,13 +229,6 @@ if (ALLOW_FEEDBACK_FROM_UNREGISTERED || $this->existsUser())	// just check for *
 			if ($rc)
 			{
 				$success = '<em class="success">'.sprintf(SUCCESS_FEEDBACK_SENT, $sender_name).'</em>'."\n";
-				/*
-				// optionally display the feedback text
-				if (DISPLAY_SENT_MESSAGE)
-				{
-					#echo $this->Format("---- **".FEEDBACK_NAME_LABEL."** ".$sender_name."---**".FEEDBACK_EMAIL_LABEL."** ".$sender_email."---**".FEEDBACK_MESSAGE_LABEL."** ---".$comments); # i18n (#340)
-				}
-				*/
 			}
 			else
 			{
@@ -261,7 +248,9 @@ if (ALLOW_FEEDBACK_FROM_UNREGISTERED || $this->existsUser())	// just check for *
 	$button_send	= FEEDBACK_SEND_BUTTON;
 	$form_close		= $this->FormClose();
 	
-	//check if user is logged in; pre-fill sender data if so
+	// check if user is logged in; pre-fill sender data if so
+	// @@@	use special styling for read-only as it's not obvious now!
+	//		or make it text display combined with hidden fields
 	if ($user = $this->GetUser())
 	{
 		$form_sender_name = '<input id="fb_name" name="name" value="'.$user['name'].'" type="text" readonly="readonly" />'."\n";
@@ -283,11 +272,13 @@ if (ALLOW_FEEDBACK_FROM_UNREGISTERED || $this->existsUser())	// just check for *
 MAILSENT;
 
 	// construct form template
+	// @@@ Why so narrow? setting cols to 78 (maybe better 80) doesn't help, apparently
+	// overridden by the stylesheet. The narrow textarea is really annoying; the form
+	// should re-display the mail as it's word-wrapped (line length 78).
 	$tpl_form =
 <<<TPLFEEDBACKFORM
 	$form_open
 	<fieldset class="feedback"><legend>$form_legend</legend>
-	<!--input type="hidden" name="mail" value="result" /-->
 	<label for="fb_name">$label_name</label> $form_sender_name<br />
 	<label for="fb_email">$label_email</label> $form_sender_email<br />
 	<label for="fb_message">$label_message</label>

@@ -263,6 +263,7 @@ function filesys2uri($path)
  *					if a value > 0 is supplied, a minimum of 25 and a maximum or 998 is
  *					applied; negative values are ignored (no wrap).
  * @return	string	text with normalized line endings, optionally word-wrapped
+ * @todo	declare minimum and maximum line length in constants
  */
 function normalizeEol($text, $eol="\n", $wrap=0)
 {
@@ -276,8 +277,10 @@ function normalizeEol($text, $eol="\n", $wrap=0)
 	// optionally wrap
 	if ((int) $wrap > 0)
 	{
-		$wrap = max(min($wrap,998),25);
+		$wrap = max(min($wrap,RFC_MAX_EMAIL_LINE_LENGTH),25);			// @@@
 		$text = wordwrap($text,$wrap,$eol);
+		// cut lines left longer than 998 (RFC 29822 max message line length)
+		$text = wordwrap($text,RFC_MAX_EMAIL_LINE_LENGTH,$eol,TRUE);
 	}
 	// return result
 	return $text;
