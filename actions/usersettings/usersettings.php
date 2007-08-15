@@ -271,6 +271,7 @@ if ($user = $this->GetUser())
 	// END *** PASSWORD UPDATE ***
 
 	// BEGIN *** USERSETTINGS ***
+	// @@@ replace hidden "action" by name on submit button
 ?>
 	<input type="hidden" name="action" value="update" />
 	<label for="email"><?php echo USER_EMAIL_LABEL ?></label>
@@ -305,6 +306,7 @@ if ($user = $this->GetUser())
 
 	// BEGIN *** PASSWORD UPDATE ***
 	echo $this->FormOpen();	// open password update form
+	// @@@ replace hidden "action" by name on submit button
 ?>
 	<fieldset class="usersettings" id="changepassword"><legend><?php echo CHANGE_PASSWORD_LEGEND ?></legend>
 	<input type="hidden" name="action" value="changepass" />
@@ -315,7 +317,7 @@ if ($user = $this->GetUser())
 		}
 		else if (isset($passsuccess))
 		{
-			echo '<em class="success">'.$passsuccess.'</em><br />'."\n";			
+			echo '<em class="success">'.$passsuccess.'</em><br />'."\n";
 		}
 ?>
 	<select id="update_option" name="update_option">
@@ -514,6 +516,7 @@ else
 
 	// BEGIN *** LOGIN/REGISTER ***
 	print($this->FormOpen());	// open login/registration form
+	// @@@ replace hidden "action" by name on submit button
 ?>
 	<fieldset id="register" class="usersettings"><legend><?php  echo ($register == '1' || $register == '2') ? LOGIN_REGISTER_LEGEND : LOGIN_LEGEND; ?></legend>
 	<input type="hidden" name="action" value="login" />
@@ -586,6 +589,7 @@ else
 
 	// BEGIN *** LOGIN PW FORGOTTEN ***
 	print($this->FormOpen());	// open login pw forgotten form
+	// @@@ replace hidden "action" by name on submit button
 ?>
 	<fieldset id="password_forgotten" class="usersettings"><legend><?php echo RETRIEVE_PASSWORD_LEGEND ?></legend>
 	<input type="hidden" name="action" value="updatepass" />
