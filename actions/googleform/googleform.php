@@ -8,27 +8,31 @@
  * The content of the input field is of course editable, maximum length of search query is limited to 2048, as you can see
  * on Google itself.
  * When the user clicks on the button labelled <tt>Google</tt>, a google search will start in a new window.</p>
- * 
+ *
  * @package		Actions
  * @version		$Id$
  * @license		http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
- * 
+ *
  * @uses	Wakka::htmlspecialchars_ent()
  * @uses	Wakka::GetPageTag()
  * @uses	Wakka::FormClose()
  * @link	http://docs.wikkawiki.org/GoogleFormActionInfo
  *
- * @todo	Use [advanced] FormOpen() - which should accept an external URL
- * @todo	Add a behaviour script to select the content of the input field when focused.
- * @todo	[accessibility] Add a label with a prompt (cf. footer action)
- * @todo	[accessibility] Add signal for the user that the result will open in a
- *			new window
+ * @todo	Use [advanced] FormOpen() - which should accept an external URL (and
+ *			extra attributes)
+ * @todo	Add a behaviour script to select the content of the input field when
+ *			focused.
+ *			JW: whatever for? it's mostly annoying, and not accessible either
+ *			(unexpected behavior)!
+ * @todo	[accessibility] Add a label with a prompt
+ * @todo	[accessibility] Add signal for the user that the result will open in
+ *			a new window
  * @todo	define maxlength in a constant - no "magic numbers"!
  */
 
-//Note: The classname WBselectonfocus, (WB means Wikka Behaviour) is used to (todo further) let add a behaviour scripts that
-//will select the content of the input field when it is focused.
+// Note: The classname WBselectonfocus, (WB means Wikka Behaviour) is used to (todo further) let add a behaviour scripts that
+// will select the content of the input field when it is focused.
 $query = '';
 
 // *** param section ***
@@ -43,8 +47,10 @@ if (is_array($vars))
 	}
 }
 if ($query == '')
-{// backward compatibility for {{googleform query}} usage
-	$query = (isset($vars['wikka_vars'])) ? $vars['wikka_vars'] : $this->GetPageTag();
+{
+	// backward compatibility for {{googleform query}} usage
+	#$query = (isset($vars['wikka_vars'])) ? $vars['wikka_vars'] : $this->GetPageTag();
+	$query = (isset($vars['wikka_vars'])) ? $vars['wikka_vars'] : $this->tag;
 }
 // Sanitization: Passing $query to htmlspecialchars_ent instead of ReturnSafeHTML(). Inside the value parameter of the input field,
 // we definitely don't want any occurence of ", <, > or unescaped &. IMPORTANT: Use doublequote to enclose value supplied by user, W3C
