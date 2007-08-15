@@ -4320,7 +4320,8 @@ if ($debug) echo 'UserIsOwner calling... ';
 	{
 		$isadmin = FALSE;
 		// use preg_split to get an array with already-trimmed elements (no looping needed)
-		$adminarray = preg_split('/\s*,\s*/' , trim($this->GetConfigValue('admin_users')), PREG_SPLIT_NO_EMPTY);
+		$adminarray = preg_split('/\s*,\s*/', trim($this->GetConfigValue('admin_users')), -1, PREG_SPLIT_NO_EMPTY);
+
 		// only a logged-in user can be admin; check if name occurs in the array
 		if ($this->existsUser() && in_array($this->reg_username, $adminarray))
 		{
