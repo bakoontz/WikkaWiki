@@ -218,7 +218,8 @@ elseif ($this->page && $this->HasAccess('read') && $this->handler == 'show' && $
 	}
 
 	// get upload results
-	if ($is_writable && isset($_POST['action']) && $_POST['action'] == 'upload' && userCanUpload()) #38
+	#if ($is_writable && isset($_POST['action']) && $_POST['action'] == 'upload' && userCanUpload()) #38
+	if ($is_writable && isset($_POST['upload']) && $_POST['upload'] == 'Upload' && userCanUpload()) #38 #i18n
 	{
 		switch ($_FILES['file']['error'])
 		{
@@ -312,7 +313,7 @@ if (is_readable($upload_path))
 		$sortby = $_GET['sortby'];
 	}
 	switch($sortby) 
-	{  
+	{
 		case SORT_BY_DATE : 
 			array_multisort($dateArr, SORT_ASC, SORT_NUMERIC, $filenameArr, $sizeArr);
 			break;
@@ -336,7 +337,7 @@ if (is_readable($upload_path))
 		{
 			// TODO #72
 			$delete_link = '<a class="keys" href="'
-			.$this->Href('files.xml',$this->tag,'action=delete&amp;file='.rawurlencode($file))
+			.$this->Href('files.xml',$this->tag,'action=delete&amp;file='.rawurlencode($file))	// @@@ should be POST form button, not link
 			.'" title="'.sprintf(DELETE_LINK_TITLE, $file).'">x</a>';
 		}
 		$download_link = '<a href="' .$this->Href('files.xml',$this->tag,'action=download&amp;file='.rawurlencode($file))
@@ -357,9 +358,9 @@ if (is_readable($upload_path))
 
 	if ($n > 0)
 	{
-		$output .=	'<div class="files">'."\n";
+		$output .= '<div class="files">'."\n";
 		// display uploaded files
-		$output .=	'<table class="files">'."\n"
+		$output .= '<table class="files">'."\n"
 			.'<caption>'.FILE_TABLE_CAPTION.'</caption>'."\n"
 			.'<thead>'."\n"
 			.'<tr>'."\n";
@@ -374,7 +375,7 @@ if (is_readable($upload_path))
 			.'</thead>'."\n"
 			.'<tbody>'."\n";
 		$output .= $output_files;
-		$output .=	'</tbody>'."\n"
+		$output .= '</tbody>'."\n"
 			.'</table>'."\n";
 	}
 }
@@ -388,29 +389,43 @@ else
 // print message if no files are available
 if ($is_readable && $n < 1)
 {
-	$output .=	'<em>'.NO_ATTACHMENTS.'</em>'."\n"; //
+	$output .= '<em>'.NO_ATTACHMENTS.'</em>'."\n"; //
 }
 
 // 5. display upload form
 if ($is_writable && userCanUpload())
 {
 	// upload form
+/*
+	// check if the hidden field is still needed - Href() already provides
+	// the wakka= part of the URL - NOT needed!
 	$input_for_no_rewrite_mode = '<!-- rewrite mode disabled -->';
 	if (!$this->GetConfigValue('rewrite_mode'))
 	{
 		$input_for_no_rewrite_mode = '<input type="hidden" name="wakka" value="'.$this->MiniHref().'" />';
 	}
 	$href = $this->Href();
-	// @@@ use (advanced) FormOpen() and FormClose()
-	// @@@ make form accessible
+	// use (advanced) FormOpen() and FormClose()
+	// make form accessible
 	$output .=	'<form action="'.$href.'" method="post" enctype="multipart/form-data">'."\n"
 		.$input_for_rewrite_mode."\n"
 		.'<input type="hidden" name="action" value="upload" />'."\n"
 		.'<fieldset><legend>'.FILE_UPLOAD_FORM_LABEL.'</legend>'."\n"
 		.'<input type="file" name="file" /><br />'."\n"
-		.'<input type="submit" value="Upload" />'."\n"
+		.'<input type="submit" value="Upload" />'."\n"		#i18n
 		.'</fieldset>'."\n"
 		.'</form>'."\n";
+*/
+	// build form
+	$form = '';
+	$form .= $this->FormOpen('', '', 'post', '', '', TRUE); // post form for current page with file upload
+	$form .= '<fieldset><legend>'.FILE_UPLOAD_FORM_LEGEND.'</legend>'."\n";
+	$form .= '<label for="fileupload">'.FILE_UPLOAD_FORM_LABEL.'</label> <input id="fileupload" type="file" name="file" /><br />'."\n";
+	$form .= '<input name = "upload" type="submit" value="'.FILE_UPLOAD_FORM_BUTTON.'" />'."\n";
+	$form .= '</fieldset>'."\n";
+	$form .= $this->FormClose();
+	// add to output
+	$output .= $form;
 	}
 }
 $output .= '</div>';

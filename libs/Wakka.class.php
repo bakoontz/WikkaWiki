@@ -2938,14 +2938,120 @@ if ($debug) echo "<br/>\n";
 	 * @uses	Wakka::GetConfigValue()
 	 *
 	 * @todo	replace with advanced FormOpen (so IDs are generated, among other things!)
+	 * @todo	check if the hidden field is still needed - Href() already provides
+	 *			the wakka= part of the URL... everything seems to work fine with
+	 *			or without rewrite mode, and without this hidden field!
 	 */
-	function FormOpen($method = '', $tag = '', $formMethod = 'post')
+	/*
+	function FormOpen($handler='', $tag='', $formMethod='post')
 	{
-		$result = '<form action="'.$this->Href($method, $tag).'" method="'.$formMethod."\">\n";
-		if (!$this->GetConfigValue('rewrite_mode'))
+		$result = '<form action="'.$this->Href($handler, $tag).'" method="'.$formMethod.'">'."\n";
+		#if (!$this->GetConfigValue('rewrite_mode'))
+		#{
+		#	$result .= '<input type="hidden" name="wakka" value="'.$this->MiniHref($handler, $tag).'" />'."\n";
+		#}
+		return $result;
+	}
+	*/
+	/**
+	 * Build an opening form tag with specified or generated attributes.
+	 *
+	 * This method builds an opening form tag, taking care that the result is valid XHTML
+	 * no matter where the parameters come from: invalid parameters are ignored and defaults used.
+	 * This enables this method to be used with user-provided parameter values.
+	 *
+	 * The form will always have the required action attribute and an id attribute to provide
+	 * a 'hook' for styling and scripting. This method tries its best to ensure the id attribute
+	 * is unique, among other things by adding a 'form_' prefix to make it different from ids for
+	 * other elements.
+	 * For a file upload form ($file=TRUE) the appropriate method and enctype attributes are generated.
+	 *
+	 * @author		{@link http://wikkawiki.org/JavaWoman JavaWoman} (Advanced version: complete rewrite; 2005)
+	 * @license		http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
+	 *
+	 * @access	public
+	 * @uses	makeId()
+	 * @uses	ID_LENGTH
+	 * @uses	existsHandler()
+	 * @uses	existsPage()
+	 * @uses	Href()
+	 * @uses	MiniHref()	only for hidden field
+	 *
+	 * @param	string	$handler	optional: "handler" which consists of handler name and possibly a query string
+	 *								to be used as part of action attribute
+	 * @param	string	$tag		optional: page name to be used for action attribute;
+	 *								if not specified, the current page will be used
+	 * @param	string	$formMethod	optional: method attribute; must be POST (default) or GET;
+	 *								anything but POST is ignored and considered as GET;
+	 *								always converted to lowercase
+	 * @param	string	$id			optional: id attribute
+	 * @param	string	$class		optional: class attribute
+	 * @param	boolean	$file		optional: specifies whether there will be a file upload field;
+	 *								default: FALSE; if TRUE sets method attribute to POST and generates
+	 *								appropriate enctype attribute
+	 * @return	string opening form tag
+	 * @todo	extend to handle a complete (external) URL instead of (handler+)pagename
+	 * @todo	extend to allow extra attributes
+	 */
+	function FormOpen($handler='', $tag='', $formMethod='post', $id='', $class='', $file=FALSE)
+	{
+		$attrMethod = '';									// no method for HTML default 'get'
+		$attrClass = '';
+		$attrEnctype = '';									// default no enctype -> HTML default application/x-www-form-urlencoded
+		#$hiddenval = '';
+		// derivations
+		$handler = trim($handler);
+		$tag = trim($tag);
+		$id = trim($id);
+		$class = trim($class);
+		// validations
+		#$validHandler = $this->existsHandler($handler);
+		#$validPage = $this->existsPage($tag);
+		#$handler = ($validHandler) ? $handler : '';
+		if (!empty($handler) && !$this->existsHandler($handler))
 		{
-			$result .= '<input type="hidden" name="wakka" value="'.$this->MiniHref($method, $tag)."\" />\n";
+			$handler = '';
 		}
+		#$tag = ($validPage) ? $tag : '';
+		// @@@ handle complete URL instead of page name here (or as separate param)
+		if (!empty($tag) && !$this->existspage($tag))
+		{
+			$tag = '';	// Href() will pick up current page name if none specified
+		}
+		
+		// form action (action is a required attribute!)
+		// @@@ handle complete URL instead of handler/pagename here
+		$attrAction = ' action="'.$this->Href($handler, $tag).'"';
+		// form method (ignore anything but post) and enctype
+		if (TRUE === $file)
+		{
+			$attrMethod  = ' method="post"';				// required for file upload
+			$attrEnctype = ' enctype="multipart/form-data"';// required for file upload
+		}
+		elseif (preg_match('/^post$/i',$formMethod))		// ignore case...
+		{
+			$attrMethod = ' method="post"';					// ...but generate lowercase
+		}
+		// form id
+		if ('' == $id)										// if no id given, generate one based on other parameters
+		{
+			$id = substr(md5($handler.$tag.$formMethod.$class),0,ID_LENGTH);
+		}
+		$attrId = ' id="'.$this->makeId('form',$id).'"';	// make sure we have a unique id
+		// form class
+		if ('' != $class)
+		{
+			$attrClass = ' class="'.$class.'"';
+		}
+
+		// build HTML fragment
+		$result = '<form'.$attrAction.$attrMethod.$attrEnctype.$attrId.$attrClass.'>'."\n";
+		#if (!$this->config['rewrite_mode'])					# is this bit really necessary?
+		#{
+		#	$hiddenval = $this->MiniHref($method, $page);
+		#	$result .= '<fieldset class="hidden"><input type="hidden" name="wakka" value="'.$hiddenval.'" /></fieldset>'."\n";
+		#}
+
 		return $result;
 	}
 	/**
@@ -3220,6 +3326,33 @@ if ($debug) echo 'Handler - handler specified: '.$handler."<br/>\n";
 			$out = $this->IncludeBuffered($handler_location, $this->GetConfigValue('wikka_handler_path'), $handler_not_found, TRUE);
 		}
 		return $out;
+	}
+	/**
+	 * Check if a handler (specified after page name) really exists.
+	 *
+	 * May be passed as handler plus query string; we'll need to look at handler only
+	 * so we strip off any querystring first.
+	 *
+	 * @author		{@link http://wikkawiki.org/JavaWoman JavaWoman} (created 2005; rewrite 2007)
+	 * @license		http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
+	 *
+	 * @access	public
+	 * @uses	Wakka::GetConfigValue()
+	 * 
+	 * @param	string 	$handler	handler name, optionally with appended parameters
+	 * @return	boolean	TRUE if handler is found, FALSE otherwise
+	 */
+	function existsHandler($handler)
+	{
+		// first strip off any query string
+		$parts = preg_split('/&/',$handler,1);				# return only one part
+		$handler = $parts[0];
+#echo 'handler: '.$handler.'<br/>';
+		// now check if a handler by that name exists
+#echo 'checking path: '.$this->GetConfigValue('wikka_handler_path').DIRECTORY_SEPARATOR.$handler.DIRECTORY_SEPARATOR.$handler.'.php'.'<br/>';
+		$exists = file_exists($this->GetConfigValue('wikka_handler_path').DIRECTORY_SEPARATOR.$handler.DIRECTORY_SEPARATOR.$handler.'.php');
+		// return conclusion
+		return $exists;
 	}
 	/**
 	 * Render a string using a given formatter or the standard Wakka by default.
@@ -3955,7 +4088,7 @@ if ($debug) echo 'FormatUser calling... ';
 				array_push($transformed_map[$parent], $id);
 			}
 		}
-		if (is_array($transformed_map[end($visited)]))
+		if (is_array($transformed_map[end($visited)]))	// @@@ causes NOTICE
 		{
 			$id = array_shift($transformed_map[end($visited)]);
 		}

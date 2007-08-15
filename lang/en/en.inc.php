@@ -191,7 +191,9 @@ define('FILE_TABLE_CAPTION', 'Attachments');
 define('FILE_TABLE_HEADER_NAME', 'File');
 define('FILE_TABLE_HEADER_SIZE', 'Size');
 define('FILE_TABLE_HEADER_DATE', 'Last modified');
-define('FILE_UPLOAD_FORM_LABEL', 'Add new attachment:');
+define('FILE_UPLOAD_FORM_LEGEND', 'Add new attachment:');
+define('FILE_UPLOAD_FORM_LABEL', 'File:');
+define('FILE_UPLOAD_FORM_BUTTON', 'Upload');
 define('DOWNLOAD_LINK_TITLE', 'Download %s'); // %s - file name
 define('DELETE_LINK_TITLE', 'Remove %s'); // %s - file name
 define('NO_ATTACHMENTS', 'This page contains no attachment.');
