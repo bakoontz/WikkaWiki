@@ -28,7 +28,7 @@ $tag = $this->tag;
 
 if ($this->IsAdmin() || ($this->UserIsOwner($tag) && (bool) $this->GetConfigValue('owner_delete_page')))
 {
-	if ($_POST)
+	if (isset($_POST['delete']) && $_POST['delete'] == PAGE_DELETION_DELETE_BUTTON) // delete button pressed
 	{
 		// delete the page, comments, related "from" links, acls and referrer
 		// @@@ format queries
@@ -57,8 +57,8 @@ if ($this->IsAdmin() || ($this->UserIsOwner($tag) && (bool) $this->GetConfigValu
 				<td><?php echo PAGE_DELETION_CAPTION ?></td>
 			</tr>
 			<tr>
-				<td> <!-- nonsense input so form submission works with rewrite mode --><input type="hidden" value="" name="null">
-				<input type="submit" value="<?php echo PAGE_DELETION_DELETE_BUTTON ?>"  style="width: 120px" />
+				<td>
+				<input name="delete" type="submit" value="<?php echo PAGE_DELETION_DELETE_BUTTON ?>"  style="width: 120px" />
 				<input type="button" value="<?php echo PAGE_DELETION_CANCEL_BUTTON ?>" onclick="history.back();" style="width: 120px" />
 				</td>
 			</tr>
