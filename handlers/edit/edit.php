@@ -131,7 +131,6 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 
 					// now we render it internally so we can write the updated link table.
 					// if we no longer do link tracking for header and footer why are we creating dummy output?
-					// @@@ test!
 					$this->ClearLinkTable();
 					#$dummy = $this->Header();		// !!!
 					$this->StartLinkTracking();
@@ -254,17 +253,15 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 
 		if ($this->GetConfigValue('gui_editor') == 1)	// @@@ cast to boolean and compare to TRUE
 		{
-			// Relocation: replaced paths using configured value(s)
-			#$output .= '<script type="text/javascript" src="'.$this->StaticHref('3rdparty/plugins/wikiedit/protoedit.js').'"></script>'."\n".
-			#		   '<script type="text/javascript" src="'.$this->StaticHref('3rdparty/plugins/wikiedit/wikiedit2.js').'"></script>'."\n";
+			// Relocation: build paths using configured value(s)
 			$protoedit_url = $this->StaticHref($this->GetConfigValue('wikiedit_uripath').'/protoedit.js');
 			$wikiedit_path = $this->StaticHref($this->GetConfigValue('wikiedit_uripath').'/wikiedit2.js');
 			$output .= '<script type="text/javascript" src="'.$protoedit_url.'"></script>'."\n".
 					   '<script type="text/javascript" src="'.$wikiedit_path.'"></script>'."\n";
-			#$output .= '<script type="text/javascript">'."  wE = new WikiEdit(); wE.init('body','WikiEdit','editornamecss');".'</script>'."\n";
-			// Relocation: we need to pass image path (ending in '/') relative to configured path as a fourth parameter to wE.init :
+			// Relocation: we need to pass image path (ending in '/') relative to
+			// configured WikiEdit path as a fourth parameter to wE.init :
 			// that way WikiEdit can find its own images even if it's relocated/shared
-			$wikiedit_imgpath = $this->StaticHref($this->GetConfigValue('wikiedit_uripath').'/images/');	// relative path breaks when not using base_url and with rewrite mode
+			$wikiedit_imgpath = $this->StaticHref($this->GetConfigValue('wikiedit_uripath').'/images/');
 			$output .= '<script type="text/javascript">'."  wE = new WikiEdit(); wE.init('body','WikiEdit','editornamecss','".$wikiedit_imgpath."');".'</script>'."\n";
 		}
 	}
