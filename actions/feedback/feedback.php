@@ -127,9 +127,10 @@ if (ALLOW_FEEDBACK_FROM_UNREGISTERED || $this->existsUser())	// just check for *
 
 		//default recipient is admin
 		default:
-			$admins = preg_split('/\s*,\s*/',trim($this->GetConfigValue('admin_users')));
-			$recipient_name = $admins[0];
-			$recipient_email = $this->GetConfigValue('admin_email');
+			$adminarray = preg_split('/\s*,\s*/',trim($this->GetConfigValue('admin_users')), -1, PREG_SPLIT_NO_EMPTY);
+			$recipient_name = $adminarray[0];
+			$admin = $this->loadUserData($this->tag);
+			$recipient_email = $admin['admin_email'];	// get email from DB rather than config!
 			$b_admin = TRUE;
 			break;
 	}
@@ -204,7 +205,7 @@ if (ALLOW_FEEDBACK_FROM_UNREGISTERED || $this->existsUser())	// just check for *
 			$msg  = FEEDBACK_NAME_LABEL."\t".$sender_name.$eol;
 			$msg .= FEEDBACK_EMAIL_LABEL."\t".$sender_email.$eol;
 			$msg .= $eol.$comments.$eol;
-			$add_headers .= 'To: '.$recipient.$eol;			// adding full address
+			#$add_headers .= 'To: '.$recipient.$eol;			// adding full address - may lead to duplicate mails: suppressing for now
 			$add_headers .= 'From: '.$sender.$eol;			// adding full address
 			$add_headers .= 'Reply-To: '.$sender.$eol;		// adding full address
 
