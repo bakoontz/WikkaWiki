@@ -27,6 +27,7 @@
  * @uses	Wakka::Format()
  * @uses	Wakka::StaticHref()
  *
+ * @todo Move header/footer to template
  * @todo Move rss autodiscovery to handlers/show/show.php
  *			JW: ??? Wikka does no autodiscovery
  *			- is this a reference to generating feed link tags? if so, why *not*
@@ -77,9 +78,10 @@ if ($this->GetHandler() != 'edit' && $this->GetConfigValue('enable_rss_autodisco
 	$rss_links .= '	<link rel="alternate" type="application/rss+xml" title="'.sprintf(RSS_REVISIONS_TITLE,$wikiname,$pagetag_disp).' (RSS '.RSS_REVISIONS_VERSION.')" href="'.$this->Href('revisions.xml', $pagetag).'" />'."\n";
 	$rss_links .= '	<link rel="alternate" type="application/rss+xml" title="'.sprintf(RSS_RECENTCHANGES_TITLE,$wikiname).' (RSS '.RSS_RECENTCHANGES_VERSION.')" href="'.$this->Href('recentchanges.xml', $pagetag).'" />'."\n"; // @@@ pagetag needed for Href??
 }
+$homepage_url = $this->href('', $this->GetConfigValue('root_page'), '');
 $backlinks_url = $this->href('backlinks', '', '');
 $backlinks_title = sprintf(WIKKA_BACKLINKS_LINK_TITLE, $pagetag_disp);
-$header_heading = $this->GetConfigValue('wakka_name').' : '.'<a href="'.$backlinks_url.'" title="'.$backlinks_title.'">'.$pagetag_disp.'</a>';
+$header_heading = '<a id="homepage_link" href="'.$homepage_url.'">'.$this->GetConfigValue('wakka_name').'</a> : '.'<a href="'.$backlinks_url.'" title="'.$backlinks_title.'">'.$pagetag_disp.'</a>';
 $header_navlinks = '';
 #if ($user = $this->GetUser())
 if ($this->existsUser())
