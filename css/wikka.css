@@ -228,6 +228,10 @@ h1 {
 	font-size: 18pt;
 }
 
+.header h2 {
+	padding: .3em 0; 
+}
+
 .highlight {color: red; background: #FFFFD0;}
 
 .strikethrough {color: #888; text-decoration: line-through;}
@@ -352,7 +356,7 @@ textarea:hover {
 }
 
 textarea:focus {
-	background-color: #E6E6E6;
+	background-color: #E6E6FF;
 }
 
 input:hover {
@@ -360,7 +364,7 @@ input:hover {
 }
 
 input:focus {
-	background-color: #E6E6E6;
+	background-color: #E6E6FF;
 }
 
 input[type=submit], input[type=button] {
@@ -452,7 +456,7 @@ em.success {
 	margin: auto;
 	z-index:20;
 	position:fixed;
-	top: 70px;
+	top: 90px;
 	right: 10px;
 	color: #000000;
 	background-color: #E9F9E9;
