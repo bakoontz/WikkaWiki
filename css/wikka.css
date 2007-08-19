@@ -893,6 +893,15 @@ fieldset.usersettings br {
 	clear: left;
 }
 
+/* RecentChanges action */
+
+ul.recentchanges {
+	list-style-type: none;
+	padding-left: 0;
+	margin-left: 1em;
+	margin-bottom: 1em;
+}
+
 /* HANDLER-related styling */
 
 /* acls handler */

@@ -22,7 +22,7 @@
  *
  * @todo		make datetime format configurable;
  * @todo		add configurable option for non-accessible pages {@link http://wush.net/trac/wikka/ticket/178 #178};
- * @todo		added extensive logging of events such as page deletion, cloning, ACL change {@link http://wush.net/trac/wikka/ticket/143 #143};
+ * @todo		add extensive logging of events such as page deletion, cloning, ACL change {@link http://wush.net/trac/wikka/ticket/143 #143};
  */
 
 /**#@+
@@ -38,7 +38,7 @@ if (!defined('MAX_REVISION_NUMBER'))  define('MAX_REVISION_NUMBER', '50');
 $max = 0;
 $readable = 0;
 
-echo '<h2>'.RECENTCHANGES_HEADING.'</h2><br />'."\n";
+echo '<h2>'.RECENTCHANGES_HEADING.'</h2>'."\n";
 if ($pages = $this->LoadRecentlyChanged())
 {
 	$curday = '';
@@ -60,17 +60,17 @@ if ($pages = $this->LoadRecentlyChanged())
 		if (($i < $max) && $this->HasAccess('read', $page['tag']))
 		{
 			$readable++;
-			// day header
+			// print day header
 			list($day, $time) = explode(' ', $page['time']);
 			if ($day != $curday)
 			{
-				$dateformatted = date(REVISION_DATE_FORMAT, strtotime($day));
-
 				if ($curday)
 				{
-					echo '</span><br />'."\n";
+					echo '</ul>'."\n";
 				}
-				echo '<strong>'.$dateformatted.':</strong><br />'."\n".'<span class="recentchanges">'."\n";
+				$dateformatted = date(REVISION_DATE_FORMAT, strtotime($day));
+				echo '<strong>'.$dateformatted.':</strong><br />'."\n";
+				echo '<ul class="recentchanges">'."\n";
 				$curday = $day;
 			}
 
@@ -113,14 +113,14 @@ if ($pages = $this->LoadRecentlyChanged())
 			$history_link  = '<a href="'.$page_url.'/history" title="'.sprintf(HISTORY_LINK_TITLE, $page['tag']).'">'.WIKKA_HISTORY.'</a>';
 			$page_link     = '<a href="'.$page_url.'">'.$page['tag'].'</a>';
 			$editor        = $this->FormatUser($page['user']);
-			echo '&nbsp;&nbsp;&nbsp;&nbsp;('.$revision_link.') ['.$history_link.'] - &nbsp;'.$page_link.' '.PAGE_EDITOR_DIVIDER.' '.$editor.' '.$note.'<br />'."\n";
+			echo '<li>'.$revision_link.' ['.$history_link.'] - &nbsp;'.$page_link.' '.PAGE_EDITOR_DIVIDER.' '.$editor.' '.$note.'</li>'."\n";
 		}
 	}
 	if ($readable == 0)
 	{
 		echo '<em>'.RECENTCHANGES_NONE_ACCESSIBLE.'</em>';
 	}
-	echo '</span>'."\n";
+	echo '</ul>'."\n";
 
 	//wikiping instructions
 	$wikipingserver = $this->GetConfigValue('wikiping_server');
@@ -129,12 +129,11 @@ if ($pages = $this->LoadRecentlyChanged())
 		$wikipingserver_url_parsed = parse_url($wikipingserver);
 		$wikipingserver_host = $wikipingserver_url_parsed['host'];
 		$wikiping_link = '<a href="http://'.$wikipingserver_host.'">http://'.$wikipingserver_host.'</a>';
-		printf('<br /><br />['.WIKIPING_ENABLED.']',$wikiping_link);
+		printf('<p>['.WIKIPING_ENABLED.']</p>',$wikiping_link);
 	}
 }
 else
 {
 	echo '<em>'.RECENTCHANGES_NONE_FOUND.'</em>';
 }
-
 ?>
