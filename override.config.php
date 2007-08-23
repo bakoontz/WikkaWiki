@@ -165,7 +165,7 @@
  * <b>not</b> end in a (back)slash.
  * The default is 'templates' within the installation directory.
  */
-#if (!defined('LOCAL_TEMPLATE_PATH'))	define('LOCAL_TEMPLATE_PATH', 'path/to/your/formatters');
+#if (!defined('LOCAL_TEMPLATE_PATH'))	define('LOCAL_TEMPLATE_PATH', 'path/to/your/templates');
 /**#@-*/
 
 
