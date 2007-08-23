@@ -186,6 +186,13 @@ class Config
 	// @@@ name should use singular 'highlighter' to conform to teh other path "names".
 	#var $wikka_highlighters_path = 'formatters';
 	var $wikka_highlighters_path = CONFIG_FORMATTER_PATH;		// pick up default from wikka.php
+
+	/**
+	 * Path to Wikka template action files.
+	 * Name of the directory under which Wikka template files are stored.
+	 * Template files are used to generate the XHTML output.
+	 */
+	var $wikka_template_path = CONFIG_TEMPLATE_PATH;				// pick up default from wikka.php
 	
 	/**
 	 * Directory for 3rd-party components.

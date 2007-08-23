@@ -2,7 +2,7 @@
 /**
  * Generates the page header.
  *
- * @package		Template
+ * @package		Templates
  * @version		$Id:header.php 369 2007-03-01 14:38:59Z DarTar $
  * @license		http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource

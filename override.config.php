@@ -157,6 +157,15 @@
  * the files all together, you don't need an override for this one.
  */
 #if (!defined('LOCAL_HIGHLIGHTER_PATH'))	define('LOCAL_HIGHLIGHTER_PATH', LOCAL_FORMATTER_PATH);
+/**
+ * Alternative path to template files.
+ * Name of the <b>directory</b> under which Wikka template files are stored.
+ *
+ * The path must be a (filesystem) path for a <b>directory</b>, and must
+ * <b>not</b> end in a (back)slash.
+ * The default is 'templates' within the installation directory.
+ */
+#if (!defined('LOCAL_TEMPLATE_PATH'))	define('LOCAL_TEMPLATE_PATH', 'path/to/your/formatters');
 /**#@-*/
 
 

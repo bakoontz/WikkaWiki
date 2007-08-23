@@ -31,7 +31,7 @@
 /* ------------------ COMMON ------------------ */
 
 /**#@+
- * Language constant shared among several Wikka files
+ * Language constant shared among several Wikka components
  */
 // NOTE: all common names (used in multiple files) should start with WIKKA_ !
 define('WIKKA_ERROR_SETUP_FILE_MISSING', 'A file of the installer / upgrader was not found. Please install Wikka again!');
@@ -83,10 +83,44 @@ define('ERROR_WRONG_MYSQL_VERSION', 'Wikka requires MySQL %s or higher!');	// %s
 define('STATUS_WIKI_UPGRADE_NOTICE', 'This site is currently being upgraded. Please try again later.');
 define('STATUS_WIKI_UNAVAILABLE', 'The wiki is currently unavailable.');
 define('PAGE_GENERATION_TIME', 'Page was generated in %.4f seconds'); // %.4f - page generation time
+define('ERROR_HEADER_MISSING', 'A header template could not be found. Please make sure that a file called <code>header.php</code> exists in the templates directory.'); //TODO Make sure this message matches any filename/folder change
+define('ERROR_FOOTER_MISSING', 'A footer template could not be found. Please make sure that a file called <code>footer.php</code> exists in the templates directory.'); //TODO Make sure this message matches any filename/folder change
 
 #define('ERROR_WRONG_PHP_VERSION', '$_REQUEST[] not found. Wakka requires PHP 4.1.0 or higher!'); //TODO remove referral to PHP internals; refer only to required version
 #define('ERROR_SETUP_HEADER_MISSING', 'The file "setup/header.php" was not found. Please install Wikka again!');
 #define('ERROR_SETUP_FOOTER_MISSING', 'The file "setup/footer.php" was not found. Please install Wikka again!');
+/**#@-*/
+
+/*  ------------------ TEMPLATE ------------------  */
+
+/**#@+
+ * Language constant used by the {@link header.php header} template
+ */
+// header
+define('GENERIC_DOCTITLE', '%1$s: %2$s');	// %1$s - wiki name; %2$s - page title
+define('RSS_REVISIONS_TITLE', '%1$s: revisions for %2$s');	// %1$s - wiki name; %2$s - current page name
+define('RSS_RECENTCHANGES_TITLE', '%s: recently edited pages');	// %s - wiki name
+define('YOU_ARE', 'You are %s'); // %s - name / ip of the user.
+/**#@-*/
+
+/**#@+
+ * Language constant used by the {@link footer.php footer} template
+ */
+// footer
+define('FOOTER_PAGE_EDIT_LINK_DESC', 'Edit page');
+define('PAGE_HISTORY_LINK_TITLE', 'Click to view recent edits to this page'); // @@@ TODO 'View recent edits to this page'
+define('PAGE_HISTORY_LINK_DESC', 'Page History');
+define('PAGE_REVISION_LINK_TITLE', 'Click to view recent revisions list for this page'); // @@@ TODO 'View recent revisions list for this page'
+define('PAGE_REVISION_XML_LINK_TITLE', 'Click to view recent revisions list for this page'); // @@@ TODO 'View recent revisions list for this page'
+define('PAGE_ACLS_EDIT_LINK_DESC', 'Edit ACLs');
+define('PAGE_ACLS_EDIT_ADMIN_LINK_DESC', '('.PAGE_ACLS_EDIT_LINK_DESC.')');
+define('PUBLIC_PAGE', 'Public page');
+define('USER_IS_OWNER', 'You own this page.');
+define('TAKE_OWNERSHIP', 'Take Ownership');
+define('REFERRERS_LINK_TITLE', 'Click to view a list of URLs referring to this page'); // @@@ TODO 'View a list of URLs referring to this page'
+define('REFERRERS_LINK_DESC', 'Referrers');
+define('QUERY_LOG', 'Query log:');
+define('SEARCH_LABEL', 'Search:');
 /**#@-*/
 
 
@@ -200,40 +234,10 @@ define('NO_ATTACHMENTS', 'This page contains no attachment.');
 /**#@-*/
 
 /**#@+
- * Language constant used by the {@link footer.php footer} action
- */
-// footer
-define('FOOTER_PAGE_EDIT_LINK_DESC', 'Edit page');
-define('PAGE_HISTORY_LINK_TITLE', 'Click to view recent edits to this page'); // @@@ TODO 'View recent edits to this page'
-define('PAGE_HISTORY_LINK_DESC', 'Page History');
-define('PAGE_REVISION_LINK_TITLE', 'Click to view recent revisions list for this page'); // @@@ TODO 'View recent revisions list for this page'
-define('PAGE_REVISION_XML_LINK_TITLE', 'Click to view recent revisions list for this page'); // @@@ TODO 'View recent revisions list for this page'
-define('PAGE_ACLS_EDIT_LINK_DESC', 'Edit ACLs');
-define('PAGE_ACLS_EDIT_ADMIN_LINK_DESC', '('.PAGE_ACLS_EDIT_LINK_DESC.')');
-define('PUBLIC_PAGE', 'Public page');
-define('USER_IS_OWNER', 'You own this page.');
-define('TAKE_OWNERSHIP', 'Take Ownership');
-define('REFERRERS_LINK_TITLE', 'Click to view a list of URLs referring to this page'); // @@@ TODO 'View a list of URLs referring to this page'
-define('REFERRERS_LINK_DESC', 'Referrers');
-define('QUERY_LOG', 'Query log:');
-define('SEARCH_LABEL', 'Search:');
-/**#@-*/
-
-/**#@+
  * Language constant used by the {@link googleform.php googleform} action
  */
 // googleform
 define('GOOGLE_BUTTON', 'Google');
-/**#@-*/
-
-/**#@+
- * Language constant used by the {@link header.php header} action
- */
-// header
-define('GENERIC_DOCTITLE', '%1$s: %2$s');	// %1$s - wiki name; %2$s - page title
-define('RSS_REVISIONS_TITLE', '%1$s: revisions for %2$s');	// %1$s - wiki name; %2$s - current page name
-define('RSS_RECENTCHANGES_TITLE', '%s: recently edited pages');	// %s - wiki name
-define('YOU_ARE', 'You are %s'); // %s - name / ip of the user.
 /**#@-*/
 
 /**#@+

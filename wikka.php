@@ -250,7 +250,12 @@ if (!defined('DEFAULT_HANDLER_PATH'))	define('DEFAULT_HANDLER_PATH', 'handlers')
  * between Wikka installations.
  */
 if (!defined('DEFAULT_FORMATTER_PATH'))	define('DEFAULT_FORMATTER_PATH', 'formatters');
-
+/**
+ * Default <b>directory</b> where template files bundled with Wikka are stored.
+ * May be overridden as well as configured to enable sharing Wikka components
+ * between Wikka installations.
+ */
+if (!defined('DEFAULT_TEMPLATE_PATH'))	define('DEFAULT_TEMPLATE_PATH', 'templates');
 /**
  * Default <b>directory</b> where 3rd-party components bundled with Wikka are stored.
  * This path isn't used directly but can be used in building other 3rd-party
@@ -341,7 +346,16 @@ if (!defined('CONFIG_FORMATTER_PATH')) define('CONFIG_FORMATTER_PATH',
 		? $canon_path
 		: DEFAULT_FORMATTER_PATH
 	);
-
+/**
+ * Effective (configurable) <b>directory</b> for Wikka templates.
+ * The path takes any optional override into account; used to define a value in
+ * the default configuration file.
+ */
+if (!defined('CONFIG_TEMPLATE_PATH')) define('CONFIG_TEMPLATE_PATH',
+	(defined('LOCAL_TEMPLATE_PATH') && ($canon_path = validLocalPath(LOCAL_TEMPLATE_PATH, 'dir')))
+		? $canon_path
+		: DEFAULT_FORMATTER_PATH
+	);	
 /**
  * Effective (configurable) <b>directory</b> for 3rd-party components; these components
  * are required for basic Wikka functionality.
@@ -588,16 +602,28 @@ if (file_exists(SITE_CONFIGFILE))
 	include SITE_CONFIGFILE;		// fills $wakkaConfig
 }
 // migrate some old to new variable names (should come before merge!)
+//TODO move these checks to a directive file to be used by the installer/upgrader, #97
 if (isset($wakkaConfig['action_path']) && !isset($wakkaConfig['wikka_action_path']))
 {
 	$wakkaConfig['wikka_action_path'] = $wakkaConfig['action_path'];
-	unset($wakkaConfig['action_path']);
+	unset($wakkaConfig['action_path']); //since 1.1.7
 }
 if (isset($wakkaConfig['handler_path']) && !isset($wakkaConfig['wikka_handler_path']))
 {
 	$wakkaConfig['wikka_handler_path'] = $wakkaConfig['handler_path'];
-	unset($wakkaConfig['handler_path']);
+	unset($wakkaConfig['handler_path']); //since 1.1.7
 }
+// remove obsolete config settings (should come before merge!)
+//TODO move these checks to a directive file to be used by the installer/upgrader, #97
+if (isset($wakkaConfig['header_action']))
+{
+	unset($wakkaConfig['header_action']); //since 1.1.7
+}
+if (isset($wakkaConfig['footer_action'])) //since 1.1.7
+{
+	unset($wakkaConfig['footer_action']);
+}
+
 // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 /**
  * 3. Now, the default configuration is merged with any already-existing (and

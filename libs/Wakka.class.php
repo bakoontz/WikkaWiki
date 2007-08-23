@@ -2902,29 +2902,25 @@ if ($debug) echo "<br/>\n";
 	 */
 
 	/**
-	 * Output the Header for Wikka-pages.
+	 * Output the header for Wikka-pages.
 	 *
 	 * @uses	Wakka::GetConfigValue()
-	 * @uses	Wakka::Action()
-	 *
-	 * @todo	turn into something else than "actions"
+	 * @uses	Wakka::IncludeBuffered()
 	 */
 	function Header()
 	{
-		$header = $this->Action($this->GetConfigValue('header_action'), 0);
+		$header = $this->IncludeBuffered('header.php', $this->GetConfigValue('wikka_template_path'), ERROR_HEADER_MISSING);
 		return $header;
 	}
 	/**
-	 * Output the Footer for Wikka-pages.
+	 * Output the footer for Wikka-pages.
 	 *
 	 * @uses	Wakka::GetConfigValue()
-	 * @uses	Wakka::Action()
-	 *
-	 * @todo	turn into something else than "actions"
+	 * @uses	Wakka::IncludeBuffered()
 	 */
 	function Footer()
 	{
-		$footer = $this->Action($this->GetConfigValue('footer_action'), 0);
+		$footer = $this->IncludeBuffered('footer.php', $this->GetConfigValue('wikka_template_path'), ERROR_FOOTER_MISSING);
 		return $footer;
 	}
 
