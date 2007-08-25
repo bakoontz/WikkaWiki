@@ -354,7 +354,7 @@ if (!defined('CONFIG_FORMATTER_PATH')) define('CONFIG_FORMATTER_PATH',
 if (!defined('CONFIG_TEMPLATE_PATH')) define('CONFIG_TEMPLATE_PATH',
 	(defined('LOCAL_TEMPLATE_PATH') && ($canon_path = validLocalPath(LOCAL_TEMPLATE_PATH, 'dir')))
 		? $canon_path
-		: DEFAULT_FORMATTER_PATH
+		: DEFAULT_TEMPLATE_PATH
 	);	
 /**
  * Effective (configurable) <b>directory</b> for 3rd-party components; these components
