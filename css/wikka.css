@@ -232,6 +232,11 @@ h1 {
 	padding: .3em 0; 
 }
 
+tt {
+	color: #393;
+	background-color: #EFE;
+}
+
 .highlight {color: red; background: #FFFFD0;}
 
 .strikethrough {color: #888; text-decoration: line-through;}
