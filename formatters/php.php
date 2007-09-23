@@ -1,16 +1,9 @@
 <?php
 /**
  * PHP language file for Wikka highlighting (uses PHP built-in highlighting).
- * 
- * @package	Formatters
- * @version	$Id$
- * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
- * @filesource
- * 
- * @uses		Wakka::Handler()
  */
 
-if ($this->handler == "diff") {
+if ($this->method == "diff") {
 	// save output buffer and restart with clean buffer
 	$dummy = ob_get_clean(); ob_start();
 	// replace diff-tags to prevent highlighting these html-entities!
@@ -19,14 +12,14 @@ if ($this->handler == "diff") {
 
 highlight_string($text);
 
-if ($this->handler == "diff") {
+if ($this->method == "diff") {
 	// get highlighting output
 	$listing = ob_get_clean(); ob_start();
 	// render diff tags
 	$listing = preg_replace("/££<\/font>/", "</font>££", $listing);
-	$listing = preg_replace("/££(.*?)££/", "<ins>\\1</ins>", $listing);
+	$listing = preg_replace("/££(.*?)££/", "<span class='additions'>\\1</span>", $listing);
 	$listing = preg_replace("/¥¥<\/font>/", "</font>¥¥", $listing);
-	$listing = preg_replace("/¥¥(.*?)¥¥/", "<del>\\1</del>", $listing);
+	$listing = preg_replace("/¥¥(.*?)¥¥/", "<span class='deletions'>\\1</span>", $listing);
 	// write original output and revised highlighting back to fresh buffer
 	print $dummy.$listing;
 }

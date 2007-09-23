@@ -43,11 +43,7 @@
        len = iRange.text.length;
        move = Math.floor(len/2);
        _move = iRange.moveStart("character", move);
-       try 
-       {
-        where = iRange.compareEndPoints("StartToStart",sRange2);
-       } 
-       catch(err) {where = 0;}
+       where = iRange.compareEndPoints("StartToStart",sRange2);
        if (where==1)
        {
          iRange.moveStart("character", -_move);

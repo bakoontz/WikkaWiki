@@ -1,5 +1,5 @@
 Wikka Installation
----------------
+------------------
 
 Not much to it (as long as it works, ahem). Unpack/upload the distribution files
 into a directory that can be accessed via the web. Then go to the corresponding URL.
@@ -26,7 +26,6 @@ in the setup/ subdirectory. They're used by the web-based installer/updater, but
 should really just access the Wikka directory itself, and it will (or at least should)
 work perfectly.
 
-Detailed instructions are available at <http://docs/wikkawiki.org/WikkaInstallation>.
+Detailed instructions are available at <http://wikkawiki.org/WikkaInstallation>.
 
--------
-Version: $Id$
+

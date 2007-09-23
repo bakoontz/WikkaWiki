@@ -1,8 +1,7 @@
 /*
 -----------------------------------------------
 Wikka Default Stylesheet (screen)
------------------------------------------------ 
-*/
+----------------------------------------------- */
 
 /* global styling */
 
@@ -25,11 +24,11 @@ body {
 	line-height: 20px;
 	color: #000000;
 	background-color: #F8F8F8;
-	margin: 0;
 }
 
 .header {
 	padding: 10px;
+	padding-top: 0px;
 }
 
 .page {
@@ -38,17 +37,50 @@ body {
 	font-family: Verdana, Tahoma, Arial, Helvetica, sans-serif;
 	background-color: white;
 	padding: 15px;
-	border-top: 1px solid #CCC;
+	border: 1px inset;
 	border-bottom: none;
 	height: 100%;
 }
 
 .footer {
 	clear: both;
-	background-color: #E3E3E3;
+	background-color: #DDDDDD;
 	padding: 5px 10px;
+	border: 1px inset;
+	border-top: none;
 	border-top: 1px solid #CCCCCC;
-	border-bottom: 1px solid #CCCCCC;
+}
+
+/* comments */
+
+.commentsheader {
+	clear: both;
+	background-color: #DDDDDD;
+	padding: 2px 10px;
+	border-left: 1px inset;
+	border-right: 1px inset;
+	border-top: 1px solid #CCCCCC;
+}
+
+.comment {
+	background-color: #EEEEEE;
+	padding: 10px;
+	border-left: 1px inset;
+	border-right: 1px inset;
+	border-top: 1px solid #CCCCCC;
+	border-bottom: 1px solid #EEEEEE;
+}
+
+.commentinfo {
+	color: #AAAAAA;
+}
+
+.commentform {
+	background-color: #EEEEEE;
+	padding: 10px;
+	border-left: 1px inset;
+	border-right: 1px inset;
+	border-top: 1px solid #CCCCCC;
 }
 
 /* links */
@@ -78,14 +110,16 @@ a.ext:hover {
 	color: #993333;
 }
 
+.exttail {
+	color: #999;
+	position: relative;
+	bottom: 0.5ex;
+}
+
 .header a:hover {
 	color: #993333;
 	background: transparent;
 	border-bottom: 0px;
-}
-
-a#homepage_link {
-	color: #000;
 }
 
 .page a {
@@ -95,33 +129,6 @@ a#homepage_link {
 .page a:hover {
 	color: #993333;
 	text-decoration: underline;
-}
-
-a.keys:hover {
-	text-decoration: none;
-	color: #333;	
-}
-
-/* link icons */
-
-a.ext {
-	background: url('../images/icons/ext_simple.gif') right bottom no-repeat;
-	padding-right: 12px;
-}
-
-.page a.mailto {
-	background: url('../images/icons/mail.gif') right bottom no-repeat;
-	padding-right: 12px;
-}
-
-.page a.interwiki {
-	background: url('../images/icons/ext.gif') right bottom no-repeat;
-	padding-right: 12px;
-}
-
-a.user, a.user:hover {
-	background: url('../images/icons/user.gif') right bottom no-repeat;
-	padding-right: 12px;
 }
 
 /* lists */
@@ -173,16 +180,7 @@ img.right {
 	float: right;
 }
 
-/* boxes and floats */
-
-div.alertbox {
-	margin: 10px;
-	padding: 4px 8px;
-	width:49%;
-	background-color:#FEE;
-	border:1px solid #EDD;
-	font-size: 90%;
-}
+/* floats */
 
 .floatl {
 	float: left;
@@ -228,15 +226,6 @@ h1 {
 	font-size: 18pt;
 }
 
-.header h2 {
-	padding: .3em 0; 
-}
-
-tt {
-	color: #393;
-	background-color: #EFE;
-}
-
 .highlight {color: red; background: #FFFFD0;}
 
 .strikethrough {color: #888; text-decoration: line-through;}
@@ -256,31 +245,26 @@ tt {
 .center, .center p {text-align: center;}
 
 .keys {
-	color: #666;
-	background-color: #DDD;
-	font: normal 95% Verdana, sans-serif;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	color:#FFF;
+	font-weight: bold;
+	background-color: #33A;
+	border-top: 2px solid #FFF;
+	border-left: 2px solid #FFF;
+	border-right: 2px solid #336;
+	border-bottom: 2px solid #336;
 	text-align: center;
-	border-top: 1px solid #FFF;
-	border-left: 1px solid #FFF;
-	border-right: 1px solid #AAA;
-	border-bottom: 1px solid #AAA;
-	padding: .1em .2em;
+	padding: 0.1em 0.3em;
+	line-height: 1.6em;
+	vertical-align: top;
 }
 
 .keys:hover {
-	color: #555;
-	background-color: #CCC;
-	border-top: 1px solid #FFF;
-	border-left: 1px solid #FFF;
-	border-right: 1px solid #999;
-	border-bottom: 1px solid #999;
+	background-color: #66C;
+	border-right: 2px solid #668;
+	border-bottom: 2px solid #668;
 }
-
-span.user_anonymous {
-	color: #666;	
-}
-
-/* other HTML elements */
 
 acronym {
 	border-bottom: 1px dotted #333;
@@ -296,26 +280,24 @@ blockquote {
 	font-size: 90%;
 }
 
-hr {
-	border: 0;
-	border-top: 1px solid #EEE;
-}
-
 /* code blocks */
 
+
 .code_header {
-	color: #666;
-	background-color: #EEE;
+	color: #FFF;
+	background: #33A;
 	border-top: 1px solid #CCC;
 	border-right: 1px solid #CCC;
 	border-left: 1px solid #CCC;
 	border-bottom: none;
-	font-family: Verdana, Arial, sans-serif;
-	font-size: 100%;
+	font-weight: bold;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 10pt;
 	padding: 0 3px;
+	width: 95%;
 	margin: 5px auto 0 auto;
 	text-align: left;
-	line-height: 1.5em;
+	line-height: 15px;
 }
 
 .code {
@@ -324,8 +306,9 @@ hr {
 	border: 1px solid #CCC;
 	font-size: 11px;
 	font-family: "Lucida Console", Monaco, monospace;
+	width: 95%;
 	margin: auto;
-	padding: 6px 5px 13px 5px;	/* padding-bottom solves hor. scrollbar hiding single line of code in IE6 but causes vert. scrollbar... */
+	padding: 6px 3px 13px 3px;	/* padding-bottom solves hor. scrollbar hiding single line of code in IE6 but causes vert. scrollbar... */
 	text-align: left;			/* override justify on body */
 	overflow: auto;				/* allow scroll bar in case of long lines - goes together with white-space: nowrap! */
 	white-space: nowrap;		/* prevent line wrapping */
@@ -340,61 +323,22 @@ hr {
 
 /* form elements */
 
-fieldset {
-	margin-top: 10px;
-	margin-bottom: 10px;
-	border: 1px solid #CCC;	
-}
-
-fieldset legend {
-	font-size: 115%;
-	color: #666;
-	padding:2px;
-}
-
-textarea {
-	border: 1px solid #CCC;	
-}
-
-textarea:hover {
-	background-color: #F3F3F3;
-}
-
-textarea:focus {
-	background-color: #E6E6FF;
-}
-
-input:hover {
-	background-color: #F3F3F3;
-}
-
-input:focus {
-	background-color: #E6E6FF;
-}
-
 input[type=submit], input[type=button] {
-	color: #666;
-	background-color: #EEE;
-	font: normal 95% Verdana, sans-serif;
-	text-align: center;
-	border-top: 1px solid #FFF;
-	border-left: 1px solid #FFF;
-	border-right: 1px solid #AAA;
-	border-bottom: 1px solid #AAA;
-	padding: .1em .2em;
+	font-family: Arial, Helvetica, sans-serif;
+	padding: 0px 1px;
+	width: auto;
+	font-size: 9pt;
+	color:#fff;
+	font-weight: bold;
+	background-color: #33A;
+	border-right: 2px solid #336;
+	border-bottom: 2px solid #336;
 }
 
 input[type=submit]:hover, input[type=button]:hover {
-	color: #333;
-	background-color: #DDD;
-	border-top: 1px solid #FFF;
-	border-left: 1px solid #FFF;
-	border-right: 1px solid #999;
-	border-bottom: 1px solid #999;
-}
-
-input[type=text] {
-	border: 1px solid #CCC;	
+	background-color: #66C;
+	border-right: 2px solid #668;
+	border-bottom: 2px solid #668;
 }
 
 textarea#body{
@@ -412,6 +356,7 @@ textarea#body{
 
 input.grabcode {
 	float: right;
+	margin-right: 20px;
 	margin-top: 0px;
 	font-size: 90%;
 }
@@ -437,7 +382,6 @@ em.error {
 	font-style: normal;
 	font-weight: bold;
 	font-size: 95%;
-	display: block;
 }
 
 em.success {
@@ -445,39 +389,14 @@ em.success {
 	font-style: normal;
 	font-weight: bold;
 	font-size: 95%;
-	display: block;
 }
 
 .comments {display: none;}
 
-/* old-style revision header
 .revisioninfo {
 	color: #AAAAAA;
 	padding-bottom: 20px;
 }
-*/
-
-.revisioninfo {
-	margin: auto;
-	z-index:20;
-	position:fixed;
-	top: 90px;
-	right: 10px;
-	color: #000000;
-	background-color: #E9F9E9;
-	border: 1px solid #ACA;
-	padding: 5px 10px;
-	font-size: 90%;
-}
-
-.history_revisioninfo {
-	float: left;
-	text-align: left;
-	padding: 4px;
-	background: #EEE;
-	border: 1px solid #CCC; 		
-}
-
 
 .copyright {
 	font-size: 11px;
@@ -501,22 +420,13 @@ em.success {
 	padding: 5px;
 }
 
-ins {
-	background-color: #CFC;
-	text-decoration: none;
-}
+.additions {background-color: #ccffcc;}
 
-del {
-	color: #876;
-	background-color: #FC9;
-	text-decoration: none;
-}
+.deletions {color: #876; background-color: #FFCC99;}
 
 .recentchanges {font-size: 0.9em;}
 
 .pagenote {color: #888;}
-
-.pagetitle {color: #888;}
 
 .smaller {font-size: smaller;}
 
@@ -526,98 +436,14 @@ del {
 	color: #987;
 }
 
-/* ACTION-related styling */
+/* Action-related styling */
 
-/* File attachments */
+/* Table action */
 
-div.files {
-	display: block;
-	padding: 5px;
-	width: 40%;
-}
-
-table.files {
-	width: 100%;
-	font-size: 90%;
-	border: 2px solid #CCC;
-	border-collapse: collapse;
-	border-spacing: 0;
-}
-
-table.files caption {
-	border: 1px solid #CCC;
-	color: #666;
-	margin:5px 0;
-	padding:2px;
-}
-
-table.files thead {
-	background-color: #DDD;
-}
-
-table.files th, table.files td {
-	border: 1px solid #CCC;
-	padding: 1px 3px;
-}
-
-table.files thead th {
-	background-color: #DDD;
-}
-
-table.files tfoot th {
-	background-color: #DDD;
-}
-
-table.files tbody th {
-	background-color: #EEE;
-}
-
-table.files tbody tr:hover {
-	background-color: #EEE;
-}
-
-/* Tables */
 table.wikka {
 	border: 2px solid #CCC;
 	border-collapse: collapse;
 	border-spacing: 0;
-}
-
-table.wikka caption {
-	border: 1px solid #CCC;
-	font-size: 95%;
-	color: #666;
-	margin:5px 0;
-	padding:2px;
-}
-
-table.wikka thead {
-	background-color: #DDD;
-}
-
-table.wikka tfoot {
-	background-color: #DDD;
-}
-
-table.wikka th {
-	border: 1px solid #CCC;
-	padding: .1em .25em;
-}
-
-table.wikka thead th {
-	background-color: #DDD;
-}
-
-table.wikka tfoot th {
-	background-color: #DDD;
-}
-
-table.wikka tbody th {
-	background-color: #EEE;
-}
-
-table.wikka tbody tr:hover {
-	background-color: #EEE;
 }
 
 table.wikka td {
@@ -642,282 +468,86 @@ table.wikka td {
 .tse_keywords {
 	font-weight: bold;
 	color: green;
-	background-color: #FAEBD7;
+	background-color: antiquewhite;
 }
 
 /* Calendar Action */
+
+/* general styling */
 table.calendar {
-	color: #000;
-	background-color: #EEE;
-	border-collapse: collapse;
+	color: #000000;
+	background-color: #CCCCCC;				/* comment out to have space between cells same color as page background */
+	/*border-collapse: collapse;*/			/* would make single-width borders, ignoring cell-spacing */
 }
-
 table.calendar caption {
-	border: 1px solid #CCC;
-	margin:5px 0;
-	font-size: 95%;
-	color: #666;
-	padding:2px;
+	background-color: #CCCCCC;
+	font-weight: bold;
+	line-height: 1.6em;
 }
-
 table.calendar thead {
-	border: 2px solid #CCC;
-	background-color: #DDD;
+	background-color: #CCCCCC;
 }
-
 table.calendar tbody.face {
-	background-color: #EEE;
-	border: 2px solid #CCC;
+	background-color: #CCCCCC;
 }
-
 table.calendar tbody.calnav {
-	background-color: #FFF;
+	background-color: #CCCCCC;
 }
-
+/* styling for some specific elements */
 table.calendar thead th {
-	border: 1px solid #CCC;
+	/*border: 1px solid #000000;*/			/* uncomment to have border around day name headers (will be page background if table background is undefined) */
 	padding: 1px;
 	text-align: center;
 	font-size: 85%;
 	width: 26px;
 }
-
 table.calendar tbody.face td {
-	border: 1px solid #CCC;
+	border: 1px solid #000000;
 	text-align: right;
 }
-
 table.calendar td.currentday {
-	color: #FFF;
-	background-color: #33A;
+	color: #993333;
+	background-color: #AAAAAA;
+	font-weight: bold;
 }
-
-table.calendar tbody.face td:hover {
-	background-color: #DDD;
-}
-
-table.calendar tbody.face td.currentday:hover {
-	color: #FFF;
-	background-color: #66C;
-}
-
+/* styling of calendar navigation */
 table.calendar tbody.calnav {
 	font-weight: bold;
 }
-
 table.calendar td.prevmonth {
 	text-align: left;
 	font-size: 85%;
 }
-
 table.calendar td.curmonth {
 	text-align: center;
 }
-
 table.calendar td.nextmonth {
 	text-align: right;
 	font-size: 85%;
 }
-
 table.calendar a:link {
-	color: #339;
+	color: #993333;
 	text-decoration: none;
 }
-
 table.calendar a:visited {
-	color: #339;
+	color: #993333;
 	text-decoration: none;
 }
-
 table.calendar a:hover {
-	color: #933;
+	color: #993333;
 }
-
 table.calendar a:active {
-	color: #339;
+	color: #993333;
 	text-decoration: none;
 }
-
-/* Feedback action */
-
-fieldset.feedback {
-	display: block;
-	width: 350px;
-	padding: 10px;
-}
-
-fieldset.feedback label {
-	display: block;
-	width: 110px;
-	float: left;
-	margin-bottom: 10px;
-	text-align: right;
-	padding-right: 10px;
-}
-
-fieldset.feedback input[type=submit] {
-	float: left;
-	margin-left: 120px;
-}
-
-fieldset.feedback input[type=text] {
-	display: block;
-	width: 220px;
-	float: left;
-	margin-bottom: 10px;
-	border:1px solid #CCC;
-}
-
-fieldset.feedback textarea {
-	display: block;
-	width: 220px;
-	float: left;
-	margin-bottom: 10px;
-	border:1px solid #CCC;
-}
-
-fieldset.feedback br {
-	clear: left;
-}
-
-/* Newpage action */
-
-fieldset.newpage {
-	display: block;
-	width: 350px;
-	padding: 10px;
-}
-
-fieldset.newpage input[type=text] {
-	width: 250px;
-	border:1px solid #CCC;
-}
-
 
 /* Usersettings action */
-
-fieldset#account {
-	display: block;
-	min-width: 600px;
-	padding: 10px;
-	background-color: #F6F6F6;
-	text-align: left;
+table.usersettings {
 }
 
-fieldset#account span#account_info {
-	display: block;
-	width: 230px;
-	float: left;
-	margin-bottom: 10px;
-	text-align: right;
-	padding-right: 10px;
-}
+/* Handler-related styling */
 
-fieldset#account input#logout {
-	float: left;
-	margin-left: 0;
-}
-
-fieldset.usersettings {
-	display: block;
-	min-width: 600px;
-	padding: 10px;
-}
-
-fieldset.usersettings fieldset {
-	clear: left;
-	display: block;
-	width: 236px;
-	float: left;
-	margin: 0 0 10px 240px;
-}
-
-fieldset.usersettings fieldset legend {
-	margin: 0;
-}
-
-fieldset.usersettings fieldset input{
-	display: block;
-	float: left;
-	padding: 0;
-	margin: 0;
-}
-
-fieldset.usersettings fieldset label {
-	vertical-align: top;
-	margin: 0 0 0 10px;
-	display: inline;
-	text-align: left;
-	width: auto;
-	float:left;
-}
-
-fieldset.usersettings em {
-	clear: left;
-	float: left;
-	display: block;
-	margin: 0 0 0 240px;
-}
-
-fieldset.usersettings em.usersettings_info {
-	clear: left;
-	float: left;
-	display: block;
-	width: 246px;
-	margin: 0 0 5px 240px;
-	font-style: normal;
-	font-size: 85%;
-	color: #666;
-	border: 1px solid #CCC;
-	background-color: #F0F0F0;
-	padding: 2px;
-}
-
-fieldset.usersettings label {
-	display: block;
-	width: 230px;
-	float: left;
-	margin-bottom: 10px;
-	text-align: right;
-	padding-right: 10px;
-}
-
-fieldset.usersettings select#update_option {
-	display: block;
-	width: 230px;
-	float: left;
-	margin: 0px 10px 10px 0px;
-}
-
-fieldset.usersettings input[type=text], fieldset.usersettings input[type=password] {
-	display: block;
-	width: 250px;
-	float: left;
-	margin-bottom: 10px;
-	border:1px solid #CCC;
-}
-
-fieldset.usersettings input[type=submit] {
-	float: left;
-	margin-left: 250px;
-}
-
-fieldset.usersettings br {
-	clear: left;
-}
-
-/* RecentChanges action */
-
-ul.recentchanges {
-	list-style-type: none;
-	padding-left: 0;
-	margin-left: 1em;
-	margin-bottom: 1em;
-}
-
-/* HANDLER-related styling */
-
-/* acls handler */
+/* Acls handler */
 table.acls {
 }
 
@@ -971,6 +601,3 @@ table.acls {
 .toolbar .btn-pressed { border-color: ButtonShadow ButtonHighlight ButtonHighlight ButtonShadow; }
 .toolbar .btn-pressed { background: ButtonHighlight; }
 .editornamecss { background-color:#CCCCFF; font-size: 18px; padding: 0 10px; }
-
-
-/* Version: $Id$ */

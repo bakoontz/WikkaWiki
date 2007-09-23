@@ -1,8 +1,7 @@
 /*
 -----------------------------------------------
 Wikka Default Stylesheet (print)
------------------------------------------------ 
-*/
+----------------------------------------------- */
 
 .header, .footer, .commentsheader, .copyright, .smallprint, .lastedit, .grabcode { display:none; }
 
@@ -18,5 +17,3 @@ body {
 	padding: 0px;
 	border: none;
 }
-
-/* Version: $Id$ */

@@ -24,12 +24,12 @@
  *  You should have received a copy of the GNU General Public License
  *  along with GeSHi; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- *
+ * 
  * @package    geshi
  * @subpackage core
- * @author     Nigel McNie <nigel@geshi.org>
+ * @author    Nigel McNie <nigel@geshi.org>
  * @copyright  (C) 2004 - 2007 Nigel McNie
- * @license    http://gnu.org/copyleft/gpl.html GNU GPL
+ * @license   http://gnu.org/copyleft/gpl.html GNU GPL
  * @filesource
  *
  */

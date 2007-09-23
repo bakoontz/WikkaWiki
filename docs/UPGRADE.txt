@@ -1,7 +1,5 @@
-UPGRADING FROM AN EARLIER VERSION:
----------------
-
-An upgrade is a great chance to back up your tables!
+Wikka: Upgrading from an earlier version
+----------------------------------------
 
 Just unpack the new distribution archive wherever you need/want it; all you need from
 your old Wikka installation is wikka.config.php. You can also just copy the new files
@@ -18,7 +16,4 @@ Wikka directory; once Wikka sees it, it will ask for a username ("admin") and a
 password (whatever you put into that file). Don't forget to remove the "locked" file
 once you're done with upgrading!
 
-More details, hopefully, on <http://docs.wikkawiki.org/UpgradeNotes>.
-
----------------
-Version: $Id$
+More details, hopefully, on <http://wikkawiki.org/UpgradeNotes>.

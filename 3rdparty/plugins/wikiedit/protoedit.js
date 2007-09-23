@@ -1,7 +1,7 @@
 /* 
 ////////////////////////////////////////////////////////////////////////
 // ProtoEdit                                                          //
-// v. 2.11                                                            //
+// v. 2.01                                                            //
 ////////////////////////////////////////////////////////////////////////
 
 For license see LICENSE.TXT
@@ -10,13 +10,11 @@ var isDOM = document.getElementById //DOM1 browser
 var isO   = isO5 = window.opera && isDOM; //Opera 5+
 var isO6  = isO && window.print //Opera 6+
 var isO7  = isO && document.readyState //Opera 7+
-var isO8  = isO && document.createProcessingInstruction && (new XMLHttpRequest()).getAllResponseHeaders //Opera 8+
 var isIE  = document.all && document.all.item && !isO //Microsoft Internet Explorer 4+
 var isIE5 = isIE && isDOM //MSIE 5+
 var isMZ  = isDOM && (navigator.appName=="Netscape")
 var ua = navigator.userAgent.toLowerCase();
 var isSafari = (ua.indexOf("safari") != -1);
-var isWK  = (ua.indexOf("webkit") != -1) || (ua.indexOf("swift") != -1)
 
 var ProtoEdit = function(){
  this.enabled = true;
@@ -42,11 +40,9 @@ ProtoEdit.prototype._init = function(id, rte) {
  {
   if(isIE){
    this.area.onkeydown = function() { this._owner.keyDown(event) }
-  }else if (isMZ) {
+  }else if (this.MZ=isMZ) {
     this.area.addEventListener("keypress", function(ev) { this._owner.keyDown(ev) }, true);
     this.area.addEventListener("keyup",    function(ev) { this._owner.keyDown(ev) }, true);
-  }else if (isO8) {
-    this.area.onkeypress = function() { this._owner.keyDown(event) }
   }
  }
 }
@@ -107,7 +103,7 @@ ProtoEdit.prototype.createToolbar = function (id, width, height, readOnly) {
    else if (btn.name=="customhtml")
     html += btn.desc;
    else
-    html += ' <td class="btns-"><div id="' + btn.name + '_' + id + '" onmouseover=\'this.className="btn-hover";\' '
+    html += ' <td><div id="' + btn.name + '_' + id + '" onmouseover=\'this.className="btn-hover";\' '
           + 'onmouseout=\'this.className="btn-";\' class="btn-" '
           + 'onclick="this.className=\'btn-pressed\';' + btn.actionName + '('//\'' + id + '\', ' 
           + btn.actionParams + ')"><img src="' + this.imagesPath 
@@ -142,7 +138,7 @@ ProtoEdit.prototype.checkKey = function (k) {
 }
 
 ProtoEdit.prototype.addEvent = function (el, evname, func) {
-  if (isIE || isO8) 
+  if (isIE) 
     el.attachEvent("on" + evname, func);
   else
     el.addEventListener(evname, func, true);

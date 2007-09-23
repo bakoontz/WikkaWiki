@@ -1,15 +1,11 @@
-/* 
------------------------------------------------
-Wikka XML Stylesheet
------------------------------------------------ 
+/* Copyright 1997-2003 W3C (MIT, ERCIM, Keio). All Rights Reserved.
+   The following software licensing rules apply:
+   http://www.w3.org/Consortium/Legal/copyright-software */
 
-Copyright 1997-2003 W3C (MIT, ERCIM, Keio). All Rights Reserved.
-The following software licensing rules apply:
-http://www.w3.org/Consortium/Legal/copyright-software 
 
-This stylesheet is used to give a basic layout for RSS 1.0 feeds
+/* This stylesheet is used to give a basic layout for RSS 1.0 feeds */
 
-Add it to your RSS feed with
+/* Add it to your RSS feed with
 
 <?xml-stylesheet href="http://www.w3.org/2000/08/w3c-synd/style.css" type="text/css"?>
 
@@ -97,5 +93,3 @@ description {
 	font-style: italic;
 	font-size: 1.2em;
 }
-
-/* Version: $Id$*/

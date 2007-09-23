@@ -1,4 +1,4 @@
-/**
+/*
  * Display a dialog for searching and replacing strings in the current edit screen.
  *  
  * Note: Cross-browser semi-transparence is not W3 compliant CSS.
@@ -12,6 +12,9 @@
  * @todo 	- css to be moved to wikiedit.css
  *			- Ctrl+Z doesn't always work
  *  			- Add Documentation
+ *  			- When the selection (the text to be replaced that is highlighted) is hidden (out of the 
+         	scope of the textarea), no scrolling happens in Mozilla.
+ *  			- Create a button in WikiEdit Toolbar
  */
 
 var sr_i18n_err;
@@ -117,14 +120,9 @@ var sr_dlg=
  {//In IE, when some texts are selected in the textarea, and if the textarea is blurred then focused again,
   //the current selection is lost. This is an ennoying behavior if the user clicks on the replace window.
   //Strange but when the user clicks on the toolbar button, for example on the Bold button, this doesn't happen.
-   wE.getDefines();
-   return;
    var t = wE.area;
 
-   if (!isO8)
-   {
-    text = t.value.replace(/\r/g, "");
-   }
+   text = t.value.replace(/\r/g, "");
    //I don't know why but in IE, if the user clicks on replacement before clicking to Replace by, an error 
    //related to sel.htc occurs. This solves that strange behavior
    try
@@ -225,15 +223,6 @@ var sr_dlg=
   wE.undosels = wE.area.selectionStart;
   wE.undosele = wE.area.selectionEnd;
  },
- MZscrollIntoView:function()
- {
-  t=wE.area;
-  z=t.selectionStart;
-  alllines = wE.area.value.split('\n').length;
-  lines=wE.area.value.substr(0,z).split('\n').length;
-  new_scrollTop = parseInt((lines-5)*wE.area.scrollHeight/alllines);
-  wE.area.scrollTop = new_scrollTop > 0 ? new_scrollTop : 0;
- },
  prep_repl:function()
  {
   sr_dlg.getDefines();
@@ -297,33 +286,18 @@ var sr_dlg=
    if (matched && (matched != replaced_text))
    {
     sr_dlg.setAttrReadOnly(wE.area);
-    var new_content = sr_dlg.save_prev+matched+sr_dlg.save_next;
-    var hilited_selection = new_content.substr(new_content.indexOf(wE.begin) + wE.begin.length, new_content.indexOf(wE.end) - new_content.indexOf(wE.begin) - wE.begin.length);
-    wE.setAreaContent(new_content);
-    if (isMZ) this.MZscrollIntoView();
+    wE.setAreaContent(sr_dlg.save_prev+matched+sr_dlg.save_next);
     sr_dlg.wE_getDefines();
     sr_dlg.cursS = wE.sel1;
     sr_dlg.cursE = wE.sel2;
     sr_dlg.cursl = wE.sel;
     rrepl2 = new RegExp(sr_dlg.replp, modifier);
     sr_dlg.replr_dol0 = sr_dlg.replr.replace(/\$0/, wE.sel);
-    replacement = hilited_selection.replace(rrepl2, sr_dlg.replr_dol0);
+    replacement = wE.sel.replace(rrepl2, sr_dlg.replr_dol0);
     replacement = replacement.replace(/##sign(\n)ngis##/g, '\\n');
     replacement = replacement.replace(/##sign(\\)ngis##/g, '\\\\');
     replacement = replacement.replace(/##sign(.)ngis##/g, '$1');
     document.forms.replaceform.replace_by.value = replacement;
-    if (isWK) 
-    {
-     sr_dlg.obj.style.display = 'none';
-     if (window.confirm('If you would like to replace highlighted word ('+hilited_selection+') with ['+replacement+'], click <OK> , else click <CANCEL>!'))
-     {
-      sr_dlg.replace_do();
-     }
-     else 
-     {
-      sr_dlg.replace_next();
-     }
-    }
    }
    else
    {
@@ -331,7 +305,6 @@ var sr_dlg=
     sr_dlg.setAttrReadOnly(document.forms.replaceform.replacement, false);
     sr_dlg.dir_global_next = false;
     sr_dlg.setAttrReadOnly(wE.area, false);
-    wE.area.setSelectionRange(wE.area.selectionEnd, wE.area.selectionEnd);
    }
   }
   wE.area.focus();
@@ -416,7 +389,7 @@ var sr_dlg=
    '{'+
      'background: #eee;'+
    '}';
-   if ((typeof(document.styleSheets)!='undefined') && (typeof(document.styleSheets[0].addRule)!='undefined')) 
+   if (isIE) 
    {
     _style = document.styleSheets[0];
     _styleRules0 = _innerHTML.split("}");
