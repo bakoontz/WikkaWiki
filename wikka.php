@@ -60,7 +60,7 @@ error_reporting (E_ALL ^ E_NOTICE);
 /**
  * Defines the current Wikka version. Do not change the version number or you will have problems upgrading.
  */
-if (!defined('WAKKA_VERSION')) define('WAKKA_VERSION', '1.1.6.3');
+if (!defined('WAKKA_VERSION')) define('WAKKA_VERSION', '1.1.6.4');
 /**
  * Defines the default cookie name.
  */
