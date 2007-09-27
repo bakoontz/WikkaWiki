@@ -6,6 +6,16 @@ Wikka Default Stylesheet (screen)
 
 /* global styling */
 
+body {
+	font-family: Verdana, Tahoma, Arial, Helvetica, sans-serif;
+	font-size: 13px;
+/*	text-align: justify; */			/* comment out this line if you really need justified text */
+	line-height: 20px;
+	color: #000000;
+	background-color: #F8F8F8;
+	margin: 0;
+}
+
 p, td, li, input, select, textarea {
 	font-family: Verdana, Tahoma, Arial, Helvetica, sans-serif;
 	line-height: 20px;
@@ -18,15 +28,6 @@ form, h1, h2, h3, h4, h5 {
 }
 
 /* page layout */
-
-body {
-	font-family: Verdana, Tahoma, Arial, Helvetica, sans-serif;	font-size: 13px;
-/*	text-align: justify; */			/* comment out this line if you really need justified text */
-	line-height: 20px;
-	color: #000000;
-	background-color: #F8F8F8;
-	margin: 0;
-}
 
 .header {
 	padding: 10px;
@@ -235,6 +236,10 @@ h1 {
 tt {
 	color: #393;
 	background-color: #EFE;
+}
+
+.hidden {
+	display: none;
 }
 
 .highlight {color: red; background: #FFFFD0;}

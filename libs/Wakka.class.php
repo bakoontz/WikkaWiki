@@ -465,7 +465,7 @@ class Wakka
 		*/
 
 		$errors = array();
-		$result = getMysqlVersion($errors);
+		$mysql_version = getMysqlVersion($errors);
 
 		// report any error encountered retrieving version (like in Query())
 		if (($n = count($errors)) > 0)
@@ -1014,12 +1014,12 @@ class Wakka
 	 * 			- ENT_QUOTES:   escapes &, <, >, double and single quotes
 	 * @return	string	converted string
 	 */
-	 function hsc_secure($string, $quote_style=ENT_COMPAT)
-	 {
-	 	// init
-	 	$aTransSpecchar = array('&' => '&amp;',
-	 							'"' => '&quot;',
-	 							'<' => '&lt;',
+	function hsc_secure($string, $quote_style=ENT_COMPAT)
+	{
+		// init
+		$aTransSpecchar = array('&' => '&amp;',
+								'"' => '&quot;',
+								'<' => '&lt;',
 								'>' => '&gt;'
 								);			// ENT_COMPAT set
 		if (ENT_NOQUOTES == $quote_style)	// don't convert double quotes
@@ -1034,7 +1034,7 @@ class Wakka
 		// return translated string
 		$result = strtr($string,$aTransSpecchar);
 		return $result;
-	 }
+	}
 
 	/**
 	 * Get a value provided by user (by get, post or cookie) and sanitize it.
@@ -2271,7 +2271,7 @@ if ($debug) echo 'SavePage calling... ';
 				$response = $this->HTTPpost($server, $rpcRequest, 'text/xml');
 				if ($debug)
 				{
-					print($response);
+					print $response;
 				}
 			}
 		}
@@ -2287,7 +2287,8 @@ if ($debug) echo 'SavePage calling... ';
 	 * @param	string	$tag	mandatory:
 	 * @param	string	$user	mandatory:
 	 * @param	string	$changelog	optional:
-	 * @return	mixed	either an array with the WikiPing-params or FALSE if there was an error
+	 * @return	mixed	either an array with the WikiPing-params or FALSE
+	 *					if retrieving one of the required parameters failed
 	 * @todo	move to a dedicated class (plugin)
 	 */
 	function GetPingParams($server, $tag, $user, $changelog = '')
@@ -2938,7 +2939,7 @@ if ($debug) echo "<br/>\n";
 	 *			the wakka= part of the URL... everything seems to work fine with
 	 *			or without rewrite mode, and without this hidden field!
 	 */
-	/*
+	/* replaced by http://wikkawiki.org/AdvancedFormOpen
 	function FormOpen($handler='', $tag='', $formMethod='post')
 	{
 		$result = '<form action="'.$this->Href($handler, $tag).'" method="'.$formMethod.'">'."\n";
@@ -2991,10 +2992,11 @@ if ($debug) echo "<br/>\n";
 	 */
 	function FormOpen($handler='', $tag='', $formMethod='post', $id='', $class='', $file=FALSE)
 	{
+		// init
 		$attrMethod = '';									// no method for HTML default 'get'
 		$attrClass = '';
 		$attrEnctype = '';									// default no enctype -> HTML default application/x-www-form-urlencoded
-		#$hiddenval = '';
+		$hidden = array();
 		// derivations
 		$handler = trim($handler);
 		$tag = trim($tag);
@@ -3003,21 +3005,35 @@ if ($debug) echo "<br/>\n";
 		// validations
 		#$validHandler = $this->existsHandler($handler);
 		#$validPage = $this->existsPage($tag);
+		// validation needed only if parameters are actually specified
 		#$handler = ($validHandler) ? $handler : '';
 		if (!empty($handler) && !$this->existsHandler($handler))
 		{
 			$handler = '';
 		}
 		#$tag = ($validPage) ? $tag : '';
-		// @@@ handle complete URL instead of page name here (or as separate param)
 		if (!empty($tag) && !$this->existspage($tag))
 		{
 			$tag = '';	// Href() will pick up current page name if none specified
 		}
 		
 		// form action (action is a required attribute!)
-		// @@@ handle complete URL instead of handler/pagename here
-		$attrAction = ' action="'.$this->Href($handler, $tag).'"';
+		// !!! If rewrite mode is off, "tag" has to be passed as a hidden field
+		// rather than part of the URL (where it gets ignored on submit!)
+		if ($this->GetConfigValue('rewrite_mode'))
+		{
+			// @@@ add passed extra GET params here by passing them as extra
+			// parameter to Href()
+			$attrAction = ' action="'.$this->Href($handler, $tag).'"';
+		}
+		else
+		{
+			$attrAction = ' action="'.$this->Href($handler).'"';
+			$hidden['wakka'] = ('' != $tag) ? $tag : $this->tag;
+			// @@@ add passed extra GET params here by adding them as extra
+			// entries to $hidden (probably not by adding them to Href()
+			// but that needs to be tested when we get to it!)
+		}
 		// form method (ignore anything but post) and enctype
 		if (TRUE === $file)
 		{
@@ -3041,14 +3057,20 @@ if ($debug) echo "<br/>\n";
 		}
 
 		// build HTML fragment
-		$result = '<form'.$attrAction.$attrMethod.$attrEnctype.$attrId.$attrClass.'>'."\n";
-		#if (!$this->config['rewrite_mode'])					# is this bit really necessary?
-		#{
-		#	$hiddenval = $this->MiniHref($method, $page);
-		#	$result .= '<fieldset class="hidden"><input type="hidden" name="wakka" value="'.$hiddenval.'" /></fieldset>'."\n";
-		#}
+		$fragment = '<form'.$attrAction.$attrMethod.$attrEnctype.$attrId.$attrClass.'>'."\n";
+		// construct and add hidden fields (necessary if we are NOT using rewrite mode)
+		if (count($hidden) > 0)
+		{
+			$fragment .= '<fieldset class="hidden">'."\n";
+			foreach ($hidden as $name => $value)
+			{
+				$fragment .= '	<input type="hidden" name="'.$name.'" value="'.$value.'" />'."\n";
+			}
+			$fragment .= '</fieldset>'."\n";
+		}
 
-		return $result;
+		// return resulting HTML fragment
+		return $fragment;
 	}
 	/**
 	 * Close form
@@ -3102,7 +3124,7 @@ if ($debug) echo "<br/>\n";
 	/**
 	 * Return the full URL of an interwiki for a given shortcut, if in the list.
 	 *
-	 * @param  string $name mandatory: the shortcut for the interWiki
+	 * @param  string $name	mandatory: the shortcut for the interWiki
 	 * @param  string $tag	mandatory: name of a page in the other wiki
 	 * @return string the full URL for $tag or an empty string
 	 */
@@ -3130,7 +3152,8 @@ if ($debug) echo "<br/>\n";
 		// fill values
 		if (!$tag = trim($tag))
 		{
-			$tag = $this->GetPageTag();
+			#$tag = $this->GetPageTag();
+			$tag = $this->tag;
 		}
 		if (!$referrer = trim($referrer))
 		{
@@ -3388,6 +3411,7 @@ if ($debug) echo 'Handler - handler specified: '.$handler."<br/>\n";
 		}
 		return $out;
 	}
+
 	/**
 	 * Add a custom header(s) to be inserted inside the <head> section.
 	 *
@@ -4386,7 +4410,6 @@ if ($debug) echo 'UserIsOwner calling... ';
 	 * Load the Access Control list for a given page and a given privilege.
 	 *
 	 * @uses	Wakka::GetConfigValue()
-	 * @uses	Wakka::GetConfigValue()
 	 * @uses	Wakka::LoadSingle()
 	 *
 	 * @param	string	$tag	mandatory:
@@ -4589,7 +4612,7 @@ if ($debug) echo 'UserIsOwner calling... ';
 	}
 
 	/**
-	 * Determine if the current user has specified access for the specified page.
+	 * Determine if the (current) user has specified access for the specified page.
 	 *
 	 * Returns true if $username (defaults to current user) has $privilege
 	 * access on $page (defaults to current page).
