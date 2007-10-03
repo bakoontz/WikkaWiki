@@ -1,12 +1,12 @@
-<?php
+﻿<?php
 /**
  * Embed a mindmap in the current page.
- * 
+ *
  * @package		Actions
  * @version		$Id$
- * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
+ * @license		http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
- * 
+ *
  * @uses	Wakka::cleanUrl()
  * @uses	Wakka::htmlspecialchars_ent()
  * @uses	Wakka::StaticHref()
@@ -40,12 +40,12 @@ $height = isset($vars['height']) ? $this->htmlspecialchars_ent(trim($vars['heigh
 if (!$height) $height = '550';
 
 // output
-if ($mindmap_url) 
+if ($mindmap_url)
 {
 	// set up template variables
 	$jre_download_link = '<a href="'.WIKKA_JRE_DOWNLOAD_URL.'">'.WIKKA_JRE_LINK_DESC.'</a>';
 	$jre_install_req = sprintf(MM_JRE_INSTALL_REQ,$jre_download_link);
-	$jre_install_req_js = str_replace(array('\\', '\'', "\r", "\n"), array('\\\\', '\\\'', '', '\\n'), $jre_install_req);	
+	$jre_install_req_js = str_replace(array('\\', '\'', "\r", "\n"), array('\\\\', '\\\'', '', '\\n'), $jre_install_req);
 	$freemind_link = '<a href="'.FREEMIND_PROJECT_URL.'">Freemind</a>';
 
 	$mm_download_link = '<a href="'.$mindmap_url.'">'.MM_DOWNLOAD_LINK_DESC.'</a>';
@@ -88,8 +88,8 @@ TPLMINDMAP;
 
 	// display template
 	echo $mm_template;
-} 
-else 
+}
+else
 {
 	echo '<em class="error">'.ERROR_INVALID_MM_SYNTAX.'<br />'.sprintf(PROPER_USAGE_MM_SYNTAX,SAMPLE_SYNTAX1,SAMPLE_SYNTAX2).'</em>';
 }

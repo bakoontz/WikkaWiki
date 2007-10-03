@@ -1,7 +1,7 @@
-<?php
+﻿<?php
 /**
  * Display a list of pages owned by the current user.
- * 
+ *
  * If the current user is logged-in and owns at least one page, a list of pages owned by the current user
  * is displayed, ordered alphabetically or by date and time (last edit first).
  *
@@ -15,7 +15,7 @@
  * @uses	Wakka::reg_username
  * @uses	Wakka::existsUser()
  * @uses	Wakka::LoadPagesByOwner()
- * @uses	Wakka::GetUserName() 
+ * @uses	Wakka::GetUserName()
  * @uses	Wakka::Link()
  * @todo	fix RE (#104 etc.); also lose the comma in there!
  * @todo	actually add the (intended) timestanmp sorting; cf. mychanges action
@@ -33,7 +33,7 @@ if ($this->existsUser())
 	{
 		foreach ($pages as $page)
 		{
-			//if ($this->GetUserName() == $page["owner"]) 
+			//if ($this->GetUserName() == $page["owner"])
 			//{
 				$firstChar = strtoupper($page["tag"][0]);
 				if (!preg_match("/[A-Z,a-z]/", $firstChar)) //TODO: (#104 #340, #34) Internationalization (allow other starting chars, make consistent with Formatter REs)
@@ -41,7 +41,7 @@ if ($this->existsUser())
 					$firstChar = "#";
 				}
 
-				if ($firstChar != $curChar) 
+				if ($firstChar != $curChar)
 				{
 					if ($curChar) print("<br />\n");
 					echo '<strong>'.$firstChar."</strong><br />\n";
@@ -49,10 +49,10 @@ if ($this->existsUser())
 				}
 
 				echo $this->Link($page['tag'])."<br />\n";
-				
+
 			//}
 		}
-		
+
 	}
 	else
 	{

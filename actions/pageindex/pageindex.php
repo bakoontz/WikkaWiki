@@ -9,15 +9,15 @@
  * where showpagetitle="1" displays page titles (or page tag by
  *	default if no page title can be generated)
  *
- * @package    Actions
- * @version	$Id:pageindex.php 369 2007-03-01 14:38:59Z DarTar $
- * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
+ * @package		Actions
+ * @version		$Id:pageindex.php 369 2007-03-01 14:38:59Z DarTar $
+ * @license		http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
  *
- * @author    {@link http://wikkawiki.org/GiorgosKontopoulos GiorgosKontopoulos} (added ACL check, first code cleanup)
- * @author    {@link http://wikkawiki.org/DarTar DarTar} (adding doc header, minor code and layout refinements, i18n)
- * @author    {@link http://wikkawiki.org/BrianKoontz BrianKoontz} (added showpagetitle option)
- * 
+ * @author	{@link http://wikkawiki.org/GiorgosKontopoulos GiorgosKontopoulos} (added ACL check, first code cleanup)
+ * @author	{@link http://wikkawiki.org/DarTar DarTar} (adding doc header, minor code and layout refinements, i18n)
+ * @author	{@link http://wikkawiki.org/BrianKoontz BrianKoontz} (added showpagetitle option)
+ *
  * @uses		Wakka::LoadPageTitles()
  * @uses		Wakka::GetUserName()
  * @uses		Wakka::HasAccess()
@@ -40,7 +40,7 @@ if (isset($vars['showpagetitle']) && 1 == (int) $vars['showpagetitle'])
 if ($pages = $this->LoadPageTitles())
 {
 	// filter by letter
-	$requested_letter = (isset($_GET['letter'])) ? $_GET['letter'] : ''; #312 
+	$requested_letter = (isset($_GET['letter'])) ? $_GET['letter'] : ''; # #312
 	if (!$requested_letter && isset($letter))
 	{
 		$requested_letter = strtoupper($letter); // TODO action parameter (letter) needs to be validated and sanitized (make sure it's a single character)
@@ -73,15 +73,15 @@ if ($pages = $this->LoadPageTitles())
 		{
 			$firstChar = '#';
 		}
-		if ($firstChar != $current_character) 
+		if ($firstChar != $current_character)
 		{
 			$alpha_bar .= '<a href="'.$link.$firstChar.'">'.$firstChar.'</a>&nbsp;'."\n";
 			$current_character = $firstChar;
 			$character_changed = TRUE;
 		}
-		if ($requested_letter == '' || $firstChar == $requested_letter) 
+		if ($requested_letter == '' || $firstChar == $requested_letter)
 		{
-			if ($character_changed) 
+			if ($character_changed)
 			{
 				$index_output .= "<br />\n<strong>$firstChar</strong><br />\n";
 				$character_changed = FALSE;
@@ -92,11 +92,11 @@ if ($pages = $this->LoadPageTitles())
 			{
 				$index_output .= "<span class=\"pagetitle\">[".$this->PageTitle($page['tag'])."]</span>";
 			}
-			if ($cached_username == $page_owner) 
+			if ($cached_username == $page_owner)
 			{
 				$index_output .= '*';
 				$user_owns_pages = TRUE;
-			} 
+			}
 			elseif ($page_owner != '(Public)' && $page_owner != '')
 			{
 				$index_output .= sprintf(' . . . . '.WIKKA_PAGE_OWNER, $this->FormatUser($page_owner));
@@ -110,11 +110,11 @@ if ($pages = $this->LoadPageTitles())
 	{
 		$index_caption .= '---'.PAGEINDEX_OWNED_PAGES_CAPTION;
 	}
-	echo $this->Format('===='.PAGEINDEX_HEADING.'==== --- <<'.$index_caption.'<< ::c:: ---'); 
+	echo $this->Format('===='.PAGEINDEX_HEADING.'==== --- <<'.$index_caption.'<< ::c:: ---');
 	echo "\n<strong>".$alpha_bar."</strong><br />\n";
 	echo $index_output;
-} 
-else 
+}
+else
 {
 	echo WIKKA_NO_PAGES_FOUND;
 }

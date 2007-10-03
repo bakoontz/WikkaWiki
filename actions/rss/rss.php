@@ -1,11 +1,11 @@
 <?php
 /**
  * Cache and display an RSS feed.
- * 
+ *
  * Usage:
  *		{{rss http://domain.com/feed.xml}} or
  *		{{rss url="http://domain.com/feed.xml" cachetime="30"}}
- * NOTE 1 : in Onyx-RSS default is "debugMode" which results in all errors being printed
+ * NOTE 1: in Onyx-RSS default is "debugMode" which results in all errors being printed
  * this could be suppressed by turning debug mode off, but then we'd never have a
  * clue about the cause of any error.
  * A better (preliminary) approach seems to be to override the raiseError() method
@@ -13,19 +13,19 @@
  * that way normal display will look clean but you can look at the HTML source to
  * find the cause of any problem.
  * NOTE 2: no solution for timeout problems with non-existing feeds yet...
- * 
+ *
  * @package		Actions
  * @version		$Id$
  * @license		http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
- * 
+ *
  * @input		string	$url	mandatory: URL of the feed
  * @input		integer $cachetime	optional: time in minutes to cache the feed
  * @output		... tbd @@@
  * @uses		Wakka::cleanUrl()
  * @uses		Wakka::ReturnSafeHTML()
  * @todo		internationalization (#i18n marker)
- * @todo		should use makeList to generate the list; 
+ * @todo		should use makeList to generate the list;
  * @todo		maybe better convert to using Magpie first;
  */
 

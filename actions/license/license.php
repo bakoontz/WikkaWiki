@@ -2,7 +2,7 @@
 /**
  * Display the full text of a license.
  *
- * This action displays the full text of a number of licenses. The license type 
+ * This action displays the full text of a number of licenses. The license type
  * can be specified through a $type action parameter.
  *
  * @package		Actions
@@ -10,7 +10,7 @@
  * @author		{@link http://wikkawiki.org/DarTar Dario Taraborelli}
  * @since		Wikka 1.1.7
  * @license		http://www.gnu.org/copyleft/gpl.html GNU General Public License
- * @filesource 
+ * @filesource
  *  *
  * @uses		Wakka::Format()
  *
@@ -61,7 +61,7 @@ switch ($type)
 	case 'LGPL':
 	$license_text = LGPL_FULL_TEXT;
 	break;
-		
+
 	default:
 	case 'GPL':
 	$license_text = GPL_FULL_TEXT;

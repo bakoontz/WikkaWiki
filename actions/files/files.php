@@ -1,24 +1,24 @@
 <?php
 /**
  * Display a form with file attachments to the current page.
- * 
- * This actions displays a form allowing users to download files uploaded to wiki pages. By default only 
+ *
+ * This actions displays a form allowing users to download files uploaded to wiki pages. By default only
  * wiki admins can upload and delete files. If the intranet mode option is enabled, any user with write access
- * to the current page can upload or remove file attachments. If the optional download parameter is set, a simple 
+ * to the current page can upload or remove file attachments. If the optional download parameter is set, a simple
  * download link is displayed for the specified file.
  *
  * Usage: {{files [download="filename"] [text="download link text"]}}
  *
  * @package		Actions
  * @version		$Id:files.php 369 2007-03-01 14:38:59Z DarTar $
- * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
+ * @license		http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
- * 
+ *
  * @author Victor Manuel Varela (original code)
  * @author {@link http://wikkawiki.org/CryDust CryDust} (code overhaul, stylesheet)
  * @author {@link http://wikkawiki.org/DarTar Dario Taraborelli} (code cleanup, defaults, i18n, added intranet mode)
  * @author {@link http://wikkawiki.org/NilsLindenberg Nils Lindenberg} (i18n)
- * 
+ *
  * @input 	string 	$download  	optional: prints a link to the file specified in the string
  * 			string 	$text		optional: a text for the link provided with the download parameter
  * @output	a form for file uploading/downloading and a table with an overview of attached files
@@ -31,7 +31,7 @@
  *
  * @todo security: check file type, not only extension
  * @todo use buttons instead of links for file deletion; #72 comment 7
- * @todo similarly replace download link with POST form button -> files handler 
+ * @todo similarly replace download link with POST form button -> files handler
  * 		 can then use only $_POST instead of $_GET
  * @todo replace $_REQUEST in files handler with $_POST / $_GET; #72, #312
  * @todo replace intranet mode with fine-grained file ownership/ACL;
@@ -40,7 +40,7 @@
  * @todo make datetime format configurable;
  * @todo add support for file versioning;
  * @todo add (AJAX-powered?) confirmation check on file deletion;
- * @todo integrate file table in page template, à la Wacko;
+ * @todo integrate file table in page template, a la Wacko;
  */
 
 //---- Global action settings ----
@@ -56,9 +56,9 @@ if(!defined('INTRANET_MODE')) define('INTRANET_MODE', 0);
 /** Size limit for file uploads (in bites) */
 if(!defined('MAX_UPLOAD_SIZE')) define('MAX_UPLOAD_SIZE', 2097152);
 /** Pipe-separated list of allowed file extensions */
-if(!defined('ALLOWED_FILE_EXTENSIONS')) define('ALLOWED_FILE_EXTENSIONS', 'gif|jpeg|jpg|jpe|png|doc|xls|csv|ppt|ppz|pps|pot|pdf|asc|txt|zip|gtar|gz|bz2|tar|rar|vpp|mpp|vsd|mm|htm|html'); #34
+if(!defined('ALLOWED_FILE_EXTENSIONS')) define('ALLOWED_FILE_EXTENSIONS', 'gif|jpeg|jpg|jpe|png|doc|xls|csv|ppt|ppz|pps|pot|pdf|asc|txt|zip|gtar|gz|bz2|tar|rar|vpp|mpp|vsd|mm|htm|html'); # #34
 /** Displayed date format */
-if(!defined('UPLOAD_DATE_FORMAT')) define('UPLOAD_DATE_FORMAT', 'Y-m-d H:i'); //TODO use general config settings for date format 
+if(!defined('UPLOAD_DATE_FORMAT')) define('UPLOAD_DATE_FORMAT', 'Y-m-d H:i'); //TODO use general config settings for date format
 /** Sort routines */
 if(!defined('SORT_BY_FILENAME')) define('SORT_BY_FILENAME', 'filename');
 if(!defined('SORT_BY_DATE')) define('SORT_BY_DATE', 'date');
@@ -92,7 +92,7 @@ if (!function_exists('userCanUpload'))
 	function userCanUpload()
 	{
 		global $wakka;
-		switch(TRUE) 
+		switch(TRUE)
 		{
 			case ($wakka->IsAdmin()):
 			case (INTRANET_MODE && $wakka->HasAccess('write')):
@@ -112,11 +112,11 @@ if (!function_exists('mkdir_r'))
 {
 	function mkdir_r ($dir)
 	{
-		if (strlen($dir) == 0) 
+		if (strlen($dir) == 0)
 		{
 			return 0;
 		}
-		if (is_dir($dir)) 
+		if (is_dir($dir))
 		{
 			return 1;
 		}
@@ -169,7 +169,7 @@ if ($this->GetConfigValue('upload_path') == '')
 {
 	$this->SetConfigValue('upload_path','files');
 }
-$upload_path = $this->GetConfigValue('upload_path').DIRECTORY_SEPARATOR.$this->tag; #89
+$upload_path = $this->GetConfigValue('upload_path').DIRECTORY_SEPARATOR.$this->tag; # #89
 
 // 1. check if main upload path is writable
 if (!is_writable($this->GetConfigValue('upload_path')))
@@ -184,7 +184,7 @@ else
 // 2. print a simple download link for the specified file, if it exists
 if (isset($vars['download']))
 {
-	if (file_exists($upload_path.DIRECTORY_SEPARATOR.$vars['download'])) #89
+	if (file_exists($upload_path.DIRECTORY_SEPARATOR.$vars['download'])) # #89
 	{
 		if (!isset($vars['text']))
 		{
@@ -219,7 +219,7 @@ elseif ($this->page && $this->HasAccess('read') && $this->handler == 'show' && $
 
 	// get upload results
 	#if ($is_writable && isset($_POST['action']) && $_POST['action'] == 'upload' && userCanUpload()) #38
-	if ($is_writable && isset($_POST['upload']) && $_POST['upload'] == 'Upload' && userCanUpload()) #38 #i18n
+	if ($is_writable && isset($_POST['upload']) && $_POST['upload'] == 'Upload' && userCanUpload()) # #38 #i18n
 	{
 		switch ($_FILES['file']['error'])
 		{
@@ -260,7 +260,7 @@ elseif ($this->page && $this->HasAccess('read') && $this->handler == 'show' && $
 				break;
 			case UPLOAD_ERR_INI_SIZE:
 			case UPLOAD_ERR_FORM_SIZE:
-				$error_msg = sprintf(ERROR_FILE_TOO_BIG, bytesToHumanReadableUsage($max_upload_size)); 
+				$error_msg = sprintf(ERROR_FILE_TOO_BIG, bytesToHumanReadableUsage($max_upload_size));
 				break;
 			case UPLOAD_ERR_PARTIAL:
 				$error_msg = ERROR_FILE_UPLOAD_INCOMPLETE;
@@ -283,7 +283,7 @@ elseif ($this->page && $this->HasAccess('read') && $this->handler == 'show' && $
 
 // 4. display attached files table
 if (is_readable($upload_path))
-{ 
+{
 	$is_readable = TRUE;
 	$dir = opendir($upload_path);
 	$n = 0;
@@ -312,15 +312,15 @@ if (is_readable($upload_path))
 	{
 		$sortby = $_GET['sortby'];
 	}
-	switch($sortby) 
+	switch($sortby)
 	{
-		case SORT_BY_DATE : 
+		case SORT_BY_DATE :
 			array_multisort($dateArr, SORT_ASC, SORT_NUMERIC, $filenameArr, $sizeArr);
 			break;
-		case SORT_BY_SIZE : 
+		case SORT_BY_SIZE :
 			array_multisort($sizeArr, SORT_ASC, SORT_NUMERIC, $filenameArr, $dateArr);
 			break;
-		case SORT_BY_FILENAME: 
+		case SORT_BY_FILENAME:
 		default:
 			array_multisort($filenameArr, SORT_ASC, SORT_STRING, $dateArr, $sizeArr);
 	}
@@ -342,8 +342,8 @@ if (is_readable($upload_path))
 		}
 		$download_link = '<a href="' .$this->Href('files.xml',$this->tag,'action=download&amp;file='.rawurlencode($file))
 			.'" title="'.sprintf(DOWNLOAD_LINK_TITLE, $file).'">'.urldecode($file).'</a>';
-		$size = bytesToHumanReadableUsage($filesize); #89
-		$date = date(UPLOAD_DATE_FORMAT, $filedate); #89
+		$size = bytesToHumanReadableUsage($filesize); # #89
+		$date = date(UPLOAD_DATE_FORMAT, $filedate); # #89
 
 		$output_files .= '<tr>'."\n";
 		if (userCanUpload())
@@ -382,7 +382,7 @@ if (is_readable($upload_path))
 // cannot read the folder contents
 else
 {
-	echo '<div class="alertbox">'.sprintf(ERROR_UPLOAD_DIRECTORY_NOT_READABLE, '<tt>'.$upload_path.'</tt>').'</div>'; #89
+	echo '<div class="alertbox">'.sprintf(ERROR_UPLOAD_DIRECTORY_NOT_READABLE, '<tt>'.$upload_path.'</tt>').'</div>'; # #89
 
 }
 

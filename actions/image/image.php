@@ -1,12 +1,12 @@
-<?php
+﻿<?php
 /**
  * Display an image.
- * 
+ *
  * @package		Actions
  * @version		$Id$
- * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
+ * @license		http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
- * 
+ *
  * @uses	Wakka::Link()
  * @uses	Wakka::ReturnSafeHTML()
  * @uses	Wakka::htmlspecialchars_ent()
@@ -28,13 +28,13 @@ $alt = 'image';			// @@@ don't generate a meaningless alt text: invalid!
 
 if (is_array($vars))
 {
-    foreach ($vars as $param => $value)
-    {
-    	if ($param == 'src' and $vars['url'] == '') {$vars['url']=$value;}
-    	if ($param == 'title') {$title = $this->htmlspecialchars_ent($vars['title']);}
-    	if ($param == 'class') {$class = $this->htmlspecialchars_ent($vars['class']);}
-    	if ($param == 'alt') {$alt = $this->htmlspecialchars_ent($vars['alt']);}
-    	if ($param == 'link') {$link = $this->htmlspecialchars_ent($vars['link']);}
+	foreach ($vars as $param => $value)
+	{
+		if ($param == 'src' and $vars['url'] == '') {$vars['url']=$value;}
+		if ($param == 'title') {$title = $this->htmlspecialchars_ent($vars['title']);}
+		if ($param == 'class') {$class = $this->htmlspecialchars_ent($vars['class']);}
+		if ($param == 'alt') {$alt = $this->htmlspecialchars_ent($vars['alt']);}
+		if ($param == 'link') {$link = $this->htmlspecialchars_ent($vars['link']);}
 	}
 }
 $url = $this->StaticHref($this->cleanUrl(trim($vars['url'])));

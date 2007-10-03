@@ -1,12 +1,12 @@
 <?php
 /**
  * Print information on the current release.
- * 
- * @package	Actions
- * @version $Id$
- * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
+ *
+ * @package		Actions
+ * @version		$Id$
+ * @license		http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
- * 
+ *
  * @uses	Wakka::Format()
  * @todo	should be a default page, not an action
  */

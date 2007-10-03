@@ -1,10 +1,10 @@
-<?php
+﻿<?php
 /**
  * Display a box with information on the last edit.
  *
  * @package		Actions
  * @version		$Id:lastedit.php 369 2007-03-01 14:38:59Z DarTar $
- * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
+ * @license		http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
  *
  * @author		{@link http://wikkawiki.org/DarTar Dario Taraborelli} (first draft)
@@ -24,7 +24,7 @@
  * @uses	Wakka::Href()
  * @uses	Wakka::htmlspecialchars_ent()
  * @uses	Wakka::FormatUser()
- * 
+ *
  * @todo		make date/time format system-configurable;
  */
 /**
@@ -39,12 +39,12 @@ define('TIME_FORMAT', 'H:i T'); #TODO make this system-configurable
 define('LASTEDIT_BOX', 'lastedit');
 define('LASTEDIT_NOTES', 'lastedit_notes');
 
-if (!isset($show)) 
+if (!isset($show))
 {
 	$show = DEFAULT_SHOW;
 }
 
-if ($this->handler == 'show') 
+if ($this->handler == 'show')
 {
 	$page = $this->page;
 	$pagetag = $page['tag'];
@@ -67,7 +67,7 @@ if ($this->handler == 'show')
 		$note = ($page['note']) ? ':<br/><span class="'.LASTEDIT_NOTES.'">'.
 		$this->htmlspecialchars_ent($page['note']).'</span>' : '';
 
-		default:	
+		default:
 	}
 	echo '<div class="'.LASTEDIT_BOX.'">'.sprintf(LASTEDIT_DESC, $user).$note.'<br /> '.$dateformatted.' '.$timeformatted.$difflink.'</div>';
 }

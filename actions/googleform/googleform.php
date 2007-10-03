@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /**
  * Display a searchbox for searching google.
  *
@@ -36,9 +36,9 @@
 $query = '';
 
 // *** param section ***
-if (is_array($vars)) 
+if (is_array($vars))
 {
-	foreach ($vars as $param => $value) 
+	foreach ($vars as $param => $value)
 	{
 		if ($param == 'q')
 		{
@@ -60,6 +60,6 @@ $query = $this->htmlspecialchars_ent($query);
 // *** output section *** @@@
 ?>
 <form action="http://www.google.com/search" method="get" target="_blank">
-	<input type="text" value="<?php echo $query; ?>" name="q" size="30" maxlength="2048" class="WBselectonfocus" /> 
+	<input type="text" value="<?php echo $query; ?>" name="q" size="30" maxlength="2048" class="WBselectonfocus" />
 	<input name="btnG" type="submit" value="<?php echo GOOGLE_BUTTON;?>" />
 <?php echo $this->FormClose(); ?>

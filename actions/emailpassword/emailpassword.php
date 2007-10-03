@@ -1,22 +1,22 @@
-<?php
-/** 
+﻿<?php
+/**
  * Send the user a reminder with the md5 checksum of his or her password via email.
- * 
+ *
  * @package		Actions
  * @version		$Id:emailpassword.php 369 2007-03-01 14:38:59Z DarTar $
- * @license http://comawiki.martignier.net/LizenzenUndBedingungen
- * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
+ * @license		http://comawiki.martignier.net/LizenzenUndBedingungen
+ * @license		http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
- *  
+ *
  * @author	{@link http://comawiki.martignier.net Costal Martignier} initial action
  * @author	{@link http://wikkawiki.org/NilsLindenberg Nils Lindenberg} rewritten
  * @author	{@link http://wikkawiki.org/DarTar Dario Taraborelli} further cleanup, error styling and improved logical structure
- * 
+ *
  * @uses	Wakka::Format()
  * @uses	Wakka::loadUserData()
  * @uses	Wakka::FormOpen()
  * @uses	Wakka::FormClose()
- */ 
+ */
 
 /**
  * Class attribute to enable styling as error.
@@ -39,7 +39,7 @@ if (isset($_POST['wikiname'])) // get posted values
 	$input = $_POST['wikiname'];
 	#$user = $this->LoadUser($input);
 	$user = $this->loadUserData($input);
-	
+
 	switch(TRUE)
 	{
 		case ($input == ''): // empty user
@@ -62,7 +62,7 @@ if (isset($_POST['wikiname'])) // get posted values
 				$usersettings_wlink = '[[UserSettings '.WIKKA_LOGIN_LINK_DESC.']]';
 				$output .= $this->Format(sprintf(USERSETTINGS_REF,$usersettings_wlink));
 			}
-			else 
+			else
 			{
 				$output .= '<em class="error">'.ERROR_MAIL_NOT_SENT.'</em><br />'."\n";
 			}
@@ -80,7 +80,7 @@ if (!$mailsent)
 	$output .= '<input '.$highlight.' type="text" name="wikiname" value="" />'."\n";
 	$output .= '<input type="submit" value="'.BUTTON_SEND_PW.'" />'."\n";
 	$output .= '</fieldset>'."\n";
-	$output .= $this->FormClose();   
+	$output .= $this->FormClose();
 }
 
 // *** output section ***

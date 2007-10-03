@@ -1,12 +1,12 @@
 <?php
-/**  
+/**
  * Search wiki pages for a phrase.
- * 
+ *
  * @package	Actions
  * @version $Id$
  * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
- * 
+ *
  * @uses	Wakka::FormClose()
  * @uses	Wakka::FormOpen()
  * @uses	Wakka::FullTextSearch()
@@ -14,11 +14,11 @@
  * @uses	Wakka::HasAccess()
  * @uses	Wakka::CheckMySQLVersion()
  * @uses	Wakka::htmlspecialchars_ent()
- * 
- * @todo	[accesibility] make form accessible 
+ *
+ * @todo	[accesibility] make form accessible
  * @todo	replace $_REQUEST with either $_GET or $_POST (or both if really
- * 			necessary) - #312  
- * @todo	i18n search button text  
+ * 			necessary) - #312
+ * @todo	i18n search button text
  */
 
 // init
@@ -30,7 +30,7 @@ $phrase_disp = $this->htmlspecialchars_ent($phrase);
 
 // display form
 // TODO i18n
-?>		
+?>
 <?php echo $this->FormOpen('', '', 'get'); ?>
 <fieldset><legend><?php echo SEARCH_FOR; ?></legend>
 <input name="phrase" size="40" value="<?php echo $phrase_disp ?>" /> <input type="submit" value="Search"/>
@@ -38,16 +38,16 @@ $phrase_disp = $this->htmlspecialchars_ent($phrase);
 <?php echo $this->FormClose(); ?>
 
 <?php
-// strange construct here 
+// strange construct here
 // also inconsistent behavior:
 // if 'phrase' is empty, search tips would be displayed
 // if 'phrase' is empty after trimming and removing slashes, search tips NOT displayed
 
-// process search request  
+// process search request
 #if (isset($_REQUEST['phrase']) && ($phrase = $_REQUEST['phrase']))
 if ('' !== $phrase)
 {
-	#$phrase_re = stripslashes(trim($phrase)); 
+	#$phrase_re = stripslashes(trim($phrase));
 	#if (!$phrase_re) return;
 	#$results = $this->FullTextSearch($phrase_re);
 	$results = $this->FullTextSearch($phrase);
@@ -89,7 +89,7 @@ if ('' !== $phrase)
 // display search tips
 #if ($this->CheckMySQLVersion(4,00,01))	// DONE replace with version_compare
 if ($this->CheckMySQLVersion('4.00.01'))
-{	
+{
 	// define variables for template
 	$search_tips     = SEARCH_TIPS;
 	$search_word_1   = SEARCH_WORD_1;

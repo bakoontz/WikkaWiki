@@ -1,14 +1,14 @@
 <?php
 /**
  * Display the number and percentage of pages owned by the current user.
- * 
- * @package Actions
+ *
+ * @package	Actions
  * @version	$Id$
- * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
+ * @license	http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
- * 
+ *
  * @author	{@link http://web.archive.org/web/20040820215257/http://www.wakkawiki.com/ChrisTessmer Chris Tessmer}
- * 
+ *
  * @uses	Wakka::reg_username
  * @uses	Wakka::existsUser()
  * @uses	Wakka::getCount()

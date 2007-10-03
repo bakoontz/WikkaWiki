@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /**
 * Render a string as colored text.
 *
@@ -48,7 +48,7 @@ if (!function_exists('color_syntax_is_valid'))
 	{
 		if (!defined ('PATTERN_VALID_HEX_COLOR')) define('PATTERN_VALID_HEX_COLOR', '#(?>[\da-f]{3}){1,2}');
 		if (!defined ('PATTERN_VALID_RGB_COLOR')) define('PATTERN_VALID_RGB_COLOR', 'rgb\(\s*\d+((?>\.\d*)?%)?\s*(?>,\s*\d+(?(1)(\.\d*)?%)\s*){2}\)');
-		$htlm_color_names = array('aliceblue', 'antiquewhite', 'aqua', 'aquamarine', 'azure', 'beige', 'bisque', 'black', 'blanchedalmond', 'blue',
+		$html_color_names = array('aliceblue', 'antiquewhite', 'aqua', 'aquamarine', 'azure', 'beige', 'bisque', 'black', 'blanchedalmond', 'blue',
 		'blueviolet', 'brown', 'burlywood', 'cadetblue', 'chartreuse', 'chocolate', 'coral', 'cornflower', 'cornsilk', 'crimson', 'cyan',
 		'darkblue', 'darkcyan', 'darkgoldenrod', 'darkgray', 'darkgreen', 'darkkhaki', 'darkmagenta', 'darkolivegreen', 'darkorange', 'darkorchid',
 		'darkred', 'darksalmon', 'darkseagreen', 'darkslateblue', 'darkslategray', 'darkturquoise', 'darkviolet', 'deeppink', 'deepskyblue',
@@ -66,7 +66,7 @@ if (!function_exists('color_syntax_is_valid'))
 		'inactiveborder', 'inactivecaption', 'inactivecaptiontext', 'infobackground', 'infotext', 'menu', 'menutext', 'scrollbar',
 		'threeddarkshadow', 'threedface', 'threedhighlight', 'threedlightshadow', 'threedshadow', 'window', 'windowframe', 'windowtext');
 		$syntax = trim(strtolower($syntax));
-		if (in_array($syntax, $htlm_color_names))
+		if (in_array($syntax, $html_color_names))
 		{
 			return($syntax);
 		}
@@ -86,7 +86,7 @@ $output = '';
 // *** User input section ***
 if (is_array($vars))
 {
-	foreach ($vars as $param => $value) 
+	foreach ($vars as $param => $value)
 	{
 		if ($param == 'text')
 		{

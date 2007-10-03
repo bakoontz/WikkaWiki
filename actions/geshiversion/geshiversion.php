@@ -1,10 +1,10 @@
-<?php
+﻿<?php
 /**
  * Display current GeSHi version.
  *
  * @package		Actions
  * @version		$Id$
- * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
+ * @license		http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
  *
  * @author		{@link http://wikkawiki.org/DarTar Dario Taraborelli}

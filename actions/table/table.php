@@ -1,14 +1,14 @@
 <?php
 /**
  * Display a data table.
- * 
- * @package	Actions
- * @version $Id$
- * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
+ *
+ * @package		Actions
+ * @version		$Id$
+ * @license		http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
  *
  * @input	string $cells mandatory: string with all cells, separated by ';' and '###' for empty cells
- * @input	integer $cellpadding optional: padding within cells in pixels; default: 1 
+ * @input	integer $cellpadding optional: padding within cells in pixels; default: 1
  * @input	string $style optional: in-line style for the table.
  * @input	integer $columns optional: 	number of columns for the table; default: 1
  * @uses	Wakka::ReturnSafeHTML()
@@ -29,13 +29,13 @@ if (is_array($vars))
 {
 	foreach ($vars as $param => $value)
 	{
-		if ($param == 'style') {$style=$value;}   
-		if ($param == 'columns') {$columns=$value;}	
+		if ($param == 'style') {$style=$value;}
+		if ($param == 'columns') {$columns=$value;}
 		if ($param == 'cellpadding')
 		{
-			$cellpadding=$value;
-			$border=$value;
-		}             
+			$cellpadding = $value;
+			$border = $value;
+		}
 		if ($param == 'cells') $cells = split($delimiter, $value);
 	}
 	$cached_output = '<table class="wikka" cellpadding="'.$cellpadding.'" cellspacing="'.$cellspacing.'" border="'.$border.'" style="'.$style."\">\n";
@@ -52,7 +52,7 @@ if (is_array($vars))
 		}
 	}
 	$cached_output .= "</table>";
-	echo $this->ReturnSafeHTML($cached_output);	
+	echo $this->ReturnSafeHTML($cached_output);
 }
 
 ?>

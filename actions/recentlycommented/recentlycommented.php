@@ -6,7 +6,7 @@
  * @version		$Id$
  * @license		http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
- * 
+ *
  * @author		{@link http://wikkawiki.org/DarTar Dario Taraborelli} (preliminary code cleanup, ACL check)
  *
  * @uses	Wakka::Format()
@@ -14,7 +14,7 @@
  * @uses	Wakka::LoadRecentlyCommented()
  * @uses	Wakka::HasAccess()
  * @uses	Wakka::FormatUser()
- * 
+ *
  * @todo	make datetime format configurable;
  */
 

@@ -2,9 +2,9 @@
 /**
  * Display a list of nonexisting pages to which other pages are linking to.
  *
- * <p>This action lists all pagenames that don't exist but are referred to by other pages on the wiki. By default, the 
+ * <p>This action lists all pagenames that don't exist but are referred to by other pages on the wiki. By default, the
  * WikkaInstaller creates a page named WantedPages that uses this action.</p>
- * <p>Those non-existing pages are listed as one line per wanted pages. Each line is composed of 2 parts : The name of 
+ * <p>Those non-existing pages are listed as one line per wanted pages. Each line is composed of 2 parts : The name of
  * the wanted page in a form of a link: Clicking on this link will let you create the page and start editing its content.
  * Then in brackets, you see the number of pages linking to the wanted page. This number is also in a form of a link:
  * clicking on it will let you see all the pages linking to the wanted page, using the {@link backlinks.php backlinks}
@@ -44,7 +44,7 @@ if ((isset($vars) && is_array($vars) && isset($vars['option']) && $vars['option'
 		{
 			if (in_array($_GET['ob'.$i], $sorting_fields))
 			{
-				if ($sort) 
+				if ($sort)
 				{
 					$sort .= ',';
 				}

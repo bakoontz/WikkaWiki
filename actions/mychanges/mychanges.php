@@ -1,18 +1,18 @@
-<?php
+﻿<?php
 /**
  * Display a list of pages edited by the current user.
- * 
- * If the current user is logged-in and has edited at least one page, a list of pages edited by the current user 
+ *
+ * If the current user is logged-in and has edited at least one page, a list of pages edited by the current user
  * is displayed, ordered alphabetically or by date and time (last edit first).
- * 
+ *
  * @package		Actions
  * @version		$Id:mychanges.php 369 2007-03-01 14:38:59Z DarTar $
  * @license		http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
- * 
+ *
  * @author	{@link http://web.archive.org/web/20040616194824/http://www.wakkawiki.com/CarloZottmann Carlo Zottmann}
  * @author	{@link http://wikkawiki.org/NilsLindenberg Nils Lindenberg} (rewrite, i18n)
- * 
+ *
  * @uses	Wakka::existsUser()
  * @uses	Wakka::GetUserName()
  * @uses	Wakka::GetPageTag()
@@ -59,13 +59,13 @@ if ($this->existsUser())
 		WHERE user = '".mysql_real_escape_string($this->reg_username)."'
 			AND latest = 'Y'
 		ORDER BY ".$order;
-	
+
 	if ($pages = $this->LoadAll($query))
 	{
 		$current = '';
-		
+
 		// build the list of pages
-		foreach ($pages as $page) 
+		foreach ($pages as $page)
 		{
 			// order alphabetically
 			if ($alpha)
@@ -76,7 +76,7 @@ if ($this->existsUser())
 					$firstChar = "#";
 				}
 
-				if ($firstChar != $current) 
+				if ($firstChar != $current)
 				{
 					if ($current) $output .= "<br />\n";
 					$output .= '<strong>'.$firstChar."</strong><br />\n";

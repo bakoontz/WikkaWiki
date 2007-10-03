@@ -1,7 +1,7 @@
-<?php
+﻿<?php
 /**
  * Embed a Flash object in a wiki page.
- * 
+ *
  * Example: {{flash url="http://example.com/example.swf" [width=x] [height=x]}}
  *
  * @package 	Actions
@@ -9,7 +9,7 @@
  * @version		$Id$
  * @license		http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
- * 
+ *
  * @uses		Wakka::cleanUrl()
  * @uses		Wakka::StaticHref()
  *

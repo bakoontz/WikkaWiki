@@ -15,7 +15,7 @@
  * Credit:
  * This action was inspired mainly by the "Calendar Menu" code written by
  * {@link http://www.blazonry.com/about.php Marcus Kazmierczak}
- * (© 1998-2002 Astonish Inc.) which we traced back as being the ultimate origin of this code
+ * (Â© 1998-2002 Astonish Inc.) which we traced back as being the ultimate origin of this code
  * although our starting point was actually a (probably second-hand) variant found on the web which
  * did not contain any attribution.
  * However, not much of the original code is left in this version. Nevertheless, credit to
