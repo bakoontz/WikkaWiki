@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /**
  * The Wikka mainscript.
  *
@@ -79,7 +79,7 @@ else
 	}
 	else
 	{
-		error_reporting (E_ALL ^ E_NOTICE);	// production mode
+		error_reporting(E_ALL ^ E_NOTICE);	// production mode
 	}
 }
 // -------------------- END DEBUGGING AND ERROR REPORTING ---------------------
@@ -218,15 +218,15 @@ if ($debug) echo "default 3rd-party component paths...<br/>\n";
   Although these paths are configurable, we use defined constants here for three
   reasons:
   1. Like a core path, these represent paths to components that might be
-     shared between installations, so we use the same override mechanism here.
+	 shared between installations, so we use the same override mechanism here.
   2. While the paths are configurable, the defaults defined here can be overridden
-     <i>before</i> they get to the configuration file (and seen by the installer),
-     so they effectively become the defaults used during the installation process.
-     This enhances consistency between "sister" installations.
+	 <i>before</i> they get to the configuration file (and seen by the installer),
+	 so they effectively become the defaults used during the installation process.
+	 This enhances consistency between "sister" installations.
   3. A (filesystem) file or directory path needs to take the local directory
-     separator into account but in PHP4 a class variable (as used in the default
-     configuration file) can only be initialized with a literal or a constant,
-     not a concatenation.
+	 separator into account but in PHP4 a class variable (as used in the default
+	 configuration file) can only be initialized with a literal or a constant,
+	 not a concatenation.
 */
 
 /**#@+
@@ -355,7 +355,7 @@ if (!defined('CONFIG_TEMPLATE_PATH')) define('CONFIG_TEMPLATE_PATH',
 	(defined('LOCAL_TEMPLATE_PATH') && ($canon_path = validLocalPath(LOCAL_TEMPLATE_PATH, 'dir')))
 		? $canon_path
 		: DEFAULT_TEMPLATE_PATH
-	);	
+	);
 /**
  * Effective (configurable) <b>directory</b> for 3rd-party components; these components
  * are required for basic Wikka functionality.
@@ -757,11 +757,11 @@ if ($wakkaConfig['wakka_version'] !== WAKKA_VERSION)
 if ($debug) echo 'site configuration file (to be) lodated at: '.SITE_CONFIGFILE."<br/>\n";
 	$htaccessLocation = str_replace('\\', '/', dirname(__FILE__)).DIRECTORY_SEPARATOR.'.htaccess';
 	#if (file_exists('setup'.DIRECTORY_SEPARATOR.'index.php'))	#89
-	if (file_exists(WIKKA_SETUP_PATH.DIRECTORY_SEPARATOR.'index.php'))	#89
+	if (file_exists(WIKKA_SETUP_PATH.DIRECTORY_SEPARATOR.'index.php'))	# #89
 	{
 		// run the installer
 		#include 'setup'.DIRECTORY_SEPARATOR.'index.php';		#89
-		include WIKKA_SETUP_PATH.DIRECTORY_SEPARATOR.'index.php';		#89
+		include WIKKA_SETUP_PATH.DIRECTORY_SEPARATOR.'index.php';		# #89
 		return;				// prevent "fall-through"
 	}
 	else
@@ -813,7 +813,7 @@ $wikka_cookie_path = substr($base_url_path,0,-1);
 // 2. start session
 session_name(md5(BASIC_SESSION_NAME.$wakkaConfig['wiki_suffix']));
 session_set_cookie_params(0, $wikka_cookie_path);	// default path is '/' - we don't want that! this call overrides php.ini settings
-session_cache_limiter(''); #279
+session_cache_limiter(''); # #279
 session_start();
 
 /**
@@ -822,7 +822,7 @@ session_start();
  * @todo files action uses POST, everything else uses GET #312
  * @todo use different name - $wakka clashes with $wakka object (which should be #Wakka)
  */
-$wakka_request = $_GET['wakka']; #312
+$wakka_request = $_GET['wakka']; # #312
 
 /**
  * Remove leading slash.
@@ -854,7 +854,7 @@ else if (preg_match("#^(.*)$#", $wakka_request, $matches))
 }
 
 //Fix lowercase mod_rewrite bug: URL rewriting makes pagename lowercase. #135
-if ((strtolower($page) == $page) && (isset($_SERVER['REQUEST_URI']))) #38
+if ((strtolower($page) == $page) && (isset($_SERVER['REQUEST_URI']))) # #38
 {
 	$pattern = preg_quote($page, '/');
 	if (preg_match('/('.$pattern.')/i', urldecode($_SERVER['REQUEST_URI']), $match_url))
@@ -955,7 +955,7 @@ $content =  ob_get_contents();				// pick up contents of buffer
  */
 if (isset($_SERVER['HTTP_ACCEPT_ENCODING']) &&
 	strstr($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip') &&
-	function_exists('gzencode') #38
+	function_exists('gzencode') # #38
    )
 {
 	// Tell the browser the content is compressed with gzip
@@ -973,7 +973,7 @@ $etag = md5($content);
 header('ETag: '.$etag);		// @@@ should not contain footer with page generation time!
 
 if (!isset($wakka->do_not_send_anticaching_headers) ||
-	(!$wakka->do_not_send_anticaching_headers) #279
+	(!$wakka->do_not_send_anticaching_headers) # #279
    )
 {
 	header('Expires: Thu, 19 Nov 1981 08:52:00 GMT');
