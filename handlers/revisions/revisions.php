@@ -8,12 +8,12 @@
  * deletions nor any content of the page. The date of modification is linked to the version of the
  * page at that revision.</p>
  * <p>The user can also pick two revisions from the list and compare them by passing their id's to the
- * {@link diff.php diff handler}. Two kinds of diffs are proposed: the normal diff and the simple 
+ * {@link diff.php diff handler}. Two kinds of diffs are proposed: the normal diff and the simple
  * diff. This is done by choosing revisions using the checkboxes and by clicking the button <kbd>
  * Show Differences</kbd>.
  * The maximum number of revisions shown is configured through the user preference or at the
  * wikka configuration. See {@link Wakka::LoadRevisions()}. If the page has more revisions than this
- * configured value, a button <kbd>Next ...</kbd> will appear to allow viewing more revisions. The 
+ * configured value, a button <kbd>Next ...</kbd> will appear to allow viewing more revisions. The
  * revision marked at the left column will appear at the top of the next page, this will let the user
  * compare any revision of the current page with another revision on the next (or later) page.</p>
  *
@@ -38,7 +38,7 @@
 
 $start = 0;
 
-if ($this->HasAccess('read')) 
+if ($this->HasAccess('read'))
 {
 	if (isset($_GET['start']))
 	{
@@ -59,7 +59,7 @@ if ($this->HasAccess('read'))
 	{
 		$output  = $this->FormOpen('diff', '', 'get');
 		$output .= "<fieldset>\n";
-		$output .= "<legend>".sprintf(REVISIONS_CAPTION, $this->Link($this->tag))."</legend>"."\n";		
+		$output .= "<legend>".sprintf(REVISIONS_CAPTION, $this->Link($this->tag))."</legend>"."\n";
 		$output .= '<table border="0" cellspacing="0" cellpadding="1">'."\n";
 		$output .= "<tr>\n";
 		$output .= '<td><input type="submit" value="'.REVISIONS_SHOW_DIFFERENCES_BUTTON.'" /></td>';
@@ -107,8 +107,8 @@ if ($this->HasAccess('read'))
 	echo '<div class="page">'."\n";
 	echo $output;
 	echo '</div>'."\n";
-} 
-else 
+}
+else
 {
 	echo '<div class="page">'."\n";
 	echo '<em class="error">'.WIKKA_ERROR_ACL_READ.'</em>'."\n";

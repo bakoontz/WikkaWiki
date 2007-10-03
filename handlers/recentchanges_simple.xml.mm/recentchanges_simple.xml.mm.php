@@ -1,15 +1,15 @@
 <?php
 /**
  * Show a simple mindmap of recent changes in the wiki as an XML File.
- * 
+ *
  * Only the date and the page of the change are shown.
- * 
+ *
  * @package		Handlers
  * @subpackage	Mindmaps
  * @version		$Id:recentchanges_simple.xml.mm.php 407 2007-03-13 05:59:51Z DarTar $
  * @license		http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
- * 
+ *
  * @uses	in_iarray()
  * @uses	Wakka::Href()
  * @uses	Wakka::LoadRecentlyChanged()
@@ -22,16 +22,16 @@ header('Content-type: text/xml');
 
 /**
  * Checks if an item is contained in an array (case insensitive).
- * 
+ *
  * @name	in_iarray()
  * @return	TRUE or FALSE
  */
-function in_iarray($item, $array) 
+function in_iarray($item, $array)
 {
 	$item = &strtoupper($item);
-	foreach ($array as $element) 
+	foreach ($array as $element)
 	{
-		if ($item == strtoupper($element)) 
+		if ($item == strtoupper($element))
 		{
 			return TRUE;
 		}
@@ -54,7 +54,7 @@ if ($pages = $this->LoadRecentlyChanged())
 	//} else {
 	//	$max = 50;
 	//}
-	
+
 	$c = 0;
 	foreach ($pages as $page)
 	{
@@ -74,7 +74,7 @@ if ($pages = $this->LoadRecentlyChanged())
 			$xml .= '<node TEXT="'.$page['tag'].'">'."\n";
 			// $xml .= "<arrowlink ENDARROW=\"Default\" DESTINATION=\"Freemind_Link_".$page["user"]."\" STARTARROW=\"None\"/>\n";
 			$xml .= "</node>\n";
-			if (isset($users[$page['user']]) && (is_array($users[$page['user']]))) 
+			if (isset($users[$page['user']]) && (is_array($users[$page['user']])))
 			{
 				$u_count = count($users[$page['user']]);
 				$users[$page['user']][$u_count] = $page['tag'];

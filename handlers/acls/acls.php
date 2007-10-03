@@ -48,7 +48,7 @@ if ($this->UserIsOwner())
 		// or if the posted values are different than the defaults
 
 		$page = $this->LoadSingle("
-			SELECT * 
+			SELECT *
 			FROM ".$this->GetConfigValue('table_prefix')."acls
 			WHERE page_tag = '".mysql_real_escape_string($this->GetPageTag())."'
 			LIMIT 1"

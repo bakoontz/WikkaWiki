@@ -1,17 +1,17 @@
 <?php
 /**
  * Show a mindmap of the recent changes in the wiki as an XML File.
- * 
+ *
  * @package		Handlers
  * @subpackage	Mindmaps
  * @version		$Id:recentchanges.xml.mm.php 407 2007-03-13 05:59:51Z DarTar $
  * @license		http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
- * 
+ *
  * @uses	Wakka::Href()
  * @uses	Wakka::htmlspecialchars_ent()
  * @uses	Wakka::LoadRecentlyChanged()
- * 
+ *
  * @todo	i18n
  * @todo	replace numbers by constants: no "magic numbers"!)
  */
@@ -33,7 +33,7 @@ if ($pages = $this->LoadRecentlyChanged())
 	//} else {
 	//	$max = 50;
 	//}
-	
+
 	$c = 0;
 	foreach ($pages as $page)
 	{
@@ -57,7 +57,7 @@ if ($pages = $this->LoadRecentlyChanged())
 			$pagelink = $this->wikka_url.urlencode($page['tag']);
 			$xml .= '<node LINK="'.$pagelink.'" TEXT="'.$pagetag.'" FOLDED="true">'."\n";
 			$timeformatted = date('H:i T', strtotime($page['time']));
-			$xml .= '<node LINK="'.$pagelink.'/revisions" TEXT="Revision time: '.$timeformatted.'"/>'."\n";	#i18n
+			$xml .= '<node LINK="'.$pagelink.'/revisions" TEXT="Revision time: '.$timeformatted.'"/>'."\n";	# i18n
 			if ($pagenote = $this->htmlspecialchars_ent($page['note'],ENT_COMPAT,'XML'))
 			{
 				$xml .= '<node TEXT="'.$pageuser.': '.$pagenote.'"/>'."\n";
@@ -67,7 +67,7 @@ if ($pages = $this->LoadRecentlyChanged())
 				$xml .= '<node TEXT="Author: '.$pageuser.'"/>'."\n";	#i18n
 			}
 
-			$xml .= '<node LINK="'.$pagelink.'/history" TEXT="View History"/>'."\n";	#i18n
+			$xml .= '<node LINK="'.$pagelink.'/history" TEXT="View History"/>'."\n";	# i18n
 			$xml .= "</node>\n";
 			// $xml .= "<arrowlink ENDARROW=\"Default\" DESTINATION=\"Freemind_Link_".$page["user"]."\" STARTARROW=\"None\"/>\n";
 			if (isset($users[$pageuser]) && (is_array($users[$pageuser])))

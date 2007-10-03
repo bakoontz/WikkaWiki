@@ -1,13 +1,13 @@
 <?php
 /**
  * Generate a RSS 2.0 feed of the revisions of the current page.
- * 
+ *
  * @package		Handlers
  * @subpackage	XML
  * @version		$Id$
  * @license		http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
- * 
+ *
  * @uses		Config::$wakka_name
  * @uses		Wakka::GetConfigValue()
  * @uses		Wakka::HasAccess()

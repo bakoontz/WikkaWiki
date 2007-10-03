@@ -1,15 +1,15 @@
 <?php
 /**
  * Process a comment.
- * 
- * @package	Handlers
+ *
+ * @package		Handlers
  * @subpackage	Comments
- * @version $Id: processcomment.php,v 1.3.1.3 2007/02/11 11:39:16 brian Exp brian $
- * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
+ * @version		$Id: processcomment.php,v 1.3.1.3 2007/02/11 11:39:16 brian Exp brian $
+ * @license		http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
- * 
+ *
  * @author {http://wikkawiki.org/BrianKoontz Brian Koontz}
- * 
+ *
  * @uses	Wakka::GetUserName()
  * @uses	Wakka::Href()
  * @uses	Wakka::LoadSingle()
@@ -18,7 +18,7 @@
  * @uses	Wakka::SaveComment()
  * @uses	Wakka::UserIsOwner()
  * @uses	Wakka::htmlspecialchars_ent()
- * 
+ *
  * @todo	move main <div> to templating class
  */
 
@@ -63,7 +63,7 @@ if(($_POST['submit']==COMMENT_REPLY_BUTTON || $_POST['submit']==COMMENT_NEW_BUTT
 	<div class="commentparent"><?php echo $comment['comment']; ?></div>
 	<?php } else { ?>
 	<label for="commentbox"><?php echo NEW_COMMENT_LABEL; ?></label><br />
-	<?php } ?>	
+	<?php } ?>
 	<textarea id="commentbox" name="body" rows="6" cols="78"></textarea><br />
 	<input type="submit" name="submit" value="<?php echo COMMENT_ADD_BUTTON; ?>" accesskey="s" />
 	<?php echo $this->FormClose(); ?>
@@ -88,7 +88,7 @@ if ($_POST['submit']==COMMENT_ADD_BUTTON)
 			// store new comment
 			$this->SaveComment($this->tag, $body, $parent_id);
 		}
-		
+
 		// redirect to page
 		$this->redirect($this->Href(), $redirectmessage);
 	}

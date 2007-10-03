@@ -3,44 +3,44 @@
  * Clone the current page and save a copy of it as a new page.
  *
  * Usage: append /clone to the URL of the page you want to clone
- * 
- * This handler checks the existence of the source page, the validity of the 
- * name of the target page to be created, the user's read-access to the source 
+ *
+ * This handler checks the existence of the source page, the validity of the
+ * name of the target page to be created, the user's read-access to the source
  * page and write-access to the target page.
  * If the "Edit after creation" option is selected, the user is redirected to the
  * target page for editing immediately after its creation.
  * If the "Clone ACL" option is selected, ACL settings are copied to the target
  * page, otherwise default ACL are applied to the new page.
  *
- * @package         Handlers
- * @subpackage        Page
- * @version           $Id:clone.php 407 2007-03-13 05:59:51Z DarTar $
- * @since             Wikka 1.1.6.0
- * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
+ * @package 	Handlers
+ * @subpackage	Page
+ * @version		$Id:clone.php 407 2007-03-13 05:59:51Z DarTar $
+ * @since		Wikka 1.1.6.0
+ * @licens		http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
  *
  * @author		{@link http://wikkawiki.org/ChristianBarthelemy Christian Barthelemy} - original idea and code.
  * @author		{@link http://wikkawiki.org/DarTar Dario Taraborelli} - bugs fixed, code improved, removed popup alerts.
  * @author		{@link http://wikkawiki.org/BrianKoontz Brian Koontz} - clone ACL option
- * 
+ *
  *
  * @uses	Wakka::ExistsPage()
- * @uses	Wakka::Format() 
- * @uses	Wakka::FormClose() 
- * @uses	Wakka::FormOpen() 
- * @uses	Wakka::HasAccess()    
- * @uses	Wakka::LoadPage() 
- * @uses	Wakka::Href() 
- * @uses	Wakka::Redirect() 
+ * @uses	Wakka::Format()
+ * @uses	Wakka::FormClose()
+ * @uses	Wakka::FormOpen()
+ * @uses	Wakka::HasAccess()
+ * @uses	Wakka::LoadPage()
+ * @uses	Wakka::Href()
+ * @uses	Wakka::Redirect()
  * @uses	Wakka::SavePage()
- * 
+ *
  * @input	string	$to 	required: the page to be created
  *					must be a non-existing page and current user must have privs to create it
- *					default is source page name 
+ *					default is source page name
  * @input	string	$note	optional: the note to be added to the page when created
  *					default is "Cloned from " followed by the name of the source page
  * @input	boolean	$editoption	optional: if true, the new page will be opened for edition on creation
- 					default is FALSE (to allow multiple cloning of the same source)
+					default is FALSE (to allow multiple cloning of the same source)
  * @input	boolean	$cloneaclsoption	optional: if true, ACLs are copied from the source page to the new page
  *					default is FALSE
  * @output	... tbd
@@ -62,7 +62,7 @@ if (!defined('VALID_PAGENAME_PATTERN')) define ('VALID_PAGENAME_PATTERN', '/^[A-
 $from = $this->tag;
 $to = $this->tag;
 $note = sprintf(CLONED_FROM, $from);
-$editoption = ''; 
+$editoption = '';
 $cloneaclsoption = '';
 $box = '<em>'.CLONE_VALID_TARGET.'</em>';
 
@@ -71,7 +71,7 @@ if (!$this->ExistsPage($from))
 {
 	// source page does not exist!
 	$box = sprintf(WIKKA_ERROR_PAGE_NOT_EXIST, $from);
-} else 
+} else
 {
 	// 2. page exists - now check user's read-access to the source page
 	if (!$this->HasAccess('read', $from))
@@ -89,7 +89,7 @@ if (!$this->ExistsPage($from))
 			$note = isset($_POST['note']) && $_POST['note'] ? $_POST['note'] : $note;
 			$editoption = (isset($_POST['editoption'])) ? ' checked="checked"' : '';
 			$cloneaclsoption = (isset($_POST['cloneaclsoption'])) ? ' checked="checked"' : '';
-		
+
 			// 3. check target pagename validity
 			if (!preg_match(VALID_PAGENAME_PATTERN, $to))  //TODO use central regex library
 			{
@@ -99,7 +99,7 @@ if (!$this->ExistsPage($from))
 			else
 			{
 				// 4. target page name is valid - now check user's write-access
-				if (!$this->HasAccess('write', $to))  
+				if (!$this->HasAccess('write', $to))
 				{
 					$box = '<em class="error">'.sprintf(ERROR_ACL_WRITE, $to).'</em>';
 				}
@@ -107,7 +107,7 @@ if (!$this->ExistsPage($from))
 				{
 					// 5. check target page existence
 					if ($this->ExistsPage($to))
-					{ 
+					{
 						// page already exists!
 						$box = '<em class="error">'.WIKKA_ERROR_PAGE_ALREADY_EXIST.'</em>';
 					}
@@ -117,7 +117,7 @@ if (!$this->ExistsPage($from))
 						$thepage=$this->LoadPage($from);
 						if ($thepage)
 						{
-							$pagecontent = $thepage['body'];	
+							$pagecontent = $thepage['body'];
 						}
 						$this->SavePage($to, $pagecontent, $note);
 						// Clone ACLs if requested

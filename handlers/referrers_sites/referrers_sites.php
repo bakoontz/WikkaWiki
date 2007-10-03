@@ -32,11 +32,11 @@ $ref_domains_to_page_url = $this->Href('referrers_sites');
 $ref_urls_to_wiki_url = $this->Href('referrers','','global=1');
 $ref_urls_to_page_url = $this->Href('referrers');
 $ref_blacklist_url = $this->Href('review_blacklist');
-if (isset($_GET["global"])) #312
+if (isset($_GET["global"])) # #312
 {
 	// referrers to this wiki
 	// prepare UI
-	$global = $_GET["global"]; #312
+	$global = $_GET["global"]; # #312
 	$referrers_urls_link = '<a href="'.$ref_urls_to_wiki_url.'">'.REFERRERS_URLS_LINK_DESC.'</a>';
 	$heading = sprintf(REFERRERS_DOMAINS_TO_WIKI, $referrers_urls_link);
 
@@ -51,7 +51,7 @@ else
 	// prepare UI
 	switch ((int) $this->GetConfigValue('referrers_purge_time'))
 	{
-		case 0: 
+		case 0:
 			$referrers_purge_time = '';
 			break;
 		case 1:

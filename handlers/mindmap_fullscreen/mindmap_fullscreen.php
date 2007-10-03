@@ -1,7 +1,7 @@
 <?php
 /**
  * Open a fullscreen window with an embedded Freemind map
- * 
+ *
  * @package  3rdParty
  * @subpackage Freemind
  * @author	{@link http://wikkawiki.org/JsnX Jason Tourtelotte} (first draft)
@@ -9,12 +9,12 @@
  * @license  http://gnu.org/copyleft/gpl.html GNU GPL
  * @version  $Id$
  * @filesource
- * 
+ *
  * @uses Wakka::hsc_secure()
  * @uses Wakka::StaticHref()
  * @uses Config::$default_lang
- * @todo	check if we should (copy and) use Wakka::GetSafeVar() and 
- * 			Wakka::Wakka::cleanUrl() to secure our input parameters 
+ * @todo	check if we should (copy and) use Wakka::GetSafeVar() and
+ * 			Wakka::Wakka::cleanUrl() to secure our input parameters
  * 			(cf. mindmap action!)
  * @todo	since this produces a whole page, turn into a normal handler
  */
@@ -81,10 +81,10 @@ html, body { height: 100%; }
 <body>
 
 <?php
-$mindmap_url = $this->hsc_secure(preg_replace('/&amp;/','&',(trim($_GET['url'])))); #312 // duplicates Wakka::cleanUrl()
-if (isset($_GET['height'])) $height = $this->hsc_secure(trim($_GET['height'])); #312 // more or less equivalent to Wakka::GetSafeVar()
+$mindmap_url = $this->hsc_secure(preg_replace('/&amp;/','&',(trim($_GET['url'])))); # #312 // duplicates Wakka::cleanUrl()
+if (isset($_GET['height'])) $height = $this->hsc_secure(trim($_GET['height'])); # #312 // more or less equivalent to Wakka::GetSafeVar()
 
-if ($mindmap_url) 
+if ($mindmap_url)
 {
 	// set up template variables
 	$close_window = CLOSE_WINDOW;
@@ -92,8 +92,8 @@ if ($mindmap_url)
 	$jre_plugin_link = '<a href="'.WIKKA_JRE_DOWNLOAD_URL.'">'.MM_GET_JAVA_PLUGIN_LINK_DESC.'</a>';
 	$jre_download_link = '<a href="'.WIKKA_JRE_DOWNLOAD_URL.'">'.WIKKA_JRE_LINK_DESC.'</a>';
 	$jre_install_req = sprintf(MM_JRE_INSTALL_REQ, $jre_download_link);
-	$jre_install_req_js = str_replace(array('\\', '\'', "\r", "\n") ,array('\\\\', '\\\'', '', '\\n'), $jre_install_req);	// escape slashes for JavaScript 
-	$jre_install_req_sub = $jre_install_req; 
+	$jre_install_req_js = str_replace(array('\\', '\'', "\r", "\n") ,array('\\\\', '\\\'', '', '\\n'), $jre_install_req);	// escape slashes for JavaScript
+	$jre_install_req_sub = $jre_install_req;
 	$jre_install_req_sub[0] = strtolower($jre_install_req_sub[0]);	// lower case first char for use in subphrase
 	$freemind_link = '<a href="'.FREEMIND_PROJECT_URL.'">Freemind</a>';
 

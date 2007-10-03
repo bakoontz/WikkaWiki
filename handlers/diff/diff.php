@@ -26,10 +26,10 @@
  * @uses	Diff
  *
  * @todo	This is a really cheap way to do it. I think it may be more intelligent to write the two pages to temporary files and run /usr/bin/diff over them. Then again, maybe not.
- * 			JW: that may be nice but won't work on a Windows system ;) 
+ * 			JW: that may be nice but won't work on a Windows system ;)
  */
 
-// If javascript is disabled, user may get here after pressing button Next... on the /revisions handler. 
+// If javascript is disabled, user may get here after pressing button Next... on the /revisions handler.
 if ((isset($_GET['more_revisions'])) && (isset($_GET['a'])) && (isset($_GET['start'])))
 {
 	$this->Redirect($this->Href('revisions', '', 'a='.$_GET['a'].'&start='.$_GET['start']));
@@ -57,8 +57,8 @@ if ($this->HasAccess('read'))
 	}
 
 	// load pages
-	$pageA = (isset($_GET['a'])) ? $this->LoadPageById($_GET['a']) : '';	#312
-	$pageB = (isset($_GET['b'])) ? $this->LoadPageById($_GET['b']) : '';	#312
+	$pageA = (isset($_GET['a'])) ? $this->LoadPageById($_GET['a']) : '';	# #312
+	$pageB = (isset($_GET['b'])) ? $this->LoadPageById($_GET['b']) : '';	# #312
 	if ('' == $pageA || '' == $pageB)
 	{
 		echo '<div class="page">'."\n";
@@ -71,8 +71,8 @@ if ($this->HasAccess('read'))
 	$linkPageA = '<a href="'.$this->Href('', '', 'time='.urlencode($pageA['time'])).'">'.$pageA['time'].'</a>';
 	$linkPageB = '<a href="'.$this->Href('', '', 'time='.urlencode($pageB['time'])).'">'.$pageB['time'].'</a>';
 
-	// If asked, call original diff 
-	if (isset($_GET['fastdiff']) && $_GET['fastdiff'])	#312
+	// If asked, call original diff
+	if (isset($_GET['fastdiff']) && $_GET['fastdiff'])	# #312
 	{
 
 		// prepare bodies
@@ -154,7 +154,7 @@ if ($this->HasAccess('read'))
 			{
 				break;
 			}
-			if ($sideO->decode_directive_line()) 
+			if ($sideO->decode_directive_line())
 			{
 				$argument=$sideO->getargument();
 				$letter=$sideO->getdirective();

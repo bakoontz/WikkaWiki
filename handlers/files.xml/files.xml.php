@@ -15,7 +15,7 @@
  * @version		$Id$
  * @license		http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
- * 
+ *
  * @uses	Wakka::GetConfigValue()
  * @uses	Wakka::GetPageTag()
  * @uses	Wakka::HasAccess()
@@ -31,24 +31,24 @@ if ('' == $this->GetConfigValue('upload_path'))
 {
 	$this->SetConfigValue('upload_path','files');
 }
-$upload_path = $this->GetConfigValue('upload_path').DIRECTORY_SEPARATOR.$this->GetPageTag(); #89
+$upload_path = $this->GetConfigValue('upload_path').DIRECTORY_SEPARATOR.$this->GetPageTag(); # #89
 if (!is_dir($upload_path))
 {
 	mkdir_r($upload_path);
 }
 
 // do the action
-switch ($_GET['action'])	#312
+switch ($_GET['action'])	# #312
 {
 	// @@@ shared download code
 	case 'download':
 		header('Accept-Ranges: bytes');
-		$_GET['file'] = basename($_GET['file']); #312
-		$path = $upload_path.DIRECTORY_SEPARATOR.$_GET['file'];	#89, #312
+		$_GET['file'] = basename($_GET['file']); # #312
+		$path = $upload_path.DIRECTORY_SEPARATOR.$_GET['file'];	# #89, #312
 		$filename = basename($path);
 		header("Content-Type: application/x-download");
 		header("Content-Disposition: attachment; filename=\"".urldecode($filename)."\"");
-		if ($this->HasAccess('read')) 
+		if ($this->HasAccess('read'))
 		{
 			if (isset($_SERVER['HTTP_RANGE']) &&
 				(preg_match('/^.*bytes[= ]+(\d+)-(\d+)\s*$/', $_SERVER['HTTP_RANGE'], $range)) &&
@@ -80,9 +80,9 @@ switch ($_GET['action'])	#312
 			exit();
 		}
 	case 'delete':
-		if ($this->IsAdmin()) 
+		if ($this->IsAdmin())
 		{
-			@unlink($upload_path.DIRECTORY_SEPARATOR.$_GET['file']); #89, #312 // TODO if this is admin-only, why hide any errors?
+			@unlink($upload_path.DIRECTORY_SEPARATOR.$_GET['file']); # #89, #312 // TODO if this is admin-only, why hide any errors?
 		}
 		print $this->redirect($this->Href());
 }

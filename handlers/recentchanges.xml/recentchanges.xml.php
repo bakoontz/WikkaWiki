@@ -51,9 +51,9 @@
  * Default value.
  */
 if (!defined('FEED_VALID_FORMATS')) define('FEED_VALID_FORMATS', 'RSS0.91,RSS1.0,RSS2.0,ATOM1.0');	// no whitespace around commas!
-if (!defined('FEED_DESCRIPTION_TRUNCATE_SIZE')) define('FEED_DESCRIPTION_TRUNCATE_SIZE', 200); #character limit to truncate description	// expects integer
-if (!defined('FEED_DESCRIPTION_HTML')) define('FEED_DESCRIPTION_HTML',TRUE); #Indicates whether the description field should be rendered in HTML	// expects boolean
-if (!defined('FEED_DEFAULT_OUTPUT_FORMAT')) define('FEED_DEFAULT_OUTPUT_FORMAT','RSS2.0'); #any of the valid formats specified in VALID_FORMATS
+if (!defined('FEED_DESCRIPTION_TRUNCATE_SIZE')) define('FEED_DESCRIPTION_TRUNCATE_SIZE', 200); // character limit to truncate description	// expects integer
+if (!defined('FEED_DESCRIPTION_HTML')) define('FEED_DESCRIPTION_HTML', TRUE); // Indicates whether the description field should be rendered in HTML	// expects boolean
+if (!defined('FEED_DEFAULT_OUTPUT_FORMAT')) define('FEED_DEFAULT_OUTPUT_FORMAT','RSS2.0'); //any of the valid formats specified in VALID_FORMATS
 //if (!defined('FEED_DEFAULT_OWNER_FILTER')) define('FEED_DEFAULT_OWNER_FILTER', ''); #empty, modifications of pages owned by any user
 //if (!defined('FEED_DEFAULT_USER_FILTER')) define('FEED_DEFAULT_USER_FILTER', ''); #empty, modifications by any user
 //if (!defined('FEED_DEFAULT_CATEGORY_FILTER')) define('FEED_DEFAULT_CATEGORY_FILTER', ''); #empty, pages belonging to any category
@@ -107,13 +107,13 @@ $rss = instantiate('UniversalFeedCreator');
 
 //initialize feed (general settings)
 $rss->useCached(); //TODO: make this configurable
-$rss->title = sprintf(FEED_TITLE_RECENT_CHANGES, $this->GetConfigValue('wakka_name')); 
-$rss->description = sprintf(FEED_DESCRIPTION_RECENT_CHANGES, $this->GetConfigValue('wakka_name')); 
+$rss->title = sprintf(FEED_TITLE_RECENT_CHANGES, $this->GetConfigValue('wakka_name'));
+$rss->description = sprintf(FEED_DESCRIPTION_RECENT_CHANGES, $this->GetConfigValue('wakka_name'));
 $rss->cssStyleSheet = $this->StaticHref('css/'.FEED_CSS);
 $rss->descriptionTruncSize = FEED_DESCRIPTION_TRUNCATE_SIZE;
 $rss->descriptionHtmlSyndicated = FEED_DESCRIPTION_HTML;
 $rss->link = $this->Href('', $this->GetConfigValue('root_page'));
-$rss->syndicationURL = $this->Href($this->handler,'','f='.$f); 
+$rss->syndicationURL = $this->Href($this->handler,'','f='.$f);
 
 //create feed image
 #$image = new FeedImage();
@@ -139,7 +139,7 @@ if ($pages = $this->LoadRecentlyChanged())
 			#$item = new FeedItem();
 			$item = instantiate('FeedItem');
 			$item->title = $page['tag'];
-			#$item->link = $this->Href('show', $page['tag'], 'time='.urlencode($page['time'])); 
+			#$item->link = $this->Href('show', $page['tag'], 'time='.urlencode($page['time']));
 			$item->link = $this->Href('', $page['tag'], 'time='.urlencode($page['time']));
 			// @@@ ^ uses &amp;amp; in all formats - this is FC escaping the &amp; that Href() outputs
 			// WARNING: the double escape comes from the use of htmlspecialchars()
@@ -158,11 +158,11 @@ Element: Source
   Name:        Source
   Identifier:  Source
   Definition:  A Reference to a resource from which the present resource
-               is derived.
+			   is derived.
   Comment:     The present resource may be derived from the Source resource
-               in whole or in part.  Recommended best practice is to reference 
-               the resource by means of a string or number conforming to a 
-               formal identification system.
+			   in whole or in part.  Recommended best practice is to reference
+			   the resource by means of a string or number conforming to a
+			   formal identification system.
 */
 			if ('RSS1.0' == $f)		// dc:source used only here
 			{
