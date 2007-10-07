@@ -200,7 +200,7 @@ function ACL_show_selectbox($type)
 }
 /**
  * Facility to echo a <select>...</select> for language packs availables. A simple check is performed on all 
- * subdirectories of the lang/ folder: if a file called PageIndex.txt if found inside it, then, it's a valid
+ * subdirectories of the lang/ folder: if a file called PageIndex.txt is found inside it, then, it's a valid
  * language pack subfolder. (To avoid treating some obscure system dependent special folders).
  * 
  * @access public
@@ -230,5 +230,28 @@ function Language_selectbox($default_lang)
 		}
 	}
 	echo '</select>';
+}
+function test_mod_rewrite()
+{
+	return (isset($_SESSION['mod_rewrite']) && ($_SESSION['mod_rewrite'] == 'ok'));
+}
+function init_test_mod_rewrite()
+{
+	global $action_target, $url;
+	$data = '';
+	$rewrite_base = substr($action_target, 0, strlen($action_target) - 9);
+	$fp = @fopen('setup/test/.htaccess', 'w');
+	if ($fp)
+	{
+		$htaccess_content = <<<HTACCESSCONTENT
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteBase {$rewrite_base}setup/test/
+RewriteRule ^test-mod-rewrite.php$ rewrite-ok.php
+</IfModule>
+HTACCESSCONTENT;
+		fwrite($fp, $htaccess_content);
+		fclose($fp);
+	}
 }
 ?>

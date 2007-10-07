@@ -7,13 +7,14 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
  * @todo	make form accessible!
+ * @todo  write setup/test/.htaccess
  */
 ?>
 <div style='display:none;'>
 <script type='text/javascript'>
 </script>
 </div>
-<form action="<?php echo $action_target; ?>" name="form1" method="post">
+<form action="setup/test/test-mod-rewrite.php" name="form1" method="post">
 <table>
 	<?php
 	if (isset($config['wakka_version']) && ($config['wakka_version']))
@@ -47,18 +48,20 @@
 	<tr><td>&nbsp;</td><td><h2><?php echo __('Database settings'); ?></h2></td></tr>
 	<tr><td>&nbsp;</td><td><?php echo __('WikkaWiki uses a MySQL database to store data. The wizard will start by checking the connection to the database.');?></td></tr>
 	<tr><td>&nbsp;</td><td><?php echo __('1. The host your MySQL server is running on. <span class="note">Usually <tt>localhost</tt> (i.e. the same machine your WikkaWiki site is on).</span>'); ?></td></tr>
-	<tr><td align="right" nowrap><?php echo __('MySQL host');?>:</td><td><input type="text" size="50" name="pconfig[mysql_host]" value="<?php echo $config["mysql_host"] ?>" /></td></tr>
+	<tr><td align="right" nowrap="nowrap"><?php echo __('MySQL host');?>:</td><td><input type="text" size="50" name="pconfig[mysql_host]" value="<?php echo $config["mysql_host"] ?>" /></td></tr>
 	<tr><td>&nbsp;</td><td><?php echo __('2. The name of the database WikkaWiki will use. <span class="note">Note that this database must already exist before you continue.</span>'); ?></td></tr>
-	<tr><td align="right" nowrap><?php echo __('MySQL database'); ?>:</td><td><input type="text" size="50" name="pconfig[mysql_database]" value="<?php echo $config["mysql_database"] ?>" /></td></tr>
+	<tr><td align="right" nowrap="nowrap"><?php echo __('MySQL database'); ?>:</td><td><input type="text" size="50" name="pconfig[mysql_database]" value="<?php echo $config["mysql_database"] ?>" /></td></tr>
 	<tr><td>&nbsp;</td><td><?php printf(__('3. Username and password to connect to your database. <span class="note">This user must exist and be granted access for <tt>%s</tt> operations to the database where WikkaWiki will be installed.</span>'), 'SELECT, INSERT, UPDATE, DELETE, ALTER TABLE'); ?></td></tr>
-	<tr><td align="right" nowrap><?php echo __('MySQL username'); ?>:</td><td><input type="text" size="50" name="pconfig[mysql_user]" value="<?php echo $config["mysql_user"] ?>" /></td></tr>
-	<tr><td align="right" nowrap><?php echo __('MySQL password'); ?>:</td><td><input type="password" size="50" name="pconfig[mysql_password]" value="" /></td></tr>
+	<tr><td align="right" nowrap="nowrap"><?php echo __('MySQL username'); ?>:</td><td><input type="text" size="50" name="pconfig[mysql_user]" value="<?php echo $config["mysql_user"] ?>" /></td></tr>
+	<tr><td align="right" nowrap="nowrap"><?php echo __('MySQL password'); ?>:</td><td><input type="password" size="50" name="pconfig[mysql_password]" value="" /></td></tr>
 <?php
 	}
 ?>
 	<tr><td>&nbsp;</td><td>
 	<input type="hidden" name="installAction" value="check" />
 	<input type="submit" value="<?php echo _p('Continue');?>" />
+	<input type="hidden" name="redirect_to" value="<?php echo $action_target; ?>" />
 	</td></tr>
 </table>
 </form>
+<?php init_test_mod_rewrite(); ?>

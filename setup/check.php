@@ -65,7 +65,7 @@ $php_req_ok = FALSE;
 $mysql_req_ok = FALSE;
 
 $server_info['mod_rewrite'] = false;
-if (isset($_SERVER['WIKKA_MOD_REWRITE']) && $_SERVER['WIKKA_MOD_REWRITE'] == 'OK') $server_info['mod_rewrite'] = true;
+$server_info['mod_rewrite'] = test_mod_rewrite();
 
 ?>
 <form action="<?php echo $action_target; ?>" name="form1" method="post">

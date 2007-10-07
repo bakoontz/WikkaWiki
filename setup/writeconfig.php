@@ -38,8 +38,7 @@ else
 $htaccess_updated = 0;
 if ($config['rewrite_mode'] == 1)
 {
-	#$rewrite_base = preg_replace('+^\\S*://[^/]*(?=/)+', '', $config['base_url']);	// base_url OBSOLETE
-	$rewrite_base = preg_replace('+^\\S+://[^/]*(?=/)+', '', $url);	// remove scheme and domain
+	$rewrite_base = preg_replace('|^\\S+://[^/]*(?=/)|', '', $url);	// remove scheme and domain
 	$htaccess_content = file($htaccessLocation);
 	$new_htaccess_content = '';
 	$on_rewrite_section = 0;
@@ -51,9 +50,9 @@ if ($config['rewrite_mode'] == 1)
 		}
 		if (preg_match("/^(\\s*)<IfModule\\s+mod_rewrite.c>/i", $line , $m))
 		{
-			$line .= '#---WIKKA-REWRITING-BEGIN'."\n";
-			$line .= $m[1].' RewriteEngine On'."\n";
-			$line .= $m[1].' RewriteBase '.$rewrite_base."\n";
+			$line .= '#---WIKKA-REWRITING-BEGIN'."\r\n";
+			$line .= $m[1].' RewriteEngine On'."\r\n";
+			$line .= $m[1].' RewriteBase '.$rewrite_base."\r\n";
 			$on_rewrite_section = 1;
 		}
 		if (($on_rewrite_section == 1) && (preg_match("/^(\\s*)<\\/IfModule>/i", $line)))
