@@ -384,7 +384,7 @@ class Wakka
 	 * Get a count of the number of records in a given table that would be matched
 	 * by the given (optional) WHERE criteria. Only a single table can be queried.
 	 *
-	 * @author		{@link http://wikka.jsnx.com/JavaWoman JavaWoman}
+	 * @author		{@link http://wikkawiki.org/JavaWoman JavaWoman}
 	 * @license		http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
 	 * @version		1.1
 	 *
@@ -660,7 +660,7 @@ class Wakka
 	 * unique, it will be remain unchanged (but recorded to ensure uniqueness
 	 * overall).
 	 *
-	 * @author		{@link http://wikka.jsnx.com/JavaWoman JavaWoman}
+	 * @author		{@link http://wikkawiki.org/JavaWoman JavaWoman}
 	 * @copyright	Copyright © 2005, Marjolein Katsma
 	 * @license		http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
 	 *
