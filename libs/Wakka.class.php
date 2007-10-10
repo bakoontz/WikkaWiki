@@ -92,6 +92,40 @@ class Wakka
 		}
 		return $data;
 	}
+	/**
+	 * Generic 'count' query.
+	 *
+	 * Get a count of the number of records in a given table that would be matched
+	 * by the given (optional) WHERE criteria. Only a single table can be queried.
+	 *
+	 * @author		{@link http://wikkawiki.org/JavaWoman JavaWoman}
+	 * @license		http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
+	 * @version		1.1
+	 *
+	 * @access	public
+	 * @uses	Wakka::GetConfigValue()
+	 * @uses	Wakka::Query()
+	 *
+	 * @param	string	$table	required: (logical) table name to query;
+	 *							prefix will be automatically added
+	 * @param	string	$where	optional: criteria to be specified for a WHERE clause;
+	 *							do not include WHERE
+	 * @return	integer	number of matches returned by MySQL
+	 * @todo	move into a database class.
+	 */
+	function getCount($table, $where='')							# JW 2005-07-16
+	{
+		// build query
+		$where = ('' != $where) ? ' WHERE '.$where : '';
+		$query = "
+			SELECT COUNT(*)
+			FROM ".$this->GetConfigValue('table_prefix').$table.
+			$where;
+
+		// get and return the count as an integer
+		$count = (int)mysql_result($this->Query($query),0);
+		return $count;
+	}
 	function CheckMySQLVersion($major, $minor, $subminor)
 	{
 		$result = @mysql_query('SELECT VERSION() AS version');
