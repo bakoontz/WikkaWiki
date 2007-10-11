@@ -1279,8 +1279,8 @@ class Wakka
 		$handler = $parts[0];
 #echo 'handler: '.$handler.'<br/>';
 		// now check if a handler by that name exists
-#echo 'checking path: '.$this->GetConfigValue('wikka_handler_path').DIRECTORY_SEPARATOR.$handler.DIRECTORY_SEPARATOR.$handler.'.php'.'<br/>';
-		$exists = file_exists($this->GetConfigValue('wikka_handler_path').DIRECTORY_SEPARATOR.$handler.DIRECTORY_SEPARATOR.$handler.'.php');
+#echo 'checking path: '.$this->GetConfigValue('handler_path').DIRECTORY_SEPARATOR.'page'.DIRECTORY_SEPARATOR.$handler.'.php'.'<br/>';
+		$exists = file_exists($this->GetConfigValue('handler_path').DIRECTORY_SEPARATOR.'page'.DIRECTORY_SEPARATOR.$handler.'.php');
 		// return conclusion
 		return $exists;
 	}
