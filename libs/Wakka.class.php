@@ -465,7 +465,7 @@ class Wakka
 	 * 	"The third argument charset defines character set used in conversion."
 	 *
 	 * I suspect PHP's htmlspecialchars() is working at the byte-value level and
-	 * thus _needs_ to know (or asssume) a character set because the special
+	 * thus _needs_ to know (or assume) a character set because the special
 	 * characters to be replaced could exist at different code points in
 	 * different character sets. (If indeed htmlspecialchars() works at
 	 * byte-value level that goes some  way towards explaining why the
@@ -1169,7 +1169,8 @@ class Wakka
 	 */
 	function FormClose()
 	{
-		return "</form>\n";
+		$result = '</form>'."\n";
+		return $result;
 	}
 
 	// INTERWIKI STUFF
@@ -1600,7 +1601,7 @@ class Wakka
 		if (!$this->GetUser() && ($user = $this->LoadUser($this->GetCookie('user_name'), $this->GetCookie('pass')))) $this->SetUser($user);
 		if ((!$this->GetUser() && isset($_COOKIE["wikka_user_name"])) && ($user = $this->LoadUser($_COOKIE["wikka_user_name"], $_COOKIE["wikka_pass"])))
 		{
-		 //Old cookies : delete them
+			//Old cookies : delete them
 			SetCookie('wikka_user_name', "", 1, "/");
 			$_COOKIE['wikka_user_name'] = "";
 			SetCookie('wikka_pass', '', 1, '/');
