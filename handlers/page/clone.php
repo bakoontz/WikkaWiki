@@ -4,34 +4,34 @@
  * Clone the current page and save a copy of it as a new page.
  *
  * Usage: append /clone to the URL of the page you want to clone
- * 
- * This handler checks the existence of the source page, the validity of the 
- * name of the target page to be created, the user's read-access to the source 
+ *
+ * This handler checks the existence of the source page, the validity of the
+ * name of the target page to be created, the user's read-access to the source
  * page and write-access to the target page.
  * If the edit option is selected, the user is redirected to the target page for
  * edition immediately after its creation.
  *
  * @package         Handlers
- * @subpackage        
+ * @subpackage
  * @name              clone
  *
  * @author            {@link http://wikkawiki.org/ChristianBarthelemy Christian Barthelemy} - original idea and code.
- * @author            {@link http://wikkawiki.org/DarTar Dario Taraborelli} - bugs fixed, code improved, removed popup alerts.  
+ * @author            {@link http://wikkawiki.org/DarTar Dario Taraborelli} - bugs fixed, code improved, removed popup alerts.
  * @version           0.4
  * @since             Wikka 1.1.6.0
- *                      
+ *
  * @input             string  $to  required: the page to be created
  *                            must be a non existing page and current user must be authorized to create it
- *                            default is source page name 				
- * 
+ *                            default is source page name
+ *
  * @input             string  $note  optional: the note to be added to the page when created
  *                            default is "Cloned from " followed by the name of the source page
- * 
+ *
  * @input             boolean $editoption optional: if true, the new page will be opened for edition on creation
  *                            default is false (to allow multiple cloning of the same source)
  *
  * @todo              Use central library for valid pagenames.
- *        
+ *
  */
 // defaults
 if(!defined('VALID_PAGENAME_PATTERN')) define ('VALID_PAGENAME_PATTERN', '/^[A-Za-zÄÖÜßäöü]+[A-Za-z0-9ÄÖÜßäöü]*$/s');
@@ -55,18 +55,18 @@ define('PLEASE_FILL_VALID_TARGET', 'Please fill in a valid target ""PageName"" a
 $from = $this->tag;
 $to = $this->tag;
 $note = sprintf(CLONED_FROM, $from);
-$editoption = ''; 
+$editoption = '';
 $box = PLEASE_FILL_VALID_TARGET;
 
 // print header
 echo $this->Format(CLONE_HEADER);
 
 // 1. check source page existence
-if (!$this->ExistsPage($from))
+if (!$this->existsPage($from))					// name change
 {
 	// source page does not exist!
 	$box = sprintf(ERROR_PAGE_NOT_EXIST, $from);
-} else 
+} else
 {
 	// 2. page exists - now check user's read-access to the source page
 	if (!$this->HasAccess('read', $from))
@@ -82,7 +82,7 @@ if (!$this->ExistsPage($from))
 			$to = isset($_POST['to']) && $_POST['to'] ? $_POST['to'] : $to;
 			$note = isset($_POST['note']) && $_POST['note'] ? $_POST['note'] : $note;
 			$editoption = (isset($_POST['editoption']))? 'checked="checked"' : '';
-		
+
 			// 3. check target pagename validity
 			if (!preg_match(VALID_PAGENAME_PATTERN, $to))  //TODO use central regex library
 			{
@@ -91,14 +91,14 @@ if (!$this->ExistsPage($from))
 			} else
 			{
 				// 4. target page name is valid - now check user's write-access
-				if (!$this->HasAccess('write', $to))  
+				if (!$this->HasAccess('write', $to))
 				{
 					$box = '""<em class="error">'.sprintf(ERROR_ACL_WRITE, $to).'</em>""';
 				} else
 				{
 					// 5. check target page existence
-					if ($this->ExistsPage($to))
-					{ 
+					if ($this->existsPage($to))						// name change
+					{
 						// page already exists!
 						$box = '""<em class="error">'.ERROR_PAGE_ALREADY_EXIST.'</em>""';
 					} else
@@ -119,7 +119,7 @@ if (!$this->ExistsPage($from))
 					}
 				}
 			}
-		} 
+		}
 		// build form
 		$form = $this->FormOpen('clone');
 		$form .= '<table class="clone">'."\n".

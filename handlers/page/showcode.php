@@ -25,7 +25,7 @@ if(!defined('ERROR_NO_READ_ACCESS')) define('ERROR_NO_READ_ACCESS', 'Sorry, you 
 echo '<div class="page">'."\n";//TODO: move to templating class
 
 //check if page exists
-if ($this->ExistsPage($this->tag))
+if ($this->existsPage($this->tag))				// name change
 {
 	//check if user has read access
 	if ($this->HasAccess('read'))

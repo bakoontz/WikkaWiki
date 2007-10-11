@@ -11,7 +11,7 @@
  * @author		{@link http://wikkawiki.org/DarTar Dario Taraborelli} (further cleanup, i18n, replaced JS dialogs with server-generated messages)
  *
  * @uses		Wakka::htmlspecialchars_ent()
- * 
+ *
  * @todo		use different actions for registration / login / user settings;
  * @todo		add documentation links or short explanations for each option;
  * @todo		use error handler for displaying messages and highlighting
@@ -163,14 +163,14 @@ else if ($user = $this->GetUser())
 					"changescount = '".mysql_real_escape_string($changescount)."' ".
 					"WHERE name = '".$user['name']."' LIMIT 1");
 				$this->SetUser($this->LoadUser($user["name"]));
-			
+
 				// forward
 				$params .= 'stored=true';
 				$this->Redirect($url.$params);
 		}
 	}
 	//user just logged in
-	else 
+	else
 	{
 		// get stored settings
 		$email = $user['email'];
@@ -212,7 +212,7 @@ else if ($user = $this->GetUser())
 			echo '<tr><td></td><td><em class="error">'.$this->Format($error).'</em></td></tr>'."\n";
 			break;
 		case (isset($success)):
-			echo '<tr><td></td><td><em class="success">'.$this->Format($success).'</em></td></tr>'."\n";		
+			echo '<tr><td></td><td><em class="success">'.$this->Format($success).'</em></td></tr>'."\n";
 			break;
 		default:
 	}
@@ -244,7 +244,7 @@ else if ($user = $this->GetUser())
 			</td>
 		</tr>
 	</table>
-<?php	
+<?php
 	echo $this->FormClose(); //close user settings form
 
 	if (isset($_POST['action']) && ($_POST['action'] == 'changepass'))
@@ -254,7 +254,7 @@ else if ($user = $this->GetUser())
 		$password = $_POST['password'];
 		$password_confirm = $_POST['password_confirm'];
 		$update_option = $this->GetSafeVar('update_option', 'post');
-		
+
 		switch (TRUE)
 		{
 			case (strlen($oldpass) == 0):
@@ -264,38 +264,38 @@ else if ($user = $this->GetUser())
 			case (($update_option == 'pw') && md5($oldpass) != $user['password']): //wrong password
 				$passerror = ERROR_WRONG_PASSWORD;
 				$pw_selected = 'selected="selected"';
-				$password_highlight = INPUT_ERROR_STYLE;			
+				$password_highlight = INPUT_ERROR_STYLE;
 				break;
 			case (($update_option == 'hash') && $oldpass != $user['password']): //wrong hash
 				$passerror = ERROR_WRONG_HASH;
 				$hash_selected = 'selected="selected"';
-				$password_highlight = INPUT_ERROR_STYLE;			
+				$password_highlight = INPUT_ERROR_STYLE;
 				break;
 			case (strlen($password) == 0):
 				$passerror = ERROR_EMPTY_NEW_PASSWORD;
-				$password_highlight = INPUT_ERROR_STYLE;			
+				$password_highlight = INPUT_ERROR_STYLE;
 				$password_new_highlight = INPUT_ERROR_STYLE;
 				break;
 			case (preg_match("/ /", $password)):
 				$passerror = ERROR_NO_BLANK;
-				$password_highlight = INPUT_ERROR_STYLE;			
+				$password_highlight = INPUT_ERROR_STYLE;
 				$password_new_highlight = INPUT_ERROR_STYLE;
 				break;
 			case (strlen($password) < PASSWORD_MIN_LENGTH):
 				$passerror = sprintf(ERROR_PASSWORD_TOO_SHORT, PASSWORD_MIN_LENGTH);
-				$password_highlight = INPUT_ERROR_STYLE;			
+				$password_highlight = INPUT_ERROR_STYLE;
 				$password_new_highlight = INPUT_ERROR_STYLE;
 				break;
 			case (strlen($password_confirm) == 0):
 				$passerror = ERROR_EMPTY_NEW_CONFIRMATION_PASSWORD;
-				$password_highlight = INPUT_ERROR_STYLE;			
+				$password_highlight = INPUT_ERROR_STYLE;
 				$password_new_highlight = INPUT_ERROR_STYLE;
 				$password_confirm_highlight = INPUT_ERROR_STYLE;
 				break;
 			case ($password_confirm != $password):
 				$passerror = ERROR_PASSWORD_MATCH;
 				$password_highlight = INPUT_ERROR_STYLE;
-				$password_new_highlight = INPUT_ERROR_STYLE;			
+				$password_new_highlight = INPUT_ERROR_STYLE;
 				$password_confirm_highlight = INPUT_ERROR_STYLE;
 				break;
 			default:
@@ -348,7 +348,7 @@ else if ($user = $this->GetUser())
 	print($this->FormClose());
 }
 // user is not logged in
-else 
+else
 {
 	// print confirmation message on successful logout
 	if (isset($_GET['out']) && ($_GET['out'] == 'true'))
@@ -396,7 +396,7 @@ else
 					$error = ERROR_WIKINAME;
 					$username_highlight = INPUT_ERROR_STYLE;
 					break;
-				case ($this->ExistsPage($name)):
+				case ($this->existsPage($name)):			// name change
 					$error = ERROR_RESERVED_PAGENAME;
 					$username_highlight = INPUT_ERROR_STYLE;
 					break;
@@ -448,18 +448,18 @@ else
 			}
 		}
 		// END *** Register ***
-	} 
+	}
 
 	// BEGIN *** Usersettings ***
 	elseif  (isset($_POST['action']) && ($_POST['action'] == 'updatepass'))
 	{
         	$name = trim($_POST['yourname']);
-		if (strlen($name) == 0) // empty username	
+		if (strlen($name) == 0) // empty username
 		{
 			$newerror = ERROR_EMPTY_USERNAME;
 			$username_temp_highlight = INPUT_ERROR_STYLE;
 		}
-		elseif (!$this->IsWikiName($name)) // check if name is WikiName style	
+		elseif (!$this->IsWikiName($name)) // check if name is WikiName style
 		{
 			$newerror = ERROR_WIKINAME;
 			$username_temp_highlight = INPUT_ERROR_STYLE;
@@ -543,7 +543,7 @@ else
 	print($this->FormClose());
 	// END *** Login/Register ***
 
-	// BEGIN *** Login Temp Password *** 
+	// BEGIN *** Login Temp Password ***
 	print($this->FormOpen());
 ?>
 	<input type="hidden" name="action" value="updatepass" />
@@ -555,7 +555,7 @@ else
 		<td align="left"></td>
 		<td><?php echo $this->Format(RETRIEVE_PASSWORD_MESSAGE) ?></td>
 	</tr>
-<?php   
+<?php
 	if (isset($newerror))
 	{
 		print('<tr><td></td><td><em class="error">'.$this->Format($newerror).'</em></td></tr>'."\n");
@@ -576,6 +576,6 @@ else
    </table>
 <?php
 	print($this->FormClose());
-	// END *** Login Temp Password *** 
+	// END *** Login Temp Password ***
 }
 ?>

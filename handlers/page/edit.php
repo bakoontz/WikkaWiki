@@ -16,7 +16,6 @@
  * @uses Config::$require_edit_note
  * @uses Config::$gui_editor
  * @uses Wakka::ClearLinkTable()
- * @uses Wakka::ExistsPage()
  * @uses Wakka::Footer()
  * @uses Wakka::Format()
  * @uses Wakka::FormClose()
@@ -39,7 +38,7 @@
  * @todo		optimization using history.back();
  * @todo		use central regex library for validation;
  * @todo	replace $_REQUEST with either $_GET or $_POST (or both if really
- * 			necessary) - #312 => NOT CLEAR here what to do; see also #449  
+ * 			necessary) - #312 => NOT CLEAR here what to do; see also #449
  */
 
 /**
@@ -188,7 +187,7 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 			'<input type="hidden" name="previous" value="'.$previous.'" />'."\n".
 			// We need to escape ALL entity refs before display so we display them _as_ entities instead of interpreting them
 			// hence htmlspecialchars() instead of htmlspecialchars_ent() which UNescapes entities!
-			// JW/2007-02-20: why is this? wouldn't it be  easier for the person editing to show actual characters instead of entities?  
+			// JW/2007-02-20: why is this? wouldn't it be  easier for the person editing to show actual characters instead of entities?
 			'<input type="hidden" name="body" value="'.$this->hsc_secure($body).'" />'."\n";	#427
 
 
@@ -216,7 +215,7 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 
 		// append a comment?
 		// TODO not clear if this is/was intended as a URL parameter (GET), or a check box on the edito form (POST) ....
-		// would be nice as a checkbox, provided it is acted upon only when user is actually submitting - NOT on preview or re-edit  
+		// would be nice as a checkbox, provided it is acted upon only when user is actually submitting - NOT on preview or re-edit
 		if (isset($_REQUEST['appendcomment'])) #312, #449
 		{
 			$body = trim($body)."\n\n----\n\n--".$this->GetUserName().' ('.strftime("%c").')';
@@ -227,7 +226,7 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 			'<input type="hidden" name="previous" value="'.$previous.'" />'."\n".
 			// We need to escape ALL entity refs before display so we display them _as_ entities instead of interpreting them
 			// hence hsc_secure() instead of htmlspecialchars_ent() which UNescapes entities!
-			// JW/2007-02-20: why is this? wouldn't it be  easier for the person editing to show actual characters instead of entities?  
+			// JW/2007-02-20: why is this? wouldn't it be  easier for the person editing to show actual characters instead of entities?
 			'<textarea id="body" name="body">'.$this->hsc_secure($body).'</textarea><br />'."\n";	#427
 		// add Edit note
 		// We need to escape ALL entity refs before display so we display them _as_ entities instead of interpreting them
@@ -240,7 +239,7 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 		$output .=	'<input name="submit" type="submit" value="'.INPUT_SUBMIT_STORE.'" accesskey="'.ACCESSKEY_STORE.'" /> <input name="submit" type="submit" value="'.INPUT_SUBMIT_PREVIEW.'" accesskey="'.ACCESSKEY_PREVIEW.'" /> <input type="button" value="'.INPUT_BUTTON_CANCEL.'" onclick="document.location=\''.$this->Href('').'\';" />'."\n".
 			$this->FormClose();
 
-		if ($this->config['gui_editor'] == 1) 
+		if ($this->config['gui_editor'] == 1)
 		{
 			$output .= '<script type="text/javascript" src="3rdparty/plugins/wikiedit/protoedit.js"></script>'."\n".
 					   '<script type="text/javascript" src="3rdparty/plugins/wikiedit/wikiedit2.js"></script>'."\n";
