@@ -65,22 +65,19 @@ else
 	echo ' <tr><td>&nbsp;</td><td>'.__('To start the installation, please fill in the form below').'.</td></tr>'."\n";
 }
 // We need to (directly) use the configured location SITE_CONFIGFILE
-// Try to create wikka.config.php
-#if (!file_exists($wakkaConfigLocation))
+// Try to create wikka.config.php, we do not need to report the status of the operation at this moment.
 if (!file_exists(SITE_CONFIGFILE))
 {
-	#@touch($wakkaConfigLocation);			// check result from touch - error if not successful!
-	test('Creating empty configuration file...',@touch(SITE_CONFIGFILE),'Could not create '.SITE_CONFIGFILE,0);	// @@@ should stop on error! don't stop for debugging only
+	@touch(SITE_CONFIGFILE);
 }
 
 echo ' <tr><td>&nbsp;</td><td><span class="note">'.sprintf(__('NOTE: The installer will try to write the configuration data to a file called %1$s, located in %2$s'), '<tt>'.basename(SITE_CONFIGFILE).'</tt>', '<tt>'.dirname(realpath(SITE_CONFIGFILE)).'</tt>').'. ';
-#if (!file_exists($wakkaConfigLocation) || !is_writeable($wakkaConfigLocation))
 if (!file_exists(SITE_CONFIGFILE) || !is_writeable(SITE_CONFIGFILE))
 {
 	// display first message always, so user can check path! ^^
-	#echo ' <tr><td>&nbsp;</td><td><span class="note">'.sprintf(__('NOTE: The installer will try to write the configuration data to a file called %1$s, located in %2$s'), '<tt>'.basename($wakkaConfigLocation).'</tt>', '<tt>'.dirname(realpath($wakkaConfigLocation)).'</tt>').'. ';
-	echo __('In order for this to work, you must make sure the web server has write access to that file. If you can\'t do this, you will have to edit the file manually (the installer will tell you how)').'.</span></td></tr>'."\n";
+	echo __('In order for this to work, you must make sure the web server has write access to that file. If you can\'t do this, you will have to edit the file manually (the installer will tell you how)')."\n";
 }
+echo '</span></td></tr>';
 
 	if (!$wakkaConfig["wakka_version"])
 	{
