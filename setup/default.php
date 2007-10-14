@@ -1,19 +1,16 @@
 <?php
 /**
- * Display a configuration form to set default ACL.
+ * Display a configuration form to set language and database settings.
  * 
  * @package	Setup
  * @version	$Id$
  * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
+ *
+ * @uses init_test_mod_rewrite()
  * @todo	make form accessible!
- * @todo  write setup/test/.htaccess
  */
 ?>
-<div style='display:none;'>
-<script type='text/javascript'>
-</script>
-</div>
 <form action="setup/test/test-mod-rewrite.php" name="form1" method="post">
 <table>
 	<?php
@@ -28,6 +25,23 @@
 		echo '<tr><td>&nbsp;</td><td><p>'.__('Welcome to the WikkaWiki Setup Wizard. Since there is no existing WikkaWiki configuration, this probably is a <em>fresh install</em>').'.</p><p>'.sprintf(__('You are about to install WikkaWiki (version %s). This wizard will guide you through the installation, which should take only a few minutes'), '<strong><tt>'.WAKKA_VERSION.'</tt></strong>').'. '.sprintf(__('Please refer to the %1$s for further instructions'), '<a href="http://docs.wikkawiki.org/WikkaInstallation" target="_blank">'.__('documentation').'</a>').'.</p></td></tr>'."\n";
 	}
 
+	$setupfiles_to_update = array(
+		'./.htaccess', './wikka.config.php', 'setup/test/.htaccess');
+	$setup_files_not_writable = '';
+	foreach ($setupfiles_to_update as $f1)
+	{
+		if (!setupfile_is_writable($f1))
+		{
+			$setup_files_not_writable .= '<li><tt>'.$f1.'</tt></li>';
+		}
+	}
+	if ($setup_files_not_writable)
+	{
+		printf('<tr><td>&nbsp;</td><td class="note"><p>'.__('The following files need to be written/updated by the installer: %s'.
+		 'Please ensure that if the file exists, it is writable; and if it doesn\'t exist, its parent directory is writable.').
+		 '</p></td></tr>', '</p><ul>'.$setup_files_not_writable.'</ul><p>');
+	}
+	init_test_mod_rewrite();
 	// Language select
 	if (!isset($config['default_lang']))
 	{
@@ -64,4 +78,3 @@
 	</td></tr>
 </table>
 </form>
-<?php init_test_mod_rewrite(); ?>

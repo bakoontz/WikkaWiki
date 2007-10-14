@@ -231,10 +231,25 @@ function Language_selectbox($default_lang)
 	}
 	echo '</select>';
 }
+/**
+ * Test if mod_rewrite Apache module was found to be available.
+ * The real checking occured after submitting the form on the first installation setup
+ * screen, using the files {@link Setup/test/test-mod-rewrite.php} and 
+ * {@link Setup/test/rewrite-ok.php}.
+ */
 function test_mod_rewrite()
 {
 	return (isset($_SESSION['mod_rewrite']) && ($_SESSION['mod_rewrite'] == 'ok'));
 }
+/**
+ * Write the file {@link Setup/test/.htaccess}.
+ *
+ * .htaccess files must be written dynamically, because the RewriteBase
+ * directive needs the installation path.
+ *
+ * @todo: case setup files in other directory than setup
+ * @return boolean true if the file .htaccess could be written successfully, false otherwise
+ */
 function init_test_mod_rewrite()
 {
 	global $action_target, $url;
@@ -252,6 +267,24 @@ RewriteRule ^test-mod-rewrite.php$ rewrite-ok.php
 HTACCESSCONTENT;
 		fwrite($fp, $htaccess_content);
 		fclose($fp);
+		return true;
 	}
+	return false;
+}
+/**
+ * Check if the installer will be able to write the specified file.
+ *
+ * @param string $file the filename and path to be checked
+ * @return boolean true if the file could be written (created if absent), false otherwise
+ */
+function setupfile_is_writable($file)
+{
+	$buff = @fopen($file, 'a');
+	if (!$buff)
+	{
+		return (false);
+	}
+	fclose($buff);
+	return (true);
 }
 ?>
