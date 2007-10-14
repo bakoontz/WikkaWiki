@@ -54,7 +54,6 @@ if (isset($_GET['nonce']))
 	}
 
 // get utilities
-#require_once 'setup'.DIRECTORY_SEPARATOR.'inc'.DIRECTORY_SEPARATOR.'functions.inc.php';
 /**
  * Setup function library
  *
@@ -97,8 +96,6 @@ else
 }
 // load subpage
 // use path constant
-#if (file_exists('setup'.DIRECTORY_SEPARATOR.$installAction.'.php'))
-#include('setup'.DIRECTORY_SEPARATOR.$installAction.'.php'); else print '<em>'.ERROR_SETUP_FILE_MISSING.'</em>';
 if (file_exists(WIKKA_SETUP_PATH.DIRECTORY_SEPARATOR.$installAction.'.php'))
 	/**
 	 * Installation phase script.

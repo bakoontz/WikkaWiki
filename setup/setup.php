@@ -64,12 +64,6 @@ else
 	echo '	<tr><td>&nbsp;</td><td><h1>'.__('Wikka Installation').' (3/5)</h1></td></tr>'."\n";
 	echo ' <tr><td>&nbsp;</td><td>'.__('To start the installation, please fill in the form below').'.</td></tr>'."\n";
 }
-// We need to (directly) use the configured location SITE_CONFIGFILE
-// Try to create wikka.config.php, we do not need to report the status of the operation at this moment.
-if (!file_exists(SITE_CONFIGFILE))
-{
-	@touch(SITE_CONFIGFILE);
-}
 
 echo ' <tr><td>&nbsp;</td><td><span class="note">'.sprintf(__('NOTE: The installer will try to write the configuration data to a file called %1$s, located in %2$s'), '<tt>'.basename(SITE_CONFIGFILE).'</tt>', '<tt>'.dirname(realpath(SITE_CONFIGFILE)).'</tt>').'. ';
 if (!file_exists(SITE_CONFIGFILE) || !is_writeable(SITE_CONFIGFILE))

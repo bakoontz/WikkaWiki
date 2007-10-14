@@ -336,12 +336,10 @@ case "trunk": //latest development version from the SVN repository - do not remo
 }
 
 // (directly) use configured location SITE_CONFIGFILE
-#if (!file_exists($wakkaConfigLocation) || !is_writeable($wakkaConfigLocation))
 if (!file_exists(SITE_CONFIGFILE) || !is_writeable(SITE_CONFIGFILE))
 {
 ?>
 <p><?php
-	#printf(__('In the next step, the installer will try to write the updated configuration file, %s').'. ', '<tt>'.$wakkaConfigLocation.'</tt>');
 	printf(__('In the next step, the installer will try to write the updated configuration file, %s').'. ', '<tt>'.SITE_CONFIGFILE.'</tt>');
 echo __('Please make sure the web server has write access to the file, or you will have to edit it manually').'.';
 printf(__('Once again, see %s for details'), '<a href="http://docs.wikkawiki.org/WikkaInstallation" target="_blank">Wikka:WikkaInstallation</a>');

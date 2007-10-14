@@ -109,18 +109,13 @@ function update_default_page($tag, $dblink, $config, $lang_defaults_path, $lang_
 	}
 	$admin_users = explode(',', $config['admin_users']);
 	$admin_main_user = trim($admin_users[0]);
-	#$txt_filename = 'lang'.DIRECTORY_SEPARATOR.$config['default_lang'].DIRECTORY_SEPARATOR.'defaults'.DIRECTORY_SEPARATOR.$filename.'.txt';
 	$txt_filepath = $lang_defaults_path.$filename.'.txt';
-	#if (!file_exists($txt_filename) || !is_readable($txt_filename))
 	if (!file_exists($txt_filepath) || !is_readable($txt_filepath))
 	{
-		#$txt_filename = 'lang'.DIRECTORY_SEPARATOR.'en'.DIRECTORY_SEPARATOR.'defaults'.DIRECTORY_SEPARATOR.$filename.'.txt';
 		$txt_filepath = $lang_defaults_fallback_path.$filename.'.txt';
 	}
-	#if (file_exists($txt_filename) && is_readable($txt_filename))
 	if (file_exists($txt_filepath) && is_readable($txt_filepath))
 	{
-		#$body = implode('', file($txt_filename));
 		$body = implode('', file($txt_filepath));
 		mysql_query('update '.$config['table_prefix'].'pages set latest = "N" where tag = \''.$tag.'\'', $dblink);
 		test (sprintf(__('Adding/Updating default page %s'.'...'), $tag),
@@ -131,7 +126,6 @@ function update_default_page($tag, $dblink, $config, $lang_defaults_path, $lang_
 	}
 	else
 	{
-		#test (sprintf(__('Adding/Updating default page %s'.'...'), $tag), false, sprintf(__('Default page not found or file not readable (%s, %s)'), $tag, $txt_filename), 0);
 		test (sprintf(__('Adding/Updating default page %s'.'...'), $tag), false, sprintf(__('Default page not found or file not readable (%s, %s)'), $tag, $txt_filepath), 0);
 	}
 }
@@ -215,13 +209,11 @@ function Language_selectbox($default_lang)
 		'fr' => 'Français',
 		'de' => 'Deutsch');
 	// use configured path
-	#$hdl = opendir('lang');
 	$hdl = opendir(WIKKA_LANG_PATH);
 	while ($f = readdir($hdl))
 	{
 		if ($f[0] == '.') continue;
 		// use configured path
-		#if (file_exists('lang'.DIRECTORY_SEPARATOR.$f.DIRECTORY_SEPARATOR.'defaults'.DIRECTORY_SEPARATOR.'PageIndex.txt'))
 		if (file_exists(WIKKA_LANG_PATH.DIRECTORY_SEPARATOR.$f.DIRECTORY_SEPARATOR.'defaults'.DIRECTORY_SEPARATOR.'PageIndex.txt'))
 		{
 			echo "\n ".'<option value="'.$f.'"';

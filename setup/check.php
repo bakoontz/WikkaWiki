@@ -16,12 +16,6 @@
 #if (!defined('MYSQL_REQ')) define('MYSQL_REQ', '3.23');	// vv use MINIMUM_MYSQL_VERSION (already defined!)
 
 $server_info = array();
-// Try to create .htaccess
-if (!file_exists($htaccessLocation))
-{
-	#@touch($htaccessLocation);			// check result from touch - error if not successful!
-	test('Creating empty .htaccess file...',@touch($htaccessLocation),'Could not create '.$htaccessLocation,0);	// @@@ should stop on error! don't stop for debugging only
-}
 if (preg_match('/Apache\/?([0-9|\.]*)/i', $_SERVER['SERVER_SOFTWARE'], $webserver_version))
 {
 	// Apache
@@ -88,7 +82,6 @@ $dblink = @mysql_connect($config['mysql_host'], $config['mysql_user'], $config['
 $server_info['mysql'] = @mysql_get_server_info($dblink);
 $db_exists = @mysql_select_db($config['mysql_database'], $dblink);
 
-#if ((function_exists('version_compare')) && version_compare($server_info['php'], PHP_REQ, '>='))
 if ((function_exists('version_compare')) && version_compare($server_info['php'], MINIMUM_PHP_VERSION, '>='))
 {
 	$php_note = '<em class="ok">OK</em>';
@@ -96,11 +89,9 @@ if ((function_exists('version_compare')) && version_compare($server_info['php'],
 }
 else
 {
-	#$php_note = '<em class="failed">'.__('Not supported').'</em><br /><span class="small">('.sprintf(__('Min. %s version required:'), 'PHP').' <strong>'.PHP_REQ.'</strong>) '.__('Any other information provided by this installer may be false').'.</span>';
 	$php_note = '<em class="failed">'.__('Not supported').'</em><br /><span class="small">('.sprintf(__('Min. %s version required:'), 'PHP').' <strong>'.MINIMUM_PHP_VERSION.'</strong>) '.__('Any other information provided by this installer may be false').'.</span>';
 }
 
-#if (version_compare($server_info['mysql'], MYSQL_REQ, '>='))
 if (version_compare($server_info['mysql'], MINIMUM_MYSQL_VERSION, '>='))
 {
 	$mysql_note = '<em class="ok">OK</em>';
@@ -108,12 +99,10 @@ if (version_compare($server_info['mysql'], MINIMUM_MYSQL_VERSION, '>='))
 }
 else
 {
-	#$mysql_note = '<em class="failed">'.__('Not supported').'</em><br /><span class="small">('.sprintf(__('Min. %s version required:'), 'MySQL').' <strong>'.MYSQL_REQ.'</strong>)</span>';
 	$mysql_note = '<em class="failed">'.__('Not supported').'</em><br /><span class="small">('.sprintf(__('Min. %s version required:'), 'MySQL').' <strong>'.MINIMUM_MYSQL_VERSION.'</strong>)</span>';
 }
 if (!$server_info['mysql'])
 {
-	#$mysql_note = '<em class="failed">'.__('Unable to find MySQL version').'</em><br /><span class="small">('.sprintf(__('Min. %s version required:'), 'MySQL').' <strong>'.MYSQL_REQ.'</strong>, '.__('if you are sure you have the same or a newer version, you can go ahead').'.)</span>';
 	$mysql_note = '<em class="failed">'.__('Unable to find MySQL version').'</em><br /><span class="small">('.sprintf(__('Min. %s version required:'), 'MySQL').' <strong>'.MINIMUM_MYSQL_VERSION.'</strong>, '.__('if you are sure you have the same or a newer version, you can go ahead').'.)</span>';
 	$server_info['mysql'] = 'n/a';
 	$mysql_retry = "\n<input type='hidden' name='retry_mysql' value='1' />";

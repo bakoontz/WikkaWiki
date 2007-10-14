@@ -10,7 +10,6 @@
 
 // remove config values for whatever reason
 unset($config['allow_doublequote_html']);
-#$config['base_url'] = $url;			// !!! OBSOLETE
 
 // set version to current version, yay!
 $config['wakka_version'] = WAKKA_VERSION;
@@ -101,7 +100,6 @@ if ($fp)
 	fwrite($fp, $configCode);
 	// write
 	fclose($fp);
-	#printf('<p>'.__('That\'s all! You can now %1$sreturn to your WikkaWiki site%2$s'), '<a href="'.$config['base_url'].'">', '</a>');	// base_url OBSOLETE
 	printf('<p>'.__('That\'s all! You can now %1$sreturn to your WikkaWiki site%2$s'), '<a href="'.$url.'">', '</a>');
 	echo '. '."\n";
 	printf(__('However, you are advised to remove write access to %s again now that it\'s been written. Leaving the file writable can be a security risk'), '<tt>wikka.config.php</tt>');
@@ -110,15 +108,11 @@ if ($fp)
 else
 {
 	// complain
-	// (directly) use configured location SITE_CONFIGFILE
 	print('<p><span class="failed">'.__('WARNING').':</span> ');
-	#printf(__('The file %1$s could not be written. You will need to give your web server temporary write access to either your wikka directory, or a blank file called %1$s'), '<tt>'.$wakkaConfigLocation.'</tt>');
 	printf(__('The file %1$s could not be written. You will need to give your web server temporary write access to either your wikka directory, or a blank file called %1$s'), '<tt>'.SITE_CONFIGFILE.'</tt>');
 	echo ' (<kbd>touch wikka.config.php ; chmod 666 wikka.config.php</kbd>) ; ';
-	#printf(__('don\'t forget to remove write access again later, ie %s'), '<kbd>chmod 644 '.$wakkaConfigLocation.'</kbd>');
 	printf(__('don\'t forget to remove write access again later, ie %s'), '<kbd>chmod 644 '.SITE_CONFIGFILE.'</kbd>');
 	echo ".\n";
-	#printf(__('If, for any reason, you can\'t do this, you\'ll have to copy the text below into a new file and save/upload it as %1$s'), '<tt>'.$wakkaConfigLocation.'</tt>');
 	printf(__('If, for any reason, you can\'t do this, you\'ll have to copy the text below into a new file and save/upload it as %1$s'), '<tt>'.SITE_CONFIGFILE.'</tt>');
 	printf(__('Once you\'ve done this, your Wikka site should work. If not, please visit %s'), '<a href="http://docs.wikkawiki.org/WikkaInstallation">Wikka:WikkaInstallation</a>');
 	echo '.</p>'."\n";
