@@ -25,4 +25,5 @@
 
 	//print code block
 	echo $code;
+	die();
 ?>
