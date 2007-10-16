@@ -64,15 +64,25 @@ class Wakka
 	/**
 	 * Database methods
 	 */
-	function Query($query)
+	function Query($query, $dblink='')
 	{
-		$start = $this->GetMicroTime();
-		if (!$result = mysql_query($query, $this->dblink))
+		// init - detect if called from objct or externally
+		if ('' == $dblink)
+		{
+			$dblink = $this->dblink;
+			$object = TRUE;
+			$start = $this->GetMicroTime();
+		}
+		else
+		{
+			$object = FALSE;
+		}
+		if (!$result = mysql_query($query, $dblink))
 		{
 			ob_end_clean();
 			die("Query failed: ".$query." (".mysql_error().")");
 		}
-		if ($this->GetConfigValue("sql_debugging"))
+		if ($object && $this->config['sql_debugging'])
 		{
 			$time = $this->GetMicroTime() - $start;
 			$this->queryLog[] = array(
@@ -1241,22 +1251,28 @@ class Wakka
 	 *		- added $prefix param so it can be used from installer
 	 *		- added $current param so it checks by default for a current page only
 	 *
-	 * @access		public
-	 * @uses		Query()
+	 * @access	public
+	 * @uses	Query()
 	 *
-	 * @param		string  $page  page name to check
-	 * @param		string	$prefix	optional: table prefix to use
-	 *						pass NULL if you need to override the $active parameter
-	 *						default: prefix as in configuration file
-	 * @param		string	$active	optional: if TRUE, check for actgive page only
-	 *						default: TRUE
-	 * @return		boolean  TRUE if page exists, FALSE otherwise
+	 * @param	string	$page  page name to check
+	 * @param	string	$prefix	optional: table prefix to use
+	 *					pass NULL if you need to override the $active parameter
+	 *					default: prefix as in configuration file
+	 * @param	mixed	$dblink	optional: connection resource, or NULL to get
+	 *					object's connection
+	 * @param	string	$active	optional: if TRUE, check for actgive page only
+	 *					default: TRUE
+	 * @return	boolean	TRUE if page exists, FALSE otherwise
 	 */
-	function existsPage($page, $prefix='', $active=TRUE)
+	function existsPage($page, $prefix='', $dblink=NULL, $active=TRUE)
 	{
 		// init
 		$count = 0;
 		$table_prefix = (empty($prefix)) ? $this->config['table_prefix'] : $prefix;
+		if (is_null($dblink))
+		{
+			$dblink = $this->dblink;
+		}
 		// build query
 		$query = "SELECT COUNT(tag)
 				FROM ".$table_prefix."pages
@@ -1266,7 +1282,7 @@ class Wakka
 			$query .= "		AND latest='Y'";
 		}
 		// do query
-		if ($r = $this->Query($query))
+		if ($r = Wakka::Query($query, $dblink))
 		{
 			$count = mysql_result($r,0);
 			mysql_free_result($r);

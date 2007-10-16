@@ -410,7 +410,7 @@ else
 					$error = ERROR_WIKINAME;
 					$username_highlight = INPUT_ERROR_STYLE;
 					break;
-				case ($this->existsPage($name,NULL,FALSE)):			// name change, new interface (check for non-active page, too)
+				case ($this->existsPage($name,NULL,NULL,FALSE)):	// name change, new interface (check for non-active page, too)
 					$error = ERROR_RESERVED_PAGENAME;
 					$username_highlight = INPUT_ERROR_STYLE;
 					break;

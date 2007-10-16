@@ -111,7 +111,7 @@ if (!$this->existsPage($from))		// name change, interface change (allows only ac
 				} else
 				{
 					// 5. check target page existence
-					if ($this->existsPage($to, NULL, FALSE))	// name change, interface change (checks for non-active page, too) @@@
+					if ($this->existsPage($to, NULL, NULL, FALSE))	// name change, interface change (checks for non-active page, too) @@@
 					{
 						// page already exists!
 						$box = '<em class="error">'.ERROR_PAGE_ALREADY_EXIST.'</em>';
