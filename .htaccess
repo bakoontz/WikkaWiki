@@ -5,12 +5,21 @@ order deny,allow
 deny from env=BadReferrer
 
 <IfModule mod_rewrite.c>
- # turn on rewrite engine
- RewriteEngine on
- # if request is a directory, make sure it ends with a slash
- RewriteCond %{REQUEST_FILENAME} -d
- RewriteRule ^(.*/[^/]+)$ $1/
- # if not rewritten before, turn request into a query for wikka.php
- RewriteCond %{QUERY_STRING} !wakka=
- RewriteRule ^(.*)$ wikka.php?wakka=$1 [QSA,L]
+	# turn on rewrite engine
+	RewriteEngine on
+
+	# if request is a directory, make sure it ends with a slash
+	RewriteCond %{REQUEST_FILENAME} -d
+	RewriteRule ^(.*/[^/]+)$ $1/
+
+	# if not rewritten before, AND requested file is wikka.php
+	# turn request into a query for a default (unspecified) page
+	RewriteCond %{QUERY_STRING} !wakka=
+	RewriteCond %{REQUEST_FILENAME} wikka.php
+	RewriteRule ^(.*)$ wikka.php?wakka= [QSA,L]
+
+	# if not rewritten before, AND requested file is a page name
+	# turn request into a query for that page name for wikka.php
+	RewriteCond %{QUERY_STRING} !wakka=
+	RewriteRule ^(.*)$ wikka.php?wakka=$1 [QSA,L]
 </IfModule>
