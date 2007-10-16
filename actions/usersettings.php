@@ -10,13 +10,27 @@
  * @author		{@link http://wikkawiki.org/MinusF MinusF} (code cleanup and validation)
  * @author		{@link http://wikkawiki.org/DarTar Dario Taraborelli} (further cleanup, i18n, replaced JS dialogs with server-generated messages)
  *
+ * @uses		Wakka::LogoutUser()
+ * @uses		Wakka::Redirect()
+ * @uses		Wakka::Getuser()
+ * @uses		Wakka::GetSafeVar()
+ * @uses		Wakka::Query()
+ * @uses		Wakka::SetUser()
+ * @uses		Wakka::LoadUser()
+ * @uses		Wakka::FormOpen()
+ * @uses		Wakka::FormClose()
+ * @uses		Wakka::Link()
+ * @uses		Wakka::Format()			to be avoided
  * @uses		Wakka::htmlspecialchars_ent()
+ * @uses		Wakka::IsWikiName()
+ * @uses		Wakka::existsPage()
  *
  * @todo		use different actions for registration / login / user settings;
  * @todo		add documentation links or short explanations for each option;
  * @todo		use error handler for displaying messages and highlighting
  * 				invalid input fields;
  * @todo		remove useless redirections;
+ * @todo		avoid use of Format() (too costly for just headings and erro rstrings)
  * @todo		[accessibility] make logout independent of JavaScript
  */
 
@@ -396,7 +410,7 @@ else
 					$error = ERROR_WIKINAME;
 					$username_highlight = INPUT_ERROR_STYLE;
 					break;
-				case ($this->existsPage($name)):			// name change
+				case ($this->existsPage($name,NULL,FALSE)):			// name change, new interface (check for non-active page, too)
 					$error = ERROR_RESERVED_PAGENAME;
 					$username_highlight = INPUT_ERROR_STYLE;
 					break;
@@ -453,7 +467,7 @@ else
 	// BEGIN *** Usersettings ***
 	elseif  (isset($_POST['action']) && ($_POST['action'] == 'updatepass'))
 	{
-        	$name = trim($_POST['yourname']);
+		$name = trim($_POST['yourname']);
 		if (strlen($name) == 0) // empty username
 		{
 			$newerror = ERROR_EMPTY_USERNAME;
@@ -491,10 +505,10 @@ else
 ?>
 	<input type="hidden" name="action" value="login" />
 	<table class="usersettings">
-   	<tr>
-   		<td colspan="2"><?php echo $this->Format(REGISTER_HEADING) ?></td>
-   		<td>&nbsp;</td>
-   	</tr>
+	<tr>
+		<td colspan="2"><?php echo $this->Format(REGISTER_HEADING) ?></td>
+		<td>&nbsp;</td>
+	</tr>
 	<tr>
 		<td>&nbsp;</td>
 		<td><?php echo $this->Format(REGISTERED_USER_LOGIN_LABEL); ?></td>

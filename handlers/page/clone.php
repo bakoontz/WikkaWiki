@@ -1,4 +1,3 @@
-<div class="page">
 <?php
 /**
  * Clone the current page and save a copy of it as a new page.
@@ -11,33 +10,45 @@
  * If the edit option is selected, the user is redirected to the target page for
  * edition immediately after its creation.
  *
- * @package         Handlers
+ * @package		Handlers
  * @subpackage
- * @name              clone
+ * @name		clone
  *
- * @author            {@link http://wikkawiki.org/ChristianBarthelemy Christian Barthelemy} - original idea and code.
- * @author            {@link http://wikkawiki.org/DarTar Dario Taraborelli} - bugs fixed, code improved, removed popup alerts.
- * @version           0.4
- * @since             Wikka 1.1.6.0
+ * @author		{@link http://wikkawiki.org/ChristianBarthelemy Christian Barthelemy} - original idea and code.
+ * @author		{@link http://wikkawiki.org/DarTar Dario Taraborelli} - bugs fixed, code improved, removed popup alerts.
+ * @version		0.4
+ * @since		Wikka 1.1.6.0
  *
- * @input             string  $to  required: the page to be created
- *                            must be a non existing page and current user must be authorized to create it
- *                            default is source page name
+ * @uses	Wakka::HasAccess()
+ * @uses	Wakka::existsPage()
+ * @uses	Wakka::LoadPage()
+ * @uses	Wakka::Savepage()
+ * @uses	Wakka::Redirect()
+ * @uses	Wakka::Link()
+ * @uses	Wakka::GetpageTag()
+ * @uses	Wakka;:FormOpen()
+ * @uses	Wakka::FormClose()
  *
- * @input             string  $note  optional: the note to be added to the page when created
- *                            default is "Cloned from " followed by the name of the source page
+ * @input	string	$to	required: the page to be created
+ *					must be a non existing page and current user must be authorized
+ *					to create it
+ *					default is source page name
+ * @input	string	$note	optional: the note to be added to the page when created
+ *					default is "Cloned from " followed by the name of the source page
+ * @input	boolean	$editoption	optional: if true, the new page will be opened for
+ *					editing on creation
+ *					default is FALSE (to allow multiple cloning of the same source)
  *
- * @input             boolean $editoption optional: if true, the new page will be opened for edition on creation
- *                            default is false (to allow multiple cloning of the same source)
- *
- * @todo              Use central library for valid pagenames.
+ * @todo	Use central regex library for valid pagenames.
+ * @todo	Decide whether it's allowed to "re-create" a page of which only non-active versions exist
  *
  */
 // defaults
 if(!defined('VALID_PAGENAME_PATTERN')) define ('VALID_PAGENAME_PATTERN', '/^[A-Za-zÄÖÜßäöü]+[A-Za-z0-9ÄÖÜßäöü]*$/s');
 
 // i18n
-define('CLONE_HEADER', '==== Clone current page ====');
+#define('CLONE_HEADER', '==== Clone current page ====');
+define('CLONE_HEADER', 'Clone current page');
 define('CLONE_SUCCESSFUL', '%s was succesfully created!');
 define('CLONE_X_TO', 'Clone %s to:');
 define('CLONED_FROM', 'Cloned from %s');
@@ -58,63 +69,66 @@ $note = sprintf(CLONED_FROM, $from);
 $editoption = '';
 $box = PLEASE_FILL_VALID_TARGET;
 
+echo '<div class="page">'."\n";
+
 // print header
-echo $this->Format(CLONE_HEADER);
+#echo $this->Format(CLONE_HEADER);
+echo '<h3>'.CLONE_HEADER.'</h3>'."\n";
 
 // 1. check source page existence
-if (!$this->existsPage($from))					// name change
+if (!$this->existsPage($from))		// name change, interface change (allows only active page (if not, LoadPage() will fail!))
 {
 	// source page does not exist!
-	$box = sprintf(ERROR_PAGE_NOT_EXIST, $from);
+	$box = '<em class="error">'.sprintf(ERROR_PAGE_NOT_EXIST, $from).'</em>';
 } else
 {
 	// 2. page exists - now check user's read-access to the source page
 	if (!$this->HasAccess('read', $from))
 	{
 		// user can't read source page!
-		$box = ERROR_ACL_READ;
+		$box = '<em class="error">'.ERROR_ACL_READ.'</em>';
 	} else
 	{
 		// page exists and user has read-access to the source - proceed
-		if (isset($_POST) && $_POST)
+		if (isset($_POST) && $_POST)	// @@@ ??? what are we testing here?
 		{
 			// get parameters
 			$to = isset($_POST['to']) && $_POST['to'] ? $_POST['to'] : $to;
 			$note = isset($_POST['note']) && $_POST['note'] ? $_POST['note'] : $note;
-			$editoption = (isset($_POST['editoption']))? 'checked="checked"' : '';
+			$editoption = (isset($_POST['editoption'])) ? ' checked="checked"' : '';
 
 			// 3. check target pagename validity
 			if (!preg_match(VALID_PAGENAME_PATTERN, $to))  //TODO use central regex library
 			{
 				// invalid pagename!
-				$box = '""<em class="error">'.ERROR_INVALID_PAGENAME.'</em>""';
+				$box = '<em class="error">'.ERROR_INVALID_PAGENAME.'</em>';
 			} else
 			{
 				// 4. target page name is valid - now check user's write-access
 				if (!$this->HasAccess('write', $to))
 				{
-					$box = '""<em class="error">'.sprintf(ERROR_ACL_WRITE, $to).'</em>""';
+					$box = '<em class="error">'.sprintf(ERROR_ACL_WRITE, $to).'</em>';
 				} else
 				{
 					// 5. check target page existence
-					if ($this->existsPage($to))						// name change
+					if ($this->existsPage($to, NULL, FALSE))	// name change, interface change (checks for non-active page, too) @@@
 					{
 						// page already exists!
-						$box = '""<em class="error">'.ERROR_PAGE_ALREADY_EXIST.'</em>""';
+						$box = '<em class="error">'.ERROR_PAGE_ALREADY_EXIST.'</em>';
 					} else
 					{
 						// 6. Valid request - proceed to page cloning
-						$thepage=$this->LoadPage($from); # load the source page
+						$thepage = $this->LoadPage($from); # load the source page
 						if ($thepage) $pagecontent = $thepage['body']; # get its content
 						$this->SavePage($to, $pagecontent, $note); #create target page
-						if ($editoption == 'checked="checked"')
+						if ($editoption == ' checked="checked"')
 						{
 							// quick edit
 							$this->Redirect($this->href('edit', $to));
 						} else
 						{
 							// show confirmation message
-							$box = '""<em class="success">'.sprintf(CLONE_SUCCESSFUL, $to).'</em>""';
+							$box = '<em class="success">'.sprintf(CLONE_SUCCESSFUL, $to).'</em>';
 						}
 					}
 				}
@@ -134,7 +148,7 @@ if (!$this->existsPage($from))					// name change
 			'<tr>'."\n".
 			'<td></td>'."\n".
 			'<td>'."\n".
-			'<input type="checkbox" name="editoption" '.$editoption.' id="editoption" /><label for="editoption">'.LABEL_EDIT_OPTION.'</label>'."\n".
+			'<input type="checkbox" name="editoption"'.$editoption.' id="editoption" /><label for="editoption">'.LABEL_EDIT_OPTION.'</label>'."\n".
 			'<input type="submit" name="create" value="'.LABEL_CLONE.'" />'."\n".
 			'</td>'."\n".
 			'</tr>'."\n".
@@ -144,7 +158,8 @@ if (!$this->existsPage($from))					// name change
 }
 
 // display messages
-if (isset($box)) echo $this->Format(' --- '.$box.' --- --- ');
+#if (isset($box)) echo $this->Format(' --- '.$box.' --- --- ');
+if (isset($box)) echo '<p>'.$box.'</p><br />'."\n";
 // print form
 if (isset($form)) print $form;
 ?>

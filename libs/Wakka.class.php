@@ -588,8 +588,8 @@ class Wakka
 	 * @since	wikka 1.1.6.0
 	 * @uses	Wakka::config
 	 * @uses	GeShi
-	 * @todo		support for GeSHi line number styles
-	 * @todo		enable error handling
+	 * @todo	support for GeSHi line number styles
+	 * @todo	enable error handling
 	 *
 	 * @param	string	$sourcecode	required: source code to be highlighted
 	 * @param	string	$language	required: language spec to select highlighter
@@ -1062,12 +1062,12 @@ class Wakka
 	 * @license		http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
 	 *
 	 * @access	public
-	 * @uses	makeId()
 	 * @uses	ID_LENGTH
-	 * @uses	existsHandler()
-	 * @uses	existsPage()
-	 * @uses	Href()
-	 * @uses	MiniHref()	only for hidden field
+	 * @uses	Wakka::makeId()
+	 * @uses	Wakka::existsHandler()
+	 * @uses	Wakka::existsPage()
+	 * @uses	Wakka::Href()
+	 * @uses	Wakka::MiniHref()	only for hidden field
 	 *
 	 * @param	string	$handler	optional: "handler" which consists of handler name and possibly a query string
 	 *								to be used as part of action attribute
@@ -1102,7 +1102,7 @@ class Wakka
 		{
 			$handler = '';
 		}
-		if (!empty($tag) && !$this->existsPage($tag))
+		if (!empty($tag) && !$this->existsPage($tag))	// name change, interface change (check for active page only)
 		{
 			$tag = '';	// Href() will pick up current page name if none specified
 		}
@@ -1234,27 +1234,44 @@ class Wakka
 	 * @author		{@link http://wikkawiki.org/JavaWoman JavaWoman}
 	 * @copyright	Copyright © 2004, Marjolein Katsma
 	 * @license		http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
-	 * @version		1.0
+	 * @version		1.1
 	 *
-	 * NOTE: name changed from ExistsPage() to existsPage() !!!
+	 * NOTE: v. 1.0 -> 1.1
+	 *		- name changed from ExistsPage() to existsPage() !!!
+	 *		- added $prefix param so it can be used from installer
+	 *		- added $current param so it checks by default for a current page only
 	 *
 	 * @access		public
 	 * @uses		Query()
 	 *
 	 * @param		string  $page  page name to check
+	 * @param		string	$prefix	optional: table prefix to use
+	 *						pass NULL if you need to override the $active parameter
+	 *						default: prefix as in configuration file
+	 * @param		string	$active	optional: if TRUE, check for actgive page only
+	 *						default: TRUE
 	 * @return		boolean  TRUE if page exists, FALSE otherwise
 	 */
-	function existsPage($page)
+	function existsPage($page, $prefix='', $active=TRUE)
 	{
+		// init
 		$count = 0;
-		$query = 	"SELECT COUNT(tag)
-					FROM ".$this->config['table_prefix']."pages
-					WHERE tag='".mysql_real_escape_string($page)."'";
+		$table_prefix = (empty($prefix)) ? $this->config['table_prefix'] : $prefix;
+		// build query
+		$query = "SELECT COUNT(tag)
+				FROM ".$table_prefix."pages
+				WHERE tag='".mysql_real_escape_string($page)."'";
+		if ($active)
+		{
+			$query .= "		AND latest='Y'";
+		}
+		// do query
 		if ($r = $this->Query($query))
 		{
 			$count = mysql_result($r,0);
 			mysql_free_result($r);
 		}
+		// report
 		return ($count > 0) ? TRUE : FALSE;
 	}
 	/**
@@ -1300,9 +1317,11 @@ class Wakka
 		{
 			// valid action name, so we pull out the parts
 			$action_name	= strtolower($matches[1]);
-			$paramlist		= trim($matches[2]);
+			$paramlist		= (isset($matches[2])) ? trim($matches[2]) : '';
 		}
 
+		// prepare an array for extract() (in $this->IncludeBuffered()) to work with
+		$vars = array();
 		// search for parameters if there was more than just a (syntactically valid) action name
 		if ('' != $paramlist)
 		{
@@ -1310,7 +1329,7 @@ class Wakka
 			preg_match_all('/([a-zA-Z0-9]+)=(\"|\')(.*)\\2/U', $paramlist, $matches);	# [SEC] parameter name should not be empty
 
 			// prepare an array for extract() (in $this->IncludeBuffered()) to work with
-			$vars = array();
+			#$vars = array();
 			if (is_array($matches))
 			{
 				for ($a = 0; $a < count($matches[0]); $a++)
