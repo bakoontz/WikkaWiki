@@ -34,7 +34,7 @@ echo '<div class="page">'."\n";
 
 // build backlinks list
 #echo $this->Format('=== '.sprintf(PAGE_TITLE,'[['.$this->tag.']]').' === --- ---');
-echo '<h3>'.sprintf(PAGE_TITLE,$this->tag.'</h3><br />'."\n";
+echo '<h3>'.sprintf(PAGE_TITLE,$this->tag).'</h3><br />'."\n";
 if ($pages = $this->LoadPagesLinkingTo($this->tag)) {
 	foreach ($pages as $page) {
 		if ($this->existsPage($page['tag'])) {			// name change, interface change (active pages only)
