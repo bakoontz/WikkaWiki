@@ -303,7 +303,7 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 			{
 				//This is actually opening the table (i.e. nothing at all to close). Go on to open a cell.
 				$trigger_table = 1;
-				$close_part = '<table class="wikka">'."\n";
+				$close_part = '<table class="data">'."\n";
 			}
 
 			//If we are in a cell and there is a linebreak - then it is end of row.

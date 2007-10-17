@@ -582,13 +582,13 @@ table.files tbody tr:hover {
 }
 
 /* Tables */
-table.wikka {
+table.data {
 	border: 2px solid #CCC;
 	border-collapse: collapse;
 	border-spacing: 0;
 }
 
-table.wikka caption {
+table.data caption {
 	border: 1px solid #CCC;
 	font-size: 95%;
 	color: #666;
@@ -596,36 +596,36 @@ table.wikka caption {
 	padding:2px;
 }
 
-table.wikka thead {
+table.data thead {
 	background-color: #DDD;
 }
 
-table.wikka tfoot {
+table.data tfoot {
 	background-color: #DDD;
 }
 
-table.wikka th {
+table.data th {
 	border: 1px solid #CCC;
 	padding: .1em .25em;
 }
 
-table.wikka thead th {
+table.data thead th {
 	background-color: #DDD;
 }
 
-table.wikka tfoot th {
+table.data tfoot th {
 	background-color: #DDD;
 }
 
-table.wikka tbody th {
+table.data tbody th {
 	background-color: #EEE;
 }
 
-table.wikka tbody tr:hover {
+table.data tbody tr:hover {
 	background-color: #EEE;
 }
 
-table.wikka td {
+table.data td {
 	border: 1px solid #CCC;
 	padding: .1em .25em;
 }
