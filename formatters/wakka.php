@@ -321,11 +321,11 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 			}
 
 			//We want to start a new table, and most likely have attributes to parse.
-			//TODO: Need to find out if class="wikka" should be auto added, and if so - put it in the attribute list to add up.
+			//TODO: Need to find out if class="data" should be auto added, and if so - put it in the attribute list to add up.
 			if ( $matches[1] == '!' )
 			{
 				$trigger_table = 1;
-				$open_part = '<table class="wikka"';
+				$open_part = '<table class="data"';
 				$linebreak_after_open = "\n";
 			}
 			//Open a caption.
