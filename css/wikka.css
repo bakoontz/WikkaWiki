@@ -37,56 +37,56 @@ body {
 	font-family: Verdana, Tahoma, Arial, Helvetica, sans-serif;
 	background-color: white;
 	padding: 15px;
-	border: 1px inset;
+	border: 1px solid #CCC;
 	border-bottom: none;
 	height: 100%;
 }
 
 .footer {
 	clear: both;
-	background-color: #DDDDDD;
+	background-color: #DDD;
 	padding: 5px 10px;
-	border: 1px inset;
+	border: 1px solid #CCC;
 	border-top: none;
-	border-top: 1px solid #CCCCCC;
+	border-top: 1px solid #CCC;
 }
 
 /* comments */
 
 .commentsheader {
 	clear: both;
-	background-color: #DDDDDD;
+	background-color: #DDD;
 	padding: 2px 10px;
-	border-left: 1px inset;
-	border-right: 1px inset;
-	border-top: 1px solid #CCCCCC;
+	border-left: 1px solid #CCC;
+	border-right: 1px solid #CCC;
+	border-top: 1px solid #CCC;
 }
 
 .comment {
-	background-color: #EEEEEE;
+	background-color: #EEE;
 	padding: 10px;
-	border-left: 1px inset;
-	border-right: 1px inset;
-	border-top: 1px solid #CCCCCC;
-	border-bottom: 1px solid #EEEEEE;
+	border-left: 1px solid #CCC;
+	border-right: 1px solid #CCC;
+	border-top: 1px solid #CCC;
+	border-bottom: 1px solid #EEE;
 }
 
 .commentinfo {
-	color: #AAAAAA;
+	color: #AAA;
 }
 
 .commentform {
-	background-color: #EEEEEE;
+	background-color: #EEE;
 	padding: 10px;
-	border-left: 1px inset;
-	border-right: 1px inset;
-	border-top: 1px solid #CCCCCC;
+	border-left: 1px solid #CCC;
+	border-right: 1px solid #CCC;
+	border-top: 1px solid #CCC;
 }
 
 /* links */
 
 a {
-	color: #333399;
+	color: #339;
 	text-decoration: none;
 }
 
@@ -95,7 +95,7 @@ a:visited {
 }
 
 a:hover {
-	color: #993333;
+	color: #933;
 }
 
 a:active {
@@ -103,11 +103,11 @@ a:active {
 }
 
 a.ext {
-	color: #333399;
+	color: #339;
 }
 
 a.ext:hover {
-	color: #993333;
+	color: #933;
 }
 
 .exttail {
@@ -117,7 +117,7 @@ a.ext:hover {
 }
 
 .header a:hover {
-	color: #993333;
+	color: #933;
 	background: transparent;
 	border-bottom: 0px;
 }
@@ -127,7 +127,7 @@ a.ext:hover {
 }
 
 .page a:hover {
-	color: #993333;
+	color: #933;
 	text-decoration: underline;
 }
 
@@ -237,7 +237,7 @@ h1 {
 }
 
 .notes {
-	color: #888800;
+	color: #880;
 }
 
 .centre {text-align: center;}
@@ -278,6 +278,11 @@ abbr {
 
 blockquote {
 	font-size: 90%;
+}
+
+hr {
+	border: 0;
+	border-top: 1px solid #EEE;
 }
 
 /* code blocks */
@@ -323,22 +328,65 @@ blockquote {
 
 /* form elements */
 
+fieldset {
+	margin-top: 10px;
+	margin-bottom: 10px;
+	border: 1px solid #CCC;	
+}
+
+fieldset legend {
+	font-size: 115%;
+	color: #666;
+	padding:2px;
+}
+
+textarea {
+	border: 1px solid #CCC;	
+}
+
+textarea:hover {
+	background-color: #F3F3F3;
+}
+
+textarea:focus {
+	background-color: #E6E6FF;
+}
+
+input {
+	border: 1px solid #CCC;	
+}
+
+input:hover {
+	background-color: #F3F3F3;
+}
+
+input:focus {
+	background-color: #E6E6FF;
+}
+
+input[type=hidden] {
+	display: none;
+}
+
 input[type=submit], input[type=button] {
-	font-family: Arial, Helvetica, sans-serif;
-	padding: 0px 1px;
-	width: auto;
-	font-size: 9pt;
-	color:#fff;
-	font-weight: bold;
-	background-color: #33A;
-	border-right: 2px solid #336;
-	border-bottom: 2px solid #336;
+	color: #666;
+	background-color: #EEE;
+	font: normal 95% Verdana, sans-serif;
+	text-align: center;
+	border-top: 1px solid #FFF;
+	border-left: 1px solid #FFF;
+	border-right: 1px solid #AAA;
+	border-bottom: 1px solid #AAA;
+	padding: .1em .2em;
 }
 
 input[type=submit]:hover, input[type=button]:hover {
-	background-color: #66C;
-	border-right: 2px solid #668;
-	border-bottom: 2px solid #668;
+	color: #333;
+	background-color: #DDD;
+	border-top: 1px solid #FFF;
+	border-left: 1px solid #FFF;
+	border-right: 1px solid #999;
+	border-bottom: 1px solid #999;
 }
 
 textarea#body{
@@ -349,14 +397,13 @@ textarea#body{
 
 .searchbox {
 	/* border: none; */
-	border: 1px solid #CCCCAA;
+	border: 1px solid #CCA;
 	padding: 0px;
 	margin: 0px;
 }
 
 input.grabcode {
 	float: right;
-	margin-right: 20px;
 	margin-top: 0px;
 	font-size: 90%;
 }
@@ -378,14 +425,14 @@ input.highlight {
 }
 
 em.error {
-	color: #AA3333; 
+	color: #A33; 
 	font-style: normal;
 	font-weight: bold;
 	font-size: 95%;
 }
 
 em.success {
-	color: #33AA33; 
+	color: #3A3; 
 	font-style: normal;
 	font-weight: bold;
 	font-size: 95%;
@@ -394,18 +441,18 @@ em.success {
 .comments {display: none;}
 
 .revisioninfo {
-	color: #AAAAAA;
+	color: #AAA;
 	padding-bottom: 20px;
 }
 
 .copyright {
 	font-size: 11px;
-	color: #AAAAAA;
+	color: #AAA;
 	text-align: right;
 }
 
 .copyright a {
-	color: #AAAAAA;
+	color: #AAA;
 }
 
 .previewhead {
@@ -422,7 +469,7 @@ em.success {
 
 .additions {background-color: #ccffcc;}
 
-.deletions {color: #876; background-color: #FFCC99;}
+.deletions {color: #876; background-color: #FC9;}
 
 .recentchanges {font-size: 0.9em;}
 
@@ -461,7 +508,7 @@ table.wikka td {
 }
 
 .lastedit_notes {
-	color: #888800;
+	color: #880;
 }
 
 /* TextSearch & TextSearchExpanded Actions*/
@@ -475,39 +522,39 @@ table.wikka td {
 
 /* general styling */
 table.calendar {
-	color: #000000;
-	background-color: #CCCCCC;				/* comment out to have space between cells same color as page background */
+	color: #000;
+	background-color: #CCC;				/* comment out to have space between cells same color as page background */
 	/*border-collapse: collapse;*/			/* would make single-width borders, ignoring cell-spacing */
 }
 table.calendar caption {
-	background-color: #CCCCCC;
+	background-color: #CCC;
 	font-weight: bold;
 	line-height: 1.6em;
 }
 table.calendar thead {
-	background-color: #CCCCCC;
+	background-color: #CCC;
 }
 table.calendar tbody.face {
-	background-color: #CCCCCC;
+	background-color: #CCC;
 }
 table.calendar tbody.calnav {
-	background-color: #CCCCCC;
+	background-color: #CCC;
 }
 /* styling for some specific elements */
 table.calendar thead th {
-	/*border: 1px solid #000000;*/			/* uncomment to have border around day name headers (will be page background if table background is undefined) */
+	/*border: 1px solid #000;*/			/* uncomment to have border around day name headers (will be page background if table background is undefined) */
 	padding: 1px;
 	text-align: center;
 	font-size: 85%;
 	width: 26px;
 }
 table.calendar tbody.face td {
-	border: 1px solid #000000;
+	border: 1px solid #000;
 	text-align: right;
 }
 table.calendar td.currentday {
-	color: #993333;
-	background-color: #AAAAAA;
+	color: #933;
+	background-color: #AAA;
 	font-weight: bold;
 }
 /* styling of calendar navigation */
@@ -526,18 +573,18 @@ table.calendar td.nextmonth {
 	font-size: 85%;
 }
 table.calendar a:link {
-	color: #993333;
+	color: #933;
 	text-decoration: none;
 }
 table.calendar a:visited {
-	color: #993333;
+	color: #933;
 	text-decoration: none;
 }
 table.calendar a:hover {
-	color: #993333;
+	color: #933;
 }
 table.calendar a:active {
-	color: #993333;
+	color: #933;
 	text-decoration: none;
 }
 
@@ -562,26 +609,26 @@ table.acls {
 	font-size: 11px;
 	font-family: "Lucida Console", Monaco, monospace;
 }
-.code .br0	{ color: #66cc66; }
+.code .br0	{ color: #6C6; }
 .code .co1	{ color: #808080; font-style: italic; }
 .code .co2	{ color: #808080; font-style: italic; }
 .code .coMULTI	{ color: #808080; font-style: italic; }
-.code .es0	{ color: #000099; font-weight: bold; }
+.code .es0	{ color: #009; font-weight: bold; }
 .code .kw1	{ color: #b1b100; }
-.code .kw2	{ color: #000000; font-weight: bold; }
-.code .kw3	{ color: #000066; }
-.code .kw4	{ color: #993333; }
-.code .kw5	{ color: #0000ff; }
-.code .me0	{ color: #006600; }
-.code .nu0	{ color: #cc66cc; }
-.code .re0	{ color: #0000ff; }
-.code .re1	{ color: #0000ff; }
-.code .re2	{ color: #0000ff; }
-.code .re4	{ color: #009999; }
-.code .sc0	{ color: #00bbdd; }
-.code .sc1	{ color: #ddbb00; }
-.code .sc2	{ color: #009900; }
-.code .st0	{ color: #ff0000; }
+.code .kw2	{ color: #000; font-weight: bold; }
+.code .kw3	{ color: #006; }
+.code .kw4	{ color: #933; }
+.code .kw5	{ color: #00F; }
+.code .me0	{ color: #060; }
+.code .nu0	{ color: #C6C; }
+.code .re0	{ color: #00F; }
+.code .re1	{ color: #00F; }
+.code .re2	{ color: #00F; }
+.code .re4	{ color: #099; }
+.code .sc0	{ color: #0BD; }
+.code .sc1	{ color: #DB0; }
+.code .sc2	{ color: #090; }
+.code .st0	{ color: #F00; }
 
 /* wikiedit */
 
