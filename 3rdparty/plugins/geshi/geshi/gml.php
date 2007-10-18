@@ -4,7 +4,7 @@
  * --------
  * Author: José Jorge Enríquez (jenriquez@users.sourceforge.net)
  * Copyright: (c) 2005 José Jorge Enríquez Rodríguez (http://www.zonamakers.com)
- * Release Version: 1.0.7.18
+ * Release Version: 1.0.7.20
  * Date Started: 2005/06/21
  *
  * GML language file for GeSHi.
@@ -450,7 +450,7 @@ $language_data = array (
 			1 => 'font-weight: bold; color: #000000;',
 			2 => 'font-weight: bold; color: #000000;',
 			3 => 'color: navy;',
-			4 => 'color: brown',
+			4 => 'color: #663300;',
 			),
 		'COMMENTS' => array(
 			1 => 'font-style: italic; color: green;',
