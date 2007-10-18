@@ -4,7 +4,7 @@
  * ----------------
  * Author: Roberto Armellin (r.armellin@tin.it)
  * Copyright: (c) 2004 Roberto Armellin, Nigel McNie (http://qbnz.com/highlighter/)
- * Release Version: 1.0.7.18
+ * Release Version: 1.0.7.20
  * Date Started: 2004/09/17
  *
  * Visual FoxPro language file for GeSHi.
@@ -400,7 +400,7 @@ $language_data = array (
 			),
 		'COMMENTS' => array(
 			1 => 'color: green; font-style: italic;',
-			2 => 'color: green font-style: italic;',
+			2 => 'color: green; font-style: italic;',
 			'MULTI' => 'color: #808080; font-style: italic;'
 			),
 		'ESCAPE_CHAR' => array(
