@@ -24,13 +24,12 @@
  *  You should have received a copy of the GNU General Public License
  *  along with GeSHi; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- * 
+ *
  * @package    geshi
  * @subpackage core
- * @author    Nigel McNie <nigel@geshi.org>
+ * @author     Nigel McNie <nigel@geshi.org>
  * @copyright  (C) 2004 - 2007 Nigel McNie
- * @license   http://gnu.org/copyleft/gpl.html GNU GPL
- * @filesource
+ * @license    http://gnu.org/copyleft/gpl.html GNU GPL
  *
  */
 
@@ -42,7 +41,7 @@
 //
 
 /** The version of this GeSHi file */
-define('GESHI_VERSION', '1.0.7.18');
+define('GESHI_VERSION', '1.0.7.20');
 
 // Define the root directory for the GeSHi code tree
 if (!defined('GESHI_ROOT')) {
@@ -274,6 +273,13 @@ class GeSHi {
     var $footer_content_style = '';
 
     /**
+     * Tells if a block around the highlighted source should be forced
+     * if not using line numbering
+     * @var boolean
+     */
+    var $force_code_block = false;
+
+    /**
      * The styles for hyperlinks in the code
      * @var array
      */
@@ -313,6 +319,14 @@ class GeSHi {
      * @var string
      */
     var $highlight_extra_lines_style = 'color: #cc0; background-color: #ffc;';
+
+	/**
+	 * The line ending
+	 * If null, nl2br() will be used on the result string.
+	 * Otherwise, all instances of \n will be replaced with $line_ending
+	 * @var string
+	 */
+	var $line_ending = null;
 
     /**
      * Number at which line numbers should start at
@@ -373,6 +387,12 @@ class GeSHi {
      * @var int
      */
     var $tab_width = 8;
+
+	/**
+	 * Should we use language-defined tab stop widths?
+	 * @var int
+	 */
+	var $use_language_tab_width = false;
 
     /**
      * Default target for keyword links
@@ -974,7 +994,35 @@ class GeSHi {
      */
     function set_tab_width($width) {
         $this->tab_width = intval($width);
+        //Check if it fit's the constraints:
+        if($this->tab_width < 1) {
+            //Return it to the default
+            $this->tab_width = 8;
+        }
     }
+
+	/**
+	 * Sets whether or not to use tab-stop width specifed by language
+	 *
+	 * @param boolean Whether to use language-specific tab-stop widths
+	 */
+	function set_use_language_tab_width($use) {
+		$this->use_language_tab_width = (bool) $use;
+	}
+
+	/**
+	 * Returns the tab width to use, based on the current language and user
+	 * preference
+	 *
+	 * @return int Tab width
+	 */
+	function get_real_tab_width() {
+		if (!$this->use_language_tab_width || !isset($this->language_data['TAB_WIDTH'])) {
+			return $this->tab_width;
+		} else {
+			return $this->language_data['TAB_WIDTH'];
+		}
+	}
 
     /**
      * Enables/disables strict highlighting. Default is off, calling this
@@ -1214,6 +1262,17 @@ class GeSHi {
     }
 
     /**
+     * Sets whether to force a surrounding block around
+     * the highlighted code or not
+     *
+     * @param boolean Tells whether to enable or disable this feature
+     * @since 1.0.7.20
+     */
+    function enable_inner_code_block($flag) {
+        $this->force_code_block = (bool)$flag;
+    }
+
+    /**
      * Sets the base URL to be used for keywords
      *
      * @param int The key of the keyword group to set the URL for
@@ -1312,6 +1371,15 @@ class GeSHi {
         $this->highlight_extra_lines_style = $styles;
     }
 
+	/**
+	 * Sets the line-ending
+	 *
+	 * @param string The new line-ending
+	 */
+	function set_line_ending($line_ending) {
+		$this->line_ending = (string)$line_ending;
+	}
+
     /**
      * Sets what number line numbers should start at. Should
      * be a positive integer, and will be converted to one.
@@ -1397,6 +1465,7 @@ class GeSHi {
         // Whether to highlight inside a block of code
         $HIGHLIGHT_INSIDE_STRICT = false;
         $HARDQUOTE_OPEN = false;
+        $STRICTATTRS = '';
         $stuff_to_parse   = '';
         $result           = '';
 
@@ -1497,6 +1566,7 @@ class GeSHi {
                             $attributes = ' class="sc' . $script_key . '"';
                         }
                         $result .= "<span$attributes>";
+                        $STRICTATTRS = $attributes;
                     }
                 }
 
@@ -1685,7 +1755,10 @@ class GeSHi {
                                         ($this->line_numbers != GESHI_NO_LINE_NUMBERS ||
                                         count($this->highlight_extra_lines) > 0)) {
                                         // strreplace to put close span and open span around multiline newlines
-                                        $test_str .= str_replace("\n", "</span>\n<span$attributes>", $rest_of_comment);
+                                        $test_str .= str_replace(
+                                            "\n", "</span>\n<span$attributes>", 
+                                            str_replace("\n ", "\n&nbsp;", $rest_of_comment)
+                                        );
                                     }
                                     else {
                                         $test_str .= $rest_of_comment;
@@ -1698,7 +1771,7 @@ class GeSHi {
                                             $test_str .= "\n";
                                         }
                                     }
-                                    $i = $close_pos + $com_len - 1;
+									$i = $close_pos + $com_len - 1;
                                     // parse the rest
                                     $result .= $this->parse_non_string_part($stuff_to_parse);
                                     $stuff_to_parse = '';
@@ -1786,7 +1859,11 @@ class GeSHi {
                     $stuff_to_parse = '';
                 }
                 else {
-                    $result .= GeSHi::hsc($part);
+                    if ($STRICTATTRS != '') {
+                        $part = str_replace("\n", "</span>\n<span$STRICTATTRS>", GeSHi::hsc($part));
+                        $STRICTATTRS = '';
+                    }
+                    $result .= $part;
                 }
                 // Close the <span> that surrounds the block
                 if ($this->strict_mode && $this->language_data['STYLES']['SCRIPT'][$script_key] != '' &&
@@ -1827,88 +1904,92 @@ class GeSHi {
      * @access private
      */
     function indent($result) {
-            /// Replace tabs with the correct number of spaces
-            if (false !== strpos($result, "\t")) {
-                $lines = explode("\n", $result);
-                foreach ($lines as $key => $line) {
-                    if (false === strpos($line, "\t")) {
-                        $lines[$key] = $line;
-                        continue;
-                    }
-
-                    $pos = 0;
-                    $tab_width = $this->tab_width;
-                    $length = strlen($line);
-                    $result_line = '';
-
-                    $IN_TAG = false;
-                    for ($i = 0; $i < $length; $i++) {
-                        $char = substr($line, $i, 1);
-                        // Simple engine to work out whether we're in a tag.
-                        // If we are we modify $pos. This is so we ignore HTML
-                        // in the line and only workout the tab replacement
-                        // via the actual content of the string
-                        // This test could be improved to include strings in the
-                        // html so that < or > would be allowed in user's styles
-                        // (e.g. quotes: '<' '>'; or similar)
-                        if ($IN_TAG && '>' == $char) {
-                            $IN_TAG = false;
-                            $result_line .= '>';
-                            ++$pos;
-                        }
-                        else if (!$IN_TAG && '<' == $char) {
-                            $IN_TAG = true;
-                            $result_line .= '<';
-                            ++$pos;
-                        }
-                        else if (!$IN_TAG && '&' == $char) {
-                            $substr = substr($line, $i + 3, 4);
-                            //$substr_5 = substr($line, 5, 1);
-                            $posi = strpos($substr, ';');
-                            if (false !== $posi) {
-                                $pos += $posi + 3;
-                            }
-                            $result_line .= '&';
-                        }
-                        else if (!$IN_TAG && "\t" == $char) {
-                            $str = '';
-                            // OPTIMISE - move $strs out. Make an array:
-                            // $tabs = array(
-                            //  1 => '&nbsp;',
-                            //  2 => '&nbsp; ',
-                            //  3 => '&nbsp; &nbsp;' etc etc
-                            // to use instead of building a string every time
-                            $strs = array(0 => '&nbsp;', 1 => ' ');
-                            for ($k = 0; $k < ($tab_width - (($i - $pos) % $tab_width)); $k++) $str .= $strs[$k % 2];
-                            $result_line .= $str;
-                            $pos++;
-
-                            if (false === strpos($line, "\t", $i + 1)) {
-                                $result_line .= substr($line, $i + 1);
-                                break;
-                            }
-                        }
-                        else if ($IN_TAG) {
-                            ++$pos;
-                            $result_line .= $char;
-                        }
-                        else {
-                            $result_line .= $char;
-                            //++$pos;
-                        }
-                    }
-                    $lines[$key] = $result_line;
+        /// Replace tabs with the correct number of spaces
+        if (false !== strpos($result, "\t")) {
+            $lines = explode("\n", $result);
+			$tab_width = $this->get_real_tab_width();
+            foreach ($lines as $key => $line) {
+                if (false === strpos($line, "\t")) {
+                    $lines[$key] = $line;
+                    continue;
                 }
-                $result = implode("\n", $lines);
+
+                $pos = 0;
+                $length = strlen($line);
+                $result_line = '';
+
+                $IN_TAG = false;
+                for ($i = 0; $i < $length; $i++) {
+                    $char = substr($line, $i, 1);
+                    // Simple engine to work out whether we're in a tag.
+                    // If we are we modify $pos. This is so we ignore HTML
+                    // in the line and only workout the tab replacement
+                    // via the actual content of the string
+                    // This test could be improved to include strings in the
+                    // html so that < or > would be allowed in user's styles
+                    // (e.g. quotes: '<' '>'; or similar)
+                    if ($IN_TAG && '>' == $char) {
+                        $IN_TAG = false;
+                        $result_line .= '>';
+                        ++$pos;
+                    }
+                    else if (!$IN_TAG && '<' == $char) {
+                        $IN_TAG = true;
+                        $result_line .= '<';
+                        ++$pos;
+                    }
+                    else if (!$IN_TAG && '&' == $char) {
+                        $substr = substr($line, $i + 3, 4);
+                        //$substr_5 = substr($line, 5, 1);
+                        $posi = strpos($substr, ';');
+                        if (false !== $posi) {
+                            $pos += $posi + 3;
+                        }
+                        $result_line .= '&';
+                    }
+                    else if (!$IN_TAG && "\t" == $char) {
+                        $str = '';
+                        // OPTIMISE - move $strs out. Make an array:
+                        // $tabs = array(
+                        //  1 => '&nbsp;',
+                        //  2 => '&nbsp; ',
+                        //  3 => '&nbsp; &nbsp;' etc etc
+                        // to use instead of building a string every time
+                        $strs = array(0 => '&nbsp;', 1 => ' ');
+                        for ($k = 0; $k < ($tab_width - (($i - $pos) % $tab_width)); $k++) $str .= $strs[$k % 2];
+                        $result_line .= $str;
+                        $pos += ($i - $pos) % $tab_width + 1;
+
+                        if (false === strpos($line, "\t", $i + 1)) {
+                            $result_line .= substr($line, $i + 1);
+                            break;
+                        }
+                    }
+                    else if ($IN_TAG) {
+                        ++$pos;
+                        $result_line .= $char;
+                    }
+                    else {
+                        $result_line .= $char;
+                        //++$pos;
+                    }
+                }
+                $lines[$key] = $result_line;
             }
+            $result = implode("\n", $lines);
+        }
         // Other whitespace
-        $result = str_replace('  ', '&nbsp; ', $result);
-        $result = str_replace('  ', ' &nbsp;', $result);
+        // BenBE: Fix to reduce the number of replacements to be done
         $result = str_replace("\n ", "\n&nbsp;", $result);
+        $result = str_replace('  ', ' &nbsp;', $result);
 
         if ($this->line_numbers == GESHI_NO_LINE_NUMBERS) {
-            $result = nl2br($result);
-        }
+			if ($this->line_ending === null) {
+				$result = nl2br($result);
+			} else {
+				$result = str_replace("\n", $this->line_ending, $result);
+			}
+		}
         return $result;
     }
 
@@ -1976,7 +2057,7 @@ class GeSHi {
                 return '';
             // HTML fix. Again, dirty hackage...
             }
-            else if (!($this->language == 'html4strict' && '&gt;' == $keyword)) {
+            else if (!($this->language == 'html4strict' && ('&gt;' == $keyword || '&lt;' == $keyword))) {
                 return '</a>';
             }
         }
@@ -2417,7 +2498,8 @@ class GeSHi {
             if ($this->line_numbers != GESHI_NO_LINE_NUMBERS) {
                 return "$header<ol$ol_attributes>";
             }
-            return $header;
+            return $header .
+                ($this->force_code_block ? '<div>' : '');
         }
 
         // Work out what to return and do it
@@ -2431,10 +2513,12 @@ class GeSHi {
         }
         else {
             if ($this->header_type == GESHI_HEADER_PRE) {
-                return "<pre$attributes>$header";
+                return "<pre$attributes>$header"  .
+                    ($this->force_code_block ? '<div>' : '');
             }
             else if ($this->header_type == GESHI_HEADER_DIV) {
-                return "<div$attributes>$header";
+                return "<div$attributes>$header" .
+                    ($this->force_code_block ? '<div>' : '');
             }
         }
     }
@@ -2483,13 +2567,15 @@ class GeSHi {
             if ($this->line_numbers != GESHI_NO_LINE_NUMBERS) {
                 return "</ol>$footer_content</div>";
             }
-            return "$footer_content</div>";
+            return ($this->force_code_block ? '</div>' : '') .
+                "$footer_content</div>";
         }
         else {
             if ($this->line_numbers != GESHI_NO_LINE_NUMBERS) {
                 return "</ol>$footer_content</pre>";
             }
-            return "$footer_content</pre>";
+            return ($this->force_code_block ? '</div>' : '') .
+                "$footer_content</pre>";
         }
     }
 
@@ -2531,13 +2617,16 @@ class GeSHi {
         $keywords = $replacements = array();
 
         $keywords[] = '<TIME>';
-        $replacements[] = number_format($this->get_time(), 3);
+        $keywords[] = '{TIME}';
+        $replacements[] = $replacements[] = number_format($this->get_time(), 3);
 
         $keywords[] = '<LANGUAGE>';
-        $replacements[] = $this->language;
+        $keywords[] = '{LANGUAGE}';
+        $replacements[] = $replacements[] = $this->language;
 
         $keywords[] = '<VERSION>';
-        $replacements[] = GESHI_VERSION;
+        $keywords[] = '{VERSION}';
+        $replacements[] = $replacements[] = GESHI_VERSION;
 
         return str_replace($keywords, $replacements, $instr);
     }

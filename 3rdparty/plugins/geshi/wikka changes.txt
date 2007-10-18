@@ -1,6 +1,8 @@
 Differences from standard GeSHi distribution:
 
 - contrib directory removed.
+- api directory removed.
+
 
 - doc/geshi-doc.txt removed.
 - doc/geshi-doc.html removed.
