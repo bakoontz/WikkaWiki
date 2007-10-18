@@ -4,7 +4,7 @@
  * -------
  * Author: Tux (tux@inmail.cz)
  * Copyright: (c) 2004 Tux (http://tux.a4.cz/), Nigel McNie (http://qbnz.com/highlighter)
- * Release Version: 1.0.7.18
+ * Release Version: 1.0.7.20
  * Date Started: 2004/07/27
  *
  * x86 Assembler language file for GeSHi.
@@ -185,14 +185,15 @@ $language_data = array (
 	'OBJECT_SPLITTERS' => array(
 		),
 	'REGEXPS' => array(
-		0 => '0[0-9a-fA-F][0-9a-fA-F]*[hH]',
-		1 => '[01][01]*[bB]'
+		0 => '0[0-9a-fA-F]{1,32}[hH]',
+		1 => '[01]{1,64}[bB]'
 		),
 	'STRICT_MODE_APPLIES' => GESHI_NEVER,
 	'SCRIPT_DELIMITERS' => array(
 		),
 	'HIGHLIGHT_STRICT_BLOCK' => array(
-		)
+        ),
+    'TAB_WIDTH' => 8
 );
 
 ?>
