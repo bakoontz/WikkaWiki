@@ -12,6 +12,48 @@ modified by me for consistency/bug fixing.
 Please send any bug reports to nigel@geshi.org, or use the bug report tracker
 at sourceforge (http://sourceforge.net/tracker/?group_id=114997&atid=670231)
 
+Version 1.0.7.20
+  -  Added language files
+     * Genero (logic) and Per (forms) (FOURJ's Genero 4GL) (Lars Gersmann)
+     * Haskell (Dagit)
+     * ABAP (Andres Picazo)
+     * Motorola 68k Assembler (for MC68HC908GP32 Microcontroller) (BenBE)
+     * Dot (Adrien Friggeri)
+  -  Fixed java documentation search for keywords to actually go to the
+     documentation (spaze)
+  -  Applied fix for bug 1688864 (bad regexes) (Tim Starling)
+  -  Fixed comment CSS rule in visualfoxpro
+  -  ThinBASIC language update (Eros Olmi)
+  -  mIRC language update (BenBE)
+  -  Fixed outdated documentation URL of Perl language file (RuralMoon by BenBE)
+  -  Fixed tab replacement code not generating the correct number of spaces in
+     some cases (Guillermo Calvo)
+  -  Fixed two typos in Z80 language file
+  -  Applied fix for bug 1730168 (Daniel Naber)
+  -  Applied fix for bug 1705482 (Jason Frame)
+     * Configurable line endings (Replace \n by custom string)
+     * per-language tab-widths (Adjustable for width>=1)
+     * Included defaults for ASM (x86, m68k, z80), C, C (Mac), C++, C++ (QT), C#,
+       Delphi, CSS,, HTML, PHP, PHP (Brief), QBasic, Ruby, XML
+  -  Added a possibility to force generation of a surrounding tag around
+     the highlighted source
+  -  Applied fix for additional keywords for the bash language
+     (cf. http://bash.thefreebizhost.com/bash_geshi.php, BenBE / Jan G)
+  -  Fix bad colour definition in GML language (Andreas Gohr)
+  -  Fixed phpdoc comments not being indented one space if they should be (Andy
+     Hassall)
+Version 1.0.7.19
+  -  Added language files
+     * X++ (Simon Butcher)
+     * Rails (Moises Deniz)
+  -  Fixed invalid HTML being generated and doctypes not being highlighted over
+     multiple lines properly when line numbers are on (Validome)
+  -  Improved the ruby syntax highlighting by basing it off the Rails file
+  -  Changed some regular expressions to possibly help with badly performing
+     regex support in PHP (Tim Starling)
+  -  Allow {TIME}, {LANGUAGE} and {VERSION} to be used in the header as well as
+     the normal <TIME>/<LANGUAGE>/<VERSION> (AthanD)
+  -  Changed comment regex in bash to prevent malformed XHTML (rv1971)
 Version 1.0.7.18
   -  Added language files
      * ZiLOG Z80 Assembly (BenBE)
