@@ -483,17 +483,51 @@ em.success {
 	color: #987;
 }
 
-/* Action-related styling */
-
-/* Table action */
-
-table.wikka {
+/* Tables */
+table.data {
 	border: 2px solid #CCC;
 	border-collapse: collapse;
 	border-spacing: 0;
 }
 
-table.wikka td {
+table.data caption {
+	border: 1px solid #CCC;
+	font-size: 95%;
+	color: #666;
+	margin:5px 0;
+	padding:2px;
+}
+
+table.data thead {
+	background-color: #DDD;
+}
+
+table.data tfoot {
+	background-color: #DDD;
+}
+
+table.data th {
+	border: 1px solid #CCC;
+	padding: .1em .25em;
+}
+
+table.data thead th {
+	background-color: #DDD;
+}
+
+table.data tfoot th {
+	background-color: #DDD;
+}
+
+table.data tbody th {
+	background-color: #EEE;
+}
+
+table.data tbody tr:hover {
+	background-color: #EEE;
+}
+
+table.data td {
 	border: 1px solid #CCC;
 	padding: .1em .25em;
 }

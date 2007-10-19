@@ -25,7 +25,7 @@ if (is_array($vars))
 		}             
 		if ($param == 'cells') $cells = split($delimiter, $value);
 	}
-	$cached_output = "<table class=\"wikka\" cellpadding='".$cellpadding."' cellspacing='".$cellspacing."' border='".$border."' style='".$style."'>\n";
+	$cached_output = "<table class=\"data\" cellpadding='".$cellpadding."' cellspacing='".$cellspacing."' border='".$border."' style='".$style."'>\n";
 	foreach ($cells as $cell_item)
 	{
 		if ($row == 1) $cached_output .= "   <tr>\n";
