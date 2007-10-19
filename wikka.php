@@ -227,9 +227,9 @@ $wakkaConfigLocation = $configfile;
 //TODO move these checks to a directive file to be used by the installer/upgrader, #97
 if (isset($wakkaConfig['header_action']))
 {
-	unset($wakkaConfig['header_action']); //since 1.1.7
+	unset($wakkaConfig['header_action']); //since 1.1.6.4
 }
-if (isset($wakkaConfig['footer_action'])) //since 1.1.7
+if (isset($wakkaConfig['footer_action'])) //since 1.1.6.4
 {
 	unset($wakkaConfig['footer_action']);
 }
