@@ -180,6 +180,11 @@ img.right {
 	float: right;
 }
 
+img.icon {
+	border: 0px;
+	vertical-align: middle;
+}
+
 /* floats */
 
 .floatl {

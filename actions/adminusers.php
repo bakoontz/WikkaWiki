@@ -311,9 +311,9 @@ if ($this->IsAdmin($this->GetUser()))
 				'		<th>'.$emailheader.'</th>'."\n".
 				'		<th>'.$timeheader.'</th>'."\n".
 				/* '		<th>'.$ipheader.'</th>'."\n". # installed as beta feature at wikkawiki.org */
-				'		<th'.(($c_color == 1)? ' class="c1"' : '').' title="'.TABLE_HEADING_OWNED_TITLE.'"><img src="'.OWNED_ICON.'" alt="O"/></th>'."\n".
-				'		<th'.(($c_color == 1)? ' class="c2"' : '').' title="'.TABLE_HEADING_EDITS_TITLE.'"><img src="'.EDITS_ICON.'" alt="E"/></th>'."\n".
-				'		<th'.(($c_color == 1)? ' class="c3"' : '').' title="'.TABLE_HEADING_COMMENTS_TITLE.'"><img src="'.COMMENTS_ICON.'" alt="C"/></th>'."\n".
+				'		<th'.(($c_color == 1)? ' class="c1"' : '').' title="'.TABLE_HEADING_OWNED_TITLE.'"><img src="'.OWNED_ICON.'" class="icon" alt="O"/></th>'."\n".
+				'		<th'.(($c_color == 1)? ' class="c2"' : '').' title="'.TABLE_HEADING_EDITS_TITLE.'"><img src="'.EDITS_ICON.'" class="icon" alt="E"/></th>'."\n".
+				'		<th'.(($c_color == 1)? ' class="c3"' : '').' title="'.TABLE_HEADING_COMMENTS_TITLE.'"><img src="'.COMMENTS_ICON.'" class="icon" alt="C"/></th>'."\n".
 				'		<th>Actions</th>'."\n".
 	 		 	'	</tr>'."\n".
 	 		 	'</thead>'."\n";

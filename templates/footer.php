@@ -3,7 +3,7 @@
 	echo $this->FormOpen('', 'TextSearch', 'get'); 
 	echo $this->HasAccess('write') ? '<a href="'.$this->Href('edit').'" title="Click to edit this page">Edit</a> ::'."\n" : '';
 	echo '<a href="'.$this->Href('history').'" title="Click to view recent edits to this page">Page History</a> ::'."\n";
-	echo $this->GetPageTime() ? '<a href="'.$this->Href('revisions').'" title="Click to view recent revisions list for this page">'.$this->GetPageTime().'</a> <a href="'.$this->Href('revisions.xml').'" title="Click to display a feed with the latest revisions to this page."><img src="images/xml.png" width="36" height="14" style="border:0px; vertical-align:middle" alt="feed icon" /></a> ::'."\n" : '';
+	echo $this->GetPageTime() ? '<a href="'.$this->Href('revisions').'" title="Click to view recent revisions list for this page">'.$this->GetPageTime().'</a> <a href="'.$this->Href('revisions.xml').'" title="Click to display a feed with the latest revisions to this page."><img src="images/xml.png" class="icon" width="36" height="14" alt="feed icon" /></a> ::'."\n" : '';
 
 	// if this page exists
 	if ($this->page)
