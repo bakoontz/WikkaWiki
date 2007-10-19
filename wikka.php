@@ -55,6 +55,8 @@ if (!defined('ERROR_MYSQL_SUPPORT_MISSING')) define('ERROR_MYSQL_SUPPORT_MISSING
 if (!defined('ERROR_SETUP_FILE_MISSING')) define('ERROR_SETUP_FILE_MISSING', 'A file of the installer/ upgrader was not found. Please install Wikka again!');
 if (!defined('ERROR_SETUP_HEADER_MISSING')) define('ERROR_SETUP_HEADER_MISSING', 'The file "setup/header.php" was not found. Please install Wikka again!');
 if (!defined('ERROR_SETUP_FOOTER_MISSING')) define('ERROR_SETUP_FOOTER_MISSING', 'The file "setup/footer.php" was not found. Please install Wikka again!');
+if (!defined('ERROR_HEADER_MISSING')) define('ERROR_HEADER_MISSING', 'A header template could not be found. Please make sure that a file called <code>header.php</code> exists in the templates directory.'); //TODO Make sure this message matches any filename/folder change 
+if (!defined('ERROR_FOOTER_MISSING')) define('ERROR_FOOTER_MISSING', 'A footer template could not be found. Please make sure that a file called <code>footer.php</code> exists in the templates directory.'); //TODO Make sure this message matches any filename/folder change 
 if (!defined('ERROR_NO_DB_ACCESS')) define('ERROR_NO_DB_ACCESS', 'The wiki is currently unavailable. <br /><br />Error: Unable to connect to the MySQL database.');
 if (!defined('PAGE_GENERATION_TIME')) define('PAGE_GENERATION_TIME', 'Page was generated in %.4f seconds'); // %.4f - generation time in seconds with 4 digits after the dot
 if (!defined('WIKI_UPGRADE_NOTICE')) define('WIKI_UPGRADE_NOTICE', 'This site is currently being upgraded. Please try again later.');
@@ -172,8 +174,8 @@ $wakkaDefaultConfig = array(
 	'geshi_path' 				=> '3rdparty/plugins/geshi',				# (location of GeSHi package)
 	'geshi_languages_path' 		=> '3rdparty/plugins/geshi/geshi',		# (location of GeSHi language highlighting files)
 
-	'header_action'				=> 'header',
-	'footer_action'				=> 'footer',
+	// template
+	'wikka_template_path' 		=> 'templates',		# (location of Wikka template files - REQUIRED)
 
 	'navigation_links'			=> '[[CategoryCategory Categories]] :: PageIndex ::  RecentChanges :: RecentlyCommented :: [[UserSettings Login/Register]]',
 	'logged_in_navigation_links' => '[[CategoryCategory Categories]] :: PageIndex :: RecentChanges :: RecentlyCommented :: [[UserSettings Change settings/Logout]]',
@@ -219,8 +221,19 @@ else
 	$configfile = 'wikka.config.php';
 }
 if (file_exists($configfile)) include($configfile);
-
 $wakkaConfigLocation = $configfile;
+
+// remove obsolete config settings (should come before merge!)
+//TODO move these checks to a directive file to be used by the installer/upgrader, #97
+if (isset($wakkaConfig['header_action']))
+{
+	unset($wakkaConfig['header_action']); //since 1.1.7
+}
+if (isset($wakkaConfig['footer_action'])) //since 1.1.7
+{
+	unset($wakkaConfig['footer_action']);
+}
+
 $wakkaConfig = array_merge($wakkaDefaultConfig, $wakkaConfig);	// merge defaults with config from file
 
 /**

@@ -1033,8 +1033,14 @@ class Wakka
 			}
 		}
 	}
-	function Header() { return $this->Action($this->config['header_action'], 0); }
-	function Footer() { return $this->Action($this->config['footer_action'], 0); }
+	function Header() {
+		$header = $this->IncludeBuffered('header.php', ERROR_HEADER_MISSING, '',  $this->GetConfigValue('wikka_template_path'));
+		return $header;
+	}
+	function Footer() {
+		$footer = $this->IncludeBuffered('footer.php', ERROR_FOOTER_MISSING, '', $this->GetConfigValue('wikka_template_path'));	
+		return $footer;
+	}
 
 	// FORMS
 	/**
