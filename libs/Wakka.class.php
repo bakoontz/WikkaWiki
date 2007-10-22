@@ -3384,6 +3384,7 @@ if ($debug) echo 'Handler - handler specified: '.$handler."<br/>\n";
 	 * @param	string	$formatter		the name of the formatter. This name is linked to a file with the same name, located in the folder
 	 *			specified by {@link Config::$wikka_formatter_path}, and with extension .php; which is called to process the text $text
 	 * @param	string	$format_option	a comma separated list of string options, in the form of 'option1;option2;option3'
+  *   this value is passed to compact() to re-create the variable on formatters/wakka.php
 	 * @return	string	output produced by {@link Wakka::IncludeBuffered()} or an error message
 	 * @todo	move regexes to central regex library			#34
 	 */
@@ -3407,7 +3408,7 @@ if ($debug) echo 'Handler - handler specified: '.$handler."<br/>\n";
 			$formatter_location_disp	= '<code>'.$this->htmlspecialchars_ent($formatter_location).'</code>';	// [SEC] make error (including (part of) request) safe to display
 			$formatter_not_found		= sprintf(FORMATTER_UNKNOWN,$formatter_location_disp);
 			// produce output
-			$out = $this->IncludeBuffered($formatter_location, $this->GetConfigValue('wikka_formatter_path'), $formatter_not_found, FALSE, compact('text')); // @@@
+			$out = $this->IncludeBuffered($formatter_location, $this->GetConfigValue('wikka_formatter_path'), $formatter_not_found, FALSE, compact('text', 'format_option')); // @@@
 		}
 		return $out;
 	}
