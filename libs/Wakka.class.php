@@ -573,7 +573,7 @@ class Wakka
 
 	/**
 	 * Generate a timestamp - OBSOLETE.
-	 * 
+	 *
 	 * DISABLED: replaced by getmicrotime() in Compatibility library!
 	 * Left in place but returning just zero for now.
 	 */
@@ -1162,7 +1162,7 @@ class Wakka
 	 *
 	 * @todo	decide if we need (all) these methods!
 	 *			JW: my vote is NOT if all a getter does is return a variable directly;
-	 *			but useful if there's some processing or checking involved - 
+	 *			but useful if there's some processing or checking involved -
 	 *			in which case an accompanying "setter" method should be used
 	 *			for creating/updating the variable - if only for consistency.
 	 *
@@ -2779,7 +2779,7 @@ if ($debug) echo "<br/>\n";
 	 * This function should be used everywhere a static file should be attached
 	 * to a wikkapage via XHTML tag attributes that expect a URL, such as href,
 	 * src, or archive tags, or attributes in elements in XML/RSS.
-	 * 
+	 *
 	 * Its main purpose is to avoid "path confusion" when a relative URL would be
 	 * attached to a <b>rewritten</b> (base) URL; without rewriting there's no
 	 * problem, but when mod_rewrite is active, it's really necessary:
@@ -3016,7 +3016,7 @@ if ($debug) echo "<br/>\n";
 		{
 			$tag = '';	// Href() will pick up current page name if none specified
 		}
-		
+
 		// form action (action is a required attribute!)
 		// !!! If rewrite mode is off, "tag" has to be passed as a hidden field
 		// rather than part of the URL (where it gets ignored on submit!)
@@ -3144,10 +3144,12 @@ if ($debug) echo "<br/>\n";
 
 	function LogReferrer($tag = '', $referrer = '')
 	{
+		/* better fix farther on
 		if (!isset($_SERVER['HTTP_REFERER']))
 		{
 			return; #38
 		}
+		*/
 
 		// fill values
 		if (!$tag = trim($tag))
@@ -3155,15 +3157,15 @@ if ($debug) echo "<br/>\n";
 			#$tag = $this->GetPageTag();
 			$tag = $this->tag;
 		}
-		if (!$referrer = trim($referrer))
+		if (empty($referrer))
 		{
-			$referrer = $_SERVER['HTTP_REFERER'];
+			$referrer = (isset($_SERVER['HTTP_REFERER'])) ? $_SERVER['HTTP_REFERER'] : '';	#38
 		}
-		$referrer = $this->cleanUrl($referrer);			# secured JW 2005-01-20
+		$referrer = trim($this->cleanUrl($referrer));			# secured JW 2005-01-20
 
 		// check if it's coming from another site
 		#if ($referrer && !preg_match('/^'.preg_quote($this->GetConfigValue('base_url'), '/').'/', $referrer))
-		if ($referrer && !preg_match('/^'.preg_quote($this->base_url, '/').'/', $referrer))
+		if (!empty($referrer) && !preg_match('/^'.preg_quote($this->base_url, '/').'/', $referrer))
 		{
 			$parsed_url = parse_url($referrer);
 			$spammer = $parsed_url['host'];
@@ -3357,7 +3359,7 @@ if ($debug) echo 'Handler - handler specified: '.$handler."<br/>\n";
 	 *
 	 * @access	public
 	 * @uses	Wakka::GetConfigValue()
-	 * 
+	 *
 	 * @param	string 	$handler	handler name, optionally with appended parameters
 	 * @return	boolean	TRUE if handler is found, FALSE otherwise
 	 */
@@ -3437,7 +3439,7 @@ if ($debug) echo 'Handler - handler specified: '.$handler."<br/>\n";
 
 	/**
 	 * Authenticate a user from (persistent) cookies.
-	 * 
+	 *
 	 * @uses	Wakka::GetConfigValue()
 	 * @uses	Wakka::LoadAll()
 	 *
@@ -3605,7 +3607,7 @@ if ($debug) echo "<br/>\n";
 	 * <b>Replaced by {@link Wakka::authenticateUserFromCookies()},
 	 * {@link Wakka::existsUser()} or {@link Wakka::loadUserData()} depending on
 	 * purpose!</b>
-	 * 
+	 *
 	 * ***Returns FALSE while still existing for reference.***
 	 *
 	 * <p>If a second parameter $password is supplied, this method checks if this password is valid, thus a FALSE return value would mean
