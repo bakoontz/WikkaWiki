@@ -1038,7 +1038,7 @@ class Wakka
 		return $header;
 	}
 	function Footer() {
-		$footer = $this->IncludeBuffered('footer.php', ERROR_FOOTER_MISSING, '', $this->GetConfigValue('wikka_template_path'));	
+		$footer = $this->IncludeBuffered('footer.php', ERROR_FOOTER_MISSING, '', $this->GetConfigValue('wikka_template_path'));
 		return $footer;
 	}
 
@@ -1216,15 +1216,20 @@ class Wakka
 	}
 
 	// REFERRERS
-	function LogReferrer($tag = "", $referrer = "")
+	function LogReferrer($tag='', $referrer='')
 	{
 		// fill values
 		if (!$tag = trim($tag)) $tag = $this->GetPageTag();
-		if (!$referrer = trim($referrer)) $referrer = $_SERVER["HTTP_REFERER"];
-		$referrer = $this->cleanUrl($referrer);			# secured JW 2005-01-20
+		#if (!$referrer = trim($referrer)) $referrer = $_SERVER["HTTP_REFERER"]; NOTICE
+		if (empty($referrer))
+		{
+			$referrer = (isset($_SERVER['HTTP_REFERER'])) ? $_SERVER['HTTP_REFERER'] : '';
+		}
+		$referrer = trim($this->cleanUrl($referrer));			# secured JW 2005-01-20
 
 		// check if it's coming from another site
-		if ($referrer && !preg_match("/^".preg_quote($this->GetConfigValue("base_url"), "/")."/", $referrer))
+		#if ($referrer && !preg_match("/^".preg_quote($this->GetConfigValue("base_url"), "/")."/", $referrer))
+		if (!empty($referrer) && !preg_match("/^".preg_quote($this->GetConfigValue("base_url"), "/")."/", $referrer))
 		{
 			$parsed_url = parse_url($referrer);
 			$spammer = $parsed_url["host"];
