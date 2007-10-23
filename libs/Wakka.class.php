@@ -1219,7 +1219,11 @@ class Wakka
 	function LogReferrer($tag='', $referrer='')
 	{
 		// fill values
-		if (!$tag = trim($tag)) $tag = $this->GetPageTag();
+		if (!$tag = trim($tag))
+		{
+			#$tag = $this->GetPageTag();
+			$tag = $this->tag;
+		}
 		#if (!$referrer = trim($referrer)) $referrer = $_SERVER["HTTP_REFERER"]; NOTICE
 		if (empty($referrer))
 		{
@@ -1228,23 +1232,38 @@ class Wakka
 		$referrer = trim($this->cleanUrl($referrer));			# secured JW 2005-01-20
 
 		// check if it's coming from another site
-		#if ($referrer && !preg_match("/^".preg_quote($this->GetConfigValue("base_url"), "/")."/", $referrer))
-		if (!empty($referrer) && !preg_match("/^".preg_quote($this->GetConfigValue("base_url"), "/")."/", $referrer))
+		#if ($referrer && !preg_match('/^'.preg_quote($this->GetConfigValue('base_url'), '/').'/', $referrer))
+		if (!empty($referrer) && !preg_match('/^'.preg_quote($this->GetConfigValue('base_url'), '/').'/', $referrer))
 		{
 			$parsed_url = parse_url($referrer);
-			$spammer = $parsed_url["host"];
-			$blacklist = $this->LoadSingle("select * from ".$this->config["table_prefix"]."referrer_blacklist WHERE spammer = '".mysql_real_escape_string($spammer)."'");
-			if (!$blacklist) {
-			$this->Query("insert into ".$this->config["table_prefix"]."referrers set ".
-				"page_tag = '".mysql_real_escape_string($tag)."', ".
-				"referrer = '".mysql_real_escape_string($referrer)."', ".
-				"time = now()");
+			$spammer = $parsed_url['host'];
+			$blacklist = $this->LoadSingle("
+				SELECT *
+				FROM ".$this->GetConfigValue('table_prefix')."referrer_blacklist
+				WHERE spammer = '".mysql_real_escape_string($spammer)."'"
+				);
+			if (FALSE === $blacklist)
+			{
+				$this->Query("
+					INSERT INTO ".$this->GetConfigValue('table_prefix')."referrers
+					SET page_tag	= '".mysql_real_escape_string($tag)."',
+						referrer	= '".mysql_real_escape_string($referrer)."',
+						time		= now()"
+					);
 			}
 		}
 	}
 	function LoadReferrers($tag = "")
 	{
-		return $this->LoadAll("select referrer, count(referrer) as num from ".$this->config["table_prefix"]."referrers ".($tag = trim($tag) ? "where page_tag = '".mysql_real_escape_string($tag)."'" : "")." group by referrer order by num desc");
+		$where = ($tag = trim($tag)) ? "			WHERE page_tag = '".mysql_real_escape_string($tag)."'" : '';
+		$referrers = $this->LoadAll("
+			SELECT referrer, COUNT(referrer) AS num
+			FROM ".$this->GetConfigValue('table_prefix')."referrers".
+			$where."
+			GROUP BY referrer
+			ORDER BY num DESC"
+			);
+		return $referrers;
 	}
 
 	// SANITY CHECKS
