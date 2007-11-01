@@ -231,6 +231,10 @@ h1 {
 	font-size: 18pt;
 }
 
+.hidden {
+	display: none;
+}
+
 .highlight {color: red; background: #FFFFD0;}
 
 .strikethrough {color: #888; text-decoration: line-through;}
