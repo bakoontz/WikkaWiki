@@ -21,7 +21,6 @@
  * @todo	replace with advanced category action (which not only produces
  *			better output but also solves bugs)
  */
-
 if ($tag = $_GET['wakka'])	#312 (only files action uses POST for wakka)
 {
 	// init
@@ -32,11 +31,26 @@ if ($tag = $_GET['wakka'])	#312 (only files action uses POST for wakka)
 
 	// get parameters and set defaults
 	// @@@ parameters are not sanitized!!
-	if (!isset($page)) $page = $thispage;
-	if ($page=='/') $page="CategoryCategory";	// top level category
-	if (!isset($col)) $col=1;
-	if (!isset($compact)) $compact=0;
-	if (!isset($class)) $class = '';
+	if (!isset($page))
+	{
+		$page = $thispage;
+	}
+	if ($page == '/')
+	{
+		$page = "CategoryCategory";	// top level category
+	}
+	if (!isset($col))
+	{
+		$col = 1;
+	}
+	if (!isset($compact))
+	{
+		$compact = 0;
+	}
+	if (!isset($class))
+	{
+		$class = '';
+	}
 
 	#if (!isset($page)) $page=$this->GetPageTag();
 	// next line: #232 - partial fix only!
@@ -46,14 +60,13 @@ if ($tag = $_GET['wakka'])	#312 (only files action uses POST for wakka)
 	#if (!$page) {$page=$cattag;}	// this duplicates the $this->GetPageTag() above!
 
 	$results = $this->LoadPagesLinkingTo($page);
-
 	$errmsg = '<em class="error">'.sprintf(ERROR_NO_PAGES, $page).'</em>';
 	$str = $this->ListPages($results, $errmsg, $class, $col, $compact);
 
 	if ($str != $errmsg)
 	{
-		printf(PAGES_BELONGING_TO.'<br /><br />', count($results), $page);
+		echo '<p>'.sprintf(PAGES_BELONGING_TO, count($results), $page).'</p>'."\n";
 	}
-	print($str);
+	echo $str;
 }
 ?>
