@@ -112,8 +112,7 @@ a.ext:hover {
 
 .exttail {
 	color: #999;
-	position: relative;
-	bottom: 0.5ex;
+	vertical-align: super;
 }
 
 .header a:hover {
