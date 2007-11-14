@@ -38,18 +38,21 @@ WikkaEdit.prototype.init = function() {
 	this.initCategs();
 	if (this.we_actionsMenuEnabled)
 		this.initActions();
-
+	
+	//var we_ta_container = this.we_ta;		// without textarea_container (old method)
+	var we_ta_container = document.getElementById("textarea_container");	// with textarea_container
+	
 	// add a toolbar before textarea
 	this.we_toolbar = document.createElement("div");
 	this.we_toolbar.id = "wikkatoolbar";
 	this.we_toolbar.innerHTML = this.genToolbar();
-	this.we_ta.parentNode.insertBefore(this.we_toolbar, this.we_ta);
+	we_ta_container.parentNode.insertBefore(this.we_toolbar, we_ta_container);
 
 	// submenu
 	this.we_submenu = document.createElement("div");
 	this.we_submenu.id = "wikkasubmenu";
 	this.we_submenu.style.visibility = "hidden";
-	this.we_ta.parentNode.insertBefore(this.we_submenu, this.we_ta); //this.we_help.nextSibling);
+	we_ta_container.parentNode.insertBefore(this.we_submenu, we_ta_container); //this.we_help.nextSibling);
 
 	// search & replace
 	if (this.we_searchReplaceEnabled) {
@@ -59,9 +62,9 @@ WikkaEdit.prototype.init = function() {
 		this.we_search.style.visibility = "hidden"
 		this.we_search.style.width = "500px"; // width & height can't be moved to the CSS, else JS can't read these values later
 		this.we_search.style.height = "180px";
-		this.we_ta.parentNode.insertBefore(this.we_search, this.we_ta.nextSibling);
+		we_ta_container.parentNode.insertBefore(this.we_search, we_ta_container.nextSibling);
 
-		// dummy textarea, used to scroll this.we_ta to the right position
+		// dummy textarea, used to scroll the textarea to the right position
 		// it is hidden, but it needs to be inserted to the page to work
 		this.we_searchTa = document.createElement("textarea");
 		this.we_searchTa.style.position = "absolute";
@@ -69,7 +72,7 @@ WikkaEdit.prototype.init = function() {
 		this.we_searchTa.style.top = 0;
 		this.we_searchTa.style.visibility = "hidden";
 		this.we_searchTa.style.scroll = "auto";
-		this.we_ta.parentNode.insertBefore(this.we_searchTa, this.we_ta.nextSibling);
+		we_ta_container.parentNode.insertBefore(this.we_searchTa, we_ta_container.nextSibling);
 	}
 
 	// actions
@@ -80,12 +83,12 @@ WikkaEdit.prototype.init = function() {
 		this.we_help.id = "wikkahelp";
 		this.we_help.innerHTML = this.we_helpPreviousContent;	// contains at least a character to keep constant height
 		this.we_help.style.display = (this.we_actionsMenuEnabled ? "" : "none");
-		this.we_ta.parentNode.insertBefore(this.we_help, this.we_ta.nextSibling.nextSibling);	// next*2 to skip following <br/>
+		we_ta_container.parentNode.insertBefore(this.we_help, we_ta_container.nextSibling.nextSibling);	// next*2 to skip following <br/>
 		// tooltip
 		this.we_tooltip = document.createElement("div");
 		this.we_tooltip.id = "wikkatooltip";
 		this.we_tooltip.style.visibility = "hidden"
-		this.we_ta.parentNode.insertBefore(this.we_tooltip, this.we_help.nextSibling);
+		we_ta_container.parentNode.insertBefore(this.we_tooltip, this.we_help.nextSibling);
 	}
 
 	// log (debug)
@@ -93,7 +96,7 @@ WikkaEdit.prototype.init = function() {
 	this.we_log.id = "wikkalog";
 	this.we_log.innerHTML = "log<br/>";
 	this.we_log.style.display = "none";
-	this.we_ta.parentNode.insertBefore(this.we_log, this.we_ta.nextSibling);
+	we_ta_container.parentNode.insertBefore(this.we_log, we_ta_container.nextSibling);
 
 	// make sure nothing is selectionned in the textarea
 	this.setSelectionRange(0, 0);
