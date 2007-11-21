@@ -230,6 +230,10 @@ h1 {
 	font-size: 18pt;
 }
 
+tt {
+	color: #666;
+}
+
 .hidden {
 	display: none;
 }
