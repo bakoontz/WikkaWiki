@@ -244,7 +244,9 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 			// We need to escape ALL entity refs before display so we display them _as_ entities instead of interpreting them
 			// hence hsc_secure() instead of htmlspecialchars_ent() which UNescapes entities!
 			// JW/2007-02-20: why is this? wouldn't it be  easier for the person editing to show actual characters instead of entities?
-			'<textarea id="body" name="body">'.$this->hsc_secure($body).'</textarea>'."\n";	# #427
+			'<div id="textarea_container">'."\n".
+			'<textarea id="body" name="body">'.$this->hsc_secure($body).'</textarea>'."\n".	# #427
+			'</div>'."\n";
 		if ($buttons_position == 'bottom')
 		{
 			$output .= $edit_buttons;
@@ -253,16 +255,10 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 
 		if ($this->GetConfigValue('gui_editor') == 1)	// @@@ cast to boolean and compare to TRUE
 		{
-			// Relocation: build paths using configured value(s)
-			$protoedit_url = $this->StaticHref($this->GetConfigValue('wikiedit_uripath').'/protoedit.js');
-			$wikiedit_path = $this->StaticHref($this->GetConfigValue('wikiedit_uripath').'/wikiedit2.js');
-			$output .= '<script type="text/javascript" src="'.$protoedit_url.'"></script>'."\n".
-					   '<script type="text/javascript" src="'.$wikiedit_path.'"></script>'."\n";
-			// Relocation: we need to pass image path (ending in '/') relative to
-			// configured WikiEdit path as a fourth parameter to wE.init :
-			// that way WikiEdit can find its own images even if it's relocated/shared
-			$wikiedit_imgpath = $this->StaticHref($this->GetConfigValue('wikiedit_uripath').'/images/');
-			$output .= '<script type="text/javascript">'."  wE = new WikiEdit(); wE.init('body','WikiEdit','editornamecss','".$wikiedit_imgpath."');".'</script>'."\n";
+			$output .= '<script type="text/javascript" src="3rdparty/plugins/wikkaedit/wikkaedit_data.js"></script>'."\n";
+			$output .= '<script type="text/javascript" src="3rdparty/plugins/wikkaedit/wikkaedit_search.js"></script>'."\n";
+			$output .= '<script type="text/javascript" src="3rdparty/plugins/wikkaedit/wikkaedit_actions.js"></script>'."\n";
+			$output .= '<script type="text/javascript" src="3rdparty/plugins/wikkaedit/wikkaedit.js"></script>'."\n";			
 		}
 	}
 
