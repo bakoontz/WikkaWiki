@@ -401,10 +401,20 @@ input[type=text] {
 	border: 1px solid #CCC;	
 }
 
+/* editor textarea decorations */
+/* (decorations can't be in "textarea#body" declaration, else the "width:100%" won't work) */
+#textarea_container {
+	border: 1px solid #CCC;
+	padding: 2px;
+	margin-bottom: 2px;
+}
+
 textarea#body{
 	width: 100%;
 	height: 500px;
-	padding: 2px;
+	/* padding and border must be 0 for the "width:100%" to work */
+	padding: 0;
+	border: 0;
 }
 
 .searchbox {
