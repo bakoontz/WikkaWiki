@@ -4,7 +4,7 @@
 // v. 1.00                                                            //
 // supported browsers : MZ1.4+, MSIE5+, Opera 8+, khtml/webkit        //
 //                                                                    //
-// Copyright (C) 2007 Olivier Borowski (coin at tuxfamily dot org)    //
+// (C) 2007 Olivier Borowski (olivier.borowski@wikkawiki.org)         //
 // Homepage : http://wikkawiki.org/WikkaEdit                          //
 //                                                                    //
 // This program is free software; you can redistribute it and/or      //

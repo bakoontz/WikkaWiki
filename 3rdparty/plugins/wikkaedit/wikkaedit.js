@@ -38,10 +38,10 @@ WikkaEdit.prototype.init = function() {
 	this.initCategs();
 	if (this.we_actionsMenuEnabled)
 		this.initActions();
-	
+
 	//var we_ta_container = this.we_ta;		// without textarea_container (old method)
 	var we_ta_container = document.getElementById("textarea_container");	// with textarea_container
-	
+
 	// add a toolbar before textarea
 	this.we_toolbar = document.createElement("div");
 	this.we_toolbar.id = "wikkatoolbar";
@@ -174,8 +174,8 @@ WikkaEdit.prototype.genToolbar = function() {
 
 	// ========== actions ==========
 	if (this.we_actionsMenuEnabled) {
-		html += "<div style='border-top:1px solid #CCCCCC; margin:1px 0 4px 0'></div>";
-		html += "<span style='vertical-align:middle;margin-left:5px'>Actions :</span>";
+		html += "<div class='toolhorizsep'></div>";
+		html += "<span class='actiontitle'>Actions :</span>";
 		for(i in this.we_categs) {
 			if (this.we_categs[i].title != null)	// hidden actions don't have a title
 				html += "<span class=\"toolbutton\" style='margin-left:20px; padding:2px 5px 3px 6px' onclick=\"varWikkaEdit.toolbarCategClick('" + i + "', this);\">" + this.we_categs[i].title + "<img src='3rdparty/plugins/wikkaedit/images/submenu.gif' style='vertical-align:middle'/></span>";
@@ -263,11 +263,11 @@ WikkaEdit.prototype.toolbarActionClick = function(actionRef) {
 	if (this.we_actionsMenuEnabled) {
 		// === use actions data to insert the action ===
 		// add the action and default parameters to the textarea
-		var actionName = this.we_actions[actionRef].name;
+		var actionName = this.we_actions[actionRef].we_name;
 		var OP;
 		actionAndParams += "{{" + actionName;
-		for(var i in this.we_actions[actionRef].params) {
-			OP = this.we_actions[actionRef].params[i];
+		for(var i in this.we_actions[actionRef].we_params) {
+			OP = this.we_actions[actionRef].we_params[i];
 			if ((OP.nodefault == null) || (OP.nodefault == false))	// null or hide => add param
 				actionAndParams += " " + OP.name + "=\"" + OP.value + "\"";
 		}
@@ -356,10 +356,10 @@ WikkaEdit.prototype.toggleSubmenu = function(obj, newSubmenu, isAction) {
 			}
 		} else {
 			for(i in this.we_actions) {
-				if (this.we_actions[i].categ == newSubmenu) {
-					html += "<div class=\"smbutton\" onclick=\"varWikkaEdit.toolbarActionClick('" + i + "');\"" + (this.we_actions[i].summary == null ? "" : " title=\"" + this.we_actions[i].summary + "\"") + ">";
-					html += "<img class=\"smimage\" src=\"3rdparty/plugins/wikkaedit/images/" + this.we_actions[i].name + ".gif\" alt=\"" + this.we_actions[i].name + "\"" + ie6_hover + " />";
-					html += this.we_actions[i].title;
+				if (this.we_actions[i].we_categ == newSubmenu) {
+					html += "<div class=\"smbutton\" onclick=\"varWikkaEdit.toolbarActionClick('" + i + "');\"" + (this.we_actions[i].we_summary == null ? "" : " title=\"" + this.we_actions[i].we_summary + "\"") + ">";
+					html += "<img class=\"smimage\" src=\"3rdparty/plugins/wikkaedit/images/actions/" + this.we_actions[i].we_name + ".gif\" alt=\"" + this.we_actions[i].we_name + "\"" + ie6_hover + " />";
+					html += this.we_actions[i].we_title;
 					html += "</div>";
 				}
 			}

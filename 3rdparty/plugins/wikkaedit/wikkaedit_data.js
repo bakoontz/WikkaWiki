@@ -147,7 +147,7 @@ function WikkaAction(categName, tagName, title, summary, usage) {
 
 WikkaAction.prototype.addParam = function(name, value, nodefault, description) {
 	nodefault = (nodefault == true);
-	this.we_params[this.nameToRef(name)] = {name:name, value:value, nodefault:nodefault, description:description};
+	this.we_params[varWikkaEdit.nameToRef(name)] = {name:name, value:value, nodefault:nodefault, description:description};
 }
 
 WikkaEdit.prototype.initActions = function() {
