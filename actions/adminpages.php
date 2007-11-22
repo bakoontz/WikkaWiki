@@ -10,6 +10,9 @@
  * is displayed instead.
  *
  * @package		Actions
+ * @version		$Id$
+ * @license 	http://www.gnu.org/copyleft/gpl.html GNU General Public License
+ * @filesource
  *
  * @author		{@link http://wikkawiki.org/DarTar Dario Taraborelli}
  * @author		{@link http://wikkawiki.org/JavaWoman JavaWoman} (using getCount(); minor tweaks)
@@ -28,8 +31,9 @@
  * @output		A module to manage wiki pages.
  *
  * @todo	
- *			- sanitize URL parameters
- * 			- port all the dependencies (CSS, icons, handlers)
+ *			- sanitize URL parameters;
+ *			- apply FormatUser();
+ *			- port all the dependencies (CSS, icons, handlers);
  * 			- mass-operations;
  *			- handlers: rename handler;
  *			- statistics: page hits;
@@ -37,7 +41,7 @@
  *			- integrate with other admin modules.
  * 			- tie to a new default page (AdminPages);
  * 			- move i18n strings to lang in 1.1.7;
- * 			- move icons to buddy file or action folder in 1.1.7
+ * 			- move icons to buddy file or action folder in 1.1.7;
  */
 
 //utilities
@@ -130,13 +134,12 @@ if ($this->IsAdmin($this->GetUser()))
 	
 	// -------------------------------------
 	// User-interface: icons
-	
-	define('ADMINPAGES_HITS_ICON', 'images/icons/16x16/stock_about.png'); 
-	define('ADMINPAGES_REVISIONS_ICON', 'images/icons/16x16/stock_book_open.png'); 
-	define('ADMINPAGES_COMMENTS_ICON', 'images/icons/16x16/stock_help-agent.png'); 
-	define('ADMINPAGES_BACKLINKS_ICON', 'images/icons/16x16/stock_link.png'); 
-	define('ADMINPAGES_REFERRERS_ICON', 'images/icons/16x16/stock_internet.png'); 
-	
+
+	define('ADMINPAGES_REVISIONS_ICON', 'images/icons/edit.png'); 
+	define('ADMINPAGES_COMMENTS_ICON', 'images/icons/comment.png');
+	define('ADMINPAGES_HITS_ICON', 'images/icons/star.png'); 
+	define('ADMINPAGES_BACKLINKS_ICON', 'images/icons/link.png'); 
+	define('ADMINPAGES_REFERRERS_ICON', 'images/icons/world.png'); 
 	
 	// -------------------------------------
 	// User-interface: strings
@@ -165,7 +168,7 @@ if ($this->IsAdmin($this->GetUser()))
 	define('ADMINPAGES_TABLE_HEADING_LASTEDIT_TITLE','Sort by edit time');
 	define('ADMINPAGES_TABLE_SUMMARY','List of pages on this server');
 	define('ADMINPAGES_TABLE_HEADING_HITS_TITLE','Hits');
-	define('ADMINPAGES_TABLE_HEADING_REVISIONS_TITLE','Sort by number of revisions (DEBUG ONLY)');
+	define('ADMINPAGES_TABLE_HEADING_REVISIONS_TITLE','Revisions');
 	define('ADMINPAGES_TABLE_HEADING_COMMENTS_TITLE','Comments');
 	define('ADMINPAGES_TABLE_HEADING_BACKLINKS_TITLE','Backlinks');
 	define('ADMINPAGES_TABLE_HEADING_REFERRERS_TITLE','Referrers');
@@ -180,7 +183,7 @@ if ($this->IsAdmin($this->GetUser()))
 	define('ADMINPAGES_ACTION_CLONE_LINK_TITLE','Clone %s');
 	define('ADMINPAGES_ACTION_RENAME_LINK_TITLE','Rename %s (DISABLED)');
 	define('ADMINPAGES_ACTION_ACL_LINK_TITLE','Change Access Control List for %s');
-	define('ADMINPAGES_ACTION_INFO_LINK_TITLE','Display information and statistics for %s');
+	/* define('ADMINPAGES_ACTION_INFO_LINK_TITLE','Display information and statistics for %s'); */ #not implemented yet
 	define('ADMINPAGES_ACTION_REVERT_LINK_TITLE','Revert %s to previous version');
 	define('ADMINPAGES_ACTION_EDIT_LINK','edit');
 	define('ADMINPAGES_ACTION_DELETE_LINK','delete');
@@ -483,7 +486,7 @@ if ($this->IsAdmin($this->GetUser()))
 			$ownerheader = '<a href="'.$this->Href('','', (($sort == 'owner' && $d == 'asc')? 'l='.$l.'&amp;sort=owner&amp;d=desc&amp;q='.$q.'&amp;start_ts='.urlencode($start_ts).'&amp;end_ts='.urlencode($end_ts) : 'l='.$l.'&amp;sort=owner&amp;d=asc&amp;q='.$q.'&amp;start_ts='.urlencode($start_ts).'&amp;end_ts='.urlencode($end_ts))).'" title="'.ADMINPAGES_TABLE_HEADING_OWNER_TITLE.'">'.ADMINPAGES_TABLE_HEADING_OWNER.'</a>';
 			$userheader = '<a href="'.$this->Href('','', (($sort == 'user' && $d == 'asc')? 'l='.$l.'&amp;sort=user&amp;d=desc&amp;q='.$q.'&amp;start_ts='.urlencode($start_ts).'&amp;end_ts='.urlencode($end_ts) : 'l='.$l.'&amp;sort=user&amp;d=asc&amp;q='.$q.'&amp;start_ts='.urlencode($start_ts).'&amp;end_ts='.urlencode($end_ts))).'" title="'.ADMINPAGES_TABLE_HEADING_LASTAUTHOR_TITLE.'">'.ADMINPAGES_TABLE_HEADING_LASTAUTHOR.'</a>';
 			$lasteditheader = '<a href="'.$this->Href('','', (($sort == 'time' && $d == 'desc')? 'l='.$l.'&amp;sort=time&amp;d=asc&amp;q='.$q.'&amp;start_ts='.urlencode($start_ts).'&amp;end_ts='.urlencode($end_ts) : 'l='.$l.'&amp;sort=time&amp;d=desc&amp;q='.$q.'&amp;start_ts='.urlencode($start_ts).'&amp;end_ts='.urlencode($end_ts))).'" title="'.ADMINPAGES_TABLE_HEADING_LASTEDIT_TITLE.'">'.ADMINPAGES_TABLE_HEADING_LASTEDIT.'</a>';
-			$revisionsheader = '<a href="'.$this->Href('','', (($sort == 'edits' && $d == 'desc')? 'l='.$l.'&amp;sort=edits&amp;d=asc&amp;q='.$q.'&amp;start_ts='.urlencode($start_ts).'&amp;end_ts='.urlencode($end_ts) : 'l='.$l.'&amp;sort=edits&amp;d=desc&amp;q='.$q.'&amp;start_ts='.urlencode($start_ts).'&amp;end_ts='.urlencode($end_ts))).'" title="'.ADMINPAGES_TABLE_HEADING_REVISIONS_TITLE.'"><img src="'.ADMINPAGES_REVISIONS_ICON.'" alt="'.ADMINPAGES_TABLE_HEADING_REVISIONS_ALT.'"/></a>';
+			/* $revisionsheader = '<a href="'.$this->Href('','', (($sort == 'edits' && $d == 'desc')? 'l='.$l.'&amp;sort=edits&amp;d=asc&amp;q='.$q.'&amp;start_ts='.urlencode($start_ts).'&amp;end_ts='.urlencode($end_ts) : 'l='.$l.'&amp;sort=edits&amp;d=desc&amp;q='.$q.'&amp;start_ts='.urlencode($start_ts).'&amp;end_ts='.urlencode($end_ts))).'" title="'.ADMINPAGES_TABLE_HEADING_REVISIONS_TITLE.'"><img src="'.ADMINPAGES_REVISIONS_ICON.'" alt="'.ADMINPAGES_TABLE_HEADING_REVISIONS_ALT.'"/></a>'; */ #not implemented
 
 			$data_table = '<table id="adminpages" summary="'.ADMINPAGES_TABLE_SUMMARY.'" border="1px" class="data">'."\n".
 			'<thead>'."\n".
@@ -494,7 +497,7 @@ if ($this->IsAdmin($this->GetUser()))
 			'		<th>'.$userheader.'</th>'."\n".
 			'		<th>'.$lasteditheader.'</th>'."\n".
 			'		<th'.(($c_color == 1)? ' class="c1"' : '').' title="'.ADMINPAGES_TABLE_HEADING_HITS_TITLE.'"><img src="'.ADMINPAGES_HITS_ICON.'" alt="'.ADMINPAGES_TABLE_HEADING_HITS_ALT.'" /></th>'."\n".
-			'		<th'.(($c_color == 1)? ' class="c2"' : '').' title="'.ADMINPAGES_TABLE_HEADING_REVISIONS_TITLE.'">'.$revisionsheader.'</th>'."\n".
+			'		<th'.(($c_color == 1)? ' class="c2"' : '').' title="'.ADMINPAGES_TABLE_HEADING_REVISIONS_TITLE.'"><img src="'.ADMINPAGES_REVISIONS_ICON.'" alt="'.ADMINPAGES_TABLE_HEADING_REVISIONS_ALT.'" /></th>'."\n".
 			'		<th'.(($c_color == 1)? ' class="c3"' : '').' title="'.ADMINPAGES_TABLE_HEADING_COMMENTS_TITLE.'"><img src="'.ADMINPAGES_COMMENTS_ICON.'" alt="'.ADMINPAGES_TABLE_HEADING_COMMENTS_ALT.'" /></th>'."\n".
 			'		<th'.(($c_color == 1)? ' class="c4"' : '').' title="'.ADMINPAGES_TABLE_HEADING_BACKLINKS_TITLE.'"><img src="'.ADMINPAGES_BACKLINKS_ICON.'" alt="'.ADMINPAGES_TABLE_HEADING_BACKLINKS_ALT.'" /></th>'."\n".
 			'		<th'.(($c_color == 1)? ' class="c5"' : '').' title="'.ADMINPAGES_TABLE_HEADING_REFERRERS_TITLE.'"><img src="'.ADMINPAGES_REFERRERS_ICON.'" alt="'.ADMINPAGES_TABLE_HEADING_REFERRERS_ALT.'" /></th>'."\n".
@@ -518,14 +521,13 @@ if ($this->IsAdmin($this->GetUser()))
 				{
 					$showpage = '<a href="'.$this->Href('',$page['tag'], '').'">'.$pagename.'</a>';
 				}
+				$revertpage = '<a href="'.$this->Href('revert',$page['tag'], '').'" title="'.sprintf(ADMINPAGES_ACTION_REVERT_LINK_TITLE, $page['tag']).'">'.ADMINPAGES_ACTION_REVERT_LINK.'</a>';
 				$editpage = '<a href="'.$this->Href('edit',$page['tag'], '').'" title="'.sprintf(ADMINPAGES_ACTION_EDIT_LINK_TITLE, $page['tag']).'">'.ADMINPAGES_ACTION_EDIT_LINK.'</a>';
 				$deletepage = '<a href="'.$this->Href('delete',$page['tag'], '').'" title="'.sprintf(ADMINPAGES_ACTION_DELETE_LINK_TITLE, $page['tag']).'">'.ADMINPAGES_ACTION_DELETE_LINK.'</a>';
 				$clonepage = '<a href="'.$this->Href('clone',$page['tag'], '').'" title="'.sprintf(ADMINPAGES_ACTION_CLONE_LINK_TITLE, $page['tag']).'">'.ADMINPAGES_ACTION_CLONE_LINK.'</a>';
-				// renaming disabled
-				$renamepage = '<a href="'.$this->Href('rename',$page['tag'], '').'" title="'.sprintf(ADMINPAGES_ACTION_RENAME_LINK_TITLE, $page['tag']).'">'.ADMINPAGES_ACTION_RENAME_LINK.'</a>';
+				/* $renamepage = '<a href="'.$this->Href('rename',$page['tag'], '').'" title="'.sprintf(ADMINPAGES_ACTION_RENAME_LINK_TITLE, $page['tag']).'">'.ADMINPAGES_ACTION_RENAME_LINK.'</a>'; */ #to be implemented
 				$aclpage = '<a href="'.$this->Href('acls',$page['tag'], '').'" title="'.sprintf(ADMINPAGES_ACTION_ACL_LINK_TITLE, $page['tag']).'">'.ADMINPAGES_ACTION_ACL_LINK.'</a>';
-				$infopage = '<a href="'.$this->Href('info',$page['tag'], '').'" title="'.sprintf(ADMINPAGES_ACTION_INFO_LINK_TITLE, $page['tag']).'">'.ADMINPAGES_ACTION_INFO_LINK.'</a>';
-				$revertpage = '<a href="'.$this->Href('revert',$page['tag'], '').'" title="'.sprintf(ADMINPAGES_ACTION_REVERT_LINK_TITLE, $page['tag']).'">'.ADMINPAGES_ACTION_REVERT_LINK.'</a>';
+				/* $infopage = '<a href="'.$this->Href('info',$page['tag'], '').'" title="'.sprintf(ADMINPAGES_ACTION_INFO_LINK_TITLE, $page['tag']).'">'.ADMINPAGES_ACTION_INFO_LINK.'</a>'; */ #to be implemented
 
 				// get page owner
 				if ($page['owner'])
@@ -631,7 +633,7 @@ if ($this->IsAdmin($this->GetUser()))
 				'		<td class="number'.(($c_color == 1)? ' c3' : '').'">'.$commentspage.'</td>'."\n".
 				'		<td class="number'.(($c_color == 1)? ' c4' : '').'">'.$backlinkpage.'</td>'."\n".
 				'		<td class="number'.(($c_color == 1)? ' c5' : '').'">'.$refpage.'</td>'."\n".
-				'		<td class="center">'.$editpage.' :: '.$deletepage.' :: '.$clonepage.' :: './*$renamepage*.' :: '.*/$aclpage.' :: '.$infopage.' :: '.$revertpage.'</td>'."\n".
+				'		<td class="center">'.$revertpage.' :: '.$editpage.' :: '.$deletepage.' :: '.$clonepage.' :: '.$aclpage.'</td>'."\n".
 				'	</tr>'."\n".
 				'</tbody>'."\n";
 

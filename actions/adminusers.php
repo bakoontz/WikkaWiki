@@ -14,7 +14,6 @@
  * @filesource
  *
  * @author		{@link http://wikkawiki.org/DarTar Dario Taraborelli}
- * @version		0.5
  * @since		Wikka 1.1.6.4
  *
  * @input		integer $colcolor  optional: enables color for statistics columns
@@ -29,14 +28,15 @@
  * @output		A table of users registered on the current server.
  *
  * @todo
- *			- sanitize URL parameters
- * 			- port all the dependencies (CSS, icons, handlers)
+ *			- sanitize URL parameters;
+ *			- apply FormatUser();
+ * 			- port all the dependencies (CSS, icons, handlers);
  * 			- mass-operations;
  *			- deleting/banning users;
  *			- integrate with other admin modules;
  * 			- tie to a new default page (AdminUsers);
  * 			- move i18n strings to lang in 1.1.7;
- * 			- move icons to buddy file or action folder in 1.1.7
+ * 			- move icons to buddy file or action folder in 1.1.7;
  */
 
 /**
