@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Display a module for page management.
  *
@@ -11,12 +10,10 @@
  * is displayed instead.
  *
  * @package		Actions
- * @name		PageAdmin
  *
- * @author		{@link http://wikka.jsnx.com/DarTar Dario Taraborelli}
- * @author		{@link http://wikka.jsnx.com/JavaWoman JavaWoman} (using getCount(); minor tweaks)
- * @author      {@link http://www.wikkawiki.org/BrianKoontz Brian Koontz} (mass page reversion)
- * @version		0.4
+ * @author		{@link http://wikkawiki.org/DarTar Dario Taraborelli}
+ * @author		{@link http://wikkawiki.org/JavaWoman JavaWoman} (using getCount(); minor tweaks)
+ * @author      {@link http://wikkawiki.org/BrianKoontz Brian Koontz} (mass page reversion)
  * @since		Wikka 1.1.6.4
  *
  * @input		integer $colcolor  optional: enables color for statistics columns
@@ -28,14 +25,19 @@
  *				0: disables colored rows;
  *				default: 1;
  *
- * @output		A list of pages available on the current server.
+ * @output		A module to manage wiki pages.
  *
  * @todo	
- *			- mass-operations;
+ *			- sanitize URL parameters
+ * 			- port all the dependencies (CSS, icons, handlers)
+ * 			- mass-operations;
  *			- handlers: rename handler;
  *			- statistics: page hits;
  *			- full-text page search;
  *			- integrate with other admin modules.
+ * 			- tie to a new default page (AdminPages);
+ * 			- move i18n strings to lang in 1.1.7;
+ * 			- move icons to buddy file or action folder in 1.1.7
  */
 
 //utilities
@@ -47,7 +49,7 @@
  * a period expressed in number of days: a difference between 2 and 5 days may
  * be significant while that between 92 and 95 may not be.
  *
- * @author		{@link http://wikka.jsnx.com/JavaWoman JavaWoman}
+ * @author		{@link http://wikkawiki.org/JavaWoman JavaWoman}
  * @copyright	Copyright (c) 2005, Marjolein Katsma
  * @license		http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
  * @version		1.0
@@ -58,6 +60,9 @@
  *					(will be included if smaller than the largest limit)
  * @param	int		$firstinc optional: increment for the first range; default 1
  * @return	array	resulting list of numbers
+ * 
+ * @todo	find a better name
+ * @todo	move to core
  */
 function optionRanges($limits, $max, $firstinc = 1)
 {
@@ -91,144 +96,147 @@ function optionRanges($limits, $max, $firstinc = 1)
 }
 
 // restrict access to admins
-if ($this->IsAdmin($this->GetUser())) {
+if ($this->IsAdmin($this->GetUser()))
+{
 
 	// -------------------------------------
 	// set default values as constants
-	define('DEFAULT_RECORDS_LIMIT', '20'); # number of records per page
-	define('DEFAULT_MIN_RECORDS_DISPLAY', '5'); # min number of records
-	define('DEFAULT_RECORDS_RANGE',serialize(array('10','50','100','500','1000'))); #range array for records pager
-	define('DEFAULT_SORT_FIELD', 'time'); # sort field
-	define('DEFAULT_SORT_ORDER', 'desc'); # sort order, ascendant or descendant
-	define('DEFAULT_START', '0'); # start record
-	define('DEFAULT_SEARCH', ''); # keyword to restrict page search
-	define('DEFAULT_TAG_LENGTH', '12'); # max. length of displayed pagename
-	define('DEFAULT_URL_LENGTH', '15'); # max. length of displayed user host
-	define('DEFAULT_TERMINATOR', '&#8230;'); # standard symbol replacing truncated text (ellipsis) JW 2005-07-19
-	define('ALTERNATE_ROW_COLOR', '1'); # switch alternate row color
-	define('STAT_COLUMN_COLOR', '1'); # switch color for statistics columns
+	define('ADMINPAGES_DEFAULT_RECORDS_LIMIT', '20'); # number of records per page
+	define('ADMINPAGES_DEFAULT_MIN_RECORDS_DISPLAY', '5'); # min number of records
+	define('ADMINPAGES_DEFAULT_RECORDS_RANGE',serialize(array('10','50','100','500','1000'))); #range array for records pager
+	define('ADMINPAGES_DEFAULT_SORT_FIELD', 'time'); # sort field
+	define('ADMINPAGES_DEFAULT_SORT_ORDER', 'desc'); # sort order, ascendant or descendant
+	define('ADMINPAGES_DEFAULT_START', '0'); # start record
+	define('ADMINPAGES_DEFAULT_SEARCH', ''); # keyword to restrict page search
+	define('ADMINPAGES_DEFAULT_TAG_LENGTH', '12'); # max. length of displayed pagename
+	define('ADMINPAGES_DEFAULT_URL_LENGTH', '15'); # max. length of displayed user host
+	define('ADMINPAGES_DEFAULT_TERMINATOR', '&#8230;'); # standard symbol replacing truncated text (ellipsis) JW 2005-07-19
+	define('ADMINPAGES_ALTERNATE_ROW_COLOR', '1'); # switch alternate row color
+	define('ADMINPAGES_STAT_COLUMN_COLOR', '1'); # switch color for statistics columns
 	// last edit range defaults
-	define('DEFAULT_START_YEAR', 'YYYY');
-	define('DEFAULT_START_MONTH', 'MM');
-	define('DEFAULT_START_DAY', 'DD');
-	define('DEFAULT_START_HOUR', 'hh');
-	define('DEFAULT_START_MINUTE', 'mm');
-	define('DEFAULT_START_SECOND', 'ss');
-	define('DEFAULT_END_YEAR', 'YYYY');
-	define('DEFAULT_END_MONTH', 'MM');
-	define('DEFAULT_END_DAY', 'DD');
-	define('DEFAULT_END_HOUR', 'hh');
-	define('DEFAULT_END_MINUTE', 'mm');
-	define('DEFAULT_END_SECOND', 'ss');
+	define('ADMINPAGES_DEFAULT_START_YEAR', 'YYYY');
+	define('ADMINPAGES_DEFAULT_START_MONTH', 'MM');
+	define('ADMINPAGES_DEFAULT_START_DAY', 'DD');
+	define('ADMINPAGES_DEFAULT_START_HOUR', 'hh');
+	define('ADMINPAGES_DEFAULT_START_MINUTE', 'mm');
+	define('ADMINPAGES_DEFAULT_START_SECOND', 'ss');
+	define('ADMINPAGES_DEFAULT_END_YEAR', 'YYYY');
+	define('ADMINPAGES_DEFAULT_END_MONTH', 'MM');
+	define('ADMINPAGES_DEFAULT_END_DAY', 'DD');
+	define('ADMINPAGES_DEFAULT_END_HOUR', 'hh');
+	define('ADMINPAGES_DEFAULT_END_MINUTE', 'mm');
+	define('ADMINPAGES_DEFAULT_END_SECOND', 'ss');
 
 	
 	// -------------------------------------
 	// User-interface: icons
 	
-	define('HITS_ICON', 'images/icons/16x16/stock_about.png'); 
-	define('REVISIONS_ICON', 'images/icons/16x16/stock_book_open.png'); 
-	define('COMMENTS_ICON', 'images/icons/16x16/stock_help-agent.png'); 
-	define('BACKLINKS_ICON', 'images/icons/16x16/stock_link.png'); 
-	define('REFERRERS_ICON', 'images/icons/16x16/stock_internet.png'); 
+	define('ADMINPAGES_HITS_ICON', 'images/icons/16x16/stock_about.png'); 
+	define('ADMINPAGES_REVISIONS_ICON', 'images/icons/16x16/stock_book_open.png'); 
+	define('ADMINPAGES_COMMENTS_ICON', 'images/icons/16x16/stock_help-agent.png'); 
+	define('ADMINPAGES_BACKLINKS_ICON', 'images/icons/16x16/stock_link.png'); 
+	define('ADMINPAGES_REFERRERS_ICON', 'images/icons/16x16/stock_internet.png'); 
 	
 	
 	// -------------------------------------
 	// User-interface: strings
 	
-	define('PAGE_TITLE','Page Administration');
-	define('FORM_LEGEND','Filter view:');
-	define('FORM_SEARCH_STRING_LABEL','Search page:');
-	define('FORM_SEARCH_STRING_TITLE','Enter a search string');
-	define('FORM_SEARCH_SUBMIT','Submit');
-	define('FORM_DATE_RANGE_STRING_LABEL','Last edit range: Between');
-	define('FORM_DATE_RANGE_CONNECTOR_LABEL','and');
-	define('FORM_PAGER_LABEL_BEFORE','Show');
-	define('FORM_PAGER_TITLE','Select records-per-page limit');
-	define('FORM_PAGER_LABEL_AFTER','records per page');
-	define('FORM_PAGER_SUBMIT','Apply');
-	define('FORM_PAGER_LINK','Show records from %d to %d');
-	define('FORM_RESULT_INFO','Records');
-	define('FORM_RESULT_SORTED_BY','Sorted by:');
-	define('TABLE_HEADING_PAGENAME','Page Name');
-	define('TABLE_HEADING_PAGENAME_TITLE','Sort by page name');
-	define('TABLE_HEADING_OWNER','Owner');
-	define('TABLE_HEADING_OWNER_TITLE','Sort by page owner');
-	define('TABLE_HEADING_LASTAUTHOR','Last Author');
-	define('TABLE_HEADING_LASTAUTHOR_TITLE','Sort by last author');
-	define('TABLE_HEADING_LASTEDIT','Last Edit');
-	define('TABLE_HEADING_LASTEDIT_TITLE','Sort by edit time');
-	define('TABLE_SUMMARY','List of pages on this server');
-	define('TABLE_HEADING_HITS_TITLE','Hits');
-	define('TABLE_HEADING_REVISIONS_TITLE','Sort by number of revisions (DEBUG ONLY)');
-	define('TABLE_HEADING_COMMENTS_TITLE','Comments');
-	define('TABLE_HEADING_BACKLINKS_TITLE','Backlinks');
-	define('TABLE_HEADING_REFERRERS_TITLE','Referrers');
-	define('TABLE_HEADING_HITS_ALT','Hits');
-	define('TABLE_HEADING_REVISIONS_ALT','Revisions');
-	define('TABLE_HEADING_COMMENTS_ALT','Comments');
-	define('TABLE_HEADING_BACKLINKS_ALT','Backlinks');
-	define('TABLE_HEADING_REFERRERS_ALT','Referrers');
-	define('TABLE_HEADING_ACTIONS','Actions');
-	define('ACTION_EDIT_LINK_TITLE','Edit %s');
-	define('ACTION_DELETE_LINK_TITLE','Delete %s');
-	define('ACTION_CLONE_LINK_TITLE','Clone %s');
-	define('ACTION_RENAME_LINK_TITLE','Rename %s (DISABLED)');
-	define('ACTION_ACL_LINK_TITLE','Change Access Control List for %s');
-	define('ACTION_INFO_LINK_TITLE','Display information and statistics for %s');
-	define('ACTION_REVERT_LINK_TITLE','Revert %s to previous version');
-	define('ACTION_EDIT_LINK','edit');
-	define('ACTION_DELETE_LINK','delete');
-	define('ACTION_CLONE_LINK','clone');
-	define('ACTION_RENAME_LINK','rename');
-	define('ACTION_ACL_LINK','acl');
-	define('ACTION_INFO_LINK','info');
-	define('ACTION_REVERT_LINK', 'revert');
-	define('TAKE_OWNERSHIP_LINK','Take ownership of');
-	define('NO_OWNER','(Nobody)');
-	define('TABLE_CELL_HITS_TITLE','Hits for %s (%d)');
-	define('TABLE_CELL_REVISIONS_TITLE','Display revisions for %s (%d)');
-	define('TABLE_CELL_COMMENTS_TITLE','Display comments for %s (%d)');
-	define('TABLE_CELL_BACKLINKS_TITLE','Display pages linking to %s (%d)');
-	define('TABLE_CELL_REFERRERS_TITLE','Display external sites linking to %s (%d)');
-	define('SELECT_RECORD_TITLE','Select %s');
-	define('NO_EDIT_NOTE','[No edit note]');
-	define('CHECK_ALL_TITLE','Check all records');
-	define('CHECK_ALL','Check all');
-	define('UNCHECK_ALL_TITLE','Uncheck all records');
-	define('UNCHECK_ALL','Uncheck all');
-	define('FORM_MASSACTION_LEGEND','Mass-action');
-	define('FORM_MASSACTION_LABEL','With selected');
-	define('FORM_MASSACTION_SELECT_TITLE','Choose action to apply to selected records (DISABLED)');
-	define('FORM_MASSACTION_OPT_DELETE','Delete all');
-	define('FORM_MASSACTION_OPT_CLONE','Clone all');
-	define('FORM_MASSACTION_OPT_RENAME','Rename all');
-	define('FORM_MASSACTION_OPT_ACL','Change Access Control List');
-	define('FORM_MASSACTION_OPT_REVERT','Revert to previous page version');
-	define('FORM_MASSACTION_SUBMIT','Submit');
-	define('ERROR_NO_MATCHES','Sorry, there are no pages matching "%s"');
-	
+	define('ADMINPAGES_PAGE_TITLE','Page Administration');
+	define('ADMINPAGES_FORM_LEGEND','Filter view:');
+	define('ADMINPAGES_FORM_SEARCH_STRING_LABEL','Search page:');
+	define('ADMINPAGES_FORM_SEARCH_STRING_TITLE','Enter a search string');
+	define('ADMINPAGES_FORM_SEARCH_SUBMIT','Submit');
+	define('ADMINPAGES_FORM_DATE_RANGE_STRING_LABEL','Last edit range: Between');
+	define('ADMINPAGES_FORM_DATE_RANGE_CONNECTOR_LABEL','and');
+	define('ADMINPAGES_FORM_PAGER_LABEL_BEFORE','Show');
+	define('ADMINPAGES_FORM_PAGER_TITLE','Select records-per-page limit');
+	define('ADMINPAGES_FORM_PAGER_LABEL_AFTER','records per page');
+	define('ADMINPAGES_FORM_PAGER_SUBMIT','Apply');
+	define('ADMINPAGES_FORM_PAGER_LINK','Show records from %d to %d');
+	define('ADMINPAGES_FORM_RESULT_INFO','Records');
+	define('ADMINPAGES_FORM_RESULT_SORTED_BY','Sorted by:');
+	define('ADMINPAGES_TABLE_HEADING_PAGENAME','Page Name');
+	define('ADMINPAGES_TABLE_HEADING_PAGENAME_TITLE','Sort by page name');
+	define('ADMINPAGES_TABLE_HEADING_OWNER','Owner');
+	define('ADMINPAGES_TABLE_HEADING_OWNER_TITLE','Sort by page owner');
+	define('ADMINPAGES_TABLE_HEADING_LASTAUTHOR','Last Author');
+	define('ADMINPAGES_TABLE_HEADING_LASTAUTHOR_TITLE','Sort by last author');
+	define('ADMINPAGES_TABLE_HEADING_LASTEDIT','Last Edit');
+	define('ADMINPAGES_TABLE_HEADING_LASTEDIT_TITLE','Sort by edit time');
+	define('ADMINPAGES_TABLE_SUMMARY','List of pages on this server');
+	define('ADMINPAGES_TABLE_HEADING_HITS_TITLE','Hits');
+	define('ADMINPAGES_TABLE_HEADING_REVISIONS_TITLE','Sort by number of revisions (DEBUG ONLY)');
+	define('ADMINPAGES_TABLE_HEADING_COMMENTS_TITLE','Comments');
+	define('ADMINPAGES_TABLE_HEADING_BACKLINKS_TITLE','Backlinks');
+	define('ADMINPAGES_TABLE_HEADING_REFERRERS_TITLE','Referrers');
+	define('ADMINPAGES_TABLE_HEADING_HITS_ALT','Hits');
+	define('ADMINPAGES_TABLE_HEADING_REVISIONS_ALT','Revisions');
+	define('ADMINPAGES_TABLE_HEADING_COMMENTS_ALT','Comments');
+	define('ADMINPAGES_TABLE_HEADING_BACKLINKS_ALT','Backlinks');
+	define('ADMINPAGES_TABLE_HEADING_REFERRERS_ALT','Referrers');
+	define('ADMINPAGES_TABLE_HEADING_ACTIONS','Actions');
+	define('ADMINPAGES_ACTION_EDIT_LINK_TITLE','Edit %s');
+	define('ADMINPAGES_ACTION_DELETE_LINK_TITLE','Delete %s');
+	define('ADMINPAGES_ACTION_CLONE_LINK_TITLE','Clone %s');
+	define('ADMINPAGES_ACTION_RENAME_LINK_TITLE','Rename %s (DISABLED)');
+	define('ADMINPAGES_ACTION_ACL_LINK_TITLE','Change Access Control List for %s');
+	define('ADMINPAGES_ACTION_INFO_LINK_TITLE','Display information and statistics for %s');
+	define('ADMINPAGES_ACTION_REVERT_LINK_TITLE','Revert %s to previous version');
+	define('ADMINPAGES_ACTION_EDIT_LINK','edit');
+	define('ADMINPAGES_ACTION_DELETE_LINK','delete');
+	define('ADMINPAGES_ACTION_CLONE_LINK','clone');
+	define('ADMINPAGES_ACTION_RENAME_LINK','rename');
+	define('ADMINPAGES_ACTION_ACL_LINK','acl');
+	define('ADMINPAGES_ACTION_INFO_LINK','info');
+	define('ADMINPAGES_ACTION_REVERT_LINK', 'revert');
+	define('ADMINPAGES_TAKE_OWNERSHIP_LINK','Take ownership of');
+	define('ADMINPAGES_NO_OWNER','(Nobody)');
+	define('ADMINPAGES_TABLE_CELL_HITS_TITLE','Hits for %s (%d)');
+	define('ADMINPAGES_TABLE_CELL_REVISIONS_TITLE','Display revisions for %s (%d)');
+	define('ADMINPAGES_TABLE_CELL_COMMENTS_TITLE','Display comments for %s (%d)');
+	define('ADMINPAGES_TABLE_CELL_BACKLINKS_TITLE','Display pages linking to %s (%d)');
+	define('ADMINPAGES_TABLE_CELL_REFERRERS_TITLE','Display external sites linking to %s (%d)');
+	define('ADMINPAGES_SELECT_RECORD_TITLE','Select %s');
+	define('ADMINPAGES_NO_EDIT_NOTE','[No edit note]');
+	define('ADMINPAGES_CHECK_ALL_TITLE','Check all records');
+	define('ADMINPAGES_CHECK_ALL','Check all');
+	define('ADMINPAGES_UNCHECK_ALL_TITLE','Uncheck all records');
+	define('ADMINPAGES_UNCHECK_ALL','Uncheck all');
+	define('ADMINPAGES_FORM_MASSACTION_LEGEND','Mass-action');
+	define('ADMINPAGES_FORM_MASSACTION_LABEL','With selected');
+	define('ADMINPAGES_FORM_MASSACTION_SELECT_TITLE','Choose action to apply to selected records (DISABLED)');
+	define('ADMINPAGES_FORM_MASSACTION_OPT_DELETE','Delete all');
+	define('ADMINPAGES_FORM_MASSACTION_OPT_CLONE','Clone all');
+	define('ADMINPAGES_FORM_MASSACTION_OPT_RENAME','Rename all');
+	define('ADMINPAGES_FORM_MASSACTION_OPT_ACL','Change Access Control List');
+	define('ADMINPAGES_FORM_MASSACTION_OPT_REVERT','Revert to previous page version');
+	define('ADMINPAGES_FORM_MASSACTION_SUBMIT','Submit');
+	define('ADMINPAGES_ERROR_NO_MATCHES','Sorry, there are no pages matching "%s"');
 	
 	// -------------------------------------
 	// Initialize variables
 	
 	$r = 1; #initialize row counter
-	$r_color = ALTERNATE_ROW_COLOR; #get alternate row color option
-	$c_color = STAT_COLUMN_COLOR; #get column color option
+	$r_color = ADMINPAGES_ALTERNATE_ROW_COLOR; #get alternate row color option
+	$c_color = ADMINPAGES_STAT_COLUMN_COLOR; #get column color option
 	// record dropdown
-	$page_limits = unserialize(DEFAULT_RECORDS_RANGE);
+	$page_limits = unserialize(ADMINPAGES_DEFAULT_RECORDS_RANGE);
 	// pager
 	$prev = '';		
 	$next = '';		
 	
 	//override defaults with action parameters
-	if (is_array($vars)) {
-		foreach ($vars as $param => $value){
-			switch ($param) {
+	if (is_array($vars))
+	{
+		foreach ($vars as $param => $value)
+		{
+			switch ($param)
+			{
 				case 'colcolor':
-					$c_color = (preg_match('/[01]/',$value))? $value : STAT_COLUMN_COLOR;
+					$c_color = (preg_match('/[01]/',$value))? $value : ADMINPAGES_STAT_COLUMN_COLOR;
 					break;
 				case 'rowcolor':
-					$r_color = (preg_match('/[01]/',$value))? $value : ALTERNATE_ROW_COLOR;
+					$r_color = (preg_match('/[01]/',$value))? $value : ADMINPAGES_ALTERNATE_ROW_COLOR;
 					break;
 			}
 		}
@@ -270,40 +278,52 @@ if ($this->IsAdmin($this->GetUser())) {
 
 		// number of records per page
 		if (isset($_POST['l']))
+		{
 			$l = $_POST['l'];
+		}
 		elseif (isset($_GET['l']))
+		{
 			$l = $_GET['l'];
+		}
 		else
-			$l = DEFAULT_RECORDS_LIMIT;
+		{
+			$l = ADMINPAGES_DEFAULT_RECORDS_LIMIT;
+		}
 
 		// last edit date range
-		$start_YY = (isset($_POST['start_YY'])) ? $this->htmlspecialchars_ent($_POST['start_YY']) : DEFAULT_START_YEAR;
-		$start_MM = (isset($_POST['start_MM'])) ? $this->htmlspecialchars_ent($_POST['start_MM']) : DEFAULT_START_MONTH;
-		$start_DD = (isset($_POST['start_DD'])) ? $this->htmlspecialchars_ent($_POST['start_DD']) : DEFAULT_START_DAY;
-		$start_hh = (isset($_POST['start_hh'])) ? $this->htmlspecialchars_ent($_POST['start_hh']) : DEFAULT_START_HOUR;
-		$start_mm = (isset($_POST['start_mm'])) ? $this->htmlspecialchars_ent($_POST['start_mm']) : DEFAULT_START_MINUTE;
-		$start_ss = (isset($_POST['start_ss'])) ? $this->htmlspecialchars_ent($_POST['start_ss']) : DEFAULT_START_SECOND;
-		$end_YY = (isset($_POST['end_YY'])) ? $this->htmlspecialchars_ent($_POST['end_YY']) : DEFAULT_END_YEAR;
-		$end_MM = (isset($_POST['end_MM'])) ? $this->htmlspecialchars_ent($_POST['end_MM']) : DEFAULT_END_MONTH;
-		$end_DD = (isset($_POST['end_DD'])) ? $this->htmlspecialchars_ent($_POST['end_DD']) : DEFAULT_END_DAY;
-		$end_hh = (isset($_POST['end_hh'])) ? $this->htmlspecialchars_ent($_POST['end_hh']) : DEFAULT_END_HOUR;
-		$end_mm = (isset($_POST['end_mm'])) ? $this->htmlspecialchars_ent($_POST['end_mm']) : DEFAULT_END_MINUTE;
-		$end_ss = (isset($_POST['end_ss'])) ? $this->htmlspecialchars_ent($_POST['end_ss']) : DEFAULT_END_SECOND;
+		$start_YY = (isset($_POST['start_YY'])) ? $this->htmlspecialchars_ent($_POST['start_YY']) : ADMINPAGES_DEFAULT_START_YEAR;
+		$start_MM = (isset($_POST['start_MM'])) ? $this->htmlspecialchars_ent($_POST['start_MM']) : ADMINPAGES_DEFAULT_START_MONTH;
+		$start_DD = (isset($_POST['start_DD'])) ? $this->htmlspecialchars_ent($_POST['start_DD']) : ADMINPAGES_DEFAULT_START_DAY;
+		$start_hh = (isset($_POST['start_hh'])) ? $this->htmlspecialchars_ent($_POST['start_hh']) : ADMINPAGES_DEFAULT_START_HOUR;
+		$start_mm = (isset($_POST['start_mm'])) ? $this->htmlspecialchars_ent($_POST['start_mm']) : ADMINPAGES_DEFAULT_START_MINUTE;
+		$start_ss = (isset($_POST['start_ss'])) ? $this->htmlspecialchars_ent($_POST['start_ss']) : ADMINPAGES_DEFAULT_START_SECOND;
+		$end_YY = (isset($_POST['end_YY'])) ? $this->htmlspecialchars_ent($_POST['end_YY']) : ADMINPAGES_DEFAULT_END_YEAR;
+		$end_MM = (isset($_POST['end_MM'])) ? $this->htmlspecialchars_ent($_POST['end_MM']) : ADMINPAGES_DEFAULT_END_MONTH;
+		$end_DD = (isset($_POST['end_DD'])) ? $this->htmlspecialchars_ent($_POST['end_DD']) : ADMINPAGES_DEFAULT_END_DAY;
+		$end_hh = (isset($_POST['end_hh'])) ? $this->htmlspecialchars_ent($_POST['end_hh']) : ADMINPAGES_DEFAULT_END_HOUR;
+		$end_mm = (isset($_POST['end_mm'])) ? $this->htmlspecialchars_ent($_POST['end_mm']) : ADMINPAGES_DEFAULT_END_MINUTE;
+		$end_ss = (isset($_POST['end_ss'])) ? $this->htmlspecialchars_ent($_POST['end_ss']) : ADMINPAGES_DEFAULT_END_SECOND;
 
 		// sort field
-		$sort = (isset($_GET['sort'])) ? $_GET['sort'] : DEFAULT_SORT_FIELD;
+		$sort = (isset($_GET['sort'])) ? $_GET['sort'] : ADMINPAGES_DEFAULT_SORT_FIELD;
 		// sort order
-		$d = (isset($_GET['d'])) ? $_GET['d'] : DEFAULT_SORT_ORDER;
+		$d = (isset($_GET['d'])) ? $_GET['d'] : ADMINPAGES_DEFAULT_SORT_ORDER;
 		// start record
-		$s = (isset($_GET['s'])) ? $_GET['s'] : DEFAULT_START;
+		$s = (isset($_GET['s'])) ? $_GET['s'] : ADMINPAGES_DEFAULT_START;
 
 		// search string
 		if (isset($_POST['q']))
+		{
 			$q = $_POST['q'];
+		}
 		elseif (isset($_GET['q']))
+		{
 			$q = $_GET['q'];
+		}
 		else
-			$q = DEFAULT_SEARCH;
+		{
+			$q = ADMINPAGES_DEFAULT_SEARCH;
+		}
 
 		// select all	added JW 2005-07-19
 		$checked = '';
@@ -313,19 +333,19 @@ if ($this->IsAdmin($this->GetUser())) {
 		}
 
 		// print page header
-		echo $this->Format('==== '.PAGE_TITLE.' ==== --- ');
+		echo '<h3>'.ADMINPAGES_PAGE_TITLE.'</h3>'."\n";
 
 		// build pager form	
-		$form1 = $this->FormOpen('','','post','page_admin_panel');
-		$form1 .= '<fieldset><legend>'.FORM_LEGEND.'</legend>'."\n";
-		$form1 .= '<label for="q">'.FORM_SEARCH_STRING_LABEL.'</label> <input type ="text" id="q" name="q" title="'.FORM_SEARCH_STRING_TITLE.'" size="20" maxlength="50" value="'.$q.'"/> <input type="submit" value="'.FORM_SEARCH_SUBMIT.'" /><br />'."\n";
+		$form_filter = $this->FormOpen('','','post','page_admin_panel');
+		$form_filter .= '<fieldset><legend>'.ADMINPAGES_FORM_LEGEND.'</legend>'."\n";
+		$form_filter .= '<label for="q">'.ADMINPAGES_FORM_SEARCH_STRING_LABEL.'</label> <input type ="text" id="q" name="q" title="'.ADMINPAGES_FORM_SEARCH_STRING_TITLE.'" size="20" maxlength="50" value="'.$q.'"/> <input type="submit" value="'.ADMINPAGES_FORM_SEARCH_SUBMIT.'" /><br />'."\n";
 		// build date range fields
-		$form1 .= '<label for="d">'.FORM_DATE_RANGE_STRING_LABEL.'</label>&nbsp;<input type="text" name="start_YY" size="4" maxlength="4" value="'.$start_YY.'"/>-<input type="text" name="start_MM" size="2" maxlength="2" value="'.$start_MM.'"/>-<input type="text" name="start_DD" size="2" maxlength="2" value="'.$start_DD.'"/>&nbsp;<input type="text" name="start_hh" size="2" maxlength="2" value="'.$start_hh.'"/>:<input type="text" name="start_mm" size="2" maxlength="2" value="'.$start_mm.'"/>:<input type="text" name="start_ss" size="2" maxlength="2" value="'.$start_ss.'"/>&nbsp;'.FORM_DATE_RANGE_CONNECTOR_LABEL.'&nbsp;<input type="text" name="end_YY" size="4" maxlength="4" value="'.$end_YY.'"/>-<input type="text" name="end_MM" size="2" maxlength="2" value="'.$end_MM.'"/>-<input type="text" name="end_DD" size="2" maxlength="2" value="'.$end_DD.'"/>&nbsp;<input type="text" name="end_hh" size="2" maxlength="2" value="'.$end_hh.'"/>:<input type="text" name="end_mm" size="2" maxlength="2" value="'.$end_mm.'"/>:<input type="text" name="end_ss" size="2" maxlength="2" value="'.$end_ss.'"/><br />'."\n";
+		$form_filter .= '<label for="d">'.ADMINPAGES_FORM_DATE_RANGE_STRING_LABEL.'</label>&nbsp;<input type="text" name="start_YY" size="4" maxlength="4" value="'.$start_YY.'"/>-<input type="text" name="start_MM" size="2" maxlength="2" value="'.$start_MM.'"/>-<input type="text" name="start_DD" size="2" maxlength="2" value="'.$start_DD.'"/>&nbsp;<input type="text" name="start_hh" size="2" maxlength="2" value="'.$start_hh.'"/>:<input type="text" name="start_mm" size="2" maxlength="2" value="'.$start_mm.'"/>:<input type="text" name="start_ss" size="2" maxlength="2" value="'.$start_ss.'"/>&nbsp;'.ADMINPAGES_FORM_DATE_RANGE_CONNECTOR_LABEL.'&nbsp;<input type="text" name="end_YY" size="4" maxlength="4" value="'.$end_YY.'"/>-<input type="text" name="end_MM" size="2" maxlength="2" value="'.$end_MM.'"/>-<input type="text" name="end_DD" size="2" maxlength="2" value="'.$end_DD.'"/>&nbsp;<input type="text" name="end_hh" size="2" maxlength="2" value="'.$end_hh.'"/>:<input type="text" name="end_mm" size="2" maxlength="2" value="'.$end_mm.'"/>:<input type="text" name="end_ss" size="2" maxlength="2" value="'.$end_ss.'"/><br />'."\n";
 
 		// check for/validate last date edit range
 		$start_ts = '';
 		$end_ts = '';
-		if(!empty($_GET['start_ts']) && !empty($_GET['end_ts']))
+		if (!empty($_GET['start_ts']) && !empty($_GET['end_ts']))
 		{
 			$start_ts = $this->htmlspecialchars_ent($_GET['start_ts']);
 			$end_ts = $this->htmlspecialchars_ent($_GET['end_ts']); 
@@ -339,13 +359,13 @@ if ($this->IsAdmin($this->GetUser())) {
 			$start_ts .= mysql_real_escape_string($start_MM);
 			$start_ts .= '-';
 			$start_ts .= mysql_real_escape_string($start_DD);
-			if(is_numeric($start_hh) && $start_hh >= 0 && $start_hh <=24)
+			if (is_numeric($start_hh) && $start_hh >= 0 && $start_hh <=24)
 			{
 				$start_ts .= ' '.mysql_real_escape_string($start_hh).':';
-				if(is_numeric($start_mm) && $start_mm >= 0 && $start_mm <= 59)
+				if (is_numeric($start_mm) && $start_mm >= 0 && $start_mm <= 59)
 				{
 					$start_ts .= mysql_real_escape_string($start_mm).':';
-					if(is_numeric($start_ss) && $start_ss >= 0 && $start_ss <= 59)
+					if (is_numeric($start_ss) && $start_ss >= 0 && $start_ss <= 59)
 					{
 						$start_ts .= mysql_real_escape_string($start_ss);
 					}
@@ -359,7 +379,7 @@ if ($this->IsAdmin($this->GetUser())) {
 					$start_ts .= '00:00';
 				}
 			}
-			if(is_numeric($end_YY) && $end_YY > 1000 && $end_YY < 9999 &&
+			if (is_numeric($end_YY) && $end_YY > 1000 && $end_YY < 9999 &&
 			   is_numeric($end_MM) && $end_MM > 0 && $end_MM < 13 &&
 			   is_numeric($end_DD) && $end_DD > 0 && $end_DD < 32)
 			{
@@ -368,13 +388,13 @@ if ($this->IsAdmin($this->GetUser())) {
 				$end_ts .= mysql_real_escape_string($end_MM);
 				$end_ts .= '-';
 				$end_ts .= mysql_real_escape_string($end_DD);
-				if(is_numeric($end_hh) && $end_hh >= 0 && $end_hh <=24)
+				if (is_numeric($end_hh) && $end_hh >= 0 && $end_hh <=24)
 				{
 					$end_ts .= ' '.mysql_real_escape_string($end_hh).':';
-					if(is_numeric($end_mm) && $end_mm >= 0 && $end_mm <= 59)
+					if (is_numeric($end_mm) && $end_mm >= 0 && $end_mm <= 59)
 					{
 						$end_ts .= mysql_real_escape_string($end_mm).':';
-						if(is_numeric($end_ss) && $end_ss >= 0 && $end_ss <= 59)
+						if (is_numeric($end_ss) && $end_ss >= 0 && $end_ss <= 59)
 						{
 							$end_ts .= mysql_real_escape_string($end_ss);
 						}
@@ -397,42 +417,44 @@ if ($this->IsAdmin($this->GetUser())) {
 
 		// restrict MySQL query by search string	 modified JW 2005-07-19
 		$where = ('' == $q) ? "`latest` = 'Y'" : "`tag` LIKE '%".$q."%' AND `latest` = 'Y'";
-		if(!empty($start_ts) && !empty($end_ts))
+		if (!empty($start_ts) && !empty($end_ts))
 		{
 			$where .= " AND time > '".$start_ts."' AND time < '".$end_ts."'"; 
 		}
 		// get total number of pages
-		$numpages = $this->getCount('pages',$where);
+		$numpages = $this->getCount('pages', $where);
 
 		// ranged drop-down
-		$pages_opts = optionRanges($page_limits,$numpages,DEFAULT_MIN_RECORDS_DISPLAY);
-		$form1 .= '<label for="l">'.FORM_PAGER_LABEL_BEFORE.'</label> '."\n";
-		$form1 .= '<select name="l" id="l" title="'.FORM_PAGER_TITLE.'">'."\n";
+		$pages_opts = optionRanges($page_limits,$numpages, ADMINPAGES_DEFAULT_MIN_RECORDS_DISPLAY);
+		$form_filter .= '<label for="l">'.ADMINPAGES_FORM_PAGER_LABEL_BEFORE.'</label> '."\n";
+		$form_filter .= '<select name="l" id="l" title="'.ADMINPAGES_FORM_PAGER_TITLE.'">'."\n";
 		// build drop-down
-		foreach ($pages_opts as $opt) {
+		foreach ($pages_opts as $opt)
+		{
 			$selected = ($opt == $l) ? ' selected="selected"' : '';
-			$form1 .= '<option value="'.$opt.'"'.$selected.'>'.$opt.'</option>'."\n";
+			$form_filter .= '<option value="'.$opt.'"'.$selected.'>'.$opt.'</option>'."\n";
 		}
-		$form1 .=  '</select> <label for="l">'.FORM_PAGER_LABEL_AFTER.'</label> <input type="submit" value="'.FORM_PAGER_SUBMIT.'" /><br />'."\n";
+		$form_filter .=  '</select> <label for="l">'.ADMINPAGES_FORM_PAGER_LABEL_AFTER.'</label> <input type="submit" value="'.ADMINPAGES_FORM_PAGER_SUBMIT.'" /><br />'."\n";
 
 		// build pager links
 		if ($s > 0)
-			$prev = '<a href="' .$this->Href('','','l='.$l.'&amp;sort='.$sort.'&amp;d='.$d.'&amp;s='.($s-$l)).'&amp;q='.$q.'&amp;start_ts='.urlencode($start_ts).'&amp;end_ts='.urlencode($end_ts).'" title="'.sprintf(FORM_PAGER_LINK, ($s-$l+1), $s).'">'.($s-$l+1).'-'.$s.'</a> |  '."\n";
+		{
+			$prev = '<a href="' .$this->Href('','','l='.$l.'&amp;sort='.$sort.'&amp;d='.$d.'&amp;s='.($s-$l)).'&amp;q='.$q.'&amp;start_ts='.urlencode($start_ts).'&amp;end_ts='.urlencode($end_ts).'" title="'.sprintf(ADMINPAGES_FORM_PAGER_LINK, ($s-$l+1), $s).'">'.($s-$l+1).'-'.$s.'</a> |  '."\n";
+		}
 		if ($numpages > ($s + $l))
-			$next = ' | <a href="'.$this->Href('','','l='.$l.'&amp;sort='.$sort.'&amp;d='.$d.'&amp;s='.($s+$l)).'&amp;q='.$q.'&amp;start_ts='.urlencode($start_ts).'&amp;end_ts='.urlencode($end_ts).'" title="'.sprintf(FORM_PAGER_LINK, ($s+$l+1), ($s+2*$l)).'">'.($s+$l+1).'-'.($s+2*$l).'</a>'."\n";
-		$form1 .= FORM_RESULT_INFO.' ('.$numpages.'): '.$prev.($s+1).'-'.($s+$l).$next.'<br />'."\n";
-		$form1 .= '('.FORM_RESULT_SORTED_BY.'<em>'.$sort.', '.$d.'</em>)'."\n";
-		$form1 .= '</fieldset>'.$this->FormClose()."\n";
-
-		// print form
-		echo $form1;
+		{
+			$next = ' | <a href="'.$this->Href('','','l='.$l.'&amp;sort='.$sort.'&amp;d='.$d.'&amp;s='.($s+$l)).'&amp;q='.$q.'&amp;start_ts='.urlencode($start_ts).'&amp;end_ts='.urlencode($end_ts).'" title="'.sprintf(ADMINPAGES_FORM_PAGER_LINK, ($s+$l+1), ($s+2*$l)).'">'.($s+$l+1).'-'.($s+2*$l).'</a>'."\n";
+		}
+		$form_filter .= ADMINPAGES_FORM_RESULT_INFO.' ('.$numpages.'): '.$prev.($s+1).'-'.($s+$l).$next.'<br />'."\n";
+		$form_filter .= '<span class="sortorder">'.ADMINPAGES_FORM_RESULT_SORTED_BY.' <tt>'.$sort.', '.$d.'</tt></span>'."\n";
+		$form_filter .= '</fieldset>'.$this->FormClose()."\n";
 
 		// sort by counted values
 		switch($sort) 
 		{
 			case 'edits': #alpha --- 'latest' needs to be disabled
 				//sample query:
-				//SELECT *, COUNT(*) as edits FROM `wikka1160_pages` GROUP BY tag ORDER BY edits DESC
+				//SELECT *, COUNT(*) as edits FROM `wikka_pages` GROUP BY tag ORDER BY edits DESC
 				$count = ', COUNT(*) as edits';
 				$group = 'GROUP BY tag';	
 				$where .= 'AND 1';
@@ -441,7 +463,7 @@ if ($this->IsAdmin($this->GetUser())) {
 				break;
 			case 'comments': #to implement
 			/*
-				// SELECT wikka1160_pages.tag, COUNT(  *  )  AS comments FROM wikka1160_pages, wikka1160_comments WHERE wikka1160_pages.tag = wikka1160_comments.page_tag GROUP  BY wikka1160_pages.tag ORDER  BY comments DESC 
+				// SELECT wikka1160_pages.tag, COUNT(  *  )  AS comments FROM wikka_pages, wikka_comments WHERE wikka1160_pages.tag = wikka1160_comments.page_tag GROUP  BY wikka1160_pages.tag ORDER  BY comments DESC 
 				$count = ', COUNT(*) as edits';
 				$group = 'GROUP BY tag';	
 				$where = '1';
@@ -457,32 +479,34 @@ if ($this->IsAdmin($this->GetUser())) {
 		if ($pagedata)
 		{
 			// build table headers
-			$tagheader = '<a href="'.$this->Href('','', (($sort == 'tag' && $d == 'asc')? 'l='.$l.'&amp;sort=tag&amp;d=desc&amp;q='.$q.'&amp;start_ts='.urlencode($start_ts).'&amp;end_ts='.urlencode($end_ts) : 'l='.$l.'&amp;sort=tag&amp;d=asc&amp;q='.$q.'&amp;start_ts='.urlencode($start_ts).'&amp;end_ts='.urlencode($end_ts))).'" title="'.TABLE_HEADING_PAGENAME_TITLE.'">'.TABLE_HEADING_PAGENAME.'</a>';
-			$ownerheader = '<a href="'.$this->Href('','', (($sort == 'owner' && $d == 'asc')? 'l='.$l.'&amp;sort=owner&amp;d=desc&amp;q='.$q.'&amp;start_ts='.urlencode($start_ts).'&amp;end_ts='.urlencode($end_ts) : 'l='.$l.'&amp;sort=owner&amp;d=asc&amp;q='.$q.'&amp;start_ts='.urlencode($start_ts).'&amp;end_ts='.urlencode($end_ts))).'" title="'.TABLE_HEADING_OWNER_TITLE.'">'.TABLE_HEADING_OWNER.'</a>';
-			$userheader = '<a href="'.$this->Href('','', (($sort == 'user' && $d == 'asc')? 'l='.$l.'&amp;sort=user&amp;d=desc&amp;q='.$q.'&amp;start_ts='.urlencode($start_ts).'&amp;end_ts='.urlencode($end_ts) : 'l='.$l.'&amp;sort=user&amp;d=asc&amp;q='.$q.'&amp;start_ts='.urlencode($start_ts).'&amp;end_ts='.urlencode($end_ts))).'" title="'.TABLE_HEADING_LASTAUTHOR_TITLE.'">'.TABLE_HEADING_LASTAUTHOR.'</a>';
-			$lasteditheader = '<a href="'.$this->Href('','', (($sort == 'time' && $d == 'desc')? 'l='.$l.'&amp;sort=time&amp;d=asc&amp;q='.$q.'&amp;start_ts='.urlencode($start_ts).'&amp;end_ts='.urlencode($end_ts) : 'l='.$l.'&amp;sort=time&amp;d=desc&amp;q='.$q.'&amp;start_ts='.urlencode($start_ts).'&amp;end_ts='.urlencode($end_ts))).'" title="'.TABLE_HEADING_LASTEDIT_TITLE.'">'.TABLE_HEADING_LASTEDIT.'</a>';
-			$revisionsheader = '<a href="'.$this->Href('','', (($sort == 'edits' && $d == 'desc')? 'l='.$l.'&amp;sort=edits&amp;d=asc&amp;q='.$q.'&amp;start_ts='.urlencode($start_ts).'&amp;end_ts='.urlencode($end_ts) : 'l='.$l.'&amp;sort=edits&amp;d=desc&amp;q='.$q.'&amp;start_ts='.urlencode($start_ts).'&amp;end_ts='.urlencode($end_ts))).'" title="'.TABLE_HEADING_REVISIONS_TITLE.'"><img src="'.REVISIONS_ICON.'" alt="'.TABLE_HEADING_REVISIONS_ALT.'"/></a>';
+			$tagheader = '<a href="'.$this->Href('','', (($sort == 'tag' && $d == 'asc')? 'l='.$l.'&amp;sort=tag&amp;d=desc&amp;q='.$q.'&amp;start_ts='.urlencode($start_ts).'&amp;end_ts='.urlencode($end_ts) : 'l='.$l.'&amp;sort=tag&amp;d=asc&amp;q='.$q.'&amp;start_ts='.urlencode($start_ts).'&amp;end_ts='.urlencode($end_ts))).'" title="'.ADMINPAGES_TABLE_HEADING_PAGENAME_TITLE.'">'.ADMINPAGES_TABLE_HEADING_PAGENAME.'</a>';
+			$ownerheader = '<a href="'.$this->Href('','', (($sort == 'owner' && $d == 'asc')? 'l='.$l.'&amp;sort=owner&amp;d=desc&amp;q='.$q.'&amp;start_ts='.urlencode($start_ts).'&amp;end_ts='.urlencode($end_ts) : 'l='.$l.'&amp;sort=owner&amp;d=asc&amp;q='.$q.'&amp;start_ts='.urlencode($start_ts).'&amp;end_ts='.urlencode($end_ts))).'" title="'.ADMINPAGES_TABLE_HEADING_OWNER_TITLE.'">'.ADMINPAGES_TABLE_HEADING_OWNER.'</a>';
+			$userheader = '<a href="'.$this->Href('','', (($sort == 'user' && $d == 'asc')? 'l='.$l.'&amp;sort=user&amp;d=desc&amp;q='.$q.'&amp;start_ts='.urlencode($start_ts).'&amp;end_ts='.urlencode($end_ts) : 'l='.$l.'&amp;sort=user&amp;d=asc&amp;q='.$q.'&amp;start_ts='.urlencode($start_ts).'&amp;end_ts='.urlencode($end_ts))).'" title="'.ADMINPAGES_TABLE_HEADING_LASTAUTHOR_TITLE.'">'.ADMINPAGES_TABLE_HEADING_LASTAUTHOR.'</a>';
+			$lasteditheader = '<a href="'.$this->Href('','', (($sort == 'time' && $d == 'desc')? 'l='.$l.'&amp;sort=time&amp;d=asc&amp;q='.$q.'&amp;start_ts='.urlencode($start_ts).'&amp;end_ts='.urlencode($end_ts) : 'l='.$l.'&amp;sort=time&amp;d=desc&amp;q='.$q.'&amp;start_ts='.urlencode($start_ts).'&amp;end_ts='.urlencode($end_ts))).'" title="'.ADMINPAGES_TABLE_HEADING_LASTEDIT_TITLE.'">'.ADMINPAGES_TABLE_HEADING_LASTEDIT.'</a>';
+			$revisionsheader = '<a href="'.$this->Href('','', (($sort == 'edits' && $d == 'desc')? 'l='.$l.'&amp;sort=edits&amp;d=asc&amp;q='.$q.'&amp;start_ts='.urlencode($start_ts).'&amp;end_ts='.urlencode($end_ts) : 'l='.$l.'&amp;sort=edits&amp;d=desc&amp;q='.$q.'&amp;start_ts='.urlencode($start_ts).'&amp;end_ts='.urlencode($end_ts))).'" title="'.ADMINPAGES_TABLE_HEADING_REVISIONS_TITLE.'"><img src="'.ADMINPAGES_REVISIONS_ICON.'" alt="'.ADMINPAGES_TABLE_HEADING_REVISIONS_ALT.'"/></a>';
 
-			$htmlout = "<table summary=\"".TABLE_SUMMARY."\" border=\"1px\" id=\"admin_table\">\n".
-			"<thead>\n<tr>\n".
-			"    <th>&nbsp;</th>\n".
-			"    <th>".$tagheader."</th>\n".
-			"    <th>".$ownerheader."</th>\n".
-			"    <th>".$userheader."</th>\n".
-			"    <th>".$lasteditheader."</th>\n".
-			"    <th class=\"number ".(($c_color == 1)? ' c1' : '')."\" title=\"".TABLE_HEADING_HITS_TITLE."\"><img src=\"".HITS_ICON."\" alt=\"".TABLE_HEADING_HITS_ALT."\"/></th>\n".
-			"    <th class=\"number ".(($c_color == 1)? ' c2' : '')."\" title=\"".TABLE_HEADING_REVISIONS_TITLE."\">".$revisionsheader."</th>\n".
-			"    <th class=\"number ".(($c_color == 1)? ' c3' : '')."\" title=\"".TABLE_HEADING_COMMENTS_TITLE."\"><img src=\"".COMMENTS_ICON."\" alt=\"".TABLE_HEADING_COMMENTS_ALT."\"/></th>\n".
-			"    <th class=\"number ".(($c_color == 1)? ' c4' : '')."\" title=\"".TABLE_HEADING_BACKLINKS_TITLE."\"><img src=\"".BACKLINKS_ICON."\" alt=\"".TABLE_HEADING_BACKLINKS_ALT."\"/></th>\n".
-			"    <th class=\"number ".(($c_color == 1)? ' c5' : '')."\" title=\"".TABLE_HEADING_REFERRERS_TITLE."\"><img src=\"".REFERRERS_ICON."\" alt=\"".TABLE_HEADING_REFERRERS_ALT."\"/></th>\n".
-			"    <th class=\"center\">".TABLE_HEADING_ACTIONS."</th>\n".
-			"  </tr>\n</thead>\n";
+			$data_table = '<table id="adminpages" summary="'.ADMINPAGES_TABLE_SUMMARY.'" border="1px" class="data">'."\n".
+			'<thead>'."\n".
+			'	<tr>'."\n".
+			'		<th> </th>'."\n".
+			'		<th>'.$tagheader.'</th>'."\n".
+			'		<th>'.$ownerheader.'</th>'."\n".
+			'		<th>'.$userheader.'</th>'."\n".
+			'		<th>'.$lasteditheader.'</th>'."\n".
+			'		<th'.(($c_color == 1)? ' class="c1"' : '').' title="'.ADMINPAGES_TABLE_HEADING_HITS_TITLE.'"><img src="'.ADMINPAGES_HITS_ICON.'" alt="'.ADMINPAGES_TABLE_HEADING_HITS_ALT.'" /></th>'."\n".
+			'		<th'.(($c_color == 1)? ' class="c2"' : '').' title="'.ADMINPAGES_TABLE_HEADING_REVISIONS_TITLE.'">'.$revisionsheader.'</th>'."\n".
+			'		<th'.(($c_color == 1)? ' class="c3"' : '').' title="'.ADMINPAGES_TABLE_HEADING_COMMENTS_TITLE.'"><img src="'.ADMINPAGES_COMMENTS_ICON.'" alt="'.ADMINPAGES_TABLE_HEADING_COMMENTS_ALT.'" /></th>'."\n".
+			'		<th'.(($c_color == 1)? ' class="c4"' : '').' title="'.ADMINPAGES_TABLE_HEADING_BACKLINKS_TITLE.'"><img src="'.ADMINPAGES_BACKLINKS_ICON.'" alt="'.ADMINPAGES_TABLE_HEADING_BACKLINKS_ALT.'" /></th>'."\n".
+			'		<th'.(($c_color == 1)? ' class="c5"' : '').' title="'.ADMINPAGES_TABLE_HEADING_REFERRERS_TITLE.'"><img src="'.ADMINPAGES_REFERRERS_ICON.'" alt="'.ADMINPAGES_TABLE_HEADING_REFERRERS_ALT.'" /></th>'."\n".
+			'		<th>'.ADMINPAGES_TABLE_HEADING_ACTIONS.'</th>'."\n".
+			'	</tr>'."\n".
+			'</thead>'."\n";
 
 			// feed table with data
 			foreach($pagedata as $page)
 			{
 				// truncate long page names
-				$pagename = (strlen($page['tag']) > DEFAULT_TAG_LENGTH) ? substr($page['tag'], 0, DEFAULT_TAG_LENGTH).DEFAULT_TERMINATOR : $page['tag'];
+				$pagename = (strlen($page['tag']) > ADMINPAGES_DEFAULT_TAG_LENGTH) ? substr($page['tag'], 0, ADMINPAGES_DEFAULT_TAG_LENGTH).ADMINPAGES_DEFAULT_TERMINATOR : $page['tag'];
 
 				// build handler links
 				$lastedit = $page['time'];
@@ -494,15 +518,14 @@ if ($this->IsAdmin($this->GetUser())) {
 				{
 					$showpage = '<a href="'.$this->Href('',$page['tag'], '').'">'.$pagename.'</a>';
 				}
-				$editpage = '<a href="'.$this->Href('edit',$page['tag'], '').'" title="'.sprintf(ACTION_EDIT_LINK_TITLE, $page['tag']).'">'.ACTION_EDIT_LINK.'</a>';
-				$deletepage = '<a href="'.$this->Href('delete',$page['tag'], '').'" title="'.sprintf(ACTION_DELETE_LINK_TITLE, $page['tag']).'">'.ACTION_DELETE_LINK.'</a>';
-				$clonepage = '<a href="'.$this->Href('clone',$page['tag'], '').'" title="'.sprintf(ACTION_CLONE_LINK_TITLE, $page['tag']).'">'.ACTION_CLONE_LINK.'</a>';
+				$editpage = '<a href="'.$this->Href('edit',$page['tag'], '').'" title="'.sprintf(ADMINPAGES_ACTION_EDIT_LINK_TITLE, $page['tag']).'">'.ADMINPAGES_ACTION_EDIT_LINK.'</a>';
+				$deletepage = '<a href="'.$this->Href('delete',$page['tag'], '').'" title="'.sprintf(ADMINPAGES_ACTION_DELETE_LINK_TITLE, $page['tag']).'">'.ADMINPAGES_ACTION_DELETE_LINK.'</a>';
+				$clonepage = '<a href="'.$this->Href('clone',$page['tag'], '').'" title="'.sprintf(ADMINPAGES_ACTION_CLONE_LINK_TITLE, $page['tag']).'">'.ADMINPAGES_ACTION_CLONE_LINK.'</a>';
 				// renaming disabled
-				$renamepage = '<a href="'.$this->Href('rename',$page['tag'], '').'" title="'.sprintf(ACTION_RENAME_LINK_TITLE, $page['tag']).'">'.ACTION_RENAME_LINK.'</a>';
-				$aclpage = '<a href="'.$this->Href('acls',$page['tag'], '').'" title="'.sprintf(ACTION_ACL_LINK_TITLE, $page['tag']).'">'.ACTION_ACL_LINK.'</a>';
-				$infopage = '<a href="'.$this->Href('info',$page['tag'], '').'" title="'.sprintf(ACTION_INFO_LINK_TITLE, $page['tag']).'">'.ACTION_INFO_LINK.'</a>';
-				$revertpage = '<a href="'.$this->Href('revert',$page['tag'], '').'" title="'.sprintf(ACTION_REVERT_LINK_TITLE, $page['tag']).'">'.ACTION_REVERT_LINK.'</a>';
-
+				$renamepage = '<a href="'.$this->Href('rename',$page['tag'], '').'" title="'.sprintf(ADMINPAGES_ACTION_RENAME_LINK_TITLE, $page['tag']).'">'.ADMINPAGES_ACTION_RENAME_LINK.'</a>';
+				$aclpage = '<a href="'.$this->Href('acls',$page['tag'], '').'" title="'.sprintf(ADMINPAGES_ACTION_ACL_LINK_TITLE, $page['tag']).'">'.ADMINPAGES_ACTION_ACL_LINK.'</a>';
+				$infopage = '<a href="'.$this->Href('info',$page['tag'], '').'" title="'.sprintf(ADMINPAGES_ACTION_INFO_LINK_TITLE, $page['tag']).'">'.ADMINPAGES_ACTION_INFO_LINK.'</a>';
+				$revertpage = '<a href="'.$this->Href('revert',$page['tag'], '').'" title="'.sprintf(ADMINPAGES_ACTION_REVERT_LINK_TITLE, $page['tag']).'">'.ADMINPAGES_ACTION_REVERT_LINK.'</a>';
 
 				// get page owner
 				if ($page['owner'])
@@ -528,7 +551,7 @@ if ($this->IsAdmin($this->GetUser())) {
 				else
 				{
 					// page has empty owner field: print claim link
-					$owner = $this->Link($page['tag'], 'claim','(Nobody)','','',TAKE_OWNERSHIP_LINK.' '.$page['tag']);
+					$owner = $this->Link($page['tag'], 'claim','(Nobody)','','',ADMINPAGES_TAKE_OWNERSHIP_LINK.' '.$page['tag']);
 				}
 				// get last author
 				if ($page['user'])
@@ -549,7 +572,7 @@ if ($this->IsAdmin($this->GetUser())) {
 					else
 					{
 						// truncate long host names
-						$user = (strlen($page['user']) > DEFAULT_URL_LENGTH) ? substr($page['user'], 0, DEFAULT_URL_LENGTH).DEFAULT_TERMINATOR : $page['user'];
+						$user = (strlen($page['user']) > ADMINPAGES_DEFAULT_URL_LENGTH) ? substr($page['user'], 0, ADMINPAGES_DEFAULT_URL_LENGTH).ADMINPAGES_DEFAULT_TERMINATOR : $page['user'];
 						# added  JW 2005-07-19
 						if ($user != $page['user'])
 						{
@@ -560,7 +583,7 @@ if ($this->IsAdmin($this->GetUser())) {
 				else
 				{
 					// page has empty user field
-					$user = NO_OWNER;
+					$user = ADMINPAGES_NO_OWNER;
 				}
 
 				// get counts	- JW 2005-07-19
@@ -574,53 +597,60 @@ if ($this->IsAdmin($this->GetUser())) {
 				$rn = $this->getCount('referrers',$wherePageTag);
 
 				// get page hits (forthcoming)
-				$hitspage = ($hn > 0) ? '<a href="'.$this->Href('hits',$page['tag'], '').'" title="'.sprintf(TABLE_CELL_HITS_TITLE, $page['tag'], $hn).'">'.$hn.'</a>' : '0';
+				$hitspage = ($hn > 0) ? '<a href="'.$this->Href('hits',$page['tag'], '').'" title="'.sprintf(ADMINPAGES_TABLE_CELL_HITS_TITLE, $page['tag'], $hn).'">'.$hn.'</a>' : '0';
 
 				// get page revisions and create revision link if needed
-				$revpage = ($rv > 0) ? '<a href="'.$this->Href('revisions',$page['tag'], '').'" title="'.sprintf(TABLE_CELL_REVISIONS_TITLE, $page['tag'], $rv).'">'.$rv.'</a>' : '0';
+				$revpage = ($rv > 0) ? '<a href="'.$this->Href('revisions',$page['tag'], '').'" title="'.sprintf(ADMINPAGES_TABLE_CELL_REVISIONS_TITLE, $page['tag'], $rv).'">'.$rv.'</a>' : '0';
 
 				// get page comments and create comments link if needed
-				$commentspage = ($cn > 0) ? '<a href="'.$this->Href('',$page['tag'], 'show_comments=1#comments').'" title="'.sprintf(TABLE_CELL_COMMENTS_TITLE, $page['tag'], $cn).'">'.$cn.'</a>' : '0';
+				$commentspage = ($cn > 0) ? '<a href="'.$this->Href('',$page['tag'], 'show_comments=1#comments').'" title="'.sprintf(ADMINPAGES_TABLE_CELL_COMMENTS_TITLE, $page['tag'], $cn).'">'.$cn.'</a>' : '0';
 
 				// get page backlinks and create backlinks link
-				$backlinkpage = ($bn > 0) ? '<a href="'.$this->Href('backlinks',$page['tag'], '').'" title="'.sprintf(TABLE_CELL_BACKLINKS_TITLE, $page['tag'], $bn).'">'.$bn.'</a>' : '0';
+				$backlinkpage = ($bn > 0) ? '<a href="'.$this->Href('backlinks',$page['tag'], '').'" title="'.sprintf(ADMINPAGES_TABLE_CELL_BACKLINKS_TITLE, $page['tag'], $bn).'">'.$bn.'</a>' : '0';
 
 				// get page referrers and create referrer link
-				$refpage = ($rn > 0) ? '<a href="'.$this->Href('referrers',$page['tag'], '').'" title="'.sprintf(TABLE_CELL_REFERRERS_TITLE, $page['tag'], $rn).'">'.$rn.'</a>' : '0';
+				$refpage = ($rn > 0) ? '<a href="'.$this->Href('referrers',$page['tag'], '').'" title="'.sprintf(ADMINPAGES_TABLE_CELL_REFERRERS_TITLE, $page['tag'], $rn).'">'.$rn.'</a>' : '0';
 
 				// build table body
-				$htmlout .= "<tbody>\n";
-				if ($r_color == 1) { 
-					$htmlout .= "<tr ".(($r%2)? '' : 'class="alt"').">\n"; #enable alternate row color
-				} else {
-					$htmlout .= "<tr>\n"; #disable alternate row color
+				$data_table .= '<tbody>'."\n";
+				if ($r_color == 1)
+				{
+					$data_table .= '<tr '.(($r%2)? '' : 'class="alt"').'>'."\n"; #enable alternate row color
 				}
-				$htmlout .="    <td><input type=\"checkbox\" name=\"id_".$page['id']."\"".$checked." title=\"".sprintf(SELECT_RECORD_TITLE, $page['tag'])."\"/></td>\n".	# modified JW 2005-07-19
-				"    <td>".$showpage."</td>\n".
-				"    <td>".$owner."</td>\n".
-				"    <td>".$user."</td>\n".
-				"    <td class=\"time\" ".((strlen($page['note'])>0)? 'title="['.$page['note'].']"' : 'title="'.NO_EDIT_NOTE.'"').">".$lastedit."</td>\n".
-				"    <td class=\"number ".(($c_color == 1)? ' c1' : '')."\">".$hitspage."</td>\n".
-				"    <td class=\"number ".(($c_color == 1)? ' c2' : '')."\">".$revpage."</td>\n".
-				"    <td class=\"number ".(($c_color == 1)? ' c3' : '')."\">".$commentspage."</td>\n".
-				"    <td class=\"number ".(($c_color == 1)? ' c4' : '')."\">".$backlinkpage."</td>\n".
-				"    <td class=\"number ".(($c_color == 1)? ' c5' : '')."\">".$refpage."</td>\n".
-				"    <td class=\"center \">".$editpage." :: ".$deletepage." :: ".$clonepage." :: "./*$renamepage*." :: ".*/$aclpage." :: ".$infopage." :: ".$revertpage."</td>\n".
-				"  </tr>\n</tbody>\n";
+				else
+				{
+					$data_table .= '<tr>'."\n"; #disable alternate row color
+				}
+				$data_table .= '		<td><input type="checkbox" name="id_'.$page['id'].'"'.$checked.' title="'.sprintf(ADMINPAGES_SELECT_RECORD_TITLE, $page['tag']).'" /></td>'."\n".	# modified JW 2005-07-19
+				'		<td>'.$showpage.'</td>'."\n".
+				'		<td>'.$owner.'</td>'."\n".
+				'		<td>'.$user.'</td>'."\n".
+				'		<td class="datetime" '.((strlen($page['note'])>0)? 'title="['.$page['note'].']"' : 'title="'.ADMINPAGES_NO_EDIT_NOTE.'"').'>'.$lastedit.'</td>'."\n".
+				'		<td class="number'.(($c_color == 1)? ' c1' : '').'">'.$hitspage.'</td>'."\n".
+				'		<td class="number'.(($c_color == 1)? ' c2' : '').'">'.$revpage.'</td>'."\n".
+				'		<td class="number'.(($c_color == 1)? ' c3' : '').'">'.$commentspage.'</td>'."\n".
+				'		<td class="number'.(($c_color == 1)? ' c4' : '').'">'.$backlinkpage.'</td>'."\n".
+				'		<td class="number'.(($c_color == 1)? ' c5' : '').'">'.$refpage.'</td>'."\n".
+				'		<td class="center">'.$editpage.' :: '.$deletepage.' :: '.$clonepage.' :: './*$renamepage*.' :: '.*/$aclpage.' :: '.$infopage.' :: '.$revertpage.'</td>'."\n".
+				'	</tr>'."\n".
+				'</tbody>'."\n";
 
 				//increase row counter    ----- alternate row colors
-				if ($r_color == 1) $r++;
+				if ($r_color == 1)
+				{
+					$r++;
 				}
-			$htmlout .= '</table>'."\n";
-			// print the table
-			echo $this->FormOpen('','','get');
-			echo $htmlout;
+			}
+			$data_table .= '</table>'."\n";
+
+			$form_mass .= $this->FormOpen('','','get');
+			$form_mass .= $data_table;
 
 			// multiple-page operations (forthcoming)		JW 2005-07-19 accesskey removed (causes more problems than it solves)
-			echo '<fieldset><legend>'.FORM_MASSACTION_LEGEND.'</legend>';
-			echo '[<a href="'.$this->Href('','','l='.$l.'&amp;sort='.$sort.'&amp;d='.$d.'&amp;s='.$s.'&amp;q='.$q.'&amp;start_ts='.urlencode($start_ts).'&amp;end_ts='.urlencode($end_ts).'&amp;selectall=1').'" title="'.CHECK_ALL_TITLE.'">'.CHECK_ALL.'</a> | <a href="'.$this->Href('','','l='.$l.'&amp;sort='.$sort.'&amp;d='.$d.'&amp;s='.$s.'&amp;q='.$q.'&amp;start_ts='.urlencode($start_ts).'&amp;end_ts='.urlencode($end_ts).'&amp;selectall=0').'" title="'.UNCHECK_ALL_TITLE.'">'.UNCHECK_ALL.'</a>]<br />';
-			echo '<label for="action" >'.FORM_MASSACTION_LABEL.'</label> <select title="'.FORM_MASSACTION_SELECT_TITLE.'" id="action" name="action">';
-			echo '<option value="" selected="selected">---</option>';
+			$form_mass .= '<fieldset><legend>'.ADMINPAGES_FORM_MASSACTION_LEGEND.'</legend>';
+			$form_mass .= '[<a href="'.$this->Href('','','l='.$l.'&amp;sort='.$sort.'&amp;d='.$d.'&amp;s='.$s.'&amp;q='.$q.'&amp;start_ts='.urlencode($start_ts).'&amp;end_ts='.urlencode($end_ts).'&amp;selectall=1').'" title="'.ADMINPAGES_CHECK_ALL_TITLE.'">'.ADMINPAGES_CHECK_ALL.'</a> | <a href="'.$this->Href('','','l='.$l.'&amp;sort='.$sort.'&amp;d='.$d.'&amp;s='.$s.'&amp;q='.$q.'&amp;start_ts='.urlencode($start_ts).'&amp;end_ts='.urlencode($end_ts).'&amp;selectall=0').'" title="'.ADMINPAGES_UNCHECK_ALL_TITLE.'">'.ADMINPAGES_UNCHECK_ALL.'</a>]<br />';
+			$form_mass .= '<label for="action" >'.ADMINPAGES_FORM_MASSACTION_LABEL.'</label> <select title="'.ADMINPAGES_FORM_MASSACTION_SELECT_TITLE.'" id="action" name="action">';
+			$form_mass .= '<option value="" selected="selected">---</option>';
 			// Temporarily disabling all but massrevert
 			/*
 			echo '<option value="massdelete">'.FORM_MASSACTION_OPT_DELETE.'</option>';
@@ -628,15 +658,20 @@ if ($this->IsAdmin($this->GetUser())) {
 			echo '<option value="massrename">'.FORM_MASSACTION_OPT_RENAME.'</option>';
 			echo '<option value="massacls">'.FORM_MASSACTION_OPT_ACL.'</option>';
 			*/
-			echo '<option value="massrevert">'.FORM_MASSACTION_OPT_REVERT.'</option>';
-			echo '</select> <input type="submit" value="'.FORM_MASSACTION_SUBMIT.'" />';
-			echo '</fieldset>';
-			echo $this->FormClose();
+			$form_mass .= '<option value="massrevert">'.ADMINPAGES_FORM_MASSACTION_OPT_REVERT.'</option>';
+			$form_mass .= '</select> <input type="submit" value="'.ADMINPAGES_FORM_MASSACTION_SUBMIT.'" />';
+			$form_mass .= '</fieldset>';
+			$form_mass .= $this->FormClose();
+			
+			// output
+			echo $form_filter;
+			echo $form_mass;
+			
 		}
 		else
 		{
 			// no records matching the search string: print error message
-			echo '<p><span class="error">'.sprintf(ERROR_NO_MATCHES, $q).'</span></p>';
+			echo '<p><span class="error">'.sprintf(ADMINPAGES_ERROR_NO_MATCHES, $q).'</span></p>';
 		}
 	}
 }

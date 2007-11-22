@@ -657,6 +657,13 @@ table.data tr.alt td.c6 {
 
 /* Action-related styling */
 
+/* Adminpages action */
+
+table#adminpages {
+	border: 1px solid #CCC;
+	width: 100%;
+}
+
 /* Adminuser action */
 
 table#adminusers {
