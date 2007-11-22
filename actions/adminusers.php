@@ -25,7 +25,7 @@
  *				0: disable colored rows;
  *				default: 1;
  *
- * @output		A table of users registered on the current server.
+ * @output		A module to manage registered users.
  *
  * @todo
  *			- sanitize URL parameters;
