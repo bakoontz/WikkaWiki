@@ -286,7 +286,7 @@ if ($this->IsAdmin($this->GetUser()))
 			$next = ' | <a href="'.$this->Href('','','l='.$l.'&amp;sort='.$sort.'&amp;d='.$d.'&amp;s='.($s+$l)).'&amp;q='.$q.'" title="'.sprintf(FORM_PAGER_LINK, ($s+$l+1), ($s+2*$l)).'">'.($s+$l+1).'-'.($s+2*$l).'</a>'."\n";
 		}
 		$form_filter .= FORM_RESULT_INFO.' ('.$numusers.'): '.$prev.($s+1).'-'.($s+$l).$next.'<br />'."\n";
-		$form_filter .= '('.FORM_RESULT_SORTED_BY.' <tt>'.$sort.', '.$d.'</tt>)'."\n";
+		$form_filter .= '<span class="smaller">'.FORM_RESULT_SORTED_BY.' <tt>'.$sort.', '.$d.'</tt></span>'."\n";
 		$form_filter .= '</fieldset>'.$this->FormClose()."\n";
 	
 		// get user list
