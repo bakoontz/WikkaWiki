@@ -130,10 +130,10 @@ WikkaEdit.prototype.initCategs = function() {
 	this.we_categs.hidden = {title:null};
 	this.we_categs.objects = {title:"Objects"};
 	this.we_categs.page = {title:"Page"};
-	this.we_categs.accounts = {title:"Accounts"};
-	this.we_categs.global = {title:"Global"};
-	this.we_categs.misc = {title:"Misc"};
-	this.we_categs.infos = {title:"Infos"};
+	this.we_categs.accounts = {title:"User"};
+	this.we_categs.global = {title:"Wiki"};
+	this.we_categs.misc = {title:"Utilities"};
+	this.we_categs.info = {title:"Information"};
 }
 
 function WikkaAction(categName, tagName, title, summary, usage) {
@@ -157,59 +157,59 @@ WikkaEdit.prototype.initActions = function() {
 	this.we_actions.we_color.addParam("c", "color");
 	this.we_actions.we_image = new WikkaAction("hidden", "image", "Image", "Display an image.");
 	this.we_actions.we_image.addParam("url", "url", null, "Image URL. Can be relative (images/img.png) or external (http://example.com/example.jpg)");
-	this.we_actions.we_image.addParam("title", "text", null, "Tooltip text");
+	this.we_actions.we_image.addParam("title", "text", null, "Image title");
 	this.we_actions.we_image.addParam("alt", "text", null, "Alternate text when image can't be displayed");
 	this.we_actions.we_image.addParam("class", "className", true, "Class name (defined in the CSS file)");
-	this.we_actions.we_image.addParam("link", "url", true, "Put a link on this image");
+	this.we_actions.we_image.addParam("link", "url", true, "Add a link to the image");
+	this.we_actions.we_usersettings = new WikkaAction("hidden", "usersettings", "My user settings");
+	this.we_actions.we_emailpassword = new WikkaAction("hidden", "emailpassword", "Lost password form", "Display a form to retrieve a password");
 	// ===== objects =====
-	this.we_actions.we_calendar = new WikkaAction("objects", "calendar", "Calendar", "Display a calendar face for a specified or the current month.", "Specifying a month and/or year in the action itself results in a \"static\" calendar face without navigation; conversely, providing no parameters in the action results in a calendar face with navigation links to previous, current and next month, with URL parameters determining which month is shown (with the current month as default).");
+	this.we_actions.we_calendar = new WikkaAction("objects", "calendar", "Calendar", "Display a calendar for a specified or the current month.", "Specifying a month and/or year in the action itself results in a \"static\" calendar without navigation links; conversely, providing no parameters results in a calendar with navigation links to previous, current and next month, with URL parameters determining which month is shown (with the current month as default).");
 	this.we_actions.we_calendar.addParam("year", "yyyy", null, "Year in 4 digits format");
 	this.we_actions.we_calendar.addParam("month", "mm", null, "Month in 2 digits format");
 	this.we_actions.we_flash = new WikkaAction("objects", "flash", "Flash animation");
 	this.we_actions.we_flash.addParam("url", "http://example.com/example.swf");
 	this.we_actions.we_flash.addParam("width", "w", true);
 	this.we_actions.we_flash.addParam("height", "h", true);
-	this.we_actions.we_include = new WikkaAction("objects", "include", "Page included");
-	this.we_actions.we_include.addParam("page", "PageName");
-	this.we_actions.we_files = new WikkaAction("objects", "files", "File upload/download manager");
+	this.we_actions.we_include = new WikkaAction("objects", "include", "Page include", "Include another wiki page in the current page");
+	this.we_actions.we_include.addParam("page", "name of the page to be included");
+	this.we_actions.we_files = new WikkaAction("objects", "files", "File upload form");
 	this.we_actions.we_files.addParam("download", "filename");
-	this.we_actions.we_files.addParam("text", "descriptive text");
+	this.we_actions.we_files.addParam("text", "file description");
 	this.we_actions.we_mindmap = new WikkaAction("objects", "mindmap", "Mindmap", "Embed a mindmap in the current page.");
 	// ===== infos - this page =====
-	this.we_actions.we_rss = new WikkaAction("page", "rss", "RSS");
-	this.we_actions.we_backlinks = new WikkaAction("page", "backlinks", "Backlinks");
-	this.we_actions.we_lastedit = new WikkaAction("page", "lastedit", "Last edit");
+	this.we_actions.we_rss = new WikkaAction("page", "rss", "RSS", "Embed a feed in the current page");
+	this.we_actions.we_backlinks = new WikkaAction("page", "backlinks", "Backlinks", "Display a list of pages linking to the current page");
+	this.we_actions.we_lastedit = new WikkaAction("page", "lastedit", "Last edit", "Display information on the last revision");
 	// === infos - accounts===
-	this.we_actions.we_usersettings = new WikkaAction("accounts", "usersettings", "My user settings");
-	this.we_actions.we_mychanges = new WikkaAction("accounts", "mychanges", "My changes");
-	this.we_actions.we_mypages = new WikkaAction("accounts", "mypages", "My pages");
-	this.we_actions.we_emailpassword = new WikkaAction("accounts", "emailpassword", "Lost password");
-	this.we_actions.we_lastusers = new WikkaAction("accounts", "lastusers", "Newly registered users");
+	this.we_actions.we_mychanges = new WikkaAction("accounts", "mychanges", "My changes", "Display a list of edits by the current user");
+	this.we_actions.we_mypages = new WikkaAction("accounts", "mypages", "My pages", "Display a list of pages owned by the current user");
 	// === infos - global===
-	this.we_actions.we_category = new WikkaAction("global", "category", "Show thinks belonging to a category");
-	this.we_actions.we_wantedpages = new WikkaAction("global", "wantedpages", "Name of nonexisting pages");
-	this.we_actions.we_orphanedpages = new WikkaAction("global", "orphanedpages", "Orphaned pages");
-	this.we_actions.we_pageindex = new WikkaAction("global", "pageindex", "Page index");
+	this.we_actions.we_category = new WikkaAction("global", "category", "Category", "Display pages belonging to a category");
+	this.we_actions.we_wantedpages = new WikkaAction("global", "wantedpages", "Wanted pages", "Display a list of missing pages");
+	this.we_actions.we_orphanedpages = new WikkaAction("global", "orphanedpages", "Orphaned pages", "Display a list of pages not linked from any other page");
+	this.we_actions.we_pageindex = new WikkaAction("global", "pageindex", "Page index", "Display an alphabetical list of pages in the wiki");
 	this.we_actions.we_recentchanges = new WikkaAction("global", "recentchanges", "Recently changed pages");
 	this.we_actions.we_recentcomments = new WikkaAction("global", "recentcomments", "Recently commented pages");
 	this.we_actions.we_recentlycommented = new WikkaAction("global", "recentlycommented", "Latest comments");
+	this.we_actions.we_lastusers = new WikkaAction("global", "lastusers", "Recently registered users", "Display a list of recently registered users");
 	// === misc ===
-	this.we_actions.we_newpage = new WikkaAction("misc", "newpage", "New pages");
-	this.we_actions.we_textsearch = new WikkaAction("misc", "textsearch", "Search for a phrase");
-	this.we_actions.we_textsearchexpanded = new WikkaAction("misc", "textsearchexpanded", "Search for a phrase 2");
-	this.we_actions.we_googleform = new WikkaAction("misc", "googleform", "Google searchbox");
+	this.we_actions.we_newpage = new WikkaAction("misc", "newpage", "New page form", "Display a form to create a new page");
+	this.we_actions.we_textsearch = new WikkaAction("misc", "textsearch", "Search form");
+	this.we_actions.we_textsearchexpanded = new WikkaAction("misc", "textsearchexpanded", "Advanced search form");
+	this.we_actions.we_googleform = new WikkaAction("misc", "googleform", "Google search form");
 	this.we_actions.we_feedback = new WikkaAction("misc", "feedback", "Feedback form");
 	this.we_actions.we_nocomments = new WikkaAction("misc", "nocomments", "Disallow comments");
-	this.we_actions.we_interwikilist = new WikkaAction("misc", "interwikilist", "InterWiki list");
+	this.we_actions.we_interwikilist = new WikkaAction("misc", "interwikilist", "Interwiki list");
 	// === infos - rare===
-	this.we_actions.we_wikkaname = new WikkaAction("infos", "wikkaname", "Wikka name");
-	this.we_actions.we_wikkaversion = new WikkaAction("infos", "wikkaversion", "Wikka version");
-	this.we_actions.we_wikkachanges = new WikkaAction("infos", "wikkachanges", "Wikka version & Release Notes");
-	this.we_actions.we_phpversion = new WikkaAction("infos", "phpversion", "PHP version");
-	this.we_actions.we_mysqlversion = new WikkaAction("infos", "mysqlversion", "mySQL version");
-	this.we_actions.we_system = new WikkaAction("infos", "system", "System informations");
-	this.we_actions.we_countpages = new WikkaAction("infos", "countpages", "Count pages");
-	this.we_actions.we_countowned = new WikkaAction("infos", "countowned", "Count owned pages");
-	this.we_actions.we_countcomments = new WikkaAction("infos", "countcomments", "Count comments");
-	this.we_actions.we_countusers = new WikkaAction("infos", "countusers", "Count users");
+	this.we_actions.we_wikkaname = new WikkaAction("info", "wikkaname", "Wikka name", "Display the name of the current wiki");
+	this.we_actions.we_wikkaversion = new WikkaAction("info", "wikkaversion", "Wikka version", "Display the version of the current wiki");
+	this.we_actions.we_wikkachanges = new WikkaAction("info", "wikkachanges", "Wikka release notes");
+	this.we_actions.we_phpversion = new WikkaAction("info", "phpversion", "PHP version", "Display the PHP version running on this server");
+	this.we_actions.we_mysqlversion = new WikkaAction("info", "mysqlversion", "MySQL version", "Display the MySQL version running on this server");
+	this.we_actions.we_system = new WikkaAction("info", "system", "System information", "Display a table with information on this server");
+	this.we_actions.we_countpages = new WikkaAction("info", "countpages", "Count pages", "Display the total number of pages in this wiki");
+	this.we_actions.we_countowned = new WikkaAction("info", "countowned", "Count owned pages", "Display the number of pages owned by the current user");
+	this.we_actions.we_countcomments = new WikkaAction("info", "countcomments", "Count comments", "Display the total number of comments in this wiki");
+	this.we_actions.we_countusers = new WikkaAction("info", "countusers", "Count users", "Display the total number of registered users in this wiki");
 }
