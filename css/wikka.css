@@ -664,11 +664,19 @@ table#adminpages {
 	width: 100%;
 }
 
+form#form_page_admin_panel fieldset {
+	line-height: 2em;	
+}
+
 /* Adminuser action */
 
 table#adminusers {
 	border: 1px solid #CCC;
 	width: 100%;
+}
+
+form#form_user_admin_panel fieldset {
+	line-height: 2em;	
 }
 
 /* Lastedit action */
