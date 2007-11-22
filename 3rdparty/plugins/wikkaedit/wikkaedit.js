@@ -175,7 +175,7 @@ WikkaEdit.prototype.genToolbar = function() {
 	// ========== actions ==========
 	if (this.we_actionsMenuEnabled) {
 		html += "<div class='toolhorizsep'></div>";
-		html += "<span class='actiontitle'>Actions :</span>";
+		html += "<span class='actiontitle'>Actions</span>";
 		for(i in this.we_categs) {
 			if (this.we_categs[i].title != null)	// hidden actions don't have a title
 				html += "<span class=\"toolbutton\" style='margin-left:20px; padding:2px 5px 3px 6px' onclick=\"varWikkaEdit.toolbarCategClick('" + i + "', this);\">" + this.we_categs[i].title + "<img src='3rdparty/plugins/wikkaedit/images/submenu.gif' style='vertical-align:middle'/></span>";

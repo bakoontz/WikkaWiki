@@ -62,7 +62,11 @@
 }
 
 .actiontitle {
-	vertical-align:middle;
+	text-transform: uppercase;
+	font-size: 7pt;
+	letter-spacing: 2px;
+	color: #666;
+	vertical-align: middle;
 	margin-left:5px;
 }
 
