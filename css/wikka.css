@@ -505,6 +505,13 @@ em.success {
 	color: #987;
 }
 
+/* sort order information in sortable lists and tables*/
+.sortorder {
+	font-size: 70%;
+	text-transform: uppercase;	
+	letter-spacing: 1px;
+}
+
 /* Tables */
 table.data {
 	border: 2px solid #CCC;
