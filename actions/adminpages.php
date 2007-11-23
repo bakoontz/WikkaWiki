@@ -265,12 +265,25 @@ if ($this->IsAdmin($this->GetUser()))
 		*/
 		if ($_GET['action'] == 'massrevert')
 		{
-			$this->IncludeBuffered("revert.php", '', '', "handlers/page");
-			$this->Redirect($this->Href());
-		}
-		else
-		{
-			// No action selected!
+			//$this->IncludeBuffered("revert.php", '', '', "handlers/page");
+			//$this->Redirect($this->Href());
+			$ids = array();
+			foreach($_GET as $key=>$val)
+			{
+				if(FALSE !== strpos($key, "id_"))
+				{
+					$id = substr($key, strpos($key,'_')+1);
+					array_push($ids, $id);
+				}
+			}
+			if(count($ids) > 0)
+			{
+				include_once('libs/revert.lib.php');
+				foreach($ids as $id)
+				{
+					RevertPageToPreviousById($this, $id);
+				}
+			}
 			$this->Redirect($this->Href());
 		}
 	}
