@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * Print a spam-safe mailto: link to the administrator's email address.
  *

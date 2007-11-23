@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * Display a searchbox for searching google.
  *

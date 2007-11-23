@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * Display the pages linking to the current page.
  *

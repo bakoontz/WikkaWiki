@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * Send the user a reminder with the md5 checksum of his or her password via email.
  *

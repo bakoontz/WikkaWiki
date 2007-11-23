@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * Embed a Flash object in a wiki page.
  *

@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
 * Render a string as colored text.
 *

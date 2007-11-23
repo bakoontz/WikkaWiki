@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * Synonym for color.php.
  *

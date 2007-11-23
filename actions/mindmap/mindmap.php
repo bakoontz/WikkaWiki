@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * Embed a mindmap in the current page.
  *

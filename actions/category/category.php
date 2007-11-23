@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * Shows the pages and subcategories belonging to a category.
  *

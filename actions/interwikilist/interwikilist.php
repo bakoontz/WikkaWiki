@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * Echos the list of InterWiki shortcuts.
  *

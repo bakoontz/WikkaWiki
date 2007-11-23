@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * Print total number of comments in this wiki.
  *

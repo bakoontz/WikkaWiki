@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * Print number of registered users.
  *

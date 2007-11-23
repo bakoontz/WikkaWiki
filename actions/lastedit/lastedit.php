@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * Display a box with information on the last edit.
  *

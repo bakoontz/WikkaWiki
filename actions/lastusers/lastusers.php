@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * Display a list of newly registered users.
  *

@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * Print the total number of pages in this wiki.
  *

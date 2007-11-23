@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * Displays a list of users, ranked after their ownership of pages in the wiki.
  *
