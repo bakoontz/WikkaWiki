@@ -265,27 +265,75 @@ if ($this->IsAdmin($this->GetUser()))
 		*/
 		if ($_GET['action'] == 'massrevert')
 		{
-			//$this->IncludeBuffered("revert.php", '', '', "handlers/page");
-			//$this->Redirect($this->Href());
-			$ids = array();
+			$id_params = array();
+			$tags = array();
 			foreach($_GET as $key=>$val)
 			{
 				if(FALSE !== strpos($key, "id_"))
 				{
+					array_push($id_params, $key);
 					$id = substr($key, strpos($key,'_')+1);
-					array_push($ids, $id);
+					$res = $this->LoadPageById($id);
+				    array_push($tags, $res['tag']);
 				}
 			}
-			if(count($ids) > 0)
+			if(count($id_params) > 0)
 			{
-				include_once('libs/revert.lib.php');
-				foreach($ids as $id)
+				?>
+				<h3>Revert these pages?</h3><br/>
+				<?php
+			    foreach($tags as $tag)
 				{
-					RevertPageToPreviousById($this, $id);
+					echo "$tag<br/>\n";
 				}
+				echo "<br/>\n";
+				echo $this->FormOpen() 
+				?>
+				<table border="0" cellspacing="0" cellpadding="0">
+					<tr>
+						<td> 
+							<!-- nonsense input so form submission works with rewrite mode -->
+							<input type="hidden" value="" name="null"/>
+							<?php
+							foreach($id_params as $id_param)
+							{
+								?>
+								<input type="hidden" name="<?php echo $id_param ?>" value="1"/>
+								<?php
+							}
+							?>
+							<input type="hidden" name="massaction" value="massrevert"/>
+							<input type="submit" value="Revert Pages"  style="width: 120px"   />
+							<input type="button" value="Cancel" onclick="history.back();" style="width: 120px" />
+						</td>
+					</tr>
+				</table>
+				<?php
+				print($this->FormClose());
 			}
-			$this->Redirect($this->Href());
 		}
+	}
+	else if(isset($_POST['massaction']) && $_POST['massaction'] == 'massrevert')
+	{
+		$ids = array();
+		foreach($_POST as $key=>$val)
+		{
+			if(FALSE !== strpos($key, "id_"))
+			{
+				$id = substr($key, strpos($key,'_')+1);
+				array_push($ids, $id);
+			}
+		}
+		if(count($ids) > 0)
+		{
+			include_once('libs/revert.lib.php');
+			foreach($ids as $id)
+			{
+				echo "|$id|";
+				RevertPageToPreviousById($this, $id);
+			}
+		}
+		$this->Redirect($this->Href());
 	}
 	else
 	{
