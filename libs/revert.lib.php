@@ -27,7 +27,7 @@
  */
 
 //i18n
-if(!defined('DEFAULT_COMMENT')) define ('DEFAULT_COMMENT', 'Reverted to previous revision');
+if(!defined('DEFAULT_COMMENT')) define ('DEFAULT_COMMENT', 'Reverting last edit by %s [%d] to previous version [%d]');
 if(!defined('MESSAGE_SUCCESS')) define ('MESSAGE_SUCCESS', 'Reverted to previous version');
 if(!defined('MESSAGE_FAILED')) define ('MESSAGE_FAILED', 'Reversion to previous version FAILED!');
 
@@ -50,17 +50,18 @@ function RevertPageToPreviousByTag($wakka, $tag, $comment='')
 	$comment = mysql_real_escape_string($comment);
 	if(TRUE===$wakka->IsAdmin())
 	{
-		// Set default comment
-		if(TRUE===empty($comment))
-		{
-			$comment = DEFAULT_COMMENT;
-		}
-
 		// Select current version of this page and version immediately preceding
 		$res = $wakka->LoadAll("SELECT * FROM ".$wakka->config['table_prefix']."pages WHERE tag='".$tag."' ORDER BY time DESC LIMIT 2");
 		if($res)
 		{
 			// $res[0] is current page, $res[1] is page we're reverting to
+
+			// Set default comment
+			if(TRUE===empty($comment))
+			{
+				$comment = sprintf(DEFAULT_COMMENT, $res[0]['user'], $res[0]['id'], $res[1]['id']);
+			}
+
 			$time = strftime("%F %H:%M:%S");
 			$body = $res[1]['body'];
 			$owner = $res[1]['owner'];
