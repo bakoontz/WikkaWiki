@@ -130,7 +130,7 @@ if ($this->IsAdmin($this->GetUser()))
 	define('ADMINPAGES_DEFAULT_END_HOUR', 'hh');
 	define('ADMINPAGES_DEFAULT_END_MINUTE', 'mm');
 	define('ADMINPAGES_DEFAULT_END_SECOND', 'ss');
-
+	define('ADMINPAGES_MAX_EDIT_NOTE_LENGTH', '50');
 	
 	// -------------------------------------
 	// User-interface: icons
@@ -215,6 +215,7 @@ if ($this->IsAdmin($this->GetUser()))
 	define('ADMINPAGES_FORM_MASSACTION_OPT_REVERT','Revert to previous page version');
 	define('ADMINPAGES_FORM_MASSACTION_SUBMIT','Submit');
 	define('ADMINPAGES_ERROR_NO_MATCHES','Sorry, there are no pages matching "%s"');
+	define('ADMINPAGES_LABEL_EDIT_NOTE','Please enter a comment, or leave blank for default');
 	
 	// -------------------------------------
 	// Initialize variables
@@ -291,6 +292,11 @@ if ($this->IsAdmin($this->GetUser()))
 				?>
 				<table border="0" cellspacing="0" cellpadding="0">
 					<tr>
+						<td>
+							<input type="text" name="comment" value="" size="<?php echo ADMINPAGES_MAX_EDIT_NOTE_LENGTH; ?>" /> <?php echo ADMINPAGES_LABEL_EDIT_NOTE; ?> <br/><br/>
+						</td>
+					</tr>
+					<tr>
 						<td> 
 							<!-- nonsense input so form submission works with rewrite mode -->
 							<input type="hidden" value="" name="null"/>
@@ -327,10 +333,14 @@ if ($this->IsAdmin($this->GetUser()))
 		if(count($ids) > 0)
 		{
 			include_once('libs/revert.lib.php');
+			$comment = '';
+			if(isset($_POST['comment']))
+			{
+				$comment = $_POST['comment'];
+			}
 			foreach($ids as $id)
 			{
-				echo "|$id|";
-				RevertPageToPreviousById($this, $id);
+				RevertPageToPreviousById($this, $id, $comment);
 			}
 		}
 		$this->Redirect($this->Href());
