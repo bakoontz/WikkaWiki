@@ -59,7 +59,7 @@ function RevertPageToPreviousByTag($wakka, $tag, $comment='')
 			}
 
 			$time = strftime("%F %H:%M:%S");
-			$body = $res[1]['body'];
+			$body = mysql_real_escape_string($res[1]['body']);
 			$owner = $res[1]['owner'];
 			$user = $res[1]['user'];
 			$latest = 'Y';
