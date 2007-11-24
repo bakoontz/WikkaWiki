@@ -156,7 +156,7 @@ if ($this->IsAdmin($this->GetUser()))
 	define('ADMINUSERS_FORM_MASSACTION_LEGEND','Mass-action');
 	define('ADMINUSERS_FORM_MASSACTION_LABEL','With selected');
 	define('ADMINUSERS_FORM_MASSACTION_SELECT_TITLE','Choose an action to apply to the selected records');
-	define('ADMINUSERS_FORM_MASSACTION_OPT_DELETE','Remove all');
+	define('ADMINUSERS_FORM_MASSACTION_OPT_DELETE','Delete selected');
 	define('ADMINUSERS_FORM_MASSACTION_OPT_FEEDBACK','Send feedback to all');
 	define('ADMINUSERS_FORM_MASSACTION_SUBMIT','Submit');
 	define('ADMINUSERS_ERROR_NO_MATCHES','Sorry, there are no users matching "%s"');
@@ -205,6 +205,80 @@ if ($this->IsAdmin($this->GetUser()))
 	{
 		echo $this->Action('usercomments');
 	} 
+	elseif($_GET['action'] == 'delete')
+	{
+		if(TRUE($_GET['user']))
+		{
+			include_once('libs/admin.lib.php');
+			$res = DeleteUser($this, $this->htmlspecialchars_ent($_GET['user']));
+			$this->Redirect($this->Href(), $res);
+		}
+	}
+	else if($_GET['action'] == 'massdelete')
+	{
+		$usernames = array();
+		foreach($_GET as $key=>$val)
+		{
+			if($val == "on")
+			{
+				array_push($usernames, $this->htmlspecialchars_ent($key));
+			}
+		}
+		if(count($usernames) > 0)
+		{
+			?>
+			<h3>Delete these users?</h3><br/>
+			<?php
+			foreach($usernames as $username)
+			{
+				echo "$username<br/>\n";
+			}
+			echo "<br/>\n";
+			echo $this->FormOpen() 
+			?>
+			<table border="0" cellspacing="0" cellpadding="0">
+				<tr>
+					<td> 
+						<!-- nonsense input so form submission works with rewrite mode -->
+						<input type="hidden" value="" name="null"/>
+						<?php
+						foreach($usernames as $username)
+						{
+							?>
+							<input type="hidden" name="<?php echo $username ?>" value="username"/>
+							<?php
+						}
+						?>
+						<input type="hidden" name="massaction" value="massdelete"/>
+						<input type="submit" value="Delete Users"  style="width: 120px"   />
+						<input type="button" value="Cancel" onclick="history.back();" style="width: 120px" />
+					</td>
+				</tr>
+			</table>
+			<?php
+			print($this->FormClose());
+		}
+	}	
+	else if(isset($_POST['massaction']) && $_POST['massaction'] == 'massdelete')
+	{
+		$usernames = array();
+		foreach($_POST as $key=>$val)
+		{
+			if($val == "username")
+			{
+				array_push($usernames, $this->htmlspecialchars_ent($key));
+			}
+		}
+		if(count($usernames) > 0)
+		{
+			include_once('libs/admin.lib.php');
+			foreach($usernames as $username)
+			{
+				DeleteUser($this, $username);
+			}
+		}
+		$this->Redirect($this->Href());
+	}
 	else 
 	{
 		// process URL variables
@@ -290,7 +364,8 @@ if ($this->IsAdmin($this->GetUser()))
 		$form_filter .= '</fieldset>'.$this->FormClose()."\n";
 	
 		// get user list
-		$userdata = $this->LoadAll("SELECT * FROM ".$this->config["table_prefix"]."users WHERE ".
+		$userdata = $this->LoadAll("SELECT * FROM
+		".$this->config["table_prefix"]."users WHERE status IS NULL OR status != 'deleted' AND ".
 		$where." ORDER BY ".$sort." ".$d." limit ".$s.", ".$l);
 	
 		if ($userdata)
@@ -348,7 +423,7 @@ if ($this->IsAdmin($this->GetUser()))
 				{
 					$data_table .= '	<tr>'."\n"; #disable alternate row color
 				}
-				$data_table .= '		<td><input type="checkbox" id="'.$user['name'].'"'.$checked.' title="'.sprintf(ADMINUSERS_SELECT_RECORD_TITLE,$user['name']).'"/></td>'."\n".	
+				$data_table .= '		<td><input type="checkbox" name="'.$user['name'].'"'.$checked.' title="'.sprintf(ADMINUSERS_SELECT_RECORD_TITLE,$user['name']).'"/></td>'."\n".	
 	 				'		<td>'.(($this->ExistsPage($user['name']))? $this->Link($user['name']) : $user['name']).'</td>'."\n". #check if userpage exists
 			 		'		<td>'.$user['email'].'</td>'."\n".
 					'		<td class="datetime">'.$user['signuptime'].'</td>'."\n".

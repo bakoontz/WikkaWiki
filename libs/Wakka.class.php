@@ -1529,12 +1529,20 @@ class Wakka
 		if ($this->GetPageOwner($tag) == $this->GetUserName()) return true;
 	}
 	//returns true if user is listed in configuration list as admin
-	function IsAdmin() {
+	function IsAdmin($user='') {
 		$adminstring = $this->config["admin_users"];
 		$adminarray = explode(',' , $adminstring);
 
+		if(TRUE===empty($user))
+		{
+			$user = $this->GetUserName();
+		}
+		else if(is_array($user))
+		{
+			$user = $user['name'];
+		}
 		foreach ($adminarray as $admin) {
-			if (trim($admin) == $this->GetUserName()) return true;
+			if (trim($admin) == $user) return true;
 		}
 	}
 	function GetPageOwner($tag = "", $time = "") { if (!$tag = trim($tag)) $tag = $this->GetPageTag(); if ($page = $this->LoadPage($tag, $time)) return $page["owner"]; }
