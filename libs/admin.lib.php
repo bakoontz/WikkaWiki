@@ -28,6 +28,25 @@ if(!defined('USERDELETE_MESSAGE_SUCCESS')) define('USERDELETE_MESSAGE_SUCCESS', 
 if(!defined('USERDELETE_MESSAGE_FAILURE')) define('USERDELETE_MESSAGE_FAILURE', 'User deletion failed');
 
 /**
+ * LoadLastTwoPagesByTag
+ *
+ * Returns an object containing the most recent page and the page
+ * immediately preceding. Array element 0 is most recent page; element
+ * 1 is the previou page.
+ *
+ * @param object $wakka Wakka class instantiation
+ * @param string $tag Page tag
+ * @return object Page records
+ *
+ */
+function LoadLastTwoPagesByTag($wakka, $tag)
+{
+	$tag = mysql_real_escape_string($tag);
+	$res = $wakka->LoadAll("SELECT * FROM ".$wakka->config['table_prefix']."pages WHERE tag='".$tag."' ORDER BY time DESC LIMIT 2");
+	return $res;
+}
+
+/**
  * RevertPageToPreviousByTag
  *
  * Reverts a page to the version immediately preceding the "latest"
@@ -47,7 +66,7 @@ function RevertPageToPreviousByTag($wakka, $tag, $comment='')
 	if(TRUE===$wakka->IsAdmin())
 	{
 		// Select current version of this page and version immediately preceding
-		$res = $wakka->LoadAll("SELECT * FROM ".$wakka->config['table_prefix']."pages WHERE tag='".$tag."' ORDER BY time DESC LIMIT 2");
+		$res = LoadLastTwoPagesByTag($wakka, $tag);
 		if($res)
 		{
 			// $res[0] is current page, $res[1] is page we're reverting to

@@ -282,11 +282,16 @@ if ($this->IsAdmin($this->GetUser()))
 			{
 				?>
 				<h3>Revert these pages?</h3><br/>
+				<ul>
 				<?php
 			    foreach($tags as $tag)
 				{
-					echo "$tag<br/>\n";
+					include_once('libs/admin.lib.php');
+					$res = LoadLastTwoPagesByTag($this, $tag);
+					$method = "diff?fastdiff=1&a=".$res[0]['id']."&b=".$res[1]['id'];
+					echo "<li>".$this->Link($tag)." (current [".$res[0]['id']."] :: previous [".$res[1]['id']."] :: ".$this->Link($tag, $method, 'diff').")</li>\n";
 				}
+				?></ul><?php
 				echo "<br/>\n";
 				echo $this->FormOpen() 
 				?>
