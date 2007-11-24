@@ -32,7 +32,7 @@ if(!defined('USERDELETE_MESSAGE_FAILURE')) define('USERDELETE_MESSAGE_FAILURE', 
  *
  * Returns an object containing the most recent page and the page
  * immediately preceding. Array element 0 is most recent page; element
- * 1 is the previou page.
+ * 1 is the previous page.
  *
  * @param object $wakka Wakka class instantiation
  * @param string $tag Page tag
