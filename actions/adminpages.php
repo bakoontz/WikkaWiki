@@ -332,7 +332,7 @@ if ($this->IsAdmin($this->GetUser()))
 		}
 		if(count($ids) > 0)
 		{
-			include_once('libs/revert.lib.php');
+			include_once('libs/admin.lib.php');
 			$comment = '';
 			if(isset($_POST['comment']))
 			{

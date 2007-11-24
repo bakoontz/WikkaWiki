@@ -35,7 +35,7 @@
 
 if(TRUE===$this->IsAdmin())
 {
-	include_once('libs/revert.lib.php');
+	include_once('libs/admin.lib.php');
 	$comment = '';
 	if(TRUE===isset($_GET['comment']))
 	{

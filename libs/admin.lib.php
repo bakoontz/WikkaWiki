@@ -1,12 +1,11 @@
 <?php
 
 /**
- * Page reversion routines 
+ * Admin routines 
  *
- * Various routines to handle the reversion of a page to a previous
- * version. 
+ * Various admin-related routines
  *
- * @name	    revert.lib.php 
+ * @name	    admin.lib.php 
  *
  * @package	    Lib	
  * @version		$Id$
@@ -16,17 +15,10 @@
  *
  * @author		{@link http://wikkawiki.org/BrianKoontz Brian Koontz}
  *
- * Based upon the Delete handler written by DarTar, NilsLindenberg,
- * and MinusF
- *
- * @uses Wakka::Query()
- * @uses Wakka::LoadAll()
- * @uses Wakka::IsAdmin()
- * @uses Wakka::LoadPageById()
- *
  */
 
 //i18n
+// Reversion routine strings
 if(!defined('DEFAULT_COMMENT')) define ('DEFAULT_COMMENT', 'Reverting last edit by %s [%d] to previous version [%d]');
 if(!defined('MESSAGE_SUCCESS')) define ('MESSAGE_SUCCESS', 'Reverted to previous version');
 if(!defined('MESSAGE_FAILED')) define ('MESSAGE_FAILED', 'Reversion to previous version FAILED!');
