@@ -2,7 +2,7 @@
 /**
  * Embed a Flash object in a wiki page.
  *
- * Example: {{flash url="http://example.com/example.swf" [width=x] [height=x]}}
+ * Example: {{flash url="http://example.com/example.swf" [width="x"] [height="x"]}}
  *
  * @package 	Actions
  * @name		Flash
