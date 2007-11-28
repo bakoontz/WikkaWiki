@@ -3,7 +3,7 @@
 /*
 
 Syntax:
-   {{Flash url="http://example.com/example.swf" [width=x] [height=x]}}
+   {{flash url="http://example.com/example.swf" [width="x"] [height="x"]}}
 
 Width and Height are optional arguments.
 
