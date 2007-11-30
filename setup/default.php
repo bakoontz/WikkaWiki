@@ -28,6 +28,33 @@
 	$setupfiles_to_update = array(
 		'./.htaccess', './wikka.config.php', 'setup/test/.htaccess');
 	$setup_files_not_writable = '';
+	// Need to adjust setup/test/.htaccess if installed in a subdir
+	include_once('./inc/functions.inc.php');
+	$htaccess = 'setup/test/.htaccess';
+	if(setupfile_is_writable($htaccess))
+	{
+		$rewrite_base = preg_replace('|^\\S+://[^/]*(?=/)|', '', $url);	// remove scheme and domain
+		$htaccess_content = file($htaccess);
+		$new_htaccess_content = '';
+		foreach($htaccess as $line)
+		{
+			if(preg_match("/^(\\s*RewriteBase/i", $line))
+			{
+				$line = "RewriteBase $rewrite_base/setup/test"; 
+			}
+			$new_htaccess_content .= $line;
+		}
+		print('<tr><td>&nbsp;</td><td class="note">'."\n");
+		print('<h2>'.__('Setting up mod_rewrite autodetection').'</h2>'."\n");
+		test(sprintf(__('Writing .htaccess file (%s)'), '<tt>'.$htaccess.'</tt>').'...', $f1 = @fopen($htaccess, "w"), "", 0);
+		print('</td></tr>'."\n");
+		if ($f1)
+		{
+			fwrite($f1, $new_htaccess_content);
+			fclose($f1);
+		}
+	}
+
 	foreach ($setupfiles_to_update as $f1)
 	{
 		if (!setupfile_is_writable($f1))
@@ -38,7 +65,7 @@
 	if ($setup_files_not_writable)
 	{
 		printf('<tr><td>&nbsp;</td><td class="note"><p>'.__('The following files need to be written/updated by the installer: %s'.
-		 'Please ensure that if the file exists, it is writable; and if it doesn\'t exist, its parent directory is writable.').
+		 'Please ensure that the file is writable.  <b>When fixed, reload this page using the Reload button in your browser.</b> ').
 		 '</p></td></tr>', '</p><ul>'.$setup_files_not_writable.'</ul><p>');
 	}
 	init_test_mod_rewrite();
