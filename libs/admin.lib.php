@@ -25,7 +25,7 @@ if(!defined('REVERT_MESSAGE_FAILURE')) define ('REVERT_MESSAGE_FAILURE', 'Revers
 
 // User deletion strings
 if(!defined('USERDELETE_MESSAGE_SUCCESS')) define('USERDELETE_MESSAGE_SUCCESS', 'User deletion successful');
-if(!defined('USERDELETE_MESSAGE_FAILURE')) define('USERDELETE_MESSAGE_FAILURE', 'User deletion failed');
+if(!defined('USERDELETE_MESSAGE_FAILURE')) define('USERDELETE_MESSAGE_FAILURE', 'User deletion error');
 
 /**
  * LoadLastTwoPagesByTag
@@ -136,7 +136,7 @@ function RevertPageToPreviousById($wakka, $id, $comment='')
  */
 function DeleteUser($wakka, $user)
 {
-	$message = USERDELETE_MESSAGE_FAILURE;
+	$status = true;
 	if(is_array($user))
 	{
 		$user = mysql_real_escape_string($user['name']);
@@ -150,7 +150,7 @@ function DeleteUser($wakka, $user)
 		// Don't permit deletion of admin accounts!
 		if(TRUE===$wakka->IsAdmin($user))
 		{
-			return $message;
+			return false;
 		}		
 
 		// Reset password
@@ -158,6 +158,10 @@ function DeleteUser($wakka, $user)
 		if(FALSE===empty($res))
 		{
 			$wakka->Query("UPDATE ".$wakka->config['table_prefix']."users SET status='deleted', password='!' WHERE name='".$user."'");
+		}
+		else
+		{
+			$status = false;
 		}
 
 		// Remove sessions
@@ -167,13 +171,12 @@ function DeleteUser($wakka, $user)
 			foreach($res as $session)
 			{
 				$session_file = session_save_path().DIRECTORY_SEPARATOR."sess_".$session['sessionid'];
-				unlink($session_file);
+				$status = $status && unlink($session_file);
 			}
 		}
 		$wakka->Query("DELETE FROM ".$wakka->config['table_prefix']."sessions WHERE userid='".$user."'");
-		$message = USERDELETE_MESSAGE_SUCCESS;
 
-		return $message;
+		return $status;
 	}
 }
 

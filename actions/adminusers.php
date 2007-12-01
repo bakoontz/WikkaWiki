@@ -160,7 +160,7 @@ if ($this->IsAdmin($this->GetUser()))
 	define('ADMINUSERS_FORM_MASSACTION_OPT_FEEDBACK','Send feedback to all');
 	define('ADMINUSERS_FORM_MASSACTION_SUBMIT','Submit');
 	define('ADMINUSERS_ERROR_NO_MATCHES','Sorry, there are no users matching "%s"');
-				
+
 	//initialize row & column colors variables
 	$r = 1; #initialize row counter
 	$r_color = ADMINUSERS_ALTERNATE_ROW_COLOR; #get alternate row color option
@@ -210,8 +210,15 @@ if ($this->IsAdmin($this->GetUser()))
 		if(TRUE($_GET['user']))
 		{
 			include_once('libs/admin.lib.php');
-			$res = DeleteUser($this, $this->htmlspecialchars_ent($_GET['user']));
-			$this->Redirect($this->Href(), $res);
+			$status = DeleteUser($this, $this->htmlspecialchars_ent($_GET['user']));
+			if(false===$status)
+			{
+				$this->Redirect($this->Href(), USERDELETE_MESSAGE_FAILURE);
+			}
+			else
+			{
+				$this->Redirect($this->Href());
+			}
 		}
 	}
 	else if($_GET['action'] == 'massdelete')
@@ -272,12 +279,20 @@ if ($this->IsAdmin($this->GetUser()))
 		if(count($usernames) > 0)
 		{
 			include_once('libs/admin.lib.php');
+			$status = true;
 			foreach($usernames as $username)
 			{
-				DeleteUser($this, $username);
+				$status = $status && DeleteUser($this, $username);
 			}
 		}
-		$this->Redirect($this->Href());
+		if(false === $status)
+		{
+			$this->Redirect($this->Href(), USERDELETE_MESSAGE_FAILURE);
+		}
+		else
+		{
+			$this->Redirect($this->Href());
+		}
 	}
 	else 
 	{
@@ -333,6 +348,11 @@ if ($this->IsAdmin($this->GetUser()))
 	
 		// print page header
 		echo '<h3>'.ADMINUSERS_PAGE_TITLE.'</h3>'."\n";
+		$msg = '';
+		if($msg = $this->GetRedirectMessage())
+		{
+			echo '<p><span class="error">'.sprintf($msg).'</span></p>';
+		}
 	
 		// build pager form	
 		$form_filter = $this->FormOpen('','','post','user_admin_panel');
