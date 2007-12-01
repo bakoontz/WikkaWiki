@@ -152,12 +152,27 @@ function DeleteUser($wakka, $user)
 		{
 			return $message;
 		}		
+
+		// Reset password
 		$res = $wakka->LoadSingle("SELECT * FROM ".$wakka->config['table_prefix']."users WHERE name='".$user."'");
 		if(FALSE===empty($res))
 		{
 			$wakka->Query("UPDATE ".$wakka->config['table_prefix']."users SET status='deleted', password='!' WHERE name='".$user."'");
-			$message = USERDELETE_MESSAGE_SUCCESS;
 		}
+
+		// Remove sessions
+		$res = $wakka->LoadAll("SELECT * FROM ".$wakka->config['table_prefix']."sessions WHERE userid='".$user."'");	
+		if(FALSE===empty($res))
+		{
+			foreach($res as $session)
+			{
+				$session_file = session_save_path().DIRECTORY_SEPARATOR."sess_".$session['sessionid'];
+				unlink($session_file);
+			}
+		}
+		$wakka->Query("DELETE FROM ".$wakka->config['table_prefix']."sessions WHERE userid='".$user."'");
+		$message = USERDELETE_MESSAGE_SUCCESS;
+
 		return $message;
 	}
 }

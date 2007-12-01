@@ -335,6 +335,15 @@ if (!$wakka->dblink)
 	exit;
 }
 
+/**
+ * Save session ID
+ */
+ $user = $wakka->GetUser();
+ // Only store sessions for real users!
+ if(NULL != $user)
+ {
+	$wakka->Query("INSERT IGNORE INTO ".$wakka->config['table_prefix']."sessions (sessionid, userid) VALUES('".session_id()."', '".$user['name']."')");
+ }
 
 /**
  * Run the engine.
