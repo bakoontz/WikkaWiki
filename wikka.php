@@ -338,12 +338,22 @@ if (!$wakka->dblink)
 /**
  * Save session ID
  */
- $user = $wakka->GetUser();
- // Only store sessions for real users!
- if(NULL != $user)
- {
-	$wakka->Query("INSERT IGNORE INTO ".$wakka->config['table_prefix']."sessions (sessionid, userid) VALUES('".session_id()."', '".$user['name']."')");
- }
+$user = $wakka->GetUser();
+// Only store sessions for real users!
+if(NULL != $user)
+{
+	$res = $wakka->LoadSingle("SELECT * FROM ".$wakka->config['table_prefix']."sessions WHERE sessionid='".session_id()."' AND userid='".$user['name']."'"); 
+	if(isset($res))
+	{
+		// Just update the session_start time
+		$wakka->Query("UPDATE ".$wakka->config['table_prefix']."sessions SET session_start=FROM_UNIXTIME(".$wakka->GetMicroTime().") WHERE sessionid='".session_id()."' AND userid='".$user['name']."'");
+	}
+	else
+	{
+		// Create new session record
+		$wakka->Query("INSERT INTO ".$wakka->config['table_prefix']."sessions (sessionid, userid, session_start) VALUES('".session_id()."', '".$user['name']."', FROM_UNIXTIME(".$wakka->GetMicroTime()."))");
+	}
+}
 
 /**
  * Run the engine.
@@ -405,13 +415,13 @@ function getmicrotime() {
 
 if (!function_exists('mysql_real_escape_string'))
 {
-/**
- * Escape special characters in a string for use in a SQL statement.
- *
- * This function is added for back-compatibility with MySQL 3.23.
- * @param string $string the string to be escaped
- * @return string a string with special characters escaped
- */
+	/**
+	 * Escape special characters in a string for use in a SQL statement.
+	 *
+	 * This function is added for back-compatibility with MySQL 3.23.
+	 * @param string $string the string to be escaped
+	 * @return string a string with special characters escaped
+	 */
 	function mysql_real_escape_string($string)
 	{
 		return mysql_escape_string($string);

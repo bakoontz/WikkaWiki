@@ -23,6 +23,9 @@
  * @copyright Copyright 2006-2007 {@link http://wikkawiki.org/CreditsPage Wikka Development Team}
  */
 
+// Time to live for client-side cookies in seconds (90 days)
+if(!defined('PERSISTENT_COOKIE_EXPIRY')) define('PERSISTENT_COOKIE_EXPIRY', 7776000);
+
 /**
  * The Wikka core.
  *
@@ -42,6 +45,7 @@ class Wakka
 	var $interWiki = array();
 	var $VERSION;
 	var $cookies_sent = false;
+	var $cookie_expiry = PERSISTENT_COOKIE_EXPIRY; 
 
 	/**
 	 * Constructor
@@ -887,7 +891,7 @@ class Wakka
 
 	// COOKIES
 	function SetSessionCookie($name, $value) { SetCookie($name.$this->config['wiki_suffix'], $value, 0, "/"); $_COOKIE[$name.$this->config['wiki_suffix']] = $value; $this->cookies_sent = true; }
-	function SetPersistentCookie($name, $value) { SetCookie($name.$this->config['wiki_suffix'], $value, time() + 90 * 24 * 60 * 60, "/"); $_COOKIE[$name.$this->config['wiki_suffix']] = $value; $this->cookies_sent = true; }
+	function SetPersistentCookie($name, $value) { SetCookie($name.$this->config['wiki_suffix'], $value, time() + $this->cookie_expiry, "/"); $_COOKIE[$name.$this->config['wiki_suffix']] = $value; $this->cookies_sent = true; }
 	function DeleteCookie($name) { SetCookie($name.$this->config['wiki_suffix'], "", 1, "/"); $_COOKIE[$name.$this->config['wiki_suffix']] = ""; $this->cookies_sent = true; }
 	function GetCookie($name)
 	{
@@ -1447,8 +1451,14 @@ class Wakka
 	{ 
 		$this->DeleteCookie("user_name"); 
 		$this->DeleteCookie("pass"); 
-		$this->Query("DELETE FROM ".$this->config['table_prefix']."sessions WHERE userid='".$this->GetUserName()."'");
+		// Delete this session from sessions table
+		$this->Query("DELETE FROM ".$this->config['table_prefix']."sessions WHERE userid='".$this->GetUserName()."' AND sessionid='".session_id()."'");
 		$_SESSION["user"] = ""; 
+		// This seems a good as place as any to purge all session records
+		// older than PERSISTENT_COOKIE_EXPIRY, as this is not a
+		// time-critical function for the user.  The assumption here
+		// is that  server-side sessions have long ago been cleaned up by PHP.
+		$this->Query("DELETE FROM ".$this->config['table_prefix']."sessions WHERE DATE_SUB(NOW(), INTERVAL ".PERSISTENT_COOKIE_EXPIRY." SECOND) > session_start");
 	}
 	function UserWantsComments() { if (!$user = $this->GetUser()) return false; return ($user["show_comments"] == "Y"); }
 
