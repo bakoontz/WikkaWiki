@@ -106,6 +106,14 @@ case "0":
 			"KEY idx_page_tag (page_tag),".
 			"KEY idx_time (time)".
 			") TYPE=MyISAM;", $dblink), "Already exists?", 0);
+	test("Creating session tracking table...",
+		@mysql_query(
+			"CREATE TABLE ".$config['table_prefix']."sessions (".
+			"sessionid char(32) NOT NULL,".
+			"userid varchar(75) NOT NULL,".
+			"PRIMARY KEY (sessionid, userid),".
+			"session_start datetime NOT NULL".
+			") TYPE=MyISAM", $dblink), "Already exists?", 0);
 
 	test("Adding admin user...",
 	@mysql_query("insert into ".$config['table_prefix']."users set name = '".$config["admin_users"]."', password = md5('".mysql_real_escape_string($_POST["password"])."'), email = '".$config["admin_email"]."', signuptime = now()", $dblink), "Hmm!", 0); // @@@ The "Hmm!" is confusing people...
@@ -316,7 +324,7 @@ case "1.1.6.3":
 	test("Adding status field to users table...",
 	mysql_query("alter table ".$config['table_prefix']."users add column status enum ('invited','signed-up','pending','active','suspended','banned','deleted')"), "Already done? OK!", 0); 
 	test("Adding sessions tracking table...",
-	mysql_query("create table ".$config['table_prefix']."sessions (sessionid char(16) NOT NULL, userid varchar(75) NOT NULL, PRIMARY KEY (sessionid, userid))"),	"Already done? OK!", 0); 
+	mysql_query("create table ".$config['table_prefix']."sessions (sessionid char(32) NOT NULL, userid varchar(75) NOT NULL, PRIMARY KEY (sessionid, userid), session_start datetime NOT NULL)"),	"Already done? OK!", 0); 
 }
 ?>
 
