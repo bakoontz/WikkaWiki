@@ -36,13 +36,17 @@ if(!defined('USERDELETE_MESSAGE_FAILURE')) define('USERDELETE_MESSAGE_FAILURE', 
  *
  * @param object $wakka Wakka class instantiation
  * @param string $tag Page tag
- * @return object Page records
+ * @return object Page records or null if only single revision exists
  *
  */
 function LoadLastTwoPagesByTag($wakka, $tag)
 {
 	$tag = mysql_real_escape_string($tag);
 	$res = $wakka->LoadAll("SELECT * FROM ".$wakka->config['table_prefix']."pages WHERE tag='".$tag."' ORDER BY time DESC LIMIT 2");
+	if(count($res) != 2)
+	{
+		return null;
+	}
 	return $res;
 }
 
@@ -87,6 +91,10 @@ function RevertPageToPreviousByTag($wakka, $tag, $comment='')
 			// Reset 'latest' flag on older version to 'N'
 			$wakka->Query("UPDATE ".$wakka->config['table_prefix']."pages SET latest='N' where id=".$res[0]['id']);
 			$message = REVERT_MESSAGE_SUCCESS;
+		}
+		else
+		{
+			$message = REVERT_MESSAGE_FAILURE;
 		}
 	}
 	return $message;

@@ -44,6 +44,9 @@
  * 			- move icons to buddy file or action folder in 1.1.7;
  */
 
+
+include_once('libs/admin.lib.php');
+
 //utilities
 
 /**
@@ -213,6 +216,7 @@ if ($this->IsAdmin($this->GetUser()))
 	define('ADMINPAGES_FORM_MASSACTION_OPT_RENAME','Rename all');
 	define('ADMINPAGES_FORM_MASSACTION_OPT_ACL','Change Access Control List');
 	define('ADMINPAGES_FORM_MASSACTION_OPT_REVERT','Revert to previous page version');
+	define('ADMINPAGES_FORM_MASSACTION_REVERT_ERROR','Cannot be reverted');
 	define('ADMINPAGES_FORM_MASSACTION_SUBMIT','Submit');
 	define('ADMINPAGES_ERROR_NO_MATCHES','Sorry, there are no pages matching "%s"');
 	define('ADMINPAGES_LABEL_EDIT_NOTE','Please enter a comment, or leave blank for default');
@@ -284,10 +288,16 @@ if ($this->IsAdmin($this->GetUser()))
 				<h3>Revert these pages?</h3><br/>
 				<ul>
 				<?php
+				$errors = 0;
 			    foreach($tags as $tag)
 				{
-					include_once('libs/admin.lib.php');
 					$res = LoadLastTwoPagesByTag($this, $tag);
+					if(null===$res)
+					{
+						++$errors;
+						echo "<li><span class='disabled'>".$tag."&nbsp;</span><em class='error'>(".ADMINPAGES_FORM_MASSACTION_REVERT_ERROR.")</em></li>\n";
+						continue;
+					}
 					$method = "diff?fastdiff=1&a=".$res[0]['id']."&b=".$res[1]['id'];
 					echo "<li>".$this->Link($tag)." (current [".$res[0]['id']."] :: previous [".$res[1]['id']."] :: ".$this->Link($tag, $method, 'diff').")</li>\n";
 				}
@@ -296,11 +306,13 @@ if ($this->IsAdmin($this->GetUser()))
 				echo $this->FormOpen() 
 				?>
 				<table border="0" cellspacing="0" cellpadding="0">
+				<?php if($errors < count($tags)) { ?>
 					<tr>
 						<td>
 							<input type="text" name="comment" value="" size="<?php echo ADMINPAGES_MAX_EDIT_NOTE_LENGTH; ?>" /> <?php echo ADMINPAGES_LABEL_EDIT_NOTE; ?> <br/><br/>
 						</td>
 					</tr>
+				<?php } ?>
 					<tr>
 						<td> 
 							<!-- nonsense input so form submission works with rewrite mode -->
@@ -314,7 +326,9 @@ if ($this->IsAdmin($this->GetUser()))
 							}
 							?>
 							<input type="hidden" name="massaction" value="massrevert"/>
+							<?php if($errors < count($tags)) { ?>
 							<input type="submit" value="Revert Pages"  style="width: 120px"   />
+							<?php } ?>
 							<input type="button" value="Cancel" onclick="history.back();" style="width: 120px" />
 						</td>
 					</tr>
@@ -337,7 +351,6 @@ if ($this->IsAdmin($this->GetUser()))
 		}
 		if(count($ids) > 0)
 		{
-			include_once('libs/admin.lib.php');
 			$comment = '';
 			if(isset($_POST['comment']))
 			{
@@ -597,7 +610,17 @@ if ($this->IsAdmin($this->GetUser()))
 				{
 					$showpage = '<a href="'.$this->Href('',$page['tag'], '').'">'.$pagename.'</a>';
 				}
-				$revertpage = '<a href="'.$this->Href('revert',$page['tag'], '').'" title="'.sprintf(ADMINPAGES_ACTION_REVERT_LINK_TITLE, $page['tag']).'">'.ADMINPAGES_ACTION_REVERT_LINK.'</a>';
+				// Disable revert link if only one page revision exists
+				$revertpage = '';
+				$res = LoadLastTwoPagesByTag($this, $page['tag']);
+				if(null===$res)
+				{
+					$revertpage = "<span class='disabled'>".ADMINPAGES_ACTION_REVERT_LINK."</span>";
+				}
+				else
+				{
+					$revertpage = '<a href="'.$this->Href('revert',$page['tag'], '').'" title="'.sprintf(ADMINPAGES_ACTION_REVERT_LINK_TITLE, $page['tag']).'">'.ADMINPAGES_ACTION_REVERT_LINK.'</a>';
+				}
 				$editpage = '<a href="'.$this->Href('edit',$page['tag'], '').'" title="'.sprintf(ADMINPAGES_ACTION_EDIT_LINK_TITLE, $page['tag']).'">'.ADMINPAGES_ACTION_EDIT_LINK.'</a>';
 				$deletepage = '<a href="'.$this->Href('delete',$page['tag'], '').'" title="'.sprintf(ADMINPAGES_ACTION_DELETE_LINK_TITLE, $page['tag']).'">'.ADMINPAGES_ACTION_DELETE_LINK.'</a>';
 				$clonepage = '<a href="'.$this->Href('clone',$page['tag'], '').'" title="'.sprintf(ADMINPAGES_ACTION_CLONE_LINK_TITLE, $page['tag']).'">'.ADMINPAGES_ACTION_CLONE_LINK.'</a>';
