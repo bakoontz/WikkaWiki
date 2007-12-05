@@ -29,7 +29,7 @@
 // ===== initialization =====
 WikkaEdit.prototype.init = function() {
 	// load CSS
-	document.write("<link rel=\"stylesheet\" type=\"text/css\" href=\"3rdparty/plugins/wikkaedit/wikkaedit.css\" />");
+	document.write("<link rel=\"stylesheet\" type=\"text/css\" href=\""+Wikkaedit_baseURL+"3rdparty/plugins/wikkaedit/wikkaedit.css\" />");
 
 	// init data
 	this.we_actionsMenuEnabled = (typeof(this.contextualHelp) != "undefined");
@@ -159,13 +159,13 @@ WikkaEdit.prototype.genToolbar = function() {
 	for(var i in this.we_buttons) {
 		switch (this.we_buttons[i].type) {
 			case "button" :		// button
-				html += "<img class=\"toolbutton\" src=\"3rdparty/plugins/wikkaedit/images/" + this.refToName(i) + ".gif\" alt=\"" + this.refToName(i) + "\" title=\"" + this.we_buttons[i].title + "\" onclick=\"varWikkaEdit.toolbarButtonClick(this, '" + this.refToName(i) + "');\"" + ie6_hover + " />";
+				html += "<img class=\"toolbutton\" src=\""+Wikkaedit_baseURL+"3rdparty/plugins/wikkaedit/images/" + this.refToName(i) + ".gif\" alt=\"" + this.refToName(i) + "\" title=\"" + this.we_buttons[i].title + "\" onclick=\"varWikkaEdit.toolbarButtonClick(this, '" + this.refToName(i) + "');\"" + ie6_hover + " />";
 				break;
 			case "submenu" :	// submenu
-				html += "<img class=\"toolbutton\" src=\"3rdparty/plugins/wikkaedit/images/submenu.gif\" alt=\"submenu\" title=\"" + this.we_buttons[i].title + "\" onclick=\"varWikkaEdit.toolbarButtonClick(this, '" + this.refToName(i) + "');\"" + ie6_hover + " />";
+				html += "<img class=\"toolbutton\" src=\""+Wikkaedit_baseURL+"3rdparty/plugins/wikkaedit/images/submenu.gif\" alt=\"submenu\" title=\"" + this.we_buttons[i].title + "\" onclick=\"varWikkaEdit.toolbarButtonClick(this, '" + this.refToName(i) + "');\"" + ie6_hover + " />";
 				break;
 			case "separator" :	// separator
-				html += "<img class=\"toolseparator\" src=\"3rdparty/plugins/wikkaedit/images/separator.gif\" alt=\"|\" />";
+				html += "<img class=\"toolseparator\" src=\""+Wikkaedit_baseURL+"3rdparty/plugins/wikkaedit/images/separator.gif\" alt=\"|\" />";
 				break;
 			default :
 				alert("genToolbar() : unknown type (" + this.we_buttons[i].type + ")");
@@ -178,7 +178,7 @@ WikkaEdit.prototype.genToolbar = function() {
 		html += "<span class='actiontitle'>Actions</span>";
 		for(i in this.we_categs) {
 			if (this.we_categs[i].title != null)	// hidden actions don't have a title
-				html += "<span class=\"toolbutton\" style='margin-left:20px; padding:2px 5px 3px 6px' onclick=\"varWikkaEdit.toolbarCategClick('" + i + "', this);\">" + this.we_categs[i].title + "<img src='3rdparty/plugins/wikkaedit/images/submenu.gif' style='vertical-align:middle'/></span>";
+				html += "<span class=\"toolbutton\" style='margin-left:20px; padding:2px 5px 3px 6px' onclick=\"varWikkaEdit.toolbarCategClick('" + i + "', this);\">" + this.we_categs[i].title + "<img src='"+Wikkaedit_baseURL+"3rdparty/plugins/wikkaedit/images/submenu.gif' style='vertical-align:middle'/></span>";
 		}
 	}
 
@@ -350,7 +350,7 @@ WikkaEdit.prototype.toggleSubmenu = function(obj, newSubmenu, isAction) {
 		if (!isAction) {
 			for(i in this.we_buttons[this.nameToRef(newSubmenu)].we_buttons) {
 				html += "<div class=\"smbutton\" onclick=\"varWikkaEdit.toolbarButtonClick(this, '" + this.refToName(i) + "', '" + newSubmenu + "');\">";
-				html += "<img class=\"smimage\" src=\"3rdparty/plugins/wikkaedit/images/" + this.refToName(i) + ".gif\" alt=\"" + this.refToName(i) + "\"" + ie6_hover + " />";
+				html += "<img class=\"smimage\" src=\""+Wikkaedit_baseURL+"3rdparty/plugins/wikkaedit/images/" + this.refToName(i) + ".gif\" alt=\"" + this.refToName(i) + "\"" + ie6_hover + " />";
 				html += this.we_buttons[this.nameToRef(newSubmenu)].we_buttons[i].title;
 				html += "</div>";
 			}
@@ -358,7 +358,7 @@ WikkaEdit.prototype.toggleSubmenu = function(obj, newSubmenu, isAction) {
 			for(i in this.we_actions) {
 				if (this.we_actions[i].we_categ == newSubmenu) {
 					html += "<div class=\"smbutton\" onclick=\"varWikkaEdit.toolbarActionClick('" + i + "');\"" + (this.we_actions[i].we_summary == null ? "" : " title=\"" + this.we_actions[i].we_summary + "\"") + ">";
-					html += "<img class=\"smimage\" src=\"3rdparty/plugins/wikkaedit/images/actions/" + this.we_actions[i].we_name + ".gif\" alt=\"" + this.we_actions[i].we_name + "\"" + ie6_hover + " />";
+					html += "<img class=\"smimage\" src=\""+Wikkaedit_baseURL+"3rdparty/plugins/wikkaedit/images/actions/" + this.we_actions[i].we_name + ".gif\" alt=\"" + this.we_actions[i].we_name + "\"" + ie6_hover + " />";
 					html += this.we_actions[i].we_title;
 					html += "</div>";
 				}

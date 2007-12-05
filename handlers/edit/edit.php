@@ -255,6 +255,8 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 
 		if ($this->GetConfigValue('gui_editor') == 1)	// @@@ cast to boolean and compare to TRUE
 		{
+			$Wikkaedit_baseURL = preg_replace('/3rdparty$/', '', $this->StaticHref('3rdparty')); 
+			$output .= '<script type="text/javascript">Wikkaedit_baseURL = "'.$Wikkaedit_baseURL.'";</script>'."\n";
 			$output .= '<script type="text/javascript" src="'.$this->StaticHref('3rdparty/plugins/wikkaedit/wikkaedit_data.js').'"></script>'."\n";
 			$output .= '<script type="text/javascript" src="'.$this->StaticHref('3rdparty/plugins/wikkaedit/wikkaedit_search.js').'"></script>'."\n";
 			$output .= '<script type="text/javascript" src="'.$this->StaticHref('3rdparty/plugins/wikkaedit/wikkaedit_actions.js').'"></script>'."\n";
