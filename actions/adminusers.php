@@ -157,6 +157,7 @@ if ($this->IsAdmin($this->GetUser()))
 	define('ADMINUSERS_FORM_MASSACTION_LABEL','With selected');
 	define('ADMINUSERS_FORM_MASSACTION_SELECT_TITLE','Choose an action to apply to the selected records');
 	define('ADMINUSERS_FORM_MASSACTION_OPT_DELETE','Delete selected');
+	define('ADMINUSERS_FORM_MASSACTION_DELETE_ERROR', 'Cannot delete admins');
 	define('ADMINUSERS_FORM_MASSACTION_OPT_FEEDBACK','Send feedback to all');
 	define('ADMINUSERS_FORM_MASSACTION_SUBMIT','Submit');
 	define('ADMINUSERS_ERROR_NO_MATCHES','Sorry, there are no users matching "%s"');
@@ -207,7 +208,7 @@ if ($this->IsAdmin($this->GetUser()))
 	} 
 	elseif($_GET['action'] == 'delete')
 	{
-		if(TRUE($_GET['user']))
+		if(isset($_GET['user']))
 		{
 			include_once('libs/admin.lib.php');
 			$status = DeleteUser($this, $this->htmlspecialchars_ent($_GET['user']));
@@ -235,12 +236,20 @@ if ($this->IsAdmin($this->GetUser()))
 		{
 			?>
 			<h3>Delete these users?</h3><br/>
+			<ul>
 			<?php
+			$errors = 0;
 			foreach($usernames as $username)
 			{
-				echo "$username<br/>\n";
+				if($this->IsAdmin($username))
+				{
+					++$errors;
+					echo "<li><span class='disabled'>".$username."&nbsp;</span><em class='error'>(".ADMINUSERS_FORM_MASSACTION_DELETE_ERROR.")</em></li>\n";
+					continue;
+				}
+				echo "<li>".$username."</li>\n";
 			}
-			echo "<br/>\n";
+			echo "</ul><br/>\n";
 			echo $this->FormOpen() 
 			?>
 			<table border="0" cellspacing="0" cellpadding="0">
@@ -251,13 +260,18 @@ if ($this->IsAdmin($this->GetUser()))
 						<?php
 						foreach($usernames as $username)
 						{
+							if(true!==$this->IsAdmin($username))
+							{
 							?>
 							<input type="hidden" name="<?php echo $username ?>" value="username"/>
 							<?php
+							}
 						}
 						?>
 						<input type="hidden" name="massaction" value="massdelete"/>
+						<?php if($errors < count($usernames)) { ?>
 						<input type="submit" value="Delete Users"  style="width: 120px"   />
+						<?php } ?>
 						<input type="button" value="Cancel" onclick="history.back();" style="width: 120px" />
 					</td>
 				</tr>
@@ -430,7 +444,16 @@ if ($this->IsAdmin($this->GetUser()))
 				$commentslink = ($numcomments > 0)? '<a title="'.sprintf(ADMINUSERS_TABLE_CELL_COMMENTS_TITLE,$user['name'],$numcomments).'" href="'.$this->Href('','','user='.$user['name'].'&amp;action=comments').'">'.$numcomments.'</a>' : '0';
 
 				// build handler links
-				$deleteuser = '<a title="'.sprintf(ADMINUSERS_ACTION_DELETE_LINK_TITLE, $user['name']).'" href="'.$this->Href('','','user='.$user['name'].'&amp;action=delete').'">'.ADMINUSERS_ACTION_DELETE_LINK.'</a>';
+				// Disable delete link if user is admin
+				$deleteuser = '';
+				if($this->IsAdmin($user['name']))
+				{
+					$deleteuser = "<span class='disabled'>".ADMINUSERS_ACTION_DELETE_LINK."</span>";
+				}
+				else
+				{
+					$deleteuser = '<a title="'.sprintf(ADMINUSERS_ACTION_DELETE_LINK_TITLE, $user['name']).'" href="'.$this->Href('','','user='.$user['name'].'&amp;action=delete').'">'.ADMINUSERS_ACTION_DELETE_LINK.'</a>';
+				}
 				$feedbackuser = '<a title="'.sprintf(ADMINUSERS_ACTION_FEEDBACK_LINK_TITLE, $user['name']).'" href="'.$this->Href('','','user='.$user['name'].'&amp;action=feedback').'">'.ADMINUSERS_ACTION_FEEDBACK_LINK.'</a>';
 	
 				// build table body
