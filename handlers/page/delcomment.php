@@ -14,7 +14,7 @@ if ($this->UserIsOwner() || $comment["user"]==$current_user)
 }
 else
 {
-	print("<div class=\"page\"><em>Sorry, you're not allowed to delete this comment!</em></div>\n");
+	print("<div class=\"page\"><em class='error'>Sorry, you're not allowed to delete this comment!</em></div>\n");
 }
 
 ?>

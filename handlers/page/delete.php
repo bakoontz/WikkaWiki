@@ -40,7 +40,7 @@ if ($this->IsAdmin())
 }
 else
 {
-    print("<em>You are not allowed to delete pages.</em>");
+    print("<em class='error'>You are not allowed to delete pages.</em>");
 }
 
 ?>

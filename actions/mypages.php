@@ -34,17 +34,17 @@ if ($user = $this->GetUser())
 		
 		if ($my_pages_count == 0)
 		{
-			print("<em>You don't own any pages.</em>");
+			print("<em class='error'>You don't own any pages.</em>");
 		}
 	}
 	else
 	{
-		print("<em>No pages found.</em>");
+		print("<em class='error'>No pages found.</em>");
 	}
 }
 else
 {
-	print("<em>You're not logged in, thus the list of your pages couldn't be retrieved.</em>");
+	print("<em class='error'>You're not logged in, thus the list of your pages couldn't be retrieved.</em>");
 }
 
 ?>

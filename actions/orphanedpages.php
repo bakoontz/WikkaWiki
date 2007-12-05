@@ -9,7 +9,7 @@ if ($pages = $this->LoadOrphanedPages())
 }
 else
 {
-	print("<em>No orphaned pages. Good!</em>");
+	print("<em class='error'>No orphaned pages. Good!</em>");
 }
 
 ?>

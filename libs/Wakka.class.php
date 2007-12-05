@@ -209,7 +209,7 @@ class Wakka
 		}
 		if ('' != trim($notfoundText))
 		{
-			return $this->htmlspecialchars_ent(trim($notfoundText));	# [SEC] make error (including (part of) request) safe to display
+			return '<em class="error">'.$this->htmlspecialchars_ent(trim($notfoundText)).'</em>';	# [SEC] make error (including (part of) request) safe to display
 		}
 		else
 		{
@@ -1396,7 +1396,7 @@ class Wakka
 		}
 		if (!$forceLinkTracking) $this->StopLinkTracking();
 
-		$result = $this->IncludeBuffered($action_name.'.php', '<em class="error">Unknown action "'.$action_name.'"</em>', $vars, $this->config['action_path']);
+		$result = $this->IncludeBuffered($action_name.'.php', 'Unknown action "'.$action_name.'"', $vars, $this->config['action_path']);
 		$this->StartLinkTracking();
 		return $result;
 	}
@@ -1424,7 +1424,7 @@ class Wakka
 		}
 		if (!$handler = $this->page['handler']) $handler = 'page';	# there are no other handlers (yet)
 		$methodLocation = $handler.DIRECTORY_SEPARATOR.$method.'.php';	#89
-		return $this->IncludeBuffered($methodLocation, '<em class="error">Unknown method "'.$methodLocation.'"</em>', '', $this->config['handler_path']);
+		return $this->IncludeBuffered($methodLocation, 'Unknown method "'.$methodLocation.'"', '', $this->config['handler_path']);
 	}
 	function Format($text, $formatter='wakka')
 	{
@@ -1438,7 +1438,7 @@ class Wakka
 			// valid method name; now make sure it's lower case
 			$formatter	= strtolower($formatter);
 		}
-		return $this->IncludeBuffered($formatter.'.php', '<em class="error">Formatter "'.$formatter.'" not found</em>', compact("text"), $this->config['wikka_formatter_path']);
+		return $this->IncludeBuffered($formatter.'.php', 'Formatter "'.$formatter.'" not found', compact("text"), $this->config['wikka_formatter_path']);
 	}
 
 	// USERS

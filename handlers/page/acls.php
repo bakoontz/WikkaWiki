@@ -136,7 +136,7 @@ if ($this->UserIsOwner())
 }
 else
 {
-	echo '<em>'.NOT_PAGE_OWNER.'</em>'."\n";
+	echo '<em class="error">'.NOT_PAGE_OWNER.'</em>'."\n";
 }
 echo '</div>'."\n" //TODO: move to templating class
 ?>

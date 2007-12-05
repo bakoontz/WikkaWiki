@@ -184,7 +184,7 @@ if ($this->HasAccess("read"))
 
 }
 else{
-	echo '<em>'.ERROR_NO_PAGE_ACCESS.'</em>';
+	echo '<em class="error">'.ERROR_NO_PAGE_ACCESS.'</em>';
 }
 ?>
 </div>

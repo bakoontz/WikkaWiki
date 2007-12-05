@@ -84,7 +84,7 @@ if ($pages = $this->LoadRecentlyChanged())
 	}
 	if ($readable == 0)
 	{
-		echo '<em>'.NO_READABLE_RECENTLY_CHANGED_PAGES.'</em>';
+		echo '<em class="error">'.NO_READABLE_RECENTLY_CHANGED_PAGES.'</em>';
 	}
 	echo '</span>'."\n";
 
@@ -99,7 +99,7 @@ if ($pages = $this->LoadRecentlyChanged())
 }
 else
 {
-	echo '<em>'.NO_RECENTLY_CHANGED_PAGES.'</em>';
+	echo '<em class="error">'.NO_RECENTLY_CHANGED_PAGES.'</em>';
 }
 
 ?>

@@ -51,7 +51,7 @@ else
 	}
 	else
 	{
-		echo '<em>Blacklist is empty.</em><br /><br />'."\n";
+		echo '<em class="error">Blacklist is empty.</em><br /><br />'."\n";
 	}
 }
 

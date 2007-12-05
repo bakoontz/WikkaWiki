@@ -94,7 +94,7 @@ if (preg_match("/^(http|https):\/\/([^\\s\"<>]+)$/i", $rss_path))
 	$cached_output .= "</ul>\n";
 	echo $this->ReturnSafeHTML($cached_output);
 } else {
-	echo '<span class="error"><em>Error: Invalid RSS action syntax. <br /> Proper usage: {{rss http://domain.com/feed.xml}} or {{rss url="http://domain.com/feed.xml"}}</em></span>'; # i18n
+	echo '<em class="error">Error: Invalid RSS action syntax. <br /> Proper usage: {{rss http://domain.com/feed.xml}} or {{rss url="http://domain.com/feed.xml"}}</em>'; # i18n
 }
 
 ?>

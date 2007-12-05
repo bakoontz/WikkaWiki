@@ -91,7 +91,7 @@ if ($this->HasAccess("read")) {
 		print($output);
 	}
 } else {
-	print('<em>'.ERROR_ACL_READ.'</em>');
+	print('<em class="error">'.ERROR_ACL_READ.'</em>');
 }
 ?>
 </div>

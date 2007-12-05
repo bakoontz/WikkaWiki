@@ -38,12 +38,12 @@ if ($user = $this->GetUser())
 			
 			if ($my_edits_count == 0)
 			{
-				print("<em>You have not edited any pages yet.</em>");
+				print("<em class='error'>You have not edited any pages yet.</em>");
 			}
 		}
 		else
 		{
-			print("<em>No pages found.</em>");
+			print("<em class='error'>No pages found.</em>");
 		}
 	}
 	else
@@ -78,18 +78,18 @@ if ($user = $this->GetUser())
 			
 			if ($my_edits_count == 0)
 			{
-				print("<em>You have not edited any pages yet.</em>");
+				print("<em class='error'>You have not edited any pages yet.</em>");
 			}
 		}
 		else
 		{
-			print("<em>No pages found.</em>");
+			print("<em class='error'>No pages found.</em>");
 		}
 	}
 }
 else
 {
-	print("<em>You're not logged in, thus the list of pages you've edited couldn't be retrieved.</em>");
+	print("<em class='error'>You're not logged in, thus the list of pages you've edited couldn't be retrieved.</em>");
 }
 
 ?>

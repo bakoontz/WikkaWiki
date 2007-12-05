@@ -41,7 +41,7 @@ else
 }
 
 echo '<strong>'.$title.'</strong><br />'."\n";
-echo '<em>Note to spammers: This page is not indexed by search engines, so don\'t waste your time.</em><br /><br />'."\n";
+echo '<em class="error">Note to spammers: This page is not indexed by search engines, so don\'t waste your time.</em><br /><br />'."\n";
 
 if ($this->GetUser())
 {
@@ -78,10 +78,10 @@ if ($this->GetUser())
 	}
 	else
 	{
-		echo '<em>None</em><br />'."\n";
+		echo '<em class="error">None</em><br />'."\n";
 	}
 } else {
-	echo '<em>You need to login to see referring sites</em><br />'."\n";
+	echo '<em class="error">You need to login to see referring sites</em><br />'."\n";
 }
 
 if ($global !== '')

@@ -43,7 +43,7 @@ if ($mindmap_url) {
 	print($output);
 
 } else {
-	echo "<span class='error'><em>Error: Invalid MindMap action syntax. <br /> Proper usage: {{mindmap http://domain.com/MapName/mindmap.mm}} or {{mindmap url=\"http://domain.com/MapName/mindmap.mm\"}}</em></span>";
+	echo "<em class='error'>Error: Invalid MindMap action syntax. <br /> Proper usage: {{mindmap http://domain.com/MapName/mindmap.mm}} or {{mindmap url=\"http://domain.com/MapName/mindmap.mm\"}}</em>";
 }
 
 ?>

@@ -10,6 +10,6 @@ if (!in_array($page, $this->config["includes"]) && $page != $this->tag) {
         	$page = $this->LoadPage($page);
 		print $this->Format($page["body"]);
 	}
-} else print "<span class='error'>Circular reference detected</span>";
+} else print "<em class='error'>Circular reference detected</em>";
 
 ?>

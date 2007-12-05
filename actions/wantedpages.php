@@ -12,7 +12,7 @@ if ($linking_to = $_REQUEST["linking_to"])
 	}
 	else
 	{
-		print("<em>No page is linking to ".$this->Link($linking_to).".</em>");
+		print("<em class='error'>No page is linking to ".$this->Link($linking_to).".</em>");
 	}
 }
 else
@@ -26,7 +26,7 @@ else
 	}
 	else
 	{
-		print("<em>No wanted pages. Good!</em>");
+		print("<em class='error'>No wanted pages. Good!</em>");
 	}
 }
 

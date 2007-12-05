@@ -351,7 +351,7 @@ if ($this->IsAdmin($this->GetUser()))
 		$msg = '';
 		if($msg = $this->GetRedirectMessage())
 		{
-			echo '<p><span class="error">'.sprintf($msg).'</span></p>';
+			echo '<p><em class="error">'.sprintf($msg).'</em></p>';
 		}
 	
 		// build pager form	
@@ -485,7 +485,7 @@ if ($this->IsAdmin($this->GetUser()))
 		else
 		{
 			// no records matching the search string: print error message
-			echo '<p><span class="error">'.sprintf(ADMINUSERS_ERROR_NO_MATCHES, $q).'</span></p>';
+			echo '<p><em class="error">'.sprintf(ADMINUSERS_ERROR_NO_MATCHES, $q).'</em></p>';
 		}
 	}
 }

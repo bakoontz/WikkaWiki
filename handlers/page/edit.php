@@ -91,7 +91,7 @@ if (isset($_POST['submit']) && ($_POST['submit'] == 'Preview') && ($user = $this
 <div class="page"<?php echo $ondblclick;?>>
 <?php
 if (!(preg_match(VALID_PAGENAME_PATTERN, $this->tag))) { //TODO use central regex library
-	echo '<em>'.ERROR_INVALID_PAGENAME.'</em>';
+	echo '<em class="error">'.ERROR_INVALID_PAGENAME.'</em>';
 }
 elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 {
@@ -278,7 +278,7 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 }
 else
 {
-	$message = '<em>'.ERROR_NO_WRITE_ACCESS.'</em><br />'."\n".
+	$message = '<em class="error">'.ERROR_NO_WRITE_ACCESS.'</em><br />'."\n".
 			"<br />\n".
 			'<a href="'.$this->Href('showcode').'" title="'.SHOWCODE_LINK_TITLE.'">'.SHOWCODE_LINK.'</a>'.
 			"<br />\n";

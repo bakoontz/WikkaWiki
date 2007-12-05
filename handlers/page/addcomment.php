@@ -21,7 +21,7 @@ if ($this->HasAccess("comment") || $this->IsAdmin())
 }
 else
 {
-	print("<div class=\"page\"><em>Sorry, you're not allowed to post comments to this page.</em></div>\n");
+	print("<div class=\"page\"><em class='error'>Sorry, you're not allowed to post comments to this page.</em></div>\n");
 }
 
 ?>

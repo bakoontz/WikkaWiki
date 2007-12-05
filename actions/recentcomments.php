@@ -60,11 +60,11 @@ if ($comments = $this->LoadRecentComments())
 	}
 	if ($readable == 0)
 	{
-		echo '<em>'.NO_READABLE_RECENT_COMMENTS.'</em>';
+		echo '<em class="error">'.NO_READABLE_RECENT_COMMENTS.'</em>';
 	}
 }
 else
 {
-	echo '<em>'.NO_RECENT_COMMENTS.'</em>';
+	echo '<em class="error">'.NO_RECENT_COMMENTS.'</em>';
 }
 ?>

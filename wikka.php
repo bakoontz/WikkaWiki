@@ -277,9 +277,13 @@ if ($wakkaConfig['wakka_version'] !== WAKKA_VERSION)
 	$installAction = 'default';
 	#if (isset($_REQUEST['installAction'])) $installAction = trim($_REQUEST['installAction']);
 	if (isset($_GET['installAction'])) $installAction = trim($_GET['installAction']);	#312
-	if (file_exists('setup'.DIRECTORY_SEPARATOR.'header.php')) include('setup'.DIRECTORY_SEPARATOR.'header.php'); else print '<em>'.ERROR_SETUP_HEADER_MISSING.'</em>'; #89
-	if (file_exists('setup'.DIRECTORY_SEPARATOR.$installAction.'.php')) include('setup'.DIRECTORY_SEPARATOR.$installAction.'.php'); else print '<em>'.ERROR_SETUP_FILE_MISSING.'</em>'; #89
-	if (file_exists('setup'.DIRECTORY_SEPARATOR.'footer.php')) include('setup'.DIRECTORY_SEPARATOR.'footer.php'); else print '<em>'.ERROR_SETUP_FOOTER_MISSING.'</em>'; #89
+	if (file_exists('setup'.DIRECTORY_SEPARATOR.'header.php'))
+	include('setup'.DIRECTORY_SEPARATOR.'header.php'); else print '<em class="error">'.ERROR_SETUP_HEADER_MISSING.'</em>'; #89
+	if
+	(file_exists('setup'.DIRECTORY_SEPARATOR.$installAction.'.php'))
+	include('setup'.DIRECTORY_SEPARATOR.$installAction.'.php'); else print '<em class="error">'.ERROR_SETUP_FILE_MISSING.'</em>'; #89
+	if (file_exists('setup'.DIRECTORY_SEPARATOR.'footer.php'))
+	include('setup'.DIRECTORY_SEPARATOR.'footer.php'); else print '<em class="error">'.ERROR_SETUP_FOOTER_MISSING.'</em>'; #89
 	exit;
 }
 

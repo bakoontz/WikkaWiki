@@ -772,7 +772,7 @@ if ($this->IsAdmin($this->GetUser()))
 		else
 		{
 			// no records matching the search string: print error message
-			echo '<p><span class="error">'.sprintf(ADMINPAGES_ERROR_NO_MATCHES, $q).'</span></p>';
+			echo '<p><em class="error">'.sprintf(ADMINPAGES_ERROR_NO_MATCHES, $q).'</em></p>';
 		}
 	}
 }
