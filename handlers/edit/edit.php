@@ -255,10 +255,10 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 
 		if ($this->GetConfigValue('gui_editor') == 1)	// @@@ cast to boolean and compare to TRUE
 		{
-			$output .= '<script type="text/javascript" src="3rdparty/plugins/wikkaedit/wikkaedit_data.js"></script>'."\n";
-			$output .= '<script type="text/javascript" src="3rdparty/plugins/wikkaedit/wikkaedit_search.js"></script>'."\n";
-			$output .= '<script type="text/javascript" src="3rdparty/plugins/wikkaedit/wikkaedit_actions.js"></script>'."\n";
-			$output .= '<script type="text/javascript" src="3rdparty/plugins/wikkaedit/wikkaedit.js"></script>'."\n";			
+			$output .= '<script type="text/javascript" src="'.$this->StaticHref('3rdparty/plugins/wikkaedit/wikkaedit_data.js').'"></script>'."\n";
+			$output .= '<script type="text/javascript" src="'.$this->StaticHref('3rdparty/plugins/wikkaedit/wikkaedit_search.js').'"></script>'."\n";
+			$output .= '<script type="text/javascript" src="'.$this->StaticHref('3rdparty/plugins/wikkaedit/wikkaedit_actions.js').'"></script>'."\n";
+			$output .= '<script type="text/javascript" src="'.$this->StaticHref('3rdparty/plugins/wikkaedit/wikkaedit.js').'"></script>'."\n";			
 		}
 	}
 
