@@ -4833,6 +4833,11 @@ if ($debug)  echo 'Run - handler: '.$handler."<br/>\n";
 		$this->base_url = $this->base_domain_url.$this->base_url_path;
 		$this->wikka_url = ((bool) $this->GetConfigValue('rewrite_mode')) ? $this->base_url : $this->base_url.WIKKA_URL_EXTENSION;
 		$this->wikka_cookie_path = substr($this->base_url_path,0,-1);
+		// In case $this->base_url_path == '/', we would get $this->wikka_cookie_path = '', so restore it...
+		if ('' == $this->wikka_cookie_path)
+		{
+			$this->wikka_cookie_path = '/';
+		}
 
 		// 2. page and handler
 
