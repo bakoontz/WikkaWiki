@@ -27,7 +27,7 @@ if ($this->GetMethod() != 'edit') {
 </head>
 <body <?php echo $message ? "onLoad=\"alert('".$message."');\" " : "" ?> >
 <div class="header">
-	<h2><?php echo $this->config["wakka_name"] ?> : <a href="<?php echo $this->href('backlinks', '', ''); ?>" title="Display a list of pages linking to <? echo $this->tag ?>"><?php echo $this->GetPageTag(); ?></a></h2>
+	<h2><a id="homepage_link" href="<?php echo $homepage_url; ?>"><?php echo $this->config['wakka_name'];?></a> : <a href="<?php echo $this->href('backlinks', '', ''); ?>" title="Display a list of pages linking to <? echo $this->tag ?>"><?php echo $this->GetPageTag(); ?></a></h2>
 	<?php echo $this->Link($this->config["root_page"]); ?> ::
 	<?php 
 		if ($this->GetUser()) {
