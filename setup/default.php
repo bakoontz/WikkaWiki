@@ -29,16 +29,16 @@
 		'./.htaccess', './wikka.config.php', 'setup/test/.htaccess');
 	$setup_files_not_writable = '';
 	// Need to adjust setup/test/.htaccess if installed in a subdir
-	include_once('./inc/functions.inc.php');
+	include_once('setup/inc/functions.inc.php');
 	$htaccess = 'setup/test/.htaccess';
 	if(setupfile_is_writable($htaccess))
 	{
 		$rewrite_base = preg_replace('|^\\S+://[^/]*(?=/)|', '', $url);	// remove scheme and domain
 		$htaccess_content = file($htaccess);
 		$new_htaccess_content = '';
-		foreach($htaccess as $line)
+		foreach($htaccess_content as $line)
 		{
-			if(preg_match("/^(\\s*RewriteBase/i", $line))
+			if(preg_match("/^\\s*RewriteBase/i", $line))
 			{
 				$line = "RewriteBase $rewrite_base/setup/test"; 
 			}
