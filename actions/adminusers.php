@@ -33,6 +33,7 @@
  * 			- port all the dependencies (CSS, icons, handlers);
  * 			- mass-operations;
  *			- deleting/banning users;
+ * 			- single/mass user feedback via new feedback action; #608
  *			- integrate with other admin modules;
  * 			- tie to a new default page (AdminUsers);
  * 			- move i18n strings to lang in 1.1.7;
@@ -142,9 +143,9 @@ if ($this->IsAdmin($this->GetUser()))
 	define('ADMINUSERS_TABLE_HEADING_EDITS_TITLE','Edits');
 	define('ADMINUSERS_TABLE_HEADING_COMMENTS_TITLE','Comments');
 	define('ADMINUSERS_ACTION_DELETE_LINK_TITLE','Remove user %s');
-	define('ADMINUSERS_ACTION_FEEDBACK_LINK_TITLE','Send feedback to user %s');
+	//define('ADMINUSERS_ACTION_FEEDBACK_LINK_TITLE','Send feedback to user %s'); #to be added in 1.1.7, see #608
 	define('ADMINUSERS_ACTION_DELETE_LINK','delete');
-	define('ADMINUSERS_ACTION_FEEDBACK_LINK','feedback');
+	//define('ADMINUSERS_ACTION_FEEDBACK_LINK','feedback'); #to be added in 1.1.7, see #608
 	define('ADMINUSERS_TABLE_CELL_OWNED_TITLE','Display pages owned by %s (%d)');
 	define('ADMINUSERS_TABLE_CELL_EDITS_TITLE','Display page edits by %s (%d)');
 	define('ADMINUSERS_TABLE_CELL_COMMENTS_TITLE','Display comments by %s (%d)');
@@ -158,7 +159,7 @@ if ($this->IsAdmin($this->GetUser()))
 	define('ADMINUSERS_FORM_MASSACTION_SELECT_TITLE','Choose an action to apply to the selected records');
 	define('ADMINUSERS_FORM_MASSACTION_OPT_DELETE','Delete selected');
 	define('ADMINUSERS_FORM_MASSACTION_DELETE_ERROR', 'Cannot delete admins');
-	define('ADMINUSERS_FORM_MASSACTION_OPT_FEEDBACK','Send feedback to all');
+	//define('ADMINUSERS_FORM_MASSACTION_OPT_FEEDBACK','Send feedback to all'); #to be added in 1.1.7, see #608
 	define('ADMINUSERS_FORM_MASSACTION_SUBMIT','Submit');
 	define('ADMINUSERS_ERROR_NO_MATCHES','Sorry, there are no users matching "%s"');
 
@@ -190,11 +191,7 @@ if ($this->IsAdmin($this->GetUser()))
 	}
 	
 	//perform actions if required
-	if ($_GET['action'] == 'feedback' || $_REQUEST['mail']) 
-	{
-		echo $this->Action('userfeedback');
-	} 
-	elseif ($_GET['action'] == 'owned') 
+	if ($_GET['action'] == 'owned') 
 	{
 		echo $this->Action('userpages');
 	} 
@@ -206,6 +203,12 @@ if ($this->IsAdmin($this->GetUser()))
 	{
 		echo $this->Action('usercomments');
 	} 
+	/*
+	elseif ($_GET['action'] == 'feedback' || $_REQUEST['mail']) 
+	{
+		echo $this->Action('userfeedback'); #to be added in 1.1.7, see #608
+	}
+	*/
 	elseif($_GET['action'] == 'delete')
 	{
 		if(isset($_GET['user']))
@@ -454,7 +457,7 @@ if ($this->IsAdmin($this->GetUser()))
 				{
 					$deleteuser = '<a title="'.sprintf(ADMINUSERS_ACTION_DELETE_LINK_TITLE, $user['name']).'" href="'.$this->Href('','','user='.$user['name'].'&amp;action=delete').'">'.ADMINUSERS_ACTION_DELETE_LINK.'</a>';
 				}
-				$feedbackuser = '<a title="'.sprintf(ADMINUSERS_ACTION_FEEDBACK_LINK_TITLE, $user['name']).'" href="'.$this->Href('','','user='.$user['name'].'&amp;action=feedback').'">'.ADMINUSERS_ACTION_FEEDBACK_LINK.'</a>';
+				//$feedbackuser = '<a title="'.sprintf(ADMINUSERS_ACTION_FEEDBACK_LINK_TITLE, $user['name']).'" href="'.$this->Href('','','user='.$user['name'].'&amp;action=feedback').'">'.ADMINUSERS_ACTION_FEEDBACK_LINK.'</a>'; #to be added in 1.1.7, see #608
 	
 				// build table body
 				$data_table .= '<tbody>'."\n";
@@ -474,7 +477,7 @@ if ($this->IsAdmin($this->GetUser()))
 					'		<td class="number'.(($c_color == 1)? ' c1' : '').'">'.$ownedlink.'</td>'."\n".  #set column color
 					'		<td class="number'.(($c_color == 1)? ' c2' : '').'">'.$changeslink.'</td>'."\n". #set column color
 					'		<td class="number'.(($c_color == 1)? ' c3' : '').'">'.$commentslink.'</td>'."\n".   #set column color
-					'		<td class="center">'.$deleteuser.' :: '.$feedbackuser.'</td>'."\n". 
+					'		<td class="center">'.$deleteuser.'</td>'."\n". 
 	 				'	</tr>'."\n".
 	 				'</tbody>'."\n";
 	
@@ -496,7 +499,7 @@ if ($this->IsAdmin($this->GetUser()))
 				'	<select title="'.ADMINUSERS_FORM_MASSACTION_SELECT_TITLE.'" id="action" name="action">'."\n".
 				'		<option value="" selected="selected">---</option>'."\n".
 				'		<option value="massdelete">'.ADMINUSERS_FORM_MASSACTION_OPT_DELETE.'</option>'."\n".
-				'		<option value="massfeedback">'.ADMINUSERS_FORM_MASSACTION_OPT_FEEDBACK.'</option>'."\n".
+				//'		<option value="massfeedback">'.ADMINUSERS_FORM_MASSACTION_OPT_FEEDBACK.'</option>'."\n". #to be added in 1.1.7, see #608
 				'	</select> <input type="submit" value="'.ADMINUSERS_FORM_MASSACTION_SUBMIT.'" />'."\n".
 				'</fieldset>';
 			$form_mass .= $this->FormClose();
