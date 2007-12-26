@@ -401,6 +401,14 @@ input[type=text] {
 	border: 1px solid #CCC;	
 }
 
+input[readonly=readonly] {
+	color: #666;
+}
+
+input[readonly=readonly]:hover, input[readonly=readonly]:focus {
+	background-color: transparent;
+}
+
 /* editor textarea decorations */
 /* (decorations can't be in "textarea#body" declaration, else the "width:100%" won't work) */
 #textarea_container {
