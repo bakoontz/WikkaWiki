@@ -61,7 +61,7 @@ class URAuth
 				include_once("UR/$module/$module.php");
 				if(class_exists($module))
 				{
-					eval(\$this->URAuthRegister(new $module(\$this->wakka)));
+					eval("\$this->URAuthRegister(new ".$module."(\$this->wakka));");
 				}
 			}
 		}
