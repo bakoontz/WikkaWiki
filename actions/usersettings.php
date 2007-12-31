@@ -82,6 +82,7 @@ if (!defined('ERROR_EMAIL_ADDRESS_REQUIRED')) define('ERROR_EMAIL_ADDRESS_REQUIR
 if (!defined('ERROR_INVALID_EMAIL_ADDRESS')) define('ERROR_INVALID_EMAIL_ADDRESS', "That doesn't quite look like an email address.");
 if (!defined('ERROR_INVALID_REVISION_DISPLAY_LIMIT')) define('ERROR_INVALID_REVISION_DISPLAY_LIMIT', "The number of page revisions should not exceed %d.");
 if (!defined('ERROR_INVALID_RECENTCHANGES_DISPLAY_LIMIT')) define('ERROR_INVALID_RECENTCHANGES_DISPLAY_LIMIT', "The number of recently changed pages should not exceed %d.");
+if(!defined('ERROR_VALIDATION_FAILED')) define('ERROR_VALIDATION_FAILED', "Registration validation failed, please try again!");
 if (!defined('REGISTRATION_SUCCEEDED')) define('REGISTRATION_SUCCEEDED', "You have successfully registered!");
 if (!defined('REGISTERED_USER_LOGIN_LABEL')) define('REGISTERED_USER_LOGIN_LABEL', "If you're already a registered user, log in here!");
 if (!defined('REGISTER_HEADING')) define('REGISTER_HEADING', "===Login/Register===");
@@ -117,6 +118,10 @@ $password_new_highlight = '';
 $password_confirm_highlight = '';
 $revisioncount_highlight = '';
 $changescount_highlight = '';
+
+// Create URAuth object
+include_once('libs/userregistration.class.php');
+$urobj = new URAuth($this);
 
 //create URL
 $url = $this->config['base_url'].$this->tag;
@@ -254,7 +259,7 @@ else if ($user = $this->GetUser())
 		<tr>
 			<td>&nbsp;</td>
 			<td><input type="submit" value="<?php echo UPDATE_SETTINGS_INPUT ?>" /><!-- <input type="button" value="<?php echo LOGOUT_BUTTON_LABEL; ?>" onclick="document.location='<?php echo $this->href('', '', 'action=logout'); ?>'" /></td>-->
-				<input id="logout" name="logout" type="submit" value="<?php echo LOGOUT_BUTTON_LABEL; ?>" /><!--#353,#312-->
+				<input id="logout" name="logout" type="submit" value="<?php echo LOGOUT_BUTTON_LABEL; ?>" />
 			</td>
 		</tr>
 	</table>
@@ -402,6 +407,9 @@ else
 			// validate input
 			switch(TRUE)
 			{
+				case (FALSE===$urobj->URAuthVerify()):
+					$error = ERROR_VALIDATION_FAILED;
+					break;
 				case (strlen($name) == 0):
 					$error = ERROR_EMPTY_USERNAME;
 					$username_highlight = INPUT_ERROR_STYLE;
@@ -539,6 +547,9 @@ else
 	<tr>
 		<td>&nbsp;</td>
 		<td width="500"><?php echo $this->Format(NEW_USER_REGISTER_LABEL); ?></td>
+	</tr>
+	<tr>
+		<td colspan="2" align="left"><?php $urobj->URAuthDisplay(); ?></td>
 	</tr>
 	<tr>
 		<td align="right"><?php echo CONFIRM_PASSWORD_LABEL ?></td>
