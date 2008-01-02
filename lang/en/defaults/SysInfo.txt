@@ -6,7 +6,7 @@
 ~-""GeSHi"" version: ##{{geshiversion}}##
 ~-Server:
 ~~-Host: ##{{system show="host"}}##
-~~-Operative System: ##{{system show="os"}}##
+~~-Operating System: ##{{system show="os"}}##
 ~~-Machine: ##{{system show="machine"}}##
 
 ----
