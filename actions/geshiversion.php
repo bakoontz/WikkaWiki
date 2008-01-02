@@ -2,10 +2,18 @@
 /**
  * Display current GeSHi version.
  *
+ * By default this only displays for Wikka admins. This option can be
+ * changed by setting 'public_sysinfo' to '1' in the Wikka
+ * configuration file.
+ * 
+ * Syntax: {{geshiversion}}
+ *
  * @package		Actions
  * @name		GeSHiVersion
  *
  * @author		{@link http://wikkawiki.org/DarTar Dario Taraborelli}
+ * @author		{@link http://wikkawiki.org/JavaWoman JavaWoman}
+ * @author		{@link http://wikkawiki.org/BrianKoontz Brian Koontz}
  * @since		Wikka 1.1.6.2
  *
  */
@@ -14,20 +22,28 @@
 if (!defined('NOT_AVAILABLE')) define('NOT_AVAILABLE', 'n/a');
 if (!defined('NOT_INSTALLED')) define('NOT_INSTALLED', 'not installed');
 
-if (file_exists($this->config['geshi_path'].'/geshi.php'))
+// defaults
+$out = NOT_AVAILABLE;
+
+//check privs
+if ($this->config['public_sysinfo'] == '1' || $this->IsAdmin())
 {
-	include_once($this->config['geshi_path'].'/geshi.php');
-	if (defined('GESHI_VERSION'))
+	if (file_exists($this->config['geshi_path'].'/geshi.php'))
 	{
-		echo GESHI_VERSION;
+		include_once($this->config['geshi_path'].'/geshi.php');
+		if (defined('GESHI_VERSION'))
+		{
+			$out = GESHI_VERSION;
+		}
+		else
+		{
+			$out = NOT_AVAILABLE;
+		}
 	}
 	else
 	{
-		echo NOT_AVAILABLE;
+			$out = NOT_INSTALLED;
 	}
 }
-else
-{
-		echo NOT_INSTALLED;
-}
+echo $out;
 ?>
