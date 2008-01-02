@@ -95,22 +95,22 @@ if ($this->UserIsOwner())
 <tr>
 	<td>
 	<label for="read_acl"><strong><?php echo ACLS_READ_LABEL ?></strong></label><br />
-	<textarea id="read_acl" name="read_acl" rows="4" cols="20"><?php echo preg_replace("/[\s,]+/", "\n", $this->ACLs['read_acl']) ?></textarea>
+	<textarea id="read_acl" name="read_acl" rows="4" cols="20"><?php echo preg_replace("/[|,]+/", "\n", $this->ACLs['read_acl']) ?></textarea>
 	</td>
 
 	<td>
 	<label for="write_acl"><strong><?php echo ACLS_WRITE_LABEL ?></strong></label><br />
-	<textarea id="write_acl" name="write_acl" rows="4" cols="20"><?php echo preg_replace("/[\s,]+/", "\n", $this->ACLs['write_acl']) ?></textarea>
+	<textarea id="write_acl" name="write_acl" rows="4" cols="20"><?php echo preg_replace("/[|,]+/", "\n", $this->ACLs['write_acl']) ?></textarea>
 	</td>
 
 	<td>
 	<label for="comment_read_acl"><strong><?php echo ACLS_COMMENT_READ_LABEL ?></strong></label><br />
-	<textarea id="comment_read_acl" name="comment_read_acl" rows="4" cols="20"><?php echo preg_replace("/[\s,]+/", "\n", $this->ACLs['comment_read_acl']) ?></textarea>
+	<textarea id="comment_read_acl" name="comment_read_acl" rows="4" cols="20"><?php echo preg_replace("/[|,]+/", "\n", $this->ACLs['comment_read_acl']) ?></textarea>
 	</td>
 
 	<td>
 	<label for="comment_post_acl"><strong><?php echo ACLS_COMMENT_POST_LABEL ?></strong></label><br />
-	<textarea id="comment_post_acl" name="comment_post_acl" rows="4" cols="20"><?php echo preg_replace("/[\s,]+/", "\n", $this->ACLs['comment_post_acl']) ?></textarea>
+	<textarea id="comment_post_acl" name="comment_post_acl" rows="4" cols="20"><?php echo preg_replace("/[|,]+/", "\n", $this->ACLs['comment_post_acl']) ?></textarea>
 	</td>
 
 </tr>

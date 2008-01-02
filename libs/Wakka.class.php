@@ -4594,8 +4594,8 @@ if ($debug) echo 'UserIsOwner calling... ';
 	}
 
 	/**
-	 * Split ACL list on whitespace or commas, then trim any remaining
-	 * whitespace. Return a whitespace-delimited list. Used mainly
+	 * Split ACL list on pipes or commas, then trim any
+	 * whitespace. Return a pipe-delimited list. Used mainly
 	 * to remove carriage returns.
 	 *
 	 * @param	string	$list	mandatory: List of ACLs to trim
@@ -4606,12 +4606,12 @@ if ($debug) echo 'UserIsOwner calling... ';
 	 */
 	function TrimACLs($acl)
 	{
-		foreach (preg_split('/[\s,]+/', $acl) as $line)	// @@@ #226
+		foreach (preg_split('/[|,]+/', $acl) as $line)
 		{
 			$line = trim($line);
-			$trimmed_list .= $line.' ';		// @@@ #226
+			$trimmed_list .= $line.'|';
 		}
-		return $trimmed_list;
+		return substr($trimmed_list, 0, -1);
 	}
 
 	/**
@@ -4698,7 +4698,7 @@ if ($debug) echo 'HasAccess calling... ';
 			}
 
 			// fine fine... now go through acl
-			foreach (preg_split('/[\s,]+/', $acl) as $line)	// @@@ see @todo in TrimACLs() and other ACL methods!!! - we should already have a "normalized" list here!
+			foreach (preg_split('/[|,]+/', $acl) as $line)	// @@@ see @todo in TrimACLs() and other ACL methods!!! - we should already have a "normalized" list here!
 			{
 				// check for inversion character "!"
 				if (preg_match('/^[!](.*)$/', $line, $matches))
