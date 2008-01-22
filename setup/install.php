@@ -28,6 +28,16 @@ $upgrade_note = sprintf(__('Upgrading from %1$s to %2$s'), $version, WAKKA_VERSI
 $_SESSION['sconfig']['logged_in_navigation_links'] = str_replace('_rootpage', $config['root_page'], $_SESSION['sconfig']['logged_in_navigation_links']);
 $_SESSION['sconfig']['navigation_links'] = str_replace('_rootpage', $config['root_page'], $_SESSION['sconfig']['navigation_links']);
 
+$lang_defaults_fallback_path = WIKKA_LANG_PATH.DIRECTORY_SEPARATOR.CONFIG_DEFAULT_LANGUAGE.DIRECTORY_SEPARATOR.'defaults'.DIRECTORY_SEPARATOR;
+test('Checking availability of default pages...', is_dir($lang_defaults_fallback_path), 'default pages not found at '.$lang_defaults_fallback_path, 1);
+$lang_defaults_path = WIKKA_LANG_PATH.DIRECTORY_SEPARATOR.$config['default_lang'].DIRECTORY_SEPARATOR.'defaults'.DIRECTORY_SEPARATOR;
+// @@@ use test() here, too? (without stop on error but reporting back we're using sytem default language)
+if (!is_dir($lang_defaults_path))
+{
+	// no directory for selected language: set equal to fallback so we can continue
+	$lang_defaults_path = $lang_defaults_fallback_path;
+}
+
 switch ($version)
 {
 // new installation
@@ -117,18 +127,6 @@ case "0":
 
 	test(__('Adding admin user').'...', 
 		@mysql_query("insert into ".$config["table_prefix"]."users set name = '".$config["admin_users"]."', password = md5('".mysql_real_escape_string($_SESSION['wikka']['install']['password'])."'), email = '".$config["admin_email"]."', signuptime = now()", $dblink), "Hmm!", 0);
-
-	// @@@	==> maybe do this check before even starting with database creation for new install?
-	//		actually applies to adding pages on upgrade as well...
-	$lang_defaults_fallback_path = WIKKA_LANG_PATH.DIRECTORY_SEPARATOR.CONFIG_DEFAULT_LANGUAGE.DIRECTORY_SEPARATOR.'defaults'.DIRECTORY_SEPARATOR;
-	test('Checking availability of default pages...', is_dir($lang_defaults_fallback_path), 'default pages not found at '.$lang_defaults_fallback_path, 1);
-	$lang_defaults_path = WIKKA_LANG_PATH.DIRECTORY_SEPARATOR.$config['default_lang'].DIRECTORY_SEPARATOR.'defaults'.DIRECTORY_SEPARATOR;
-	// @@@ use test() here, too? (without stop on error but reporting back we're using sytem default language)
-	if (!is_dir($lang_defaults_path))
-	{
-		// no directory for selected language: set equal to fallback so we can continue
-		$lang_defaults_path = $lang_defaults_fallback_path;
-	}
 
 	update_default_page(array(
 	'_rootpage', 
