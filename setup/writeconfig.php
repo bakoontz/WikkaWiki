@@ -97,6 +97,7 @@ test(sprintf(__('Writing configuration file %s'), '<tt>'.SITE_CONFIGFILE.'</tt>.
 
 if ($fp)
 {
+	$_SESSION['server_info'] = $_SESSION['sconfig'] = $_SESSION['wikka'] = null;
 	fwrite($fp, $configCode);
 	// write
 	fclose($fp);

@@ -314,7 +314,7 @@ case "1.1.6.3":
 	mysql_query("alter table ".$config["table_prefix"]."comments add deleted char(1) default NULL", $dblink), "Already done? OK!", 0);
 	//dropping obsolete "handler" field from pages table #452
 	test(__('Removing handler field from the pages table').'...', 
-	@mysql_query("ALTER TABLE ".$config["table_prefix"]."pages DROP handler", $dblink), __('Already done? Hmm!'), 1);
+	@mysql_query("ALTER TABLE ".$config["table_prefix"]."pages DROP handler", $dblink), __('Already done? Hmm!'), 0);
 	// Comment threading
 	test(__('Adding field to comment table to enable threading').'...', 
 	@mysql_query("alter table ".$config["table_prefix"]."comments add status varchar(10) default NULL", $dblink), __('Already done?  OK!'), 0);
@@ -327,7 +327,7 @@ case "1.1.6.3":
 	test(__('Creating new comment_post_acl field').'...',
 	@mysql_query("alter table ".$config['table_prefix']."acls add comment_post_acl text not null", $dblink), __('Already done?  OK!'), 0);
 	test(__('Copying existing comment_acls to new fields').'...',
-	@mysql_query("update ".$config['table_prefix']."acls as a inner join(select page_tag, comment_acl from ".$config['table_prefix']."acls) as b on a.page_tag = b.page_tag set a.comment_read_acl=b.comment_acl, a.comment_post_acl=b.comment_acl", $dblink), __('Failed').'. ?', 1);
+	@mysql_query("update ".$config['table_prefix']."acls as a inner join(select page_tag, comment_acl from ".$config['table_prefix']."acls) as b on a.page_tag = b.page_tag set a.comment_read_acl=b.comment_acl, a.comment_post_acl=b.comment_acl", $dblink), __('Failed').'. ?', 0);
 	test(__('Creating new page title field').'...',
 	@mysql_query("alter table ".$config['table_prefix']."pages add title varchar(75) default null", $dblink), __('Already done?  OK!'), 0);	// @@@ column position? @@@ also add index on 'owner' column
 	break;
