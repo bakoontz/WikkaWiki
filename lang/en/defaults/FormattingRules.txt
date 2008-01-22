@@ -184,8 +184,8 @@ Alternatively, you can specify a foreground and background color using the ##fg#
 ~##""{{color fg="#FF0000" bg="#000000" text="This is colored text on colored background"}}""##
 ~{{color fg="#FF0000" bg="#000000" text="This is colored text on colored background"}}
 
-~##""{{color fg="lightgreen" bg="black" text="This is colored text on colored background"}}""##
-~{{color fg="lightgreen" bg="black" text="This is colored text on colored background"}}
+~##""{{color fg="yellow" bg="black" text="This is colored text on colored background"}}""##
+~{{color fg="yellow" bg="black" text="This is colored text on colored background"}}
 
 
 ===11. Floats===
