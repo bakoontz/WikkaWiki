@@ -760,7 +760,7 @@ class Wakka
 		return($data);
 	}
 	function FullCategoryTextSearch($phrase) { return $this->LoadAll("select * from ".$this->config["table_prefix"]."pages where latest = 'Y' and match(body) against('".mysql_real_escape_string($phrase)."' IN BOOLEAN MODE)"); }
-	function SavePage($tag, $body, $note)
+	function SavePage($tag, $body, $note, $owner=null)
 	{
 		// get current user
 		$user = $this->GetUserName();
@@ -768,16 +768,20 @@ class Wakka
 		// TODO: check write privilege
 		if ($this->HasAccess("write", $tag))
 		{
-			// is page new?
-			if (!$oldPage = $this->LoadPage($tag))
+			// If $owner is specified, don't do an owner check 
+			if(empty($owner))
 			{
-				// current user is owner if user is logged in, otherwise, no owner.
-				if ($this->GetUser()) $owner = $user;
-			}
-			else
-			{
-				// aha! page isn't new. keep owner!
-				$owner = $oldPage["owner"];
+				// is page new?
+				if (!$oldPage = $this->LoadPage($tag))
+				{
+					// current user is owner if user is logged in, otherwise, no owner.
+					if ($this->GetUser()) $owner = $user;
+				}
+				else
+				{
+					// aha! page isn't new. keep owner!
+					$owner = $oldPage["owner"];
+				}
 			}
 
 			// set all other revisions to old

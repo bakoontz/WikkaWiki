@@ -81,15 +81,8 @@ function RevertPageToPreviousByTag($wakka, $tag, $comment='')
 				$comment = sprintf(REVERT_DEFAULT_COMMENT, $res[0]['user'], $res[0]['id'], $res[1]['id']);
 			}
 
-			$time = strftime("%F %H:%M:%S");
-			$body = mysql_real_escape_string($res[1]['body']);
-			$owner = $res[1]['owner'];
-			$user = $res[1]['user'];
-			$latest = 'Y';
-			$handler = $res[1]['handler'];
-			$wakka->Query("INSERT INTO ".$wakka->config['table_prefix']."pages (tag, time, body, owner, user, latest, note, handler) VALUES ('$tag', '$time', '$body', '$owner', '$user', '$latest', '$comment', '$handler')");
-			// Reset 'latest' flag on older version to 'N'
-			$wakka->Query("UPDATE ".$wakka->config['table_prefix']."pages SET latest='N' where id=".$res[0]['id']);
+			// Save reverted page
+			$wakka->SavePage($tag, $res[1]['body'], $comment, $res[1]['owner']);
 			$message = REVERT_MESSAGE_SUCCESS;
 		}
 		else
