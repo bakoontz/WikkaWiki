@@ -61,7 +61,6 @@ case "0":
 			"from_tag varchar(75) NOT NULL default '',".
 			"to_tag varchar(75) NOT NULL default '',".
 			"UNIQUE KEY from_tag (from_tag,to_tag),".
-			"KEY idx_from (from_tag),".
 			"KEY idx_to (to_tag)".
 			") TYPE=MyISAM", $dblink), "Already exists?", 0);
 	test("Creating referrer table...",
@@ -342,6 +341,8 @@ case "1.1.6.3":
 	mysql_query("alter table ".$config['table_prefix']."users add column status enum ('invited','signed-up','pending','active','suspended','banned','deleted')"), "Already done? OK!", 0); 
 	test("Adding sessions tracking table...",
 	mysql_query("create table ".$config['table_prefix']."sessions (sessionid char(32) NOT NULL, userid varchar(75) NOT NULL, PRIMARY KEY (sessionid, userid), session_start datetime NOT NULL)"),	"Already done? OK!", 0); 
+	test('Dropping unnecessary index `from_tag`...',
+	mysql_query('alter table '.$config['table_prefix'].'links drop index `idx_from`'), 'Already done?  OK!', 0);
 }
 ?>
 
