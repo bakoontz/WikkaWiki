@@ -67,7 +67,6 @@ case "0":
 			 "from_tag varchar(75) NOT NULL default '',".
 			 "to_tag varchar(75) NOT NULL default '',".
 			 "UNIQUE KEY from_tag (from_tag,to_tag),".
-			 "KEY idx_from (from_tag),".
 			 "KEY idx_to (to_tag)".
 			") TYPE=MyISAM", $dblink), __('Already exists?'), 0);
 	test(sprintf(__('Creating %s table'), __('referrer')).'...',
@@ -330,6 +329,8 @@ case "1.1.6.3":
 	@mysql_query("update ".$config['table_prefix']."acls as a inner join(select page_tag, comment_acl from ".$config['table_prefix']."acls) as b on a.page_tag = b.page_tag set a.comment_read_acl=b.comment_acl, a.comment_post_acl=b.comment_acl", $dblink), __('Failed').'. ?', 0);
 	test(__('Creating new page title field').'...',
 	@mysql_query("alter table ".$config['table_prefix']."pages add title varchar(75) default null", $dblink), __('Already done?  OK!'), 0);	// @@@ column position? @@@ also add index on 'owner' column
+	test(__('Dropping unnecessary index `from_tag`').'...',
+	@mysql_query('alter table '.$config['table_prefix'].'links drop index `idx_from`', $dblink), __('Already done?  OK!'), 0);
 	break;
 case "trunk": //latest development version from the SVN repository - do not remove
 	break;
