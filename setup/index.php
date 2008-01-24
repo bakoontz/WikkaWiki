@@ -61,6 +61,20 @@ if (isset($_GET['nonce']))
  */
 require_once WIKKA_SETUP_PATH.DIRECTORY_SEPARATOR.'inc'.DIRECTORY_SEPARATOR.'functions.inc.php';
 
+// get subpage request
+if (isset($_GET['installAction']))
+{
+	$installAction = trim($_GET['installAction']);
+}
+else
+{
+	$installAction = DEFAULT_SETUP_ACTION;
+}
+
+if ('grabinfo' == $installAction)
+{
+	ob_start();
+}
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
@@ -85,15 +99,6 @@ require_once WIKKA_SETUP_PATH.DIRECTORY_SEPARATOR.'inc'.DIRECTORY_SEPARATOR.'fun
 <!--START page body -->
 <div class="page">
 <?php
-// get subpage request
-if (isset($_GET['installAction']))
-{
-	$installAction = trim($_GET['installAction']);
-}
-else
-{
-	$installAction = DEFAULT_SETUP_ACTION;
-}
 // load subpage
 // use path constant
 if (file_exists(WIKKA_SETUP_PATH.DIRECTORY_SEPARATOR.$installAction.'.php'))
