@@ -108,7 +108,7 @@ WikkaEdit.prototype.initButtons = function() {
 	this.we_buttons.we_hr = {type:"button", title:"Line"};
 	this.we_buttons.we_link = {type:"button", title:"Hyperlink"};
 	this.we_buttons.we_image = {type:"button", title:"Image"};
-	this.we_buttons.we_table = {type:"button", title:"Table"};
+	//this.we_buttons.we_table = {type:"button", title:"Table"};
 
 	this.we_buttons.we_sep5 = {type:"separator"};
 
