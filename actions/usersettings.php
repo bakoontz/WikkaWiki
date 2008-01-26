@@ -70,6 +70,8 @@ if (!defined('ERROR_WRONG_PASSWORD')) define('ERROR_WRONG_PASSWORD', "Sorry, you
 if (!defined('ERROR_WRONG_HASH')) define('ERROR_WRONG_HASH', "Sorry, you entered a wrong password reminder.");
 if (!defined('ERROR_EMPTY_USERNAME')) define('ERROR_EMPTY_USERNAME', "Please fill in your user name.");
 if (!defined('ERROR_NON_EXISTENT_USERNAME')) define('ERROR_NON_EXISTENT_USERNAME', "Sorry, this user name doesn't exist.");
+if (!defined('ERROR_USERNAME_EXISTS')) define('ERROR_USERNAME_EXISTS', "Sorry, this user name already exists.");
+if (!defined('ERROR_USER_SUSPENDED')) define('ERROR_USER_SUSPENDED', "Sorry, this account has been suspended. Please contact an administrator for further details.");
 if (!defined('ERROR_RESERVED_PAGENAME')) define('ERROR_RESERVED_PAGENAME', "Sorry, this name is reserved for a page. Please choose a different name.");
 if (!defined('ERROR_WIKINAME')) define('ERROR_WIKINAME', "Username must be formatted as a ##\"\"WikiName\"\"##, e.g. ##\"\"JohnDoe\"\"##.");
 if (!defined('ERROR_EMPTY_PASSWORD')) define('ERROR_EMPTY_PASSWORD', "Please fill in a password.");
@@ -376,15 +378,21 @@ else
 		$success = USER_LOGGED_OUT;
 	}
 
-	// is user trying to log in or register?
 	$register = $this->GetConfigValue('allow_user_registration');
-	if (isset($_POST['action']) && ($_POST['action'] == 'login'))
+	// Login request
+	if (isset($_POST['submit']) && ($_POST['submit'] == LOGIN_BUTTON_LABEL))
 	{
 		// if user name already exists, check password
 		if (isset($_POST['name']) && $existingUser = $this->LoadUser($_POST['name']))
 		{
 			// check password
+			$status = $existingUser['status'];
 			switch(TRUE){
+				case ($status=='deleted' ||
+			          $status=='suspended' ||
+					  $status=='banned'):
+					$error = ERROR_USER_SUSPENDED;
+					break;
 				case (strlen($_POST['password']) == 0):
 					$error = ERROR_EMPTY_PASSWORD;
 					$password_highlight = INPUT_ERROR_STYLE;
@@ -398,78 +406,88 @@ else
 					$this->Redirect($url, '');
 			}
 		}
-		// BEGIN *** Register ***
-		else if ($register == '1') // otherwise, proceed to registration
+		else
 		{
-			$name = trim($_POST['name']);
-			$email = trim($this->GetSafeVar('email', 'post'));
-			$password = $_POST['password'];
-			$confpassword = $_POST['confpassword'];
+			$error = ERROR_NON_EXISTENT_USERNAME;
+			$username_highlight = INPUT_ERROR_STYLE;
+		}
+	}
 
-			// validate input
-			switch(TRUE)
-			{
-				case (FALSE===$urobj->URAuthVerify()):
-					$error = ERROR_VALIDATION_FAILED;
-					break;
-				case (strlen($name) == 0):
-					$error = ERROR_EMPTY_USERNAME;
-					$username_highlight = INPUT_ERROR_STYLE;
-					break;
-				case (!$this->IsWikiName($name)):
-					$error = ERROR_WIKINAME;
-					$username_highlight = INPUT_ERROR_STYLE;
-					break;
-				case ($this->existsPage($name,NULL,NULL,FALSE)):	// name change, new interface (check for non-active page, too)
-					$error = ERROR_RESERVED_PAGENAME;
-					$username_highlight = INPUT_ERROR_STYLE;
-					break;
-				case (strlen($password) == 0):
-					$error = ERROR_EMPTY_PASSWORD;
-					$password_highlight = INPUT_ERROR_STYLE;
-					break;
-				case (preg_match("/ /", $password)):
-					$error = ERROR_NO_BLANK;
-					$password_highlight = INPUT_ERROR_STYLE;
-					break;
-				case (strlen($password) < PASSWORD_MIN_LENGTH):
-					$error = sprintf(ERROR_PASSWORD_TOO_SHORT, PASSWORD_MIN_LENGTH);
-					$password_highlight = INPUT_ERROR_STYLE;
-					break;
-				case (strlen($confpassword) == 0):
-					$error = ERROR_EMPTY_CONFIRMATION_PASSWORD;
-					$password_highlight = INPUT_ERROR_STYLE;
-					$password_confirm_highlight = INPUT_ERROR_STYLE;
-					break;
-				case ($confpassword != $password):
-					$error = ERROR_PASSWORD_MATCH;
-					$password_highlight = INPUT_ERROR_STYLE;
-					$password_confirm_highlight = INPUT_ERROR_STYLE;
-					break;
-				case (strlen($email) == 0):
-					$error = ERROR_EMAIL_ADDRESS_REQUIRED;
-					$email_highlight = INPUT_ERROR_STYLE;
-					$password_highlight = INPUT_ERROR_STYLE;
-					$password_confirm_highlight = INPUT_ERROR_STYLE;
-					break;
-				case (!preg_match(VALID_EMAIL_PATTERN, $email)):
-					$error = ERROR_INVALID_EMAIL_ADDRESS;
-					$email_highlight = INPUT_ERROR_STYLE;
-					$password_highlight = INPUT_ERROR_STYLE;
-					$password_confirm_highlight = INPUT_ERROR_STYLE;
-					break;
-				default: //valid input, create user
-					$this->Query("INSERT INTO ".$this->config['table_prefix']."users SET ".
-						"signuptime = now(), ".
-						"name = '".mysql_real_escape_string($name)."', ".
-						"email = '".mysql_real_escape_string($email)."', ".
-						"password = md5('".mysql_real_escape_string($_POST['password'])."')");
+	// Registration request
+	if (isset($_POST['submit']) && ($_POST['submit'] == REGISTER_BUTTON_LABEL) && $register == '1')
+	{
+		$name = trim($_POST['name']);
+		$email = trim($this->GetSafeVar('email', 'post'));
+		$password = $_POST['password'];
+		$confpassword = $_POST['confpassword'];
 
-					// log in
-					$this->SetUser($this->LoadUser($name));
-					$params .= 'registered=true';
-					$this->Redirect($url.$params);
-			}
+		// validate input
+		switch(TRUE)
+		{
+			case (FALSE===$urobj->URAuthVerify()):
+				$error = ERROR_VALIDATION_FAILED;
+				break;
+			case (isset($_POST['name']) && $existingUser = $this->LoadUser($_POST['name'])):
+				$error = ERROR_USERNAME_EXISTS;
+				$username_highlight = INPUT_ERROR_STYLE;
+				break;
+			case (strlen($name) == 0):
+				$error = ERROR_EMPTY_USERNAME;
+				$username_highlight = INPUT_ERROR_STYLE;
+				break;
+			case (!$this->IsWikiName($name)):
+				$error = ERROR_WIKINAME;
+				$username_highlight = INPUT_ERROR_STYLE;
+				break;
+			case ($this->existsPage($name,NULL,NULL,FALSE)):	// name change, new interface (check for non-active page, too)
+				$error = ERROR_RESERVED_PAGENAME;
+				$username_highlight = INPUT_ERROR_STYLE;
+				break;
+			case (strlen($password) == 0):
+				$error = ERROR_EMPTY_PASSWORD;
+				$password_highlight = INPUT_ERROR_STYLE;
+				break;
+			case (preg_match("/ /", $password)):
+				$error = ERROR_NO_BLANK;
+				$password_highlight = INPUT_ERROR_STYLE;
+				break;
+			case (strlen($password) < PASSWORD_MIN_LENGTH):
+				$error = sprintf(ERROR_PASSWORD_TOO_SHORT, PASSWORD_MIN_LENGTH);
+				$password_highlight = INPUT_ERROR_STYLE;
+				break;
+			case (strlen($confpassword) == 0):
+				$error = ERROR_EMPTY_CONFIRMATION_PASSWORD;
+				$password_highlight = INPUT_ERROR_STYLE;
+				$password_confirm_highlight = INPUT_ERROR_STYLE;
+				break;
+			case ($confpassword != $password):
+				$error = ERROR_PASSWORD_MATCH;
+				$password_highlight = INPUT_ERROR_STYLE;
+				$password_confirm_highlight = INPUT_ERROR_STYLE;
+				break;
+			case (strlen($email) == 0):
+				$error = ERROR_EMAIL_ADDRESS_REQUIRED;
+				$email_highlight = INPUT_ERROR_STYLE;
+				$password_highlight = INPUT_ERROR_STYLE;
+				$password_confirm_highlight = INPUT_ERROR_STYLE;
+				break;
+			case (!preg_match(VALID_EMAIL_PATTERN, $email)):
+				$error = ERROR_INVALID_EMAIL_ADDRESS;
+				$email_highlight = INPUT_ERROR_STYLE;
+				$password_highlight = INPUT_ERROR_STYLE;
+				$password_confirm_highlight = INPUT_ERROR_STYLE;
+				break;
+			default: //valid input, create user
+				$this->Query("INSERT INTO ".$this->config['table_prefix']."users SET ".
+					"signuptime = now(), ".
+					"name = '".mysql_real_escape_string($name)."', ".
+					"email = '".mysql_real_escape_string($email)."', ".
+					"password = md5('".mysql_real_escape_string($_POST['password'])."')");
+
+				// log in
+				$this->SetUser($this->LoadUser($name));
+				$params .= 'registered=true';
+				$this->Redirect($url.$params);
 		}
 		// END *** Register ***
 	}
@@ -544,7 +562,7 @@ else
 	</tr>
 	<tr>
 		<td>&nbsp;</td>
-		<td><input type="submit" value="<?php echo LOGIN_BUTTON_LABEL ?>" size="40" /></td>
+		<td><input name="submit" type="submit" value="<?php echo LOGIN_BUTTON_LABEL ?>" size="40" /></td>
 	</tr>
 <?php
 	// END *** Login/Logout ***
@@ -569,7 +587,7 @@ else
 	</tr>
 	<tr>
 		<td>&nbsp;</td>
-		<td><input type="submit" value="<?php echo REGISTER_BUTTON_LABEL ?>" size="40" /></td>
+		<td><input name="submit" type="submit" value="<?php echo REGISTER_BUTTON_LABEL ?>" size="40" /></td>
 	</tr>
 <?php
 	}
