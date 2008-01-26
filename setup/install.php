@@ -317,6 +317,7 @@ case "1.1.6.2-alpha":
 case "1.1.6.2-beta":
 case "1.1.6.2":
 case "1.1.6.3":
+	$config['allow_user_registration'] = '1';
 	test(sprintf(ADDING_CONFIG_ENTRY, 'wikka_template_path' ), 1);
 	$config["wikka_template_path"] = 'templates';
 	test("Adding CategoryAdmin page...",

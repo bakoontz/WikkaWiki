@@ -85,12 +85,13 @@ if (!defined('ERROR_INVALID_RECENTCHANGES_DISPLAY_LIMIT')) define('ERROR_INVALID
 if(!defined('ERROR_VALIDATION_FAILED')) define('ERROR_VALIDATION_FAILED', "Registration validation failed, please try again!");
 if (!defined('REGISTRATION_SUCCEEDED')) define('REGISTRATION_SUCCEEDED', "You have successfully registered!");
 if (!defined('REGISTERED_USER_LOGIN_LABEL')) define('REGISTERED_USER_LOGIN_LABEL', "If you're already a registered user, log in here!");
-if (!defined('REGISTER_HEADING')) define('REGISTER_HEADING', "===Login/Register===");
+if (!defined('LOGIN_HEADING')) define('LOGIN_HEADING', "===Login===");
+if (!defined('LOGIN_REGISTER_HEADING')) define('LOGIN_REGISTER_HEADING', "===Login/Register===");
 if (!defined('WIKINAME_LABEL')) define('WIKINAME_LABEL', "Your <abbr title=\"A WikiName is formed by two or more capitalized words without space, e.g. JohnDoe\">WikiName</abbr>:");
 if (!defined('PASSWORD_LABEL')) define('PASSWORD_LABEL', "Password (%s+ chars):");
 if (!defined('LOGIN_BUTTON_LABEL')) define('LOGIN_BUTTON_LABEL', "Login");
 if (!defined('LOGOUT_BUTTON_LABEL')) define('LOGOUT_BUTTON_LABEL', "Logout");
-if (!defined('NEW_USER_REGISTER_LABEL')) define('NEW_USER_REGISTER_LABEL', "Stuff you only need to fill in when you're logging in for the first time (and thus signing up as a new user on this site).");
+if (!defined('NEW_USER_REGISTER_LABEL')) define('NEW_USER_REGISTER_LABEL', "Fields you only need to fill in when you're logging in for the first time (and thus signing up as a new user on this site).");
 if (!defined('CONFIRM_PASSWORD_LABEL')) define('CONFIRM_PASSWORD_LABEL', "Confirm password:");
 if (!defined('RETRIEVE_PASSWORD_HEADING')) define('RETRIEVE_PASSWORD_HEADING', "===Forgot your password?===");
 if (!defined('RETRIEVE_PASSWORD_MESSAGE')) define('RETRIEVE_PASSWORD_MESSAGE', "If you need a password reminder, click [[PasswordForgotten here]]. --- You can login here using your password reminder.");
@@ -376,6 +377,7 @@ else
 	}
 
 	// is user trying to log in or register?
+	$register = $this->GetConfigValue('allow_user_registration');
 	if (isset($_POST['action']) && ($_POST['action'] == 'login'))
 	{
 		// if user name already exists, check password
@@ -397,7 +399,7 @@ else
 			}
 		}
 		// BEGIN *** Register ***
-		else // otherwise, proceed to registration
+		else if ($register == '1') // otherwise, proceed to registration
 		{
 			$name = trim($_POST['name']);
 			$email = trim($this->GetSafeVar('email', 'post'));
@@ -514,7 +516,7 @@ else
 	<input type="hidden" name="action" value="login" />
 	<table class="usersettings">
 	<tr>
-		<td colspan="2"><?php echo $this->Format(REGISTER_HEADING) ?></td>
+		<td colspan="2"><?php echo ($register == '1') ?  $this->Format(LOGIN_REGISTER_HEADING) : $this->Format(LOGIN_HEADING) ?></td>
 		<td>&nbsp;</td>
 	</tr>
 	<tr>
@@ -544,6 +546,12 @@ else
 		<td>&nbsp;</td>
 		<td><input type="submit" value="<?php echo LOGIN_BUTTON_LABEL ?>" size="40" /></td>
 	</tr>
+<?php
+	// END *** Login/Logout ***
+	$register = $this->GetConfigValue('allow_user_registration');
+	if($register == '1')
+	{
+?>
 	<tr>
 		<td>&nbsp;</td>
 		<td width="500"><?php echo $this->Format(NEW_USER_REGISTER_LABEL); ?></td>
@@ -563,10 +571,13 @@ else
 		<td>&nbsp;</td>
 		<td><input type="submit" value="<?php echo REGISTER_BUTTON_LABEL ?>" size="40" /></td>
 	</tr>
+<?php
+	}
+?>
 	</table>
 <?php
 	print($this->FormClose());
-	// END *** Login/Register ***
+	// END *** Register ***
 
 	// BEGIN *** Login Temp Password ***
 	print($this->FormOpen());
