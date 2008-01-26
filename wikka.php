@@ -206,6 +206,7 @@ $wakkaDefaultConfig = array(
 	'default_write_acl'			=> '+',
 	'default_read_acl'			=> '*',
 	'default_comment_acl'		=> '*',
+	'allow_user_registration'	=> '1'
 	);
 
 // load config
