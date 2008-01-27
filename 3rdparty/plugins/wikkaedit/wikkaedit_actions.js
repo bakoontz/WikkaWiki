@@ -5,7 +5,7 @@
 // supported browsers : MZ1.4+, MSIE5+, Opera 8+, khtml/webkit        //
 //                                                                    //
 // (C) 2007 Olivier Borowski (olivier.borowski@wikkawiki.org)         //
-// Homepage : http://wikkawiki.org/WikkaEdit                          //
+// Homepage : http://docs.wikkawiki.org/WikkaEdit                     //
 //                                                                    //
 // This program is free software; you can redistribute it and/or      //
 // modify it under the terms of the GNU General Public License        //

@@ -3957,7 +3957,7 @@ if ($debug) echo 'GetUserName calling... ';
 	 * missing page links for users without a userpage. Makes other options
 	 * configurable (like truncating long hostnames or disabling link formatting).
 	 *
-	 * @author	{@link http://www.wikkawiki.org/DarTar Dario Taraborelli}
+	 * @author	{@link http://wikkawiki.org/DarTar Dario Taraborelli}
 	 *
 	 * @uses	Wakka::existsUser()
 	 * @uses	Wakka::ExistsPage()
