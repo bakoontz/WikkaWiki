@@ -55,7 +55,7 @@ function check() {
 	}
 	?>
 
-	<tr><td></td><td><span class="note">NOTE: This installer will try to write the configuration data to a file called <tt>wikka.config.php</tt>, located in your Wikka directory. In order for this to work, you must make sure the web server has write access to that file! If you can't do this, you will have to edit the file manually (the installer will tell you how). Once Wikka is correctly installed, you will be able to modify its configuration by editing this file.</span>See <a href="http://wikkawiki.org/WikkaInstallation" target="_blank">Wikka:WikkaInstallation</a> for details.</td></tr>
+	<tr><td></td><td><span class="note">NOTE: This installer will try to write the configuration data to a file called <tt>wikka.config.php</tt>, located in your Wikka directory. In order for this to work, you must make sure the web server has write access to that file! If you can't do this, you will have to edit the file manually (the installer will tell you how). Once Wikka is correctly installed, you will be able to modify its configuration by editing this file.</span>See <a href="http://docs.wikkawiki.org/WikkaInstallation" target="_blank">Wikka:WikkaInstallation</a> for details.</td></tr>
 
 	<?php
 	 if (!$wakkaConfig["wakka_version"])

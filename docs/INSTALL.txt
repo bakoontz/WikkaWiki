@@ -26,6 +26,6 @@ in the setup/ subdirectory. They're used by the web-based installer/updater, but
 should really just access the Wikka directory itself, and it will (or at least should)
 work perfectly.
 
-Detailed instructions are available at <http://wikkawiki.org/WikkaInstallation>.
+Detailed instructions are available at <http://docs.wikkawiki.org/WikkaInstallation>.
 
 
