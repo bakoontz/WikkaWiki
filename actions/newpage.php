@@ -1,16 +1,20 @@
 <?php
-// author: costal martignier
-// beschreibung: erstellt eine seite
-// parameter: keine
-// lizenz: GPL
-// email: wakkaactions@martignier.net
-// url: http://knowledge.martignier.net
-
-// Modified by JsnX and JavaWoman 2005-1-17
-//   Added check for posted page name,
-//   Added check for valid CamelCase page names,
-//   Modified to use FormOpen,
-//   Removed hidden "submitted"
+/**
+ * Display a form to create a new page.
+ *
+ * @package	Actions
+ * @version	$Id:newpage.php 369 2007-03-01 14:38:59Z DarTar $
+ * @license	http://www.gnu.org/copyleft/gpl.html GNU General Public License
+ * @filesource
+ *
+ * @author 	{@link http://www.comawiki.org/CoMa.php?CoMa=Costal_Martignier Costal Martignier} (initial version)
+ * @author	{@link http://wikkawiki.org/JsnX JsnX} (modified 2005-1-17)
+ * @author	{@link http://wikkawiki.org/JavaWoman JavaWoman} (modified 2005-1-17)
+ *
+ * @filesource
+ *
+ * @todo user central regex library #34
+ */
 
 $showform = TRUE;
 
@@ -20,7 +24,7 @@ if (isset($_POST['pagename']))
 
 	if (!(preg_match("/^[A-ZÄÖÜ]+[a-zßäöü]+[A-Z0-9ÄÖÜ][A-Za-z0-9ÄÖÜßäöü]*$/s", $pagename))) 
 	{
-		echo '<em class='error'>The page name "'.$pagename.'" is invalid. Valid page names must start with a capital letter, contain only letters and numbers, and be in CamelCase format.</em>';
+		echo '<em class="error">The page name "'.$pagename.'" is invalid. Valid page names must start with a capital letter, contain only letters and numbers, and be in CamelCase format.</em>';
 	}
 	else 
 	{
