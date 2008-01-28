@@ -1,10 +1,10 @@
 /*
 ////////////////////////////////////////////////////////////////////////
 // WikkaEdit                                                          //
-// v. 1.00                                                            //
+//                                                                    //
 // supported browsers : MZ1.4+, MSIE5+, Opera 8+, khtml/webkit        //
 //                                                                    //
-// (C) 2007 Olivier Borowski (olivier.borowski@wikkawiki.org)         //
+// (C) 2007-2008 Olivier Borowski (olivier.borowski@wikkawiki.org)    //
 // Homepage : http://wikkawiki.org/WikkaEdit                          //
 //                                                                    //
 // This program is free software; you can redistribute it and/or      //
@@ -108,7 +108,7 @@ WikkaEdit.prototype.initButtons = function() {
 	this.we_buttons.we_hr = {type:"button", title:"Line"};
 	this.we_buttons.we_link = {type:"button", title:"Hyperlink"};
 	this.we_buttons.we_image = {type:"button", title:"Image"};
-	//this.we_buttons.we_table = {type:"button", title:"Table"};
+	this.we_buttons.we_table = {type:"button", title:"Table"};
 
 	this.we_buttons.we_sep5 = {type:"separator"};
 
