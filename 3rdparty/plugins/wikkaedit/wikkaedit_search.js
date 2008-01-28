@@ -1,10 +1,10 @@
 /*
 ////////////////////////////////////////////////////////////////////////
 // WikkaEdit                                                          //
-// v. 1.00                                                            //
+//                                                                    //
 // supported browsers : MZ1.4+, MSIE5+, Opera 8+, khtml/webkit        //
 //                                                                    //
-// Copyright (C) 2007 Olivier Borowski (coin at tuxfamily dot org)    //
+// (C) 2007-2008 Olivier Borowski (olivier.borowski@wikkawiki.org)    //
 // Homepage : http://wikkawiki.org/WikkaEdit                          //
 //                                                                    //
 // This program is free software; you can redistribute it and/or      //
@@ -115,14 +115,11 @@ WikkaEdit.prototype.findNext = function() {
 	var currentSelectionMatch = this.checkIfMatch(searchforC, textC, sr.start, sr.end);
 
 	if ((this.we_replace) && (currentSelectionMatch)) {
-		var beforeSel = text.substr(0, sr.start);
-		var afterSel = text.substr(sr.end);
-		// update selection content
-		var scrollTop = this.we_ta.scrollTop;
-		this.we_ta.value = beforeSel + this.we_replaceWith + afterSel;
-		this.we_ta.scrollTop = scrollTop;
-		// replace selection
-		this.setSelectionRange(sr.start, sr.start + this.we_replaceWith.length);
+		// selection content
+		var selCont = this.getSelectionContent(sr);
+		// update textarea content & move selection
+		var newSr = new SelRange(sr.start, sr.start + this.we_replaceWith.length);
+		this.setTextAreaContent(selCont.before + this.we_replaceWith + selCont.after, newSr);
 		// as the textarea content has change, textC, sr... are not up to date so
 		// we restart at the beginning of the function
 		this.findNext();
