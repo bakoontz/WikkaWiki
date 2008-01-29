@@ -173,6 +173,32 @@ define('INDEX_LINK_TITLE', 'Display an alphabetical page index');
 /**#@-*/
 
 /**#@+
+ * Language constant used by the {@link dbinfo.php dbinfo} action
+ */
+// dbinfo
+define('HD_DBINFO','Database Information');
+define('HD_DBINFO_DB','Database');
+define('HD_DBINFO_TABLES','Tables');
+define('HD_DB_CREATE_DDL','DDL to create database %s:');				# %s will hold database name
+define('HD_TABLE_CREATE_DDL','DDL to create table %s:');				# %s will hold table name
+define('TXT_INFO_1','This utility provides some information about the database(s) and tables in your system.');
+define('TXT_INFO_2',' Depending on permissions for the Wikka database user, not all databases or tables may be visible.');
+define('TXT_INFO_3',' Where creation DDL is given, this reflects everything that would be needed to exactly recreate the same database and table definitions,');
+define('TXT_INFO_4',' including defaults that may not have been specified explicitly.');
+define('FORM_SELDB_LEGEND','Databases');
+define('FORM_SELTABLE_LEGEND','Tables');
+define('FORM_SELDB_OPT_LABEL','Select a database:');
+define('FORM_SELTABLE_OPT_LABEL','Select a table:');
+define('FORM_SUBMIT_SELDB','Select');
+define('FORM_SUBMIT_SELTABLE','Select');
+define('MSG_ONLY_ADMIN','Sorry, only administrators can view database information.');
+define('MSG_SINGLE_DB','Information for the <tt>%s</tt> database.');			# %s will hold database name
+define('MSG_NO_TABLES','No tables found in the <tt>%s</tt> database. Your MySQL user may not have sufficient privileges to access this database.');		# %s will hold database name
+define('MSG_NO_DB_DDL','Creation DDL for <tt>%s</tt> could not be retrieved.');	# %s will hold database name
+define('MSG_NO_TABLE_DDL','Creation DDL for <tt>%s</tt> could not be retrieved.');# %s will hold table name
+/**#@-*/
+
+/**#@+
  * Language constant used by the {@link emailpassword.php emailpassword} action
  */
 // emailpassword
