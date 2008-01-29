@@ -245,7 +245,7 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 			// hence hsc_secure() instead of htmlspecialchars_ent() which UNescapes entities!
 			// JW/2007-02-20: why is this? wouldn't it be  easier for the person editing to show actual characters instead of entities?
 			'<div id="textarea_container">'."\n".
-			'<textarea id="body" name="body">'.$this->hsc_secure($body).'</textarea>'."\n".	# #427
+			'<textarea id="body" name="body" rows="100" cols="20">'.$this->hsc_secure($body).'</textarea>'."\n".	# #427
 			'</div>'."\n";
 		if ($buttons_position == 'bottom')
 		{
