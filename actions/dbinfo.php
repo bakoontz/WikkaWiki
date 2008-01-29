@@ -36,9 +36,6 @@
  * @uses	FormClose()
  * @uses	Format()
  * @uses	makeId()
- * 
- * @todo	Move translation strings to language file in 1.1.7 
- * @todo	Create default DBInfo page
  */
 
 // escape & placeholder: action allowed only once per page
