@@ -35,9 +35,10 @@ WikkaEdit.prototype.init = function() {
 	this.we_actionsMenuEnabled = (typeof(this.contextualHelp) != "undefined");
 	this.we_searchReplaceEnabled = (typeof(this.showSearchWindow) != "undefined");
 	this.initButtons();
-	this.initCategs();
-	if (this.we_actionsMenuEnabled)
+	if (this.we_actionsMenuEnabled) {
+		this.initCategs();
 		this.initActions();
+	}
 
 	//var we_ta_container = this.we_ta;		// without textarea_container (old method)
 	var we_ta_container = document.getElementById("textarea_container");	// with textarea_container
@@ -133,7 +134,7 @@ WikkaEdit.prototype.moveElementsAfterWindowResize = function() {
 		// make editor height follow browser window height
 		if (this.we_ta.style.height == "") this.we_ta.style.height = "500px"; // this.we_ta.style.height is "" the 1st time
 		var windowHeight = parseInt(window.innerHeight ? window.innerHeight : document.documentElement.clientHeight, 10);
-		var change = windowHeight - parseInt(document.body.offsetHeight, 10);
+		var change = windowHeight - parseInt(document.body.offsetHeight, 10) - 20;	// TODO remove this hardcoded value (needed for vertical scrollbar to disappear)
 		if (change != 0) {
 			var newheight = Math.max(this.EDITOR_MIN_HEIGHT, parseInt(this.we_ta.style.height, 10) + change);
 			this.we_ta.style.height = newheight + "px";
@@ -219,7 +220,7 @@ WikkaEdit.prototype.toolbarButtonClick = function(obj, buttonName, submenuName) 
 		case "hr" :			this.addToSelection("----"); break;
 
 		case "link" :		this.addToSelection("[[http://www.example.com Page Title]]"); break;
-		case "image" :		this.toolbarActionClick("_image"); break; //this.addToSelection("{{image url=\"path/image.jpg\" alt=\"alternate text\"}}"); break;
+		case "image" :		this.toolbarActionClick("we_image"); break;
 		case "table" :		this.addToSelection("{{table columns=\"2\" cellpadding=\"1\" cells=\"header1;header2;cell1;cell2\"}}");	// 1.1.6.4
 							//this.addToSelection("|=|header1|=|header2||\n||cell1||cell2||");										// 1.1.7
 							break;
@@ -227,11 +228,11 @@ WikkaEdit.prototype.toolbarButtonClick = function(obj, buttonName, submenuName) 
 		case "sourcecode" :	this.addToSelection("%%(language-ref)\ninsert-source-code-here\n%%"); break;
 
 		case "find" :		this.showSearchWindow(); break;
-		case "shortcuts" :	this.toggleSubmenu(obj, "shortcuts"); break; //this.showShortcuts(obj); break;
+		case "shortcuts" :	this.toggleSubmenu(obj, "shortcuts"); break;
 		case "formatting_rules" :	this.showFormattingRules(); break;
 
 		// submenu : style
-		case "forecolor" :	this.toolbarActionClick("_color"); break; //this.addToSelection("{{color fg=\"text-color\" bg=\"background-color\" text=\"insert-text-here\"}}"); break;
+		case "forecolor" :	this.toolbarActionClick("we_color"); break;
 		case "monospace" :	this.addToSelection("##", "##"); break;
 		case "highlight" :	this.addToSelection("''", "''"); break;
 		case "key" :		this.addToSelection("#%", "#%"); break;
@@ -276,10 +277,10 @@ WikkaEdit.prototype.toolbarActionClick = function(actionRef) {
 	} else {
 		// === use static text to insert the action ===
 		switch (actionRef) {
-			case "_image" :
+			case "we_image" :
 				actionAndParams = "{{image url=\"url\" title=\"text\" alt=\"text\"}}";
 				break;
-			case "_color" :
+			case "we_color" :
 				actionAndParams = "{{color text=\"text\" c=\"color\"}}";
 				break;
 			default :
