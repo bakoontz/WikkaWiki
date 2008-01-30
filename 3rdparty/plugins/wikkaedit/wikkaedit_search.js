@@ -99,11 +99,19 @@ WikkaEdit.prototype.checkIfMatch = function(searched, text, start, end) {
 
 // ===== find the next occurence or replace selection =====
 WikkaEdit.prototype.findNext = function() {
+	var searchfor = this.we_searchFor;
+
+	// empty search field => removes selection and does nothing
+	if (searchfor == "") {
+		this.we_ta.focus();
+		this.setSelectionRange(0);
+		return;
+	}
+
 	// position of the selection
 	var sr = this.getSelectionRange();
 	// textarea content
 	var text = this.getTextAreaContent();
-	var searchfor = this.we_searchFor;
 
 	// duplicate these variables to simplify search in case sensitive or not
 	var textC = text, searchforC = searchfor;
@@ -139,10 +147,13 @@ WikkaEdit.prototype.findNext = function() {
 		if (newSrStart == -1) {					// not found
 			finished = true;
 			this.we_lastMsg = "no other occurence";
-		} else if (!this.we_whole) {				// found => ok
+		} else if (!this.we_whole) {			// found => ok
 			finished = true;
 		} else {								// found but is this a whole word?
 			finished = this.checkIfMatch(searchforC, textC, newSrStart, newSrStart + searchfor.length);
+			// not a whole word => need to move to the next character to avoid an infinite loop
+			if (!finished)
+				newSrStart++;
 		}
 	}
 
