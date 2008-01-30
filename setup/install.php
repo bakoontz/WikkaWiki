@@ -148,6 +148,8 @@ case "0":
 	'CategoryWiki', 
 	'CategoryCategory', 
 	'FormattingRules', 
+	'DatabaseInfo',
+	'CategoryAdmin',
 	'HighScores', 
 	'OwnedPages', 
 	'SandBox', 
