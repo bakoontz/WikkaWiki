@@ -56,6 +56,20 @@
 	/*-moz-user-select: none;*/
 }
 
+.toolhorizsep {
+	border-top:1px solid #CCCCCC;
+	margin:1px 0 4px 0;
+}
+
+.actiontitle {
+	text-transform: uppercase;
+	font-size: 7pt;
+	letter-spacing: 2px;
+	color: #666;
+	vertical-align: middle;
+	margin-left:5px;
+}
+
 /* ================================ submenu ================================ */
 #wikkasubmenu {
 	position: absolute;
