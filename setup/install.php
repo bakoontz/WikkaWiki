@@ -346,6 +346,10 @@ case "1.1.6.3":
 	test('Dropping unnecessary index `from_tag`...',
 	mysql_query('alter table '.$config['table_prefix'].'links drop index `idx_from`'), 'Already done?  OK!', 0);
 }
+// #600: Force reloading of stylesheet. '
+$config['stylesheet'] = preg_replace('/(&amp;|\\?)(0|1\.1\.6\.\S+)(?>$|&amp;)/', '', $config['stylesheet']); // Needed in case of reinstall
+$config['stylesheet'] .= strstr($config['stylesheet'], '?') ? '&amp;' : '?';
+$config['stylesheet'] .= WAKKA_VERSION;
 ?>
 
 <p>
@@ -355,6 +359,6 @@ Once again, see <a href="http://docs.wikkawiki.org/WikkaInstallation" target="_b
 </p>
 
 <form action="<?php echo myLocation(); ?>?installAction=writeconfig" method="post">
-<input type="hidden" name="config" value="<?php echo Wakka::hsc_secure(serialize($config)) ?>" /><!--#427-->
+<input type="hidden" name="config" value="<?php echo Wakka::hsc_secure(serialize($config)) ?>" /><?php /* #427 */ ?>
 <input type="submit" value="Continue" />
 </form>
