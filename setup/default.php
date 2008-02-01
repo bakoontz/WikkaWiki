@@ -24,7 +24,7 @@ if (f.elements["password"].value!=f.elements["password2"].value) {
  alert("Passwords don't match.");
  return false;
 }
-re = new RegExp("^[A-Z0-9._%+-]+@[A-Z0-9.-]+$", 'i');
+re = new RegExp("^[a-z0-9!#$%&'*+/=?^_`{|}~-]+@[A-Z0-9.-]+$", 'i');
 if (f.elements["config[admin_email]"].value.search(re)==-1) {
  alert("Email address appears incorrect.");
  return false;
