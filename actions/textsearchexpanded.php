@@ -23,7 +23,7 @@
 	if (!defined('SEARCH_ZERO_MATCH')) define('SEARCH_ZERO_MATCH', 'No matches');
 	if (!defined('SEARCH_ONE_MATCH')) define('SEARCH_ONE_MATCH', 'One match found');
 	if (!defined('SEARCH_N_MATCH')) define('SEARCH_N_MATCH', 'There was %d matches found');
-	if (!defined('SEARCH_RESULTS')) define('SEARCH_RESULTS', 'Search results');
+	if (!defined('SEARCH_RESULTS')) define('SEARCH_RESULTS', 'Search results: <strong>%1$s</strong> for <strong>%2$s</strong>'); #%1$s: n matches for | %2$s: search term
 	if (!defined('SEARCH_MAX_SNIPPETS')) define('SEARCH_MAX_SNIPPETS', 3);
 	if (!defined('SEARCH_MYSQL_IDENTICAL_CHARS')) define('SEARCH_MYSQL_IDENTICAL_CHARS', 'aàáâã,eèéêë,iìîï,oòóôõ,uùúû,cç,nñ,yý');
 
@@ -131,10 +131,10 @@ if ('' !== $phrase)
 			$match_str = SEARCH_ONE_MATCH;
 			break;
 		default:
-			$match_str = SEARCH_N_MATCH;
+			$match_str = sprintf(SEARCH_N_MATCH, $total_results);
 			break;
 	}
-	printf(SEARCH_RESULTS.": <strong>".$match_str."</strong> for <strong>".$this->htmlspecialchars_ent($phrase)."</strong><br />\n", $total_results);
+	printf(SEARCH_RESULTS, $match_str, $this->htmlspecialchars_ent($phrase));
 	$result_page_list = $this->ReturnSafeHtml($result_page_list);
 	echo $result_page_list;
 }
