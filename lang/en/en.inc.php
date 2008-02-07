@@ -404,7 +404,7 @@ define('SEARCH_FOR', 'Search for');
 define('SEARCH_ZERO_MATCH', 'No matches');
 define('SEARCH_ONE_MATCH', 'One match found');
 define('SEARCH_N_MATCH', '%d matches found'); // %d - number of hits
-define('SEARCH_RESULTS', 'Search results:');
+define('SEARCH_RESULTS', 'Search results: <strong>%1$s</strong> for <strong>%2$s</strong>'); # %1$s: n matches for | %2$s: search term
 define('SEARCH_NOT_SURE_CHOICE', 'Not sure which page to choose?');
 define('SEARCH_EXPANDED_LINK_DESC', 'Expanded Text Search'); // search link description
 define('SEARCH_TRY_EXPANDED', 'Try the %s which shows surrounding text.'); // %s expanded search link
