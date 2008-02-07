@@ -72,10 +72,10 @@ if ('' !== $phrase)
 			$match_str = SEARCH_ONE_MATCH;
 			break;
 		default:
-			$match_str = SEARCH_N_MATCH;
+			$match_str = sprintf(SEARCH_N_MATCH, $total_results);
 			break;
 	}
-	printf(SEARCH_RESULTS.' <strong>'.$match_str.'</strong> for <strong>'.$this->htmlspecialchars_ent($phrase).'</strong><br />'."\n", $total_results);
+	printf(SEARCH_RESULTS, $match_str, $this->htmlspecialchars_ent($phrase));
 	if ($total_results > 0)
 	{
 		$expsearchurl  = $this->Href('', 'TextSearchExpanded', 'phrase='.urlencode($phrase));
