@@ -34,10 +34,6 @@ if (!defined('COMMENT_ORDER_THREADED')) define('COMMENT_ORDER_THREADED', 3);
 if (!defined('COMMENT_MAX_TRAVERSAL_DEPTH')) define('COMMENT_MAX_TRAVERSAL_DEPTH', 10);
 if (!defined('MAX_HOSTNAME_LENGTH_DISPLAY')) define('MAX_HOSTNAME_LENGTH_DISPLAY', 50);
 /**
- * Default number of hours after which a permanent cookie is to expire: corresponds to 90 days.
- */
-if (!defined('DEFAULT_COOKIE_EXPIRATION_HOURS')) define('DEFAULT_COOKIE_EXPIRATION_HOURS',90 * 24);
-/**
  * Length to use for generated part of id attribute.
  */
 if (!defined('ID_LENGTH')) define('ID_LENGTH',10);		// @@@ maybe make length configurable
@@ -235,41 +231,13 @@ class Wakka
 	 * URL or URL component, derived just once in {@link Wakka::Run()} for later usage.
 	 */
 	/**
-	 * URL fragment consisting of scheme + domain part.
-	 * Represents the domain URL where teh current instance of Wikka is located.
-	 *
-	 * @var string
-	 */
-	var $base_domain_url = '';
-	/**
-	 * URL fragment consisting of a path component.
-	 * Points to the instance of Wikka within {@link Wakka::$base_domain_url}.
-	 *
-	 * @var string
-	 */
-	var $base_url_path = '';
-	/**
-	 * Base URL consisting of {@link Wakka::$base_domain_url} and {@link Wakka::$base_url_path} concatenated.
-	 * Ready to append a relative path to a "static" file to.
-	 *
-	 * @var string
-	 */
-	var $base_url = '';
-	/**
 	 * Complete Wikka URL ready to append a page name to.
-	 * Derived from {@link Wakka::$base_url} and (if rewrite mode is NOT on)
+	 * Derived from {@link WIKKA_BASE_URL} and (if rewrite mode is NOT on)
 	 * {@link WIKKA_URL_EXTENSION} concatenated.
 	 *
 	 * @var string
 	 */
 	var $wikka_url = '';
-	/**
-	 * Path to be used for cookies.
-	 * Derived from {@link Wakka::$base_url_path}
-	 *
-	 * @var string
-	 */
-	var $wikka_cookie_path = '';
 	/**#@-*/
 
 	/**
@@ -2350,13 +2318,16 @@ if ($debug) echo 'SavePage calling... ';
 	 * expiration differs). Cookie path is automatically set to the Wikka path.
 	 * The default action is to set a persistent cookie.
 	 *
-	 * @uses	Wakka::GetConfigValue()
+	 * @uses	Config::$wiki_suffix
+	 * @uses	WIKKA_COOKIE_PATH
+	 * @uses	DEFAULT_COOKIE_EXPIRATION_HOURS
+	 * @uses	Wakka::$cookie_sent
 	 *
 	 * @param	$name	string	mandatory: name of the cookie (will be supplemented
 	 * 					with configured "wiki_suffix")
 	 * @param	$value	mixed	mandatory: value to assign to the name (will
 	 *					effectively be turned into a string when sent).
-	 * 					From php.net: "Because setting a cookie with a value of
+	 *					From php.net: "Because setting a cookie with a value of
 	 *					FALSE will try to delete the cookie, you should not use
 	 *					boolean values. Instead, use 0 for FALSE and 1 for TRUE."
 	 * @param	$expires	integer	optional: time in <b>hours</b> after which the
@@ -2369,7 +2340,7 @@ if ($debug) echo 'SavePage calling... ';
 		$this->cookies_sent = FALSE;
 		$valid_until = ($expires < 0) ? 0 : time() + ($expires * 60 * 60);
 		// attempt to set cookie
-		$rc = setcookie($name.$this->GetConfigValue('wiki_suffix'), $value, $valid_until, $this->wikka_cookie_path);
+		$rc = setcookie($name.$this->GetConfigValue('wiki_suffix'), $value, $valid_until, WIKKA_COOKIE_PATH);
 		if ($rc)
 		{
 			$_COOKIE[$name.$this->GetConfigValue('wiki_suffix')] = $value;
@@ -2429,7 +2400,9 @@ if ($debug) echo 'SavePage calling... ';
 	 * it still exists), before unsetting it; this is in case PHP in a different
 	 * version or on a different platform behaves differently from mine. -- JW
 	 *
-	 * @uses	Wakka::GetConfigValue()
+	 * @uses	WIKKA_COOKIE_PATH
+	 * @uses	Config::$wiki_suffix
+	 * @uses	Wikka::$cookies_sent
 	 *
 	 * @param	$name	string	mandatory:	name of the cookie to delete
 	 * @param	$path	string	optional: path the cookie was defined as valid for;
@@ -2452,7 +2425,7 @@ if ($debug) echo 'SavePage calling... ';
 		$this->cookies_sent = FALSE;
 		if ('' == trim($path))
 		{
-			$path = $this->wikka_cookie_path;	// default
+			$path = WIKKA_COOKIE_PATH;	// default
 		}
 		$cookiename = ($rawname) ? $name : $name.$this->GetConfigValue('wiki_suffix');
 
@@ -2479,6 +2452,11 @@ if ($debug) echo 'SavePage calling... ';
 	 * installation running on the same server (precisely why we're now using a
 	 * cookie path!) but once all Wikka installations are upgraded this becomes
 	 * highly unlikely.
+	 *
+	 * @uses WIKKA_COOKIE_PATH
+	 * @uses Config::$wiki_suffix
+	 * @uses Wakka::deleteWikkaCookie()
+	 *
 	 */
 	function deleteOldWikkaCookies()
 	{
@@ -2503,7 +2481,7 @@ if ($debug) echo "deleting 'wikka_pass' at root<br/>\n";
 					break;
 				// old path
 				case 'user_name'.$this->GetConfigValue('wiki_suffix'):
-					if ($this->wikka_cookie_path != '/')
+					if (WIKKA_COOKIE_PATH != '/')
 					{
 if ($debug) echo "deleting 'user_name".$this->GetConfigValue('wiki_suffix')."' at root<br/>\n";
 						// do NOT delete from $_COOKIE since this cannot be path-specific
@@ -2512,7 +2490,7 @@ if ($debug) echo "deleting 'user_name".$this->GetConfigValue('wiki_suffix')."' a
 					break;
 				// old path
 				case 'pass'.$this->GetConfigValue('wiki_suffix'):
-					if ($this->wikka_cookie_path != '/')
+					if (WIKKA_COOKIE_PATH != '/')
 					{
 if ($debug) echo "deleting 'pass".$this->GetConfigValue('wiki_suffix')."' at root<br/>\n";
 						// delete cookie but do NOT delete from $_COOKIE since this cannot be path-specific
@@ -2593,7 +2571,6 @@ if ($debug) echo "deleting 'pass".$this->GetConfigValue('wiki_suffix')."' at roo
 		{
 			$_SESSION['redirectmessage'] = $message;
 		}
-		#$url = ($url == '' ) ? $this->GetConfigValue('base_url').$this->tag : $url;	// @@@ rewrite?
 		$url = ($url == '' ) ? $this->wikka_url.$this->tag : $url;	// @@@ rewrite? TEST!
 		if ((eregi('IIS', $_SERVER['SERVER_SOFTWARE'])) && ($this->cookies_sent))
 		{
@@ -2630,8 +2607,9 @@ if ($debug) echo "deleting 'pass".$this->GetConfigValue('wiki_suffix')."' at roo
 	/**
 	 * Return the full URL to a page/handler.
 	 *
-	 * @uses	Wakka::GetConfigValue()
+	 * @uses	Config::$rewrite_mode
 	 * @uses	Wakka::MiniHref()
+	 * @uses	Wakka::$wikka_url
 	 */
 	function Href($handler='', $tag='', $params='')
 	{
@@ -2787,6 +2765,8 @@ if ($debug) echo "<br/>\n";
 	 * fully-qualified paths as returned by this method).
 	 *
 	 * @access	public
+	 * @uses WIKKA_BASE_DOMAIN_URL
+	 * @uses WIKKA_BASE_URL
 	 *
 	 * @param	string	$filepath	path for a static file; this can be either:
 	 *				- a relative path
@@ -2811,11 +2791,11 @@ if ($debug) echo "<br/>\n";
 		}
 		elseif ('/' == substr($filepath,0,1))	// absolute path
 		{
-			$result = $this->base_domain_url.$filepath;
+			$result = WIKKA_BASE_DOMAIN_URL.$filepath;
 		}
 		else								// relative path
 		{
-			$result = $this->base_url.$filepath;
+			$result = WIKKA_BASE_URL.$filepath;
 		}
 #echo "<!--StaticHref - out: ".$result."-->\n";
 		return $result;
@@ -3139,7 +3119,15 @@ if ($debug) echo "<br/>\n";
 	}
 
 	/**
-	 * REFERRERS
+	 * Log REFERRERS.
+	 * Store external referrer into table wikka_referrers. The referrer's host is
+	 * checked against a blacklist (table wikka_blacklist) and it will be ignored
+	 * if it's present at this table.
+	 *
+	 * @uses Wakka::cleanUrl()
+	 * @uses WIKKA_BASE_URL
+	 * @uses Wakka::LoadSingle()
+	 * @uses Config::$table_prefix
 	 */
 
 	function LogReferrer($tag = '', $referrer = '')
@@ -3165,7 +3153,7 @@ if ($debug) echo "<br/>\n";
 
 		// check if it's coming from another site
 		#if ($referrer && !preg_match('/^'.preg_quote($this->GetConfigValue('base_url'), '/').'/', $referrer))
-		if (!empty($referrer) && !preg_match('/^'.preg_quote($this->base_url, '/').'/', $referrer))
+		if (!empty($referrer) && !preg_match('/^'.preg_quote(WIKKA_BASE_URL, '/').'/', $referrer))
 		{
 			$parsed_url = parse_url($referrer);
 			$spammer = $parsed_url['host'];
@@ -4780,32 +4768,27 @@ if ($debug) echo 'HasAccess calling... ';
 	/**
 	 * THE BIG EVIL NASTY ONE!
 	 *
-	 * @uses	Wakka::ACLs
-	 * @uses	Wakka::base_domain_url
-	 * @uses	Wakka::base_url_path
-	 * @uses	Wakka::base_url
-	 * @uses	Wakka::handler
-	 * @uses	Wakka::wikka_url
-	 * @uses	Wakka::wikka_cookie_path
+	 * @uses	Wakka::$ACLs
+	 * @uses	Wakka::$handler
+	 * @uses	Wakka::$wikka_url
 	 * @uses	getmicrotime()
 	 * @uses	Wakka::authenticateUserFromCookies()
 	 * @uses	Wakka::deleteOldWikkaCookies()
 	 * @uses	Wakka::Footer()
 	 * @uses	Wakka::getAnonUserName()
-	 * @uses	Wakka::GetConfigValue()
 	 * @uses	Wakka::GetHandler()
 	 * @uses	Wakka::Handler()
 	 * @uses	Wakka::Header()
 	 * @uses	Wakka::Href()
 	 * @uses	Wakka::LoadAllACLs()
-	 * @uses	Wakka::Loadpage()
+	 * @uses	Wakka::LoadPage()
 	 * @uses	Wakka::LogReferrer()
 	 * @uses	Wakka::Maintenance()
-	 * @uses	Wakka::Handler()
 	 * @uses	Wakka::ReadInterWikiConfig()
 	 * @uses	Wakka::Redirect()
-	 * @uses	Wakka::SetCookie()
 	 * @uses	Wakka::SetPage()
+	 * @uses	Config::$rewrite_mode
+	 * @uses	Config::$root_page
 	 *
 	 * @param	string	$tag		mandatory: name of the single page/image/file etc. to be used
 	 * @param	string	$handler	optional: the method which should be used. default: "show"
@@ -4821,18 +4804,9 @@ if ($debug)  echo 'Run - handler: '.$handler."<br/>\n";
 
 		// do our stuff!
 
-		// 1. paths
+		// 1. wikka_url
 
-		// first derive domain, path and base_url, as well as cookie path just once
-		// so they are ready for later use.
-		// detect actual scheme (might be https!)	@@@ TEST
-		// maybe push first two (at least) into a little function: installer needs it too
-		$scheme = ((isset($_SERVER['HTTPS'])) && !empty($_SERVER['HTTPS']) && 'off' != $_SERVER['HTTPS']) ? 'https://' : 'http://';
-		$this->base_domain_url = $scheme.$_SERVER['SERVER_NAME'].($_SERVER['SERVER_PORT'] != 80 ? ':'.$_SERVER['SERVER_PORT'] : '');
-		$this->base_url_path = preg_replace('/wikka\.php/', '', $_SERVER['SCRIPT_NAME']);
-		$this->base_url = $this->base_domain_url.$this->base_url_path;
-		$this->wikka_url = ((bool) $this->GetConfigValue('rewrite_mode')) ? $this->base_url : $this->base_url.WIKKA_URL_EXTENSION;
-		$this->wikka_cookie_path = ('/' == $this->base_url_path) ? '/' : substr($this->base_url_path,0,-1); 
+		$this->wikka_url = ((bool) $this->GetConfigValue('rewrite_mode')) ? WIKKA_BASE_URL : WIKKA_BASE_URL.WIKKA_URL_EXTENSION;
 
 		// 2. page and handler
 
@@ -4930,22 +4904,22 @@ if ($debug)
 
 		// XML-producing handlers
 		// @@@ HTTP headers (to be moved to handler config files - #446)
-		if (preg_match('/\.(xml|mm)$/', $this->handler))
+		if (preg_match('/\.(xml|mm)$/', $this->GetHandler()))
 		{
 			header('Content-type: text/xml');		// @@@ #446; #406/comment7 not correct for all feed formats! Note that FeedCreator generates its own Content-type headers!
-			print($this->Handler($this->handler));
+			print($this->Handler($this->GetHandler()));
 		}
 		// raw page handler
 		// @@@ HTTP headers (to be moved to handler config files - #446)
-		elseif ($this->handler == 'raw')
+		elseif ($this->GetHandler() == 'raw')
 		{
 			header('Content-type: text/plain');		// @@@ #446; #406/comment7
-			print($this->Handler($this->handler));
+			print($this->Handler($this->GetHandler()));
 		}
 		// grabcode handler or fullscreen mindmap handler
-		elseif (($this->handler == 'grabcode') || ($this->handler == 'mindmap_fullscreen'))
+		elseif (($this->GetHandler() == 'grabcode') || ($this->GetHandler() == 'mindmap_fullscreen'))
 		{
-			print($this->Handler($this->handler));
+			print($this->Handler($this->GetHandler()));
 		}
 		/*..leads to endless loop!
 		 *  This WAS a workaround for relative paths and rewrite gone wrong
@@ -4965,7 +4939,7 @@ if ($debug)
 		else	// all other handlers need page header and page footer
 		{
 			// handle body before header and footer: user may be logging in/out!
-			$content_body = $this->Handler($this->handler);
+			$content_body = $this->Handler($this->GetHandler());
 			print($this->Header().$content_body.$this->Footer());
 		}
 	}

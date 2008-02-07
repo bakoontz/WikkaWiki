@@ -7,7 +7,6 @@
  * @license		http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
  *
- * @uses	Config::$base_url
  * @uses	Config::$enable_rss_autodiscovery
  * @uses	Config::$logged_in_navigation_links
  * @uses	Config::$meta_description

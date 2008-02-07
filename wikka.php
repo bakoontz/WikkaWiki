@@ -156,6 +156,56 @@ if (file_exists('override.config.php'))
 }
 // ---------------------- END PATH AND DEFAULT OVERRIDES -----------------------
 
+// ---------------------- DEFINE URL DOMAIN / PATH -----------------------------
+/**#@+*
+ * URL or URL component, derived just once for later usage.
+ */
+// first derive domain, path and base_url, as well as cookie path just once
+// so they are ready for later use.
+// detect actual scheme (might be https!)	@@@ TEST
+// please recopy modif into setup/test/test-mod-rewrite.php
+$scheme = ((isset($_SERVER['HTTPS'])) && !empty($_SERVER['HTTPS']) && 'off' != $_SERVER['HTTPS']) ? 'https://' : 'http://';
+$server_port = $_SERVER['SERVER_PORT'];
+if ((('http://' == $scheme) && (80 == $server_port)) || (('https://' == $scheme) && (443 == $server_port)))
+{
+	$server_port = '';
+}
+/**
+ * URL fragment consisting of scheme + domain part.
+ * Represents the domain URL where the current instance of Wikka is located.
+ * This variable can be overriden in {@link override.config.php}
+ *
+ * @var string
+ */
+if (!defined('WIKKA_BASE_DOMAIN_URL')) define('WIKKA_BASE_DOMAIN_URL', $scheme.$_SERVER['SERVER_NAME'].$server_port);
+/**
+ * URL fragment consisting of a path component.
+ * Points to the instance of Wikka within {@link WIKKA_BASE_DOMAIN_URL}.
+ *
+ * @var string
+ */
+define('WIKKA_BASE_URL_PATH', preg_replace('/wikka\\.php/', '', $_SERVER['SCRIPT_NAME']));
+/**
+ * Base URL consisting of {@link WIKKA_BASE_DOMAIN_URL} and {@link WIKKA_BASE_URL_PATH} concatenated.
+ * Ready to append a relative path to a "static" file to.
+ *
+ * @var string
+ */
+define('WIKKA_BASE_URL', WIKKA_BASE_DOMAIN_URL.WIKKA_BASE_URL_PATH);
+/**
+ * Path to be used for cookies.
+ * Derived from {@link WIKKA_BASE_URL_PATH}
+ *
+ * @var string
+ */
+define('WIKKA_COOKIE_PATH', ('/' == WIKKA_BASE_URL_PATH) ? '/' : substr(WIKKA_BASE_URL_PATH, 0, -1)); 
+/**
+ * Default number of hours after which a permanent cookie is to expire: corresponds to 90 days.
+ */
+if (!defined('DEFAULT_COOKIE_EXPIRATION_HOURS')) define('DEFAULT_COOKIE_EXPIRATION_HOURS',90 * 24);
+
+/**#@-*/
+// ----------------------- END URL DOMAIN / PATH -------------------------------
 
 // ------------------------ DEFINE & DERIVE CORE PATHS -------------------------
 if ($debug) echo "core component paths...<br/>\n";
@@ -802,17 +852,10 @@ else
  *			and pass them to the Wakka object; that way we still derive only once
  *			but the installer can use them as well.
  */
-// 1. derive cookie path
-#$scheme = ((isset($_SERVER['HTTPS'])) && !empty($_SERVER['HTTPS']) && 'off' != $_SERVER['HTTPS']) ? 'https://' : 'http://';
-#$base_domain_url = $scheme.$_SERVER['SERVER_NAME'].($_SERVER['SERVER_PORT'] != 80 ? ':'.$_SERVER['SERVER_PORT'] : '');
-$base_url_path = preg_replace('/wikka\.php/', '', $_SERVER['SCRIPT_NAME']);
-#$base_url = $this->base_domain_url.$this->base_url_path;
-#$wikka_url = ((bool) $wakkaConfig['rewrite_mode']) ? $base_url : $base_url.WIKKA_URL_EXTENSION;
-$wikka_cookie_path = substr($base_url_path,0,-1);
 
-// 2. start session
+// start session
 session_name(md5(BASIC_SESSION_NAME.$wakkaConfig['wiki_suffix']));
-session_set_cookie_params(0, $wikka_cookie_path);	// default path is '/' - we don't want that! this call overrides php.ini settings
+session_set_cookie_params(0, WIKKA_COOKIE_PATH);	// default path is '/' - we don't want that! this call overrides php.ini settings
 session_cache_limiter(''); # #279
 session_start();
 

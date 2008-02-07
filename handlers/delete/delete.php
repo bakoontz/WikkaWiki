@@ -8,6 +8,7 @@
  * @license		http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
  *
+ * @uses	WIKKA_BASE_URL
  * @uses	Wakka::FormOpen()
  * @uses	Wakka::FormClose()
  * @uses	Wakka::IsAdmin()
@@ -40,7 +41,7 @@ if ($this->IsAdmin() || ($this->UserIsOwner($tag) && (bool) $this->GetConfigValu
 
 		// redirect back to main page
 		#$this->Redirect($this->GetConfigValue('base_url'), SUCCESS_PAGE_DELETED);
-		$this->Redirect($this->base_url, SUCCESS_PAGE_DELETED);
+		$this->Redirect(WIKKA_BASE_URL, SUCCESS_PAGE_DELETED);
 	}
 	else
 	{

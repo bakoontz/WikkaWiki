@@ -15,7 +15,6 @@
  * @since	1.1.7
  *
  * @uses	FeedCreator
- * @uses	Config::$base_url
  * @uses	Config::$wakka_name
  * @uses	Config::$root_page
  * @uses	Wakka::Href()
