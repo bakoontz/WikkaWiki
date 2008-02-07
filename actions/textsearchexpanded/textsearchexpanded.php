@@ -137,6 +137,9 @@ if ('' !== $phrase)
 	}
 	printf(SEARCH_RESULTS, $match_str, $this->htmlspecialchars_ent($phrase));
 	$result_page_list = $this->ReturnSafeHtml($result_page_list);
-	echo '<ol>'.$result_page_list.'</ol>'."\n";
+	if ($total_results) 
+	{
+		echo '<ol>'.$result_page_list.'</ol>'."\n";
+	}
 }
 ?>
