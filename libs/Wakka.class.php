@@ -4807,6 +4807,7 @@ if ($debug)  echo 'Run - handler: '.$handler."<br/>\n";
 		// 1. wikka_url
 
 		$this->wikka_url = ((bool) $this->GetConfigValue('rewrite_mode')) ? WIKKA_BASE_URL : WIKKA_BASE_URL.WIKKA_URL_EXTENSION;
+		$this->config['base_url'] = $this->wikka_url; #backward compatibility
 
 		// 2. page and handler
 
