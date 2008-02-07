@@ -19,14 +19,23 @@
  * @copyright	Copyright 2007, {@link http://wikkawiki.org/CreditsPage Wikka Development Team}
  */
 
-$url = 'http://'.$_SERVER['SERVER_NAME'].($_SERVER['SERVER_PORT'] != 80 ? ':'.$_SERVER['SERVER_PORT'] : '');
-$url .= preg_replace('/setup\\/test\\/(test-mod-rewrite|rewrite-ok)\\.php/', '', $_SERVER['SCRIPT_NAME']);	
+// duplicate copy of wikka.php - to be moved to a function.
+$scheme = ((isset($_SERVER['HTTPS'])) && !empty($_SERVER['HTTPS']) && 'off' != $_SERVER['HTTPS']) ? 'https://' : 'http://';
+$server_port = $_SERVER['SERVER_PORT'];
+if ((('http://' == $scheme) && (80 == $server_port)) || (('https://' == $scheme) && (443 == $server_port)))
+{
+	$server_port = '';
+}
+if (!defined('WIKKA_BASE_DOMAIN_URL')) define('WIKKA_BASE_DOMAIN_URL', $scheme.$_SERVER['SERVER_NAME'].$server_port);
+define('WIKKA_BASE_URL_PATH', preg_replace('!setup/test/[^.]+.php!', '', $_SERVER['SCRIPT_NAME']));
+define('WIKKA_BASE_URL', WIKKA_BASE_DOMAIN_URL.WIKKA_BASE_URL_PATH);
+
 @session_start();
 $config = isset($_POST['pconfig']) ? $_POST['pconfig'] : array();
 unset ($_POST['pconfig']);
 $_SESSION['wikka'][$_POST['installAction']] = $_POST;
 $_SESSION['sconfig'] = array_merge( $_SESSION['sconfig'], $config);
 session_write_close(); 
-header('Location: '.$url.'wikka.php?installAction='.$_POST['installAction'].'&nonce='.dechex(crc32(rand())));
+header('Location: '.WIKKA_BASE_URL_PATH.'wikka.php?installAction='.$_POST['installAction'].'&nonce='.dechex(crc32(rand())));
 die();
 ?>

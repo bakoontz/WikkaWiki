@@ -33,14 +33,13 @@
 	$htaccess = 'setup/test/.htaccess';
 	if(setupfile_is_writable($htaccess))
 	{
-		$rewrite_base = preg_replace('|^\\S+://[^/]*(?=/)|', '', $url);	// remove scheme and domain
 		$htaccess_content = file($htaccess);
 		$new_htaccess_content = '';
 		foreach($htaccess_content as $line)
 		{
 			if(preg_match("/^\\s*RewriteBase/i", $line))
 			{
-				$line = "RewriteBase $rewrite_base/setup/test"; 
+				$line = 'RewriteBase '.WIKKA_BASE_URL_PATH.'setup/test'; 
 			}
 			$new_htaccess_content .= $line;
 		}

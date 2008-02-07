@@ -20,10 +20,6 @@ define('DEFAULT_SETUP_ACTION', 'default');
 
 // define paths
 $action_target = $_SERVER['SCRIPT_NAME'];
-// @@@ should try to determine scheme, not just assume 'http' - see Wakka::Run() for derivation of object variable "base_url"
-// maybe we'll derive these values in wikka.php so installer can just use them!
-$url = 'http://'.$_SERVER['SERVER_NAME'].($_SERVER['SERVER_PORT'] != 80 ? ':'.$_SERVER['SERVER_PORT'] : '');
-$url .= preg_replace('/wikka\\.php/', '', $_SERVER['SCRIPT_NAME']);	// adds path component @@@ why the _double_ backslash?
 if (isset($_GET['nonce']))
 {
 	session_cache_limiter('public');
@@ -37,7 +33,7 @@ if (isset($_GET['nonce']))
 		$_SESSION['wikka'][$_POST['installAction']] = $_POST;
 		$_SESSION['sconfig'] = array_merge( $_SESSION['sconfig'], $config);
 		session_write_close(); 
-		header('Location: '.$url.'wikka.php?installAction='.$_POST['installAction'].'&nonce='.dechex(crc32(rand())));
+		header('Location: '.WIKKA_BASE_URL.'wikka.php?installAction='.$_POST['installAction'].'&nonce='.dechex(crc32(rand())));
 		die();
 	}
 	else

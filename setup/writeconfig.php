@@ -37,7 +37,6 @@ else
 $htaccess_updated = 0;
 if ($config['rewrite_mode'] == 1)
 {
-	$rewrite_base = preg_replace('|^\\S+://[^/]*(?=/)|', '', $url);	// remove scheme and domain
 	$htaccess_content = file($htaccessLocation);
 	$new_htaccess_content = '';
 	$on_rewrite_section = 0;
@@ -51,7 +50,7 @@ if ($config['rewrite_mode'] == 1)
 		{
 			$line .= '#---WIKKA-REWRITING-BEGIN'."\r\n";
 			$line .= $m[1].' RewriteEngine On'."\r\n";
-			$line .= $m[1].' RewriteBase '.$rewrite_base."\r\n";
+			$line .= $m[1].' RewriteBase '.WIKKA_BASE_URL_PATH."\r\n";
 			$on_rewrite_section = 1;
 		}
 		if (($on_rewrite_section == 1) && (preg_match("/^(\\s*)<\\/IfModule>/i", $line)))
@@ -101,7 +100,7 @@ if ($fp)
 	fwrite($fp, $configCode);
 	// write
 	fclose($fp);
-	printf('<p>'.__('That\'s all! You can now %1$sreturn to your WikkaWiki site%2$s'), '<a href="'.$url.'">', '</a>');
+	printf('<p>'.__('That\'s all! You can now %1$sreturn to your WikkaWiki site%2$s'), '<a href="'.WIKKA_BASE_URL.'">', '</a>');
 	echo '. '."\n";
 	printf(__('However, you are advised to remove write access to %s again now that it\'s been written. Leaving the file writable can be a security risk'), '<tt>wikka.config.php</tt>');
 	echo '!</p>';
