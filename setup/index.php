@@ -67,7 +67,7 @@ else
 	$installAction = DEFAULT_SETUP_ACTION;
 }
 
-if ('grabinfo' == $installAction)
+if (('grabinfo' == $installAction) || ('install' == $installAction))
 {
 	ob_start();
 }

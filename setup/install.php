@@ -125,8 +125,17 @@ case "0":
 			 "KEY idx_time (time)".
 			") TYPE=MyISAM;", $dblink), __('Already exists?'), 0);
 
+	$challenge = dechex(crc32(time()));
+	$pass_val = md5($challenge.md5(mysql_real_escape_string($_SESSION['wikka']['install']['password'])));
+	setcookie('user_name'.$config['wiki_suffix'], $config['admin_users'], time() + DEFAULT_COOKIE_EXPIRATION_HOURS * 60 * 60, WIKKA_COOKIE_PATH);
+	$_COOKIE['user_name'.$config['wiki_suffix']] = $config['admin_users'];
+	setcookie('pass'.$config['wiki_suffix'], $pass_val, time() + DEFAULT_COOKIE_EXPIRATION_HOURS * 60 * 60, WIKKA_COOKIE_PATH);
+	$_COOKIE['pass'.$config['wiki_suffix']] = $pass_val;
+	# first, I delete a previous entry in the table _users, in case this setup's
+	# script was run twice. If the following insert fails, the new Admin won't be auto-logged in.
+	@mysql_query('delete from '.$config['table_prefix'].'users where name = \''.$config['admin_users'].'\'', $dblink);
 	test(__('Adding admin user').'...', 
-		@mysql_query("insert into ".$config["table_prefix"]."users set name = '".$config["admin_users"]."', password = md5('".mysql_real_escape_string($_SESSION['wikka']['install']['password'])."'), email = '".$config["admin_email"]."', signuptime = now()", $dblink), "Hmm!", 0);
+		@mysql_query("insert into ".$config["table_prefix"]."users set name = '".$config["admin_users"]."', password = md5('".mysql_real_escape_string($_SESSION['wikka']['install']['password'])."'), email = '".$config["admin_email"]."', signuptime = now(), challenge='".$challenge."'", $dblink), "Hmm!", 0);
 
 	update_default_page(array(
 	'_rootpage', 
