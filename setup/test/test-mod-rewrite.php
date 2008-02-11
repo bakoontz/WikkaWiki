@@ -21,8 +21,8 @@
 
 // duplicate copy of wikka.php - to be moved to a function.
 $scheme = ((isset($_SERVER['HTTPS'])) && !empty($_SERVER['HTTPS']) && 'off' != $_SERVER['HTTPS']) ? 'https://' : 'http://';
-$server_port = $_SERVER['SERVER_PORT'];
-if ((('http://' == $scheme) && (80 == $server_port)) || (('https://' == $scheme) && (443 == $server_port)))
+$server_port = ':'.$_SERVER['SERVER_PORT'];
+if ((('http://' == $scheme) && (':80' == $server_port)) || (('https://' == $scheme) && (':443' == $server_port)))
 {
 	$server_port = '';
 }
