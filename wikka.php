@@ -89,7 +89,7 @@ else
  * Defines the current Wikka version.
  * Do not change the version number or you will have problems upgrading.
  */
-if (!defined('WAKKA_VERSION'))			define('WAKKA_VERSION', 'trunk');
+if (!defined('WAKKA_VERSION'))			define('WAKKA_VERSION', '1.1.7-docs');
 /**
  * Defines the basic name the session name will be derived from.
  */
