@@ -60,7 +60,7 @@ define('ERROR_PAGE_ALREADY_EXIST', 'Sorry, the destination page already exists')
 define('ERROR_PAGE_NOT_EXIST', ' Sorry, page %s does not exist.');
 define('LABEL_CLONE', 'Clone');
 define('LABEL_EDIT_OPTION', ' Edit after creation ');
-define('PLEASE_FILL_VALID_TARGET', 'Please fill in a valid target ""PageName"" and an (optional) edit note.');
+define('PLEASE_FILL_VALID_TARGET', 'Please fill in a valid target <tt>PageName</tt> and an (optional) edit note.');
 
 // initialization
 $from = $this->tag;
