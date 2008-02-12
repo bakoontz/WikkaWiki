@@ -446,6 +446,12 @@ input.highlight {
 
 /* system information */
 
+.datetime {
+	color: #666;
+	font-size: 80%;
+	font-family: "Lucida Console", Monaco, monospace;
+}
+
 .missingpage {
 	/* background: #ccffff; */
 	text-decoration: none;
@@ -578,9 +584,6 @@ table.data td.number {
 }
 
 table.data td.datetime {
-	color: #666;
-	font-size: 80%;
-	font-family: "Lucida Console", Monaco, monospace;
 	text-align: right;
 	white-space: nowrap;
 }
