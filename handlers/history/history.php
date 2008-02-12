@@ -72,15 +72,22 @@ if ($this->HasAccess("read")) {
 					$added = array_diff($bodyA, $bodyB);
 					$deleted = array_diff($bodyB, $bodyA);
 
-					if (strlen($pageA['note']) == 0) $note = ''; else $note = '['.$this->htmlspecialchars_ent($pageA['note']).']';
+					if (strlen($pageA['note']) == 0)
+					{
+						$note = '';
+					}
+					else
+					{
+						$note = '['.$this->htmlspecialchars_ent($pageA['note']).']';
+					}
 
 					if (($c == 2) && (!$start))
 					{
-						$output .= '<div class="history_revisioninfo">'.sprintf(MOST_RECENT_EDIT, '<a href="'.$this->Href('', '', 'time='.urlencode($pageA['time'])).'">'.$pageA['time'].'</a>', $EditedByUser).' <span class="pagenote smaller">'.$note.'</span></div><br class="clear" />'."\n";
+						$output .= '<div class="history_revisioninfo"><a href="'.$this->Href('', '', 'time='.urlencode($pageA['time'])).'">['.$pageA['id'].']</a> '.sprintf(MOST_RECENT_EDIT, '<a class="datetime" href="'.$this->Href('', '', 'time='.urlencode($pageA['time'])).'">'.$pageA['time'].'</a>', $EditedByUser).' <span class="pagenote smaller">'.$note.'</span></div><br class="clear" />'."\n";
 					}
 					else 
 					{
-						$output .= '<div class="history_revisioninfo">'.sprintf(EDITED_ON,        '<a href="'.$this->Href('', '', 'time='.urlencode($pageA['time'])).'">'.$pageA['time'].'</a>', $EditedByUser).' <span class="pagenote smaller">'.$note.'</span></div><br class="clear" />'."\n";
+						$output .= '<div class="history_revisioninfo"><a href="'.$this->Href('', '', 'time='.urlencode($pageA['time'])).'">['.$pageA['id'].']</a> '.sprintf(EDITED_ON, '<a class="datetime" href="'.$this->Href('', '', 'time='.urlencode($pageA['time'])).'">'.$pageA['time'].'</a>', $EditedByUser).' <span class="pagenote smaller">'.$note.'</span></div><br class="clear" />'."\n";
 					}
 
 					if ($added)
@@ -111,15 +118,23 @@ if ($this->HasAccess("read")) {
 			$EditedByUser = $this->FormatUser($page["user"]);
 		}
 		$oldest_revision = $this->LoadOldestRevision($this->tag);
+		if (strlen($pageB['note']) == 0)
+		{
+			$note_oldest = '';
+		}
+		else
+		{
+			$note_oldest = ' <span class="pagenote smaller">['.$this->htmlspecialchars_ent($pageB['note']).']</span>';
+		}		
 		if ($oldest_revision['id'] != $pageB['id'])
 		{
 			$history_more_link = '<a href="'.$this->Href('history', '', 'start='.($c > 1 ? $c+$start-1 : $c+$start)).'">'.HISTORY_MORE_LINK_DESC.'here</a>';
 			$additional_output .= "\n".'<br /><div class="history_revisioninfo">'.sprintf(HISTORY_MORE,$history_more_link).'</div><br class="clear" />'."\n";
-			$output .= '<div class="history_revisioninfo">'.sprintf(EDITED_ON, '<a href="'.$this->href('', '', 'time='.urlencode($pageB['time'])).'">'.$pageB['time'].'</a>', $this->FormatUser($pageB['user'])).' <span class="pagenote smaller">['.$this->htmlspecialchars_ent($pageB['note']).']</span></div><br class="clear" />'."\n";
+			$output .= '<div class="history_revisioninfo"><a href="'.$this->Href('', '', 'time='.urlencode($pageB['time'])).'">['.$pageB['id'].']</a> '.sprintf(EDITED_ON, '<a class="datetime" href="'.$this->href('', '', 'time='.urlencode($pageB['time'])).'">'.$pageB['time'].'</a>', $this->FormatUser($pageB['user'])).$note_oldest.'</div><br class="clear" />'."\n";
 		}
 		else
 		{
-			$output .= '<div class="history_revisioninfo">'.sprintf(OLDEST_VERSION_EDITED_ON_BY, '<a href="'.$this->href('', '', 'time='.urlencode($pageB['time'])).'">'.$pageB['time'].'</a>', $this->FormatUser($pageB['user'])).'<span class="pagenote smaller">['.$this->htmlspecialchars_ent($pageB['note']).']</span></div><br class="clear" />'."\n";
+			$output .= '<div class="history_revisioninfo"><a href="'.$this->Href('', '', 'time='.urlencode($pageB['time'])).'">['.$pageB['id'].']</a> '.sprintf(OLDEST_VERSION_EDITED_ON_BY, '<a class="datetime" href="'.$this->href('', '', 'time='.urlencode($pageB['time'])).'">'.$pageB['time'].'</a>', $this->FormatUser($pageB['user'])).$note_oldest.'</div><br class="clear" />'."\n";
 		}
 		$output .= '<div class="revisioninfo">'.sprintf(HISTORY_PAGE_VIEW, $this->Link($this->tag)).'</div>'.$this->Format(implode("\n", $bodyB));
 		echo $output.$additional_output;

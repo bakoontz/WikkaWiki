@@ -374,7 +374,7 @@ define('RECENTCHANGES_NONE_ACCESSIBLE', 'There are no recently changed pages you
  */
 // recentcomments
 define('RECENTCOMMENTS_HEADING', 'Recent comments');
-define('RECENTCOMMENTS_TIMESTAMP_CAPTION', '(%s)'); // %s - timestamp
+define('RECENTCOMMENTS_TIMESTAMP_CAPTION', '%s'); // %s - timestamp
 define('RECENTCOMMENTS_NONE_FOUND', 'There are no recent comments.');
 define('RECENTCOMMENTS_NONE_ACCESSIBLE', 'There are no recent comments you have access to.');
 /**#@-*/

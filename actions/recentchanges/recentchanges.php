@@ -109,11 +109,12 @@ if ($pages = $this->LoadRecentlyChanged())
 			//		shortcut to avoid calling Link() three times for the same page;
 			//		we're not escaping link texts here but that doesn't seem necessary!
 			$page_url = $this->Href('', $page['tag']);
-			$revision_link = '<a href="'.$page_url.'/revisions" title="'.sprintf(REVISIONS_LINK_TITLE, $page['tag']).'">'.$timeformatted.'</a>';
+			$revision_number_link = '<a href="'.$this->Href('revisions', $page['tag']).'" title="'.sprintf(REVISIONS_LINK_TITLE, $page['tag']).'">['.$page['id'].']</a> ';
+			$revision_time_link = '<a class="datetime" href="'.$page_url.'/revisions" title="'.sprintf(REVISIONS_LINK_TITLE, $page['tag']).'">'.$timeformatted.'</a>';
 			$history_link  = '<a href="'.$page_url.'/history" title="'.sprintf(HISTORY_LINK_TITLE, $page['tag']).'">'.WIKKA_HISTORY.'</a>';
 			$page_link     = '<a href="'.$page_url.'">'.$page['tag'].'</a>';
 			$editor        = $this->FormatUser($page['user']);
-			echo '<li>'.$revision_link.' ['.$history_link.'] - &nbsp;'.$page_link.' '.PAGE_EDITOR_DIVIDER.' '.$editor.' '.$note.'</li>'."\n";
+			echo '<li>'.$revision_time_link.' '.$revision_number_link.' ['.$history_link.'] - &nbsp;'.$page_link.' '.PAGE_EDITOR_DIVIDER.' '.$editor.' '.$note.'</li>'."\n";
 		}
 	}
 	if ($readable == 0)

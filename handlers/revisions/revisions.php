@@ -83,7 +83,7 @@ if ($this->HasAccess('read'))
 			$output .= '<tr>';
 			$output .= '<td><input type="radio" name="a" value="'.$page['id'].'" '.($c == 1 ? 'checked="checked"' : '').' /></td>';
 			$output .= '<td><input type="radio" name="b" value="'.$page['id'].'" '.($c == 2 ? 'checked="checked"' : '').' /></td>';
-			$output .= '<td>'.sprintf(WIKKA_REV_WHEN_BY_WHO, '<a href="'.$this->Href('show','','time='.urlencode($page['time'])).'">'.$page['time'].'</a>', $this->FormatUser($page['user'])).((strlen($note)>0)? ' <span class="pagenote smaller">'.$note.'</span>' : '').'</td>';
+			$output .= '<td><a href="'.$this->Href('show','','time='.urlencode($page["time"])).'">['.$page["id"].']</a> '.sprintf(WIKKA_REV_WHEN_BY_WHO, '<a class="datetime" href="'.$this->Href('show','','time='.urlencode($page['time'])).'">'.$page['time'].'</a>', $this->FormatUser($page['user'])).((strlen($note)>0)? ' <span class="pagenote smaller">'.$note.'</span>' : '').'</td>';
 			$output .= "</tr>\n";
 		}
 		$output .= "</table>\n";

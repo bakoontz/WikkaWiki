@@ -59,7 +59,7 @@ if ($comments = $this->LoadRecentComments())
 			}
 			// print entry
 			echo
-			sprintf(RECENTCOMMENTS_TIMESTAMP_CAPTION,$timeformatted).' <a href="'.$this->href('', $page_tag, 'show_comments=1').'#comment_'.$comment['id'].'">'.$page_tag.'</a>'.WIKKA_COMMENT_AUTHOR_DIVIDER.$this->FormatUser($comment['user'])."\n<blockquote>".$comment_preview."</blockquote>\n";
+			'<span class="datetime">'.sprintf(RECENTCOMMENTS_TIMESTAMP_CAPTION, $timeformatted).'</span> <a href="'.$this->href('', $page_tag, 'show_comments=1').'#comment_'.$comment['id'].'">'.$page_tag.'</a>'.WIKKA_COMMENT_AUTHOR_DIVIDER.$this->FormatUser($comment['user'])."\n<blockquote>".$comment_preview."</blockquote>\n";
 		}
 	}
 	if ($readable == 0)
