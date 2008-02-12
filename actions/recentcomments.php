@@ -55,7 +55,7 @@ if ($comments = $this->LoadRecentComments())
 				$comment_preview = $comment_preview.'&#8230;';
 			}
 			// print entry
-			echo '&nbsp;&nbsp;&nbsp;('.$timeformatted.') <a href="'.$this->href('', $comment['page_tag'], 'show_comments=1').'#comment_'.$comment['id'].'">'.$comment['page_tag'].'</a>'.COMMENT_AUTHOR_DIVIDER.$this->Format($comment['user'])."\n<blockquote>".$comment_preview."</blockquote>\n";
+			echo '&nbsp;&nbsp;&nbsp; <span class="datetime">'.$timeformatted.'</span> <a href="'.$this->href('', $comment['page_tag'], 'show_comments=1').'#comment_'.$comment['id'].'">'.$comment['page_tag'].'</a>'.COMMENT_AUTHOR_DIVIDER.$this->Format($comment['user'])."\n<blockquote>".$comment_preview."</blockquote>\n";
 		}
 	}
 	if ($readable == 0)
