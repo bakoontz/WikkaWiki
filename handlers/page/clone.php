@@ -142,7 +142,7 @@ if (!$this->existsPage($from))		// name change, interface change (allows only ac
 			'<td><input type="text" name="to" value="'.$to.'" size="37" maxlength="75" /></td>'."\n".
 			'</tr>'."\n".
 			'<tr>'."\n".
-			'<td>'.EDIT_NOTE.'</strong></td>'.
+			'<td>'.EDIT_NOTE.'</td>'.
 			'<td><input type="text" name="note" value="'.$note.'" size="37" maxlength="75" /></td>'."\n".
 			'</tr>'."\n".
 			'<tr>'."\n".
