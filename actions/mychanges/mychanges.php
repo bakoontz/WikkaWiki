@@ -22,14 +22,18 @@
  * @todo	fix RE (#104 etc.); also lose the comma in there!
  */
 
+if(!defined('REVISION_DATE_FORMAT')) define('REVISION_DATE_FORMAT', 'D, d M Y');
+if(!defined('REVISION_TIME_FORMAT')) define('REVISION_TIME_FORMAT', 'H:i T');
+
+
 // order alphabetically or by time?
 $alpha = FALSE;
 if (isset($_GET["alphabetically"]) && $_GET["alphabetically"] == 1) $alpha = TRUE;
 
 $tag = $this->GetPageTag();
 $output = '';
+$time_output = '';
 
-#if ($user = $this->GetUser())
 if ($this->existsUser())
 {
 	$my_edits_count = 0;
@@ -46,18 +50,12 @@ if ($this->existsUser())
 	}
 	$output .= '</a>)</div><div class="clear">&nbsp;</div>'."\n";
 
-	// get the pages
-	/*
-	$query = "SELECT tag, time FROM ".$this->GetConfigValue('table_prefix')."pages WHERE user = '".mysql_real_escape_string($this->GetUserName())."' AND latest = 'Y' ";
-	if ($alpha) $query .= "ORDER BY tag ASC, time DESC";
-	else $query .= "ORDER BY time DESC, tag ASC";
-	*/
 	$order = ($alpha) ? "tag ASC, time DESC" : "time DESC, tag ASC";
 	$query = "
-		SELECT tag, time
+		SELECT id, tag, time
 		FROM ".$this->GetConfigValue('table_prefix')."pages
 		WHERE user = '".mysql_real_escape_string($this->reg_username)."'
-			AND latest = 'Y'
+		AND latest = 'Y'
 		ORDER BY ".$order;
 
 	if ($pages = $this->LoadAll($query))
@@ -67,6 +65,7 @@ if ($this->existsUser())
 		// build the list of pages
 		foreach ($pages as $page)
 		{
+			list($day, $time) = explode(" ", $page["time"]);
 			// order alphabetically
 			if ($alpha)
 			{
@@ -79,23 +78,25 @@ if ($this->existsUser())
 				if ($firstChar != $current)
 				{
 					if ($current) $output .= "<br />\n";
-					$output .= '<strong>'.$firstChar."</strong><br />\n";
+					$output .= '<h5>'.$firstChar."</h5>\n";
 					$current = $firstChar;
 				}
+				$time_output = $page["time"];		
+				$output .= "&nbsp;&nbsp;&nbsp;".$this->Link($page["tag"], "", "", 0)." ".$this->Link($page["tag"], 'revisions', "[".$page['id']."]", 0).' <a class="datetime" href="'.$this->Href('revisions', $page['tag']).'" title="'.PAGE_REVISION_LINK_TITLE.'">'.$time_output."</a><br />\n";
 			}
 			// order by time
 			else
 			{
 				// day header
-				list($day, $time) = explode(" ", $page["time"]);
 				if ($day != $current)
 				{
 					if ($current) print("<br />\n");
-					$output .= '<strong>'.$day.':</strong><br />'."\n";
 					$current = $day;
+					$output .= '<h5>'.date(REVISION_DATE_FORMAT, strtotime($day)).'</h5>'."\n";
 				}
+				$time_output = date(REVISION_TIME_FORMAT, strtotime($time));
+				$output .= '&nbsp;&nbsp;&nbsp;<a class="datetime" href="'.$this->Href('revisions', $page['tag']).'" title="'.PAGE_REVISION_LINK_TITLE.'">'.$time_output.'</a> '.$this->Link($page["tag"], 'revisions', "[".$page['id']."]", 0)." ".$this->Link($page["tag"], "", "", 0)."<br />\n";	
 			}
-			$output .= "&nbsp;&nbsp;&nbsp;(".$page["time"].") (".$this->Link($page["tag"], 'revisions', WIKKA_HISTORY, 0).") ".$this->Link($page["tag"], "", "", 0)."<br />\n"; # @@@ TODO link text should be WIKKA_REVISIONS, not WIKKA_HISTORY
 			$my_edits_count++;
 		}
 
