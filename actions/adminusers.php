@@ -193,15 +193,15 @@ if ($this->IsAdmin($this->GetUser()))
 	//perform actions if required
 	if ($_GET['action'] == 'owned') 
 	{
-		echo $this->Action('userpages');
+		echo $this->Action('mypages');
 	} 
 	elseif ($_GET['action'] == 'changes') 
 	{
-		echo $this->Action('userchanges');
+		echo $this->Action('mychanges');
 	} 
 	elseif ($_GET['action'] == 'comments') 
 	{
-		echo $this->Action('usercomments');
+		echo $this->Action('recentcomments');
 	} 
 	/*
 	elseif ($_GET['action'] == 'feedback' || $_REQUEST['mail']) 

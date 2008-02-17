@@ -22,8 +22,8 @@
  */
 
 if (!defined('NO_PAGES_EDITED')) define('NO_PAGES_EDITED', 'You have not edited any pages yet.');
-if (!defined('MYCHANGES_ALPHA_LIST')) define('MYCHANGES_ALPHA_LIST', "This is a list of pages you've edited, along with the time of your last change.");
-if (!defined('MYCHANGES_DATE_LIST')) define('MYCHANGES_DATE_LIST', "This is a list of pages you've edited, ordered by the time of your last change.");
+if (!defined('MYCHANGES_ALPHA_LIST')) define('MYCHANGES_ALPHA_LIST', "This is a list of pages edited by %s, along with the time of the last change.");
+if (!defined('MYCHANGES_DATE_LIST')) define('MYCHANGES_DATE_LIST', "This is a list of pages edited by %s, ordered by the time of the last change.");
 if (!defined('ORDER_DATE_LINK_DESC')) define('ORDER_DATE_LINK_DESC', 'order by date');
 if (!defined('ORDER_ALPHA_LINK_DESC')) define('ORDER_ALPHA_LINK_DESC', 'order alphabetically');
 if (!defined('MYCHANGES_NOT_LOGGED_IN')) define('MYCHANGES_NOT_LOGGED_IN', "You're not logged in, thus the list of pages you've edited couldn't be retrieved.");
@@ -39,7 +39,24 @@ $tag = $this->GetPageTag();
 $output = '';
 $time_output = '';
 
-if ($user = $this->GetUser())
+$params = '';
+$username = '';
+if(isset($_REQUEST['user']))
+{
+	$username = $this->htmlspecialchars_ent($_REQUEST['user']);
+	$params .= "user=$username&";
+}
+
+$action = '';
+if(isset($_REQUEST['action']))
+{
+	$action = $this->htmlspecialchars_ent($_REQUEST['action']);
+	$params .= "action=$action&";
+}
+$params = substr($params, 0, -1);
+
+if (($this->IsAdmin() && !empty($username)) ||
+	($this->GetUser() &&  $username = $this->GetUserName()))
 {
 	$my_edits_count = 0;
 
@@ -47,11 +64,20 @@ if ($user = $this->GetUser())
 	$output .= '<div class="floatl">';
 	if ($alpha)
 	{
-		$output .= MYCHANGES_ALPHA_LIST.' (<a href="'.$this->href("", $tag).'">'.ORDER_DATE_LINK_DESC;
+		$output .= sprintf(MYCHANGES_ALPHA_LIST, $username).' (<a href="'.$this->Href("", $tag, $params).'">'.ORDER_DATE_LINK_DESC;
 	}
 	else
 	{
-		$output .= MYCHANGES_DATE_LIST.' (<a href="'.$this->href("", $tag, "alphabetically=1").'">'.ORDER_ALPHA_LINK_DESC;
+		if(!empty($params))
+		{
+			$params .= "&alphabetically=1";
+		}
+		else
+		{
+			$params = "alphabetically=1";
+		}
+
+		$output .= sprintf(MYCHANGES_DATE_LIST, $username).' (<a href="'.$this->href("", $tag, $params).'">'.ORDER_ALPHA_LINK_DESC;
 	}
 	$output .= '</a>)</div><div class="clear">&nbsp;</div>'."\n";
 
@@ -60,7 +86,7 @@ if ($user = $this->GetUser())
 	$query = "
 		SELECT id, tag, time
 		FROM ".$this->GetConfigValue('table_prefix')."pages
-		WHERE user = '".mysql_real_escape_string($this->GetUserName())."'
+		WHERE user = '".mysql_real_escape_string($username)."'
 		AND latest = 'Y'
 		ORDER BY ".$order;
 
@@ -124,4 +150,3 @@ else
 
 // *** output section ***
 print $output;
-?>

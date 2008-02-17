@@ -1481,22 +1481,41 @@ class Wakka
 	 *
 	 * @uses	Wakka::LoadAll()
 	 * @param	integer $limit optional: number of last comments. default: 50
+	 * @param   string $user optional: list only comments by this user
 	 * @return	array the last x comments
 	 */
-	function LoadRecentComments($limit = 50) { return $this->LoadAll("SELECT * FROM ".$this->config["table_prefix"]."comments ORDER BY time DESC LIMIT ".intval($limit)); }
+	function LoadRecentComments($limit = 50, $user = '') 
+	{ 
+		$where = '';
+		if(!empty($user) && 
+		   ($user == $this->GetUser() || $this->IsAdmin()))
+		{
+			$where = " where user = '".mysql_real_escape_string($user)."' ";
+		}
+		return $this->LoadAll("SELECT * FROM ".$this->config["table_prefix"]."comments $where ORDER BY time DESC LIMIT ".intval($limit)); 
+	}
 	/**
 	 * Load the last 50 comments on different pages on the wiki.
 	 *
 	 * @uses	Wakka::LoadAll()
 	 * @param	integer $limit optional: number of last comments on different pages. default: 50
+	 * @param   string $user optional: list only comments by this user
 	 * @return	array the last x comments on different pages
 	 */
-	function LoadRecentlyCommented($limit = 50)
+	function LoadRecentlyCommented($limit = 50, $user = '')
 	{
+		$where = ' and 1 ';
+		if(!empty($user) && 
+		   ($user == $this->GetUser() || $this->IsAdmin()))
+		{
+			$where = " and comments.user = '".mysql_real_escape_string($user)."' ";
+		}
+
 		$sql = "SELECT comments.id, comments.page_tag, comments.time, comments.comment, comments.user"
 			. " FROM ".$this->config["table_prefix"]."comments AS comments"
 			. " LEFT JOIN ".$this->config["table_prefix"]."comments AS c2 ON comments.page_tag = c2.page_tag AND comments.id < c2.id"
 			. " WHERE c2.page_tag IS NULL "
+			. $where
 			. " ORDER BY time DESC "
 			. " LIMIT ".intval($limit);
 		return $this->LoadAll($sql);
