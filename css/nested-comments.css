@@ -39,7 +39,10 @@ indented right from the parent.
 
 /* wrapper for the comment lists */
 .commentscontainer {
+	clear: both;
+	border-top: 1px solid #CCCCCC;
 	background-color: #EEEEEE;
+	padding: 5px 0;
 }
 
 /* alternate color for single comments */
@@ -47,21 +50,26 @@ indented right from the parent.
 .comment-layout-1 {
 	background-color: #EEEEEE;
 	padding: 0 0 0 20px;
+	margin-top: 10px;
+	margin-bottom: 10px;
 }
 
 .comment-layout-2 {
 	background-color: #EEEEEE;
 	padding: 0 0 0 20px;
+	margin-top: 10px;
+	margin-bottom: 10px;
 }
 
 .commentbody {
 	background-color: #EEEEEE;
 	border-left: 1px solid #CCCCCC;
+	border-bottom: 1px solid #CCCCCC;
 	padding-left: 2px;
 }
 
 .commentaction {
-	background-color: #EEEEEE;
+	background-color: #E3E3E3;
 	border-bottom: 1px solid #CCCCCC;
 	border-left: 1px solid #CCCCCC;
 	padding-left: 2px;
@@ -74,11 +82,15 @@ indented right from the parent.
 }
 
 .commentinfo {
-	color: #FFFFFF;
+	color: #666;
+	font-size: 80%;
+	font-family: "Lucida Console", Monaco, monospace;
 }
 
 .commentheader {
-	background-color: #CCCCCC;
+	padding: 0 2px;
+	background-color: #E3E3E3;
+	border: 1px solid #CCCCCC;
 }
 
 .commentdeleted {

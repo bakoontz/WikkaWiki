@@ -18,11 +18,9 @@ containing boxes owned by the parent.
 	display: inline;
 }
 
-#comments form input[type=submit] {
+div#comments form input[type=submit] {
 	font-size: 80%;
-	line-height: 1em;
-	padding-right: 2px;
-	padding-left: 2px;
+	padding: 1px 2px;
 }
 
 /* contains the comments form and the navigation bar */
@@ -70,7 +68,9 @@ containing boxes owned by the parent.
 }
 
 .commentinfo {
-	color: #AAAAAA;
+	color: #999999;
+	font-size: 80%;
+	font-family: "Lucida Console", Monaco, monospace;
 }
 
 .commentdeleted {
