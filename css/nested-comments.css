@@ -65,7 +65,7 @@ indented right from the parent.
 	background-color: #EEEEEE;
 	border-left: 1px solid #CCCCCC;
 	border-bottom: 1px solid #CCCCCC;
-	padding-left: 2px;
+	padding: 5px 2px;
 }
 
 .commentaction {
