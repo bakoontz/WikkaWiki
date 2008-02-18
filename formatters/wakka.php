@@ -64,6 +64,7 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 		static $output = '';
 		static $valid_filename = '';
 		static $invalid = '';
+		static $curIndentType;
 
 		global $wakka;
 
@@ -323,7 +324,7 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 			}
 		}
 		// indented text
-		elseif (preg_match("/\n([\t~]+)(-|&|([0-9a-zA-ZÄÖÜßäöü]+)\))?(\n|$)/s", $thing, $matches))
+		elseif (preg_match("/(^|\n)([\t~]+)(-|&|([0-9a-zA-Z]+)\))?(\n|$)/s", $thing, $matches))
 		{
 			// new line
 			$result .= ($br ? "<br />\n" : "\n");
@@ -332,14 +333,32 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 			$br = 0;
 
 			// find out which indent type we want
-			$newIndentType = $matches[2];
+			$newIndentType = $matches[3];
 			if (!$newIndentType) { $opener = "<div class=\"indent\">"; $closer = "</div>"; $br = 1; }
 			elseif ($newIndentType == "-") { $opener = "<ul><li>"; $closer = "</li></ul>"; $li = 1; }
 			elseif ($newIndentType == "&") { $opener = "<ul class=\"thread\"><li>"; $closer = "</li></ul>"; $li = 1; } #inline comments
-			else { $opener = "<ol type=\"". substr($newIndentType, 0, 1)."\"><li>"; $closer = "</li></ol>"; $li = 1; }
+			else
+			{
+				if     (ereg('[0-9]', $newIndentType[0])) { $newIndentType = '1'; }
+				elseif (ereg('[IVX]', $newIndentType[0])) { $newIndentType = 'I'; }
+				elseif (ereg('[ivx]', $newIndentType[0])) { $newIndentType = 'i'; }
+				elseif (ereg('[A-Z]', $newIndentType[0])) { $newIndentType = 'A'; }
+				elseif (ereg('[a-z]', $newIndentType[0])) { $newIndentType = 'a'; }
+
+				$opener = '<ol type="'.$newIndentType.'"><li>';
+				$closer = '</li></ol>';
+				$li = 1;
+			}
 
 			// get new indent level
-			$newIndentLevel = strlen($matches[1]);
+			$newIndentLevel = strlen($matches[2]);
+			if (($newIndentType != $curIndentType) && ($oldIndentLevel > 0))
+			{
+				for (; $oldIndentLevel > 0; $oldIndentLevel --)
+				{
+					$result .= array_pop($indentClosers);
+				}
+			}
 			if ($newIndentLevel > $oldIndentLevel)
 			{
 				for ($i = 0; $i < $newIndentLevel - $oldIndentLevel; $i++)
@@ -363,6 +382,7 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 				$result .= "</li><li>";
 			}
 
+			$curIndentType = $newIndentType;
 			return $result;
 		}
 		// new lines
@@ -436,7 +456,7 @@ $text = preg_replace_callback(
 	"\b[a-z]+:\/\/\S+|".																	# URL
 	"\*\*|\'\'|\#\#|\#\%|@@|::c::|\>\>|\<\<|&pound;&pound;|&yen;&yen;|\+\+|__|<|>|\/\/|".	# Wiki markup
 	"======|=====|====|===|==|".															# headings
-	"\n([\t~]+)(-|&|[0-9a-zA-Z]+\))?|".														# indents and lists
+	"(^|\n)([\t~]+)(-(?!-)|&|([0-9]+|[a-zA-Z]+)\))?|".														# indents and lists
 	"\{\{.*?\}\}|".																			# action
 	"\b[A-ZÄÖÜ][A-Za-zÄÖÜßäöü]+[:](?![=_])\S*\b|".											# InterWiki link
 	"\b([A-ZÄÖÜ]+[a-zßäöü]+[A-Z0-9ÄÖÜ][A-Za-z0-9ÄÖÜßäöü]*)\b|".								# CamelWords
