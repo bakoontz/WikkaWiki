@@ -1,0 +1,10 @@
+### STOP REFERRER SPAM
+SetEnvIfNoCase Referer ".*(adultsite|picturesplace|learnthebiz|celeb|pi-o|drugs|erotica|dick|ghettoinc|port5|bulk-email|camgirls|nude|paris-hilton|modelos|kredit|handyflirt24|versicherung|wwww|erotower|krank|x-1000|flirtnet|chat|sex|teen|babe|blowjob|agedwife|mikes|in-the-vip|boysfirsttime|milf|cock|captain-stabbin|tranny|Kontakt|erotik|webcam|fetish|frauen|hardcore|fakes|fick|krankenversicherung|jinnan-cross|8thstreet|porn|pussy|xxx|XXX|webcam|ficken|fuck|boobs|babes).*" BadReferrer
+
+order deny,allow
+deny from env=BadReferrer
+
+<IfModule mod_rewrite.c>
+RewriteEngine on
+RewriteRule ^(.*)$ wakka.php?wakka=$1 [QSA,L]
+</IfModule>
