@@ -1,13 +1,15 @@
 <?php
  // i18n strings
- define('DIFF_ADDITIONS', 'Additions:');
- define('DIFF_DELETIONS', 'Deletions:');
- define('DIFF_NO_DIFFERENCES', 'No differences.');
- define('EDITED_ON', 'Edited on %1$s by %2$s');
- define('ERROR_ACL_READ', 'You aren\'t allowed to read this page.');
- define('HISTORY_PAGE_VIEW', 'Page view:');
- define('OLDEST_VERSION_EDITED_ON_BY', 'Oldest known version of this page was edited on %1$s by %2$s');
-	define('MOST_RECENT_EDIT', 'Most recent edit on %1$s by %2$s');
+if (!defined('DIFF_ADDITIONS'))  define('DIFF_ADDITIONS', 'Additions:');
+if (!defined('DIFF_DELETIONS'))  define('DIFF_DELETIONS', 'Deletions:');
+if (!defined('DIFF_NO_DIFFERENCES'))  define('DIFF_NO_DIFFERENCES', 'No differences.');
+if (!defined('EDITED_ON'))  define('EDITED_ON', 'Edited on %1$s by %2$s');
+if (!defined('ERROR_ACL_READ'))  define('ERROR_ACL_READ', 'You aren\'t allowed to read this page.');
+if (!defined('HISTORY_PAGE_VIEW'))  define('HISTORY_PAGE_VIEW', 'Page view:');
+if (!defined('OLDEST_VERSION_EDITED_ON_BY'))  define('OLDEST_VERSION_EDITED_ON_BY', 'Oldest known version of this page was edited on %1$s by %2$s');
+if (!defined('MOST_RECENT_EDIT'))  define('MOST_RECENT_EDIT', 'Most recent edit on %1$s by %2$s');
+if (!defined('UNREGISTERED_USER')) define('UNREGISTERED_USER', 'unregistered user');
+
 ?>
 <div class="page">
 <?php
@@ -83,10 +85,12 @@ if ($this->HasAccess("read")) {
 					// $output .= "<DIV class=\"revisioninfo\">Current page:</div>".$this->Format($pageB["body"])."<br />\n<HR><br />\n";
 				}
 				$pageA = $this->LoadPageById($page["id"]);
-				$EditedByUser = $this->Format($page["user"]);
+				$EditedByUser  = $page['user'];	
+				if (!$this->LoadUser($EditedByUser)) $EditedByUser .= ' ('.UNREGISTERED_USER.')';				
 			}
 		}
-  $output .= '<strong>'.sprintf(OLDEST_VERSION_EDITED_ON_BY, '<a href="'.$this->href('', '', 'time='.urlencode($pageB['time'])).'">'.$pageB['time'].'</a>', $EditedByUser).'</strong> <span class="pagenote smaller">['.$this->htmlspecialchars_ent($page['note'])."]</span></strong><br />\n";
+		if ($page['note']) $note='['.$this->htmlspecialchars_ent($page['note']).']'; else $note ='';
+		$output .= '<strong>'.sprintf(OLDEST_VERSION_EDITED_ON_BY, '<a href="'.$this->href('', '', 'time='.urlencode($pageB['time'])).'">'.$pageB['time'].'</a>', $EditedByUser).'</strong> <span class="pagenote smaller">'.$note."</span></strong><br />\n";
 		$output .= '<div class="revisioninfo">'.HISTORY_PAGE_VIEW.'</div>'.$this->Format(implode("\n", $bodyB));
 		print($output);
 	}
