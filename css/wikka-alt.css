@@ -1,0 +1,299 @@
+p, td, li, input, select, textarea {
+	font-family: Verdana, Tahoma, Arial, Helvetica, sans-serif;	
+	line-height: 20px;
+	font-size: 13px;
+
+}
+
+body {
+	font-family: Verdana, Tahoma, Arial, Helvetica, sans-serif;	font-size: 13px;
+	text-align: justify;
+	line-height: 20px;
+	color: #000000;
+	background-color: #F8F8F8;
+	margin-top: 15px; 
+	margin-bottom: 15px; 
+ 	margin-left: 40px;
+	margin-right: 40px;
+}
+
+a {
+	color: #333399;
+}
+
+a:hover {
+	color: #ff6600;
+}
+
+ul, ol {
+	margin-top: 0px;
+	margin-bottom: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
+form, h1, h2, h3, h4, h5 {
+	margin: 0px;
+	padding: 0px;
+}
+
+img {border: 0px;}
+img.centre {display: block; text-align: center; margin: 5px auto;}
+img.center {display: block; text-align: center; margin: 5px auto;}
+img.left {margin: 5px 5px 5px -5px; float: left;}
+img.right {margin: 5px -5px 5px 5px; float: right;}
+
+.indent {
+	margin-left: 40px;
+}
+
+.additions {
+	color: #008800;
+}
+
+.deletions {
+	color: #880000;
+}
+
+.error {
+	color: #CC3333; font-weight: bold;
+}
+
+.header {
+	padding: 10px;
+	padding-top: 0px;
+}
+
+.header a:hover {
+	color: #ff6600;
+	background: transparent;
+	border-bottom: 0px;
+}
+
+.page {
+	color: #000;
+	font-size: 13px;
+	font-family: Verdana, Tahoma, Arial, Helvetica, sans-serif;
+	background-color: white;
+	padding: 20px;
+	border: 1px solid #000060;
+	border-bottom: none; 
+	height: 100%;
+}
+
+.page a {
+	border: 1px solid #ffffff;
+	text-decoration: none;
+}
+
+.page a:hover {
+	color: #0F4275;
+	text-decoration: underline;
+}
+
+.missingpage {
+	/* background: #ccffff; */ 
+	text-decoration: none;
+	border-bottom-width: 1px; 
+	border-bottom-color: #933; 
+	border-bottom-style: dashed; 
+}
+
+.footer {
+	clear: both;
+	background-color: #DDDDDD;
+	padding: 5px 10px;
+	border: 1px solid #000060;
+	border-top: none;
+	border-top: 1px solid #CCCCCC;
+}
+
+.commentsheader {
+	clear: both;
+	background-color: #DDDDDD;
+	padding: 2px 10px;
+	border-left: 1px solid #000060;
+	border-right: 1px solid #000060;
+	border-top: 1px solid #CCCCCC;
+}
+
+.comment {
+	background-color: #EEEEEE;
+	padding: 10px;
+	border-left: 1px solid #000060;
+	border-right: 1px solid #000060;
+	border-top: 1px solid #CCCCCC;
+	border-bottom: 1px solid #000060;
+}
+
+.commentinfo {
+	color: #AAAAAA;
+}
+
+.commentform {
+	background-color: #EEEEEE;
+	padding: 10px;
+	border-left: 1px solid #000060;
+	border-right: 1px solid #000060;
+	border-top: 1px solid #CCCCCC;
+}
+
+.code {
+	color: black;
+	background:	   #ffffee;
+	border: 1px solid #888;
+	font: 11px "Bitstream Vera Sans Mono","Courier New", monospace;
+	width: 95%;
+	margin:auto;
+	overflow: auto;
+	padding: 3px;
+}
+
+.notes {
+	color: #888800;
+}
+
+.revisioninfo {
+	color: #AAAAAA;
+	padding-bottom: 20px;
+}
+
+.copyright {
+	font-size: 11px;
+	color: #AAAAAA;
+	text-align: right;
+}
+
+.copyright a {
+	color: #AAAAAA;
+}
+
+h5 {
+	font-size: 10pt;
+}
+
+h4 {
+	font-size: 12pt;
+}
+
+h3 {
+	font-size: 14pt;
+}
+
+h2 {
+	font-size: 16pt;
+}
+
+h1 {
+	font-size: 18pt;
+}
+
+a.ext {
+	color: #333399;
+}
+
+a.ext:hover {
+	color: #993333;
+}
+
+.exttail {
+	color: #999;
+	position: relative;
+	bottom: 0.5ex;
+}
+
+.searchbox {
+	/* border: none; */
+	border: 1px solid #CCCCAA; 
+	padding: 0px;  
+	margin: 0px; 
+}
+
+input.btn {
+   color: #050;
+   font-family: "trebuchet ms",helvetica,sans-serif;
+   font-size: 84%;
+   font-weight: bold;
+   background-color: #fed;
+   border: 1px solid;
+   border-top-color: #696;
+   border-left-color: #696;
+   border-right-color: #363;
+   border-bottom-color: #363;
+   filter: progid:DXImageTransform.Microsoft.Gradient(GradientType="0",StartColorStr="#ffffffff",EndColorStr="#ffeeddaa");
+}
+
+input.btnhov {
+   border-top-color: #c63;
+   border-left-color: #c63;
+   border-right-color: #930;
+   border-bottom-color: #930;
+}
+
+.toolbar tr { background: ButtonFace; }
+.toolbar .btn-, .toolbar  .btn-hover,  .toolbar .btn-active,  
+.toolbar .btn-pressed {  
+	background: ButtonFace; 
+	color: ButtonText;
+ 	border: 1px solid ButtonFace; 
+	padding: 1px;  
+	margin: 0px; 
+	cursor: pointer; 
+}
+.toolbar .btn- img  { width: 20px; height: 20px; }
+.toolbar .btn-hover { border-color: ButtonHighlight ButtonShadow ButtonShadow ButtonHighlight; }
+.toolbar .btn-active,  
+.toolbar .btn-pressed { border-color: ButtonShadow ButtonHighlight ButtonHighlight ButtonShadow; }
+.toolbar .btn-pressed { background: ButtonHighlight; }
+.editornamecss { background-color:#CCCCFF; font-size: 18px; padding: 0 10px; }
+
+/*---Speific Styles ---*/
+
+.clear {clear:both;}
+
+.comments {display: none;}
+
+.floatl {float: left; width: 48%; margin: 0.5%; padding: 0.5%; background: #EEE;}
+
+.floatr {float: right; width: 48%; margin: 0.5%; padding: 0.5%; background: #EEE;}
+
+.previewhead {margin: auto; z-index:20; position:fixed; top: 0; left: 0; width: 100%; height: 1.75em; background: red; color: white; font-size: 1.5em; font-weight: bold; padding: 5px;}
+
+.highlight {color: red; background: #FFFFD0;}
+
+.strikethrough {color: #888; text-decoration: line-through;}
+
+.additions {color: #008;}
+
+.deletions {color: #876; text-decoration: line-through;}
+
+.underline {text-decoration: underline;}
+
+.recentchanges {font-size: 0.9em;}
+
+.pagenote {color: #888;}
+
+.centre {text-align: center;}
+
+.center, .center p {text-align: center;}
+
+.keys {	
+	color: #333;
+	background-color: #EFEFEF;
+	font: normal 80% "Verdana", sans-serif;
+	text-align: center;
+	border-top: 2px double #CFCFCF;
+	border-left: 3px solid #BABABA;
+	border-right: 4px solid #AAA;
+	border-bottom: 6px solid #909090;
+	padding-left: 0.2em;
+	padding-top: 0em;
+	padding-right: 0.2em;
+	padding-bottom: 0em;
+	line-height: 1.6em;
+	vertical-align: top;
+}
+
+.smallprint {font-size: 0.8em; color: #777; padding-right: 0.5%; text-align: right;}
+
+.smallprint a {color: #987;}
