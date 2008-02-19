@@ -46,7 +46,7 @@ if (!function_exists('color_syntax_is_valid'))
 		$html_color_names = array('aqua', 'black', 'blue', 'fuchsia', 'gray', 'green', 'lime', 'maroon', 'navy', 'olive', 'purple', 'red', 'silver', 
 		 'teal', 'white', 'yellow');
 		$syntax = trim(strtolower($syntax));
-		if (in_array($syntax, $htlm_color_names))
+		if (in_array($syntax, $html_color_names))
 		{
 			return($syntax);
 		}
