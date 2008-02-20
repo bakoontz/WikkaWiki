@@ -108,10 +108,10 @@ no-repeat top left; border: 1px solid #CCC">
 src="images/icons/24x24/gnome-globe.png" alt="globe" title="Localized
 packages" />
 <a
-href="WikkaLocalization#hn_Localized_packages">User-contributed
+href="http://wikkawiki.org/WikkaLocalization#hn_Localized_packages">User-contributed
 localized packages</a><br /><img style="vertical-align:middle"
 src="images/icons/24x24/stock_connect.png" alt="plugin"
 title="User-contributed plugins" />
-<a href="CodeContributions">User-contributed
+<a href="http://wikkawiki.org/CodeContributions">User-contributed
 plugins</a></p>
 </div>
