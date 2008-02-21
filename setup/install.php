@@ -59,6 +59,7 @@ case "0":
 			 "KEY idx_tag (tag),".
 			 "FULLTEXT KEY body (body),".
 			 "KEY idx_time (time),".
+			 "KEY idx_owner (owner),".
 			 "KEY idx_latest (latest)".
 			") TYPE=MyISAM;", $dblink), __('Already exists?'), 0);
 	test(sprintf(__('Creating %s table'), __('ACL')).'...',
@@ -337,7 +338,9 @@ case "1.1.6.3":
 	test(__('Copying existing comment_acls to new fields').'...',
 	@mysql_query("update ".$config['table_prefix']."acls as a inner join(select page_tag, comment_acl from ".$config['table_prefix']."acls) as b on a.page_tag = b.page_tag set a.comment_read_acl=b.comment_acl, a.comment_post_acl=b.comment_acl", $dblink), __('Failed').'. ?', 0);
 	test(__('Creating new page title field').'...',
-	@mysql_query("alter table ".$config['table_prefix']."pages add title varchar(75) default null", $dblink), __('Already done?  OK!'), 0);	// @@@ column position? @@@ also add index on 'owner' column
+	@mysql_query("alter table ".$config['table_prefix']."pages add title varchar(75) default null", $dblink), __('Already done?  OK!'), 0);	// @@@ column position?
+	test(__('Creating index on owner column').'...',
+	@mysql_query('alter table '.$config['table_prefix'].'pages add index `idx_owner` (`owner`)', $dblink), __('Already done?  OK!'), 0);
 	test(__('Dropping unnecessary index `from_tag`').'...',
 	@mysql_query('alter table '.$config['table_prefix'].'links drop index `idx_from`', $dblink), __('Already done?  OK!'), 0);
 	break;
