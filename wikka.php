@@ -126,6 +126,11 @@ if (get_magic_quotes_gpc())
 $t_domain	= $_SERVER['SERVER_NAME'];
 $t_port		= $_SERVER['SERVER_PORT'] != 80 ? ':'.$_SERVER['SERVER_PORT'] : '';
 $t_request	= $_SERVER['REQUEST_URI'];
+// append slash if $t_request does not end with either a slash or the string .php
+if (!preg_match('@(\\.php|/)$@i', $t_request))
+{
+	$t_request .= '/';
+}
 
 if (preg_match('@\.php$@', $t_request) && !preg_match('@wikka\.php$@', $t_request))
 {
