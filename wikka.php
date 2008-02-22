@@ -124,7 +124,12 @@ if (get_magic_quotes_gpc())
  */
 // attempt to derive base URL fragments and whether rewrite mode is enabled (#438)
 $t_domain	= $_SERVER['SERVER_NAME'];
-$t_port		= $_SERVER['SERVER_PORT'] != 80 ? ':'.$_SERVER['SERVER_PORT'] : '';
+$t_scheme = ((isset($_SERVER['HTTPS'])) && !empty($_SERVER['HTTPS']) && 'off' != $_SERVER['HTTPS']) ? 'https://' : 'http://';
+$t_port = ':'.$_SERVER['SERVER_PORT'];
+if ((('http://' == $t_scheme) && (':80' == $t_port)) || (('https://' == $t_scheme) && (':443' == $t_port)))
+{
+	$t_port = '';
+}
 $t_request	= $_SERVER['REQUEST_URI'];
 // append slash if $t_request does not end with either a slash or the string .php
 if (!preg_match('@(\\.php|/)$@i', $t_request))
@@ -162,9 +167,7 @@ $wakkaDefaultConfig = array(
 
 	'root_page'					=> 'HomePage',
 	'wakka_name'				=> 'MyWikkaSite',
-#	'base_url'				=> 'http://'.$_SERVER['SERVER_NAME'].($_SERVER['SERVER_PORT'] != 80 ? ':'.$_SERVER['SERVER_PORT'] : '').$_SERVER['REQUEST_URI'].(preg_match('/'.preg_quote('wikka.php').'$/', $_SERVER['REQUEST_URI']) ? '?wakka=' : ''),
-#	'rewrite_mode'			=> (preg_match('/'.preg_quote('wikka.php').'$/', $_SERVER['REQUEST_URI']) ? '0' : '1'),
-	'base_url'					=> 'http://'.$t_domain.$t_port.$t_request.$t_query,
+	'base_url'					=> $t_scheme.$t_domain.$t_port.$t_request.$t_query,
 	'rewrite_mode'				=> $t_rewrite_mode,
 	'wiki_suffix'				=> '@wikka',
 
