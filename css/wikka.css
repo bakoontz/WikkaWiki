@@ -307,22 +307,19 @@ hr {
 
 /* code blocks */
 
-
 .code_header {
-	color: #FFF;
-	background: #33A;
+	color: #666;
+	background-color: #EEE;
 	border-top: 1px solid #CCC;
 	border-right: 1px solid #CCC;
 	border-left: 1px solid #CCC;
 	border-bottom: none;
-	font-weight: bold;
-	font-family: Arial, Helvetica, sans-serif;
-	font-size: 10pt;
+	font-family: Verdana, Arial, sans-serif;
+	font-size: 100%;
 	padding: 0 3px;
-	width: 95%;
 	margin: 5px auto 0 auto;
 	text-align: left;
-	line-height: 15px;
+	line-height: 1.5em;
 }
 
 .code {
@@ -331,9 +328,8 @@ hr {
 	border: 1px solid #CCC;
 	font-size: 11px;
 	font-family: "Lucida Console", Monaco, monospace;
-	width: 95%;
 	margin: auto;
-	padding: 6px 3px 13px 3px;	/* padding-bottom solves hor. scrollbar hiding single line of code in IE6 but causes vert. scrollbar... */
+	padding: 6px 5px 13px 5px;	/* padding-bottom solves hor. scrollbar hiding single line of code in IE6 but causes vert. scrollbar... */
 	text-align: left;			/* override justify on body */
 	overflow: auto;				/* allow scroll bar in case of long lines - goes together with white-space: nowrap! */
 	white-space: nowrap;		/* prevent line wrapping */
