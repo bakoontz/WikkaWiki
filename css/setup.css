@@ -26,29 +26,42 @@ a {
 	color: #800;
 }
 
+input:hover {
+	background-color: #F3F3F3;
+}
+
+input:focus {
+	background-color: #E6E6E6;
+}
+
 input[type=submit], input[type=button] {
 	font-family: Arial, Helvetica, sans-serif;
-	padding: 0px 1px;
-	width: auto;
+	padding: 2px 3px;
 	font-size: 9pt;
-	color:#fff;
+	color:#666;
 	font-weight: bold;
-	background: #33A;
-	border-right: 2px solid #336;
-	border-bottom: 2px solid #336;
+	background: #EEE;
+	border-top: 1px solid #FFF;
+	border-left: 1px solid #FFF;
+	border-right: 1px solid #AAA;
+	border-bottom: 1px solid #AAA;
 }
 
 input[type=submit]:hover, input[type=button]:hover {
-	background-color: #66C;
-	border-right: 2px solid #668;
-	border-bottom: 2px solid #668;
+	color: #333;
+	background-color: #DDD;
+	border-top: 1px solid #FFF;
+	border-left: 1px solid #FFF;
+	border-right: 1px solid #999;
+	border-bottom: 1px solid #999;
 }
 
 input[type=password], input[type=text] {
-	font-family: Verdana, Tahoma, Arial, Helvetica, sans-serif;
-	color: #800;
+	font-family: Arial, Helvetica, sans-serif;
+	color: #333;
+	font-weight: bold;
+	font-size: 1em;
 }
-
 
 .ok {
 	color: #080;
@@ -95,3 +108,5 @@ xmp{
 	background-color: #FEFEFE;
 	padding: 10px;
 }
+
+/* Version: $Id$ */
