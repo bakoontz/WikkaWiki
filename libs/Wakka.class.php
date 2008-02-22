@@ -3009,7 +3009,8 @@ if ($debug) echo "<br/>\n";
 		else
 		{
 			$attrAction = ' action="'.$this->Href($handler).'"';
-			$hidden['wakka'] = ('' != $tag) ? $tag : $this->tag;
+			// #670: This value will short-circuit the value of wakka=... in URL.
+			$hidden['wakka'] = $this->MiniHref($handler, ('' == $tag ? $this->GetPageTag(): $tag));
 			// @@@ add passed extra GET params here by adding them as extra
 			// entries to $hidden (probably not by adding them to Href()
 			// but that needs to be tested when we get to it!)
