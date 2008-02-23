@@ -47,7 +47,8 @@ if ($cattag = $_GET['wakka'])	#312 (only files action uses POST for wakka)
 
 	if ($results)
 	{
-		if (!$compact) $str .= ' pages belong to ' . $page . ': <br /><br /><table '.$class.' width="100%"><tr>';
+		$str = " pages belong to ".$page.":";
+		if (!$compact) $str .= '<br /><br /><table '.$class.' width="100%"><tr>';
 		else $str .= '<div '.$class.'><ul>';
 		
 		$count = 0; 
