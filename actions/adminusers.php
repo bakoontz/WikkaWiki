@@ -388,18 +388,20 @@ if ($this->IsAdmin($this->GetUser()))
 		$form_filter .=  '</select> <label for="l">'.ADMINUSERS_FORM_PAGER_LABEL_AFTER.'</label> <input type="submit" value="'.ADMINUSERS_FORM_PAGER_SUBMIT.'" /><br />'."\n";
 	
 		// build pager links
+		$ll = $s+$l+1;
+		$ul = ($s+2*$l) > $numusers ? $numusers : ($s+2*$l);
 		if ($s > 0)
 		{
-			$prev = '<a href="' .$this->Href('','','l='.$l.'&amp;sort='.$sort.'&amp;d='.$d.'&amp;s='.($s-$l)).'&amp;q='.$q.'" title="'.sprintf(ADMINUSERS_FORM_PAGER_LINK, ($s-$l+1), $s).'">'.($s-$l+1).'-'.$s.'</a> |  '."\n";
+			$prev = '<a href="'.$this->Href('','','l='.$l.'&amp;sort='.$sort.'&amp;d='.$d.'&amp;s='.($s-$l)).  '&amp;q='.$q.  '&amp;start_ts='.urlencode($start_ts).  '&amp;end_ts='.urlencode($end_ts).  '" title="'.sprintf(ADMINUSERS_FORM_PAGER_LINK, ($s-$l+1), $s).'">'.($s-$l+1).'-'.$s.'</a> |  '."\n";
 		}
 		if ($numusers > ($s + $l))
 		{
-			$next = ' | <a href="'.$this->Href('','','l='.$l.'&amp;sort='.$sort.'&amp;d='.$d.'&amp;s='.($s+$l)).'&amp;q='.$q.'" title="'.sprintf(ADMINUSERS_FORM_PAGER_LINK, ($s+$l+1), ($s+2*$l)).'">'.($s+$l+1).'-'.($s+2*$l).'</a>'."\n";
+			$next = ' | <a href="'.$this->Href('','','l='.$l.'&amp;sort='.$sort.'&amp;d='.$d.'&amp;s='.($s+$l)).'&amp;q='.$q.'&amp;start_ts='.urlencode($start_ts).'&amp;end_ts='.urlencode($end_ts).'" title="'.sprintf(ADMINUSERS_FORM_PAGER_LINK, $ll, $ul).'">'.$ll.(($ll==$ul)?'':('-'.$ul)).'</a>'."\n";
 		}
-		$form_filter .= ADMINUSERS_FORM_RESULT_INFO.' ('.$numusers.'): '.$prev.($s+1).'-'.($s+$l).$next.'<br />'."\n";
+		$form_filter .= ADMINUSERS_FORM_RESULT_INFO.' ('.$numusers.'): '.$prev.(($s+$l)>$numusers?($s+1).'-'.$numusers:($s+1).'-'.($s+$l)).$next.'<br />'."\n";
 		$form_filter .= '<span class="sortorder">'.ADMINUSERS_FORM_RESULT_SORTED_BY.' <tt>'.$sort.', '.$d.'</tt></span>'."\n";
 		$form_filter .= '</fieldset>'.$this->FormClose()."\n";
-	
+
 		// get user list
 		$userdata = $this->LoadAll("SELECT * FROM
 		".$this->config["table_prefix"]."users WHERE status IS NULL OR status != 'deleted' AND ".

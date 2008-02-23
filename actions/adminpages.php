@@ -529,15 +529,17 @@ if ($this->IsAdmin($this->GetUser()))
 		$form_filter .=  '</select> <label for="l">'.ADMINPAGES_FORM_PAGER_LABEL_AFTER.'</label> <input type="submit" value="'.ADMINPAGES_FORM_PAGER_SUBMIT.'" /><br />'."\n";
 
 		// build pager links
+		$ll = $s+$l+1;
+		$ul = ($s+2*$l) > $numpages ? $numpages : ($s+2*$l);
 		if ($s > 0)
 		{
-			$prev = '<a href="' .$this->Href('','','l='.$l.'&amp;sort='.$sort.'&amp;d='.$d.'&amp;s='.($s-$l)).'&amp;q='.$q.'&amp;start_ts='.urlencode($start_ts).'&amp;end_ts='.urlencode($end_ts).'" title="'.sprintf(ADMINPAGES_FORM_PAGER_LINK, ($s-$l+1), $s).'">'.($s-$l+1).'-'.$s.'</a> |  '."\n";
+			$prev = '<a href="'.$this->Href('','','l='.$l.'&amp;sort='.$sort.'&amp;d='.$d.'&amp;s='.($s-$l)).  '&amp;q='.$q.  '&amp;start_ts='.urlencode($start_ts).  '&amp;end_ts='.urlencode($end_ts).  '" title="'.sprintf(ADMINPAGES_FORM_PAGER_LINK, ($s-$l+1), $s).'">'.($s-$l+1).'-'.$s.'</a> |  '."\n";
 		}
 		if ($numpages > ($s + $l))
 		{
-			$next = ' | <a href="'.$this->Href('','','l='.$l.'&amp;sort='.$sort.'&amp;d='.$d.'&amp;s='.($s+$l)).'&amp;q='.$q.'&amp;start_ts='.urlencode($start_ts).'&amp;end_ts='.urlencode($end_ts).'" title="'.sprintf(ADMINPAGES_FORM_PAGER_LINK, ($s+$l+1), ($s+2*$l)).'">'.($s+$l+1).'-'.($s+2*$l).'</a>'."\n";
+			$next = ' | <a href="'.$this->Href('','','l='.$l.'&amp;sort='.$sort.'&amp;d='.$d.'&amp;s='.($s+$l)).'&amp;q='.$q.'&amp;start_ts='.urlencode($start_ts).'&amp;end_ts='.urlencode($end_ts).'" title="'.sprintf(ADMINPAGES_FORM_PAGER_LINK, $ll, $ul).'">'.$ll.(($ll==$ul)?'':('-'.$ul)).'</a>'."\n";
 		}
-		$form_filter .= ADMINPAGES_FORM_RESULT_INFO.' ('.$numpages.'): '.$prev.($s+1).'-'.($s+$l).$next.'<br />'."\n";
+		$form_filter .= ADMINPAGES_FORM_RESULT_INFO.' ('.$numpages.'): '.$prev.(($s+$l)>$numpages?($s+1).'-'.$numpages:($s+1).'-'.($s+$l)).$next.'<br />'."\n";
 		$form_filter .= '<span class="sortorder">'.ADMINPAGES_FORM_RESULT_SORTED_BY.' <tt>'.$sort.', '.$d.'</tt></span>'."\n";
 		$form_filter .= '</fieldset>'.$this->FormClose()."\n";
 
