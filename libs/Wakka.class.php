@@ -2502,8 +2502,10 @@ if ($debug) echo "deleting 'pass".$this->GetConfigValue('wiki_suffix')."' at roo
 	}
 	/**
 	 * Get the value of a Cookie.
-	 *
-	 * @uses	Wakka::GetConfigValue()
+	 * 
+	 * @param string $name Name of the cookie, used in {@link Wakka::SetPersistentCookie()} and {@link Wakka::SetSessionCookie()}
+	 * @return mixed value of the cookie, or the boolean FALSE if the cookie is not present.
+	 * @uses	Config::$wiki_suffix
 	 */
 	function getWikkaCookie($name)
 	{
@@ -2517,6 +2519,15 @@ if ($debug) echo "deleting 'pass".$this->GetConfigValue('wiki_suffix')."' at roo
 			$cookie = $_COOKIE[$name.$this->GetConfigValue('wiki_suffix')];
 		}
 		return $cookie;
+	}
+	/**
+	 * @deprecated deprecated since version 1.1.7
+	 * @see {@link Wakka::getWikkaCookie()}
+	 * @uses	Wakka::getWikkaCookie()
+	 */
+	function GetCookie($name)
+	{
+		return $this->getWikkaCookie($name);
 	}
 
 	/**
