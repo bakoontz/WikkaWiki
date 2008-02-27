@@ -711,72 +711,95 @@ form#form_user_admin_panel fieldset {
 }
 
 /* Calendar Action */
-
-/* general styling */
 table.calendar {
 	color: #000;
-	background-color: #CCC;				/* comment out to have space between cells same color as page background */
-	/*border-collapse: collapse;*/			/* would make single-width borders, ignoring cell-spacing */
+	background-color: #EEE;
+	border-collapse: collapse;
 }
+
 table.calendar caption {
-	background-color: #CCC;
-	font-weight: bold;
-	line-height: 1.6em;
+	border: 1px solid #CCC;
+	margin:5px 0;
+	font-size: 95%;
+	color: #666;
+	padding:2px;
 }
+
 table.calendar thead {
-	background-color: #CCC;
+	border: 2px solid #CCC;
+	background-color: #DDD;
 }
+
 table.calendar tbody.face {
-	background-color: #CCC;
+	background-color: #EEE;
+	border: 2px solid #CCC;
 }
+
 table.calendar tbody.calnav {
-	background-color: #CCC;
+	background-color: #FFF;
 }
-/* styling for some specific elements */
+
 table.calendar thead th {
-	/*border: 1px solid #000;*/			/* uncomment to have border around day name headers (will be page background if table background is undefined) */
+	border: 1px solid #CCC;
 	padding: 1px;
 	text-align: center;
 	font-size: 85%;
 	width: 26px;
 }
+
 table.calendar tbody.face td {
-	border: 1px solid #000;
+	border: 1px solid #CCC;
 	text-align: right;
 }
+
 table.calendar td.currentday {
-	color: #933;
-	background-color: #AAA;
-	font-weight: bold;
+	color: #FFF;
+	background-color: #33A;
 }
-/* styling of calendar navigation */
+
+table.calendar tbody.face td:hover {
+	background-color: #DDD;
+}
+
+table.calendar tbody.face td.currentday:hover {
+	color: #FFF;
+	background-color: #66C;
+}
+
 table.calendar tbody.calnav {
 	font-weight: bold;
 }
+
 table.calendar td.prevmonth {
 	text-align: left;
 	font-size: 85%;
 }
+
 table.calendar td.curmonth {
 	text-align: center;
 }
+
 table.calendar td.nextmonth {
 	text-align: right;
 	font-size: 85%;
 }
+
 table.calendar a:link {
-	color: #933;
+	color: #339;
 	text-decoration: none;
 }
+
 table.calendar a:visited {
-	color: #933;
+	color: #339;
 	text-decoration: none;
 }
+
 table.calendar a:hover {
 	color: #933;
 }
+
 table.calendar a:active {
-	color: #933;
+	color: #339;
 	text-decoration: none;
 }
 
