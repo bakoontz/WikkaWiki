@@ -78,9 +78,9 @@ else
 <?php
 			}
 		}
-		echo '</div>'."\n";
 		echo '<div style="clear: both"></div>'."\n";
-		echo "\n".'<!--closing page content-->'."\n";
+		echo '</div>'."\n";
+		echo '<!--closing page content-->'."\n";
 		
 		if ($this->GetConfigValue('hide_comments') != 1)
 		{
