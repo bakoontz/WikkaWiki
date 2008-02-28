@@ -145,6 +145,7 @@ case "0":
 	if (!Wakka::existsPage('AdminUsers',$config['table_prefix'],$dblink)) mysql_query("insert into ".$config['table_prefix']."pages set tag = 'AdminUsers', body = '{{adminusers}}\n\n----\nCategoryAdmin', owner = '(Public)', user = 'WikkaInstaller', time = now(), latest = 'Y'", $dblink);
 	if (!Wakka::existsPage('AdminPages',$config['table_prefix'],$dblink)) mysql_query("insert into ".$config['table_prefix']."pages set tag = 'AdminPages', body = '{{adminpages}}\n\n----\nCategoryAdmin', owner = '(Public)', user = 'WikkaInstaller', time = now(), latest = 'Y'", $dblink);
 	if (!Wakka::existsPage('DatabaseInfo',$config['table_prefix'],$dblink)) mysql_query("insert into ".$config['table_prefix']."pages set tag = 'DatabaseInfo', body = '{{dbinfo}}\n\n----\nCategoryAdmin', owner = '(Public)', user = 'WikkaInstaller', time = now(), latest = 'Y'", $dblink);
+	if (!Wakka::existsPage('HighScores',$config['table_prefix'],$dblink)) mysql_query("insert into ".$config['table_prefix']."pages set tag = 'HighScores', body = '{{highscores}}\n\n----\nCategoryWiki', owner = '(Public)', user = 'WikkaInstaller', time = now(), latest = 'Y'", $dblink);
 	
 	test("Setting default ACL...", 1);
 	mysql_query("insert into ".$config['table_prefix']."acls set page_tag = 'UserSettings', read_acl = '*', write_acl = '+', comment_acl = '+'", $dblink);
@@ -327,6 +328,8 @@ case "1.1.6.3":
 	$config['allow_user_registration'] = '1';
 	test(sprintf(ADDING_CONFIG_ENTRY, 'wikka_template_path' ), 1);
 	$config["wikka_template_path"] = 'templates';
+	test("Adding HighScores page...",
+	mysql_query("insert into ".$config['table_prefix']."pages set tag = 'HighScores', body = '{{highscores}}\n\n----\nCategoryWiki', owner = '(Public)', note='".$upgrade_note."', user = 'WikkaInstaller', time = now(), latest = 'Y'", $dblink), "Already done? OK!", 0);
 	test("Adding CategoryAdmin page...",
 	mysql_query("insert into ".$config['table_prefix']."pages set tag = 'CategoryAdmin', body = '=====Wiki Administration Category=====\nThis category links to pages for wiki administration.\n\n\n----\n\n{{category}}\n\n\n----\n[[CategoryCategory List of all categories]]', owner = '(Public)', note='".$upgrade_note."', user = 'WikkaInstaller', time = now(), latest = 'Y'", $dblink), "Already done? OK!", 0);
 	test("Adding DatabaseInfo page...",
