@@ -267,6 +267,19 @@ define('GOOGLE_BUTTON', 'Google');
 /**#@-*/
 
 /**#@+
+ * Language constant used by the {@link highscores.php highscores} action
+ */
+// include
+define('HIGHSCORES_LABEL_EDITS', 'edits');
+define('HIGHSCORES_LABEL_COMMENTS', 'comments');
+define('HIGHSCORES_LABEL_PAGES', 'pages owned');
+define('HIGHSCORES_CAPTION', 'Top %1$s contributor(s) by number of %2$s'); 
+define('HIGHSCORES_HEADER_RANK', 'rank');
+define('HIGHSCORES_HEADER_USER', 'user');
+define('HIGHSCORES_HEADER_PERCENTAGE', 'percentage');
+/**#@-*/
+
+/**#@+
  * Language constant used by the {@link include.php include} action
  */
 // include

@@ -901,6 +901,13 @@ fieldset.feedback br {
 	clear: left;
 }
 
+/* HighScores action */
+
+table.highscores {
+	white-space: nowrap;
+	padding 1px 3px
+}
+
 /* Newpage action */
 
 fieldset.newpage {
