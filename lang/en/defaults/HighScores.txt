@@ -1,6 +1,4 @@
-**Rankings based on quantity of OwnedPages*:**
- {{HighScores}}*//not quality.//
-
+{{highscores style="simple"}}
 
 ----
 CategoryWiki

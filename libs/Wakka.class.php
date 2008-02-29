@@ -2502,8 +2502,10 @@ if ($debug) echo "deleting 'pass".$this->GetConfigValue('wiki_suffix')."' at roo
 	}
 	/**
 	 * Get the value of a Cookie.
-	 *
-	 * @uses	Wakka::GetConfigValue()
+	 * 
+	 * @param string $name Name of the cookie, used in {@link Wakka::SetPersistentCookie()} and {@link Wakka::SetSessionCookie()}
+	 * @return mixed value of the cookie, or the boolean FALSE if the cookie is not present.
+	 * @uses	Config::$wiki_suffix
 	 */
 	function getWikkaCookie($name)
 	{
@@ -2517,6 +2519,15 @@ if ($debug) echo "deleting 'pass".$this->GetConfigValue('wiki_suffix')."' at roo
 			$cookie = $_COOKIE[$name.$this->GetConfigValue('wiki_suffix')];
 		}
 		return $cookie;
+	}
+	/**
+	 * @deprecated deprecated since version 1.1.7
+	 * @see {@link Wakka::getWikkaCookie()}
+	 * @uses	Wakka::getWikkaCookie()
+	 */
+	function GetCookie($name)
+	{
+		return $this->getWikkaCookie($name);
 	}
 
 	/**
@@ -3008,8 +3019,9 @@ if ($debug) echo "<br/>\n";
 		}
 		else
 		{
-			$attrAction = ' action="'.$this->Href($handler).'"';
-			$hidden['wakka'] = ('' != $tag) ? $tag : $this->tag;
+			$attrAction = ' action="'.$this->Href($handler, $tag).'"';
+			// #670: This value will short-circuit the value of wakka=... in URL.
+			$hidden['wakka'] = $this->MiniHref($handler, ('' == $tag ? $this->GetPageTag(): $tag));
 			// @@@ add passed extra GET params here by adding them as extra
 			// entries to $hidden (probably not by adding them to Href()
 			// but that needs to be tested when we get to it!)

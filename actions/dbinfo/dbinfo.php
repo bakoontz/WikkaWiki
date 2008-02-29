@@ -234,7 +234,7 @@ if ($isAdmin)
 		{
 			$tableselform  = $this->FormOpen('','','POST','tablesel');
 			$tableselform .= '<fieldset class="hidden">'."\n";
-			$tableselform .= '	<input type="hidden" name="seldb" "value="'.$seldb.'" />'."\n";
+			$tableselform .= '	<input type="hidden" name="seldb" value="'.$seldb.'" />'."\n";
 			$tableselform .= '</fieldset>'."\n";
 			$tableselform .= '<fieldset>'."\n";
 			$tableselform .= '	<legend>'.FORM_SELTABLE_LEGEND.'</legend>'."\n";
@@ -252,7 +252,7 @@ if ($isAdmin)
 				}
 			}
 			$tableselform .= '	</select>'."\n";
-			$tableselform .= '	<input type="submit" name="tableselect" "value="'.FORM_SUBMIT_SELTABLE.'" />'."\n";
+			$tableselform .= '	<input type="submit" name="tableselect" value="'.FORM_SUBMIT_SELTABLE.'" />'."\n";
 			$tableselform .= '</fieldset>'."\n";
 			$tableselform .= $this->FormClose();
 		}

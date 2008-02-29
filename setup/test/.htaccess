@@ -1,5 +1,5 @@
 <IfModule mod_rewrite.c>
 RewriteEngine On
-RewriteBase /setup/test/
+RewriteBase /trunk/setup/test/
 RewriteRule ^test-mod-rewrite.php$ rewrite-ok.php
 </IfModule>

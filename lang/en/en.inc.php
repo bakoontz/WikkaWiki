@@ -267,6 +267,19 @@ define('GOOGLE_BUTTON', 'Google');
 /**#@-*/
 
 /**#@+
+ * Language constant used by the {@link highscores.php highscores} action
+ */
+// include
+define('HIGHSCORES_LABEL_EDITS', 'edits');
+define('HIGHSCORES_LABEL_COMMENTS', 'comments');
+define('HIGHSCORES_LABEL_PAGES', 'pages owned');
+define('HIGHSCORES_CAPTION', 'Top %1$s contributor(s) by number of %2$s'); 
+define('HIGHSCORES_HEADER_RANK', 'rank');
+define('HIGHSCORES_HEADER_USER', 'user');
+define('HIGHSCORES_HEADER_PERCENTAGE', 'percentage');
+/**#@-*/
+
+/**#@+
  * Language constant used by the {@link include.php include} action
  */
 // include
@@ -700,8 +713,8 @@ define('HISTORY_MORE', 'Full history for this page cannot be displayed within a 
  */
 // processcomment & show
 // - comment buttons
-define('COMMENT_DELETE_BUTTON', 'Delete Comment');
-define('COMMENT_REPLY_BUTTON', 'Reply to Comment');
+define('COMMENT_DELETE_BUTTON', 'Delete');
+define('COMMENT_REPLY_BUTTON', 'Reply');
 define('COMMENT_ADD_BUTTON', 'Add Comment');
 define('COMMENT_NEW_BUTTON', 'New Comment');
 /**#@-*/
@@ -813,7 +826,7 @@ define('HIDE_COMMENTS_LINK_DESC', 'Hide comments');
 define('STATUS_NO_COMMENTS', 'There are no comments on this page.');
 define('STATUS_ONE_COMMENT', 'There is one comment on this page.');
 define('STATUS_SOME_COMMENTS', 'There are %d comments on this page.'); // %d - number of comments
-define('COMMENT_TIME_CAPTION', '(%s)'); // %s comment time
+define('COMMENT_TIME_CAPTION', '%s'); // %s comment time
 /**#@-*/
 
 /**#@+

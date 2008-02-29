@@ -324,7 +324,7 @@ hr {
 
 .code {
 	color: black;
-	background: #ffffee;
+	background: #FAFAFA;
 	border: 1px solid #CCC;
 	font-size: 11px;
 	font-family: "Lucida Console", Monaco, monospace;
@@ -899,6 +899,13 @@ fieldset.feedback textarea {
 
 fieldset.feedback br {
 	clear: left;
+}
+
+/* HighScores action */
+
+table.highscores {
+	white-space: nowrap;
+	padding 1px 3px
 }
 
 /* Newpage action */
