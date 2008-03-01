@@ -21,9 +21,10 @@
 // i18n
 if (!defined('NOT_AVAILABLE')) define('NOT_AVAILABLE', 'n/a');
 if (!defined('NOT_INSTALLED')) define('NOT_INSTALLED', 'not installed');
+if (!defined('WIKKA_ADMIN_ONLY_TITLE')) define('WIKKA_ADMIN_ONLY_TITLE', 'Sorry, only wiki administrators can display this information');
 
 // defaults
-$out = NOT_AVAILABLE;
+$out = '<abbr title="'.WIKKA_ADMIN_ONLY_TITLE.'">'.NOT_AVAILABLE.'</abbr>'."\n";
 
 //check privs
 if ($this->config['public_sysinfo'] == '1' || $this->IsAdmin())
