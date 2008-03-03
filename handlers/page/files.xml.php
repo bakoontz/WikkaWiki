@@ -37,7 +37,7 @@ switch ($_GET['action'])	#312
     case 'download':
 			#$_REQUEST['file'] = basename($_REQUEST['file']);
 			$_GET['file'] = basename($_GET['file']); #312
-            if ($this->HasAccess('read')) {
+            if (($this->HasAccess('read')) && (!preg_match('/^\\./', $_GET['file']))) {
 				#$path = "{$upload_path}/{$_REQUEST['file']}";
 				$path = $upload_path.DIRECTORY_SEPARATOR.$_GET['file'];	#89, #312
                 $filename = basename($path);
