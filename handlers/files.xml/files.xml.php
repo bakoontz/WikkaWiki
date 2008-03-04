@@ -16,13 +16,18 @@
  * @license		http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
  *
- * @uses	Wakka::GetConfigValue()
+ * @uses	mkdir_r()
+ * @uses	Wakka::SetConfigValue()
  * @uses	Wakka::GetPageTag()
  * @uses	Wakka::HasAccess()
  * @uses	Wakka::Href()
  * @uses	Wakka::IsAdmin()
- * @uses	Wakka::redirect()
+ * @uses	Wakka::SetRedirectMessage()
+ * @uses	Wakka::Redirect()
  * @uses	Config::$upload_path
+ * @uses	Config::$root_page
+ * @uses	WIKKA_ERROR_ACL_READ_INFO
+ *
  * @todo	make shared download code for this and grab code handler
  */
 
@@ -37,6 +42,16 @@ if (!is_dir($upload_path))
 	mkdir_r($upload_path);
 }
 
+if (!isset($_GET['file']) || !isset($_GET['action']) || !is_string($_GET['file']))
+{
+	// invocation of files.xml must provide $_GET['file'] and $_GET['action'].
+	// todo: add an error message here: probably, ERROR_BAD_PARAMETERS should be splitted.
+	$this->Redirect('');
+}
+if ('.' == $_GET['file']{0})
+{
+	$this->Redirect($this->Href(), ERROR_FILETYPE_NOT_ALLOWED);
+}
 // do the action
 switch ($_GET['action'])	# #312
 {
@@ -48,42 +63,53 @@ switch ($_GET['action'])	# #312
 		$filename = basename($path);
 		header("Content-Type: application/x-download");
 		header("Content-Disposition: attachment; filename=\"".urldecode($filename)."\"");
-		if ($this->HasAccess('read'))
+		if (!file_exists($path))
 		{
-			if (isset($_SERVER['HTTP_RANGE']) &&
-				(preg_match('/^.*bytes[= ]+(\d+)-(\d+)\s*$/', $_SERVER['HTTP_RANGE'], $range)) &&
-				((int) $range[2] >= (int) $range[1])
-			   )
-			{
-				$rstart = $range[1];
-				$rend = $range[2];
-				$fp = fopen($path, 'rb');
-				fseek($fp, $rstart+SEEK_SET);
-				$data = fread($fp, $rend - $rstart + 1);
-				fclose($fp);
-				header('Content-Range: bytes '.$rstart.'-'.$rend.'/'.filesize($path));
-				header('HTTP/1.1 206 Partial content');
-				echo $data;
-				exit();
-			}
-			//Header("Content-Length: ".filesize($path));
-			//Header("Connection: close");
-			@ob_end_clean();
-			@ob_end_clean();
+			$this->Redirect($this->Href(), sprintf(ERROR_NONEXISTENT_FILE, $_GET['file']));
+		}
+		if (!$this->HasAccess('read'))
+		{
+			// The user may have followed a link from email or external site, but he has no access to the page.
+			// We redirect this user to the HomePage.
+			$this->Redirect($this->Href('', $this->GetConfigValue('root_page')), WIKKA_ERROR_ACL_READ_INFO);
+		}
+		if (isset($_SERVER['HTTP_RANGE']) &&
+			(preg_match('/^.*bytes[= ]+(\d+)-(\d+)\s*$/', $_SERVER['HTTP_RANGE'], $range)) &&
+			((int) $range[2] >= (int) $range[1])
+		   )
+		{
+			$rstart = $range[1];
+			$rend = $range[2];
 			$fp = fopen($path, 'rb');
-			while (!feof($fp))
-			{
-				$data = fread($fp, 4096);
-				echo $data;
-			}
+			fseek($fp, $rstart+SEEK_SET);
+			$data = fread($fp, $rend - $rstart + 1);
 			fclose($fp);
+			header('Content-Range: bytes '.$rstart.'-'.$rend.'/'.filesize($path));
+			header('HTTP/1.1 206 Partial content');
+			echo $data;
 			exit();
 		}
+		//Header("Content-Length: ".filesize($path));
+		//Header("Connection: close");
+		@ob_end_clean();
+		@ob_end_clean();
+		$fp = fopen($path, 'rb');
+		while (!feof($fp))
+		{
+			$data = fread($fp, 4096);
+			echo $data;
+		}
+		fclose($fp);
+		exit();
 	case 'delete':
 		if ($this->IsAdmin())
 		{
-			@unlink($upload_path.DIRECTORY_SEPARATOR.$_GET['file']); # #89, #312 // TODO if this is admin-only, why hide any errors?
+			$delete_success = @unlink($upload_path.DIRECTORY_SEPARATOR.$_GET['file']); # #89, #312 
+			if (!$delete_success)
+			{
+				$this->SetRedirectMessage(ERROR_FILE_NOT_DELETED);
+			}
 		}
-		print $this->redirect($this->Href());
 }
+print $this->Redirect($this->Href());
 ?>

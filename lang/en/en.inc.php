@@ -233,7 +233,7 @@ define('SUCCESS_FEEDBACK_SENT', 'Thanks for your feedback, %s! Your message has 
 /**#@-*/
 
 /**#@+
- * Language constant used by the {@link files.php files} action
+ * Language constant used by the {@link files.php files action} and {@link handlers/files.xml/files.xml.php files.xml handler}
  */
 // files
 define('ERROR_UPLOAD_DIRECTORY_NOT_WRITABLE', 'Please make sure that the server has write access to a folder named %s.'); // %s Upload folder ref #89
@@ -243,6 +243,8 @@ define('ERROR_FILE_UPLOAD_INCOMPLETE', 'File upload incomplete! Please try again
 define('ERROR_UPLOADING_FILE', 'There was an error uploading your file');
 define('ERROR_FILE_ALREADY_EXISTS', 'Sorry, a file named %s already exists.'); // %s - file name ref
 define('ERROR_EXTENSION_NOT_ALLOWED', 'Sorry, files with this extension are not allowed.');
+define('ERROR_FILETYPE_NOT_ALLOWED', 'Sorry, files of this type are not allowed.');
+define('ERROR_FILE_NOT_DELETED', 'Sorry, the file could not be deleted!');
 define('ERROR_FILE_TOO_BIG', 'Attempted file upload was too big. Maximum allowed size is %s.'); // %s - allowed filesize
 define('ERROR_NO_FILE_SELECTED', 'No file selected.');
 define('ERROR_FILE_UPLOAD_IMPOSSIBLE', 'File upload impossible due to misconfigured server.');

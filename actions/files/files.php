@@ -26,8 +26,12 @@
  * @uses	Wakka::Href()
  * @uses	Wakka::HasAccess()
  * @uses	Wakka::IsAdmin()
- * @uses	Wakka::MiniHref()
  * @uses	Wakka::htmlspecialchars_ent()
+ * @uses	Wakka::FormOpen()
+ * @uses	Wakka::FormClose()
+ * @uses	Wakka::SetConfigValue()
+ * @uses	Wakka::ReturnSafeHTML()
+ * @uses	Config::$upload_path
  *
  * @todo security: check file type, not only extension
  * @todo use buttons instead of links for file deletion; #72 comment 7
