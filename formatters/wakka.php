@@ -354,7 +354,7 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 			$newIndentLevel = strlen($matches[2]);
 			if (($newIndentType != $curIndentType) && ($oldIndentLevel > 0))
 			{
-				for (; $oldIndentLevel > 0; $oldIndentLevel --)
+				for (; $oldIndentLevel > $newIndentLevel; $oldIndentLevel --)
 				{
 					$result .= array_pop($indentClosers);
 				}
