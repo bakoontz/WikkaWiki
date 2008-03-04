@@ -45,6 +45,7 @@ if (!defined('RSS_RECENTCHANGES_VERSION')) define('RSS_RECENTCHANGES_VERSION','0
 
 // get "input" variables
 $message = $this->GetRedirectMessage();
+$message = addslashes($this->htmlspecialchars_ent($message));
 
 // init output variables
 $onload = ('' != $message) ? " onload=\"alert('".$message."');\" " : '';

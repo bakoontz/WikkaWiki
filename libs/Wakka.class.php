@@ -2544,8 +2544,15 @@ if ($debug) echo "deleting 'pass".$this->GetConfigValue('wiki_suffix')."' at roo
 		$_SESSION['redirectmessage'] = $message;
 	}
 	/**
-	 * Get a message, if one was stored before redirection.
+	 * Get a message, if one was stored before redirection. 
+	 * To set the message, either use {@link Wakka::SetRedirectMessage()} or the second parameter
+	 * of the {@link Wakka::Redirect()} method.
+	 * The message is passed transparently between {@link Wakka::SetRedirectMessage()} and 
+	 * GetRedirectMessage(). It is the responsibility of any code setting and getting that 
+	 * message to perform any validation against the message (quotes handling, XHTML validation, ...)
 	 *
+	 * @see	Wakka::Redirect()
+	 * @see	Wakka::SetRedirectMessage()
 	 * @return string either the text of the message or an empty string.
 	 */
 	function GetRedirectMessage()
