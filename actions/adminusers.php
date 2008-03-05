@@ -62,35 +62,38 @@
  * @todo	find a better name
  * @todo	move to core
  */
-function optionRanges($limits, $max, $firstinc = 1)
+if(!function_exists('optionRanges'))
 {
-	// initializations
-	if (is_int($limits)) $limits = array($limits);
-	if ($firstinc < 1) $firstinc = 1;
-	$opts = array();
-	$inc = $firstinc;
-
-	// first element is the first increment
-	$opts[] = $inc;
-	// each $limit is the upper limit of a 'range'
-	foreach ($limits as $limit)
+	function optionRanges($limits, $max, $firstinc = 1)
 	{
-		for ($i = $inc + $inc; $i <= $limit && $i < $max; $i += $inc)
-		{
-			$opts[] = $i;
-		}
-		// we quit at $max, even if there are more $limit elements
-		if ($limit >= $max)
-		{
-			// add $max to the list; then break out of the loop
-			$opts[] = $max;
-			break;
-		}
-		// when $limit is reached, it becomes the new start and increment for the next 'range'
-		$inc = $limit;
-	}
+		// initializations
+		if (is_int($limits)) $limits = array($limits);
+		if ($firstinc < 1) $firstinc = 1;
+		$opts = array();
+		$inc = $firstinc;
 
-	return $opts;
+		// first element is the first increment
+		$opts[] = $inc;
+		// each $limit is the upper limit of a 'range'
+		foreach ($limits as $limit)
+		{
+			for ($i = $inc + $inc; $i <= $limit && $i < $max; $i += $inc)
+			{
+				$opts[] = $i;
+			}
+			// we quit at $max, even if there are more $limit elements
+			if ($limit >= $max)
+			{
+				// add $max to the list; then break out of the loop
+				$opts[] = $max;
+				break;
+			}
+			// when $limit is reached, it becomes the new start and increment for the next 'range'
+			$inc = $limit;
+		}
+
+		return $opts;
+	}
 }
 
 // restrict access to admins
