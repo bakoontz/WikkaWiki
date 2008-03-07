@@ -146,6 +146,35 @@ ul.thread li {
 	font-size: 11px;
 }
 
+.navfloat {
+	list-style-type: none;
+	margin: auto;
+	padding: 0px;
+	z-index:20;
+	position:absolute;
+	top: 1px;
+	right: 1px;
+	color: #777;
+}
+
+.navfloat li {
+	font-size: 0.8em; 
+	float: left;
+	width: auto;
+	margin-right: 3pt;
+	margin-left: 0;
+	text-align: left; 
+}
+
+/* tweak to have separator only *between* elements */
+.navfloat li+li:before {
+	content: ' | ';
+}
+
+.navfloat a {
+	color: #987;
+}
+
 /* images */
 
 img {

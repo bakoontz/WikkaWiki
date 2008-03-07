@@ -121,4 +121,12 @@ if (isset($this->additional_headers) && is_array($this->additional_headers) && c
 <div class="header">
 	<h2><?php echo $header_heading; ?></h2>
 	<?php echo $header_navlinks; ?>
+	<ul class="navfloat">
+		<li><a href="http://wikkawiki.org" title="WikkaWiki main site">Main</a></li>
+		<li><a href="http://docs.wikkawiki.org" title="WikkaWiki Documentation">Docs</a></li>
+		<li><a href="http://demo.wikkawiki.org" title="Demo site">Demo</a></li>
+		<li><a href="http://tracker.wikkawiki.org" title="Development tracker">Dev</a></li>
+		<li><a href="http://mail.wikkawiki.org/mailman/listinfo" title="Mailing lists">Lists</a></li>
+		<li><a href="http://blog.wikkawiki.org" title="Wikka Developer Blog">Blog</a></li>
+	</ul>
 </div>
