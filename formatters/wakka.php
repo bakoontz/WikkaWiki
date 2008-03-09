@@ -72,7 +72,8 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 		{
 			if ($trigger_strike % 2) echo ('</span>');
 			if ($trigger_notes % 2) echo ('</span>');
-			if ($trigger_inserted % 2) echo ('</span>');
+			if ($trigger_inserted % 2) echo ('</div>');
+			if ($trigger_deleted % 2) echo ('</div>');
 			if ($trigger_underline % 2) echo('</span>');
 			if ($trigger_floatl % 2) echo ('</div>');
 			if ($trigger_center % 2) echo ('</div>');
@@ -144,12 +145,12 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 		// additions
 		else if ($thing == "&pound;&pound;")
 		{
-			return (++$trigger_inserted % 2 ? "<span class=\"additions\">" : "</span>");
+			return (++$trigger_inserted % 2 ? "<div class=\"additions\">" : "</div>");
 		}
 		// deletions
 		else if ($thing == "&yen;&yen;")
 		{
-			return (++$trigger_deleted % 2 ? "<span class=\"deletions\">" : "</span>");
+			return (++$trigger_deleted % 2 ? "<div class=\"deletions\">" : "</div>");
 		}
 		// center
 		else if ($thing == "@@")

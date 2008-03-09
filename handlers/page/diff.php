@@ -88,13 +88,13 @@ if ($this->HasAccess('read'))
 		{
 			// remove blank lines
 			$output .= "\n".'<h4 class="clear">'.CONTENT_ADDITIONS_HEADER.'</h4>'."\n";
-			$output .= '<span class="additions">'.$this->Format(implode("\n", $added)).'</span>'."\n";
+			$output .= '<div class="additions">'.$this->Format(implode("\n", $added)).'</div>'."\n";
 		}
 	
 		if ($deleted)
 		{
 			$output .= "\n".'<h4 class="clear">'.CONTENT_DELETIONS_HEADER.'</h4>'."\n";
-			$output .= '<span class="deletions">'.$this->Format(implode("\n", $deleted)).'</span>'."\n";
+			$output .= '<div class="deletions">'.$this->Format(implode("\n", $deleted)).'</div>'."\n";
 		}
 	
 		if (!$added && !$deleted)
@@ -139,7 +139,7 @@ if ($this->HasAccess('read'))
 		echo '	<li><a href="'.$this->Href('', '', 'time'.urlencode($pageA['time'])).'">['.$pageA['id'].']</a> '.sprintf(WHEN_BY_WHO, '<a class="datetime" href="'.$this->Href('show','','time='.urlencode($pageA["time"])).'">'.$pageA['time'].'</a>', $pageA_edited_by).' <span class="pagenote smaller">'.$noteA.'</span></li>'."\n";
 		echo '	<li><a href="'.$this->Href('', '', 'time'.urlencode($pageB['time'])).'">['.$pageB['id'].']</a> '.sprintf(WHEN_BY_WHO, '<a class="datetime" href="'.$this->Href('show','','time='.urlencode($pageB["time"])).'">'.$pageB['time'].'</a>', $pageB_edited_by).' <span class="pagenote smaller">'.$noteB.'</span></li>'."\n";
 		echo '</ul>'."\n";
-		echo '<p>Highlighting Guide: <span class="additions">addition</span> <span class="deletions">deletion</span></p>'."\n"; #i18n
+		echo '<p><strong>Highlighting Guide:</strong> <span class="additions">addition</span> <span class="deletions">deletion</span></p>'."\n"; #i18n
 		echo '<hr />'."\n";
 		$output='';
 
