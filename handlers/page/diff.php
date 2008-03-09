@@ -210,4 +210,5 @@ else
 	echo '<em class="error">'.ERROR_NO_PAGE_ACCESS.'</em>'."\n";
 }
 ?>
+<div style="clear: both"></div>
 </div>
