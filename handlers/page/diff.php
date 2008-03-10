@@ -105,9 +105,10 @@ if ($this->HasAccess('read'))
 	}
 	else
 	{
-		// extract text from bodies
-		$textA = $pageA['body'];
-		$textB = $pageB['body'];
+		// extract text from bodies SEE #701, part 3, $textA = $pageB['body'] and not $pageA['body'].
+		// That's how it was in release 1.1.6.2
+		$textA = $pageB['body'];
+		$textB = $pageA['body'];
 	
 		$sideA = new Side($textA);
 		$sideB = new Side($textB);
