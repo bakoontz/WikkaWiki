@@ -3,11 +3,11 @@
 if (!defined('DIFF_ADDITIONS'))  define('DIFF_ADDITIONS', 'Additions:');
 if (!defined('DIFF_DELETIONS'))  define('DIFF_DELETIONS', 'Deletions:');
 if (!defined('DIFF_NO_DIFFERENCES'))  define('DIFF_NO_DIFFERENCES', 'No differences.');
+if (!defined('REVISION_NUMBER'))  define('REVISION_NUMBER', 'Revision %s');
 if (!defined('EDITED_ON'))  define('EDITED_ON', 'Edited on %1$s by %2$s');
 if (!defined('ERROR_ACL_READ'))  define('ERROR_ACL_READ', 'You aren\'t allowed to read this page.');
-if (!defined('HISTORY_PAGE_VIEW'))  define('HISTORY_PAGE_VIEW', 'Page view:');
-if (!defined('OLDEST_VERSION_EDITED_ON_BY'))  define('OLDEST_VERSION_EDITED_ON_BY', 'Oldest known version of this page was edited on %1$s by %2$s');
-if (!defined('MOST_RECENT_EDIT'))  define('MOST_RECENT_EDIT', 'Most recent edit on %1$s by %2$s');
+if (!defined('OLDEST_VERSION_EDITED_ON_BY'))  define('OLDEST_VERSION_EDITED_ON_BY', 'The oldest known version of this page was edited on %1$s by %2$s');
+if (!defined('MOST_RECENT_EDIT'))  define('MOST_RECENT_EDIT', 'Most recent edit made on %1$s by %2$s');
 if (!defined('UNREGISTERED_USER')) define('UNREGISTERED_USER', 'unregistered user');
 ?>
 <div class="page">
@@ -65,13 +65,17 @@ if ($this->HasAccess('read'))
 							$note = '['.$this->htmlspecialchars_ent($pageA['note']).']';
 						}
 
+
+						//revision number
+						$output .= '<h4 class="clear">'.sprintf(REVISION_NUMBER, '<a href="'.$this->Href('', '', 'time='.urlencode($pageA['time'])).'">['.$pageA['id'].']</a>').'</h4>'."\n";
+						
 						if ($c == 2)
 						{
-							$output .= '<h4 class="clear">'.sprintf(MOST_RECENT_EDIT, '<a href="'.$this->Href('', '', 'time='.urlencode($pageA['time'])).'">'.$pageA['time'].'</a>', $EditedByUser).'</h4> <span class="pagenote smaller">'.$note."</span><br />\n";
+							$output .= '<div class="revisioninfo">'.sprintf(MOST_RECENT_EDIT, '<a class="datetime" href="'.$this->Href('', '', 'time='.urlencode($pageA['time'])).'">'.$pageA['time'].'</a>', $EditedByUser).' <span class="pagenote smaller">'.$note."</span></div>\n";
 						}
 						else
 						{
-							$output .= '<h4 class="clear">'.sprintf(EDITED_ON, '<a href="'.$this->Href('', '', 'time='.urlencode($pageA['time'])).'">'.$pageA['time'].'</a>', $EditedByUser).'</h4> <span class="pagenote smaller">'.$note."</span><br />\n";
+							$output .= '<div class="revisioninfo">'.sprintf(EDITED_ON, '<a class="datetime" href="'.$this->Href('', '', 'time='.urlencode($pageA['time'])).'">'.$pageA['time'].'</a>', $EditedByUser).' <span class="pagenote smaller">'.$note."</span></div>\n";
 						}
 
 						if ($added)
@@ -114,8 +118,10 @@ if ($this->HasAccess('read'))
 		{
 			$note ='';
 		}
-		$output .= '<h4>'.sprintf(OLDEST_VERSION_EDITED_ON_BY, '<a href="'.$this->href('', '', 'time='.urlencode($pageB['time'])).'">'.$pageB['time'].'</a>', $EditedByUser).'</h4> <span class="pagenote smaller">'.$note."</span><br />\n";
-		$output .= '<div class="revisioninfo">'.HISTORY_PAGE_VIEW.'</div>'.$this->Format(implode("\n", $bodyB));
+
+		$output .= '<h4 class="clear">'.sprintf(REVISION_NUMBER, '<a href="'.$this->Href('', '', 'time='.urlencode($pageB['time'])).'">['.$pageB['id'].']</a>').'</h4>'."\n";
+		$output .= '<div class="revisioninfo">'.sprintf(OLDEST_VERSION_EDITED_ON_BY, '<a class="datetime" href="'.$this->href('', '', 'time='.urlencode($pageB['time'])).'">'.$pageB['time'].'</a>', $EditedByUser).' <span class="pagenote smaller">'.$note."</span></div>\n";
+		$output .= $this->Format(implode("\n", $bodyB));
 		echo $output;
 	}
 }

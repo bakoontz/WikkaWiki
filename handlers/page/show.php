@@ -56,11 +56,9 @@ else
 	{
 		if ($this->page['latest'] == 'N')
 		{
-			echo '<div class="revisioninfo">This is an old revision of <a href="'.$this->Href().'">'.$this->GetPageTag().'</a> from '.$this->page['time'].'.</div>';
+			echo '<h4>Revision ['.$this->page['id'].']</h4>'."\n";
+			echo '<div class="revisioninfo">This is an <a href="'.$this->Href('revisions').'">old revision</a> of <a href="'.$this->Href().'">'.$this->GetPageTag().'</a> made by '.$this->page['user'].' on <span class="datetime">'.$this->page['time'].'</span>.</div>';
 		}
-
-		// display page
-		echo $this->Format($this->page['body'], 'wakka');
 
 		// if this is an old revision, display some buttons
 		if ($this->page['latest'] == 'N' && $this->HasAccess('write'))
@@ -69,15 +67,17 @@ else
 			if ($latest = $this->LoadPage($this->tag))
 			{
 ?>
-		            <br />
  				<?php echo $this->FormOpen('edit') ?>
  				<input type="hidden" name="previous" value="<?php echo $latest['id'] ?>" />
  				<input type="hidden" name="body" value="<?php echo $this->htmlspecialchars_ent($this->page['body']) ?>" />
  				<input type="submit" value="Re-edit this old revision" />
  				<?php echo $this->FormClose(); ?>
+ 				<hr />
 <?php
 			}
 		}
+		// display page
+		echo $this->Format($this->page['body'], 'wakka');
 		echo '<div style="clear: both"></div>'."\n";
 		echo '</div>'."\n";
 		echo '<!--closing page content-->'."\n";
