@@ -69,11 +69,13 @@ if(!function_exists('optionRanges'))
 		// initializations
 		if (is_int($limits)) $limits = array($limits);
 		if ($firstinc < 1) $firstinc = 1;
+		if($firstinc > $max) $firstinc = $max;
 		$opts = array();
 		$inc = $firstinc;
 
 		// first element is the first increment
 		$opts[] = $inc;
+		if($inc >= $max) return $opts;
 		// each $limit is the upper limit of a 'range'
 		foreach ($limits as $limit)
 		{
