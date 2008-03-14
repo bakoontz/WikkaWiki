@@ -6,12 +6,16 @@ if (!defined('ERROR_ACL_READ')) define('ERROR_ACL_READ', 'You aren\'t allowed to
 if (!defined('SIMPLE_DIFF')) define('SIMPLE_DIFF', 'Simple Diff');
 if (!defined('WHEN_BY_WHO')) define('WHEN_BY_WHO', '%1$s by %2$s');
 if (!defined('UNREGISTERED_USER')) define('UNREGISTERED_USER', 'unregistered user');
+if (!defined('REVISIONS_NO_REVISIONS_YET')) define('REVISIONS_NO_REVISIONS_YET', 'There are no revisions for this page yet');
+
 ?>
 <div class="page">
 <?php
-if ($this->HasAccess("read")) {
+if ($this->HasAccess("read"))
+{
+	$pages = $this->LoadRevisions($this->tag);
 	// load revisions for this page
-	if ($pages = $this->LoadRevisions($this->tag))
+	if (count($pages)>1)
 	{
 		$output .= $this->FormOpen("diff", "", "get");
 		$output .= "<table border=\"0\" cellspacing=\"0\" cellpadding=\"1\">\n";
@@ -49,6 +53,10 @@ if ($this->HasAccess("read")) {
 		$output .= "</table><br />\n";
 		$output .= '<input type="button" value="'.BUTTON_RETURN_TO_NODE.'" onclick="document.location=\''.$this->Href('').'\';" />'."\n";
 		$output .= $this->FormClose()."\n";
+	}
+	else
+	{
+		$output .= '<em>'.REVISIONS_NO_REVISIONS_YET.'</em>'."\n";
 	}
 	print($output);
 } else {
