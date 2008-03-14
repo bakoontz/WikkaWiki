@@ -479,8 +479,12 @@ em.success {
 .comments {display: none;}
 
 .revisioninfo {
-	color: #AAA;
-	padding-bottom: 20px;
+	color: #000000;
+	background-color: #E9F9E9;
+	border: 1px solid #ACA;
+	padding: 5px 10px;
+	font-size: 90%;
+	margin-bottom: 1em;
 }
 
 .copyright {
