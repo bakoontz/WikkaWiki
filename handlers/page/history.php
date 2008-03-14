@@ -65,19 +65,19 @@ if ($this->HasAccess('read'))
 							$note = '['.$this->htmlspecialchars_ent($pageA['note']).']';
 						}
 
-
-						//revision number
+						$output .= '<div class="revisioninfo">'."\n";					
 						$output .= '<h4 class="clear">'.sprintf(REVISION_NUMBER, '<a href="'.$this->Href('', '', 'time='.urlencode($pageA['time'])).'">['.$pageA['id'].']</a>').'</h4>'."\n";
-						
+
 						if ($c == 2)
 						{
-							$output .= '<div class="revisioninfo">'.sprintf(MOST_RECENT_EDIT, '<a class="datetime" href="'.$this->Href('', '', 'time='.urlencode($pageA['time'])).'">'.$pageA['time'].'</a>', $EditedByUser).' <span class="pagenote smaller">'.$note."</span></div>\n";
+							$output .= sprintf(MOST_RECENT_EDIT, '<a class="datetime" href="'.$this->Href('', '', 'time='.urlencode($pageA['time'])).'">'.$pageA['time'].'</a>', $EditedByUser).' <span class="pagenote smaller">'.$note."</span>\n";
 						}
 						else
 						{
-							$output .= '<div class="revisioninfo">'.sprintf(EDITED_ON, '<a class="datetime" href="'.$this->Href('', '', 'time='.urlencode($pageA['time'])).'">'.$pageA['time'].'</a>', $EditedByUser).' <span class="pagenote smaller">'.$note."</span></div>\n";
+							$output .= sprintf(EDITED_ON, '<a class="datetime" href="'.$this->Href('', '', 'time='.urlencode($pageA['time'])).'">'.$pageA['time'].'</a>', $EditedByUser).' <span class="pagenote smaller">'.$note."</span>\n";
 						}
-
+						$output .= '</div>'."\n";
+						
 						if ($added)
 						{
 							// remove blank lines
@@ -119,8 +119,10 @@ if ($this->HasAccess('read'))
 			$note ='';
 		}
 
+		$output .= '<div class="revisioninfo">'."\n";
 		$output .= '<h4 class="clear">'.sprintf(REVISION_NUMBER, '<a href="'.$this->Href('', '', 'time='.urlencode($pageB['time'])).'">['.$pageB['id'].']</a>').'</h4>'."\n";
-		$output .= '<div class="revisioninfo">'.sprintf(OLDEST_VERSION_EDITED_ON_BY, '<a class="datetime" href="'.$this->href('', '', 'time='.urlencode($pageB['time'])).'">'.$pageB['time'].'</a>', $EditedByUser).' <span class="pagenote smaller">'.$note."</span></div>\n";
+		$output .= sprintf(OLDEST_VERSION_EDITED_ON_BY, '<a class="datetime" href="'.$this->href('', '', 'time='.urlencode($pageB['time'])).'">'.$pageB['time'].'</a>', $EditedByUser).' <span class="pagenote smaller">'.$note."</span>\n";
+		$output .= '</div>'."\n";
 		$output .= $this->Format(implode("\n", $bodyB));
 		echo $output;
 	}
