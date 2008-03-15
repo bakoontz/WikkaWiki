@@ -62,6 +62,7 @@ if (!defined('ERROR_OVERWRITE_ALERT')) define('ERROR_OVERWRITE_ALERT', 'OVERWRIT
 if (!defined('ERROR_MISSING_EDIT_NOTE')) define('ERROR_MISSING_EDIT_NOTE', 'MISSING EDIT NOTE: Please fill in an edit note!');
 if (!defined('ERROR_TAG_TOO_LONG')) define('ERROR_TAG_TOO_LONG', 'Tag too long! %d characters max.');
 if (!defined('ERROR_NO_WRITE_ACCESS')) define('ERROR_NO_WRITE_ACCESS', 'You don\'t have write access to this page. You might need to register an account to be able to edit this page.');
+if (!defined('ERROR_INVALID_PAGEID')) define('ERROR_INVALID_PAGEID', 'The revision id does not exist for the requested page');
 if (!defined('MESSAGE_AUTO_RESIZE')) define('MESSAGE_AUTO_RESIZE', 'Clicking on %s will automatically truncate the tag to the correct size');
 if (!defined('INPUT_SUBMIT_PREVIEW')) define('INPUT_SUBMIT_PREVIEW', 'Preview');
 if (!defined('INPUT_SUBMIT_STORE')) define('INPUT_SUBMIT_STORE', 'Store');
@@ -73,6 +74,8 @@ if (!defined('ACCESSKEY_REEDIT')) define('ACCESSKEY_REEDIT', 'r');
 if (!defined('ACCESSKEY_PREVIEW')) define('ACCESSKEY_PREVIEW', 'p');
 if (!defined('SHOWCODE_LINK')) define('SHOWCODE_LINK', 'View formatting code for this page');
 if (!defined('SHOWCODE_LINK_TITLE')) define('SHOWCODE_LINK_TITLE', 'Click to view page formatting code');
+if (!defined('EDITING_NEW_PAGE')) define('EDITING_NEW_PAGE', 'Editing new page');
+if (!defined('EDITING_REVISION')) define('EDITING_REVISION', 'Editing revision %d');
 /**#@-*/
 
 //initialization
@@ -101,6 +104,21 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 	{
 		$newtag = $_POST['newtag'];
 		if ($newtag !== '') $this->Redirect($this->Href('edit', $newtag));
+	}
+	$body = '';
+	$id = $this->page['id'];
+	if($_GET['id'])
+	{
+		$page = $this->LoadPageById(mysql_real_escape_string($_GET['id']));
+		if($page['tag'] != $this->page['tag'])
+		{
+			$this->Redirect($this->Href(), ERROR_INVALID_PAGEID);
+		}
+		else
+		{
+			$body = $page['body'];
+			$id = $page['id'];
+		}
 	}
 	if ($_POST)
 	{
@@ -167,7 +185,7 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 	// fetch fields
 	$previous = $this->page['id'];
 	if (isset($_POST['previous'])) $previous = $_POST['previous'];
-	if (!isset($body)) $body = $this->page['body'];
+	if (empty($body)) $body = $this->page['body'];
 	// replace each 4 consecutive spaces at the start of a line with a tab
 	#$body = preg_replace("/\n[ ]{4}/", "\n\t", $body);						# @@@ FIXME: misses first line and multiple sets of four spaces - JW 2005-01-16
 	# JW FIXED 2005-07-12
@@ -232,6 +250,15 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 	// EDIT Screen
 	else
 	{
+		if(!isset($id))
+		{
+			echo "<em>".EDITING_NEW_PAGE."</em>";
+		}
+		else
+		{
+			echo "<em>".sprintf(EDITING_REVISION,  $id)."</em>";
+		}
+
 		// display form
 		if (!empty($error))
 		{
