@@ -301,8 +301,8 @@ if ($this->IsAdmin($this->GetUser()))
 						echo "<li><span class='disabled'>".$tag."&nbsp;</span><em class='error'>(".ADMINPAGES_FORM_MASSACTION_REVERT_ERROR.")</em></li>\n";
 						continue;
 					}
-					$method = "diff?fastdiff=1&a=".$res[0]['id']."&b=".$res[1]['id'];
-					echo "<li>".$this->Link($tag)." (current [".$res[0]['id']."] :: previous [".$res[1]['id']."] :: ".$this->Link($tag, $method, 'diff').")</li>\n";
+					$params = "fastdiff=1&a=".$res[0]['id']."&b=".$res[1]['id'];
+					echo "<li>".$this->Link($tag)." (current [".$res[0]['id']."] :: previous [".$res[1]['id']."] :: <a href='".$this->Href('diff', $tag, $params)."'>diff</a>)</li>\n";
 				}
 				?></ul><?php
 				echo "<br/>\n";
