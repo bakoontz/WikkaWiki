@@ -611,10 +611,12 @@ WikkaEdit.prototype.setSelectionRange = function(start, end) {
 		return;
 	}
 	// khtml browser take few milliseconds to update textarea
+	// so, apparently, does FF (#704)
 	// => need to wait a little for selection to be taken in account
 	// TODO : replace "if (false)"
-	//if (false) //(navigator.userAgent.indexOf("KHTML") == -1)
-	if (navigator.userAgent.indexOf("KHTML") == -1)
+	// if (false) //(navigator.userAgent.indexOf("KHTML") == -1)
+	if (navigator.userAgent.indexOf("KHTML") == -1 &&
+	    navigator.userAgent.indexOf("Mozilla") == -1)
 		this.setSelectionRange2(start, end);
 	else
 		timeoutSelectionRange = setTimeout("varWikkaEdit.setSelectionRange2(" + start + ", " + end + ");", 1);
