@@ -223,6 +223,7 @@ if ($this->IsAdmin($this->GetUser()))
 	define('ADMINPAGES_FORM_MASSACTION_SUBMIT','Submit');
 	define('ADMINPAGES_ERROR_NO_MATCHES','Sorry, there are no pages matching "%s"');
 	define('ADMINPAGES_LABEL_EDIT_NOTE','Please enter a comment, or leave blank for default');
+	if (!defined('WHEN_BY_WHO')) define('WHEN_BY_WHO', '%1$s by %2$s');
 	
 	// -------------------------------------
 	// Initialize variables
@@ -302,7 +303,16 @@ if ($this->IsAdmin($this->GetUser()))
 						continue;
 					}
 					$params = "fastdiff=1&a=".$res[0]['id']."&b=".$res[1]['id'];
-					echo "<li>".$this->Link($tag)." (current [".$res[0]['id']."] :: previous [".$res[1]['id']."] :: <a href='".$this->Href('diff', $tag, $params)."'>diff</a>)</li>\n";
+					echo '<li>'.$this->Link($tag)."\n";
+					echo '<ul>'."\n";
+					echo '<li>'."\n";
+					echo '<a href="'.$this->Href('show', '', 'time='.urlencode($res[0]['time'])).'">['.$res[0]['id'].']</a> '.sprintf(WHEN_BY_WHO, '<a class="datetime" href="'.$this->Href('show','','time='.urlencode($res[0]['time'])).'">'.$res[0]['time'].'</a>', $res[0]['user'])."\n";
+					echo ' &#8594; '."\n";
+					echo '<a href="'.$this->Href('show', '', 'time='.urlencode($res[1]['time'])).'">['.$res[1]['id'].']</a> '.sprintf(WHEN_BY_WHO, '<a class="datetime" href="'.$this->Href('show','','time='.urlencode($res[1]['time'])).'">'.$res[1]['time'].'</a>', $res[1]['user'])."\n";
+					echo ' (<a href="'.$this->Href('diff', $tag, $params).'">diff</a>)'."\n";
+					echo '</li>'."\n";
+					echo '</ul>'."\n";
+					echo '</li>'."\n";
 				}
 				?></ul><?php
 				echo "<br/>\n";
