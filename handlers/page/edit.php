@@ -74,8 +74,6 @@ if (!defined('ACCESSKEY_REEDIT')) define('ACCESSKEY_REEDIT', 'r');
 if (!defined('ACCESSKEY_PREVIEW')) define('ACCESSKEY_PREVIEW', 'p');
 if (!defined('SHOWCODE_LINK')) define('SHOWCODE_LINK', 'View formatting code for this page');
 if (!defined('SHOWCODE_LINK_TITLE')) define('SHOWCODE_LINK_TITLE', 'Click to view page formatting code');
-if (!defined('EDITING_NEW_PAGE')) define('EDITING_NEW_PAGE', 'Editing new page');
-if (!defined('EDITING_REVISION')) define('EDITING_REVISION', 'Editing revision %d');
 /**#@-*/
 
 //initialization
@@ -250,15 +248,6 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 	// EDIT Screen
 	else
 	{
-		if(!isset($id))
-		{
-			echo "<em>".EDITING_NEW_PAGE."</em>";
-		}
-		else
-		{
-			echo "<em>".sprintf(EDITING_REVISION,  $id)."</em>";
-		}
-
 		// display form
 		if (!empty($error))
 		{
