@@ -349,6 +349,14 @@ if ($this->IsAdmin($this->GetUser()))
 				<?php
 				print($this->FormClose());
 			}
+			else
+			{
+				$this->Redirect($this->Href());
+			}
+		}
+		else
+		{
+			$this->Redirect($this->Href());
 		}
 	}
 	else if(isset($_POST['massaction']) && $_POST['massaction'] == 'massrevert')
