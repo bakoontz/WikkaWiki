@@ -30,6 +30,8 @@ if (!defined('MYCHANGES_NOT_LOGGED_IN')) define('MYCHANGES_NOT_LOGGED_IN', "You'
 if(!defined('REVISION_DATE_FORMAT')) define('REVISION_DATE_FORMAT', 'D, d M Y');
 if(!defined('REVISION_TIME_FORMAT')) define('REVISION_TIME_FORMAT', 'H:i T');
 if (!defined('TITLE_REVISION_LINK')) define('TITLE_REVISION_LINK', 'View recent revisions list for %s');
+if (!defined('WIKKA_NO_PAGES_FOUND')) define('WIKKA_NO_PAGES_FOUND', "No
+edited pages found for %s.");
 
 // order alphabetically or by time?
 $alpha = FALSE;
@@ -60,27 +62,6 @@ if (($this->IsAdmin() && !empty($username)) ||
 {
 	$my_edits_count = 0;
 
-	// header
-	$output .= '<div class="floatl">';
-	if ($alpha)
-	{
-		$output .= sprintf(MYCHANGES_ALPHA_LIST, $username).' (<a href="'.$this->Href("", $tag, $params).'">'.ORDER_DATE_LINK_DESC;
-	}
-	else
-	{
-		if(!empty($params))
-		{
-			$params .= "&alphabetically=1";
-		}
-		else
-		{
-			$params = "alphabetically=1";
-		}
-
-		$output .= sprintf(MYCHANGES_DATE_LIST, $username).' (<a href="'.$this->href("", $tag, $params).'">'.ORDER_ALPHA_LINK_DESC;
-	}
-	$output .= '</a>)</div><div class="clear">&nbsp;</div>'."\n";
-
 	// get the pages
 	$order = ($alpha) ? "tag ASC, time DESC" : "time DESC, tag ASC";
 	$query = "
@@ -92,6 +73,27 @@ if (($this->IsAdmin() && !empty($username)) ||
 
 	if ($pages = $this->LoadAll($query))
 	{
+		// header
+		$output .= '<div class="floatl">';
+		if ($alpha)
+		{
+			$output .= sprintf(MYCHANGES_ALPHA_LIST, $username).' (<a href="'.$this->Href("", $tag, $params).'">'.ORDER_DATE_LINK_DESC;
+		}
+		else
+		{
+			if(!empty($params))
+			{
+				$params .= "&alphabetically=1";
+			}
+			else
+			{
+				$params = "alphabetically=1";
+			}
+
+			$output .= sprintf(MYCHANGES_DATE_LIST, $username).' (<a href="'.$this->href("", $tag, $params).'">'.ORDER_ALPHA_LINK_DESC;
+		}
+		$output .= '</a>)</div><div class="clear">&nbsp;</div>'."\n";
+
 		$current = '';
 
 		// build the list of pages
@@ -140,7 +142,7 @@ if (($this->IsAdmin() && !empty($username)) ||
 	}
 	else
 	{
-		$output .= '<em>'.WIKKA_NO_PAGES_FOUND.'</em>';
+		$output .= '<em>'.sprintf(WIKKA_NO_PAGES_FOUND, $username).'</em>';
 	}
 }
 else
