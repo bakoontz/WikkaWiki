@@ -17,15 +17,6 @@ third-party packages (below) provides you with the information you need to
 download the full package or contact the author. The software is written
 in PHP unless indicated otherwise.
 
-Name       : WikiEdit
-Bundled    : Version 2 (2.15)
-Description: GUI toolbar for editing Wiki pages (requires JavaScript)
-For Wikka  : Scripts are modified for Wikka syntax, toolbar is activated
-             through the configuration file
-License    : BSD
-Home page  : http://wackowiki.com/WikiEdit/
-Author     : Roman Ivanov: thingol [at] mail [dot] ru
-
 Name       : SafeHTML
 Bundled    : Version 1.2.0
 Description: A parser that strips down all potentially dangerous content

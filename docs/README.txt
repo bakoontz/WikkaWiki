@@ -18,10 +18,11 @@ The Wikka Development Team
 - DarTar [Dario Taraborelli]
 - JavaWoman [Marjolein Katsma]
 - DotMG [Mahefa Randimbisoa]
-- NilsLindenberg
+- Nils Lindenberg
 - YanB [Yan Brailowsky]
-- BrianKoontz
-- TormodHaugen
+- Brian Koontz
+- Tormod Haugen
+- Olivier Borowski
 
 Wikka Hall of Fame
 - JsnX [Jason Tourtelotte]

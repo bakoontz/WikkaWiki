@@ -1,0 +1,1216 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+    <title>WikkaReleaseNotes1164</title>
+    <meta http-equiv="Content-Type" content="text/html;
+charset=iso-8859-1" />
+    <style type="text/css">
+    .header, .footer, .commentsheader, .copyright, .smallprint {display:none; }
+
+/*
+-----------------------------------------------
+Wikka Default Stylesheet (screen)
+----------------------------------------------- 
+*/
+
+/* global styling */
+
+body {
+	font-family: Verdana, Tahoma, Arial, Helvetica, sans-serif;
+	font-size: 13px;
+/*	text-align: justify; */			/* comment out this line if you really need justified text */
+	line-height: 20px;
+	color: #000000;
+	background-color: #F8F8F8;
+	margin: 0;
+}
+
+p, td, li, input, select, textarea {
+	font-family: Verdana, Tahoma, Arial, Helvetica, sans-serif;
+	line-height: 20px;
+	font-size: 13px;
+}
+
+form, h1, h2, h3, h4, h5 {
+	margin: 0px;
+	padding: 0px;
+}
+
+/* page layout */
+
+.header {
+	padding: 10px;
+}
+
+.page {
+	color: #000;
+	font-size: 13px;
+	font-family: Verdana, Tahoma, Arial, Helvetica, sans-serif;
+	background-color: white;
+	padding: 15px;
+	border-top: 1px solid #CCC;
+	border-bottom: none;
+	height: 100%;
+}
+
+.footer {
+	clear: both;
+	background-color: #E3E3E3;
+	padding: 5px 10px;
+	border-top: 1px solid #CCCCCC;
+	border-bottom: 1px solid #CCCCCC;
+}
+
+/* links */
+
+a {
+	color: #333399;
+	text-decoration: none;
+}
+
+a:visited {
+	text-decoration: none;
+}
+
+a:hover {
+	color: #993333;
+}
+
+a:active {
+	text-decoration: none;
+}
+
+a.ext {
+	color: #333399;
+}
+
+a.ext:hover {
+	color: #993333;
+}
+
+.header a:hover {
+	color: #993333;
+	background: transparent;
+	border-bottom: 0px;
+}
+
+a#homepage_link {
+	color: #000;
+}
+
+.page a {
+	text-decoration: none;
+}
+
+.page a:hover {
+	color: #993333;
+	text-decoration: underline;
+}
+
+a.keys:hover {
+	text-decoration: none;
+	color: #333;	
+}
+
+/* link icons */
+
+a.ext {
+	background: url('../images/icons/ext_simple.gif') right bottom no-repeat;
+	padding-right: 12px;
+}
+
+.page a.mailto {
+	background: url('../images/icons/mail.gif') right bottom no-repeat;
+	padding-right: 12px;
+}
+
+.page a.interwiki {
+	background: url('../images/icons/ext.gif') right bottom no-repeat;
+	padding-right: 12px;
+}
+
+a.user, a.user:hover {
+	background: url('../images/icons/user.gif') right bottom no-repeat;
+	padding-right: 12px;
+}
+
+/* lists */
+
+ul, ol {
+	margin-top: 0px;
+	margin-bottom: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
+ul.thread {
+	list-style-type: none;
+	border-left: 2px #666 solid;
+	padding-left: 10px;
+	margin: 5px 0px;
+}
+
+ul.thread li {
+	color: #333;
+	font-size: 11px;
+}
+
+.navfloat {
+	list-style-type: none;
+	margin: auto;
+	padding: 0px;
+	z-index:20;
+	position:absolute;
+	top: 1px;
+	right: 1px;
+	color: #777;
+}
+
+.navfloat li {
+	font-size: 0.8em; 
+	float: left;
+	width: auto;
+	margin-right: 3pt;
+	margin-left: 0;
+	text-align: left; 
+}
+
+/* tweak to have separator only *between* elements */
+.navfloat li+li:before {
+	content: ' | ';
+}
+
+.navfloat a {
+	color: #987;
+}
+
+/* images */
+
+img {
+	border: 0px;
+}
+
+img.centre {
+	display: block; 
+	text-align: center; 
+	margin: 5px auto;
+}
+
+img.center {
+	display: block; 
+	text-align: center; 
+	margin: 5px auto;
+}
+
+img.left {
+	margin: 5px 5px 5px -5px;
+	float: left;
+}
+
+img.right {
+	margin: 5px -5px 5px 5px; 
+	float: right;
+}
+
+/* boxes and floats */
+
+div.alertbox {
+	margin: 10px;
+	padding: 4px 8px;
+	width:49%;
+	background-color:#FEE;
+	border:1px solid #EDD;
+	font-size: 90%;
+}
+
+.floatl {
+	float: left;
+	text-align: left;
+	width: 46%;
+	margin-right: 15px;
+	padding: 4px;
+	background: #EEE;
+	border: 1px solid #CCC; 		
+}
+
+.floatr {
+	float: right;
+	text-align: left;
+	width: 46%;
+	margin-left: 15px;
+	padding: 4px;
+	background: #EEE;
+	border: 1px solid #CCC; 		
+}
+
+.clear {clear:both;}
+
+/* text formatting */
+
+h5 {
+	font-size: 10pt;
+}
+
+h4 {
+	font-size: 12pt;
+}
+
+h3 {
+	font-size: 14pt;
+}
+
+h2 {
+	font-size: 16pt;
+}
+
+h1 {
+	font-size: 18pt;
+}
+
+.header h2 {
+	padding: .3em 0; 
+}
+
+tt {
+	color: #666;
+}
+
+.hidden {
+	display: none;
+}
+
+.highlight {color: red; background: #FFFFD0;}
+
+.strikethrough {color: #888; text-decoration: line-through;}
+
+.underline {text-decoration: underline;}
+
+.indent {
+	margin-left: 40px;
+}
+
+.notes {
+	color: #888800;
+}
+
+.centre {text-align: center;}
+
+.center, .center p {text-align: center;}
+
+.keys {
+	color: #666;
+	background-color: #DDD;
+	font: normal 95% Verdana, sans-serif;
+	text-align: center;
+	border-top: 1px solid #FFF;
+	border-left: 1px solid #FFF;
+	border-right: 1px solid #AAA;
+	border-bottom: 1px solid #AAA;
+	padding: .1em .2em;
+}
+
+.keys:hover {
+	color: #555;
+	background-color: #CCC;
+	border-top: 1px solid #FFF;
+	border-left: 1px solid #FFF;
+	border-right: 1px solid #999;
+	border-bottom: 1px solid #999;
+}
+
+span.user_anonymous {
+	color: #666;	
+}
+
+/* other HTML elements */
+
+acronym {
+	border-bottom: 1px dotted #333;
+	cursor: help;
+}
+
+abbr {
+	border-bottom: 1px dotted #333;
+	cursor: help;
+}
+
+blockquote {
+	font-size: 90%;
+}
+
+hr {
+	border: 0;
+	border-top: 1px solid #EEE;
+}
+
+/* code blocks */
+
+.code_header {
+	color: #666;
+	background-color: #EEE;
+	border-top: 1px solid #CCC;
+	border-right: 1px solid #CCC;
+	border-left: 1px solid #CCC;
+	border-bottom: none;
+	font-family: Verdana, Arial, sans-serif;
+	font-size: 100%;
+	padding: 0 3px;
+	margin: 5px auto 0 auto;
+	text-align: left;
+	line-height: 1.5em;
+}
+
+.code {
+	color: black;
+	background: #FAFAFA;
+	border: 1px solid #CCC;
+	font-size: 11px;
+	font-family: "Lucida Console", Monaco, monospace;
+	margin: auto;
+	padding: 6px 5px 13px 5px;	/* padding-bottom solves hor. scrollbar hiding single line of code in IE6 but causes vert. scrollbar... */
+	text-align: left;			/* override justify on body */
+	overflow: auto;				/* allow scroll bar in case of long lines - goes together with white-space: nowrap! */
+	white-space: nowrap;		/* prevent line wrapping */
+}
+
+.code pre {
+	margin-top: 6px;
+	margin-bottom: 6px;			/* prevent vertical scroll bar in case of overflow */
+	font-size: 11px;
+	font-family: "Lucida Console", Monaco, monospace;
+}
+
+/* form elements */
+
+fieldset {
+	margin-top: 10px;
+	margin-bottom: 10px;
+	border: 1px solid #CCC;	
+}
+
+fieldset legend {
+	font-size: 115%;
+	color: #666;
+	padding:2px;
+}
+
+textarea {
+	border: 1px solid #CCC;	
+}
+
+textarea:hover {
+	background-color: #F3F3F3;
+}
+
+textarea:focus {
+	background-color: #E6E6FF;
+}
+
+input:hover {
+	background-color: #F3F3F3;
+}
+
+input:focus {
+	background-color: #E6E6FF;
+}
+
+input[type=submit], input[type=button] {
+	color: #666;
+	background-color: #EEE;
+	font: normal 95% Verdana, sans-serif;
+	text-align: center;
+	border-top: 1px solid #FFF;
+	border-left: 1px solid #FFF;
+	border-right: 1px solid #AAA;
+	border-bottom: 1px solid #AAA;
+	padding: .1em .2em;
+}
+
+input[type=submit]:hover, input[type=button]:hover {
+	color: #333;
+	background-color: #DDD;
+	border-top: 1px solid #FFF;
+	border-left: 1px solid #FFF;
+	border-right: 1px solid #999;
+	border-bottom: 1px solid #999;
+}
+
+input[type=text] {
+	border: 1px solid #CCC;	
+}
+
+input[readonly=readonly] {
+	color: #666;
+}
+
+input[readonly=readonly]:hover, input[readonly=readonly]:focus {
+	background-color: transparent;
+}
+
+/* editor textarea decorations */
+/* (decorations can't be in "textarea#body" declaration, else the "width:100%" won't work) */
+#textarea_container {
+	border: 1px solid #CCC;
+	padding: 2px;
+	margin-bottom: 2px;
+}
+
+textarea#body{
+	width: 100%;
+	height: 500px;
+	/* padding and border must be 0 for the "width:100%" to work */
+	padding: 0;
+	border: 0;
+}
+
+.searchbox {
+	/* border: none; */
+	border: 1px solid #CCCCAA;
+	padding: 0px;
+	margin: 0px;
+}
+
+input.grabcode {
+	float: right;
+	margin-top: 0px;
+	font-size: 90%;
+}
+
+input.highlight {
+	font-weight: normal;
+	background-color: #FCC;
+	color: #000;
+}
+
+/* system information */
+
+.datetime {
+	color: #666;
+	font-size: 80%;
+	font-family: "Lucida Console", Monaco, monospace;
+}
+
+.missingpage {
+	/* background: #ccffff; */
+	text-decoration: none;
+	border-bottom-width: 1px;
+	border-bottom-color: #933;
+	border-bottom-style: dashed;
+}
+
+em.error {
+	color: #AA3333; 
+	font-style: normal;
+	font-weight: bold;
+	font-size: 95%;
+	display: block;
+}
+
+em.success {
+	color: #33AA33; 
+	font-style: normal;
+	font-weight: bold;
+	font-size: 95%;
+	display: block;
+}
+
+.comments {display: none;}
+
+/* old-style revision header
+.revisioninfo {
+	color: #AAAAAA;
+	padding-bottom: 20px;
+}
+*/
+
+.revisioninfo {
+	margin: auto;
+	z-index:20;
+	position:fixed;
+	top: 90px;
+	right: 10px;
+	color: #000000;
+	background-color: #E9F9E9;
+	border: 1px solid #ACA;
+	padding: 5px 10px;
+	font-size: 90%;
+}
+
+.history_revisioninfo {
+	float: left;
+	text-align: left;
+	padding: 4px;
+	background: #EEE;
+	border: 1px solid #CCC; 		
+}
+
+
+.copyright {
+	font-size: 11px;
+	color: #AAAAAA;
+	text-align: right;
+}
+
+.copyright a {
+	color: #AAAAAA;
+}
+
+.previewhead {
+	margin: auto;
+	z-index:20;
+	position:fixed;
+	top: 40px;
+	left: 10px;
+	color: red;
+	font-size: xx-large;
+	font-weight: bold;
+	padding: 5px;
+}
+
+ins {
+	background-color: #CFC;
+	text-decoration: none;
+}
+
+del {
+	color: #876;
+	background-color: #FC9;
+	text-decoration: none;
+}
+
+.pagenote {color: #888;}
+
+.pagetitle {color: #888;}
+
+.smaller {font-size: smaller;}
+
+.smallprint {font-size: 0.8em; color: #777; padding-right: 0.5%; text-align: right;}
+
+.smallprint a {
+	color: #987;
+}
+
+/* Tables */
+
+table.data {
+	border: 2px solid #CCC;
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+table.data caption {
+	border: 1px solid #CCC;
+	font-size: 95%;
+	color: #666;
+	margin:5px 0;
+	padding:2px;
+}
+
+table.data thead {
+	background-color: #DDD;
+}
+
+table.data tfoot {
+	background-color: #DDD;
+}
+
+table.data th {
+	border: 1px solid #CCC;
+	padding: .1em .25em;
+}
+
+table.data thead th {
+	background-color: #DDD;
+}
+
+table.data tfoot th {
+	background-color: #DDD;
+}
+
+table.data tbody th {
+	background-color: #EEE;
+}
+
+table.data tbody tr:hover {
+	background-color: #EEE;
+}
+
+table.data tbody tr.alt:hover {
+	background-color: #E9E9F9;
+}
+
+table.data td {
+	border: 1px solid #CCC;
+	padding: .1em .25em;
+}
+
+table.data td.number {
+	text-align: right;
+}
+
+table.data td.datetime {
+	color: #666;
+	font-size: 80%;
+	font-family: "Lucida Console", Monaco, monospace;
+	text-align: right;
+	white-space: nowrap;
+}
+
+/* --- alternate row & column color --- */
+
+table.data tr.alt {
+	background-color: #EEE;
+}
+
+table.data th.c1 {
+	background-color: #CDD;
+}
+
+table.data th.c2 {
+	background-color: #DCC;
+}
+
+table.data th.c3 {
+	background-color: #DDC;
+}
+
+table.data th.c4 {
+	background-color: #CDC;
+}
+
+table.data th.c5 {
+	background-color: #CCD;
+}
+
+table.data th.c6 {
+	background-color: #DCD;
+}
+
+table.data td.c1 {
+	background-color: #EFF;
+}
+
+table.data td.c2 {
+	background-color: #FEE;
+}
+
+table.data td.c3 {
+	background-color: #FFE;
+}
+
+table.data td.c4 {
+	background-color: #EFE;
+}
+
+table.data td.c5 {
+	background-color: #EEF;
+}
+
+table.data td.c6 {
+	background-color: #FEF;
+}
+
+table.data tr.alt td.c1 {
+	background-color: #DEE;
+}
+
+table.data tr.alt td.c2 {
+	background-color: #EDD;
+}
+
+table.data tr.alt td.c3 {
+	background-color: #EED;
+}
+
+table.data tr.alt td.c4 {
+	background-color: #DED;
+}
+
+table.data tr.alt td.c5 {
+	background-color: #DDE;
+}
+
+table.data tr.alt td.c6 {
+	background-color: #EDE;
+}
+
+/* ACTION-related styling */
+
+/* Files action */
+
+div.files {
+	display: block;
+	padding: 5px;
+	width: 40%;
+}
+
+table.files {
+	width: 100%;
+	font-size: 90%;
+	border: 2px solid #CCC;
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+table.files caption {
+	border: 1px solid #CCC;
+	color: #666;
+	margin:5px 0;
+	padding:2px;
+}
+
+table.files thead {
+	background-color: #DDD;
+}
+
+table.files th, table.files td {
+	border: 1px solid #CCC;
+	padding: 1px 3px;
+}
+
+table.files thead th {
+	background-color: #DDD;
+}
+
+table.files tfoot th {
+	background-color: #DDD;
+}
+
+table.files tbody th {
+	background-color: #EEE;
+}
+
+table.files tbody tr:hover {
+	background-color: #EEE;
+}
+
+/* Lastedit action */
+.lastedit {
+	border:dotted 1px;
+	padding:3pt;
+	margin:8pt; color:#888;
+	font-size:8pt;
+	width:30%;
+}
+
+.lastedit_notes {
+	color: #888800;
+}
+
+/* TextSearch & TextSearchExpanded Actions*/
+.tse_keywords {
+	font-weight: bold;
+	color: green;
+	background-color: #FAEBD7;
+}
+
+/* Calendar Action */
+table.calendar {
+	color: #000;
+	background-color: #EEE;
+	border-collapse: collapse;
+}
+
+table.calendar caption {
+	border: 1px solid #CCC;
+	margin:5px 0;
+	font-size: 95%;
+	color: #666;
+	padding:2px;
+}
+
+table.calendar thead {
+	border: 2px solid #CCC;
+	background-color: #DDD;
+}
+
+table.calendar tbody.face {
+	background-color: #EEE;
+	border: 2px solid #CCC;
+}
+
+table.calendar tbody.calnav {
+	background-color: #FFF;
+}
+
+table.calendar thead th {
+	border: 1px solid #CCC;
+	padding: 1px;
+	text-align: center;
+	font-size: 85%;
+	width: 26px;
+}
+
+table.calendar tbody.face td {
+	border: 1px solid #CCC;
+	text-align: right;
+}
+
+table.calendar td.currentday {
+	color: #FFF;
+	background-color: #33A;
+}
+
+table.calendar tbody.face td:hover {
+	background-color: #DDD;
+}
+
+table.calendar tbody.face td.currentday:hover {
+	color: #FFF;
+	background-color: #66C;
+}
+
+table.calendar tbody.calnav {
+	font-weight: bold;
+}
+
+table.calendar td.prevmonth {
+	text-align: left;
+	font-size: 85%;
+}
+
+table.calendar td.curmonth {
+	text-align: center;
+}
+
+table.calendar td.nextmonth {
+	text-align: right;
+	font-size: 85%;
+}
+
+table.calendar a:link {
+	color: #339;
+	text-decoration: none;
+}
+
+table.calendar a:visited {
+	color: #339;
+	text-decoration: none;
+}
+
+table.calendar a:hover {
+	color: #933;
+}
+
+table.calendar a:active {
+	color: #339;
+	text-decoration: none;
+}
+
+/* Feedback action */
+
+fieldset.feedback {
+	display: block;
+	width: 350px;
+	padding: 10px;
+}
+
+fieldset.feedback label {
+	display: block;
+	width: 110px;
+	float: left;
+	margin-bottom: 10px;
+	text-align: right;
+	padding-right: 10px;
+}
+
+fieldset.feedback input[type=submit] {
+	float: left;
+	margin-left: 120px;
+}
+
+fieldset.feedback input[type=text] {
+	display: block;
+	width: 220px;
+	float: left;
+	margin-bottom: 10px;
+	border:1px solid #CCC;
+}
+
+fieldset.feedback textarea {
+	display: block;
+	width: 220px;
+	float: left;
+	margin-bottom: 10px;
+	border:1px solid #CCC;
+}
+
+fieldset.feedback br {
+	clear: left;
+}
+
+/* HighScores action */
+
+table.highscores {
+	white-space: nowrap;
+	padding 1px 3px
+}
+
+/* Newpage action */
+
+fieldset.newpage {
+	display: block;
+	width: 350px;
+	padding: 10px;
+}
+
+fieldset.newpage input[type=text] {
+	width: 250px;
+	border:1px solid #CCC;
+}
+
+
+/* Usersettings action */
+
+fieldset#account {
+	display: block;
+	min-width: 600px;
+	padding: 10px;
+	background-color: #F6F6F6;
+	text-align: left;
+}
+
+fieldset#account span#account_info {
+	display: block;
+	width: 230px;
+	float: left;
+	margin-bottom: 10px;
+	text-align: right;
+	padding-right: 10px;
+}
+
+fieldset#account input#logout {
+	float: left;
+	margin-left: 0;
+}
+
+fieldset.usersettings {
+	display: block;
+	min-width: 600px;
+	padding: 10px;
+}
+
+fieldset.usersettings fieldset {
+	clear: left;
+	display: block;
+	width: 236px;
+	float: left;
+	margin: 0 0 10px 240px;
+}
+
+fieldset.usersettings fieldset legend {
+	margin: 0;
+}
+
+fieldset.usersettings fieldset input{
+	display: block;
+	float: left;
+	padding: 0;
+	margin: 0;
+}
+
+fieldset.usersettings fieldset label {
+	vertical-align: top;
+	margin: 0 0 0 10px;
+	display: inline;
+	text-align: left;
+	width: auto;
+	float:left;
+}
+
+fieldset.usersettings em {
+	clear: left;
+	float: left;
+	display: block;
+	margin: 0 0 0 240px;
+}
+
+fieldset.usersettings em.usersettings_info {
+	clear: left;
+	float: left;
+	display: block;
+	width: 246px;
+	margin: 0 0 5px 240px;
+	font-style: normal;
+	font-size: 85%;
+	color: #666;
+	border: 1px solid #CCC;
+	background-color: #F0F0F0;
+	padding: 2px;
+}
+
+fieldset.usersettings label {
+	display: block;
+	width: 230px;
+	float: left;
+	margin-bottom: 10px;
+	text-align: right;
+	padding-right: 10px;
+}
+
+fieldset.usersettings select#update_option {
+	display: block;
+	width: 230px;
+	float: left;
+	margin: 0px 10px 10px 0px;
+}
+
+fieldset.usersettings input[type=text], fieldset.usersettings input[type=password] {
+	display: block;
+	width: 250px;
+	float: left;
+	margin-bottom: 10px;
+	border:1px solid #CCC;
+}
+
+fieldset.usersettings input[type=submit] {
+	float: left;
+	margin-left: 250px;
+}
+
+fieldset.usersettings br {
+	clear: left;
+}
+
+/* RecentChanges action */
+
+ul.recentchanges {
+	list-style-type: none;
+	padding-left: 0;
+	margin-left: 1em;
+	margin-bottom: 1em;
+}
+
+ul.recentchanges li {
+	font-size: 0.9em;
+}
+
+/* HANDLER-related styling */
+
+/* acls handler */
+table.acls {
+}
+
+/* 3rdparty-code related styling */
+
+/* syntax highlighting code - GeSHi */
+.code ol {
+	margin-top: 6px;
+	margin-bottom: 6px;			/* prevent vertical scroll bar in case of overflow */
+}
+.code li {
+	font-size: 11px;
+	font-family: "Lucida Console", Monaco, monospace;
+}
+.code .br0	{ color: #66cc66; }
+.code .co1	{ color: #808080; font-style: italic; }
+.code .co2	{ color: #808080; font-style: italic; }
+.code .coMULTI	{ color: #808080; font-style: italic; }
+.code .es0	{ color: #000099; font-weight: bold; }
+.code .kw1	{ color: #b1b100; }
+.code .kw2	{ color: #000000; font-weight: bold; }
+.code .kw3	{ color: #000066; }
+.code .kw4	{ color: #993333; }
+.code .kw5	{ color: #0000ff; }
+.code .me0	{ color: #006600; }
+.code .nu0	{ color: #cc66cc; }
+.code .re0	{ color: #0000ff; }
+.code .re1	{ color: #0000ff; }
+.code .re2	{ color: #0000ff; }
+.code .re4	{ color: #009999; }
+.code .sc0	{ color: #00bbdd; }
+.code .sc1	{ color: #ddbb00; }
+.code .sc2	{ color: #009900; }
+.code .st0	{ color: #ff0000; }
+
+/* wikiedit */
+
+.toolbar tr { background: ButtonFace; }
+.toolbar .btn-, .toolbar  .btn-hover,  .toolbar .btn-active,
+.toolbar .btn-pressed {
+	background: ButtonFace;
+	color: ButtonText;
+	border: 1px solid ButtonFace;
+	padding: 1px;
+	margin: 0px;
+	cursor: pointer;
+}
+.toolbar .btn- img  { width: 20px; height: 20px; }
+.toolbar .btn-hover { border-color: ButtonHighlight ButtonShadow ButtonShadow ButtonHighlight; }
+.toolbar .btn-active,
+.toolbar .btn-pressed { border-color: ButtonShadow ButtonHighlight ButtonHighlight ButtonShadow; }
+.toolbar .btn-pressed { background: ButtonHighlight; }
+.editornamecss { background-color:#CCCCFF; font-size: 18px; padding: 0 10px; }
+
+
+/* Version: $Id: wikka.css 966 2008-03-07 14:41:49Z DarTar $ */
+ 
+    </style>
+</head>
+<body>
+<a class="" href="http://docs.wikkawiki.org/WikkaReleaseNotes">Wikka Changelog</a><br />
+<hr />
+
+<h2> <a class="" href="http://docs.wikkawiki.org/WhatsNew1164">Wikka 1.1.6.4</a> Release Notes </h2>
+
+<span class="notes"><a class="ext" href="http://wikkawiki.org/HomePage">1.1.6.4-RC1</a> released on February 20, 2008</span><br />
+<span class="notes">1.1.6.4 released March 2008</span><br />
+<br />
+<div class="floatr"><h5>See also:</h5>
+
+<ul><li><strong><a class="" href="http://docs.wikkawiki.org/WhatsNew1164">What's new in 1.1.6.4</a></strong></li></ul>
+</div><h5>Acknowledgments</h5>
+Thanks to: <a class="interwiki" href="http://wikkawiki.org/RaffaR">Raffa</a>, vi390, WazoO, <a class="interwiki" href="http://wikkawiki.org/DbieL">DbieL</a>, <a class="interwiki" href="http://wikkawiki.org/GregorLindner">GregorLindner</a>, AntonyKing, <a class="interwiki" href="http://wikkawiki.org/BaZtien">BaZtien</a>, Fishy, Rob Petty, Seven0fx, texnofobix, <a class="interwiki" href="http://wikkawiki.org/WillyPs">WillyPs</a>, arfonzo, <a class="interwiki" href="http://wikkawiki.org/KrzysztofTrybowski">KrzysztofTrybowski</a>, DomBonj, Buglet and many regulars on <tt><a class="interwiki" href="http://wikkawiki.org/TheLounge">#wikka</a></tt><div class="clear">&nbsp;</div>
+
+<br />
+<h5>New/improved functionality</h5>
+
+<ul><li> New <strong><a class="" href="http://docs.wikkawiki.org/UserAdministration">user administration module</a></strong> (accessible via the <tt>AdminUsers</tt> system page) to manage Wikka users. Ticket: 25
+</li><li> New <strong><a class="" href="http://docs.wikkawiki.org/PageAdministration">page administration module</a></strong> (accessible via the <tt>AdminPages</tt> system page) to manage pages and perform several maintenance operations on wiki pages (including mass reversions). Ticket: 26
+</li><li> New config option to <strong><a class="" href="http://docs.wikkawiki.org/ConfigurationOptions">disable new user registrations</a></strong>. Ticket: 236
+</li><li> A new lightweight <strong><a class="" href="http://docs.wikkawiki.org/UserRegistrationValidationFramework">user registration framework</a></strong> to facilitate creation of plug-in modules for registration validation schemes. Default install includes the <tt>URInviteCode</tt> module (but it must be <a class="" href="http://docs.wikkawiki.org/UserRegistrationValidationFramework">enabled first</a>). Ticket: 609
+</li><li> New Wikka editor (<strong>WikkaEdit</strong>) to replace WikiEdit, with more Wikka-specific functionality and improved cross-browser compatibility. Ticket: 578
+</li><li> New <strong><a class="" href="http://docs.wikkawiki.org/RevertHandlerInfo">reversion handler</a></strong> to allow rollback of page versions to previous versions. Ticket: 566
+</li><li> Module for <strong>mass user deletion</strong> (via the UserAdministration panel). Ticket: 442
+</li><li> <strong>Revision numbers</strong> now displayed in recentchanges, revisions and page history. Ticket: 650
+</li><li> <strong><tt><a class="" href="http://docs.wikkawiki.org/DbInfoActionInfo">{{dbinfo}}</a></tt></strong> A simple admin-only action to provide information about the <a class="" href="http://docs.wikkawiki.org/DbInfoActionInfo">structure of the database and tables used in Wikka</a>. Ticket: 27
+</li><li> New <strong><tt><a class="" href="http://docs.wikkawiki.org/WikkaConfigActionInfo">{{wikkaconfig}}</a></tt></strong> action displaying the <a class="" href="http://docs.wikkawiki.org/ConfigurationOptions">system settings</a> for the current wiki (accessible via the <tt>SysInfo</tt> page). Ticket: 669
+</li><li> Improved <strong><tt><a class="" href="http://docs.wikkawiki.org/HighScoresActionInfo">{{highscores}}</a></tt></strong> action, displaying top contributors ranked by <em>pages owned</em>, <em>edits</em> or <em>comments</em>. Tickets: 681, 688.
+</li><li> <strong>GeSHi</strong> (syntax highlighting library) updated to latest version (1.0.7.20). Ticket: 573
+</li><li> Various documentation changes/edits for better clarity and disambiguation. Tickets: 646, 601
+</li><li> Headers and footers now templatized to facilitate customization. Ticket: 146
+</li><li> Improved detection of <tt>mod_rewrite</tt> availability. Ticket: 575
+</li><li> Simplified WikiCategory default page. Ticket: 646
+</li><li> After installation, user is automatically logged in as administrator. Ticket: 571
+</li><li> Improved source code documentation (including links to docs server). Ticket: 632
+</li><li> Better consistency across application with styling of error messages. Ticket: 598</li></ul>
+<br />
+<h5>Security</h5>
+
+<ul><li> System version information now hidden to all but admins in SysInfo page (thanks Raffa). Ticket: 597
+</li><li> All Wikka releases (zipfiles and tarballs) are now <a class="" href="http://docs.wikkawiki.org/WikkaSecurity">distributed with digital signatures and checksums</a> for verification. Ticket: 454
+</li><li> A more strict policy for files that can be listed by the <tt><a class="" href="http://docs.wikkawiki.org/AttachmentInfo">{{files}}</a></tt> action and files that can be downloaded with the <tt>files.xml</tt> handler: Any file beginning with a dot is now prohibited. Ticket: 692
+</li><li> Version removed from footer (except when logged in as admin). Ticket: 680</li></ul>
+<br />
+<h5>Bug fixes</h5>
+
+<ul><li> More informative messages when users attempt to register with a WikiName that's already taken, or attempt to log into a deleted/inactivated account. Ticket: 622
+</li><li> Proper handling of metacharacters when used in searches. Ticket: 644
+</li><li> Force browsers to reload new stylesheets when accessing a Wikka site that has been updated with a later version. Ticket: 600
+</li><li> Improved XHTML/CSS validation. Tickets: 579, 580, 555
+</li><li> Properly clearing floats before the comments block. Ticket #683
+</li><li> More robust validation of e-mail addresses during installation process. Ticket: 565, 540
+</li><li> Fixed sizing issues with editor window. Ticket: 576, 375, 43
+</li><li> Duplicate default pages are no longer created should a user inadvertently delete wikka.config.php and attempt a re-install or upgrade. Ticket: 216
+</li><li> Revisions and recent changes are now sorted by <tt>id</tt> instead of <tt>time</tt> for more consistent ordering of pages created at the same time by the installer. Ticket: 672
+</li><li> Wrong list markup in default FormattingRules. Ticket: 303
+</li><li> The scheme (http or https) part of <tt>base_url</tt> is now detected correctly. Ticket: 575</li></ul>
+<br />
+<h5>Minor issues</h5>
+
+<ul><li> Browse the <a class="ext" href="http://wush.net/trac/wikka/query?status=closed&amp;milestone=1.1.6.4">full list</a> of tickets closed in <a class="" href="http://docs.wikkawiki.org/WhatsNew1164">1.1.6.4</a>.
+</li><li> If rewrite engine is enabled, users who set up Wikka behind a non-standard port <strong>must</strong> change the base_url to reflect this port in the <tt>wikka.config.php</tt> file. Ticket: 702</li></ul>
+<div class="smallprint">Page was generated in 5.4859 seconds</div>
+</body>
+</html>

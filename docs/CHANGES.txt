@@ -1,20 +1,104 @@
-Wikka 1.1.6.3
-Released on May 7, 2007
+Wikka_Changelog
+-------------------------------------------------------------------------------
 
-Security patches
-----------------
-* Sanitized UserSettings to prevent JS injection. http://tracker.wikkawiki.org/ticket/363 (thanks to Sakaru)
-* Secured LoadRecentComments() and LoadRecentlyCommented(). http://tracker.wikkawiki.org/ticket/383
-* Dropped use of GetEnv() to retrieve Wikka configuration because of potential security issues on shared servers. http://tracker.wikkawiki.org/ticket/98
-* Fixed bug that allowed changes to private pages to show up in the RecentChanges feed. http://tracker.wikkawiki.org/ticket/305
-* Replaced every occurrence of $_REQUEST with $_GET or $_POST to enforce security of user input. http://tracker.wikkawiki.org/ticket/312
-* Patched a native PHP vulnerability (HTML Entity Encoder Heap Overflow Vulnerability) affecting virtually anyweb application running on PHP<5.2. The security fix was also applied to GeSHi version 1.0.7.18. http://tracker.wikkawiki.org/ticket/427
+Wikka_1.1.6.4 Release Notes
+
+1.1.6.4-RC1 released on February 20, 2008
+1.1.6.4 released March 2008
+
+
+Acknowledgments
+
+Thanks to: Raffa, vi390, WazoO, DbieL, GregorLindner, AntonyKing, BaZtien,
+Fishy, Rob Petty, Seven0fx, texnofobix, WillyPs, arfonzo, KrzysztofTrybowski,
+DomBonj, Buglet and many regulars on #wikka
+ 
+
+
+New/improved functionality
+
+
+* New user_administration_module (accessible via the AdminUsers system page) to
+  manage Wikka users. Ticket: 25
+* New page_administration_module (accessible via the AdminPages system page) to
+  manage pages and perform several maintenance operations on wiki pages
+  (including mass reversions). Ticket: 26
+* New config option to disable_new_user_registrations. Ticket: 236
+* A new lightweight user_registration_framework to facilitate creation of plug-
+  in modules for registration validation schemes. Default install includes the
+  URInviteCode module (but it must be enabled_first). Ticket: 609
+* New Wikka editor (WikkaEdit) to replace WikiEdit, with more Wikka-specific
+  functionality and improved cross-browser compatibility. Ticket: 578
+* New reversion_handler to allow rollback of page versions to previous
+  versions. Ticket: 566
+* Module for mass user deletion (via the UserAdministration panel). Ticket: 442
+* Revision numbers now displayed in recentchanges, revisions and page history.
+  Ticket: 650
+* {{dbinfo}} A simple admin-only action to provide information about the
+  structure_of_the_database_and_tables_used_in_Wikka. Ticket: 27
+* New {{wikkaconfig}} action displaying the system_settings for the current
+  wiki (accessible via the SysInfo page). Ticket: 669
+* Improved {{highscores}} action, displaying top contributors ranked by pages
+  owned, edits or comments. Tickets: 681, 688.
+* GeSHi (syntax highlighting library) updated to latest version (1.0.7.20).
+  Ticket: 573
+* Various documentation changes/edits for better clarity and disambiguation.
+  Tickets: 646, 601
+* Headers and footers now templatized to facilitate customization. Ticket: 146
+* Improved detection of mod_rewrite availability. Ticket: 575
+* Simplified WikiCategory default page. Ticket: 646
+* After installation, user is automatically logged in as administrator. Ticket:
+  571
+* Improved source code documentation (including links to docs server). Ticket:
+  632
+* Better consistency across application with styling of error messages. Ticket:
+  598
+
+
+
+Security
+
+
+* System version information now hidden to all but admins in SysInfo page
+  (thanks Raffa). Ticket: 597
+* All Wikka releases (zipfiles and tarballs) are now distributed_with_digital
+  signatures_and_checksums for verification. Ticket: 454
+* A more strict policy for files that can be listed by the {{files}} action and
+  files that can be downloaded with the files.xml handler: Any file beginning
+  with a dot is now prohibited. Ticket: 692
+* Version removed from footer (except when logged in as admin). Ticket: 680
+
+
 
 Bug fixes
----------
-* Fixed bug producing invalid XHTML in referrer handlers. http://tracker.wikkawiki.org/ticket/469
-* Added missing trailing slash that could result in invalid base_url during installation. http://tracker.wikkawiki.org/ticket/438
-* Fixed bug in Onyx that could prevent correct feed parsing when using PHP<4.3.0. http://tracker.wikkawiki.org/ticket/420
-* Further minor fixes. http://tracker.wikkawiki.org/ticket/466, http://tracker.wikkawiki.org/ticket/437
 
-Full release notes are available at: http://wikkawiki.org/WikkaReleaseNotes
+
+* More informative messages when users attempt to register with a WikiName
+  that's already taken, or attempt to log into a deleted/inactivated account.
+  Ticket: 622
+* Proper handling of metacharacters when used in searches. Ticket: 644
+* Force browsers to reload new stylesheets when accessing a Wikka site that has
+  been updated with a later version. Ticket: 600
+* Improved XHTML/CSS validation. Tickets: 579, 580, 555
+* Properly clearing floats before the comments block. Ticket #683
+* More robust validation of e-mail addresses during installation process.
+  Ticket: 565, 540
+* Fixed sizing issues with editor window. Ticket: 576, 375, 43
+* Duplicate default pages are no longer created should a user inadvertently
+  delete wikka.config.php and attempt a re-install or upgrade. Ticket: 216
+* Revisions and recent changes are now sorted by id instead of time for more
+  consistent ordering of pages created at the same time by the installer.
+  Ticket: 672
+* Wrong list markup in default FormattingRules. Ticket: 303
+* The scheme (http or https) part of base_url is now detected correctly.
+  Ticket: 575
+
+
+
+Minor issues
+
+
+* Browse the full_list of tickets closed in 1.1.6.4.
+* If rewrite engine is enabled, users who set up Wikka behind a non-standard
+  port must change the base_url to reflect this port in the wikka.config.php
+  file. Ticket: 702
