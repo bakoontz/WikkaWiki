@@ -137,17 +137,17 @@ if (($this->IsAdmin() && !empty($username)) ||
 
 		if ($my_edits_count == 0)
 		{
-			$output .= '<em>'.STATUS_NO_PAGES_EDITED.'</em>';
+			$output .= '<em class="error">'.STATUS_NO_PAGES_EDITED.'</em>';
 		}
 	}
 	else
 	{
-		$output .= '<em>'.sprintf(WIKKA_NO_PAGES_FOUND, $username).'</em>';
+		$output .= '<em class="error">'.sprintf(WIKKA_NO_PAGES_FOUND, $username).'</em>';
 	}
 }
 else
 {
-	$output .= '<em>'.MYCHANGES_NOT_LOGGED_IN.'</em>';
+	$output .= '<em class="error">'.MYCHANGES_NOT_LOGGED_IN.'</em>';
 }
 
 // *** output section ***
