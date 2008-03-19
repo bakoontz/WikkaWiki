@@ -67,7 +67,9 @@ Security
   files that can be downloaded with the files.xml handler: Any file beginning
   with a dot is now prohibited. Ticket: 692
 * Version removed from footer (except when logged in as admin). Ticket: 680
-
+* New checkversion action that displays a message when a newer
+  version of WikkaWiki is available. Enabled by default on initial
+  HomePage, SysInfo, AdminPages, and AdminUsers pages.
 
 
 Bug fixes
