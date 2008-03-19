@@ -101,7 +101,7 @@ $table .= '<table class="data">'."\n";
 //display caption and headers for complex style
 if ($style == 'complex')
 {
-	$table .= '	<caption style="white-space: nowrap; padding 1px 3px;">Top '.$display_items.' contibutor(s) by number of '.$label.'</caption>'."\n";
+	$table .= '	<caption style="white-space: nowrap; padding: 1px 3px;">Top '.$display_items.' contibutor(s) by number of '.$label.'</caption>'."\n";
 	$table .= '	<thead>'."\n";
 	$table .= '	<tr>'."\n";
 	$table .= '		<th scope="col">rank</th>'."\n";
