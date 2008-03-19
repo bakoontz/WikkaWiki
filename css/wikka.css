@@ -263,6 +263,10 @@ tt {
 	color: #880;
 }
 
+.help {
+	cursor: help;
+}
+
 .centre {text-align: center;}
 
 .center, .center p {text-align: center;}

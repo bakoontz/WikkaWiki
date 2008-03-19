@@ -206,7 +206,7 @@ if ($this->IsAdmin($this->GetUser()))
 	define('ADMINPAGES_TABLE_CELL_BACKLINKS_TITLE','Display pages linking to %s (%d)');
 	define('ADMINPAGES_TABLE_CELL_REFERRERS_TITLE','Display external sites linking to %s (%d)');
 	define('ADMINPAGES_SELECT_RECORD_TITLE','Select %s');
-	define('ADMINPAGES_NO_EDIT_NOTE','[No edit note]');
+	define('ADMINPAGES_NO_EDIT_NOTE','(No edit note)');
 	define('ADMINPAGES_CHECK_ALL_TITLE','Check all records');
 	define('ADMINPAGES_CHECK_ALL','Check all');
 	define('ADMINPAGES_UNCHECK_ALL_TITLE','Uncheck all records');
@@ -299,10 +299,10 @@ if ($this->IsAdmin($this->GetUser()))
 					if(null===$res)
 					{
 						++$errors;
-						echo "<li><span class='disabled'>".$tag."&nbsp;</span><em class='error'>(".ADMINPAGES_FORM_MASSACTION_REVERT_ERROR.")</em></li>\n";
+						echo "<li><span class='disabled'>".$tag."</span><ul><li><em class='error'>(".ADMINPAGES_FORM_MASSACTION_REVERT_ERROR.")</em></li></ul></li>\n";
 						continue;
 					}
-					$params = "fastdiff=1&a=".$res[0]['id']."&b=".$res[1]['id'];
+					$params = "fastdiff=1&amp;a=".$res[0]['id']."&amp;b=".$res[1]['id'];
 					echo '<li>'.$this->Link($tag)."\n";
 					echo '<ul>'."\n";
 					echo '<li>'."\n";
@@ -624,7 +624,8 @@ if ($this->IsAdmin($this->GetUser()))
 				$pagename = (strlen($page['tag']) > ADMINPAGES_DEFAULT_TAG_LENGTH) ? substr($page['tag'], 0, ADMINPAGES_DEFAULT_TAG_LENGTH).ADMINPAGES_DEFAULT_TERMINATOR : $page['tag'];
 
 				// build handler links
-				$lastedit = $page['time'];
+				$lastedit = '<a class="datetime" href="'.$this->Href('revisions', $page['tag'], '').'">'.$page['time'].'</a>';
+				
 				if ($pagename != $page['tag'])
 				{
 					$showpage = '<a href="'.$this->Href('',$page['tag'], '').'" title="'.$page['tag'].'">'.$pagename.'</a>';
@@ -749,7 +750,7 @@ if ($this->IsAdmin($this->GetUser()))
 				'		<td>'.$showpage.'</td>'."\n".
 				'		<td>'.$owner.'</td>'."\n".
 				'		<td>'.$user.'</td>'."\n".
-				'		<td class="datetime" '.((strlen($page['note'])>0)? 'title="['.$page['note'].']"' : 'title="'.ADMINPAGES_NO_EDIT_NOTE.'"').'>'.$lastedit.'</td>'."\n".
+				'		<td '.((strlen($page['note'])>0)? 'class="help" title="('.$page['note'].')"' : 'title="'.ADMINPAGES_NO_EDIT_NOTE.'"').'>'.$lastedit.'</td>'."\n".
 				'		<td class="number'.(($c_color == 1)? ' c1' : '').'">'.$hitspage.'</td>'."\n".
 				'		<td class="number'.(($c_color == 1)? ' c2' : '').'">'.$revpage.'</td>'."\n".
 				'		<td class="number'.(($c_color == 1)? ' c3' : '').'">'.$commentspage.'</td>'."\n".
