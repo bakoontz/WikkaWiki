@@ -28,7 +28,7 @@ Author     : Roman Ivanov: thingol [at] mail [dot] ru
 Note       : License file missing in the current distribution
 
 Name       : GeSHi
-Bundled    : version 1.0.7.18
+Bundled    : version 1.0.7.20
 Description: Generic Syntax Highlighter
 For Wikka  : Used by formatter to provide syntax highlighting in code
              blocks (between %%...%%)
