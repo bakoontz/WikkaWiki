@@ -1,10 +1,10 @@
-Wikka_Changelog
+Wikka Changelog
 -------------------------------------------------------------------------------
 
-Wikka_1.1.6.4 Release Notes
+Wikka 1.1.6.4 Release Notes
 
-1.1.6.4-RC1 released on February 20, 2008
-1.1.6.4 released March 2008
+* 1.1.6.4-RC1 released on February 20, 2008
+* 1.1.6.4 released March 2008
 
 
 Acknowledgments
@@ -97,8 +97,15 @@ Bug fixes
 
 Minor issues
 
-
-* Browse the full_list of tickets closed in 1.1.6.4.
 * If rewrite engine is enabled, users who set up Wikka behind a non-standard
   port must change the base_url to reflect this port in the wikka.config.php
   file. Ticket: 702
+
+
+
+Read more
+
+* Browse the full list of tickets closed in 1.1.6.4: http://wush.net/trac/wikka/query?status=closed&milestone=1.1.6.4
+* What's new in Wikka 1.1.6.4: http://docs.wikkawiki.org/WhatsNew1164
+* Wikka 1.1.6.4 release notes: http://docs.wikkawiki.org/WikkaReleaseNotes1164
+
