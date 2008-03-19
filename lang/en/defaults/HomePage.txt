@@ -1,3 +1,4 @@
+{{checkversion}}
 {{image url="images/wikka_logo.jpg" alt="wikka logo" title="Welcome to your Wikka site"}}
 
 Thanks for installing Wikka! This wiki runs on version ##{{wikkaversion}}##. You may want to read the [[WikkaReleaseNotes release notes]] to learn what's new in this release.

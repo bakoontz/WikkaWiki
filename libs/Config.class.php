@@ -592,5 +592,12 @@ class Config
 	 */
 	var $gui_editor = '1';			// @@@ allow end-user configuration to turn this off
 
+	/**
+	 * Enable version checking. 
+	 *
+	 * Default ('1') enables the {{checkversion}} action. 
+	 * {@link actions/checkversion/checkversion.php checkversion * action}.
+	 */
+	var $enable_version_check = '1';
 }
 ?>
