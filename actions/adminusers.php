@@ -351,9 +351,10 @@ if ($this->IsAdmin($this->GetUser()))
 		{
 			$q = $_GET['q'];
 		}
-		else
+		elseif($_POST['submit'] == ADMINUSERS_FORM_SEARCH_SUBMIT)
 		{
-			$q = ADMINUSERS_DEFAULT_SEARCH;
+			// Reset num recs per page for empty (reset) search
+			$l = ADMINUSERS_DEFAULT_RECORDS_LIMIT;
 		}
 	
 		// select all
@@ -364,9 +365,19 @@ if ($this->IsAdmin($this->GetUser()))
 		}
 	
 		// restrict MySQL query by search string
-		$where = ('' == $q) ? '1' : "`name` LIKE '%".$q."%'";
+		$where = "(status IS NULL OR status != 'deleted') AND ";
+		$where .= ('' == $q) ? '1' : "name LIKE '%".$q."%'";
 		// get total number of users
 		$numusers = $this->getCount('users', $where);
+		// If the user doesn't specifically want to change the records
+		// per page, then use the default.  The problem here is that one
+		// form is being used to process two post requests, so things
+		// (search string, num recs per page) get out of sync, requiring
+		// multiple submissions.
+		if(!isset($_GET['l']) && $_POST['submit'] != ADMINUSERS_FORM_PAGER_SUBMIT)
+		{
+			$l = ADMINUSERS_DEFAULT_RECORDS_LIMIT;
+		}
 	
 		// print page header
 		echo '<h3>'.ADMINUSERS_PAGE_TITLE.'</h3>'."\n";
@@ -379,7 +390,7 @@ if ($this->IsAdmin($this->GetUser()))
 		// build pager form	
 		$form_filter = $this->FormOpen('','','post','user_admin_panel');
 		$form_filter .= '<fieldset><legend>'.ADMINUSERS_FORM_LEGEND.'</legend>'."\n";
-		$form_filter .= '<label for="q">'.ADMINUSERS_FORM_SEARCH_STRING_LABEL.'</label> <input type ="text" id="q" name="q" title="'.ADMINUSERS_FORM_SEARCH_STRING_TITLE.'" size="20" maxlength="50" value="'.$q.'"/> <input type="submit" value="'.ADMINUSERS_FORM_SEARCH_SUBMIT.'" /><br />'."\n";
+		$form_filter .= '<label for="q">'.ADMINUSERS_FORM_SEARCH_STRING_LABEL.'</label> <input type ="text" id="q" name="q" title="'.ADMINUSERS_FORM_SEARCH_STRING_TITLE.'" size="20" maxlength="50" value="'.$q.'"/> <input name="submit" type="submit" value="'.ADMINUSERS_FORM_SEARCH_SUBMIT.'" /><br />'."\n";
 		// get values range for drop-down
 		$users_opts = optionRanges($user_limits,$numusers, ADMINUSERS_DEFAULT_MIN_RECORDS_DISPLAY);
 		$form_filter .= '<label for="l">'.ADMINUSERS_FORM_PAGER_LABEL_BEFORE.'</label> '."\n";
@@ -390,7 +401,7 @@ if ($this->IsAdmin($this->GetUser()))
 			$selected = ($opt == $l) ? ' selected="selected"' : '';
 			$form_filter .= '<option value="'.$opt.'"'.$selected.'>'.$opt.'</option>'."\n";
 		}
-		$form_filter .=  '</select> <label for="l">'.ADMINUSERS_FORM_PAGER_LABEL_AFTER.'</label> <input type="submit" value="'.ADMINUSERS_FORM_PAGER_SUBMIT.'" /><br />'."\n";
+		$form_filter .=  '</select> <label for="l">'.ADMINUSERS_FORM_PAGER_LABEL_AFTER.'</label> <input name="submit" type="submit" value="'.ADMINUSERS_FORM_PAGER_SUBMIT.'" /><br />'."\n";
 	
 		// build pager links
 		$ll = $s+$l+1;
@@ -408,9 +419,7 @@ if ($this->IsAdmin($this->GetUser()))
 		$form_filter .= '</fieldset>'.$this->FormClose()."\n";
 
 		// get user list
-		$userdata = $this->LoadAll("SELECT * FROM
-		".$this->config["table_prefix"]."users WHERE status IS NULL OR status != 'deleted' AND ".
-		$where." ORDER BY ".$sort." ".$d." limit ".$s.", ".$l);
+		$userdata = $this->LoadAll("SELECT * FROM ".$this->config["table_prefix"]."users WHERE ".$where." ORDER BY ".$sort." ".$d." limit ".$s.", ".$l);
 	
 		if ($userdata)
 		{
