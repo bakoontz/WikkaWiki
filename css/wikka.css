@@ -536,6 +536,15 @@ em.success {
 	letter-spacing: 1px;
 }
 
+/* debug messages */
+.debug {
+	color: #AAA;
+	font-size: 70%;
+	text-transform: uppercase;	
+	letter-spacing: 1px;
+}
+
+
 /* Tables */
 table.data {
 	border: 2px solid #CCC;
