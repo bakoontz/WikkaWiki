@@ -369,6 +369,14 @@ case "1.1.6.3":
 	mysql_query("create table ".$config['table_prefix']."sessions (sessionid char(32) NOT NULL, userid varchar(75) NOT NULL, PRIMARY KEY (sessionid, userid), session_start datetime NOT NULL)"),	"Already done? OK!", 0); 
 	test('Dropping obsolete index `from_tag`...',
 	mysql_query('alter table '.$config['table_prefix'].'links drop index `idx_from`'), 'Already done?  OK!', 0);
+	test("Adding {{checkversion}} to root_page...",
+	mysql_query("insert into ".$config['table_prefix']."pages set tag = '".$config["root_page"]."', body = '{{checkversion}}\n{{image url=\"images/wikka_logo.jpg\" alt=\"wikka logo\" title=\"Welcome to your Wikka site!\"}}\n\nThanks for installing [[Wikka:HomePage WikkaWiki]]! This site is running on version ##{{wikkaversion}}## (see WikkaReleaseNotes). \nYou need to [[UserSettings login]] and then double-click on any page or click on the \"Edit page\" link at the bottom to get started. \n\nAlso don\'t forget to visit the [[Wikka:HomePage WikkaWiki website]]! \n\nUseful pages: FormattingRules, WikkaDocumentation, OrphanedPages, WantedPages, TextSearch.', user = 'WikkaInstaller', owner = '".$config["admin_users"]."', time = now(), latest = 'Y'", $dblink), 'Already done? OK!', 0);
+	test("Adding {{checkversion}} to SysInfo page...",
+	mysql_query("insert into ".$config['table_prefix']."pages set tag = 'SysInfo', body = '{{checkversion}}\n===== System Information =====\n\n~-Wikka version: ##{{wikkaversion}}##\n~-PHP version: ##{{phpversion}}##\n~-\"\"MySQL\"\" version: ##{{mysqlversion}}##\n~-\"\"GeSHi\"\" version: ##{{geshiversion}}##\n~-Server:\n~~-Host: ##{{system show=\"host\"}}##\n~~-Operative System: ##{{system show=\"os\"}}##\n~~-Machine: ##{{system show=\"machine\"}}##\n\n{{wikkaconfig}}\n\n----\nCategoryWiki', owner = '(Public)', user = 'WikkaInstaller', time = now(), latest = 'Y'", $dblink), 'Already done? OK!', 0);
+	test("Adding {{checkversion}} to AdminUsers page...",
+	mysql_query("insert into ".$config['table_prefix']."pages set tag = 'AdminUsers', body = '{{checkversion}}\n{{adminusers}}\n\n----\nCategoryAdmin', owner = '(Public)', user = 'WikkaInstaller', time = now(), latest = 'Y'", $dblink), 'Already done? OK!', 0);
+	test("Adding {{checkversion}} to AdminPages page...",
+	mysql_query("insert into ".$config['table_prefix']."pages set tag = 'AdminPages', body = '{{checkversion}}\n{{adminpages}}\n\n----\nCategoryAdmin', owner = '(Public)', user = 'WikkaInstaller', time = now(), latest = 'Y'", $dblink), 'Already done? OK!', 0);
 }
 // #600: Force reloading of stylesheet. '
 $config['stylesheet'] = preg_replace('/(&amp;|\\?)(0|1\.1\.6\.\S+)(?>$|&amp;)/', '', $config['stylesheet']); // Needed in case of reinstall
