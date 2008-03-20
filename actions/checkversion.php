@@ -45,21 +45,14 @@ if($this->IsAdmin() && TRUE == $this->config['enable_version_check'])
 	}
 	
 	// Attempt to get latest_wikka_version.txt
-	// The action won't work on Windows PHP 4.3.0 or less
+	// The action won't work on Windows PHP <4.3.0
 	$timeout = CHECKVERSION_CONNECTION_TIMEOUT;
-	if (TRUE === strpos(strtolower(PHP_OS), 'windows'))
+	if (FALSE !== strpos(strtolower(PHP_OS), 'windows') &&
+        TRUE === version_compare(PHP_VERSION, '4.3.0', '<'))
 	{
 		if ($vars['display'] == "debug")
 		{
-			echo '<span class="debug">[Windows PHP does not support this feature]</span>'."\n";
-		}
-		return;
-	}
-	else if	(FALSE === version_compare(PHP_VERSION, '4.3.0', '>='))
-	{
-		if ($vars['display'] == "debug")
-		{
-			echo '<span class="debug">[PHP < 4.3.0 does not support this feature]</span>'."\n";
+			echo '<span class="debug">['.PHP_OS.' PHP '.PHP_VERSION.' does not support this feature]</span>'."\n";
 		}
 		return;
 	}
@@ -71,6 +64,7 @@ if($this->IsAdmin() && TRUE == $this->config['enable_version_check'])
 			{
 				echo '<span class="debug">[allow_url_fopen disabled]</span>'."\n";
 			}
+			return;
 		}
 		else
 		{
@@ -92,7 +86,6 @@ if($this->IsAdmin() && TRUE == $this->config['enable_version_check'])
 				{
 					echo '<span class="debug">[Cannot initiate socket connection]</span>'."\n";
 				}
-				// Return gracefully on error
 				return;
 			}
 			else
