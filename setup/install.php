@@ -376,9 +376,9 @@ case "1.1.6.3":
 	mysql_query('alter table '.$config['table_prefix'].'links drop index `idx_from`'), 'Already done?  OK!', 0);
 }
 // #600: Force reloading of stylesheet. '
-$config['stylesheet'] = preg_replace('/(&amp;|\\?)(0|1\.1\.6\.\S+)(?>$|&amp;)/', '', $config['stylesheet']); // Needed in case of reinstall
+$config['stylesheet'] = preg_replace('/(&amp;|\\?)(.*)$/', '', $config['stylesheet']); // Needed in case of reinstall
 $config['stylesheet'] .= strstr($config['stylesheet'], '?') ? '&amp;' : '?';
-$config['stylesheet'] .= WAKKA_VERSION;
+$config['stylesheet'] .= substr(md5(time()),1,5);
 ?>
 
 <p>
