@@ -44,10 +44,17 @@ if($this->IsAdmin() && TRUE == $this->config['enable_version_check'])
 	{
 		if(TRUE == ini_get('allow_url_fopen'))
 		{
-			$ip = gethostbyname('wikkawiki.org');
+			$hostname = 'wikkawiki.org';
+			$ip = gethostbyname($hostname);
+			if($ip == $hostname)
+			{
+				// Probably no internet connection...
+				return;
+			}
 			$fp = @fsockopen($ip, 80, $errno, $errstr, $timeout);
 			if(!$fp)
 			{
+				// Return gracefully on error
 				return;
 			}
 			else
