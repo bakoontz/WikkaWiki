@@ -55,7 +55,7 @@ function check() {
 	}
 	?>
 
-	<tr><td></td><td><span class="note">NOTE: This installer will try to write the configuration data to a file called <tt>wikka.config.php</tt>, located in your Wikka directory. In order for this to work, you must make sure the web server has write access to that file! If you can't do this, you will have to edit the file manually (the installer will tell you how). Once Wikka is correctly installed, you will be able to modify its configuration by editing this file.</span>See <a href="http://docs.wikkawiki.org/WikkaInstallation" target="_blank">Wikka:WikkaInstallation</a> for details.</td></tr>
+	<tr><td></td><td><span class="note">NOTE: This installer will try to write the configuration data to a file called <tt>wikka.config.php</tt>, located in your Wikka directory. In order for this to work, you must make sure the web server has write access to that file! If you can't do this, you will have to edit the file manually (the installer will tell you how). Once Wikka is correctly installed, you will be able to modify its configuration by editing this file. See <a href="http://docs.wikkawiki.org/WikkaInstallation" target="_blank">Docs:WikkaInstallation</a> for details.</span></td></tr>
 
 	<?php
 	 if (!$wakkaConfig["wakka_version"])
@@ -123,8 +123,7 @@ function check() {
 	 <tr><td></td><td>Administrator email.</td></tr>
 	 <tr><td align="right" nowrap="nowrap">Email:</td><td><input type="text" size="50" name="config[admin_email]" value="<?php echo $wakkaConfig["admin_email"] ?>" /></td></tr>
 
-	<tr><td></td><td><br /><h2>Wikka URL Configuration</h2><?php echo $wakkaConfig["wakka_version"] ? "" : "<span class=\"note\">Since this is a new installation, the installer tried to guess the proper values.<br />Change them only if you know what you're doing!</span>" ?></td></tr>
-
+	<tr><td></td><td><br /><h2>Wikka URL Configuration</h2><?php echo $wakkaConfig["wakka_version"] ? '' : '<span class="note">Since this is a new installation, the installer tried to guess the proper values.<br />Change them only if you know what you\'re doing! 	See <a href="http://docs.wikkawiki.org/ModRewrite" target="_blank">Docs:ModRewrite</a> for details.</span>' ?></td></tr>
 	<tr><td></td><td>First you'll need to set up your Wikka site's base URL. Page names get appended to it, so: <ul>
 		<li>if Rewrite Mode is not available on your server, the base URL should end with <tt>"wikka.php?wakka="</tt><br />e.g. <tt>http://www.example.com/wikka.php?wakka=</tt></li>
 		<li>if Rewrite Mode is enabled, make sure the base URL ends with a slash "/",<br />e.g. <tt>http://www.example.com/</tt></li>
@@ -138,15 +137,14 @@ function check() {
 		<li>If Rewrite mode is <em>enabled</em>,  your site's URL will look like the following:<br /><tt>http://www.example.com/HomePage</tt></li>
 	</ul></td></tr>
 	<tr><td align="right" nowrap="nowrap">Rewrite mode:</td><td><input type="hidden" name="config[rewrite_mode]" value="0" /><input type="checkbox" name="config[rewrite_mode]" value="1" <?php echo ($wakkaConfig["rewrite_mode"])? 'checked="checked"' : ''; ?> /> Enabled</td></tr>
-
 	<?php
 	 }
 	?>
 
-	<tr><td></td><td><br /><h2>New version check</h2></td></tr>
-	<tr><td></td><td>It is <strong>strongly recommended</strong> that you leave this option checked if your run your wiki on the internet. Administrator(s) will be notified automatically on the pages SysInfo, AdminUsers and AdminPages if there is a new version of WikkaWiki available for download.</td></tr>
+	<tr><td></td><td><br /><h2>Version update check</h2></td></tr>
+	<tr><td></td><td><span class="note">It is <strong>strongly recommended</strong> that you leave this option checked if your run your wiki on the internet. Administrator(s) will be notified automatically on the wiki if a new version of WikkaWiki is available for download. 	See <a href="http://docs.wikkawiki.org/CheckVersionActionInfo" target="_blank">Docs:CheckVersionActionInfo</a> for details.
+	</span></td></tr>
 	<tr><td align="right" nowrap="nowrap"><label for="id_enable_version_check">Enable version checking:</label></td><td><input type="checkbox"<?php echo !isset($wakkaConfig["enable_version_check"]) || $wakkaConfig["enable_version_check"] == "1" ? ' checked="checked"' : ""; ?> name="config[enable_version_check]" value="1" id="id_enable_version_check" /></td></tr>
-
 	<tr><td></td><td><input type="submit" value="Continue" onclick="return check();" /></td></tr>
 
 </table>
