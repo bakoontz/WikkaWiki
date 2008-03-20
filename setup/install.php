@@ -8,6 +8,11 @@ if (!defined('DELETING_COOKIES')) define('DELETING_COOKIES', 'Deleting wikka coo
 $config = array(); //required since PHP5, to avoid warning on array_merge #94
 // fetch configuration
 $config = $_POST["config"];
+// if the checkbox was not checked, $_POST['config']['enable_version_check'] would not be defined. We must explicitly set it to "0" to overwrite any value already set (if exists).
+if (!isset($config["enable_version_check"]))
+{
+	$config["enable_version_check"] = "0";
+}
 // merge existing configuration with new one
 $config = array_merge($wakkaConfig, $config);
 

@@ -143,6 +143,10 @@ function check() {
 	 }
 	?>
 
+	<tr><td></td><td><br /><h2>New version check</h2></td></tr>
+	<tr><td></td><td>It is <strong>strongly recommended</strong> that you leave this option checked if your run your wiki on the internet. Administrator(s) will be notified automatically on the pages SysInfo, AdminUsers and AdminPages if there is a new version of WikkaWiki available for download.</td></tr>
+	<tr><td align="right" nowrap="nowrap"><label for="id_enable_version_check">Enable version checking:</label></td><td><input type="checkbox"<?php echo !isset($wakkaConfig["enable_version_check"]) || $wakkaConfig["enable_version_check"] == "1" ? ' checked="checked"' : ""; ?> name="config[enable_version_check]" value="1" id="id_enable_version_check" /></td></tr>
+
 	<tr><td></td><td><input type="submit" value="Continue" onclick="return check();" /></td></tr>
 
 </table>
