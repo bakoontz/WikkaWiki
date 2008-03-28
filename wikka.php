@@ -800,7 +800,11 @@ if (!isset($wakkaConfig['wakka_version']))
 {
 	$wakkaConfig['wakka_version'] = 0;
 }
-if ($wakkaConfig['wakka_version'] !== WAKKA_VERSION)
+$version = array();
+// We are interested in the version root (i.e., given "trunk-r1009" or
+// "trunk_r1009", we only want to compare against "trunk")
+$version = preg_split('/-|_/', WAKKA_VERSION);
+if ($wakkaConfig['wakka_version'] !== $version[0])
 {
 	// set up (intended) config location for the installer
 	#$wakkaConfigLocation = SITE_CONFIGFILE;		// @@@ use directly in installer
