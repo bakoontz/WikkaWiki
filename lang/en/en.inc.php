@@ -324,8 +324,8 @@ define('PROPER_USAGE_MM_SYNTAX', 'Proper usage: %1$s or %2$s'); // %1$s - syntax
  */
 // mychanges
 define('NO_PAGES_EDITED', 'You have not edited any pages yet.');
-define('MYCHANGES_ALPHA_LIST', "This is a list of pages you've edited, along with the time of your last change.");
-define('MYCHANGES_DATE_LIST', "This is a list of pages you've edited, ordered by the time of your last change.");
+define('MYCHANGES_ALPHA_LIST', "This is a list of pages edited by %s, along with the time of the last change.");
+define('MYCHANGES_DATE_LIST', "This is a list of pages edited by %s, ordered by the time of the last change.");
 define('ORDER_DATE_LINK_DESC', 'order by date');
 define('ORDER_ALPHA_LINK_DESC', 'order alphabetically');
 define('MYCHANGES_NOT_LOGGED_IN', "You're not logged in, thus the list of pages you've edited couldn't be retrieved.");
@@ -335,8 +335,9 @@ define('MYCHANGES_NOT_LOGGED_IN', "You're not logged in, thus the list of pages 
  * Language constant used by the {@link mypages.php mypages} action
  */
 // mypages
-define('OWNED_PAGES_TXT', 'This is the list of pages you own.');
+define('OWNED_PAGES_TXT', "This is the list of pages owned by %s.");
 define('OWNED_NO_PAGES', 'You don\'t own any pages.');
+define('OWNED_NONE_FOUND', 'No pages found.');
 define('OWNED_NOT_LOGGED_IN', "You're not logged in, thus the list of your pages couldn't be retrieved.");
 /**#@-*/
 

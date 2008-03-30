@@ -34,7 +34,24 @@ $tag = $this->GetPageTag();
 $output = '';
 $time_output = '';
 
-if ($this->existsUser())
+$params = ''; 
+$username = ''; 
+if(isset($_REQUEST['user'])) 
+{ 
+	$username = $this->htmlspecialchars_ent($_REQUEST['user']); 
+	$params .= "user=$username&"; 
+} 
+ 
+$action = ''; 
+if(isset($_REQUEST['action'])) 
+{ 
+	$action = $this->htmlspecialchars_ent($_REQUEST['action']); 
+	$params .= "action=$action&"; 
+} 
+$params = substr($params, 0, -1); 
+ 
+if (($this->IsAdmin() && !empty($username)) || 
+		($this->existsUser() &&  $username = $this->GetUserName())) 
 {
 	$my_edits_count = 0;
 
@@ -42,11 +59,20 @@ if ($this->existsUser())
 	$output .= '<div class="floatl">';
 	if ($alpha)
 	{
-		$output .= MYCHANGES_ALPHA_LIST.' (<a href="'.$this->href("", $tag).'">'.ORDER_DATE_LINK_DESC;
+	$output .= sprintf(MYCHANGES_ALPHA_LIST, $username).' (<a href="'.$this->Href("", $tag, $params).'">'.ORDER_DATE_LINK_DESC;
 	}
 	else
 	{
-		$output .= MYCHANGES_DATE_LIST.' (<a href="'.$this->href("", $tag, "alphabetically=1").'">'.ORDER_ALPHA_LINK_DESC;
+		if(!empty($params)) 
+		{ 
+			$params .= "&alphabetically=1"; 
+		} 
+		else 
+		{ 
+			$params = "alphabetically=1"; 
+		} 
+
+		$output .= sprintf(MYCHANGES_DATE_LIST, $username).' (<a href="'.$this->href("", $tag, $params).'">'.ORDER_ALPHA_LINK_DESC; 
 	}
 	$output .= '</a>)</div><div class="clear">&nbsp;</div>'."\n";
 
@@ -54,7 +80,7 @@ if ($this->existsUser())
 	$query = "
 		SELECT id, tag, time
 		FROM ".$this->GetConfigValue('table_prefix')."pages
-		WHERE user = '".mysql_real_escape_string($this->reg_username)."'
+		WHERE user = '".mysql_real_escape_string($username)."'
 		AND latest = 'Y'
 		ORDER BY ".$order;
 

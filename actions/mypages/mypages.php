@@ -21,20 +21,27 @@
  * @todo	actually add the (intended) timestanmp sorting; cf. mychanges action
  */
 
-#if ($user = $this->GetUser())
-if ($this->existsUser())
+$username = '';
+if(isset($_REQUEST['user']))
 {
-	echo '<div class="floatl">'.OWNED_PAGES_TXT.'</div><div class="clear">&nbsp;</div>'."\n";
+	$username = $this->htmlspecialchars_ent($_REQUEST['user']); 
+}
+if (($this->IsAdmin() && !empty($username)) || 
+		($this->GetUser() && $username = $this->GetUserName())) 
+{ 
+	printf("<div class="floatl">".OWNED_PAGES_TXT."</div><div class="clear">&nbsp;</div>\n", $username);
 	$curChar = '';
 
 
 	#if ($pages = $this->LoadPagesByOwner($user['name']))
 	if ($pages = $this->LoadPagesByOwner($this->reg_username))
 	{
+		$my_pages_count = 0;
 		foreach ($pages as $page)
 		{
-			//if ($this->GetUserName() == $page["owner"])
-			//{
+			if($username == $page['owner'])
+			{
+				++$my_pages_count;
 				$firstChar = strtoupper($page["tag"][0]);
 				if (!preg_match("/[A-Z,a-z]/", $firstChar)) //TODO: (#104 #340, #34) Internationalization (allow other starting chars, make consistent with Formatter REs)
 				{
@@ -50,7 +57,11 @@ if ($this->existsUser())
 
 				echo $this->Link($page['tag'])."<br />\n";
 
-			//}
+			}
+		}
+		if($my_pages_count == 0)
+		{
+			print("<em class='error'>".MYPAGES_NONE_OWNED."</em>");
 		}
 
 	}

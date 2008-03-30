@@ -106,6 +106,7 @@ case "0":
 			 "doubleclickedit enum('Y','N') NOT NULL default 'Y',".
 			 "signuptime datetime NOT NULL default '0000-00-00 00:00:00',".
 			 "show_comments enum('Y','N') NOT NULL default 'N',".
+		     "status enum('invited','signed-up','pending','active','suspended','banned','deleted'),".
 			 "default_comment_display int(10) unsigned NOT NULL default '1',".
 			 "challenge char(8) NOT NULL default '00000000',".
 			 "PRIMARY KEY  (name),".
@@ -343,6 +344,12 @@ case "1.1.6.3":
 	@mysql_query('alter table '.$config['table_prefix'].'pages add index `idx_owner` (`owner`)', $dblink), __('Already done?  OK!'), 0);
 	test(__('Dropping unnecessary index `from_tag`').'...',
 	@mysql_query('alter table '.$config['table_prefix'].'links drop index `idx_from`', $dblink), __('Already done?  OK!'), 0);
+	test("Adding sessions tracking table...",
+	mysql_query("create table ".$config['table_prefix']."sessions (sessionid char(32) NOT NULL, userid varchar(75) NOT NULL, PRIMARY KEY (sessionid, userid), session_start datetime NOT NULL)"), "Already done? OK!", 0);
+	test("Adding AdminUsers page...", 
+	mysql_query("insert into ".$config['table_prefix']."pages set tag = 'AdminUsers', body = '{{adminusers}}\n\n----\nCategoryAdmin', owner = '(Public)', note='".$upgrade_note."', user = 'WikkaInstaller', time = now(), latest = 'Y'", $dblink), "Already done? OK!", 0); 
+	test("Adding AdminPages page...", 
+	mysql_query("insert into ".$config['table_prefix']."pages set tag = 'AdminPages', body = '{{adminpages}}\n\n----\nCategoryAdmin', owner = '(Public)', note='".$upgrade_note."', user = 'WikkaInstaller', time = now(), latest = 'Y'", $dblink), "Already done? OK!", 0); 
 	break;
 case "trunk": //latest development version from the SVN repository - do not remove
 	break;

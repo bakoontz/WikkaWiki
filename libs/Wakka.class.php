@@ -3913,6 +3913,17 @@ if ($debug) echo 'GetUserName calling... ';
 			// cookies
 			$this->deleteWikkaCookie('user_name');
 			$this->deleteWikkaCookie('pass');
+			// Delete this session from sessions table
+			$this->Query("DELETE FROM ".$this->config['table_prefix']."sessions WHERE userid='".$this->GetUserName()."' AND sessionid='".session_id()."'");
+			$_SESSION["user"] = "";
+			// This seems a good as place as any to purge all session
+			// records older than PERSISTENT_COOKIE_EXPIRY, as this is
+			// not a time-critical function for the user.  The
+			// assumption here is that server-side sessions have long
+			// ago been cleaned up by PHP. 
+			$cookie_expiration_secs = DEFAULT_COOKIE_EXPIRATION_HOURS * 3600;
+			$this->Query("DELETE FROM
+			".$this->config['table_prefix']."sessions WHERE DATE_SUB(NOW(), INTERVAL ".$cookie_expiration_secs." SECOND) > session_start"); 
 		}
 		return $rc;
 	}
@@ -4346,14 +4357,22 @@ if ($debug) echo 'UserIsOwner calling... ';
 	 *
 	 * @return	boolean	TRUE if the user is an admin, FALSE otherwise
 	 */
-	function IsAdmin()
+	function IsAdmin($user='')
 	{
+		if(TRUE===empty($user))
+		{
+			$user = $this->reg_username;
+		}
+		else if(is_array($user))
+		{
+			$user = $user['name'];
+		}
 		$isadmin = FALSE;
 		// use preg_split to get an array with already-trimmed elements (no looping needed)
 		$adminarray = preg_split('/\s*,\s*/', trim($this->GetConfigValue('admin_users')), -1, PREG_SPLIT_NO_EMPTY);
 
 		// only a logged-in user can be admin; check if name occurs in the array
-		if ($this->existsUser() && in_array($this->reg_username, $adminarray))
+		if ($this->existsUser() && in_array($user, $adminarray))
 		{
 			$isadmin = TRUE;
 		}

@@ -234,7 +234,8 @@ h1 {
 }
 
 tt {
-	color: #666;
+	color: #393;
+	background-color: #EFE;
 }
 
 .hidden {
@@ -324,7 +325,7 @@ hr {
 
 .code {
 	color: black;
-	background: #FAFAFA;
+	background: #ffffee;
 	border: 1px solid #CCC;
 	font-size: 11px;
 	font-family: "Lucida Console", Monaco, monospace;
@@ -401,28 +402,10 @@ input[type=text] {
 	border: 1px solid #CCC;	
 }
 
-input[readonly=readonly] {
-	color: #666;
-}
-
-input[readonly=readonly]:hover, input[readonly=readonly]:focus {
-	background-color: transparent;
-}
-
-/* editor textarea decorations */
-/* (decorations can't be in "textarea#body" declaration, else the "width:100%" won't work) */
-#textarea_container {
-	border: 1px solid #CCC;
-	padding: 2px;
-	margin-bottom: 2px;
-}
-
 textarea#body{
 	width: 100%;
 	height: 500px;
-	/* padding and border must be 0 for the "width:100%" to work */
-	padding: 0;
-	border: 0;
+	padding: 2px;
 }
 
 .searchbox {
@@ -445,12 +428,6 @@ input.highlight {
 }
 
 /* system information */
-
-.datetime {
-	color: #666;
-	font-size: 80%;
-	font-family: "Lucida Console", Monaco, monospace;
-}
 
 .missingpage {
 	/* background: #ccffff; */
@@ -540,6 +517,8 @@ del {
 	text-decoration: none;
 }
 
+.recentchanges {font-size: 0.9em;}
+
 .pagenote {color: #888;}
 
 .pagetitle {color: #888;}
@@ -552,153 +531,9 @@ del {
 	color: #987;
 }
 
-/* Tables */
-
-table.data {
-	border: 2px solid #CCC;
-	border-collapse: collapse;
-	border-spacing: 0;
-}
-
-table.data caption {
-	border: 1px solid #CCC;
-	font-size: 95%;
-	color: #666;
-	margin:5px 0;
-	padding:2px;
-}
-
-table.data thead {
-	background-color: #DDD;
-}
-
-table.data tfoot {
-	background-color: #DDD;
-}
-
-table.data th {
-	border: 1px solid #CCC;
-	padding: .1em .25em;
-}
-
-table.data thead th {
-	background-color: #DDD;
-}
-
-table.data tfoot th {
-	background-color: #DDD;
-}
-
-table.data tbody th {
-	background-color: #EEE;
-}
-
-table.data tbody tr:hover {
-	background-color: #EEE;
-}
-
-table.data tbody tr.alt:hover {
-	background-color: #E9E9F9;
-}
-
-table.data td {
-	border: 1px solid #CCC;
-	padding: .1em .25em;
-}
-
-table.data td.number {
-	text-align: right;
-}
-
-table.data td.datetime {
-	color: #666;
-	font-size: 80%;
-	font-family: "Lucida Console", Monaco, monospace;
-	text-align: right;
-	white-space: nowrap;
-}
-
-/* --- alternate row & column color --- */
-
-table.data tr.alt {
-	background-color: #EEE;
-}
-
-table.data th.c1 {
-	background-color: #CDD;
-}
-
-table.data th.c2 {
-	background-color: #DCC;
-}
-
-table.data th.c3 {
-	background-color: #DDC;
-}
-
-table.data th.c4 {
-	background-color: #CDC;
-}
-
-table.data th.c5 {
-	background-color: #CCD;
-}
-
-table.data th.c6 {
-	background-color: #DCD;
-}
-
-table.data td.c1 {
-	background-color: #EFF;
-}
-
-table.data td.c2 {
-	background-color: #FEE;
-}
-
-table.data td.c3 {
-	background-color: #FFE;
-}
-
-table.data td.c4 {
-	background-color: #EFE;
-}
-
-table.data td.c5 {
-	background-color: #EEF;
-}
-
-table.data td.c6 {
-	background-color: #FEF;
-}
-
-table.data tr.alt td.c1 {
-	background-color: #DEE;
-}
-
-table.data tr.alt td.c2 {
-	background-color: #EDD;
-}
-
-table.data tr.alt td.c3 {
-	background-color: #EED;
-}
-
-table.data tr.alt td.c4 {
-	background-color: #DED;
-}
-
-table.data tr.alt td.c5 {
-	background-color: #DDE;
-}
-
-table.data tr.alt td.c6 {
-	background-color: #EDE;
-}
-
 /* ACTION-related styling */
 
-/* Files action */
+/* File attachments */
 
 div.files {
 	display: block;
@@ -744,6 +579,55 @@ table.files tbody th {
 
 table.files tbody tr:hover {
 	background-color: #EEE;
+}
+
+/* Tables */
+table.data {
+	border: 2px solid #CCC;
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+table.data caption {
+	border: 1px solid #CCC;
+	font-size: 95%;
+	color: #666;
+	margin:5px 0;
+	padding:2px;
+}
+
+table.data thead {
+	background-color: #DDD;
+}
+
+table.data tfoot {
+	background-color: #DDD;
+}
+
+table.data th {
+	border: 1px solid #CCC;
+	padding: .1em .25em;
+}
+
+table.data thead th {
+	background-color: #DDD;
+}
+
+table.data tfoot th {
+	background-color: #DDD;
+}
+
+table.data tbody th {
+	background-color: #EEE;
+}
+
+table.data tbody tr:hover {
+	background-color: #EEE;
+}
+
+table.data td {
+	border: 1px solid #CCC;
+	padding: .1em .25em;
 }
 
 /* Lastedit action */
@@ -901,13 +785,6 @@ fieldset.feedback br {
 	clear: left;
 }
 
-/* HighScores action */
-
-table.highscores {
-	white-space: nowrap;
-	padding 1px 3px
-}
-
 /* Newpage action */
 
 fieldset.newpage {
@@ -1041,10 +918,6 @@ ul.recentchanges {
 	padding-left: 0;
 	margin-left: 1em;
 	margin-bottom: 1em;
-}
-
-ul.recentchanges li {
-	font-size: 0.9em;
 }
 
 /* HANDLER-related styling */
