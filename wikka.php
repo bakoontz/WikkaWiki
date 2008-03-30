@@ -805,12 +805,24 @@ $version2 = array();
 // We are interested in the version root (i.e., given "trunk-r1009" or
 // "trunk_r1009", we only want to compare against "trunk"). 
 $version1 = preg_split('/-|_/', WAKKA_VERSION);
-$version2 = preg_split('/-|_/', $wakkaConfig['wakka_version']);
+// There is some weirdness with the way PHP either (1) returns from
+// preg_replace when the search string is "0", or (2) a type
+// comparison beetween a string and an integer 0.  In any case, 
+// remove the if clause below at your own risk.
+if(0 === $wakkaConfig['wakka_version'])
+{
+	$version2[0] = $wakkaConfig['wakka_version'];
+}
+else	
+{
+	$version2 = preg_split('/-|_/', $wakkaConfig['wakka_version']);
+}
 if ( $version1[0] !== $version2[0] )
+//if($wakkaConfig['wakka_version'] !== WAKKA_VERSION)
 {
 	// set up (intended) config location for the installer
 	#$wakkaConfigLocation = SITE_CONFIGFILE;		// @@@ use directly in installer
-if ($debug) echo 'site configuration file (to be) lodated at: '.SITE_CONFIGFILE."<br/>\n";
+	if ($debug) echo 'site configuration file (to be) lodated at: '.SITE_CONFIGFILE."<br/>\n";
 	$htaccessLocation = str_replace('\\', '/', dirname(__FILE__)).DIRECTORY_SEPARATOR.'.htaccess';
 	#if (file_exists('setup'.DIRECTORY_SEPARATOR.'index.php'))	#89
 	if (file_exists(WIKKA_SETUP_PATH.DIRECTORY_SEPARATOR.'index.php'))	# #89
