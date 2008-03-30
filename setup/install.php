@@ -126,6 +126,14 @@ case "0":
 			 "KEY idx_page_tag (page_tag),".
 			 "KEY idx_time (time)".
 			") TYPE=MyISAM;", $dblink), __('Already exists?'), 0);
+	test(sprintf(__('Creating %s table'), __('session')).'...',
+		@mysql_query(
+			"CREATE TABLE ".$config["table_prefix"]."sessions (".
+			 "sessionid char(32) NOT NULL,".
+			 "userid varchar(75) NOT NULL,".
+			 "PRIMARY KEY (sessionid, userid),".
+			 "session_start datetime NOT NULL".
+			") TYPE=MyISAM;", $dblink), __('Already exists?'), 0);
 
 	$challenge = dechex(crc32(time()));
 	$pass_val = md5($challenge.md5(mysql_real_escape_string($_SESSION['wikka']['install']['password'])));
@@ -141,30 +149,32 @@ case "0":
 
 	update_default_page(array(
 	'_rootpage', 
+	'AdminPages',
+	'AdminUsers',
+	'CategoryAdmin',
+	'CategoryCategory', 
+	'CategoryWiki', 
+	'DatabaseInfo',
+	'FormattingRules', 
+	'HighScores', 
+	'InterWiki', 
+	'MyChanges', 
+	'MyPages', 
+	'OrphanedPages', 
+	'OwnedPages', 
+	'PageIndex', 
+	'PasswordForgotten', 
 	'RecentChanges', 
 	'RecentlyCommented', 
-	'UserSettings', 
-	'PageIndex', 
-	'WikkaReleaseNotes', 
-	'WikkaDocumentation', 
-	'WantedPages', 
-	'OrphanedPages', 
+	'SandBox', 
+	'SysInfo',
 	'TextSearch', 
 	'TextSearchExpanded', 
-	'MyPages', 
-	'MyChanges', 
-	'InterWiki', 
-	'PasswordForgotten', 
+	'UserSettings', 
+	'WantedPages', 
 	'WikiCategory', 
-	'CategoryWiki', 
-	'CategoryCategory', 
-	'FormattingRules', 
-	'DatabaseInfo',
-	'CategoryAdmin',
-	'HighScores', 
-	'OwnedPages', 
-	'SandBox', 
-	'SysInfo'), $dblink, $config, $lang_defaults_path, $lang_defaults_fallback_path); 
+	'WikkaDocumentation', 
+	'WikkaReleaseNotes'), $dblink, $config, $lang_defaults_path, $lang_defaults_fallback_path); 
 
 	// @@@	?? *default* ACLs are in the configuration file; settings on UserSettings page are irrelevant for default ACLs!
 	//		use page-specific "ACL" files to create page-specific ACLs (in update_default_page()!).
