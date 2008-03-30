@@ -45,7 +45,7 @@
  */
 
 
-include_once('../../libs/admin.lib.php');
+ include_once($this->config['wikka_action_path'].DIRECTORY_SEPARATOR.'../libs/admin.lib.php');
 
 //utilities
 
