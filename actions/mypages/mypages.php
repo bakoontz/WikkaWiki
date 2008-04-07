@@ -29,7 +29,7 @@ if(isset($_REQUEST['user']))
 if (($this->IsAdmin() && !empty($username)) || 
 		($this->GetUser() && $username = $this->GetUserName())) 
 { 
-	printf("<div class="floatl">".OWNED_PAGES_TXT."</div><div class="clear">&nbsp;</div>\n", $username);
+	printf('<div class="floatl">'.OWNED_PAGES_TXT.'</div><div class="clear">'."&nbsp;</div>\n", $username);
 	$curChar = '';
 
 
