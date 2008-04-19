@@ -516,8 +516,6 @@ del {
 	text-decoration: none;
 }
 
-.recentchanges {font-size: 0.9em;}
-
 .pagenote {color: #888;}
 
 .pagetitle {color: #888;}
@@ -917,6 +915,10 @@ ul.recentchanges {
 	padding-left: 0;
 	margin-left: 1em;
 	margin-bottom: 1em;
+}
+
+ul.recentchanges li {
+	font-size: 0.9em;
 }
 
 /* HANDLER-related styling */
