@@ -308,11 +308,11 @@ hr {
 /* code blocks */
 
 .code_header {
-	color: #666;
-	background-color: #EEE;
-	border-top: 1px solid #CCC;
-	border-right: 1px solid #CCC;
-	border-left: 1px solid #CCC;
+	color: #336;	
+	background-color: #D0E0F0;
+	border-top: 1px solid #AAC;
+	border-right: 1px solid #AAC;
+	border-left: 1px solid #AAC;
 	border-bottom: none;
 	font-family: Verdana, Arial, sans-serif;
 	font-size: 100%;
@@ -324,8 +324,8 @@ hr {
 
 .code {
 	color: black;
-	background: #ffffee;
-	border: 1px solid #CCC;
+	background: #F3F3FF;
+	border: 1px solid #AAC;
 	font-size: 11px;
 	font-family: "Lucida Console", Monaco, monospace;
 	margin: auto;
@@ -415,9 +415,19 @@ textarea#body{
 }
 
 input.grabcode {
+	background-color: #D0E0F0;
+	border-left: 1px solid #EEF;
+	border-left: 1px solid #EEF;
+	border-right: 1px solid #AAC;
+	border-bottom: 1px solid #AAC;
+	color: #336;
 	float: right;
 	margin-top: 0px;
-	font-size: 90%;
+	font-size: 70%;
+}
+
+input.grabcode:hover {
+	background-color: #F3F3FF;
 }
 
 input.highlight {
