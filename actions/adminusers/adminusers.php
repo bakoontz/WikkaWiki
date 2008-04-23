@@ -218,7 +218,8 @@ if ($this->IsAdmin($this->GetUser()))
 	{
 		if(isset($_GET['user']))
 		{
-			include_once('../../libs/admin.lib.php');
+			include_once($this->config['wikka_action_path'].DIRECTORY_SEPARATOR.'../libs/admin.lib.php');
+
 			$status = DeleteUser($this, $this->htmlspecialchars_ent($_GET['user']));
 			if(false===$status)
 			{
