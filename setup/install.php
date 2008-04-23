@@ -360,7 +360,6 @@ case "1.1.6.3":
 	mysql_query("insert into ".$config['table_prefix']."pages set tag = 'AdminUsers', body = '{{adminusers}}\n\n----\nCategoryAdmin', owner = '(Public)', note='".$upgrade_note."', user = 'WikkaInstaller', time = now(), latest = 'Y'", $dblink), "Already done? OK!", 0); 
 	test("Adding AdminPages page...", 
 	mysql_query("insert into ".$config['table_prefix']."pages set tag = 'AdminPages', body = '{{adminpages}}\n\n----\nCategoryAdmin', owner = '(Public)', note='".$upgrade_note."', user = 'WikkaInstaller', time = now(), latest = 'Y'", $dblink), "Already done? OK!", 0); 
-	break;
 case "1.1.6.4":
 	update_default_page('FormattingRules', $dblink, $config, $lang_defaults_path, $lang_defaults_fallback_path);
 case "trunk": //latest development version from the SVN repository - do not remove
