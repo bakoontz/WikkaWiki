@@ -129,7 +129,7 @@ case "0":
 	test(sprintf(__('Creating %s table'), __('session')).'...',
 		@mysql_query(
 			"CREATE TABLE ".$config["table_prefix"]."sessions (".
-			 "sessionid char(32) NOT NULL,".
+			 "sessionid char(40) NOT NULL,".
 			 "userid varchar(75) NOT NULL,".
 			 "PRIMARY KEY (sessionid, userid),".
 			 "session_start datetime NOT NULL".
@@ -355,7 +355,7 @@ case "1.1.6.3":
 	test(__('Dropping unnecessary index `from_tag`').'...',
 	@mysql_query('alter table '.$config['table_prefix'].'links drop index `idx_from`', $dblink), __('Already done?  OK!'), 0);
 	test("Adding sessions tracking table...",
-	mysql_query("create table ".$config['table_prefix']."sessions (sessionid char(32) NOT NULL, userid varchar(75) NOT NULL, PRIMARY KEY (sessionid, userid), session_start datetime NOT NULL)"), "Already done? OK!", 0);
+	mysql_query("create table ".$config['table_prefix']."sessions (sessionid char(40) NOT NULL, userid varchar(75) NOT NULL, PRIMARY KEY (sessionid, userid), session_start datetime NOT NULL)"), "Already done? OK!", 0);
 	test("Adding AdminUsers page...", 
 	mysql_query("insert into ".$config['table_prefix']."pages set tag = 'AdminUsers', body = '{{adminusers}}\n\n----\nCategoryAdmin', owner = '(Public)', note='".$upgrade_note."', user = 'WikkaInstaller', time = now(), latest = 'Y'", $dblink), "Already done? OK!", 0); 
 	test("Adding AdminPages page...", 
