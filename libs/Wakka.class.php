@@ -1251,7 +1251,7 @@ class Wakka
 				FROM ".$this->GetConfigValue('table_prefix')."referrer_blacklist
 				WHERE spammer = '".mysql_real_escape_string($spammer)."'"
 				);
-			if (FALSE === $blacklist)
+			if (FALSE == $blacklist)
 			{
 				$this->Query("
 					INSERT INTO ".$this->GetConfigValue('table_prefix')."referrers
