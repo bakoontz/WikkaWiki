@@ -64,7 +64,7 @@ if (!defined('WIKI_UPGRADE_NOTICE')) define('WIKI_UPGRADE_NOTICE', 'This site is
 /**
  * Defines the current Wikka version. Do not change the version number or you will have problems upgrading.
  */
-if (!defined('WAKKA_VERSION')) define('WAKKA_VERSION', '1.1.6.4');
+if (!defined('WAKKA_VERSION')) define('WAKKA_VERSION', '1.1.6.5');
 
 /**#@+
  * Simple constant. May be made a configurable value.
