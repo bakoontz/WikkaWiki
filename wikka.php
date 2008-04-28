@@ -339,7 +339,7 @@ if ((strtolower($page) == $page) && (isset($_SERVER['REQUEST_URI']))) #38
 /**
  * Create Wakka object
  */
-$wakka =& new Wakka($wakkaConfig);
+$wakka = instantiate('Wakka',$wakkaConfig);
 
 /**
  * Check for database access.
