@@ -99,6 +99,7 @@ if (!function_exists('mysql_connect'))
  */
 if (file_exists('libs/Wakka.class.php'))
 {
+	require_once('libs/Compatibility.lib.php');
 	require_once('libs/Wakka.class.php');
 }
 else
@@ -413,50 +414,4 @@ ob_end_clean();
  * Output the page.
  */
 echo $page_output;
-
-
-// ----------------------------------------------
-// Utility and compatibility functions
-// ----------------------------------------------
-
-/**
- * Calculate page generation time.
- */
-function getmicrotime() {
-	list($usec, $sec) = explode(" ", microtime());
-	return ((float)$usec + (float)$sec);
-}
-
-if (!function_exists('mysql_real_escape_string'))
-{
-	/**
-	 * Escape special characters in a string for use in a SQL statement.
-	 *
-	 * This function is added for back-compatibility with MySQL 3.23.
-	 * @param string $string the string to be escaped
-	 * @return string a string with special characters escaped
-	 */
-	function mysql_real_escape_string($string)
-	{
-		return mysql_escape_string($string);
-	}
-}
-
-/**
- * Workaround for the amazingly annoying magic quotes.
- */
-function magicQuotesWorkaround(&$a)
-{
-	if (is_array($a))
-	{
-		foreach ($a as $k => $v)
-		{
-			if (is_array($v))
-				magicQuotesWorkaround($a[$k]);
-			else
-				$a[$k] = stripslashes($v);
-		}
-	}
-}
-
 ?>
