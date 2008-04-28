@@ -1,6 +1,6 @@
 <?php
 
-if ($this->HasAccess("comment") || $this->IsAdmin())
+	if (($this->HasAccess("comment") || $this->IsAdmin()) && $this->existsPage($this->tag))
 {
 	$redirectmessage = "";
 
