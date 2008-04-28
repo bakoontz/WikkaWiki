@@ -82,7 +82,7 @@
 <div class="smallprint">
 <?php echo $this->Link("http://validator.w3.org/check/referer", "", "Valid XHTML 1.0 Transitional") ?> ::
 <?php echo $this->Link("http://jigsaw.w3.org/css-validator/check/referer", "", "Valid CSS") ?> ::
-Powered by <?php echo $this->Link("http://wikkawiki.org/", "", "Wikka Wakka Wiki " . ($this->IsAdmin() ? $this->GetWakkaVersion() : "")); ?>
+Powered by <?php echo $this->Link("http://wikkawiki.org/", "", "WikkaWiki " . ($this->IsAdmin() ? $this->GetWakkaVersion() : "")); ?>
 </div>
 
 <?php
