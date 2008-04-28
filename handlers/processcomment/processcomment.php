@@ -75,7 +75,7 @@ if(($_POST['submit']==COMMENT_REPLY_BUTTON || $_POST['submit']==COMMENT_NEW_BUTT
 if ($_POST['submit']==COMMENT_ADD_BUTTON)
 {
 	$parent_id = (int) trim($_POST['comment_id']);
-	if ($this->HasAccess('comment_post') || $this->IsAdmin())
+	if (($this->HasAccess('comment_post') || $this->IsAdmin()) && $this->existsPage($this->tag))
 	{
 		$redirectmessage = '';
 		$body = nl2br($this->htmlspecialchars_ent(trim($_POST['body'])));	// @@@ check for empty before converting
