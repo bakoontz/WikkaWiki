@@ -90,25 +90,6 @@ function check() {
 
 	<?php
 	 $curversion_num = ($wakkaConfig['wakka_version']) ? str_replace('.','',$wakkaConfig['wakka_version']) : 0;
-	 if ((int)$curversion_num < 1160)		# only for new installation or if previous version is lower than 1.1.6.0
-	 { //TODO move GeSHi configuration to another screen and make it optional
-	?>
-	<tr><td></td><td><br /><h2>Syntax Highlighting</h2></td></tr>
-	<tr><td></td><td><span class="note">If you are not interested in changing the default settings for syntax highlighting you can skip this section.</span>GeSHi comes bundled with Wikka to provide syntax highlighting for code. If you already have GeSHi installed and would like to use that installation instead of the Wikka-bundled one, you may change the paths below.</td></tr>
-	<tr><td align="right" nowrap="nowrap">GeSHi path:</td><td><input type="text" size="50" name="config[geshi_path]" value="<?php echo $wakkaConfig['geshi_path'] ?>" /></td></tr>
-	<tr><td align="right" nowrap="nowrap">GeSHi language files path:</td><td><input type="text" size="50" name="config[geshi_languages_path]" value="<?php echo $wakkaConfig['geshi_languages_path'] ?>" /></td></tr>
-	<tr><td></td><td>Wikka provides some basic GeSHi configuration. You may change the default parameters below.<br /></td></tr>
-	<tr><td></td><td>GeSHi can wrap a code block in either a div tag (default) or a pre tag (simpler markup but won't allow line wrapping).</td></tr>
-	<tr><td align="right" nowrap="nowrap">Code wrapper (div or pre):</td><td><input type="text" size="50" name="config[geshi_header]" value="<?php echo $wakkaConfig['geshi_header'] ?>" /></td></tr>
-	<tr><td></td><td>GeSHi can add line numbers to code; if you enable this, users can "turn on" line numbers by setting a start line number.</td></tr>
-	<tr><td align="right">Disable line numbers (0), or enable normal (1) or fancy (2) line numbers:</td><td><input type="text" size="50" name="config[geshi_line_numbers]" value="<?php echo $wakkaConfig['geshi_line_numbers'] ?>" /></td></tr>
-	<tr><td></td><td>GeSHi assumes a tab width of 8 positions; for code, 4 is more usual though. You can define the tab width to be used below.</td></tr>
-	<tr><td align="right" nowrap="nowrap">Tab width:</td><td><input type="text" size="50" name="config[geshi_tab_width]" value="<?php echo $wakkaConfig['geshi_tab_width'] ?>" /></td></tr>
-	<?php
-	 }
-	?>
-
-	<?php
 	 if (!$wakkaConfig["wakka_version"])
 	 {
 	?>
