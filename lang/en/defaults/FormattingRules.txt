@@ -271,7 +271,7 @@ echo "Hello, World!";
 |=|NSIS||##nsis##|=|Objective C||##objc##|=|""OpenOffice"" BASIC||##oobas##||
 |=|Objective Caml||##ocaml##|=|Objective Caml (brief)||##ocaml-brief##|=|Oracle 8||##oracle8##||
 |=|Pascal||##pascal##|=|Per (FOURJ's Genero 4GL)||##per##|=|Perl||##perl##||
-|=|PHP||##php##|=|PHP (brief)||##php-brief##|=|PL/SQL||plsql||
+|=|PHP||##php##|=|PHP (brief)||##php-brief##|=|PL/SQL||##plsql##||
 |=|Python||##phyton##|=|Q(uick)BASIC||##qbasic##|=|robots.txt||##robots##||
 |=|Ruby on Rails||##rails##|=|Ruby||##ruby##|=|SAS||##sas##||
 |=|Scheme||##scheme##|=|sdlBasic||##sdlbasic##|=|Smarty||##smarty##||
