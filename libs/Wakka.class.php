@@ -1307,7 +1307,7 @@ class Wakka
 	{
 		// init
 		$count = 0;
-		$table_prefix = (empty($prefix)) ? $this->config['table_prefix'] : $prefix;
+		$table_prefix = (empty($prefix) && isset($this)) ? $this->config['table_prefix'] : $prefix;
 		if (is_null($dblink))
 		{
 			$dblink = $this->dblink;
