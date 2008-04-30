@@ -61,6 +61,7 @@ if (!in_array($page, $this->included_pages))
 		print $this->Format($page['body']);
 		unset($this->_included_page);
 	}
+	else printf("<em class='error'>".ERROR_TARGET_ACL."</em>", $_included_page);
 }
 else
 {

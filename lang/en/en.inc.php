@@ -282,10 +282,12 @@ define('HIGHSCORES_HEADER_PERCENTAGE', 'percentage');
 /**#@-*/
 
 /**#@+
- * Language constant used by the {@link include.php include} action
+ * Language constants used by the {@link include.php include} action
  */
 // include
 define('ERROR_CIRCULAR_REFERENCE', 'Circular reference detected!');
+define('ERROR_TARGET_ACL', "You aren't allowed to read included page <tt>%s</tt>");
+
 /**#@-*/
 
 /**#@+
