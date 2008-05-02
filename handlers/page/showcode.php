@@ -38,7 +38,7 @@ if ($this->existsPage($this->tag))		// name change, interface change (allow acti
 	{
 		// display raw page, slightly formatted for viewing
 		#echo $this->Format(sprintf(SOURCE_HEADING.' --- ', $this->tag));
-		echo '<h3>'.sprintf(SOURCE_HEADING, $this->Link($this->tag)).'<h3><br />'."\n";;
+		echo '<h3>'.sprintf(SOURCE_HEADING, $this->Link($this->tag)).'</h3><br />'."\n";;
 		echo '(<a href="'.$this->href('raw').'">'.RAW_LINK_LABEL.'</a>)<br /><br />';
 		echo '<tt>'.nl2br($this->htmlspecialchars_ent($this->page['body'], ENT_QUOTES)).'</tt>';
 	}
