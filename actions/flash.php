@@ -1,5 +1,4 @@
 <?php
-
 /*
 
 Syntax:
@@ -9,13 +8,27 @@ Width and Height are optional arguments.
 
 */
 
-if (!$width) $width = 550;
-else $width = (int)$width;
-if ($width>950) $width = 950;
+//setting defaults
+$width = 550;
+$height = 400;
 
-if (!$height) $height = 400;
-else $height = (int)$height;
-if ($height>950) $height = 950;
+if (is_array($vars))
+{
+    foreach ($vars as $param => $value)
+    {
+    	if ($param == 'width') 
+    	{
+    		$width = (int)$vars['width'];
+    		if ($width>950) $width = 950;
+    	}
+    	if ($param == 'height') 
+    	{
+    		$height = (int)$vars['height'];
+    		if ($height>950) $height = 950;
+    	}
+    	
+    }
+}
 
 if (!$url) $url = $vars[0];
 $url = $this->cleanUrl(trim($url));

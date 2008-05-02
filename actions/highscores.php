@@ -31,8 +31,11 @@
  */
 
 //defaults
-define('HIGHSCORES_DISPLAY_TOP', 10); //limit output to top n users
-define('HIGHSCORES_DEFAULT_STYLE', 'complex'); //set default layout style
+if(!defined('HIGHSCORES_DISPLAY_TOP')) define('HIGHSCORES_DISPLAY_TOP', 10); //limit output to top n users
+if(!defined('HIGHSCORES_DEFAULT_STYLE')) define('HIGHSCORES_DEFAULT_STYLE', 'complex'); //set default layout style
+
+$rank = 'pages';
+$limit = HIGHSCORES_DISPLAY_TOP;
 
 //valid options
 $valid_styles = array('complex','simple');
@@ -43,10 +46,6 @@ $valid_rank = array('edits','pages', 'comments');
 if (isset($top) && is_numeric($top))
 {
 	$limit = intval($top);
-}
-else
-{
-	$limit = HIGHSCORES_DISPLAY_TOP;
 }
 
 if (!isset($style) || !in_array($style, $valid_styles))
@@ -96,7 +95,7 @@ while($row = mysql_fetch_array($rank_query))
 $display_items = $i;
 
 //output table
-$table .= '<table class="data">'."\n";
+$table = '<table class="data">'."\n";
 
 //display caption and headers for complex style
 if ($style == 'complex')

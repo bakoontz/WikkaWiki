@@ -565,6 +565,8 @@ if ($this->IsAdmin($this->GetUser()))
 		$form_filter .= '</fieldset>'.$this->FormClose()."\n";
 
 		// sort by counted values
+		$count = '';
+		$group = '';
 		switch($sort) 
 		{
 			case 'edits': #alpha --- 'latest' needs to be disabled
@@ -768,7 +770,7 @@ if ($this->IsAdmin($this->GetUser()))
 			}
 			$data_table .= '</table>'."\n";
 
-			$form_mass .= $this->FormOpen('','','get');
+			$form_mass = $this->FormOpen('','','get');
 			$form_mass .= $data_table;
 
 			// multiple-page operations (forthcoming)		JW 2005-07-19 accesskey removed (causes more problems than it solves)

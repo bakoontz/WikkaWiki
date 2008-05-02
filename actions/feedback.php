@@ -1,36 +1,47 @@
 <?php
 
-// Displays a form to send feedback to the site administrator, as specified in wakka.config.php
+// Displays a form to send feedback to the site administrator, as specified in wikka.config.php
 // It first validates the form, then sends it using the mail() function;
+
+$name='';
+$email='';
+$comments='';
+
+if(isset($_POST["name"])) $name = $_POST["name"];
+if(isset($_POST["email"])) $email = $_POST["email"];
+if(isset($_POST["comments"])) $comments = $_POST["comments"];
 
 $form = "<p>Fill in the form below to send us your comments:</p>".
             $this->FormOpen().
-            "\nName: <input name=\"name\" value=\"".$_POST["name"]."\" type=\"text\" /><br />".
+            "\nName: <input name=\"name\" value=\"".$name."\" type=\"text\" /><br />".
             "\n<input type=\"hidden\" name=\"mail\" value=\"result\">".
-            "\nEmail: <input name=\"email\" value=\"".$_POST["email"]."\" type=\"text\" /><br />".
-            "\nComments:<br />\n<textarea name=\"comments\" rows=\"15\" cols=\"40\">".$_POST["comments"]."</textarea><br / >".
+            "\nEmail: <input name=\"email\" value=\"".$email."\" type=\"text\" /><br />".
+            "\nComments:<br />\n<textarea name=\"comments\" rows=\"15\" cols=\"40\">".$comments."</textarea><br / >".
             "\n<input type=\"submit\" value=\"Send\" />".
             $this->FormClose();
 
-if ($_POST["mail"]=="result") {
-	$name = $_POST["name"];
-	$email = $_POST["email"];
-	$comments = $_POST["comments"];
+if (isset($_POST["mail"]) && $_POST["mail"]=="result") 
+{
+
 	list($user, $host) = sscanf($email, "%[a-zA-Z0-9._-]@%[a-zA-Z0-9._-]");
-	if (!$name) {
+	if (!$name) 
+	{
 		// a valid name must be entered
 		echo "<p class=\"error\">Please enter your name</p>";    
 		echo $form;    
-	} elseif (!$email || !strchr($email, "@") || !$user || !$host) {
+	} elseif (!$email || !strchr($email, "@") || !$user || !$host)
+	{
 		// a valid email address must be entered
 		echo "<p class=\"error\">Please enter a valid email address</p>";    
 		echo $form;
-	} elseif (!$comments) {
+	} elseif (!$comments) 
+	{
 		// some text must be entered
 		echo "<p class=\"error\">Please enter some text</p>";    
 		echo $alert;
 		echo $form;
-	} else {
+	} else 
+	{
 		// send email and display message
 		$msg = "Name:\t".$name."\n";
 		$msg .= "Email:\t".$email."\n";
@@ -45,8 +56,8 @@ if ($_POST["mail"]=="result") {
 		// optionally displays the feedback text
 		//echo $this->Format("---- **Name:** ".$name."---**Email:** ".$email."---**Comments:** ---".$comments);
 	}    
-} else {
+} else 
+{
 	echo $form;
 }
-
 ?>

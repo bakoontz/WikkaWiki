@@ -1,7 +1,7 @@
 <?php
-
-if ($linking_to = $_REQUEST["linking_to"])
+if (isset($_REQUEST["linking_to"]))
 {
+	$linking_to = $_REQUEST["linking_to"];
 	if ($pages = $this->LoadPagesLinkingTo($linking_to))
 	{
 		print("Pages linking to ".$this->Link($linking_to).":<br />\n");
@@ -12,7 +12,7 @@ if ($linking_to = $_REQUEST["linking_to"])
 	}
 	else
 	{
-		print("<em class='error'>No page is linking to ".$this->Link($linking_to).".</em>");
+		print('<em class="error">No page is linking to '.$this->Link($linking_to).".</em>");
 	}
 }
 else
@@ -26,8 +26,7 @@ else
 	}
 	else
 	{
-		print("<em class='error'>No wanted pages. Good!</em>");
+		print('<em class="error">No wanted pages. Good!</em>');
 	}
 }
-
 ?>

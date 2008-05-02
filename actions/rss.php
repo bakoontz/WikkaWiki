@@ -32,12 +32,16 @@ $caching = true; // change this to false to disable caching
 $rss_cache_path = "/tmp"; // set this to a writable directory to store the cache files in
 $lowest_cache_time_allowed = "5"; // set this to the lowest caching time allowed
 
-$rss_cache_time = (int)trim($vars['cachetime']);
-if (!$rss_cache_time) {
-	$rss_cache_time = 30; // set this for default cache time
-} elseif ($rss_cache_time < $lowest_cache_time_allowed) {
-	$rss_cache_time = $lowest_cache_time_allowed;
+$rss_cache_time = 30; // set this for default cache time
+if(isset($vars['cachetime']))
+{
+	$rss_cache_time = (int)trim($vars['cachetime']);
+	if ($rss_cache_time < $lowest_cache_time_allowed) 
+	{
+		$rss_cache_time = $lowest_cache_time_allowed;
+	}
 }
+
 $rss_cache_file = ""; // initial value, no need to ever change
 
 //Action configuration

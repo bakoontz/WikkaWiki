@@ -16,6 +16,7 @@
  * @todo user central regex library #34
  */
 
+$pagename = '';
 $showform = TRUE;
 
 if (isset($_POST['pagename']))
