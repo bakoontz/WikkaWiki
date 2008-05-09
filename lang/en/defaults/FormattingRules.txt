@@ -31,7 +31,7 @@ Once you have read through this, test your formatting skills in the SandBox.
 
 ===2. Headers===
 
-Use between five ##=## (for the biggest header) and two ##=## (for the smallest header) on both sides of a text to render it as a header.
+Use between six ##=## (for the biggest header) and two ##=## (for the smallest header) on both sides of a text to render it as a header.
 
 ~##""====== Really big header ======""##
 ~====== Really big header ======
