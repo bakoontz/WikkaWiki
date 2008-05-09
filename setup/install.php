@@ -320,7 +320,7 @@ case "1.1.6.1":
 	test(sprintf(ADDING_CONFIG_ENTRY, 'grabcode_button' ), 1);
 	$config["grabcode_button"] = '1';
 	test(sprintf(ADDING_CONFIG_ENTRY, 'wiki_suffix'), 1);
-	$config["wiki_suffix"] = '@wikka';
+	$config["wiki_suffix"] = '_wikka';
 	test(sprintf(ADDING_CONFIG_ENTRY, 'require_edit_note'), 1);
 	$config["require_edit_note"] = '0';
 	test(sprintf(ADDING_CONFIG_ENTRY, 'public_sysinfo'), 1);
