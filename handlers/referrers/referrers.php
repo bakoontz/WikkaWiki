@@ -14,6 +14,20 @@
  *
  * @author		{@link http://wikkawiki.org/DarTar Dario Taraborelli} - code cleanup, search/filter functionality added.
  * @author		{@link http://wikkawiki.org/JavaWoman JavaWoman} - more code cleanup, accessibility, integration with referrers_sites
+ * @uses		Config::$referrers_purge_time
+ * @uses		Config::$wakka_name
+ * @uses		Wakka::FormClose()
+ * @uses		Wakka::FormOpen()
+ * @uses		Wakka::GetHandler()
+ * @uses		Wakka::GetPageTag()
+ * @uses		Wakka::GetUser()
+ * @uses		Wakka::Href()
+ * @uses		Wakka::htmlspecialchars_ent()
+ * @uses		Wakka::IsAdmin()
+ * @uses		Wakka::LoadAll()
+ * @uses		Wakka::LoadSingle()
+ * @uses		Wakka::makeId()
+ *
  * @since		Wikka 1.1.7
  *
  * @todo		
@@ -31,10 +45,10 @@
  *				- add paging
  *				- turn list into form with checkboxes to allow mass blacklisting
  *
- * @input		string  $q  optional: string used to filter the referrers;
+ * @input		string  $qs  optional: string used to filter the referrers;
  *				default: NULL;
  *				the default can be overridden by providing a POST parameter 'q'
- * @input		integer $qo optional: determines the kind of search to be performed for string $q:
+ * @input		integer $qo optional: determines the kind of search to be performed for string $qs:
  *				1: search for all referrers containing a given string
  *				0: search for all referrers not containing a given string
  *				default: 1;
@@ -138,7 +152,8 @@ $days_limits = array(7,30,90,365);				# ranges for days dropdown 		@@@ make conf
 
 // initialize parameters
 
-$q = NULL;								# search string
+$qs = NULL;								# search string sanitized for SQL query
+$qx = '';								# search string sanitized for XHTML
 $qo = 1;								# search string option
 $h = HITS_DEFAULT;						# hits number
 $ho = 1;								# hits option
@@ -246,7 +261,8 @@ if (isset($_POST['q']))
 	$tq = trim(strip_tags($_POST['q']));
 	if ('' != $tq)
 	{
-		$q = mysql_real_escape_string($tq);
+		$qs = mysql_real_escape_string($tq);
+		$qx = $this->htmlspecialchars_ent($tq);
 		if (isset($_POST['qo']))
 		{
 			$qo = ($_POST['qo'] == '1') ? 1 : 0;
@@ -341,9 +357,9 @@ if ($loggedin)
 			$query .= ' TO_DAYS(NOW()) - TO_DAYS(time) <= '.$days;			# filter by period
 		}
 		$query .= ' GROUP BY host ';
-		if (isset($q))
+		if (isset($qs))
 		{
-			$query .= ' HAVING host '.$string_option." '%".$q."%'";			# filter by string (derived column so we use HAVING)
+			$query .= ' HAVING host '.$string_option." '%".$qs."%'";			# filter by string (derived column so we use HAVING)
 		}
 		if ($hits_option != HITS_MIN_OPTION || $h != 1)
 		{
@@ -360,10 +376,10 @@ if ($loggedin)
 		{
 			$query .= " WHERE page_tag = '".mysql_real_escape_string($tag)."'";
 		}
-		if (isset($q))
+		if (isset($qs))
 		{
 			$query .= (!strpos($query,'WHERE')) ? ' WHERE' : ' AND';
-			$query .= ' referrer '.$string_option." '%".$q."%'";			# filter by string
+			$query .= ' referrer '.$string_option." '%".$qs."%'";			# filter by string
 		}
 		#if ($days != $max_days)
 		if ($days != DAYS_MAX)
@@ -472,7 +488,7 @@ if ($loggedin)
 	$form .= '<option value="0"'.(($qo == '0')? ' selected="selected"' : '').'>'.FORM_URL_OPT_0.'</option>'."\n";
 	$form .= '</select> '."\n";
 	$form .= '<label for="q">'.FORM_URL_STRING_LABEL.'</label> '."\n";
-	$form .= '<input type ="text" name="q" id="q" title="'.FORM_URL_STRING_TITLE.'" size="10" maxlength="50" value="'.$q.'" />';
+	$form .= '<input type ="text" name="q" id="q" title="'.FORM_URL_STRING_TITLE.'" size="10" maxlength="50" value="'.$qx.'" />';
 
 	$form .= '<br />'."\n";
 
