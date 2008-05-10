@@ -146,6 +146,49 @@ ul.thread li {
 	font-size: 11px;
 }
 
+ul.menu {
+	text-align: left;
+	margin: 1em 0 0 0;
+	border-bottom: 1px solid #AAC;
+	list-style-type: none;
+	padding: 6px 10px 0px 10px;
+}
+
+ul.menu li {
+	display: inline;
+	font-size: 85%;
+	line-height: 85%;
+}
+
+ul.menu li a {
+	padding: 3px 4px;
+	border: 1px solid #AAC;
+	background-color: #D0E0F0;
+	color: #336;
+	margin-right: 2px;
+	text-decoration: none;
+	border-bottom: none;
+}
+
+ul.menu li.active a {
+	background-color: #fff;
+	border-top: 1px solid #AAC;
+	border-left: 1px solid #AAC;
+	border-right: 1px solid #AAC;
+	border-bottom: 1px solid #FFF;
+	color: #000;
+	padding: 4px 4px 3px 4px;
+	margin-right: 2px;
+	text-decoration: none;
+}
+
+ul.menu li a:hover {
+	background: #fff;
+	text-decoration: none;
+	color: #336;
+}
+
+
 /* images */
 
 img {
@@ -935,6 +978,67 @@ ul.recentchanges li {
 
 /* acls handler */
 table.acls {
+}
+
+/* referrers handler */
+
+div#refbody {
+	border-top: none;
+	border-bottom: 1px solid #AAC;
+	border-left: 1px solid #AAC;
+	border-right: 1px solid #AAC;
+	padding: 2em 1em;
+	margin-top: 0;
+}
+
+#refform {
+	color: inherit;
+	background-color: inherit;
+	margin-top: 1em;
+	margin-bottom: 1em;
+	width: 32em;
+	/*border: 1px solid green;*/	/* DEBUG */
+}
+
+#refform .mainlabel {
+	float: left;
+	width: 4.6em;	/* width will work on _floated_ element, even if not a block! */
+	padding-right: 0.5em;
+}
+
+#q, #qo, #ho {
+	width: 10em;
+}
+#h {
+	width: 3em;
+	text-align: right;
+}
+
+#reflist {
+	margin-top: 1em;
+	margin-bottom: 1em;
+	border: none;
+}
+
+#reflist .hits {
+	width: 3em;
+	padding-right: 5px;
+	text-align: right;
+	vertical-align: middle;
+}
+
+#reflist .action {
+	width: 4em;
+	padding-left: 5px;
+	padding-right: 5px;
+	text-align: center;
+	vertical-align: middle;
+}
+
+#reflist .refs {
+	padding-left: 5px;
+	text-align: left;
+	vertical-align: middle;
 }
 
 /* 3rdparty-code related styling */
