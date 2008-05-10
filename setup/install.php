@@ -307,7 +307,7 @@ case "1.1.5.2":
 case "1.1.5.3":
 	update_default_page(array('WikkaReleaseNotes', 'WikkaDocumentation'), $dblink, $config, $lang_defaults_path, $lang_defaults_fallback_path);
 	// delete files removed from previous version
-	@unlink('actions/wakkabug.php');
+	@unlink('actions'.DIRECTORY_SEPARATOR.'wakkabug.php');
 	// delete directories that have been moved
 	rmdirr("freemind");
 	rmdirr("safehtml");
@@ -361,7 +361,10 @@ case "1.1.6.3":
 	test("Adding AdminPages page...", 
 	mysql_query("insert into ".$config['table_prefix']."pages set tag = 'AdminPages', body = '{{adminpages}}\n\n----\nCategoryAdmin', owner = '(Public)', note='".$upgrade_note."', user = 'WikkaInstaller', time = now(), latest = 'Y'", $dblink), "Already done? OK!", 0); 
 case "1.1.6.4":
+case "1.1.6.5":
 	update_default_page('FormattingRules', $dblink, $config, $lang_defaults_path, $lang_defaults_fallback_path);
+	@unlink('handlers'.DIRECTORY_SEPARATOR.'referrers_sites'.DIRECTORY_SEPARATOR.'referrers_sites.php');
+	rmdirr('handlers'.DIRECTORY_SEPARATOR.'referrers_sites');
 case "trunk": //latest development version from the SVN repository - do not remove
 	break;
 }
