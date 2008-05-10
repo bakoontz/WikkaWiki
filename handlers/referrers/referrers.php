@@ -443,7 +443,7 @@ if ($loggedin)
 	$m_referrers_page = '<a href="'.$this->Href('referrers').'">'.$menu_referrers_page.'</a>';
 	$m_sites_page ='<a href="'.$this->Href('referrers','','sites=1').'">'.$menu_sites_page.'</a>';
 	$m_referrers_global = '<a href="'.$this->Href('referrers','','global=1').'">'.$menu_referrers_global.'</a>';
-	$m_sites_global = '<a href="'.$this->Href('referrers','','global=1&sites=1').'">'.$menu_sites_global.'</a>';
+	$m_sites_global = '<a href="'.$this->Href('referrers','','global=1&amp;sites=1').'">'.$menu_sites_global.'</a>';
 	$m_blacklist = '<a href="'.$this->Href('review_blacklist').'">'.$menu_blacklist.'</a>';
 
 	//build menu
