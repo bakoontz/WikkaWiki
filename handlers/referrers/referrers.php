@@ -12,12 +12,11 @@
  *
  * @package		Handlers
  *
- * @author		{@link http://wikka.jsnx.com/DarTar Dario Taraborelli} - code cleanup, search/filter functionality added.
- * @author		{@link http://wikka.jsnx.com/JavaWoman JavaWoman} - more code cleanup, accessibility, integration with referrers_sites
- * @version		0.8
- * @since		Wikka 1.1.6.X
+ * @author		{@link http://wikkawiki.org/DarTar Dario Taraborelli} - code cleanup, search/filter functionality added.
+ * @author		{@link http://wikkawiki.org/JavaWoman JavaWoman} - more code cleanup, accessibility, integration with referrers_sites
+ * @since		Wikka 1.1.7
  *
- * @todo		for 1.0:
+ * @todo		
  *				- clean up debug code
  *				- remove LoadReferrers() from core
  *				- configurable choice hostname (NAME_GLOBAL) or 'this site' (config, installer)

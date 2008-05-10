@@ -10,10 +10,9 @@
  * @package		Handlers
  *
  * @author		{@link http://wikkawiki.org/JavaWoman JavaWoman} - code cleanup, search/filter functionality added, valid XHTML, accessibility
- * @version		0.8
- * @since		Wikka 1.1.6.X
+ * @since		Wikka 1.1.7
  *
- * @todo		for 1.0:
+ * @todo		
  *				- clean up debug code
  *				- configurable choice hostname (NAME_GLOBAL) or 'this site' (config, installer)
  *				- make index on the spammer column in the referrer_blacklist table _unique_ (installer) and remove extra query
