@@ -126,7 +126,8 @@ if (isset($this->additional_headers) && is_array($this->additional_headers) && c
 		<li><a href="http://docs.wikkawiki.org" title="WikkaWiki Documentation">Docs</a></li>
 		<li><a href="http://demo.wikkawiki.org" title="Demo site">Demo</a></li>
 		<li><a href="http://tracker.wikkawiki.org" title="Development tracker">Dev</a></li>
-		<li><a href="http://mail.wikkawiki.org/mailman/listinfo" title="Mailing lists">Lists</a></li>
+		<li><a href="http://wikkawiki.org/WikkaMailingLists" title="Mailing lists">Lists</a></li>
 		<li><a href="http://blog.wikkawiki.org" title="Wikka Developer Blog">Blog</a></li>
+		<li><a href="irc://irc.freenode.net/wikka" title="Wikka Community IRC Channel">IRC</a></li>
 	</ul>
 </div>
