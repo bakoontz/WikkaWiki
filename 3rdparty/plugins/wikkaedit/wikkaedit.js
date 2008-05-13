@@ -246,7 +246,7 @@ WikkaEdit.prototype.toolbarButtonClick = function(obj, buttonName, submenuName) 
 // ===== show formatting rules (open a new window) =====
 WikkaEdit.prototype.showFormattingRules = function() {
 	var newUrl = window.location.href;
-	newUrl = newUrl.replace(/[a-zA-Z0-9]+\/edit$/, "FormattingRules");
+	newUrl = newUrl.replace(/[a-zA-Z0-9]+\/edit.*$/, "FormattingRules");
 	window.open(newUrl, "wikka_formatting_rules");
 }
 
