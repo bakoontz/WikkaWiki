@@ -593,54 +593,19 @@ del {
 	color: #987;
 }
 
-/* ACTION-related styling */
-
-/* File attachments */
-
-div.files {
-	display: block;
-	padding: 5px;
-	width: 40%;
+/* sort order information in sortable lists and tables*/
+.sortorder {
+	font-size: 70%;
+	text-transform: uppercase;	
+	letter-spacing: 1px;
 }
 
-table.files {
-	width: 100%;
-	font-size: 90%;
-	border: 2px solid #CCC;
-	border-collapse: collapse;
-	border-spacing: 0;
-}
-
-table.files caption {
-	border: 1px solid #CCC;
-	color: #666;
-	margin:5px 0;
-	padding:2px;
-}
-
-table.files thead {
-	background-color: #DDD;
-}
-
-table.files th, table.files td {
-	border: 1px solid #CCC;
-	padding: 1px 3px;
-}
-
-table.files thead th {
-	background-color: #DDD;
-}
-
-table.files tfoot th {
-	background-color: #DDD;
-}
-
-table.files tbody th {
-	background-color: #EEE;
-}
-
-table.files tbody tr:hover {
-	background-color: #EEE;
+/* debug messages */
+.debug {
+	color: #AAA;
+	font-size: 70%;
+	text-transform: uppercase;	
+	letter-spacing: 1px;
 }
 
 /* Tables */
@@ -781,6 +746,78 @@ table.data tr.alt td.c5 {
 
 table.data tr.alt td.c6 {
 	background-color: #EDE;
+}
+
+/* ACTION-related styling */
+
+/* Adminpages action */
+
+table#adminpages {
+	border: 1px solid #CCC;
+	width: 100%;
+}
+
+form#form_page_admin_panel fieldset {
+	line-height: 2em;	
+}
+
+/* Adminuser action */
+
+table#adminusers {
+	border: 1px solid #CCC;
+	width: 100%;
+}
+
+form#form_user_admin_panel fieldset {
+	line-height: 2em;	
+}
+
+/* File attachments */
+
+div.files {
+	display: block;
+	padding: 5px;
+	width: 40%;
+}
+
+table.files {
+	width: 100%;
+	font-size: 90%;
+	border: 2px solid #CCC;
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+table.files caption {
+	border: 1px solid #CCC;
+	color: #666;
+	margin:5px 0;
+	padding:2px;
+}
+
+table.files thead {
+	background-color: #DDD;
+}
+
+table.files th, table.files td {
+	border: 1px solid #CCC;
+	padding: 1px 3px;
+}
+
+table.files thead th {
+	background-color: #DDD;
+}
+
+table.files tfoot th {
+	background-color: #DDD;
+}
+
+table.files tbody th {
+	background-color: #EEE;
+}
+
+table.files tbody tr:hover {
+	background-color: #EEE;
 }
 
 /* Lastedit action */
