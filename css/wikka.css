@@ -399,6 +399,18 @@ fieldset legend {
 	padding:2px;
 }
 
+select {
+	border: 1px solid #CCC;	
+}
+
+select:hover {
+	background-color: #F3F3F3;
+}
+
+select:focus {
+	background-color: #E6E6FF;
+}
+
 textarea {
 	border: 1px solid #CCC;	
 }
@@ -672,12 +684,103 @@ table.data tbody th {
 }
 
 table.data tbody tr:hover {
-	background-color: #EEE;
+	background-color: #E9E9F9;
+}
+
+table.data tbody tr.alt:hover {
+	background-color: #E9E9F9;
 }
 
 table.data td {
 	border: 1px solid #CCC;
 	padding: .1em .25em;
+}
+
+table.data td.number {
+	text-align: right;
+}
+
+table.data td.datetime {
+	text-align: right;
+	white-space: nowrap;
+}
+
+/* --- alternate row & column color --- */
+
+table.data tr.alt {
+	background-color: #EEE;
+}
+
+table.data th.c1 {
+	background-color: #CDD;
+}
+
+table.data th.c2 {
+	background-color: #DCC;
+}
+
+table.data th.c3 {
+	background-color: #DDC;
+}
+
+table.data th.c4 {
+	background-color: #CDC;
+}
+
+table.data th.c5 {
+	background-color: #CCD;
+}
+
+table.data th.c6 {
+	background-color: #DCD;
+}
+
+table.data td.c1 {
+	background-color: #EFF;
+}
+
+table.data td.c2 {
+	background-color: #FEE;
+}
+
+table.data td.c3 {
+	background-color: #FFE;
+}
+
+table.data td.c4 {
+	background-color: #EFE;
+}
+
+table.data td.c5 {
+	background-color: #EEF;
+}
+
+table.data td.c6 {
+	background-color: #FEF;
+}
+
+table.data tr.alt td.c1 {
+	background-color: #DEE;
+}
+
+table.data tr.alt td.c2 {
+	background-color: #EDD;
+}
+
+table.data tr.alt td.c3 {
+	background-color: #EED;
+}
+
+table.data tr.alt td.c4 {
+	background-color: #DED;
+}
+
+table.data tr.alt td.c5 {
+	background-color: #DDE;
+}
+
+table.data tr.alt td.c6 {
+	background-color: #EDE;
 }
 
 /* Lastedit action */
@@ -997,6 +1100,7 @@ div#refbody {
 	margin-top: 1em;
 	margin-bottom: 1em;
 	width: 32em;
+	line-height: 2em;
 	/*border: 1px solid green;*/	/* DEBUG */
 }
 
