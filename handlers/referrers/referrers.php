@@ -162,6 +162,7 @@ $global = FALSE;						# global (site) or this page only
 $sites = FALSE;							# referrers or referring sites
 $refdel = NULL;							# referrer records deleted
 $bladd = NULL;							# blacklist records added
+$r = 1;									# row counter
 
 // -------------------------------------
 
@@ -573,7 +574,7 @@ if ($loggedin)
 		echo '<table id="reflist" class="data" summary="'.$summary.'">'."\n";
 		echo '<thead>';
 		echo '<tr><th class="hits" scope="col">'.LIST_HEAD_HITS.'</th>';
-		if ($isAdmin) echo '<th class="action" scope="col">'.LIST_HEAD_ACTION.'</th>';
+		if ($isAdmin) echo '<th class="action c2" scope="col">'.LIST_HEAD_ACTION.'</th>';
 		echo '<th class="refs" scope="col">'.$refshead.'</th></tr>'."\n";
 		echo '</thead>'."\n";
 		echo '<tbody>'."\n";
@@ -589,9 +590,9 @@ if ($loggedin)
 			{
 				$ref	= $this->htmlspecialchars_ent($referrer['referrer']);
 			}
-			echo '<tr>';
+			echo '<tr'.(($r%2)? '' : ' class="alt"').'>'."\n"; #enable alternate row color			echo '<td class="hits">'.$hits.'</td>';
 			echo '<td class="hits">'.$hits.'</td>';
-			if ($isAdmin) echo '<td class="action">'.sprintf($blacklink,$ref,$redir).'</td>';
+			if ($isAdmin) echo '<td class="action c2">'.sprintf($blacklink,$ref,$redir).'</td>';
 			if ($sites)
 			{
 				echo '<td class="refs">'.$ref.'</td>';
@@ -601,6 +602,7 @@ if ($loggedin)
 				echo '<td class="refs"><a href="'.$ref.'">'.$ref.'</a></td>';
 			}
 			echo '</tr>'."\n";
+			$r++;
 		}
 
 		echo '</tbody>'."\n";

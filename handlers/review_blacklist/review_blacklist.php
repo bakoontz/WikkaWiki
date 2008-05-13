@@ -59,6 +59,7 @@ $tag = $this->GetPageTag();
 $isAdmin = $this->IsAdmin();
 $loggedin = ($isAdmin) ? TRUE : (bool)$this->GetUser();
 $pre = $this->config['table_prefix'];
+$r = 1;									# row counter
 
 $queryd = '';
 $querys = '';
@@ -288,17 +289,18 @@ if ($loggedin)
 		echo '<h4 id="'.$idResult.'">'.$result.'</h4>'."\n";
 		echo '<table id="reflist" class="data" summary="'.$summary.'">'."\n";
 		echo '<thead>';
-		if ($isAdmin) echo '<th class="action" scope="col">'.LIST_HEAD_ACTION.'</th>';
+		if ($isAdmin) echo '<th class="action c2" scope="col">'.LIST_HEAD_ACTION.'</th>';
 		echo '<th class="refs" scope="col">'.$refshead.'</th></tr>'."\n";
 		echo '</thead>'."\n";
 		echo '<tbody>'."\n";
 		foreach ($blacklist as $spammer)
 		{
 			$ref	= $this->htmlspecialchars_ent($spammer['spammer']);
-			echo '<tr>';
-			if ($isAdmin) echo '<td class="action">'.sprintf($removelink,$ref).'</td>';
+			echo '<tr'.(($r%2)? '' : ' class="alt"').'>'."\n"; #enable alternate row color			echo '<td class="hits">'.$hits.'</td>';
+			if ($isAdmin) echo '<td class="action c2">'.sprintf($removelink,$ref).'</td>';
 			echo '<td class="refs">'.$ref.'</td>';
 			echo '</tr>'."\n";
+			$r++;
 		}
 		echo '</tbody>'."\n";
 		echo '</table>'."\n";
@@ -306,7 +308,7 @@ if ($loggedin)
 	else
 	{
 		echo '<h4 id="'.$idResult.'">'.$result.'</h4>'."\n";
-		echo '<p><em>'.NONE_NOTE.'</em></p>'."\n";
+		echo '<p><em class="error">'.NONE_NOTE.'</em></p>'."\n";
 	}
 }
 else
