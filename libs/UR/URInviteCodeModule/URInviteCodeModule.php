@@ -46,7 +46,7 @@
 				echo '<em class="error">Error in URInviteCode module</em>';
 				return;
 			}
-			echo "Enter invitation code:&nbsp;<input type='textarea' name='UR_inviteCode'/><br/>";
+			echo "Enter invitation code:&nbsp;<input type='text' name='UR_inviteCode'/><br/>";
 		}
 
 		function URAuthTmplVerify()
