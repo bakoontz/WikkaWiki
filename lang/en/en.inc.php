@@ -481,9 +481,9 @@ define('ERROR_EMPTY_NEW_PASSWORD', 'You must also fill in a new password.');
 define('ERROR_PASSWORD_MATCH', 'Passwords don\'t match.');
 define('ERROR_PASSWORD_NO_BLANK', 'Sorry, blanks are not permitted in the password.');
 define('ERROR_PASSWORD_TOO_SHORT', 'Sorry, the password must contain at least %d characters.'); // %d - minimum password length
-define('ERROR_INVALID_INVITATION_CODE', 'This is a private wiki, only invited members can register an account! Please contact the administrator of this website for an invitation code.');
 define('ERROR_INVALID_REVISION_DISPLAY_LIMIT', 'The number of page revisions should not exceed %d.'); // %d - maximum revisions to view
 define('ERROR_INVALID_RECENTCHANGES_DISPLAY_LIMIT', 'The number of recently changed pages should not exceed %d.'); // %d - maximum changed pages to view
+if(!defined('ERROR_VALIDATION_FAILED')) define('ERROR_VALIDATION_FAILED', "Registration validation failed, please try again!");
 // - success messages
 define('SUCCESS_USER_LOGGED_OUT', 'You have successfully logged out.');
 define('SUCCESS_USER_REGISTERED', 'You have successfully registered!');

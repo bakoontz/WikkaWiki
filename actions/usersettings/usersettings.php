@@ -68,6 +68,10 @@ $invitation_code_highlight = '';
 
 $wikiname_expanded = '<abbr title="'.WIKINAME_LONG.'">'.WIKINAME_SHORT.'</abbr>';
 
+// Create URAuth object
+include_once('libs/userregistration.class.php');
+$urobj = new URAuth($this);
+
 //create URL
 $url = $this->Href();
 
@@ -168,7 +172,7 @@ if ($user = $this->GetUser())
 	<fieldset id="account"><legend><?php echo USER_ACCOUNT_LEGEND ?></legend>
 	<span id="account_info">
 	<?php printf(USER_LOGGED_IN_AS_CAPTION, $this->Link($user['name'])); ?>
-	</span><input id="logout" name="logout" type="submit" value="<?php echo LOGOUT_BUTTON; ?>" /><!-- #353,#312-->
+	</span><input id="logout" name="logout" type="submit" value="<?php echo LOGOUT_BUTTON; ?>" />
 	<br class="clear" />
 	</fieldset>
 <?php
@@ -390,7 +394,7 @@ else
 		}
 		// END *** LOGIN ***
 		// BEGIN *** REGISTER ***
-		else if ($register == '1' || $register == '2') // otherwise, proceed to registration
+		else if ($register == '1') // otherwise, proceed to registration
 		{
 			$name = trim($_POST['name']);
 			$email = trim($this->GetSafeVar('email', 'post'));
@@ -400,6 +404,9 @@ else
 			// validate input
 			switch(TRUE)
 			{
+				case (FALSE===$urobj->URAuthVerify()):
+					$error = ERROR_VALIDATION_FAILED;
+					break;
 				case (strlen($name) == 0):
 					$error = ERROR_EMPTY_USERNAME;
 					$username_highlight = INPUT_ERROR_STYLE;
@@ -445,10 +452,6 @@ else
 					$email_highlight = INPUT_ERROR_STYLE;
 					$password_highlight = INPUT_ERROR_STYLE;
 					$password_confirm_highlight = INPUT_ERROR_STYLE;
-					break;
-				case ($register == '2' && $_POST['invitation_code'] !==  $this->GetConfigValue('invitation_code')):
-					$error = ERROR_INVALID_INVITATION_CODE;
-					$invitation_code_highlight = INPUT_ERROR_STYLE;
 					break;
 				default: //valid input, create user
 					$this->Query("INSERT INTO ".$this->GetConfigValue('table_prefix')."users SET ".
@@ -518,7 +521,7 @@ else
 	print($this->FormOpen());	// open login/registration form
 	// @@@ replace hidden "action" by name on submit button
 ?>
-	<fieldset id="register" class="usersettings"><legend><?php  echo ($register == '1' || $register == '2') ? LOGIN_REGISTER_LEGEND : LOGIN_LEGEND; ?></legend>
+	<fieldset id="register" class="usersettings"><legend><?php  echo ($register == '1') ? LOGIN_REGISTER_LEGEND : LOGIN_LEGEND; ?></legend>
 	<input type="hidden" name="action" value="login" />
 <?php
 	switch (true)
@@ -557,28 +560,18 @@ else
 
 	// BEGIN *** REGISTER ***
 	$register = $this->GetConfigValue('allow_user_registration');
-	if ($register == '1' || $register == '2')
+	if ($register == '1')
 	{
 ?>
 	<em class="usersettings_info"><?php echo NEW_USER_REGISTER_CAPTION; ?></em>
 	<br />
+	<?php $urobj->URAuthDisplay(); ?>
 	<label for="confpassword"><?php echo CONFIRM_PASSWORD_LABEL ?></label>
 	<input id="confpassword" <?php echo $password_confirm_highlight; ?> type="password" name="confpassword" size="40" />
 	<br />
 	<label for="email"><?php echo USER_EMAIL_LABEL ?></label>
 	<input id="email" type="text" <?php echo $email_highlight; ?> name="email" size="40" value="<?php echo $email; ?>" />
 	<br />
-<?php
-		if ($register == '2')
-		{
-			$invitation_code_expanded = '<abbr title="'.INVITATION_CODE_LONG.'">'.INVITATION_CODE_SHORT.'</abbr>'
-?>
-	<label for="invitation_code"><?php printf(INVITATION_CODE_LABEL,$invitation_code_expanded) ?></label>
-	<input id="invitation_code" type="text" <?php echo $invitation_code_highlight; ?> size="20" name="invitation_code" />
-	<br />
-<?php
-		}
-?>
 	<input id="registersubmit" type="submit" value="<?php echo REGISTER_BUTTON ?>" size="40" />
 	<br />
 <?php
