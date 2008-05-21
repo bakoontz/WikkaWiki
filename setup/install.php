@@ -167,9 +167,9 @@ case "0":
 
 //Auto login wiki admin"
 	SetCookie('user_name'.$config['wiki_suffix'], $config['admin_users'], time() + PERSISTENT_COOKIE_EXPIRY, "/"); 
-	$_COOKIE['user_name'.$wiki_suffix] = $config['admin_users']; 
+	$_COOKIE['user_name'.$config['wiki_suffix']] = $config['admin_users']; 
 	SetCookie('pass'.$config['wiki_suffix'], md5(mysql_real_escape_string($_POST['password'])), time() + PERSISTENT_COOKIE_EXPIRY, "/"); 
-	$_COOKIE['pass'.$wiki_suffix] = md5(mysql_real_escape_string($_POST['password'])); 
+	$_COOKIE['pass'.$config['wiki_suffix']] = md5(mysql_real_escape_string($_POST['password'])); 
 
 	break;
 
