@@ -196,25 +196,28 @@ if ($this->IsAdmin($this->GetUser()))
 	}
 	
 	//perform actions if required
-	if ($_GET['action'] == 'owned') 
+	$g_action = '';
+	if(isset($_GET['action'])) $g_action = $_GET['action'];
+	
+	if($g_action == 'owned') 
 	{
 		echo $this->Action('mypages');
 	} 
-	elseif ($_GET['action'] == 'changes') 
+	elseif($g_action == 'changes') 
 	{
 		echo $this->Action('mychanges');
 	} 
-	elseif ($_GET['action'] == 'comments') 
+	elseif($g_action == 'comments') 
 	{
 		echo $this->Action('recentcomments');
 	} 
 	/*
-	elseif ($_GET['action'] == 'feedback' || $_REQUEST['mail']) 
+	elseif($g_action == 'feedback' || $_REQUEST['mail']) 
 	{
 		echo $this->Action('userfeedback'); #to be added in 1.1.7, see #608
 	}
 	*/
-	elseif($_GET['action'] == 'delete')
+	elseif($g_action == 'delete')
 	{
 		if(isset($_GET['user']))
 		{
@@ -230,7 +233,7 @@ if ($this->IsAdmin($this->GetUser()))
 			}
 		}
 	}
-	else if($_GET['action'] == 'massdelete')
+	elseif($g_action == 'massdelete')
 	{
 		$usernames = array();
 		foreach($_GET as $key=>$val)
@@ -343,6 +346,7 @@ if ($this->IsAdmin($this->GetUser()))
 		$s = (isset($_GET['s'])) ? $_GET['s'] : ADMINUSERS_DEFAULT_START;
 	
 		// search string
+		$q = '';
 		if (isset($_POST['q']))
 		{
 			$q = $_POST['q'];
@@ -351,7 +355,7 @@ if ($this->IsAdmin($this->GetUser()))
 		{
 			$q = $_GET['q'];
 		}
-		elseif($_POST['submit'] == ADMINUSERS_FORM_SEARCH_SUBMIT)
+		elseif(isset($_POST['submit']) && $_POST['submit'] == ADMINUSERS_FORM_SEARCH_SUBMIT)
 		{
 			// Reset num recs per page for empty (reset) search
 			$l = ADMINUSERS_DEFAULT_RECORDS_LIMIT;
@@ -374,7 +378,7 @@ if ($this->IsAdmin($this->GetUser()))
 		// form is being used to process two post requests, so things
 		// (search string, num recs per page) get out of sync, requiring
 		// multiple submissions.
-		if(!isset($_GET['l']) && $_POST['submit'] != ADMINUSERS_FORM_PAGER_SUBMIT)
+		if(!isset($_GET['l']) && isset($_POST['submit']) && $_POST['submit'] != ADMINUSERS_FORM_PAGER_SUBMIT)
 		{
 			$l = ADMINUSERS_DEFAULT_RECORDS_LIMIT;
 		}
