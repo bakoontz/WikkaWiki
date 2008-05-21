@@ -1,9 +1,19 @@
 <?php
+/**
+ * Display the list of pages an user owns.
+ * 
+ * @author	Carlo Zottmann
+ * 
+ * @uses	Wakka::GetUser()
+ * @uses	Wakka::GetUserName()
+ * @uses	Wakka::htmlspecialchars_ent()
+ * @uses	Wakka::IsAdmin()
+ * @uses	Wakka::Link()
+ * @uses	Wakka::LoadAllPages()
+ * 
+ */
 
-// actions/mypages.php
-// written by Carlo Zottmann
-// http://wakkawikki.com/CarloZottmann
-
+//i18n
 if(!defined('MYPAGES_HEADER')) define('MYPAGES_HEADER', "This is the list of pages owned by %s");
 if(!defined('MYPAGES_NONE_OWNED')) define ('MYPAGES_NONE_OWNED', "You don't own any pages.");
 if(!defined('MYPAGES_NONE_FOUND')) define ('MYPAGES_NONE_FOUND', "No pages found");
@@ -24,6 +34,7 @@ if (($this->IsAdmin() && !empty($username)) ||
 
 	if ($pages = $this->LoadAllPages())
 	{
+		$curChar = '';
 		foreach ($pages as $page)
 		{
 			if ($username == $page["owner"]) {
@@ -33,12 +44,12 @@ if (($this->IsAdmin() && !empty($username)) ||
 				}
 	
 				if ($firstChar != $curChar) {
-					if ($curChar) print("<br />\n");
-					print("<strong>$firstChar</strong><br />\n");
+					if ($curChar != '') echo "<br />\n";
+					echo '<strong>'.$firstChar."</strong><br />\n";
 					$curChar = $firstChar;
 				}
 	
-				print($this->Link($page["tag"])."<br />\n");
+				echo $this->Link($page["tag"])."<br />\n";
 				
 				$my_pages_count++;
 			}
@@ -46,17 +57,17 @@ if (($this->IsAdmin() && !empty($username)) ||
 		
 		if ($my_pages_count == 0)
 		{
-			print("<em class='error'>".MYPAGES_NONE_OWNED."</em>");
+			echo '<em class="error">'.MYPAGES_NONE_OWNED.'</em>';
 		}
 	}
 	else
 	{
-		print("<em class='error'>".MYPAGES_NONE_FOUND."</em>");
+		echo '<em class="error">'.MYPAGES_NONE_FOUND.'</em>';
 	}
 }
 else
 {
-	print("<em class='error'>".MYPAGES_NOT_LOGGED_IN."</em>");
+	echo '<em class="error">'.MYPAGES_NOT_LOGGED_IN.'</em>';
 }
 
 ?>
