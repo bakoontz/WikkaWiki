@@ -85,8 +85,8 @@ function check() {
 	<tr><td align="right" nowrap="nowrap"><?php echo SITE_SUFFIX_LABEL; ?></td><td><input type="text" size="50" name="config[wiki_suffix]" value="<?php echo $wakkaConfig["wiki_suffix"] ?>" /></td></tr>
 
 	<tr><td></td><td>META Keywords/Description that get inserted into the HTML headers.</td></tr>
-	<tr><td align="right" nowrap="nowrap">Meta Keywords:</td><td><input type="text" size="50" name="config[meta_keywords]" value="<?php echo $wakkaConfig["meta_keywords"] ?>" /></td></tr>
-	<tr><td align="right" nowrap="nowrap">Meta Description:</td><td><input type="text" size="50" name="config[meta_description]" value="<?php echo $wakkaConfig["meta_description"] ?>" /></td></tr>
+	<tr><td align="right" nowrap="nowrap">Meta Keywords:</td><td><input type="text" size="50" name="config[meta_keywords]" value="<?php if(isset($wakkaConfig["meta_keywords"])) echo $wakkaConfig["meta_keywords"] ?>" /></td></tr>
+	<tr><td align="right" nowrap="nowrap">Meta Description:</td><td><input type="text" size="50" name="config[meta_description]" value="<?php if(isset($wakkaConfig["meta_description"])) echo $wakkaConfig["meta_description"] ?>" /></td></tr>
 
 	<?php
 	 $curversion_num = ($wakkaConfig['wakka_version']) ? str_replace('.','',$wakkaConfig['wakka_version']) : 0;
