@@ -229,7 +229,7 @@ if ($this->IsAdmin($this->GetUser()))
 			}
 			else
 			{
-				$this->Redirect($this->Href());
+				$this->Redirect($this->Href(), USERDELETE_MESSAGE_SUCCESS);
 			}
 		}
 	}
