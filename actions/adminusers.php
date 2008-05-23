@@ -167,6 +167,9 @@ if ($this->IsAdmin($this->GetUser()))
 	//define('ADMINUSERS_FORM_MASSACTION_OPT_FEEDBACK','Send feedback to all'); #to be added in 1.1.7, see #608
 	define('ADMINUSERS_FORM_MASSACTION_SUBMIT','Submit');
 	define('ADMINUSERS_ERROR_NO_MATCHES','Sorry, there are no users matching "%s"');
+	define('ADMINUSERS_DELETE_USERS_HEADING', 'Delete these users?');
+	define('ADMINUSERS_DELETE_USERS_BUTTON', 'Delete Users');
+	define('ADMINUSERS_CANCEL_BUTTON', 'Cancel'); #TODO: replace with appropriate constant from language file!
 
 	//initialize row & column colors variables
 	$r = 1; #initialize row counter
@@ -245,17 +248,16 @@ if ($this->IsAdmin($this->GetUser()))
 		}
 		if(count($usernames) > 0)
 		{
-			?>
-			<h3>Delete these users?</h3><br/>
-			<ul>
-			<?php
+			echo '<h3>'.ADMINUSERS_DELETE_USERS_HEADING.'</h3><br />';
+			echo '<ul>';
+			
 			$errors = 0;
 			foreach($usernames as $username)
 			{
 				if($this->IsAdmin($username))
 				{
 					++$errors;
-					echo "<li><span class='disabled'>".$username."&nbsp;</span><em class='error'>(".ADMINUSERS_FORM_MASSACTION_DELETE_ERROR.")</em></li>\n";
+					echo '<li><span class="disabled">'.$username."&nbsp;".'</span><em class="error">('.ADMINUSERS_FORM_MASSACTION_DELETE_ERROR.")</em></li>\n";
 					continue;
 				}
 				echo "<li>".$username."</li>\n";
@@ -281,9 +283,9 @@ if ($this->IsAdmin($this->GetUser()))
 						?>
 						<input type="hidden" name="massaction" value="massdelete"/>
 						<?php if($errors < count($usernames)) { ?>
-						<input type="submit" value="Delete Users"  style="width: 120px"   />
+						<input type="submit" value="<?php echo ADMINUSERS_DELETE_USERS_BUTTON;?>"  style="width: 120px"   />
 						<?php } ?>
-						<input type="button" value="Cancel" onclick="history.back();" style="width: 120px" />
+						<input type="button" value="<?php echo ADMINUSERS_CANCEL_BUTTON;?>" onclick="history.back();" style="width: 120px" />
 					</td>
 				</tr>
 			</table>
