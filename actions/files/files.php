@@ -162,7 +162,7 @@ if (!function_exists('bytesToHumanReadableUsage'))
 		{
 			$suffix = $names[$level];
 		}
-		return round($bytes/pow(1024, $level), $precision) . $suffix;
+		return $bytes? round($bytes/pow(1024, $level), $precision) .  $suffix : $bytes;
 	}
 }
 
@@ -300,13 +300,15 @@ if (is_readable($upload_path))
 	$sizeArr = array();
 	while (false !== ($file = readdir($dir)))
 	{
-		if($file{0} == '.')
+		$fqfn = $upload_path.DIRECTORY_SEPARATOR.$file;
+		if($file{0} == '.' || !preg_match('/file|link/', filetype($fqfn)))
 		{
 			continue;
 		}
 		array_push($filenameArr, $file);
-		array_push($dateArr, filemtime($upload_path.DIRECTORY_SEPARATOR.$file));
-		array_push($sizeArr, filesize($upload_path.DIRECTORY_SEPARATOR.$file));
+		$filestats = lstat($fqfn); // Safe for links
+		array_push($dateArr, $filestats['mtime']);
+		array_push($sizeArr, $filestats['size']);
 	}
 	closedir($dir);
 
