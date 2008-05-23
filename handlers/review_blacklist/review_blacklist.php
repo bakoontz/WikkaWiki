@@ -108,7 +108,7 @@ define('LIST_ACTION_BL_TITLE','Remove this domain from the blacklist');
 
 define('LOGIN_NOTE','You need to login to see blacklisted domains.');
 
-define('LIST_RESULT_COUNTER_SITES','Filtered result: %d domains');				# @@@ does not take account of singular
+define('LIST_RESULT_COUNTER_SITES','Filtered result: %d domain(s) matching these criteria');				# @@@ does not take account of singular
 define('LIST_RESULT_NONE','Filtered result:');
 define('NONE_NOTE','No blacklisted domains found');
 
@@ -313,7 +313,7 @@ if ($loggedin)
 }
 else
 {
-	echo '<p><strong>'.LOGIN_NOTE.'</strong></p>'."\n";
+	echo '<p><em class="error">'.LOGIN_NOTE.'</em></p>'."\n";
 }
 echo '</div>'."\n";
 echo '</div>'."\n";

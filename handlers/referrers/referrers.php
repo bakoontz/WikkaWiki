@@ -197,7 +197,7 @@ define('TOTAL_SITES','Total: %d referrers linking to %s');
 # you can use NAME_GLOBAL instead of 'this site' if the site name is short enough
 # @@@ JW: choice between 'this site' and NAME_GLOBAL could be set via configuration (later)
 define('TARGET_GLOBAL','this site');
-define('TARGET_PAGE',$tag);
+define('TARGET_PAGE', $tag);
 
 // menus don't use current target but *possible* targets
 define('MENU_REFERRERS','Referrers to %s');
@@ -241,15 +241,15 @@ define('LIST_ACTION_DESC',' and links to blacklist spammers');
 define('LIST_ACTION_BLACKLIST','Blacklist');
 define('LIST_ACTION_BLACKLIST_TITLE','Blacklist this domain');
 
-define('LOGIN_NOTE','You need to login to see referring sites.');
+define('LOGIN_NOTE','You need to login to display referrers.');
 
 // show result counts for target
-define('LIST_RESULT_COUNTER_REFERRERS','Filtered result: %d referrers linking to %s');	# @@@ does not take account of singular
-define('LIST_RESULT_COUNTER_SITES','Filtered result: %d domains linking to %s');		# @@@ does not take account of singular
+define('LIST_RESULT_COUNTER_REFERRERS','Filtered result: %d referrers matching these criteria');	# @@@ does not take account of singular
+define('LIST_RESULT_COUNTER_SITES','Filtered result: %d domains matching these criteria');		# @@@ does not take account of singular
 define('LIST_RESULT_NONE','Filtered result:');
 // show 'no result' summary for target
-define('NONE_NOTE_REFERRERS','No referrers found linking to %s');
-define('NONE_NOTE_SITES','No domains found linking to %s');
+define('NONE_NOTE_REFERRERS','No referrers found matching these criteria');
+define('NONE_NOTE_SITES','No domains found matching these criteria');
 
 
 // -------------------------------------
@@ -422,7 +422,7 @@ if ($loggedin)
 // build UI elements
 
 // define current target
-$target = ($global) ? TARGET_GLOBAL : TARGET_PAGE;
+$target = ($global) ? TARGET_GLOBAL : $this->Link(TARGET_PAGE);
 
 // title
 $title  = ($sites) ? sprintf(TITLE_SITES,$target) : sprintf(TITLE_REFERRERS,$target);
@@ -441,7 +441,7 @@ if ($loggedin)
 	$creferrers = count($referrers);
 	if ($creferrers > 0)
 	{
-		$result = ($sites) ? sprintf(LIST_RESULT_COUNTER_SITES,$creferrers,$target) : sprintf(LIST_RESULT_COUNTER_REFERRERS,$creferrers,$target);
+		$result = ($sites) ? sprintf(LIST_RESULT_COUNTER_SITES,$creferrers) : sprintf(LIST_RESULT_COUNTER_REFERRERS,$creferrers);
 	}
 	else
 	{
@@ -611,12 +611,12 @@ if ($loggedin)
 	else
 	{
 		echo '<h4 id="'.$idResult.'">'.$result.'</h4>'."\n";
-		echo '<p><em class="error">'.(($sites) ? sprintf(NONE_NOTE_SITES,$target) : sprintf(NONE_NOTE_REFERRERS,$target)).'</em></p>'."\n";
+		echo '<p><em class="error">'.(($sites) ? sprintf(NONE_NOTE_SITES) : sprintf(NONE_NOTE_REFERRERS)).'</em></p>'."\n";
 	}
 }
 else
 {
-	echo '<p><strong>'.LOGIN_NOTE.'</strong></p>'."\n";
+	echo '<p><em class="error">'.LOGIN_NOTE.'</em></p>'."\n";
 }
 echo '</div>'."\n";
 echo '</div>'."\n";
