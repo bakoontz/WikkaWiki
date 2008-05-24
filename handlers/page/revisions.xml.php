@@ -64,7 +64,6 @@ if ($this->HasAccess("read"))
 				$xml .= "</item>\n";
 			}
 		}
-		$output .= "</table>".$this->FormClose()."\n";
 	}
 }
 else
