@@ -2,8 +2,13 @@
 /**
  * Display a list of recent comments.
  *
+ * Usage: {{recentcomments}}
+ *
+ * Optionally, setting the "user=" GET param will display recent
+ * comments only for the specified user.
+ *
  * @package		Actions
- * @name			RecentComments
+ * @name		RecentComments
  *
  * @author		{@link http://wikkawiki.org/DarTar Dario Taraborelli} (preliminary code cleanup)
  * @author		{@link http://wikkawiki.org/NickDamoulakis Nick Damoulakis} (ACL check)
@@ -25,9 +30,9 @@ if (!defined('NO_READABLE_RECENT_COMMENTS')) define ('NO_READABLE_RECENT_COMMENT
 $readable = 0;
 
 $username = '';
-if(isset($_REQUEST['user']))
+if(isset($_GET['user']))
 {
-	$username = $this->htmlspecialchars_ent($_REQUEST['user']);
+	$username = $this->htmlspecialchars_ent($_GET['user']);
 }
 
 echo $this->Format(RECENT_COMMENTS_HEADING.' --- ');
