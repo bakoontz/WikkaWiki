@@ -46,6 +46,7 @@ class Wakka
 	var $VERSION;
 	var $cookies_sent = false;
 	var $cookie_expiry = PERSISTENT_COOKIE_EXPIRY; 
+	var $wikka_cookie_path;
 
 	/**
 	 * Constructor
@@ -894,9 +895,12 @@ class Wakka
 	}
 
 	// COOKIES
-	function SetSessionCookie($name, $value) { SetCookie($name.$this->config['wiki_suffix'], $value, 0, "/"); $_COOKIE[$name.$this->config['wiki_suffix']] = $value; $this->cookies_sent = true; }
-	function SetPersistentCookie($name, $value) { SetCookie($name.$this->config['wiki_suffix'], $value, time() + $this->cookie_expiry, "/"); $_COOKIE[$name.$this->config['wiki_suffix']] = $value; $this->cookies_sent = true; }
-	function DeleteCookie($name) { SetCookie($name.$this->config['wiki_suffix'], "", 1, "/"); $_COOKIE[$name.$this->config['wiki_suffix']] = ""; $this->cookies_sent = true; }
+	function SetSessionCookie($name, $value) {
+		SetCookie($name.$this->config['wiki_suffix'], $value, 0, $this->wikka_cookie_path); $_COOKIE[$name.$this->config['wiki_suffix']] = $value; $this->cookies_sent = true; }
+	function SetPersistentCookie($name, $value) {
+		SetCookie($name.$this->config['wiki_suffix'], $value, time() + $this->cookie_expiry, $this->wikka_cookie_path); $_COOKIE[$name.$this->config['wiki_suffix']] = $value; $this->cookies_sent = true; }
+	function DeleteCookie($name) {
+		SetCookie($name.$this->config['wiki_suffix'], "", 1, $this->wikka_cookie_path); $_COOKIE[$name.$this->config['wiki_suffix']] = ""; $this->cookies_sent = true; }
 	function GetCookie($name)
 	{
 		if (isset($_COOKIE[$name.$this->config['wiki_suffix']]))
@@ -1708,6 +1712,10 @@ class Wakka
 	// THE BIG EVIL NASTY ONE!
 	function Run($tag, $method = "")
 	{
+		// Set default cookie path
+		$base_url_path = preg_replace('/wikka\.php/', '', $_SERVER['SCRIPT_NAME']);
+		$this->wikka_cookie_path = ('/' == $base_url_path) ? '/' : substr($base_url_path,0,-1);
+
 		// do our stuff!
 		if (!$this->method = trim($method)) $this->method = "show";
 		if (!$this->tag = trim($tag)) $this->Redirect($this->Href("", $this->config["root_page"]));
@@ -1715,9 +1723,9 @@ class Wakka
 		if ((!$this->GetUser() && isset($_COOKIE["wikka_user_name"])) && ($user = $this->LoadUser($_COOKIE["wikka_user_name"], $_COOKIE["wikka_pass"])))
 		{
 			//Old cookies : delete them
-			SetCookie('wikka_user_name', "", 1, "/");
+			SetCookie('wikka_user_name', "", 1, $this->wikka_cookie_path);
 			$_COOKIE['wikka_user_name'] = "";
-			SetCookie('wikka_pass', '', 1, '/');
+			SetCookie('wikka_pass', '', 1, $this->wikka_cookie_path);
 			$_COOKIE['wikka_pass'] = "";
 			$this->SetUser($user);
 		}
