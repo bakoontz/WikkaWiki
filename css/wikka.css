@@ -1107,6 +1107,27 @@ fieldset.usersettings br {
 	clear: left;
 }
 
+/* Wikkaconfig action */
+table.wikkaconfig {
+	width: 70%;
+	font-size: 90%;	
+}
+
+table.wikkaconfig caption {
+	font-size: 120%;
+	background-color: #E9E9F9;
+	padding: 5px;
+}
+
+table.wikkaconfig tbody th[scope=row] {
+	text-align: right;
+	padding-right: 5px;
+}
+
+table.wikkaconfig tbody td {
+	padding-left: 5px;
+}
+
 /* RecentChanges action */
 
 ul.recentchanges {

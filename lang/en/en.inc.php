@@ -549,6 +549,15 @@ define('OK_BUTTON', '   OK   ');
 define('NO_WANTED_PAGES', 'No wanted pages. Good!');
 /**#@-*/
 
+/**#@+
+ * Language constant used by the {@link wikkaconfig.php wikkaconfig} action
+ */
+//wikkaconfig
+define('WIKKACONFIG_CAPTION', "Wikka Configuration Settings [%s]"); // %s link to Wikka Config options documentation
+define('WIKKACONFIG_DOCS_URL', "http://docs.wikkawiki.org/ConfigurationOptions");
+define('WIKKACONFIG_DOCS_TITLE', "Read the documentation on Wikka Configuration Settings");
+define('WIKKACONFIG_TH_OPTION', "Option");
+define('WIKKACONFIG_TH_VALUE', "Value");
 
 /* ------------------ 3RD PARTY ------------------ */
 
