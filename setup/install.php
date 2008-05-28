@@ -315,8 +315,6 @@ case "1.1.5.3":
 	rmdirr("xml");
 case "1.1.6.0":
 case "1.1.6.1":
-	//adding SysInfo page
-	update_default_page('SysInfo', $dblink, $config, $lang_defaults_path, $lang_defaults_fallback_path);
 case "1.1.6.2":
 case "1.1.6.3":
 	update_default_page(array('HighScores', 'FormattingRules'), $dblink, $config, $lang_defaults_path, $lang_defaults_fallback_path);
@@ -360,6 +358,7 @@ case "1.1.6.3":
 	mysql_query("insert into ".$config['table_prefix']."pages set tag = 'AdminUsers', body = '{{adminusers}}\n\n----\nCategoryAdmin', owner = '(Public)', note='".$upgrade_note."', user = 'WikkaInstaller', time = now(), latest = 'Y'", $dblink), "Already done? OK!", 0); 
 	test("Adding AdminPages page...", 
 	mysql_query("insert into ".$config['table_prefix']."pages set tag = 'AdminPages', body = '{{adminpages}}\n\n----\nCategoryAdmin', owner = '(Public)', note='".$upgrade_note."', user = 'WikkaInstaller', time = now(), latest = 'Y'", $dblink), "Already done? OK!", 0); 
+	update_default_page('SysInfo', $dblink, $config, $lang_defaults_path, $lang_defaults_fallback_path);
 case "1.1.6.4":
 case "1.1.6.5":
 	update_default_page('FormattingRules', $dblink, $config, $lang_defaults_path, $lang_defaults_fallback_path);
