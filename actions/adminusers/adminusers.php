@@ -440,9 +440,9 @@ if ($this->IsAdmin($this->GetUser()))
 				'		<th>'.$emailheader.'</th>'."\n".
 				'		<th>'.$timeheader.'</th>'."\n".
 				/* '		<th>'.$ipheader.'</th>'."\n". # installed as beta feature at wikkawiki.org */
-				'		<th'.(($c_color == 1)? ' class="c1"' : '').' title="'.ADMINUSERS_TABLE_HEADING_OWNED_TITLE.'"><img src="'.ADMINUSERS_OWNED_ICON.'" class="icon" alt="O"/></th>'."\n".
-				'		<th'.(($c_color == 1)? ' class="c2"' : '').' title="'.ADMINUSERS_TABLE_HEADING_EDITS_TITLE.'"><img src="'.ADMINUSERS_EDITS_ICON.'" class="icon" alt="E"/></th>'."\n".
-				'		<th'.(($c_color == 1)? ' class="c3"' : '').' title="'.ADMINUSERS_TABLE_HEADING_COMMENTS_TITLE.'"><img src="'.ADMINUSERS_COMMENTS_ICON.'" class="icon" alt="C"/></th>'."\n".
+				'		<th'.(($c_color == 1)? ' class="c1"' : '').' title="'.ADMINUSERS_TABLE_HEADING_OWNED_TITLE.'"><img class="icon" src="'.ADMINUSERS_OWNED_ICON.'" class="icon" alt="O"/></th>'."\n".
+				'		<th'.(($c_color == 1)? ' class="c2"' : '').' title="'.ADMINUSERS_TABLE_HEADING_EDITS_TITLE.'"><img class="icon" src="'.ADMINUSERS_EDITS_ICON.'" class="icon" alt="E"/></th>'."\n".
+				'		<th'.(($c_color == 1)? ' class="c3"' : '').' title="'.ADMINUSERS_TABLE_HEADING_COMMENTS_TITLE.'"><img class="icon" src="'.ADMINUSERS_COMMENTS_ICON.'" class="icon" alt="C"/></th>'."\n".
 				'		<th>Actions</th>'."\n".
 	 		 	'	</tr>'."\n".
 	 		 	'</thead>'."\n";

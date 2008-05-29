@@ -608,11 +608,11 @@ if ($this->IsAdmin($this->GetUser()))
 			'		<th>'.$ownerheader.'</th>'."\n".
 			'		<th>'.$userheader.'</th>'."\n".
 			'		<th>'.$lasteditheader.'</th>'."\n".
-			'		<th'.(($c_color == 1)? ' class="c1"' : '').' title="'.ADMINPAGES_TABLE_HEADING_HITS_TITLE.'"><img src="'.ADMINPAGES_HITS_ICON.'" alt="'.ADMINPAGES_TABLE_HEADING_HITS_ALT.'" /></th>'."\n".
-			'		<th'.(($c_color == 1)? ' class="c2"' : '').' title="'.ADMINPAGES_TABLE_HEADING_REVISIONS_TITLE.'"><img src="'.ADMINPAGES_REVISIONS_ICON.'" alt="'.ADMINPAGES_TABLE_HEADING_REVISIONS_ALT.'" /></th>'."\n".
-			'		<th'.(($c_color == 1)? ' class="c3"' : '').' title="'.ADMINPAGES_TABLE_HEADING_COMMENTS_TITLE.'"><img src="'.ADMINPAGES_COMMENTS_ICON.'" alt="'.ADMINPAGES_TABLE_HEADING_COMMENTS_ALT.'" /></th>'."\n".
-			'		<th'.(($c_color == 1)? ' class="c4"' : '').' title="'.ADMINPAGES_TABLE_HEADING_BACKLINKS_TITLE.'"><img src="'.ADMINPAGES_BACKLINKS_ICON.'" alt="'.ADMINPAGES_TABLE_HEADING_BACKLINKS_ALT.'" /></th>'."\n".
-			'		<th'.(($c_color == 1)? ' class="c5"' : '').' title="'.ADMINPAGES_TABLE_HEADING_REFERRERS_TITLE.'"><img src="'.ADMINPAGES_REFERRERS_ICON.'" alt="'.ADMINPAGES_TABLE_HEADING_REFERRERS_ALT.'" /></th>'."\n".
+			'		<th'.(($c_color == 1)? ' class="c1"' : '').' title="'.ADMINPAGES_TABLE_HEADING_HITS_TITLE.'"><img class="icon" src="'.ADMINPAGES_HITS_ICON.'" alt="'.ADMINPAGES_TABLE_HEADING_HITS_ALT.'" /></th>'."\n".
+			'		<th'.(($c_color == 1)? ' class="c2"' : '').' title="'.ADMINPAGES_TABLE_HEADING_REVISIONS_TITLE.'"><img class="icon" src="'.ADMINPAGES_REVISIONS_ICON.'" alt="'.ADMINPAGES_TABLE_HEADING_REVISIONS_ALT.'" /></th>'."\n".
+			'		<th'.(($c_color == 1)? ' class="c3"' : '').' title="'.ADMINPAGES_TABLE_HEADING_COMMENTS_TITLE.'"><img class="icon" src="'.ADMINPAGES_COMMENTS_ICON.'" alt="'.ADMINPAGES_TABLE_HEADING_COMMENTS_ALT.'" /></th>'."\n".
+			'		<th'.(($c_color == 1)? ' class="c4"' : '').' title="'.ADMINPAGES_TABLE_HEADING_BACKLINKS_TITLE.'"><img class="icon" src="'.ADMINPAGES_BACKLINKS_ICON.'" alt="'.ADMINPAGES_TABLE_HEADING_BACKLINKS_ALT.'" /></th>'."\n".
+			'		<th'.(($c_color == 1)? ' class="c5"' : '').' title="'.ADMINPAGES_TABLE_HEADING_REFERRERS_TITLE.'"><img class="icon" src="'.ADMINPAGES_REFERRERS_ICON.'" alt="'.ADMINPAGES_TABLE_HEADING_REFERRERS_ALT.'" /></th>'."\n".
 			'		<th>'.ADMINPAGES_TABLE_HEADING_ACTIONS.'</th>'."\n".
 			'	</tr>'."\n".
 			'</thead>'."\n";

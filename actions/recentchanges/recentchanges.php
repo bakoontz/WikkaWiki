@@ -44,7 +44,7 @@ if ($pages = $this->LoadRecentlyChanged())
 	$curday = '';
 	//print feed link icon
 	$xmlicon_url = $this->StaticHref('images/xml.png');
-	echo '<p><a href="'.$this->Href('recentchanges.xml', $this->page['tag']).'"><img src="'.$xmlicon_url.'" width="36" height="14" alt="XML" /></a></p>'."\n";
+	echo '<p><a href="'.$this->Href('recentchanges.xml', $this->page['tag']).'"><img class="icon" src="'.$xmlicon_url.'" width="36" height="14" alt="feed icon" /></a></p>'."\n";
 
 	if ($user = $this->GetUser())
 	{
