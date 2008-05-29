@@ -73,6 +73,19 @@ if ($config['rewrite_mode'] == 1)
 	}
 }
 $config['rewrite_mode'] = $htaccess_updated;
+// #600: Force reloading of stylesheets. @@@ Do this in StaticHref()
+if (!empty($config['stylesheet']))
+{
+	$config['stylesheet'] = preg_replace('/(&amp;|\\?)(.*)$/', '', $config['stylesheet']); // Needed in case of reinstall
+	$config['stylesheet'] .= strstr($config['stylesheet'], '?') ? '&amp;' : '?';
+	$config['stylesheet'] .= substr(md5(time()),1,5);
+}
+if (!empty($config['comment_stylesheet']))
+{
+	$config['comment_stylesheet'] = preg_replace('/(&amp;|\\?)(.*)$/', '', $config['comment_stylesheet']);
+	$config['comment_stylesheet'] .= strstr($config['comment_stylesheet'], '?') ? '&amp;' : '?';
+	$config['comment_stylesheet'] .= substr(md5(time()),1,5);
+}
 // convert config array into PHP code
 $double_backslash = '\\\\';
 $single_quote = '\'';
