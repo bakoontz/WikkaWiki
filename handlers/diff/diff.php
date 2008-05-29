@@ -68,8 +68,8 @@ if ($this->HasAccess('read'))
 	}
 
 	// set up heading variables
-	$linkPageA = '<a href="'.$this->Href('', '', 'time='.urlencode($pageA['time'])).'">'.$pageA['time'].'</a>';
-	$linkPageB = '<a href="'.$this->Href('', '', 'time='.urlencode($pageB['time'])).'">'.$pageB['time'].'</a>';
+	$linkPageA = '<a href="'.$this->Href('show', '', 'time='.urlencode($pageA['time'])).'">'.$pageA['time'].'</a>';
+	$linkPageB = '<a href="'.$this->Href('show', '', 'time='.urlencode($pageB['time'])).'">'.$pageB['time'].'</a>';
 
 	// If asked, call original diff
 	if (isset($_GET['fastdiff']) && $_GET['fastdiff'])	# #312
@@ -208,6 +208,7 @@ if ($this->HasAccess('read'))
 	// show output
 	echo '<div class="page">'."\n";
 	echo $head.$out;
+	echo '<div style="clear: both;"></div>'."\n";
 	echo '</div>'."\n";
 }
 else

@@ -674,7 +674,7 @@ define('DIFF_FAST_COMPARISON_HEADER', 'Comparison of %1$s &amp; %2$s'); // %1$s 
 define('DIFF_COMPARISON_HEADER', 'Comparing %2$s to %1$s'); // %1$s - link to page A; %2$s - link to page B (yes, they're swapped!)
 define('DIFF_SAMPLE_ADDITION', 'addition');
 define('DIFF_SAMPLE_DELETION', 'deletion');
-define('HIGHLIGHTING_LEGEND', 'Highlighting Guide: %1$s %2$s'); // %1$s - sample added text; %2$s - sample deleted text
+define('HIGHLIGHTING_LEGEND', '<strong>Highlighting Guide:</strong> %1$s %2$s'); // %1$s - sample added text; %2$s - sample deleted text
 /**#@-*/
 
 /**#@+
