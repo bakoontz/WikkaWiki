@@ -387,11 +387,8 @@ if ($this->IsAdmin($this->GetUser()))
 	
 		// print page header
 		echo '<h3>'.ADMINUSERS_PAGE_TITLE.'</h3>'."\n";
-		$msg = '';
-		if($msg = $this->GetRedirectMessage())
-		{
-			echo '<p><em class="error">'.sprintf($msg).'</em></p>';
-		}
+		
+		//non-working message retrieval removed, see #753
 	
 		// build pager form	
 		$form_filter = $this->FormOpen('','','post','user_admin_panel');
