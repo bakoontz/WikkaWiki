@@ -21,7 +21,7 @@
  */
 
 // defaults
-$out = WIKKA_STATUS_NOT_AVAILABLE;
+$out = '<abbr title="'.WIKKA_ADMIN_ONLY_TITLE.'">'.WIKKA_STATUS_NOT_AVAILABLE.'</abbr>'."\n"; 
 
 //check privs
 if ($this->config['public_sysinfo'] == '1' || $this->IsAdmin())

@@ -34,6 +34,7 @@
  * Language constant shared among several Wikka components
  */
 // NOTE: all common names (used in multiple files) should start with WIKKA_ !
+define('WIKKA_ADMIN_ONLY_TITLE', 'Sorry, only wiki administrators can display this information'); //title for elements that are only displayed to admins
 define('WIKKA_ERROR_SETUP_FILE_MISSING', 'A file of the installer / upgrader was not found. Please install Wikka again!');
 define('WIKKA_ERROR_MYSQL_ERROR', 'MySQL error: %d - %s');	// %d - error number; %s - error text
 define('WIKKA_ERROR_CAPTION', 'Error');
