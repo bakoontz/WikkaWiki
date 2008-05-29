@@ -1564,7 +1564,7 @@ if ($debug) echo "<br/>\n";
 			SELECT note, id, time, user
 			FROM ".$this->GetConfigValue('table_prefix')."pages
 			WHERE tag = '".mysql_real_escape_string($tag)."'
-			ORDER BY time DESC
+			ORDER BY id DESC
 			LIMIT ".$limitstart.$limitmax
 			);
 		// store oldest *requested* revision in the "special cache"
@@ -1666,7 +1666,7 @@ if ($debug) echo "<br/>\n";
 			SELECT *
 			FROM ".$this->GetConfigValue('table_prefix')."pages
 			WHERE latest = 'Y'
-			ORDER BY time DESC
+			ORDER BY id DESC
 			LIMIT ".$limit
 			);
 		if ($pages)
