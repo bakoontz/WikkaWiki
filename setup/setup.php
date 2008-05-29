@@ -35,7 +35,7 @@ function check() {
  {
   err += "Passwords don't match.\n\n";
  }
- re = new RegExp("[a-z]+@[a-z]+\.[a-z]+", "i");
+ re = new RegExp("^[a-z0-9.!#$%&'*+/=?^_`{|}~-]+@[A-Z0-9.-]+$", 'i');
  if (f.elements["pconfig[admin_email]"].value.search(re)==-1) 
  {
   err += "Email address appears incorrect.\n\n";
