@@ -35,8 +35,8 @@
 	{
 		echo '<a href="'.$this->Href("history").'" title="'.PAGE_HISTORY_LINK_TITLE.'">'.PAGE_HISTORY_LINK_DESC.'</a> ::'."\n";
 	}
-	$xmlicon_url = $this->StaticHref('images/xml.png');
-	echo $this->GetPageTime() ? '<a class="datetime" href="'.$this->Href("revisions").'" title="'.PAGE_REVISION_LINK_TITLE.'">'.$this->GetPageTime().'</a> <a href="'.$this->href("revisions.xml").'" title="'.PAGE_REVISION_XML_LINK_TITLE.'"><img src="'.$xmlicon_url.'" width="36" height="14" class="icon" alt="feed icon" /></a> ::'."\n" : '';
+	$xmlicon_url = $this->StaticHref('images/feed.png');
+	echo $this->GetPageTime() ? '<a class="datetime" href="'.$this->Href("revisions").'" title="'.PAGE_REVISION_LINK_TITLE.'">'.$this->GetPageTime().'</a> <a href="'.$this->href("revisions.xml").'" title="'.PAGE_REVISION_XML_LINK_TITLE.'"><img src="'.$xmlicon_url.'" width="14" height="14" class="icon" alt="feed icon" /></a> ::'."\n" : '';
 
 	// if this page exists
 	if (($this->page) && ($this->GetHandler() != 'acls'))
