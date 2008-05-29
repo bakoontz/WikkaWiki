@@ -160,7 +160,6 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 		static $trigger_floatr = 0;
 		static $trigger_keys = 0;
 		static $trigger_strike = 0;
-		static $trigger_inserted = 0;
 		static $trigger_center = 0;
 		static $trigger_l = array(-1, 0, 0, 0, 0, 0);
 		static $output = '';
@@ -215,7 +214,11 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 			}
 			if ($trigger_inserted % 2)
 			{
-				$result .=  '</span>';
+				$result .=  '</ins>';
+			}
+			if ($trigger_deleted % 2)
+			{
+				$result .=  '</del>';
 			}
 			if ($trigger_underline % 2)
 			{
