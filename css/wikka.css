@@ -106,23 +106,23 @@ a.keys:hover {
 /* link icons */
 
 a.ext {
-	background: url('../images/icons/ext_simple.gif') right bottom no-repeat;
-	padding-right: 12px;
+	background: url('../images/icons/ext_simple.gif') left bottom no-repeat;
+	padding-left: .7em;
 }
 
 .page a.mailto {
-	background: url('../images/icons/mail.gif') right bottom no-repeat;
-	padding-right: 12px;
+	background: url('../images/icons/mail.gif') left bottom no-repeat;
+	padding-left: 1em;
 }
 
 .page a.interwiki {
-	background: url('../images/icons/ext.gif') right bottom no-repeat;
-	padding-right: 12px;
+	background: url('../images/icons/ext.gif') left bottom no-repeat;
+	padding-left: 1em;
 }
 
 a.user, a.user:hover {
-	background: url('../images/icons/user.gif') right bottom no-repeat;
-	padding-right: 12px;
+	background: url('../images/icons/user.gif') left bottom no-repeat;
+	padding-left: 1em;
 }
 
 /* lists */
