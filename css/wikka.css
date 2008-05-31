@@ -105,9 +105,9 @@ a.keys:hover {
 
 /* link icons */
 
-a.ext {
+.page a.ext {
 	background: url('../images/icons/ext_simple.gif') left bottom no-repeat;
-	padding-left: .7em;
+	padding-left: .8em;
 }
 
 .page a.mailto {
