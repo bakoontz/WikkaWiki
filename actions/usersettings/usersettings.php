@@ -360,7 +360,7 @@ else
 	// is user trying to log in or register?
 	// BEGIN *** LOGIN/REGISTER ***
 	$register = $this->GetConfigValue('allow_user_registration'); 
-	if (isset($_POST['action']) && ($_POST['action'] == 'login'))
+	if (isset($_POST['submit']) && ($_POST['submit'] == LOGIN_BUTTON))
 	{
 		// BEGIN *** LOGIN ***
 		// if user name already exists, check password
@@ -368,7 +368,13 @@ else
 		if (isset($_POST['name']) && $existingUser = $this->loadUserData($_POST['name']))
 		{
 			// check password
+			$status = $existingUser['status'];
 			switch(TRUE){
+				case ($status=='deleted' ||
+			          $status=='suspended' ||
+					  $status=='banned'):
+					$error = ERROR_USER_SUSPENDED;
+					break;
 				case (strlen($_POST['password']) == 0):
 					$error = ERROR_EMPTY_PASSWORD;
 					$password_highlight = INPUT_ERROR_STYLE;
@@ -392,92 +398,105 @@ else
 					}
 			}
 		}
-		// END *** LOGIN ***
-		// BEGIN *** REGISTER ***
-		else if ($register == '1') // otherwise, proceed to registration
+		else
 		{
-			$name = trim($_POST['name']);
-			$email = trim($this->GetSafeVar('email', 'post'));
-			$password = $_POST['password'];
-			$confpassword = $_POST['confpassword'];
-
-			// validate input
-			switch(TRUE)
-			{
-				case (FALSE===$urobj->URAuthVerify()):
-					$error = ERROR_VALIDATION_FAILED;
-					break;
-				case (strlen($name) == 0):
-					$error = ERROR_EMPTY_USERNAME;
-					$username_highlight = INPUT_ERROR_STYLE;
-					break;
-				case (!$this->IsWikiName($name)):
-					$error = $this->Format(sprintf(ERROR_WIKINAME,'##""WikiName""##','##""'.WIKKA_SAMPLE_WIKINAME.'""##'));
-					$username_highlight = INPUT_ERROR_STYLE;
-					break;
-				case ($this->ExistsPage($name)):
-					$error = ERROR_RESERVED_PAGENAME;
-					$username_highlight = INPUT_ERROR_STYLE;
-					break;
-				case (strlen($password) == 0):
-					$error = ERROR_EMPTY_PASSWORD;
-					$password_highlight = INPUT_ERROR_STYLE;
-					break;
-				case (preg_match("/ /", $password)):
-					$error = ERROR_NO_BLANK;
-					$password_highlight = INPUT_ERROR_STYLE;
-					break;
-				case (strlen($password) < PASSWORD_MIN_LENGTH):
-					$error = sprintf(ERROR_PASSWORD_TOO_SHORT, PASSWORD_MIN_LENGTH);
-					$password_highlight = INPUT_ERROR_STYLE;
-					break;
-				case (strlen($confpassword) == 0):
-					$error = ERROR_EMPTY_CONFIRMATION_PASSWORD;
-					$password_highlight = INPUT_ERROR_STYLE;
-					$password_confirm_highlight = INPUT_ERROR_STYLE;
-					break;
-				case ($confpassword != $password):
-					$error = ERROR_PASSWORD_MATCH;
-					$password_highlight = INPUT_ERROR_STYLE;
-					$password_confirm_highlight = INPUT_ERROR_STYLE;
-					break;
-				case (strlen($email) == 0):
-					$error = ERROR_EMAIL_ADDRESS_REQUIRED;
-					$email_highlight = INPUT_ERROR_STYLE;
-					$password_highlight = INPUT_ERROR_STYLE;
-					$password_confirm_highlight = INPUT_ERROR_STYLE;
-					break;
-				case (!preg_match(VALID_EMAIL_PATTERN, $email)):
-					$error = ERROR_INVALID_EMAIL_ADDRESS;
-					$email_highlight = INPUT_ERROR_STYLE;
-					$password_highlight = INPUT_ERROR_STYLE;
-					$password_confirm_highlight = INPUT_ERROR_STYLE;
-					break;
-				default: //valid input, create user
-					$this->Query("INSERT INTO ".$this->GetConfigValue('table_prefix')."users SET ".
-						"signuptime = now(), ".
-						"name = '".mysql_real_escape_string($name)."', ".
-						"email = '".mysql_real_escape_string($email)."', ".
-						"password = md5('".mysql_real_escape_string($_POST['password'])."')");
-					unset($this->specialCache['user'][strtolower($name)]);	//invalidate cache if exists #368
-
-					// log in
-					#$this->SetUser($this->LoadUser($name));
-					$this->SetUser($this->loadUserData($name));
-					if ((isset($_SESSION['go_back'])) && (isset($_POST['do_redirect'])))
-					{
-						$go_back = $_SESSION['go_back'];
-						unset($_SESSION['go_back']);
-						unset($_SESSION['go_back_tag']);
-						$this->Redirect($go_back);
-					}
-					$_SESSION['usersettings_registered'] = TRUE;
-					$this->Redirect($url.$params);
-			}
+			$error = ERROR_NON_EXISTENT_USERNAME;
+			$username_highlight = INPUT_ERROR_STYLE;
 		}
-		// END *** REGISTER ***
-	} 
-	// END *** LOGIN/REGISTER ***
+	}
+
+	// END *** LOGIN ***
+	// BEGIN *** REGISTER ***
+	if (isset($_POST['submit']) && ($_POST['submit'] == REGISTER_BUTTON) && $register == '1')
+	{
+		$name = trim($_POST['name']);
+		$email = trim($this->GetSafeVar('email', 'post'));
+		$password = $_POST['password'];
+		$confpassword = $_POST['confpassword'];
+
+//echo $_POST['name']."<br/>\n";
+//echo $this->LoadUser($_POST['name']);
+//exit;
+
+		// validate input
+		switch(TRUE)
+		{
+			case (FALSE===$urobj->URAuthVerify()):
+				$error = ERROR_VALIDATION_FAILED;
+				break;
+			case (isset($_POST['name']) && TRUE === $this->existsUser($_POST['name'])):
+				$error = ERROR_USERNAME_UNAVAILABLE;
+				$username_highlight = INPUT_ERROR_STYLE;
+				break;
+			case (strlen($name) == 0):
+				$error = ERROR_EMPTY_USERNAME;
+				$username_highlight = INPUT_ERROR_STYLE;
+				break;
+			case (!$this->IsWikiName($name)):
+				$error = $this->Format(sprintf(ERROR_WIKINAME,'##""WikiName""##','##""'.WIKKA_SAMPLE_WIKINAME.'""##'));
+				$username_highlight = INPUT_ERROR_STYLE;
+				break;
+			case ($this->ExistsPage($name)):
+				$error = ERROR_RESERVED_PAGENAME;
+				$username_highlight = INPUT_ERROR_STYLE;
+				break;
+			case (strlen($password) == 0):
+				$error = ERROR_EMPTY_PASSWORD;
+				$password_highlight = INPUT_ERROR_STYLE;
+				break;
+			case (preg_match("/ /", $password)):
+				$error = ERROR_NO_BLANK;
+				$password_highlight = INPUT_ERROR_STYLE;
+				break;
+			case (strlen($password) < PASSWORD_MIN_LENGTH):
+				$error = sprintf(ERROR_PASSWORD_TOO_SHORT, PASSWORD_MIN_LENGTH);
+				$password_highlight = INPUT_ERROR_STYLE;
+				break;
+			case (strlen($confpassword) == 0):
+				$error = ERROR_EMPTY_CONFIRMATION_PASSWORD;
+				$password_highlight = INPUT_ERROR_STYLE;
+				$password_confirm_highlight = INPUT_ERROR_STYLE;
+				break;
+			case ($confpassword != $password):
+				$error = ERROR_PASSWORD_MATCH;
+				$password_highlight = INPUT_ERROR_STYLE;
+				$password_confirm_highlight = INPUT_ERROR_STYLE;
+				break;
+			case (strlen($email) == 0):
+				$error = ERROR_EMAIL_ADDRESS_REQUIRED;
+				$email_highlight = INPUT_ERROR_STYLE;
+				$password_highlight = INPUT_ERROR_STYLE;
+				$password_confirm_highlight = INPUT_ERROR_STYLE;
+				break;
+			case (!preg_match(VALID_EMAIL_PATTERN, $email)):
+				$error = ERROR_INVALID_EMAIL_ADDRESS;
+				$email_highlight = INPUT_ERROR_STYLE;
+				$password_highlight = INPUT_ERROR_STYLE;
+				$password_confirm_highlight = INPUT_ERROR_STYLE;
+				break;
+			default: //valid input, create user
+				$this->Query("INSERT INTO ".$this->GetConfigValue('table_prefix')."users SET ".
+					"signuptime = now(), ".
+					"name = '".mysql_real_escape_string($name)."', ".
+					"email = '".mysql_real_escape_string($email)."', ".
+					"password = md5('".mysql_real_escape_string($_POST['password'])."')");
+				unset($this->specialCache['user'][strtolower($name)]);	//invalidate cache if exists #368
+
+				// log in
+				#$this->SetUser($this->LoadUser($name));
+				$this->SetUser($this->loadUserData($name));
+				if ((isset($_SESSION['go_back'])) && (isset($_POST['do_redirect'])))
+				{
+					$go_back = $_SESSION['go_back'];
+					unset($_SESSION['go_back']);
+					unset($_SESSION['go_back_tag']);
+					$this->Redirect($go_back);
+				}
+				$_SESSION['usersettings_registered'] = TRUE;
+				$this->Redirect($url.$params);
+		}
+	}
+	// END *** REGISTER ***
 
 	// BEGIN *** USERSETTINGS PW ***
 	elseif (isset($_POST['action']) && ($_POST['action'] == 'updatepass'))
@@ -553,7 +572,7 @@ else
 <?php
 	}
 ?>
-	<input id="loginsubmit" type="submit" value="<?php echo LOGIN_BUTTON ?>" size="40" />
+	<input name="submit" id="loginsubmit" type="submit" value="<?php echo LOGIN_BUTTON ?>" size="40" />
 	<br /><br />
 <?php
 	// END *** LOGIN ***
@@ -572,7 +591,7 @@ else
 	<label for="email"><?php echo USER_EMAIL_LABEL ?></label>
 	<input id="email" type="text" <?php echo $email_highlight; ?> name="email" size="40" value="<?php echo $email; ?>" />
 	<br />
-	<input id="registersubmit" type="submit" value="<?php echo REGISTER_BUTTON ?>" size="40" />
+	<input name="submit" id="registersubmit" type="submit" value="<?php echo REGISTER_BUTTON ?>" size="40" />
 	<br />
 <?php
 	}

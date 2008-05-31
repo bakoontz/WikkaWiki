@@ -44,6 +44,8 @@ define('WIKKA_ERROR_ACL_READ_INFO', 'You aren\'t allowed to access this informat
 define('WIKKA_ERROR_LABEL', 'Error');
 define('WIKKA_ERROR_PAGE_NOT_EXIST', 'Sorry, page %s does not exist.'); // %s (source) page name
 define('WIKKA_ERROR_EMPTY_USERNAME', 'Please fill in your username!');
+define('ERROR_USERNAME_UNAVAILABLE', "Sorry, this user name is unavailable.");
+define('ERROR_USER_SUSPENDED', "Sorry, this account has been suspended. Please contact an administrator for further details.");
 define('WIKKA_ERROR_INVALID_PAGE_NAME', 'The page name %s is invalid. Valid page names must start with a capital letter, contain only letters and numbers, and be in CamelCase format.'); // %s - page name
 define('WIKKA_ERROR_PAGE_ALREADY_EXIST', 'Sorry, the target page already exists');
 define('WIKKA_LOGIN_LINK_DESC', 'login');
