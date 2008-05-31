@@ -33,7 +33,7 @@
 
 echo "\n".'<!--starting page content-->'."\n";
 echo '<div class="page"';
-echo (($user = $this->GetUser()) && ($user['doubleclickedit'] == 'N') || !$this->HasAccess('write')) ? '' : ' ondblclick="document.location=\''.$this->Href('edit').'\';"'; #268
+echo (($user = $this->GetUser()) && ($user['doubleclickedit'] == 'N') || !$this->HasAccess('write')) ? '' : ' ondblclick="document.location=\''.$this->Href('edit', '', 'id='.$this->page['id']).'\';" '; #268
 echo '>'."\n";
 
 if (!$this->HasAccess('read'))

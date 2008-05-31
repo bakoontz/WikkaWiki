@@ -702,6 +702,7 @@ define('ACCESSKEY_REEDIT', 'r'); // ideally, should match EDIT_REEDIT_BUTTON
 define('SHOWCODE_LINK', 'View formatting code for this page');
 define('SHOWCODE_LINK_TITLE', 'Click to view page formatting code'); // @@@ TODO 'View page formatting code'
 define('EDIT_COMMENT_TIMESTAMP_CAPTION', '(%s)'); // %s timestamp
+if (!defined('ERROR_INVALID_PAGEID')) define('ERROR_INVALID_PAGEID', 'The revision id does not exist for the requested page');
 /**#@-*/
 
 /**#@+
