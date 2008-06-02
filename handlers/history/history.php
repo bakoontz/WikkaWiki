@@ -33,8 +33,10 @@
  * @uses	Wakka::LoadOldestRevision()
  * @uses	Wakka::LoadPageById()
  * @uses	Wakka::Format()
+ * @uses 	Wakka::FormatUser();
  * @todo	make sure resulting XHTML is valid
  * @todo	validate the $start parameter (must be positive); use a default if it isn't;
+ * @todo	use pager for histories
  */
  
 echo '<div class="page">'."\n";
@@ -81,33 +83,39 @@ if ($this->HasAccess("read")) {
 						$note = '['.$this->htmlspecialchars_ent($pageA['note']).']';
 					}
 
-					if (($c == 2) && (!$start))
+					$output .= '<div class="revisioninfo">'."\n";					
+					$output .= '<h4 class="clear">'.sprintf(WIKKA_REVISION_NUMBER, '<a href="'.$this->Href('', '', 'time='.urlencode($pageA['time'])).'">['.$pageA['id'].']</a>').'</h4>'."\n";
+					
+					if ($c == 2)
 					{
-						$output .= '<div class="history_revisioninfo"><a href="'.$this->Href('', '', 'time='.urlencode($pageA['time'])).'">['.$pageA['id'].']</a> '.sprintf(MOST_RECENT_EDIT, '<a class="datetime" href="'.$this->Href('', '', 'time='.urlencode($pageA['time'])).'">'.$pageA['time'].'</a>', $EditedByUser).' <span class="pagenote smaller">'.$note.'</span></div><br class="clear" />'."\n";
+						$output .= sprintf(MOST_RECENT_EDIT, '<a class="datetime" href="'.$this->Href('', '', 'time='.urlencode($pageA['time'])).'">'.$pageA['time'].'</a>', $EditedByUser).' <span class="pagenote smaller">'.$note."</span>\n";
 					}
-					else 
+					else
 					{
-						$output .= '<div class="history_revisioninfo"><a href="'.$this->Href('', '', 'time='.urlencode($pageA['time'])).'">['.$pageA['id'].']</a> '.sprintf(EDITED_ON, '<a class="datetime" href="'.$this->Href('', '', 'time='.urlencode($pageA['time'])).'">'.$pageA['time'].'</a>', $EditedByUser).' <span class="pagenote smaller">'.$note.'</span></div><br class="clear" />'."\n";
+						$output .= sprintf(EDITED_ON, '<a class="datetime" href="'.$this->Href('', '', 'time='.urlencode($pageA['time'])).'">'.$pageA['time'].'</a>', $EditedByUser).' <span class="pagenote smaller">'.$note."</span>\n";
 					}
-
+					$output .= '</div>'."\n";
+					
 					if ($added)
 					{
 						// remove blank lines
-						$output .= '<br />'."\n".'<strong>'.DIFF_ADDITIONS_HEADER.'</strong><br />'."\n";
-						$output .= '<ins>'.$this->Format(implode("\n", $added)).'</ins>';
+						$output .= '<br />'."\n".'<h5 class="clear">'.WIKKA_DIFF_ADDITIONS_HEADER.'</h5>'."\n";
+						//$output .= '<ins>'.$this->Format(implode("\n", $added)).'</ins>';
+						$output .= '<ins>'.implode("\n", $added).'</ins>';
 					}
 
 					if ($deleted)
 					{
-						$output .= '<br />'."\n".'<strong>'.DIFF_DELETIONS_HEADER.'</strong><br />'."\n";
-						$output .= '<del>'.$this->Format(implode("\n", $deleted)).'</del>';
+						$output .= '<br />'."\n".'<h5 class="clear">'.WIKKA_DIFF_DELETIONS_HEADER.'</h5>'."\n";
+						//$output .= '<del>'.$this->Format(implode("\n", $deleted)).'</del>';
+						$output .= '<del>'.implode("\n", $deleted).'</del>';
 					}
 
 					if (!$added && !$deleted)
 					{
-						$output .= "<br />\n".DIFF_NO_DIFFERENCES;
+						$output .= "<br />\n".WIKKA_DIFF_NO_DIFFERENCES;
 					}
-					$output .= "<br />\n<hr /><br />\n";
+					$output .= "<br class=\"clear\" />\n<hr /><br />\n";
 				}
 			}
 			if (($pagesize_max = $this->GetConfigValue('pagesize_max')) && (strlen($output) > $pagesize_max))
@@ -130,13 +138,15 @@ if ($this->HasAccess("read")) {
 		{
 			$history_more_link = '<a href="'.$this->Href('history', '', 'start='.($c > 1 ? $c+$start-1 : $c+$start)).'">'.HISTORY_MORE_LINK_DESC.'</a>';
 			$additional_output .= "\n".'<br /><div class="history_revisioninfo">'.sprintf(HISTORY_MORE,$history_more_link).'</div><br class="clear" />'."\n";
-			$output .= '<div class="history_revisioninfo"><a href="'.$this->Href('', '', 'time='.urlencode($pageB['time'])).'">['.$pageB['id'].']</a> '.sprintf(EDITED_ON, '<a class="datetime" href="'.$this->href('', '', 'time='.urlencode($pageB['time'])).'">'.$pageB['time'].'</a>', $this->FormatUser($pageB['user'])).$note_oldest.'</div><br class="clear" />'."\n";
+			//$output .= '<div class="history_revisioninfo"><a href="'.$this->Href('', '', 'time='.urlencode($pageB['time'])).'">['.$pageB['id'].']</a> '.sprintf(EDITED_ON, '<a class="datetime" href="'.$this->href('', '', 'time='.urlencode($pageB['time'])).'">'.$pageB['time'].'</a>', $this->FormatUser($pageB['user'])).$note_oldest.'</div><br class="clear" />'."\n";
 		}
 		else
 		{
-			$output .= '<div class="history_revisioninfo"><a href="'.$this->Href('', '', 'time='.urlencode($pageB['time'])).'">['.$pageB['id'].']</a> '.sprintf(OLDEST_VERSION_EDITED_ON_BY, '<a class="datetime" href="'.$this->href('', '', 'time='.urlencode($pageB['time'])).'">'.$pageB['time'].'</a>', $this->FormatUser($pageB['user'])).$note_oldest.'</div><br class="clear" />'."\n";
+			$output .= '<div class="revisioninfo">'."\n";
+			$output .= '<h4 class="clear">'.sprintf(WIKKA_REVISION_NUMBER, '<a href="'.$this->Href('', '', 'time='.urlencode($pageB['time'])).'">['.$pageB['id'].']</a>').'</h4>'."\n";
+			$output .= sprintf(OLDEST_VERSION_EDITED_ON_BY, '<a class="datetime" href="'.$this->href('', '', 'time='.urlencode($pageB['time'])).'">'.$pageB['time'].'</a>', $EditedByUser).' <span class="pagenote smaller">'.$note."</span>\n";
+			$output .= '</div>'."\n";		
 		}
-		$output .= '<div class="revisioninfo">'.sprintf(HISTORY_PAGE_VIEW, $this->Link($this->tag)).'</div>'.$this->Format(implode("\n", $bodyB));
 		echo $output.$additional_output;
 	}
 }

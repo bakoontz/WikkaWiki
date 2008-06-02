@@ -25,9 +25,12 @@
  * @uses	Wakka::Redirect()
  * @uses	Diff
  *
- * @todo	This is a really cheap way to do it. I think it may be more intelligent to write the two pages to temporary files and run /usr/bin/diff over them. Then again, maybe not.
+ * @todo	- This is a really cheap way to do it. I think it may be more intelligent to write the two pages to temporary files and run /usr/bin/diff over them. Then again, maybe not.
  * 			JW: that may be nice but won't work on a Windows system ;)
  */
+
+$output = '';
+$info = '';
 
 // If javascript is disabled, user may get here after pressing button Next... on the /revisions handler.
 if ((isset($_GET['more_revisions'])) && (isset($_GET['a'])) && (isset($_GET['start'])))
@@ -67,10 +70,14 @@ if ($this->HasAccess('read'))
 		return;
 	}
 
-	// set up heading variables
-	$linkPageA = '<a href="'.$this->Href('show', '', 'time='.urlencode($pageA['time'])).'">'.$pageA['time'].'</a>';
-	$linkPageB = '<a href="'.$this->Href('show', '', 'time='.urlencode($pageB['time'])).'">'.$pageB['time'].'</a>';
+	$pageA_edited_by = $this->FormatUser($pageA['user']);
+	//if (!$this->LoadUser($pageA_edited_by)) $pageA_edited_by .= ' ('.WIKKA_UNREGISTERED_USER.')';
+	if ($pageA['note']) $noteA='['.$this->htmlspecialchars_ent($pageA['note']).']'; else $noteA ='';
 
+	$pageB_edited_by = $this->FormatUser($pageB['user']);
+	//if (!$this->LoadUser($pageB_edited_by)) $pageB_edited_by .= ' ('.WIKKA_UNREGISTERED_USER.')';
+	if ($pageB['note']) $noteB='['.$this->htmlspecialchars_ent($pageB['note']).']'; else $noteB ='';
+	
 	// If asked, call original diff
 	if (isset($_GET['fastdiff']) && $_GET['fastdiff'])	# #312
 	{
@@ -82,32 +89,32 @@ if ($this->HasAccess('read'))
 		$added   = array_diff($bodyA, $bodyB);
 		$deleted = array_diff($bodyB, $bodyA);
 
-		//$output = sprintf('<h5>'.DIFF_FAST_COMPARISON_HEADER.'</h5><br />'."\n", $this->Href('', '', 'time='.urlencode($pageA['time'])), $pageA['time'], $this->Href('', '', 'time='.urlencode($pageB['time'])), $pageB['time']);
-		$head = '<div class="revisioninfo">'.sprintf(DIFF_FAST_COMPARISON_HEADER,$linkPageA,$linkPageB).'</div>'."\n";
-		// TODO add legend
-
-		$output = '';
-
+		//infobox
+		$info .= '<div class="revisioninfo">'."\n";
+		$info .= '<h3>Comparing <a title="Display the revision list for '.$pageA['tag'].'" href="'.$this->Href('revisions').'">revisions</a> for <a title="Return to the current revision of the page" href="'.$this->Href().'">'.$pageA['tag'].'</a></h3>'."\n";
+		$info .= '<ul style="margin: 10px 0;">'."\n";
+		$info .= '	<li><a href="'.$this->Href('show', '', 'time='.urlencode($pageA['time'])).'">['.$pageA['id'].']</a> '.sprintf(WIKKA_REV_WHEN_BY_WHO, '<a class="datetime" href="'.$this->Href('show','','time='.urlencode($pageA["time"])).'">'.$pageA['time'].'</a>', $pageA_edited_by).' <span class="pagenote smaller">'.$noteA.'</span></li>'."\n";
+		$info .= '	<li><a href="'.$this->Href('show', '', 'time='.urlencode($pageB['time'])).'">['.$pageB['id'].']</a> '.sprintf(WIKKA_REV_WHEN_BY_WHO, '<a class="datetime" href="'.$this->Href('show','','time='.urlencode($pageB["time"])).'">'.$pageB['time'].'</a>', $pageB_edited_by).' <span class="pagenote smaller">'.$noteB.'</span></li>'."\n";
+		$info .= '</ul>'."\n";
+		$info .= '</div>'."\n";
+		
 		if ($added)
 		{
 			// remove blank lines
-			$output .= '<br />'."\n".'<strong>'.DIFF_ADDITIONS_HEADER.'</strong><br />'."\n"; //TODO make real heading
-			$output .= '<ins>'.$this->Format(implode("\n", $added)).'</ins>';
+			$output .= "\n".'<h4 class="clear">'.WIKKA_DIFF_ADDITIONS_HEADER.'</h4>'."\n";
+			$output .= '<ins>'.$this->Format(implode("\n", $added)).'</ins>'."\n";
 		}
 
 		if ($deleted)
 		{
-			$output .= '<br />'."\n".'<strong>'.DIFF_DELETIONS_HEADER.'</strong><br />'."\n"; //TODO make real heading
-			$output .= '<del>'.$this->Format(implode("\n", $deleted)).'</del>';
+			$output .= "\n".'<h4 class="clear">'.WIKKA_DIFF_DELETIONS_HEADER.'</h4>'."\n";
+			$output .= '<del>'.$this->Format(implode("\n", $deleted)).'</del>'."\n";
 		}
 
 		if (!$added && !$deleted)
 		{
-			$output .= "<br />\n".DIFF_NO_DIFFERENCES;
+			$output .= "<br />\n".WIKKA_DIFF_NO_DIFFERENCES;
 		}
-
-		#echo $head.$output;
-		$out = $output;
 	}
 	else
 	{
@@ -140,13 +147,15 @@ if ($this->HasAccess('read'))
 		$sideA->init();
 		$sideB->init();
 
-		$sample_addition = '<ins>'.DIFF_SAMPLE_ADDITION.'</ins>';
-		$sample_deletion = '<del>'.DIFF_SAMPLE_DELETION.'</del>';
-		$head  = '<div class="revisioninfo">'.sprintf(DIFF_COMPARISON_HEADER,$linkPageA,$linkPageB).'</div>'."\n";
-		$head .= sprintf(HIGHLIGHTING_LEGEND,$sample_addition,$sample_deletion);
-
-		$output = '';
-
+		$info = '<div class="revisioninfo">'."\n";
+		$info .= '<h3>Comparing <a title="Display the revision list for '.$pageA['tag'].'" href="'.$this->Href('revisions').'">revisions</a> for <a title="Return to the current revision of the page" href="'.$this->Href().'">'.$pageA['tag'].'</a></h3>'."\n";
+		$info .= '<ul style="margin: 10px 0">'."\n";
+		$info .= '	<li><a href="'.$this->Href('show', '', 'time='.urlencode($pageA['time'])).'">['.$pageA['id'].']</a> '.sprintf(WIKKA_REV_WHEN_BY_WHO, '<a class="datetime" href="'.$this->Href('show','','time='.urlencode($pageA["time"])).'">'.$pageA['time'].'</a>', $pageA_edited_by).' <span class="pagenote smaller">'.$noteA.'</span></li>'."\n";
+		$info .= '	<li><a href="'.$this->Href('show', '', 'time='.urlencode($pageB['time'])).'">['.$pageB['id'].']</a> '.sprintf(WIKKA_REV_WHEN_BY_WHO, '<a class="datetime" href="'.$this->Href('show','','time='.urlencode($pageB["time"])).'">'.$pageB['time'].'</a>', $pageB_edited_by).' <span class="pagenote smaller">'.$noteB.'</span></li>'."\n";
+		$info .= '</ul>'."\n";
+		$info .= '<p><strong>Highlighting Guide:</strong> <ins>addition</ins> <del>deletion</del></p>'."\n"; #i18n
+		$info .= '</div>'."\n";
+		
 		while (1)
 		{
 			$sideO->skip_line();
@@ -202,12 +211,12 @@ if ($this->HasAccess('read'))
 		$sideB->copy_until_ordinal($count_total_right,$output);
 		$sideB->copy_whitespace($output);
 
-		$out = $this->Format($output);
+		$output = $this->Format($output);
 	}
 
 	// show output
 	echo '<div class="page">'."\n";
-	echo $head.$out;
+	echo $info.$output;
 	echo '<div style="clear: both;"></div>'."\n";
 	echo '</div>'."\n";
 }

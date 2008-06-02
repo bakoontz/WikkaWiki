@@ -38,12 +38,15 @@ define('WIKKA_ADMIN_ONLY_TITLE', 'Sorry, only wiki administrators can display th
 define('WIKKA_ERROR_SETUP_FILE_MISSING', 'A file of the installer / upgrader was not found. Please install Wikka again!');
 define('WIKKA_ERROR_MYSQL_ERROR', 'MySQL error: %d - %s');	// %d - error number; %s - error text
 define('WIKKA_ERROR_CAPTION', 'Error');
-define('WIKKA_ERROR_ACL_READ', 'You aren\'t allowed to read this page.');
-define('WIKKA_ERROR_ACL_READ_SOURCE', 'You aren\'t allowed to read the source of this page.');
-define('WIKKA_ERROR_ACL_READ_INFO', 'You aren\'t allowed to access this information.');
+define('WIKKA_ERROR_ACL_READ', 'You are not allowed to read this page.');
+define('WIKKA_ERROR_ACL_READ_SOURCE', 'You are not allowed to read the source of this page.');
+define('WIKKA_ERROR_ACL_READ_INFO', 'You are not allowed to access this information.');
 define('WIKKA_ERROR_LABEL', 'Error');
 define('WIKKA_ERROR_PAGE_NOT_EXIST', 'Sorry, page %s does not exist.'); // %s (source) page name
 define('WIKKA_ERROR_EMPTY_USERNAME', 'Please fill in your username!');
+define('WIKKA_DIFF_ADDITIONS_HEADER', 'Additions:');
+define('WIKKA_DIFF_DELETIONS_HEADER', 'Deletions:');
+define('WIKKA_DIFF_NO_DIFFERENCES', 'No Differences');
 define('ERROR_USERNAME_UNAVAILABLE', "Sorry, this user name is unavailable.");
 define('ERROR_USER_SUSPENDED', "Sorry, this account has been suspended. Please contact an administrator for further details.");
 define('WIKKA_ERROR_INVALID_PAGE_NAME', 'The page name %s is invalid. Valid page names must start with a capital letter, contain only letters and numbers, and be in CamelCase format.'); // %s - page name
@@ -59,6 +62,7 @@ define('WIKKA_ANONYMOUS_AUTHOR_CAPTION', '('.WIKKA_UNREGISTERED_USER.')'); // @@
 define('WIKKA_SAMPLE_WIKINAME', 'JohnDoe'); // must be a CamelCase name
 define('WIKKA_HISTORY', 'history');
 define('WIKKA_REVISIONS', 'revisions');
+define('WIKKA_REVISION_NUMBER', 'Revision %s');
 define('WIKKA_REV_WHEN_BY_WHO', '%1$s by %2$s'); // %1$s - timestamp; %2$s - user name
 define('WIKKA_NO_PAGES_FOUND', 'No pages found.');
 define('WIKKA_PAGE_OWNER', 'Owner: %s'); // %s - page owner name or link
@@ -670,14 +674,12 @@ define('PAGE_DELETION_CANCEL_BUTTON', 'Cancel');
 // diff
 define('ERROR_DIFF_LIBRARY_MISSING', 'The necessary file "'.WIKKA_LIBRARY_PATH.DIRECTORY_SEPARATOR.'diff.lib.php" could not be found. Please make sure the file exists and is placed in the right directory!'); //TODO 'Please make sure' should be 'please inform WikiAdmin' - end user can't "make sure"
 define('ERROR_BAD_PARAMETERS', 'There is something wrong with parameters you supplied, it\'s very likely that one of the versions you want to compare has been deleted.');
-define('DIFF_ADDITIONS_HEADER', 'Additions:');
-define('DIFF_DELETIONS_HEADER', 'Deletions:');
-define('DIFF_NO_DIFFERENCES', 'No Differences');
 define('DIFF_FAST_COMPARISON_HEADER', 'Comparison of %1$s &amp; %2$s'); // %1$s - link to page A; %2$s - link to page B
 define('DIFF_COMPARISON_HEADER', 'Comparing %2$s to %1$s'); // %1$s - link to page A; %2$s - link to page B (yes, they're swapped!)
 define('DIFF_SAMPLE_ADDITION', 'addition');
 define('DIFF_SAMPLE_DELETION', 'deletion');
 define('HIGHLIGHTING_LEGEND', '<strong>Highlighting Guide:</strong> %1$s %2$s'); // %1$s - sample added text; %2$s - sample deleted text
+
 /**#@-*/
 
 /**#@+
@@ -721,7 +723,7 @@ define('ERROR_NO_CODE', 'Sorry, there is no code to download.');
 define('EDITED_ON', 'Edited on %1$s by %2$s'); // %1$s - time; %2$s - user name
 define('HISTORY_PAGE_VIEW', 'History of recent changes for %s'); // %s pagename
 define('OLDEST_VERSION_EDITED_ON_BY', 'The oldest known version of this page was created on %1$s by %2$s'); // %1$s - time; %2$s - user name
-define('MOST_RECENT_EDIT', 'Latest edit on %1$s by %2$s'); // %1$s - time; %2$s - user name
+define('MOST_RECENT_EDIT', 'Last edited on %1$s by %2$s');
 define('HISTORY_MORE_LINK_DESC', 'here'); // used for alternative history link in HISTORY_MORE
 define('HISTORY_MORE', 'Full history for this page cannot be displayed within a single page, click %s to view more.'); // %s alternative history link # @@@ TODO avoid using 'here' ^
 /**#@-*/
