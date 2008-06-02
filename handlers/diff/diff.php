@@ -151,7 +151,7 @@ if ($this->HasAccess('read'))
 		$info .= '	<li><a href="'.$this->Href('show', '', 'time='.urlencode($pageA['time'])).'">['.$pageA['id'].']</a> '.sprintf(WIKKA_REV_WHEN_BY_WHO, '<a class="datetime" href="'.$this->Href('show','','time='.urlencode($pageA["time"])).'">'.$pageA['time'].'</a>', $pageA_edited_by).' <span class="pagenote smaller">'.$noteA.'</span></li>'."\n";
 		$info .= '	<li><a href="'.$this->Href('show', '', 'time='.urlencode($pageB['time'])).'">['.$pageB['id'].']</a> '.sprintf(WIKKA_REV_WHEN_BY_WHO, '<a class="datetime" href="'.$this->Href('show','','time='.urlencode($pageB["time"])).'">'.$pageB['time'].'</a>', $pageB_edited_by).' <span class="pagenote smaller">'.$noteB.'</span></li>'."\n";
 		$info .= '</ul>'."\n";
-		$info .= '<strong>'.HIGHLIGHTING_LEGEND.'</strong><ins>'.DIFF_SAMPLE_ADDITION.'</ins> <del>'.DIFF_SAMPLE_DELETION.'</del></p>'."\n"; #i18n
+		$info .= '<strong>'.HIGHLIGHTING_LEGEND.'</strong> <ins>'.DIFF_SAMPLE_ADDITION.'</ins> <del>'.DIFF_SAMPLE_DELETION.'</del></p>'."\n"; #i18n
 		$info .= '</div>'."\n";
 		
 		while (1)
