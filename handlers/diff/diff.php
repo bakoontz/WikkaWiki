@@ -102,13 +102,13 @@ if ($this->HasAccess('read'))
 		{
 			// remove blank lines
 			$output .= "\n".'<h5 class="clear">'.WIKKA_DIFF_ADDITIONS_HEADER.'</h5>'."\n";
-			$output .= '<ins>'.implode("\n", $added).'</ins>'."\n";
+			$output .= '<ins>'.nl2br(implode("\n", $added)).'</ins>'."\n";
 		}
 
 		if ($deleted)
 		{
 			$output .= "\n".'<h5 class="clear">'.WIKKA_DIFF_DELETIONS_HEADER.'</h5>'."\n";
-			$output .= '<del>'.implode("\n", $deleted).'</del>'."\n";
+			$output .= '<del>'.nl2br(implode("\n", $deleted)).'</del>'."\n";
 		}
 
 		if (!$added && !$deleted)
@@ -191,27 +191,27 @@ if ($this->HasAccess('read'))
 				if (($letter=='d') || ($letter=='c'))
 				{
 					$sideA->copy_whitespace($output);
-					$output .='&yen;&yen;';
+					$output .='<del>';
 					$sideA->copy_word($output);
 					$sideA->copy_until_ordinal($argument[1],$output);
-					$output .=' &yen;&yen;';
+					$output .='</del>';
 				}
 
 				// inserted word
 				if ($letter == 'a' || $letter == 'c')
 				{
 					$sideB->copy_whitespace($output);
-					$output .='&pound;&pound;';
+					$output .='<ins>';
 					$sideB->copy_word($output);
 					$sideB->copy_until_ordinal($argument[3],$output);
-					$output .=' &pound;&pound;';
+					$output .='</ins>';
 				}
 			}
 		}
 		$sideB->copy_until_ordinal($count_total_right,$output);
 		$sideB->copy_whitespace($output);
 
-		$output = $this->Format($output);
+		$output = nl2br($output);
 	}
 
 	// show output

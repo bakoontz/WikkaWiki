@@ -672,8 +672,8 @@ define('PAGE_DELETION_CANCEL_BUTTON', 'Cancel');
  * Language constant used by the {@link diff.php diff} (page) handler
  */
 // diff
-define('ERROR_DIFF_LIBRARY_MISSING', 'The necessary file "'.WIKKA_LIBRARY_PATH.DIRECTORY_SEPARATOR.'diff.lib.php" could not be found. Please make sure the file exists and is placed in the right directory!'); //TODO 'Please make sure' should be 'please inform WikiAdmin' - end user can't "make sure"
-define('ERROR_BAD_PARAMETERS', 'There is something wrong with parameters you supplied, it\'s very likely that one of the versions you want to compare has been deleted.');
+define('ERROR_DIFF_LIBRARY_MISSING', 'The file <tt>'.WIKKA_LIBRARY_PATH.DIRECTORY_SEPARATOR.'diff.lib.php</tt> could not be found. You may want to notify the wiki administrator');
+define('ERROR_BAD_PARAMETERS', 'The parameters you supplied are incorrect, one of the two revisions may have been removed.');
 define('DIFF_FAST_COMPARISON_HEADER', 'Comparison of %1$s &amp; %2$s'); // %1$s - link to page A; %2$s - link to page B
 define('DIFF_COMPARISON_HEADER', 'Comparing %2$s to %1$s'); // %1$s - link to page A; %2$s - link to page B (yes, they're swapped!)
 define('DIFF_SAMPLE_ADDITION', 'addition');
