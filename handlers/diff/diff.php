@@ -83,8 +83,8 @@ if ($this->HasAccess('read'))
 	{
 
 		// prepare bodies
-		$bodyA = explode("\n", $pageA['body']);
-		$bodyB = explode("\n", $pageB['body']);
+		$bodyA = explode("\n", $this->htmlspecialchars_ent($pageA['body']));
+		$bodyB = explode("\n", $this->htmlspecialchars_ent($pageB['body']));
 
 		$added   = array_diff($bodyA, $bodyB);
 		$deleted = array_diff($bodyB, $bodyA);
@@ -102,13 +102,13 @@ if ($this->HasAccess('read'))
 		{
 			// remove blank lines
 			$output .= "\n".'<h5 class="clear">'.WIKKA_DIFF_ADDITIONS_HEADER.'</h5>'."\n";
-			$output .= '<ins>'.nl2br(implode("\n", $added)).'</ins>'."\n";
+			$output .= '<ins><tt>'.nl2br(implode("\n", $added)).'</tt></ins>'."\n";
 		}
 
 		if ($deleted)
 		{
 			$output .= "\n".'<h5 class="clear">'.WIKKA_DIFF_DELETIONS_HEADER.'</h5>'."\n";
-			$output .= '<del>'.nl2br(implode("\n", $deleted)).'</del>'."\n";
+			$output .= '<del><tt>'.nl2br(implode("\n", $deleted)).'</tt></del>'."\n";
 		}
 
 		if (!$added && !$deleted)
@@ -119,8 +119,8 @@ if ($this->HasAccess('read'))
 	else
 	{
 		// extract text from bodies
-		$textA = $pageB['body'];
-		$textB = $pageA['body'];
+		$textA = $this->htmlspecialchars_ent($pageB['body']);
+		$textB = $this->htmlspecialchars_ent($pageA['body']);
 
 		$sideA = new Side($textA);
 		$sideB = new Side($textB);
@@ -211,7 +211,7 @@ if ($this->HasAccess('read'))
 		$sideB->copy_until_ordinal($count_total_right,$output);
 		$sideB->copy_whitespace($output);
 
-		$output = nl2br($output);
+		$output = '<tt>'.nl2br($output).'</tt>';
 	}
 
 	// show output

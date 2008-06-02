@@ -52,7 +52,7 @@ if ($this->HasAccess("read")) {
 		{
 			$c++;
 			$pageB = $this->LoadPageById($page['id']);
-			$bodyB = explode("\n", $pageB['body']);
+			$bodyB = explode("\n", $this->htmlspecialchars_ent($pageB['body']));
 
 			if (isset($pageA))
 			{
@@ -69,7 +69,7 @@ if ($this->HasAccess("read")) {
 				{
 
 					// prepare bodies
-					$bodyA = explode("\n", $pageA['body']);
+					$bodyA = explode("\n", $this->htmlspecialchars_ent($pageA['body']));
 
 					$added = array_diff($bodyA, $bodyB);
 					$deleted = array_diff($bodyB, $bodyA);
