@@ -101,13 +101,13 @@ if ($this->HasAccess('read'))
 		if ($added)
 		{
 			// remove blank lines
-			$output .= "\n".'<h4 class="clear">'.WIKKA_DIFF_ADDITIONS_HEADER.'</h4>'."\n";
+			$output .= "\n".'<h5 class="clear">'.WIKKA_DIFF_ADDITIONS_HEADER.'</h5>'."\n";
 			$output .= '<ins>'.implode("\n", $added).'</ins>'."\n";
 		}
 
 		if ($deleted)
 		{
-			$output .= "\n".'<h4 class="clear">'.WIKKA_DIFF_DELETIONS_HEADER.'</h4>'."\n";
+			$output .= "\n".'<h5 class="clear">'.WIKKA_DIFF_DELETIONS_HEADER.'</h5>'."\n";
 			$output .= '<del>'.implode("\n", $deleted).'</del>'."\n";
 		}
 
