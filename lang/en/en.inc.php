@@ -835,7 +835,7 @@ define('HISTORY_REVISIONS_OF', 'History/revisions of %s'); // %s - page name
 // show
 define('SHOW_RE_EDIT_BUTTON', 'Re-edit this old revision');
 define('SHOW_ASK_CREATE_PAGE_CAPTION', 'This page doesn\'t exist yet. Maybe you want to %s it?'); // %s - page create link
-define('SHOW_OLD_REVISION_CAPTION', 'This is an old revision of %1$s from %2$s.'); // %1$s - page link; %2$s - timestamp
+define('SHOW_OLD_REVISION_CAPTION', 'This is an old revision of %1$s made by %2$s on %3$s.'); // %1$s - page link; %2$s - username; %3$s - timestamp; 
 define('COMMENTS_CAPTION', 'Comments');
 define('DISPLAY_COMMENTS_LABEL', 'Show comments');
 define('DISPLAY_COMMENT_LINK_DESC', 'Display comment');

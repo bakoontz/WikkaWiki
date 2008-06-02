@@ -54,9 +54,11 @@ else
 		if ($this->page['latest'] == 'N')
 		{
 			$pagelink = '<a href="'.$this->Href().'">'.$this->tag.'</a>';
-			echo '<div class="revisioninfo">'.sprintf(SHOW_OLD_REVISION_CAPTION,$pagelink,$this->Link($this->tag, 'revisions', $this->page['time']));
+			echo '<div class="revisioninfo">'."\n";
+			echo '<h4 class="clear">'.sprintf(WIKKA_REVISION_NUMBER, '<a href="'.$this->Href('', '', 'time='.urlencode($this->page['time'])).'">['.$this->page['id'].']</a>').'</h4>'."\n";
+			echo sprintf(SHOW_OLD_REVISION_CAPTION, $pagelink, $this->FormatUser($this->page['user']), $this->Link($this->tag, 'revisions', $this->page['time'], TRUE, TRUE, '', 'datetime'));
+			
 			// if this is an old revision, display some buttons
-			#if ($this->page['latest'] == 'N' && $this->HasAccess('write'))
 			if ($this->HasAccess('write'))
 			{
 				// added if encapsulation: in case where some pages were brutally deleted from database
