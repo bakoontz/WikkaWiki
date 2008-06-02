@@ -71,11 +71,9 @@ if ($this->HasAccess('read'))
 	}
 
 	$pageA_edited_by = $this->FormatUser($pageA['user']);
-	//if (!$this->LoadUser($pageA_edited_by)) $pageA_edited_by .= ' ('.WIKKA_UNREGISTERED_USER.')';
 	if ($pageA['note']) $noteA='['.$this->htmlspecialchars_ent($pageA['note']).']'; else $noteA ='';
 
 	$pageB_edited_by = $this->FormatUser($pageB['user']);
-	//if (!$this->LoadUser($pageB_edited_by)) $pageB_edited_by .= ' ('.WIKKA_UNREGISTERED_USER.')';
 	if ($pageB['note']) $noteB='['.$this->htmlspecialchars_ent($pageB['note']).']'; else $noteB ='';
 	
 	// If asked, call original diff
@@ -91,7 +89,7 @@ if ($this->HasAccess('read'))
 
 		//infobox
 		$info .= '<div class="revisioninfo">'."\n";
-		$info .= '<h3>Comparing <a title="Display the revision list for '.$pageA['tag'].'" href="'.$this->Href('revisions').'">revisions</a> for <a title="Return to the current revision of the page" href="'.$this->Href().'">'.$pageA['tag'].'</a></h3>'."\n";
+		$info .= '<h3>'.sprintf(DIFF_COMPARISON_HEADER, '<a title="'.sprintf(DIFF_REVISION_LINK_TITLE, $pageA['tag']).'" href="'.$this->Href('revisions').'">'.WIKKA_REVISIONS.'</a>', '<a title="'.DIFF_PAGE_LINK_TITLE.'" href="'.$this->Href().'">'.$pageA['tag'].'</a>').'</h3>'."\n";
 		$info .= '<ul style="margin: 10px 0;">'."\n";
 		$info .= '	<li><a href="'.$this->Href('show', '', 'time='.urlencode($pageA['time'])).'">['.$pageA['id'].']</a> '.sprintf(WIKKA_REV_WHEN_BY_WHO, '<a class="datetime" href="'.$this->Href('show','','time='.urlencode($pageA["time"])).'">'.$pageA['time'].'</a>', $pageA_edited_by).' <span class="pagenote smaller">'.$noteA.'</span></li>'."\n";
 		$info .= '	<li><a href="'.$this->Href('show', '', 'time='.urlencode($pageB['time'])).'">['.$pageB['id'].']</a> '.sprintf(WIKKA_REV_WHEN_BY_WHO, '<a class="datetime" href="'.$this->Href('show','','time='.urlencode($pageB["time"])).'">'.$pageB['time'].'</a>', $pageB_edited_by).' <span class="pagenote smaller">'.$noteB.'</span></li>'."\n";
@@ -148,12 +146,12 @@ if ($this->HasAccess('read'))
 		$sideB->init();
 
 		$info = '<div class="revisioninfo">'."\n";
-		$info .= '<h3>Comparing <a title="Display the revision list for '.$pageA['tag'].'" href="'.$this->Href('revisions').'">revisions</a> for <a title="Return to the current revision of the page" href="'.$this->Href().'">'.$pageA['tag'].'</a></h3>'."\n";
+		$info .= '<h3>'.sprintf(DIFF_COMPARISON_HEADER, '<a title="'.sprintf(DIFF_REVISION_LINK_TITLE, $pageA['tag']).'" href="'.$this->Href('revisions').'">'.WIKKA_REVISIONS.'</a>', '<a title="'.DIFF_PAGE_LINK_TITLE.'" href="'.$this->Href().'">'.$pageA['tag'].'</a>').'</h3>'."\n";
 		$info .= '<ul style="margin: 10px 0">'."\n";
 		$info .= '	<li><a href="'.$this->Href('show', '', 'time='.urlencode($pageA['time'])).'">['.$pageA['id'].']</a> '.sprintf(WIKKA_REV_WHEN_BY_WHO, '<a class="datetime" href="'.$this->Href('show','','time='.urlencode($pageA["time"])).'">'.$pageA['time'].'</a>', $pageA_edited_by).' <span class="pagenote smaller">'.$noteA.'</span></li>'."\n";
 		$info .= '	<li><a href="'.$this->Href('show', '', 'time='.urlencode($pageB['time'])).'">['.$pageB['id'].']</a> '.sprintf(WIKKA_REV_WHEN_BY_WHO, '<a class="datetime" href="'.$this->Href('show','','time='.urlencode($pageB["time"])).'">'.$pageB['time'].'</a>', $pageB_edited_by).' <span class="pagenote smaller">'.$noteB.'</span></li>'."\n";
 		$info .= '</ul>'."\n";
-		$info .= '<p><strong>Highlighting Guide:</strong> <ins>addition</ins> <del>deletion</del></p>'."\n"; #i18n
+		$info .= '<strong>'.HIGHLIGHTING_LEGEND.'</strong><ins>'.DIFF_SAMPLE_ADDITION.'</ins> <del>'.DIFF_SAMPLE_DELETION.'</del></p>'."\n"; #i18n
 		$info .= '</div>'."\n";
 		
 		while (1)

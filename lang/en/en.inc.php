@@ -674,11 +674,12 @@ define('PAGE_DELETION_CANCEL_BUTTON', 'Cancel');
 // diff
 define('ERROR_DIFF_LIBRARY_MISSING', 'The file <tt>'.WIKKA_LIBRARY_PATH.DIRECTORY_SEPARATOR.'diff.lib.php</tt> could not be found. You may want to notify the wiki administrator');
 define('ERROR_BAD_PARAMETERS', 'The parameters you supplied are incorrect, one of the two revisions may have been removed.');
-define('DIFF_FAST_COMPARISON_HEADER', 'Comparison of %1$s &amp; %2$s'); // %1$s - link to page A; %2$s - link to page B
-define('DIFF_COMPARISON_HEADER', 'Comparing %2$s to %1$s'); // %1$s - link to page A; %2$s - link to page B (yes, they're swapped!)
+define('DIFF_COMPARISON_HEADER', 'Comparing %1$s for %2$s'); // %1$s - link to revision list; %2$s - link to page
+define('DIFF_REVISION_LINK_TITLE', 'Display the revision list for %s'); // %s page name
+define('DIFF_PAGE_LINK_TITLE', 'Return to the latest version of this page');
 define('DIFF_SAMPLE_ADDITION', 'addition');
 define('DIFF_SAMPLE_DELETION', 'deletion');
-define('HIGHLIGHTING_LEGEND', '<strong>Highlighting Guide:</strong> %1$s %2$s'); // %1$s - sample added text; %2$s - sample deleted text
+define('HIGHLIGHTING_LEGEND', 'Highlighting Guide:');
 
 /**#@-*/
 
