@@ -59,27 +59,41 @@ else
 			echo '<p>';
 			echo sprintf(SHOW_OLD_REVISION_CAPTION, $pagelink, $this->FormatUser($this->page['user']), $this->Link($this->tag, 'revisions', $this->page['time'], TRUE, TRUE, '', 'datetime'));
 			
-			// if this is an old revision, display some buttons
-			if ($this->HasAccess('write'))
+			// added if encapsulation: in case where some pages were brutally deleted from database
+			if ($latest = $this->LoadPage($this->tag))
 			{
-				// added if encapsulation: in case where some pages were brutally deleted from database
-				if ($latest = $this->LoadPage($this->tag))
-				{
 ?>
 				<br />
-				<?php echo $this->FormOpen('edit') ?>
-				<input type="hidden" name="previous" value="<?php echo $latest['id'] ?>" />
-				<input type="hidden" name="body" value="<?php echo $this->htmlspecialchars_ent($this->page['body']) ?>" />
-				<input type="submit" value="<?php echo SHOW_RE_EDIT_BUTTON ?>" />
+				<?php echo $this->FormOpen('show', '', 'GET', '', 'left') ?>
+				<input type="hidden" name="time" value="<?php echo $_GET['time'] ?>" />
+				<input type="hidden" name="raw" value="<?php echo ($_GET['raw']==1)? '0' :' 1' ?>" />
+				<input type="submit" value="<?php echo ($_GET['raw']==1)? SHOW_FORMATTED_BUTTON : SHOW_SOURCE_BUTTON ?>" />&nbsp;
 				<?php echo $this->FormClose(); ?>
+<?php
+				// if this is an editable revision, display form
+				if ($this->HasAccess('write'))
+				{
+?>
+					<?php echo $this->FormOpen('edit') ?>
+					<input type="hidden" name="previous" value="<?php echo $latest['id'] ?>" />
+					<input type="hidden" name="body" value="<?php echo $this->htmlspecialchars_ent($this->page['body']) ?>" />
+					<input type="submit" value="<?php echo SHOW_RE_EDIT_BUTTON ?>" />
+					<?php echo $this->FormClose(); ?>
 <?php
 				}
 			}
-			echo '</p></div>';
+			echo '</p><div class="clear"></div></div>';
 		}
 
 		// display page
-		echo $this->Format($this->page['body'], 'wakka', 'page');
+		if ($_GET['raw'] == 1)
+		{
+			echo '<div class="wikisource">'.nl2br($this->htmlspecialchars_ent($this->page["body"], ENT_QUOTES)).'</div>';
+		}
+		else
+		{
+			echo $this->Format($this->page['body'], 'wakka', 'page');
+		}
 		//clear floats at the end of the main div
 		echo "\n".'<div style="clear: both"></div>'."\n";
 		echo "\n".'</div><!--closing page content-->'."\n\n";

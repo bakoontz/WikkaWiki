@@ -253,6 +253,17 @@ div.alertbox {
 	border: 1px solid #CCC; 		
 }
 
+/* simply left-float element */
+.left {
+	float:left;
+}
+
+/* simply right-float element */
+.right {
+	float:right;
+}
+
+
 .clear {clear:both;}
 
 /* text formatting */
