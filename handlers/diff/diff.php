@@ -94,19 +94,25 @@ if ($this->HasAccess('read'))
 		$info .= '	<li><a href="'.$this->Href('show', '', 'time='.urlencode($pageA['time'])).'">['.$pageA['id'].']</a> '.sprintf(WIKKA_REV_WHEN_BY_WHO, '<a class="datetime" href="'.$this->Href('show','','time='.urlencode($pageA["time"])).'">'.$pageA['time'].'</a>', $pageA_edited_by).' <span class="pagenote smaller">'.$noteA.'</span></li>'."\n";
 		$info .= '	<li><a href="'.$this->Href('show', '', 'time='.urlencode($pageB['time'])).'">['.$pageB['id'].']</a> '.sprintf(WIKKA_REV_WHEN_BY_WHO, '<a class="datetime" href="'.$this->Href('show','','time='.urlencode($pageB["time"])).'">'.$pageB['time'].'</a>', $pageB_edited_by).' <span class="pagenote smaller">'.$noteB.'</span></li>'."\n";
 		$info .= '</ul>'."\n";
+		$info .= $this->FormOpen('diff', '', 'GET');
+		$info .= '<input type="hidden" name="fastdiff" value="0" />'."\n";
+		$info .= '<input type="hidden" name="a" value="'.$_GET['a'].'" />'."\n";
+		$info .= '<input type="hidden" name="b" value="'.$_GET['b'].'" />'."\n";
+		$info .= '<input type="submit" value="'.DIFF_FULL_BUTTON.'" />';
+		$info .= $this->FormClose();		
 		$info .= '</div>'."\n";
 		
 		if ($added)
 		{
 			// remove blank lines
 			$output .= "\n".'<h5 class="clear">'.WIKKA_DIFF_ADDITIONS_HEADER.'</h5>'."\n";
-			$output .= '<ins><tt>'.nl2br(implode("\n", $added)).'</tt></ins>'."\n";
+			$output .= '<div class="wikisource"><ins>'.nl2br(implode("\n", $added)).'</ins></div>'."\n";
 		}
 
 		if ($deleted)
 		{
 			$output .= "\n".'<h5 class="clear">'.WIKKA_DIFF_DELETIONS_HEADER.'</h5>'."\n";
-			$output .= '<del><tt>'.nl2br(implode("\n", $deleted)).'</tt></del>'."\n";
+			$output .= '<div class="wikisource"><del>'.nl2br(implode("\n", $deleted)).'</del></div>'."\n";
 		}
 
 		if (!$added && !$deleted)
@@ -151,8 +157,14 @@ if ($this->HasAccess('read'))
 		$info .= '	<li><a href="'.$this->Href('show', '', 'time='.urlencode($pageA['time'])).'">['.$pageA['id'].']</a> '.sprintf(WIKKA_REV_WHEN_BY_WHO, '<a class="datetime" href="'.$this->Href('show','','time='.urlencode($pageA["time"])).'">'.$pageA['time'].'</a>', $pageA_edited_by).' <span class="pagenote smaller">'.$noteA.'</span></li>'."\n";
 		$info .= '	<li><a href="'.$this->Href('show', '', 'time='.urlencode($pageB['time'])).'">['.$pageB['id'].']</a> '.sprintf(WIKKA_REV_WHEN_BY_WHO, '<a class="datetime" href="'.$this->Href('show','','time='.urlencode($pageB["time"])).'">'.$pageB['time'].'</a>', $pageB_edited_by).' <span class="pagenote smaller">'.$noteB.'</span></li>'."\n";
 		$info .= '</ul>'."\n";
-		$info .= '<strong>'.HIGHLIGHTING_LEGEND.'</strong> <ins>'.DIFF_SAMPLE_ADDITION.'</ins> <del>'.DIFF_SAMPLE_DELETION.'</del></p>'."\n"; #i18n
+		$info .= $this->FormOpen('diff', '', 'GET');
+		$info .= '<input type="hidden" name="fastdiff" value="1" />'."\n";
+		$info .= '<input type="hidden" name="a" value="'.$_GET['a'].'" />'."\n";
+		$info .= '<input type="hidden" name="b" value="'.$_GET['b'].'" />'."\n";
+		$info .= '<input type="submit" value="'.DIFF_SIMPLE_BUTTON.'" />';
+		$info .= $this->FormClose();		
 		$info .= '</div>'."\n";
+		$info .= '<strong>'.HIGHLIGHTING_LEGEND.'</strong> <ins><tt>'.DIFF_SAMPLE_ADDITION.'</tt></ins> <del><tt>'.DIFF_SAMPLE_DELETION.'</tt></del></p>'."\n"; #i18n
 		
 		while (1)
 		{
@@ -209,7 +221,7 @@ if ($this->HasAccess('read'))
 		$sideB->copy_until_ordinal($count_total_right,$output);
 		$sideB->copy_whitespace($output);
 
-		$output = '<tt>'.nl2br($output).'</tt>';
+		$output = '<div class="wikisource">'.nl2br($output).'</div>';
 	}
 
 	// show output

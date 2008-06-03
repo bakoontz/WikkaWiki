@@ -56,6 +56,7 @@ else
 			$pagelink = '<a href="'.$this->Href().'">'.$this->tag.'</a>';
 			echo '<div class="revisioninfo">'."\n";
 			echo '<h4 class="clear">'.sprintf(WIKKA_REVISION_NUMBER, '<a href="'.$this->Href('', '', 'time='.urlencode($this->page['time'])).'">['.$this->page['id'].']</a>').'</h4>'."\n";
+			echo '<p>';
 			echo sprintf(SHOW_OLD_REVISION_CAPTION, $pagelink, $this->FormatUser($this->page['user']), $this->Link($this->tag, 'revisions', $this->page['time'], TRUE, TRUE, '', 'datetime'));
 			
 			// if this is an old revision, display some buttons
@@ -74,7 +75,7 @@ else
 <?php
 				}
 			}
-			echo '</div>';
+			echo '</p></div>';
 		}
 
 		// display page

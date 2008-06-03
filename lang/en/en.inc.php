@@ -679,6 +679,8 @@ define('DIFF_REVISION_LINK_TITLE', 'Display the revision list for %s'); // %s pa
 define('DIFF_PAGE_LINK_TITLE', 'Return to the latest version of this page');
 define('DIFF_SAMPLE_ADDITION', 'addition');
 define('DIFF_SAMPLE_DELETION', 'deletion');
+define('DIFF_SIMPLE_BUTTON', 'Simple Diff');
+define('DIFF_FULL_BUTTON', 'Full Diff');
 define('HIGHLIGHTING_LEGEND', 'Highlighting Guide:');
 
 /**#@-*/

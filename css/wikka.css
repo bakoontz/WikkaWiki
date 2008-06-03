@@ -285,6 +285,16 @@ tt {
 	color: #666;
 }
 
+.wikisource {
+	font-family: monospace;
+	font-size: 1.1em;
+	color: #666;
+	background-color: #F9F9F9;
+	border: 1px solid #CCC;
+	padding: 1em;
+	margin-bottom: .5em;
+}
+
 .hidden {
 	display: none;
 }

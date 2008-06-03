@@ -99,23 +99,23 @@ if ($this->HasAccess("read")) {
 					if ($added)
 					{
 						// remove blank lines
-						$output .= '<br />'."\n".'<h5 class="clear">'.WIKKA_DIFF_ADDITIONS_HEADER.'</h5>'."\n";
+						$output .= "\n".'<h5 class="clear">'.WIKKA_DIFF_ADDITIONS_HEADER.'</h5>'."\n";
 						//$output .= '<ins>'.$this->Format(implode("\n", $added)).'</ins>';
-						$output .= '<ins>'.implode("\n", $added).'</ins>';
+						$output .= '<div class="wikisource"><ins>'.implode("\n", $added).'</ins></div>';
 					}
 
 					if ($deleted)
 					{
-						$output .= '<br />'."\n".'<h5 class="clear">'.WIKKA_DIFF_DELETIONS_HEADER.'</h5>'."\n";
+						$output .= "\n".'<h5 class="clear">'.WIKKA_DIFF_DELETIONS_HEADER.'</h5>'."\n";
 						//$output .= '<del>'.$this->Format(implode("\n", $deleted)).'</del>';
-						$output .= '<del>'.implode("\n", $deleted).'</del>';
+						$output .= '<div class="wikisource"><del>'.implode("\n", $deleted).'</del></div>';
 					}
 
 					if (!$added && !$deleted)
 					{
 						$output .= "<br />\n".WIKKA_DIFF_NO_DIFFERENCES;
 					}
-					$output .= "<br class=\"clear\" />\n<hr /><br />\n";
+					$output .= '<br /><hr class="clear" />'."\n";
 				}
 			}
 			if (($pagesize_max = $this->GetConfigValue('pagesize_max')) && (strlen($output) > $pagesize_max))
