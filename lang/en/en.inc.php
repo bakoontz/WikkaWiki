@@ -858,8 +858,8 @@ define('COMMENT_TIME_CAPTION', '%s'); // %s comment time
  * Language constant used by the {@link showcode.php showcode} (page) handler
  */
 // showcode
-define('SOURCE_HEADING', 'Formatting code for %s'); // %s - page link
-define('SHOW_RAW_LINK_DESC', 'show source only');
+define('SOURCE_HEADING', 'Wiki source for %s'); // %s - page link
+define('SHOW_RAW_LINK_DESC', 'Show raw source');
 /**#@-*/
 
 /* ------------------ LIBS ------------------*/

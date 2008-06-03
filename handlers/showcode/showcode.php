@@ -34,7 +34,7 @@ if ($this->ExistsPage($this->tag))
 		// display raw page, slightly formatted for viewing
 		$pagelink = $this->Link($this->tag, '', $this->tag);
 		printf('<h4>'.SOURCE_HEADING.'</h4><br />', $pagelink);
-		echo '(<a href="'.$this->href('raw').'">'.SHOW_RAW_LINK_DESC.'</a>)<br /><br />';
+		echo '<p><a class="keys" href="'.$this->href('raw').'">'.SHOW_RAW_LINK_DESC.'</a></p>';
 		echo '<div class="wikisource">'.nl2br($this->htmlspecialchars_ent($this->page["body"], ENT_QUOTES)).'</div>';
 	}
 	else
