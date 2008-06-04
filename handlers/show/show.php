@@ -29,7 +29,15 @@
  * @uses		Wakka::LoadPage()
  * @uses		Wakka::FormatUser()
  * @uses		Wakka::UserIsOwner()
+ * 
+ * @todo 	validate all $_GET parameters
  */
+
+//constants
+define('SHOW_OLD_REVISION_SOURCE', 0); # if set to 1 shows by default the source of an old revision instead of the rendered version
+
+//validate URL parameters
+$raw = (!empty($_GET['raw']))? (int) $_GET['raw'] : SHOW_OLD_REVISION_SOURCE;
 
 echo "\n".'<!--starting page content-->'."\n";
 echo '<div class="page"';
@@ -66,8 +74,8 @@ else
 				<br />
 				<?php echo $this->FormOpen('show', '', 'GET', '', 'left') ?>
 				<input type="hidden" name="time" value="<?php echo $_GET['time'] ?>" />
-				<input type="hidden" name="raw" value="<?php echo ($_GET['raw']==1)? '0' :' 1' ?>" />
-				<input type="submit" value="<?php echo ($_GET['raw']==1)? SHOW_FORMATTED_BUTTON : SHOW_SOURCE_BUTTON ?>" />&nbsp;
+				<input type="hidden" name="raw" value="<?php echo ($raw == 1)? '0' :'1' ?>" />
+				<input type="submit" value="<?php echo ($raw == 1)? SHOW_FORMATTED_BUTTON : SHOW_SOURCE_BUTTON ?>" />&nbsp;
 				<?php echo $this->FormClose(); ?>
 <?php
 				// if this is an editable revision, display form
@@ -86,7 +94,7 @@ else
 		}
 
 		// display page
-		if ($_GET['raw'] == 1)
+		if ($raw == 1)
 		{
 			echo '<div class="wikisource">'.nl2br($this->htmlspecialchars_ent($this->page["body"], ENT_QUOTES)).'</div>';
 		}
