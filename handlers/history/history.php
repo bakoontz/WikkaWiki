@@ -101,14 +101,14 @@ if ($this->HasAccess("read")) {
 						// remove blank lines
 						$output .= "\n".'<h5 class="clear">'.WIKKA_DIFF_ADDITIONS_HEADER.'</h5>'."\n";
 						//$output .= '<ins>'.$this->Format(implode("\n", $added)).'</ins>';
-						$output .= '<div class="wikisource"><ins>'.implode("\n", $added).'</ins></div>';
+						$output .= '<div class="wikisource"><ins>'.nl2br(implode("\n", $added)).'</ins></div>';
 					}
 
 					if ($deleted)
 					{
 						$output .= "\n".'<h5 class="clear">'.WIKKA_DIFF_DELETIONS_HEADER.'</h5>'."\n";
 						//$output .= '<del>'.$this->Format(implode("\n", $deleted)).'</del>';
-						$output .= '<div class="wikisource"><del>'.implode("\n", $deleted).'</del></div>';
+						$output .= '<div class="wikisource"><del>'.nl2br(implode("\n", $deleted)).'</del></div>';
 					}
 
 					if (!$added && !$deleted)
