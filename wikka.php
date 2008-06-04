@@ -75,6 +75,7 @@ else
 {
 	if ($errors)
 	{
+		ob_start();
 		error_reporting(E_ALL);				// development mode
 	}
 	else
