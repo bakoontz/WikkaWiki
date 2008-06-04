@@ -62,26 +62,18 @@ $debug = (file_exists('debug')) ? TRUE : FALSE;
  * repository!) it's is simple to test a system without needing to edit (this)
  * code.
  */
-$errors = (file_exists('errors')) ? TRUE : FALSE;
+$track_errors = (file_exists('errors')) ? TRUE : FALSE;
+ob_start();							// need to pick up tracing messages
 /**
  * Interpret debugging and development/production modes.
  */
-if ($debug)
+if ($debug || $track_errors)
 {
-	ob_start();							// need to pick up tracing messages
 	error_reporting(E_ALL);				// always on for debug mode
 }
 else
 {
-	if ($errors)
-	{
-		ob_start();
-		error_reporting(E_ALL);				// development mode
-	}
-	else
-	{
-		error_reporting(E_ALL ^ E_NOTICE);	// production mode
-	}
+	error_reporting(E_ALL ^ E_NOTICE);	// production mode
 }
 // -------------------- END DEBUGGING AND ERROR REPORTING ---------------------
 
@@ -997,9 +989,11 @@ if(NULL != $user)
 //     - Wakka class instantiated
 //     - Compatibility library loaded
 if ($debug) echo "roll...<br/>\n";
+$debug_info = '';
 if (!$debug)
 {
-	ob_end_clean();	// in case there was a previous buffer left from debug mode!
+	$debug_info = ob_get_contents();
+	@ob_end_clean();	// in case there was a previous buffer left from debug mode!
 	ob_start();		// start buffering output
 }
 /**
@@ -1021,6 +1015,10 @@ if (!preg_match('/(xml|raw|mm|grabcode|mindmap_fullscreen)$/', $handler))
 	$totaltime = ($tend - $tstart);
 	//output result	// @@@ use paragraph
 	echo '<div class="smallprint">'.sprintf(PAGE_GENERATION_TIME, $totaltime)."</div>\n";	// @@@ should be paragraph
+	if ($track_errors)
+	{
+		echo '<p class="debuginfo">'.$debug_info.'</p>'."\n";
+	}
 	echo "</body>\n</html>";
 }
 // ------------------------------- PAGE ROLLED ---------------------------------
@@ -1068,7 +1066,7 @@ if (!isset($wakka->do_not_send_anticaching_headers) ||
  * @todo remove $page_length calculation above.
  */
 //header('Content-Length: '.$page_length);
-ob_end_clean();
+@ob_end_clean();
 
 /**
  * Output the page.
