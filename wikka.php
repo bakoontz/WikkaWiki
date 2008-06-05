@@ -11,11 +11,13 @@
  *
  * (...) Explain basic override mechanism @@@
  *
- * Because we are dealing with overrides here, not all of which need to be defined,
- * we do not assume any dependencies for these overrides: each stands on its own.
- * (Of course the override file itself may make use of dependencies, but that is up
- * to the administrator setting these up.)
- * All defined and valid override paths are converted to their canonical absolute form.
+ * Because we are dealing with overrides here, not all of which need
+ * to be defined, we do not assume any dependencies for these
+ * overrides: each stands on its own.  (Of course the override file
+ * itself may make use of dependencies, but that is up to the
+ * administrator setting these up.)
+ * All defined and valid override paths are converted to their
+ * canonical absolute form.
  *
  * @package		Wikka
  * @subpackage	Core
