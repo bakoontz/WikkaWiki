@@ -84,7 +84,7 @@ if (isset($_POST['submit']) && ($_POST['submit'] == EDIT_PREVIEW_BUTTON) && ($us
 <div class="page"<?php echo $ondblclick;?>>
 <?php
 if (!(preg_match(VALID_PAGENAME_PATTERN, $this->tag))) { //TODO use central regex library or (better!) IsWikiName()
-	echo '<em>'.sprintf(WIKKA_ERROR_INVALID_PAGENAME,$this->tag).'</em>';
+	echo '<em class="error">'.sprintf(WIKKA_ERROR_INVALID_PAGENAME,$this->tag).'</em>';
 }
 elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 {
@@ -286,7 +286,7 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 }
 else
 {
-	$message = '<em>'.$this->Format(ERROR_NO_WRITE_ACCESS).'</em><br />'."\n<br />\n";
+	$message = '<em class="error">'.$this->Format(ERROR_NO_WRITE_ACCESS).'</em><br />'."\n<br />\n";
 	if ($this->ExistsPage($this->tag)) $message .= '<a href="'.$this->Href('showcode').'" title="'.SHOWCODE_LINK_TITLE.'">'.SHOWCODE_LINK.'</a>'."<br />\n";
 	echo $message;
 }

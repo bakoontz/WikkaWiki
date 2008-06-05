@@ -134,7 +134,7 @@ TPLMMTEMPLATE;
 	echo $mm_template;
 
 } else {
-	echo '<span class="error"><em>'.ERROR_INVALID_MM_SYNTAX.'<br />'.sprintf(PROPER_USAGE_MM_SYNTAX,SAMPLE_SYNTAX1,SAMPLE_SYNTAX2).'</em></span>';
+	echo '<em class="error">'.ERROR_INVALID_MM_SYNTAX.'<br />'.sprintf(PROPER_USAGE_MM_SYNTAX,SAMPLE_SYNTAX1,SAMPLE_SYNTAX2).'</em>';
 }
 
 ?>

@@ -64,11 +64,11 @@ if ($comments = $this->LoadRecentComments())
 	}
 	if ($readable == 0)
 	{
-		echo '<em>'.RECENTCOMMENTS_NONE_ACCESSIBLE.'</em>';
+		echo '<em class="error">'.RECENTCOMMENTS_NONE_ACCESSIBLE.'</em>';
 	}
 }
 else
 {
-	echo '<em>'.RECENTCOMMENTS_NONE_FOUND.'</em>';
+	echo '<em class="error">'.RECENTCOMMENTS_NONE_FOUND.'</em>';
 }
 ?>

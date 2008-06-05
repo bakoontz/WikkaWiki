@@ -21,6 +21,6 @@ if ($pages = $this->LoadOrphanedPages())
 }
 else
 {
-	print '<em>'.NO_ORPHANED_PAGES.'</em>';
+	print '<em class="error">'.NO_ORPHANED_PAGES.'</em>';
 }
 ?>

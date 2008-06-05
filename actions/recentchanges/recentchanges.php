@@ -119,7 +119,7 @@ if ($pages = $this->LoadRecentlyChanged())
 	}
 	if ($readable == 0)
 	{
-		echo '<em>'.RECENTCHANGES_NONE_ACCESSIBLE.'</em>';
+		echo '<em class="error">'.RECENTCHANGES_NONE_ACCESSIBLE.'</em>';
 	}
 	echo '</ul>'."\n";
 
@@ -135,6 +135,6 @@ if ($pages = $this->LoadRecentlyChanged())
 }
 else
 {
-	echo '<em>'.RECENTCHANGES_NONE_FOUND.'</em>';
+	echo '<em class="error">'.RECENTCHANGES_NONE_FOUND.'</em>';
 }
 ?>

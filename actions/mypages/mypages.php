@@ -67,11 +67,11 @@ if (($this->IsAdmin() && !empty($username)) ||
 	}
 	else
 	{
-		echo '<em>'.OWNED_NO_PAGES.'</em>';
+		echo '<em class="error">'.OWNED_NO_PAGES.'</em>';
 	}
 }
 else
 {
-	echo '<em>'.OWNED_NOT_LOGGED_IN.'</em>';
+	echo '<em class="error">'.OWNED_NOT_LOGGED_IN.'</em>';
 }
 ?>

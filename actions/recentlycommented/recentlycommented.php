@@ -85,12 +85,12 @@ if ($comments = $this->LoadRecentlyCommented())
 	}
 	if ($readable == 0)
 	{
-		echo '<em>'.RECENTLYCOMMENTED_NONE_ACCESSIBLE.'</em>';
+		echo '<em class="error">'.RECENTLYCOMMENTED_NONE_ACCESSIBLE.'</em>';
 	}
 }
 else
 {
-	echo '<em>'.RECENTLYCOMMENTED_NONE_FOUND.'</em>';
+	echo '<em class="error">'.RECENTLYCOMMENTED_NONE_FOUND.'</em>';
 }
 
 ?>

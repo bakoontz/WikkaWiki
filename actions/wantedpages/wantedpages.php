@@ -105,7 +105,7 @@ if ($pages)
 }
 else
 {
-	print '<em>'.NO_WANTED_PAGES.'</em>';
+	print '<em class="error">'.NO_WANTED_PAGES.'</em>';
 }
 
 ?>
