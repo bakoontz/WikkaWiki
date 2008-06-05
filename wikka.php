@@ -1,6 +1,6 @@
 <?php
 /**
- * The Wikka main script.
+ * The Wikka mainscript.
  *
  * This file is called each time a request is made from the browser.
  * Most of the core methods used by the engine are located in the Wakka class.
@@ -21,7 +21,7 @@
  *
  * @package		Wikka
  * @subpackage	Core
- * @version		$Id: wikka.php 1042 2008-04-24 03:09:11Z BrianKoontz $
+ * @version		$Id$
  * @license		http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @see			/docs/Wikka.LICENSE
  * @filesource
@@ -90,7 +90,7 @@ $svn_version = '';
  * Used to generate WAKKA_VERSION value. Changes here may be be
  * modified during SVN checkin.
  */
-$svn_revision = '$Rev$';
+$svn_revision = '$Rev: 1134 $';
 if(empty($svn_version))
 {
 	list($t1, $svn_version, $t2) = explode(' ', $svn_revision);
