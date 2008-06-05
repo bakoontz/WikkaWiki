@@ -19,7 +19,7 @@
  *
  * @package		Wikka
  * @subpackage	Core
- * @version		$Id$
+ * @version		$Id: wikka.php 1042 2008-04-24 03:09:11Z BrianKoontz $
  * @license		http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @see			/docs/Wikka.LICENSE
  * @filesource
@@ -77,12 +77,26 @@ else
 }
 // -------------------- END DEBUGGING AND ERROR REPORTING ---------------------
 
-// ----------------------------- BASIC CONSTANTS -------------------------------
+// ---------------------------- VERSIONING ------------------------------------
 /**
  * Defines the current Wikka version.
- * Do not change the version number or you will have problems upgrading.
+ * Leave null except for release versions!
  */
-if (!defined('WAKKA_VERSION'))			define('WAKKA_VERSION', 'trunk-r1020');
+$svn_version = '';
+
+/**
+ * Used to generate WAKKA_VERSION value. Changes here may be be
+ * modified during SVN checkin.
+ */
+$svn_revision = '$Rev 9999 $';
+if(empty($svn_version))
+{
+	list($t1, $svn_version, $t2) = explode(' ', $svn_revision);
+	$svn_version = 'trunk-'.trim($svn_version);
+}
+if (!defined('WAKKA_VERSION')) define('WAKKA_VERSION', $svn_version);
+
+// ----------------------------- BASIC CONSTANTS -------------------------------
 /**
  * Defines the basic name the session name will be derived from.
  */
