@@ -2094,15 +2094,25 @@ if ($debug) echo 'SavePage calling... ';
 	 * @author		{@link http://wikkawiki.org/JavaWoman JavaWoman}
 	 * @copyright	Copyright © 2004, Marjolein Katsma
 	 * @license		http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
-	 * @version		1.0
+	 * @version		1.2
 	 *
-	 * @access		public
-	 * @uses		Wakka::getCount()
+	 * NOTE: v. 1.0 -> 1.1
+	 *		- name changed from ExistsPage() to existsPage() !!!
+	 *		- added $prefix param so it can be used from installer
+	 *		- added $current param so it checks by default for a current page only
+	 * The version 1.1 of this method was introduced in 1.1.6.4, lasted in 1.1.6.5 but
+	 * the new parameters added to the method are removed again since 1.1.7 for efficiency.
+	 * @access	 public
+	 * 
+	 * NOTE: v. 1.1 -> 1.2
+	 *  - removed $prefix, $dblink and $active parameters (back to the 1.0 version)
+	 *
+	 * @uses	 Wakka::getCount()
 	 *
 	 * @param		string	$page  page name to check
 	 * @return		boolean	TRUE if page exists, FALSE otherwise
 	 */
-	function ExistsPage($page)
+	function existsPage($page)
 	{
 		$where = "`tag` = '".mysql_real_escape_string($page)."'";
 		$count = $this->getCount('pages',$where);
@@ -2659,7 +2669,7 @@ if ($debug) echo "deleting 'pass".$this->GetConfigValue('wiki_suffix')."' at roo
 	 * @uses	Wakka::htmlspecialchars_ent()
 	 * @uses	Wakka::LoadPage()
 	 * @uses	Wakka::TrackLinkTo()
-	 * @uses	Wakka::ExistsPage()
+	 * @uses	Wakka::existsPage()
 	 *
 	 * @param	mixed	$tag		mandatory:
 	 * @param	string	$handler	optional:
@@ -3978,7 +3988,7 @@ if ($debug) echo 'GetUserName calling... ';
 	 * @author	{@link http://wikkawiki.org/DarTar Dario Taraborelli}
 	 *
 	 * @uses	Wakka::existsUser()
-	 * @uses	Wakka::ExistsPage()
+	 * @uses	Wakka::existsPage()
 	 * @uses	Wakka::Link()
 	 *
 	 * @param	string	$username	mandatory: name of user or hostname retrieved from the DB;
@@ -4002,8 +4012,8 @@ if ($debug) echo 'FormatUser calling... ';
 			if ($this->existsUser($username))
 			{
 				// check if userpage exists and if linking is enabled
-				#$formatted_user = ($this->ExistsPage($username) && ($link == 1)) ? $this->Link($username,'','','','','Open user profile for '.$username,'user') : '<span class="user">'.$username.'</span>'; // @@@ #i18n
-				$formatted_user = ($this->ExistsPage($username) && ((bool) $link)) ? $this->Link($username,'','','','','Open user profile for '.$username,'user') : '<span class="user">'.$username.'</span>'; // @@@ #i18n
+				#$formatted_user = ($this->existsPage($username) && ($link == 1)) ? $this->Link($username,'','','','','Open user profile for '.$username,'user') : '<span class="user">'.$username.'</span>'; // @@@ #i18n
+				$formatted_user = ($this->existsPage($username) && ((bool) $link)) ? $this->Link($username,'','','','','Open user profile for '.$username,'user') : '<span class="user">'.$username.'</span>'; // @@@ #i18n
 			}
 			else
 			{
