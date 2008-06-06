@@ -1,6 +1,6 @@
 <?php
 /**
- * The Wikka main script.
+ * The Wikka mainscript.
  *
  * This file is called each time a request is made from the browser.
  * Most of the core methods used by the engine are located in the Wakka class.
