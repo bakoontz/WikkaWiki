@@ -356,11 +356,7 @@ case "1.1.6.3":
 	@mysql_query('alter table '.$config['table_prefix'].'links drop index `idx_from`', $dblink), __('Already done?  OK!'), 0);
 	test("Adding sessions tracking table...",
 	mysql_query("create table ".$config['table_prefix']."sessions (sessionid char(40) NOT NULL, userid varchar(75) NOT NULL, PRIMARY KEY (sessionid, userid), session_start datetime NOT NULL)"), "Already done? OK!", 0);
-	test("Adding AdminUsers page...", 
-	mysql_query("insert into ".$config['table_prefix']."pages set tag = 'AdminUsers', body = '{{adminusers}}\n\n----\nCategoryAdmin', owner = '(Public)', note='".$upgrade_note."', user = 'WikkaInstaller', time = now(), latest = 'Y'", $dblink), "Already done? OK!", 0); 
-	test("Adding AdminPages page...", 
-	mysql_query("insert into ".$config['table_prefix']."pages set tag = 'AdminPages', body = '{{adminpages}}\n\n----\nCategoryAdmin', owner = '(Public)', note='".$upgrade_note."', user = 'WikkaInstaller', time = now(), latest = 'Y'", $dblink), "Already done? OK!", 0); 
-	update_default_page('SysInfo', $dblink, $config, $lang_defaults_path, $lang_defaults_fallback_path);
+	update_default_page(array('SysInfo', 'AdminUsers', 'AdminPages'), $dblink, $config, $lang_defaults_path, $lang_defaults_fallback_path);
 case "1.1.6.4":
 case "1.1.6.5":
 	update_default_page('FormattingRules', $dblink, $config, $lang_defaults_path, $lang_defaults_fallback_path);
