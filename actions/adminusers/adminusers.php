@@ -16,6 +16,21 @@
  * @author		{@link http://wikkawiki.org/DarTar Dario Taraborelli}
  * @since		Wikka 1.1.6.4
  *
+ * @uses Wakka::Action()
+ * @uses Wakka::ExistsPage()
+ * @uses Wakka::FormClose()
+ * @uses Wakka::FormOpen()
+ * @uses Wakka::getCount()
+ * @uses Wakka::GetUser()
+ * @uses Wakka::Href()
+ * @uses Wakka::htmlspecialchars_ent()
+ * @uses Wakka::IsAdmin()
+ * @uses Wakka::Link()
+ * @uses Wakka::LoadAll()
+ * @uses Wakka::Redirect()
+ *
+ * @uses Config::$wikka_action_path
+ * 
  * @input		integer $colcolor  optional: enables color for statistics columns
  *				1: enable colored columns;
  *				0: disable colored columns;
@@ -167,6 +182,9 @@ if ($this->IsAdmin($this->GetUser()))
 	//define('ADMINUSERS_FORM_MASSACTION_OPT_FEEDBACK','Send feedback to all'); #to be added in 1.1.7, see #608
 	define('ADMINUSERS_FORM_MASSACTION_SUBMIT','Submit');
 	define('ADMINUSERS_ERROR_NO_MATCHES','Sorry, there are no users matching "%s"');
+	define('ADMINUSERS_DELETE_USERS_HEADING', 'Delete these users?');
+	define('ADMINUSERS_DELETE_USERS_BUTTON', 'Delete Users');
+	define('ADMINUSERS_CANCEL_BUTTON', 'Cancel'); #TODO: replace with appropriate constant from language file!
 
 	//initialize row & column colors variables
 	$r = 1; #initialize row counter
@@ -196,25 +214,30 @@ if ($this->IsAdmin($this->GetUser()))
 	}
 	
 	//perform actions if required
-	if ($_GET['action'] == 'owned') 
+	$g_action = '';
+	if(isset($_GET['action']))
+	{
+		$g_action = $_GET['action'];
+	}
+	if($g_action == 'owned') 
 	{
 		echo $this->Action('mypages');
 	} 
-	elseif ($_GET['action'] == 'changes') 
+	elseif($g_action == 'changes') 
 	{
 		echo $this->Action('mychanges');
 	} 
-	elseif ($_GET['action'] == 'comments') 
+	elseif($g_action == 'comments') 
 	{
 		echo $this->Action('recentcomments');
 	} 
 	/*
-	elseif ($_GET['action'] == 'feedback' || $_REQUEST['mail']) 
+	elseif ($g_action == 'feedback' || $_REQUEST['mail']) 
 	{
 		echo $this->Action('userfeedback'); #to be added in 1.1.7, see #608
 	}
 	*/
-	elseif($_GET['action'] == 'delete')
+	elseif($g_action == 'delete')
 	{
 		if(isset($_GET['user']))
 		{
@@ -227,11 +250,11 @@ if ($this->IsAdmin($this->GetUser()))
 			}
 			else
 			{
-				$this->Redirect($this->Href());
+				$this->Redirect($this->Href(), USERDELETE_MESSAGE_SUCCESS);
 			}
 		}
 	}
-	else if($_GET['action'] == 'massdelete')
+	else if($g_action == 'massdelete')
 	{
 		$usernames = array();
 		foreach($_GET as $key=>$val)
@@ -243,17 +266,14 @@ if ($this->IsAdmin($this->GetUser()))
 		}
 		if(count($usernames) > 0)
 		{
-			?>
-			<h3>Delete these users?</h3><br/>
-			<ul>
-			<?php
+			echo '<h3>'.ADMINUSERS_DELETE_USERS_HEADING.'</h3><br />'."\n".'<ul>';
 			$errors = 0;
 			foreach($usernames as $username)
 			{
 				if($this->IsAdmin($username))
 				{
 					++$errors;
-					echo "<li><span class='disabled'>".$username."&nbsp;</span><em class='error'>(".ADMINUSERS_FORM_MASSACTION_DELETE_ERROR.")</em></li>\n";
+					echo '<li><span class="disabled">'.$username.'&nbsp;</span><em class="error">('.ADMINUSERS_FORM_MASSACTION_DELETE_ERROR.")</em></li>\n";
 					continue;
 				}
 				echo "<li>".$username."</li>\n";
@@ -279,9 +299,9 @@ if ($this->IsAdmin($this->GetUser()))
 						?>
 						<input type="hidden" name="massaction" value="massdelete"/>
 						<?php if($errors < count($usernames)) { ?>
-						<input type="submit" value="Delete Users"  style="width: 120px"   />
+						<input type="submit" value="<?php echo ADMINUSERS_DELETE_USERS_BUTTON;?>"  style="width: 120px"   />
 						<?php } ?>
-						<input type="button" value="Cancel" onclick="history.back();" style="width: 120px" />
+						<input type="button" value="<?php echo ADMINUSERS_CANCEL_BUTTON;?>" onclick="history.back();" style="width: 120px" />
 					</td>
 				</tr>
 			</table>
@@ -314,7 +334,7 @@ if ($this->IsAdmin($this->GetUser()))
 		}
 		else
 		{
-			$this->Redirect($this->Href());
+			$this->Redirect($this->Href(), USERDELETE_MESSAGE_SUCCESS);
 		}
 	}
 	else 
@@ -344,6 +364,7 @@ if ($this->IsAdmin($this->GetUser()))
 		$s = (isset($_GET['s'])) ? $_GET['s'] : ADMINUSERS_DEFAULT_START;
 	
 		// search string
+		$q = '';
 		if (isset($_POST['q']))
 		{
 			$q = $_POST['q'];
@@ -352,7 +373,7 @@ if ($this->IsAdmin($this->GetUser()))
 		{
 			$q = $_GET['q'];
 		}
-		elseif($_POST['submit'] == ADMINUSERS_FORM_SEARCH_SUBMIT)
+		elseif(isset($_POST['submit']) && $_POST['submit'] == ADMINUSERS_FORM_SEARCH_SUBMIT)
 		{
 			// Reset num recs per page for empty (reset) search
 			$l = ADMINUSERS_DEFAULT_RECORDS_LIMIT;
@@ -375,19 +396,15 @@ if ($this->IsAdmin($this->GetUser()))
 		// form is being used to process two post requests, so things
 		// (search string, num recs per page) get out of sync, requiring
 		// multiple submissions.
-		if(!isset($_GET['l']) && $_POST['submit'] != ADMINUSERS_FORM_PAGER_SUBMIT)
+		if(!isset($_GET['l']) && isset($_POST['submit']) && $_POST['submit'] != ADMINUSERS_FORM_PAGER_SUBMIT)
 		{
 			$l = ADMINUSERS_DEFAULT_RECORDS_LIMIT;
 		}
 	
 		// print page header
 		echo '<h3>'.ADMINUSERS_PAGE_TITLE.'</h3>'."\n";
-		$msg = '';
-		if($msg = $this->GetRedirectMessage())
-		{
-			echo '<p><em class="error">'.sprintf($msg).'</em></p>';
-		}
-	
+
+		//non-working message retrieval removed, see #753
 		// build pager form	
 		$form_filter = $this->FormOpen('','','post','user_admin_panel');
 		$form_filter .= '<fieldset><legend>'.ADMINUSERS_FORM_LEGEND.'</legend>'."\n";
