@@ -338,6 +338,8 @@ case "1.1.6.3":
 	@mysql_query("alter table ".$config["table_prefix"]."comments add status varchar(10) default NULL", $dblink), __('Already done?  OK!'), 0);
 	test(__('Adding field to users table to specify comment display default').'...', 
 	@mysql_query("alter table ".$config["table_prefix"]."users add default_comment_display int(10) unsigned NOT NULL default '1'", $dblink), __('Already done?  OK!'), 0);
+	test(__('Adding status field to users table...',
+	mysql_query('alter table '.$config['table_prefix'].'users add column status enum ("invited","signed-up","pending","active","suspended","banned","deleted")'), __('Already done? OK!'), 0); 
 	// Create new fields for comment_read_acl and comment_post_acl,
 	// and copy existing comment_acl values to these new fields
 	test(__('Creating new comment_read_acl field').'...',
