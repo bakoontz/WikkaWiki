@@ -1690,11 +1690,11 @@ if ($debug) echo "<br/>\n";
 	 * @uses	Wakka::GetConfigValue()
 	 * @uses	Wakka::LoadAll()
 	 *
-	 * @param	string	$sort	Sorting needed: Legal SQL expression after ORDER BY clause. Field names are count, time and tag.
+	 * @param	string	$sort	Sorting needed: Legal SQL expression after ORDER BY clause. Field names are count, time and page_tag.
 	 * @return	array
 	 * @todo	it would be useful to set a LIMIT ($max) here as well
 	 */
-	function LoadWantedPages2($sort='')
+	function LoadWantedPages($sort='')
 	{
 #echo 'sort: '.$sort."<br/>\n";
 		if (empty($sort))
@@ -1716,33 +1716,6 @@ if ($debug) echo "<br/>\n";
 				AND _pages2.latest = 'Y'
 			GROUP BY page_tag
 			ORDER BY ".$sort
-			);
-		return $pages;
-	}
-	/**
-	 * Load pages that need to be created.
-	 *
-	 * @access	public
-	 * @uses	Wakka::GetConfigValue()
-	 * @uses	Wakka::LoadAll()
-	 *
-	 * @param	string $sort Sorting needed: Legal SQL expression after ORDER BY clause. Field names are count, time and tag.
-	 * @return	array
-	 * @todo	it would be useful to set a LIMIT ($max) here as well
-	 */
-	function LoadWantedPages()		// #410
-	{
-		$pre = $this->GetConfigValue('table_prefix');
-		$pages = $this->LoadAll("
-			SELECT DISTINCT ".
-				$pre."links.to_tag AS page_tag,
-				COUNT(".$pre."links.from_tag) AS count
-			FROM ".$pre."links
-			LEFT JOIN ".$pre."pages
-				ON ".$pre."links.to_tag = ".$pre."pages.tag
-			WHERE ".$pre."pages.tag IS NULL
-			GROUP BY page_tag
-			ORDER BY count DESC"
 			);
 		return $pages;
 	}

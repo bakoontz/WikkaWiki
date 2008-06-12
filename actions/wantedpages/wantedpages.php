@@ -27,7 +27,6 @@
  *
  * @uses	Wakka::Link()
  * @uses	Wakka::LoadWantedPages()
- * @uses	Wakka::LoadWantedPages2()
  * @uses	Wakka::FormOpen()
  * @uses	Wakka::FormClose()
  *
@@ -35,57 +34,42 @@
  */
 
 $sorting_fields = array('count', 'time', 'page_tag');
-if ((isset($vars) && is_array($vars) && isset($vars['option']) && $vars['option'] == 'v2') || (isset($_GET['ob1'])))
+$sort = '';
+for ($i = 1; $i <= 3; $i ++)
 {
-	$sort = '';
-	for ($i = 1; $i <= 3; $i ++)
+	if (isset($_GET['ob'.$i]))
 	{
-		if (isset($_GET['ob'.$i]))
+		if (in_array($_GET['ob'.$i], $sorting_fields))
 		{
-			if (in_array($_GET['ob'.$i], $sorting_fields))
+			if ($sort)
 			{
-				if ($sort)
-				{
-					$sort .= ',';
-				}
-				$sort .= $_GET['ob'.$i].' ';
-				if (isset($_GET['de'.$i]))
-				{
-					$sort .= 'desc';
-				}
+				$sort .= ',';
 			}
-		}
-	}
-	// @@@ really use this if all sort params are empty? You get
-	// different output that way than from the first time without sorting, which is confusing
-	if ($pages = $this->LoadWantedPages2($sort))	// @@@ array -> list
-	{
-		foreach ($pages as $page)
-		{
-			print($this->Link($page['page_tag']));
-			if ($page['count'] > 1)
+			$sort .= $_GET['ob'.$i].' ';
+			if (isset($_GET['de'.$i]))
 			{
-				print(' (<a href="'.$this->Href('backlinks', $page['page_tag']).'" title="'.sprintf(WIKKA_BACKLINKS_LINK_TITLE, $page['page_tag']).'">'.$page['count']."</a>)<br />\n");
-			}
-			else
-			{
-				preg_match('#/(.*)$#', $page['time'], $match);
-				$pagetime = $match[1];
-				print(' (1 : '.$this->Link($pagetime).' <small>['.$this->Link($pagetime, 'edit', WIKKA_PAGE_EDIT_LINK_DESC, FALSE, TRUE, sprintf(WIKKA_PAGE_EDIT_LINK_TITLE, $pagetime))."]</small>)<br />\n");
+				$sort .= 'desc';
 			}
 		}
 	}
 }
-elseif ($pages = $this->LoadWantedPages())
+if ($pages = $this->LoadWantedPages($sort))	// @@@ array -> list
 {
-	// @@@ use array -> list
 	foreach ($pages as $page)
 	{
-		print($this->Link($page['page_tag']).' (<a href="'.$this->Href('backlinks', $page['page_tag']).'" title="'.sprintf(WIKKA_BACKLINKS_LINK_TITLE, $page['page_tag']).'">'.$page['count']."</a>)<br />\n");
+		print($this->Link($page['page_tag']));
+		if ($page['count'] > 1)
+		{
+			print(' (<a href="'.$this->Href('backlinks', $page['page_tag']).'" title="'.sprintf(WIKKA_BACKLINKS_LINK_TITLE, $page['page_tag']).'">'.$page['count']."</a>)<br />\n");
+		}
+		else
+		{
+			preg_match('#/(.*)$#', $page['time'], $match);
+			$pagetime = $match[1];
+			print(' (1 : '.$this->Link($pagetime).' <small>['.$this->Link($pagetime, 'edit', WIKKA_PAGE_EDIT_LINK_DESC, FALSE, TRUE, sprintf(WIKKA_PAGE_EDIT_LINK_TITLE, $pagetime))."]</small>)<br />\n");
+		}
 	}
-}
-if ($pages)
-{
+
 	// adding form to control sorting
 	$options = '<option value="">&nbsp;</option>';
 	foreach ($sorting_fields as $i)
