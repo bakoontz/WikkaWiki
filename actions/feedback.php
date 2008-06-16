@@ -13,10 +13,10 @@ if(isset($_POST["comments"])) $comments = $_POST["comments"];
 
 $form = "<p>Fill in the form below to send us your comments:</p>".
             $this->FormOpen().
-            "\nName: <input name=\"name\" value=\"".$name."\" type=\"text\" /><br />".
+            "\nName: <input name=\"name\" value=\"".$this->htmlspecialchars_ent($name)."\" type=\"text\" /><br />".
             "\n<input type=\"hidden\" name=\"mail\" value=\"result\">".
-            "\nEmail: <input name=\"email\" value=\"".$email."\" type=\"text\" /><br />".
-            "\nComments:<br />\n<textarea name=\"comments\" rows=\"15\" cols=\"40\">".$comments."</textarea><br / >".
+            "\nEmail: <input name=\"email\" value=\"".$this->htmlspecialchars_ent($email)."\" type=\"text\" /><br />".
+            "\nComments:<br />\n<textarea name=\"comments\" rows=\"15\" cols=\"40\">".$this->htmlspecialchars_ent($comments)."</textarea><br / >".
             "\n<input type=\"submit\" value=\"Send\" />".
             $this->FormClose();
 
