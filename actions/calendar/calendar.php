@@ -26,6 +26,7 @@
  *
  * @author		{@link http://wikkawiki.org/GmBowen GmBowen} (first draft)
  * @author		{@link http://wikkawiki.org/JavaWoman JavaWoman} (more modifications)
+ * @author		{@link http://wikkawiki.org/JensFischer JensFischer} (modification to allow Monday as first weekday) 
  * @since		Wikka 1.1.6.0
  *
  * @uses		Wakka::Href()
@@ -38,7 +39,7 @@
  * @output		data table for specified or current month
  *
  * @todo		take care we don't go over date limits for PHP with navigation links
- * @todo		configurable first day of week
+ * @todo		configurable first day of week (partly solved, see 'FIRST_DOW' constant)
  * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
  */
@@ -50,6 +51,8 @@ define('MIN_DATETIME', strtotime('1970-01-01 00:00:00 GMT'));		# earliest timest
 define('MAX_DATETIME', strtotime('2038-01-19 03:04:07 GMT'));		# latest timestamp PHP can handle
 define('MIN_YEAR', date('Y',MIN_DATETIME));
 define('MAX_YEAR', date('Y',MAX_DATETIME)-1);						# don't include partial January 2038
+define('FIRST_DOW', 'Sunday'); // set this to "Monday" or "Sunday" (#780)
+
 /**
  * not quite constants
  */
@@ -110,6 +113,14 @@ if (is_array($vars))
 // derive which weekday the first is on
 $datemonthfirst = sprintf('%4d-%02d-%02d',$year,$month,1);
 $firstwday = strftime('%w',strtotime($datemonthfirst));												# i18n
+#+first DOW configurable (#780)
+if (strtolower(FIRST_DOW) == "monday") {
+    $firstwday -= 1;
+    if ($firstwday < 0) {
+        $firstwday = 6;
+    }
+}
+#-first DOW configurable 
 
 // derive (locale-specific) caption text
 $monthYear	= strftime(LOC_MON_YEAR,strtotime($datemonthfirst));									# i18n
@@ -148,7 +159,8 @@ if (!$hasActionParams)
 }
 
 // build array with names of weekdays (locale-specific)
-$tmpTime	= strtotime("this Sunday");			# get a starting date that is a Sunday
+$tmpTime = strtotime("this ". FIRST_DOW); #780
+#$tmpTime	= strtotime("this Sunday");			# get a starting date that is a Sunday
 $tmpDate	= date('d',$tmpTime);
 $tmpMonth	= date('m',$tmpTime);
 $tmpYear	= date('Y',$tmpTime);
