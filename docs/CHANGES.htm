@@ -2,7 +2,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
 <head>
-    <title>WikkaReleaseNotes1164</title>
+    <title>WikkaReleaseNotes1165</title>
     <meta http-equiv="Content-Type" content="text/html;
 charset=iso-8859-1" />
     <style type="text/css">
@@ -1153,66 +1153,36 @@ table.acls {
 <a class="" href="http://docs.wikkawiki.org/WikkaReleaseNotes">Wikka Changelog</a><br />
 <hr />
 
-<h2> <a class="" href="http://docs.wikkawiki.org/WhatsNew1164">Wikka 1.1.6.4</a> Release Notes </h2>
+<h2> <a class="" href="http://docs.wikkawiki.org/WhatsNew1165">Wikka 1.1.6.5</a> Release Notes </h2>
 
-<span class="notes"><a class="ext" href="http://wikkawiki.org/HomePage">1.1.6.4-RC1</a> released on February 20, 2008</span><br />
-<span class="notes">1.1.6.4 released March 2008</span><br />
+<span class="notes">1.1.6.5 released on June 24, 2008</span><br />
 <br />
 <div class="floatr"><h5>See also:</h5>
 
-<ul><li><strong><a class="" href="http://docs.wikkawiki.org/WhatsNew1164">What's new in 1.1.6.4</a></strong></li></ul>
+<ul><li><strong><a class="" href="http://docs.wikkawiki.org/WhatsNew1165">What's new in 1.1.6.5</a></strong></li></ul>
 </div><h5>Acknowledgments</h5>
-Thanks to: <a class="interwiki" href="http://wikkawiki.org/RaffaR">Raffa</a>, vi390, WazoO, <a class="interwiki" href="http://wikkawiki.org/DbieL">DbieL</a>, <a class="interwiki" href="http://wikkawiki.org/GregorLindner">GregorLindner</a>, AntonyKing, <a class="interwiki" href="http://wikkawiki.org/BaZtien">BaZtien</a>, Fishy, Rob Petty, Seven0fx, texnofobix, <a class="interwiki" href="http://wikkawiki.org/WillyPs">WillyPs</a>, arfonzo, <a class="interwiki" href="http://wikkawiki.org/KrzysztofTrybowski">KrzysztofTrybowski</a>, DomBonj, Buglet and many regulars on <tt><a class="interwiki" href="http://wikkawiki.org/TheLounge">#wikka</a></tt><div class="clear">&nbsp;</div>
 
-<br />
-<h5>New/improved functionality</h5>
-
-<ul><li> New <strong><a class="" href="http://docs.wikkawiki.org/UserAdministration">user administration module</a></strong> (accessible via the <tt>AdminUsers</tt> system page) to manage Wikka users. Ticket: 25
-</li><li> New <strong><a class="" href="http://docs.wikkawiki.org/PageAdministration">page administration module</a></strong> (accessible via the <tt>AdminPages</tt> system page) to manage pages and perform several maintenance operations on wiki pages (including mass reversions). Ticket: 26
-</li><li> New config option to <strong><a class="" href="http://docs.wikkawiki.org/ConfigurationOptions">disable new user registrations</a></strong>. Ticket: 236
-</li><li> A new lightweight <strong><a class="" href="http://docs.wikkawiki.org/UserRegistrationValidationFramework">user registration framework</a></strong> to facilitate creation of plug-in modules for registration validation schemes. Default install includes the <tt>URInviteCode</tt> module (but it must be <a class="" href="http://docs.wikkawiki.org/UserRegistrationValidationFramework">enabled first</a>). Ticket: 609
-</li><li> New Wikka editor (<strong>WikkaEdit</strong>) to replace WikiEdit, with more Wikka-specific functionality and improved cross-browser compatibility. Ticket: 578
-</li><li> New <strong><a class="" href="http://docs.wikkawiki.org/RevertHandlerInfo">reversion handler</a></strong> to allow rollback of page versions to previous versions. Ticket: 566
-</li><li> Module for <strong>mass user deletion</strong> (via the UserAdministration panel). Ticket: 442
-</li><li> <strong>Revision numbers</strong> now displayed in recentchanges, revisions and page history. Ticket: 650
-</li><li> <strong><tt><a class="" href="http://docs.wikkawiki.org/DbInfoActionInfo">{{dbinfo}}</a></tt></strong> A simple admin-only action to provide information about the <a class="" href="http://docs.wikkawiki.org/DbInfoActionInfo">structure of the database and tables used in Wikka</a>. Ticket: 27
-</li><li> New <strong><tt><a class="" href="http://docs.wikkawiki.org/WikkaConfigActionInfo">{{wikkaconfig}}</a></tt></strong> action displaying the <a class="" href="http://docs.wikkawiki.org/ConfigurationOptions">system settings</a> for the current wiki (accessible via the <tt>SysInfo</tt> page). Ticket: 669
-</li><li> Improved <strong><tt><a class="" href="http://docs.wikkawiki.org/HighScoresActionInfo">{{highscores}}</a></tt></strong> action, displaying top contributors ranked by <em>pages owned</em>, <em>edits</em> or <em>comments</em>. Tickets: 681, 688.
-</li><li> <strong>GeSHi</strong> (syntax highlighting library) updated to latest version (1.0.7.20). Ticket: 573
-</li><li> Various documentation changes/edits for better clarity and disambiguation. Tickets: 646, 601
-</li><li> Headers and footers now templatized to facilitate customization. Ticket: 146
-</li><li> Improved detection of <tt>mod_rewrite</tt> availability. Ticket: 575
-</li><li> Simplified WikiCategory default page. Ticket: 646
-</li><li> After installation, user is automatically logged in as administrator. Ticket: 571
-</li><li> Improved source code documentation (including links to docs server). Ticket: 632
-</li><li> Better consistency across application with styling of error messages. Ticket: 598</li></ul>
-<br />
-<h5>Security</h5>
-
-<ul><li> System version information now hidden to all but admins in SysInfo page (thanks Raffa). Ticket: 597
-</li><li> All Wikka releases (zipfiles and tarballs) are now <a class="" href="http://docs.wikkawiki.org/WikkaSecurity">distributed with digital signatures and checksums</a> for verification. Ticket: 454
-</li><li> A more strict policy for files that can be listed by the <tt><a class="" href="http://docs.wikkawiki.org/AttachmentInfo">{{files}}</a></tt> action and files that can be downloaded with the <tt>files.xml</tt> handler: Any file beginning with a dot is now prohibited. Ticket: 692
-</li><li> Version removed from footer (except when logged in as admin). Ticket: 680</li>
-<li> New <strong><a class="" href="http://docs.wikkawiki.org/CheckVersionActionInfo">checkversion action</a></strong> that displays a message when a newer version of WikkaWiki is available.  Enabled by default on initial HomePage, SysInfo, AdminPages, and AdminUsers pages.</li></ul>
+Thanks to ajmh, Vincent Fretin, VokinLoksar, BugMeNot for feedback, bug reports and patches.<br />
 <br />
 <h5>Bug fixes</h5>
 
-<ul><li> More informative messages when users attempt to register with a WikiName that's already taken, or attempt to log into a deleted/inactivated account. Ticket: 622
-</li><li> Proper handling of metacharacters when used in searches. Ticket: 644
-</li><li> Force browsers to reload new stylesheets when accessing a Wikka site that has been updated with a later version. Ticket: 600
-</li><li> Improved XHTML/CSS validation. Tickets: 579, 580, 555
-</li><li> Properly clearing floats before the comments block. Ticket #683
-</li><li> More robust validation of e-mail addresses during installation process. Ticket: 565, 540
-</li><li> Fixed sizing issues with editor window. Ticket: 576, 375, 43
-</li><li> Duplicate default pages are no longer created should a user inadvertently delete wikka.config.php and attempt a re-install or upgrade. Ticket: 216
-</li><li> Revisions and recent changes are now sorted by <tt>id</tt> instead of <tt>time</tt> for more consistent ordering of pages created at the same time by the installer. Ticket: 672
-</li><li> Wrong list markup in default FormattingRules. Ticket: 303
-</li><li> The scheme (http or https) part of <tt>base_url</tt> is now detected correctly. Ticket: 575</li></ul>
-<br />
-<h5>Minor issues</h5>
-
-<ul><li> Browse the <a class="ext" href="http://wush.net/trac/wikka/query?status=closed&amp;milestone=1.1.6.4">full list</a> of tickets closed in <a class="" href="http://docs.wikkawiki.org/WhatsNew1164">1.1.6.4</a>.
-</li><li> If rewrite engine is enabled, users who set up Wikka behind a non-standard port <strong>must</strong> change the base_url to reflect this port in the <tt>wikka.config.php</tt> file. Ticket: 702</li></ul>
-<div class="smallprint">Page was generated in 5.4859 seconds</div>
+<ul><li>Fixed wrong display of links in WantedPages with MySQL 5 (credits: Vincent Fretin). Ticket: 309.
+</li><li>Changed <tt>{{include}}</tt> action to display more user-friendly message based on target page ACL. Ticket: 710
+</li><li>Added utilities and compatibility methods. Ticket: 721.
+</li><li>Version check was not working correctly with the Alternative PHP Cache installed (credits: VokinLoksar). Ticket: 740
+</li><li>(PHP 5 compatibility) Fixed issue when instantiating <tt>Wakka</tt> object (credits: VokinLoksar). Ticket: 741
+</li><li>(PHP 5 compatibility) Fixed issue preventing the creation of tables when no prefix is specified (credits: VokinLoksar). Ticket: 742
+</li><li>Referrers in 1.1.6.4 were not correctly logged. Ticket: 746
+</li><li>Minor cleanup of <tt>{{adminusers}}</tt> action. Ticket: 753 
+</li><li>Preventing comments on non-existing pages. Ticket: 747
+</li><li>Correcting path handling in cookies. Ticket: 748, 767, 768
+</li><li>Simplified installer: removing GeSHi configuration. Ticket: 751
+</li><li>Fixing broken revision links from revision feed. Ticket: 759  
+</li><li>Fixing broken help link in WikkaEdit. Ticket: 760  
+</li><li>Replacing invalid character in default suffix for cookie. Ticket: 761
+</li><li>XHTML validation in user registration module. Ticket: 763 (credits: BugMeNot)
+</li><li>Fixed incorrect description of markup for headings in FormattingRules. Ticket: 758 
+</li><li>Corrected typo in HighScores action. Ticket: 720</li></ul>
+<div class="smallprint">Page was generated in 0.1078 seconds</div>
 </body>
 </html>
