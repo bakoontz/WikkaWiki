@@ -139,7 +139,8 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 	{
 		$thing = $things[0];
 		$result='';
-
+		$valid_filename = '';
+		
 		static $oldIndentLevel = 0;
 		static $oldIndentLength= 0;
 		static $indentClosers = array();
@@ -163,7 +164,6 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 		static $trigger_center = 0;
 		static $trigger_l = array(-1, 0, 0, 0, 0, 0);
 		static $output = '';
-		static $valid_filename = '';
 		static $invalid = '';
 		static $curIndentType;
 
