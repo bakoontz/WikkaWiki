@@ -63,6 +63,8 @@ $highlight_note = '';
 $edit_note_field = '';
 $note = '';
 $ondblclick = ''; //#123
+$body = '';
+
 if ($this->GetConfigValue('edit_buttons_position') == 'top' || $this->GetConfigValue('edit_buttons_position') == 'bottom')
 {
 	$buttons_position = $this->GetConfigValue('edit_buttons_position');
@@ -93,9 +95,8 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 	if ($newtag !== '') $this->Redirect($this->Href('edit', $newtag));
 
 	// Process id GET param if present
-	$body = '';
 	$id = $this->page['id'];
-	if($_GET['id'])
+	if(isset($_GET['id']))
 	{
 		$page = $this->LoadPageById(mysql_real_escape_string($_GET['id']));
 		if($page['tag'] != $this->page['tag'])
