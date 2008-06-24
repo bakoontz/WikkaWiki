@@ -1,16 +1,9 @@
-Wikka Changelog <http://docs.wikkawiki.org/WikkaReleaseNotes>
+Wikka Changelog
 ------------------------------------------------------------------------
 
+Wikka 1.1.6.5 Release Notes
 
-    Wikka 1.1.6.5 <http://docs.wikkawiki.org/WhatsNew1165> Release Notes
-
-1.1.6.5 released on June 21, 2008
-
-
-          See also:
-
-    * *What's new in 1.1.6.5 <http://docs.wikkawiki.org/WhatsNew1165>*
-
+1.1.6.5 released on June 24, 2008
 
           Acknowledgments
 
@@ -45,5 +38,3 @@ reports and patches.
     * Fixed incorrect description of markup for headings in
       FormattingRules. Ticket: 758
     * Corrected typo in HighScores action. Ticket: 720
-
-Page was generated in 0.0722 seconds
