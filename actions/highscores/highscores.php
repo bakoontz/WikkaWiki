@@ -33,6 +33,7 @@
 //defaults
 define('HIGHSCORES_DISPLAY_TOP', 10); //limit output to top n users
 define('HIGHSCORES_DEFAULT_STYLE', 'complex'); //set default layout style
+$table = '';
 
 //valid options
 $valid_styles = array('complex','simple');
