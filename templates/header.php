@@ -95,6 +95,13 @@ if ($this->GetHandler() != 'edit' && $this->GetConfigValue('enable_rss_autodisco
 	$rss_links .= '	<link rel="alternate" type="application/rss+xml" title="'.sprintf(RSS_RECENTCHANGES_TITLE,$wikiname).' (RSS '.RSS_RECENTCHANGES_VERSION.')" href="'.$this->Href('recentchanges.xml', $pagetag).'" />'."\n"; // @@@ pagetag needed for Href??
 }
 
+// Init UniversalEditButton (http://universaleditbutton.org/Universal_Edit_Button)
+$ueb = '';
+if ($this->GetHandler() != 'edit' && $this->HasAccess("write", $pagetag))
+{
+	$ueb .= "\t".'<link rel="alternate" type="application/x-wiki" title="'.sprintf(WIKKA_PAGE_EDIT_LINK_TITLE, $pagetag).'" href="'.$this->Href('edit', $pagetag).'"/>'."\n";
+}
+
 // Init Page title + backlinks-link
 $homepage_url = $this->href('', $this->GetConfigValue('root_page'), '');
 $backlinks_url = $this->href('backlinks', '', '');
@@ -122,14 +129,17 @@ else
 <head>
 	<title><?php echo $doctitle; ?></title>
 	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-<?php echo $extra_meta; ?>
+<?php 
+echo $extra_meta; 
+echo $rss_links;
+echo $ueb;
+?>
+	<link rel="icon" href="<?php echo $href_favicon; ?>" type="image/x-icon" />
+	<link rel="shortcut icon" href="<?php echo $href_favicon; ?>" type="image/x-icon" />
 	<link rel="stylesheet" type="text/css" href="<?php echo $href_main_stylesheet; ?>" />
 	<link rel="stylesheet" type="text/css" href="<?php echo $href_comment_stylesheet; ?>" />
 	<link rel="stylesheet" type="text/css" href="<?php echo $href_print_stylesheet; ?>" media="print" />
-	<link rel="icon" href="<?php echo $href_favicon; ?>" type="image/x-icon" />
-	<link rel="shortcut icon" href="<?php echo $href_favicon; ?>" type="image/x-icon" />
-<?php 
-echo $rss_links;
+<?php
 // output headers added via Wakka::AddCustomHeader()
 if (isset($this->additional_headers) && is_array($this->additional_headers) && count($this->additional_headers) > 0)
 {
