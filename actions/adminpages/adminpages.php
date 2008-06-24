@@ -231,6 +231,9 @@ if ($this->IsAdmin($this->GetUser()))
 	$r = 1; #initialize row counter
 	$r_color = ADMINPAGES_ALTERNATE_ROW_COLOR; #get alternate row color option
 	$c_color = ADMINPAGES_STAT_COLUMN_COLOR; #get column color option
+	$count = '';
+	$group = '';
+	$form_mass = '';
 	// record dropdown
 	$page_limits = unserialize(ADMINPAGES_DEFAULT_RECORDS_RANGE);
 	// pager
