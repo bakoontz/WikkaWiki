@@ -76,6 +76,9 @@
 	echo $this->existsUser() ? '<a href="'.$this->href("referrers").'" title="'.REFERRERS_LINK_TITLE.'">'.REFERRERS_LINK_DESC.'</a> :: ' : ''
 ?> 
 <label for="src_phrase"><?php echo SEARCH_LABEL;?></label> <input id="src_phrase" name="phrase" size="15" class="searchbox" />
+<div class="license">
+	<?php echo $this->Action("license type='CC-BY-SA' display='button'"); ?>
+</div>
 <?php echo $this->FormClose(); ?>
 </div><!-- end footer -->
 
