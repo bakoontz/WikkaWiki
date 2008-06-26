@@ -76,12 +76,11 @@
 	echo $this->existsUser() ? '<a href="'.$this->href("referrers").'" title="'.REFERRERS_LINK_TITLE.'">'.REFERRERS_LINK_DESC.'</a> :: ' : ''
 ?> 
 <label for="src_phrase"><?php echo SEARCH_LABEL;?></label> <input id="src_phrase" name="phrase" size="15" class="searchbox" />
+<?php echo $this->FormClose(); ?>
+</div><!-- end footer -->
 <div class="license">
 	<?php echo $this->Action("license type='CC-BY-SA' display='button'"); ?>
 </div>
-<?php echo $this->FormClose(); ?>
-</div><!-- end footer -->
-
 <div class="smallprint">
 <?php echo $this->Link("http://validator.w3.org/check/referer", "", "Valid XHTML 1.0 Transitional") ?> ::
 <?php echo $this->Link("http://jigsaw.w3.org/css-validator/check/referer", "", "Valid CSS") ?> ::

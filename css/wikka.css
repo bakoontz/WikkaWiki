@@ -53,11 +53,8 @@ form, h1, h2, h3, h4, h5 {
 }
 
 .license {
-	float:right;
-	margin-left: 10px;
-	margin-right: 0px;
-	margin-top: 10px;
-	margin-bottom: 1px;
+        float:right;
+        margin: 5px 5px 5px 10px;
 }
 
 /* links */
