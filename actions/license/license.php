@@ -49,6 +49,7 @@
  * @todo		add option to embed license metadata
  * @todo		replace hardcoded paths and URI #718 
  * @todo		CSS selectors
+ * @todo		complete phpdoc header
  */
 
 /**#@+
@@ -172,7 +173,7 @@ switch($display)
 	case 'button':
 	if (file_exists($this->GetConfigValue('wikka_action_path').'/license/inc/buttons/'.$type.'.png')) //TODO #718
 	{
-		$output .= '<a rel="license" title="'.$license_fullname[$type].'" href="'.$link.'"><img src="'.$this->GetConfigValue('wikka_action_path').'/license/inc/buttons/'.$type.'.png" alt="'.$license_fullname[$type].'" /></a>'	."\n";
+		$output .= '<a rel="license" title="'.$license_fullname[$type].'" href="'.$link.'"><img src="'.$this->StaticHref($this->GetConfigValue('wikka_action_path').'/license/inc/buttons/'.$type.'.png').'" alt="'.$license_fullname[$type].'" /></a>'	."\n";
 	}
 	break;
 
@@ -180,7 +181,7 @@ switch($display)
 	case 'badge':
 	if (file_exists($this->GetConfigValue('wikka_action_path').'/license/inc/badges/'.$type.'.png')) //TODO #718
 	{
-		$output .= '<a rel="license" title="'.$license_fullname[$type].'" href="'.$link.'"><img src="'.$this->GetConfigValue('wikka_action_path').'/license/inc/badges/'.$type.'.png" alt="'.$license_fullname[$type].'" /></a>'	."\n";
+		$output .= '<a rel="license" title="'.$license_fullname[$type].'" href="'.$link.'"><img src="'.$this->StaticHref($this->GetConfigValue('wikka_action_path').'/license/inc/badges/'.$type.'.png').'" alt="'.$license_fullname[$type].'" /></a>'	."\n";
 	}
 	break;
 	
