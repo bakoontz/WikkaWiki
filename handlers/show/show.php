@@ -215,10 +215,22 @@ else
 						{
 							$comment_ordering = $this->GetConfigValue('default_comment_display');
 						}
-						else
+
+						// Convert from DB enum to PHP enum
+						switch($comment_ordering)
 						{
-							$comment_ordering = COMMENT_ORDER_DATE_ASC;
-						}
+							case 'date_asc':
+								$comment_ordering = COMMENT_ORDER_DATE_ASC;
+								break;
+							case 'date_desc':
+								$comment_ordering = COMMENT_ORDER_DATE_DESC;
+								break;
+							case 'threaded':
+							default:
+								$comment_ordering = COMMENT_ORDER_THREADED;
+								break;
+						}												
+
 						$showcomments_text = '[<a href="'.$this->Href('', '', 'show_comments='.$comment_ordering.'#comments').'">'.DISPLAY_COMMENTS_LABEL.'</a>]';
 				}
 

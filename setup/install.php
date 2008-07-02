@@ -107,7 +107,7 @@ case "0":
 			 "signuptime datetime NOT NULL default '0000-00-00 00:00:00',".
 			 "show_comments enum('Y','N') NOT NULL default 'N',".
 		     "status enum('invited','signed-up','pending','active','suspended','banned','deleted'),".
-			 "default_comment_display int(10) unsigned NOT NULL default '1',".
+			 "default_comment_display enum('date_asc', 'date_desc', 'threaded') NOT NULL default 'threaded',".
 			 "challenge char(8) NOT NULL default '00000000',".
 			 "PRIMARY KEY  (name),".
 			 "KEY idx_signuptime (signuptime)".
@@ -337,7 +337,7 @@ case "1.1.6.3":
 	test(__('Adding field to comment table to enable threading').'...', 
 	@mysql_query("alter table ".$config["table_prefix"]."comments add status varchar(10) default NULL", $dblink), __('Already done?  OK!'), 0);
 	test(__('Adding field to users table to specify comment display default').'...', 
-	@mysql_query("alter table ".$config["table_prefix"]."users add default_comment_display int(10) unsigned NOT NULL default '1'", $dblink), __('Already done?  OK!'), 0);
+	@mysql_query("alter table ".$config["table_prefix"]."users add default_comment_display enum('date_asc', 'date_desc', 'threaded') NOT NULL default 'threaded'", $dblink), __('Already done?  OK!'), 0);
 	test(__('Adding status field to users table...'),
 	mysql_query('alter table '.$config['table_prefix'].'users add column status enum ("invited","signed-up","pending","active","suspended","banned","deleted")'), __('Already done? OK!'), 0); 
 	// Create new fields for comment_read_acl and comment_post_acl,
