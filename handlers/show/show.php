@@ -30,14 +30,13 @@
  * @uses		Wakka::FormatUser()
  * @uses		Wakka::UserIsOwner()
  * 
- * @todo 	validate all $_GET parameters
  */
 
 //constants
 define('SHOW_OLD_REVISION_SOURCE', 0); # if set to 1 shows by default the source of an old revision instead of the rendered version
 
 //validate URL parameters
-$raw = (!empty($_GET['raw']))? (int) $_GET['raw'] : SHOW_OLD_REVISION_SOURCE;
+$raw = (!empty($_GET['raw']))? (int) $this->GetSafeVar('raw', 'get') : SHOW_OLD_REVISION_SOURCE;
 
 echo "\n".'<!--starting page content-->'."\n";
 echo '<div class="page"';
@@ -73,7 +72,7 @@ else
 ?>
 				<br />
 				<?php echo $this->FormOpen('show', '', 'GET', '', 'left') ?>
-				<input type="hidden" name="time" value="<?php echo $_GET['time'] ?>" />
+				<input type="hidden" name="time" value="<?php echo $this->GetSafeVar('time', 'get') ?>" />
 				<input type="hidden" name="raw" value="<?php echo ($raw == 1)? '0' :'1' ?>" />
 				<input type="submit" value="<?php echo ($raw == 1)? SHOW_FORMATTED_BUTTON : SHOW_SOURCE_BUTTON ?>" />&nbsp;
 				<?php echo $this->FormClose(); ?>
@@ -123,7 +122,7 @@ else
 			// A GET comment style always overrides the SESSION comment style
 			if (isset($_GET['show_comments']))
 			{
-				switch($_GET['show_comments'])
+				switch($this->GetSafeVar('show_comments', 'get'))
 				{
 					case COMMENT_NO_DISPLAY:
 						$_SESSION['show_comments'][$tag] = COMMENT_NO_DISPLAY;
@@ -189,6 +188,33 @@ else
 				echo '<div class="commentsheader">'."\n";
 				$commentCount = $this->CountComments($this->tag);
 				$showcomments_text = '';
+
+				// Determin comment ordering preference
+				$comment_ordering = NULL;
+				if (isset($user['default_comment_display']))
+				{
+					$comment_ordering = $user['default_comment_display'];
+				}
+				elseif (NULL !== $this->GetConfigValue('default_comment_display'))
+				{
+					$comment_ordering = $this->GetConfigValue('default_comment_display');
+				}
+
+				// Convert from DB enum to PHP enum
+				switch($comment_ordering)
+				{
+					case 'date_asc':
+						$comment_ordering = COMMENT_ORDER_DATE_ASC;
+						break;
+					case 'date_desc':
+						$comment_ordering = COMMENT_ORDER_DATE_DESC;
+						break;
+					case 'threaded':
+					default:
+						$comment_ordering = COMMENT_ORDER_THREADED;
+						break;
+				}												
+
 				switch ($commentCount)
 				{
 					case 0:
@@ -202,34 +228,10 @@ else
 						break;
 					case 1:
 						$comments_message = STATUS_ONE_COMMENT.' ';
-						$showcomments_text = '[<a href="'.$this->Href('', '', 'show_comments=1#comments').'">'.DISPLAY_COMMENT_LINK_DESC.'</a>]';
+						$showcomments_text = '[<a href="'.$this->Href('', '', 'show_comments='.$comment_ordering.'#comments').'">'.DISPLAY_COMMENT_LINK_DESC.'</a>]';
 						break;
 					default:
 						$comments_message = sprintf(STATUS_SOME_COMMENTS, $commentCount).' ';
-						$comment_ordering = NULL;
-						if (isset($user['default_comment_display']))
-						{
-							$comment_ordering = $user['default_comment_display'];
-						}
-						elseif (NULL !== $this->GetConfigValue('default_comment_display'))
-						{
-							$comment_ordering = $this->GetConfigValue('default_comment_display');
-						}
-
-						// Convert from DB enum to PHP enum
-						switch($comment_ordering)
-						{
-							case 'date_asc':
-								$comment_ordering = COMMENT_ORDER_DATE_ASC;
-								break;
-							case 'date_desc':
-								$comment_ordering = COMMENT_ORDER_DATE_DESC;
-								break;
-							case 'threaded':
-							default:
-								$comment_ordering = COMMENT_ORDER_THREADED;
-								break;
-						}												
 
 						$showcomments_text = '[<a href="'.$this->Href('', '', 'show_comments='.$comment_ordering.'#comments').'">'.DISPLAY_COMMENTS_LABEL.'</a>]';
 				}
