@@ -266,6 +266,9 @@ define('FILE_UPLOAD_FORM_BUTTON', 'Upload');
 define('DOWNLOAD_LINK_TITLE', 'Download %s'); // %s - file name
 define('DELETE_LINK_TITLE', 'Remove %s'); // %s - file name
 define('NO_ATTACHMENTS', 'This page contains no attachment.');
+define('FILES_DELETE_FILE', 'Delete this file?');
+define('FILES_DELETE_FILE_BUTTON', 'Delete File');
+define('FILES_CANCEL_BUTTON', 'Cancel');
 /**#@-*/
 
 /**#@+

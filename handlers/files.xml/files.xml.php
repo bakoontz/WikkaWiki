@@ -17,6 +17,7 @@
  * @filesource
  *
  * @uses	mkdir_r()
+ * @uses    Wakka::GetSafeVar()
  * @uses	Wakka::SetConfigValue()
  * @uses	Wakka::GetPageTag()
  * @uses	Wakka::HasAccess()
@@ -48,24 +49,27 @@ if (!isset($_GET['file']) || !isset($_GET['action']) || !is_string($_GET['file']
 	// todo: add an error message here: probably, ERROR_BAD_PARAMETERS should be splitted.
 	$this->Redirect('');
 }
-if ('.' == $_GET['file']{0})
+
+$file = $this->GetSafeVar('file', 'get');
+if ('.' == $file{0})
 {
 	$this->Redirect($this->Href(), ERROR_FILETYPE_NOT_ALLOWED);
 }
 // do the action
-switch ($_GET['action'])	# #312
+$action = $this->GetSafeVar('action', 'get');
+switch ($action)	# #312
 {
 	// @@@ shared download code
 	case 'download':
 		header('Accept-Ranges: bytes');
-		$_GET['file'] = basename($_GET['file']); # #312
-		$path = $upload_path.DIRECTORY_SEPARATOR.$_GET['file'];	# #89, #312
+		$_GET['file'] = basename($file); # #312
+		$path = $upload_path.DIRECTORY_SEPARATOR.$file;	# #89, #312
 		$filename = basename($path);
 		header("Content-Type: application/x-download");
 		header("Content-Disposition: attachment; filename=\"".urldecode($filename)."\"");
 		if (!file_exists($path))
 		{
-			$this->Redirect($this->Href(), sprintf(ERROR_NONEXISTENT_FILE, $_GET['file']));
+			$this->Redirect($this->Href(), sprintf(ERROR_NONEXISTENT_FILE, $file));
 		}
 		if (!$this->HasAccess('read'))
 		{
@@ -102,14 +106,14 @@ switch ($_GET['action'])	# #312
 		fclose($fp);
 		exit();
 	case 'delete':
-		if ($this->IsAdmin())
+		if ($this->IsAdmin() && FALSE===empty($file))
 		{
-			$delete_success = @unlink($upload_path.DIRECTORY_SEPARATOR.$_GET['file']); # #89, #312 
+			$delete_success = @unlink($upload_path.DIRECTORY_SEPARATOR.$file); # #89, #312 
 			if (!$delete_success)
 			{
 				$this->SetRedirectMessage(ERROR_FILE_NOT_DELETED);
 			}
+			print $this->Redirect($this->Href());
 		}
 }
-print $this->Redirect($this->Href());
 ?>

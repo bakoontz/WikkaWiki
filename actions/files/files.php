@@ -31,13 +31,10 @@
  * @uses	Wakka::FormClose()
  * @uses	Wakka::SetConfigValue()
  * @uses	Wakka::ReturnSafeHTML()
+ * @uses    Wakka::GetSafeVar()
  * @uses	Config::$upload_path
  *
  * @todo security: check file type, not only extension
- * @todo use buttons instead of links for file deletion; #72 comment 7
- * @todo similarly replace download link with POST form button -> files handler
- * 		 can then use only $_POST instead of $_GET
- * @todo replace $_REQUEST in files handler with $_POST / $_GET; #72, #312
  * @todo replace intranet mode with fine-grained file ownership/ACL;
  * @todo integrate with edit handler for easy insertion of file links;
  * @todo maybe move some internal utilities to Wakka class?
@@ -168,6 +165,12 @@ if (!function_exists('bytesToHumanReadableUsage'))
 
 // ---- Run action ----
 
+// -0.1. Did the user cancel a delete request?  No need to do anything else but reload page.
+if(isset($_POST['cancel']))
+{
+	$this->Redirect();
+}
+
 // 0. define upload path for the current page
 if ($this->GetConfigValue('upload_path') == '')
 {
@@ -185,8 +188,43 @@ else
 	$is_writable = TRUE;
 }
 
+$action = $this->GetSafeVar('action', 'get');
+$file = $this->GetSafeVar('file', 'get');
+$file_to_delete = $this->GetSafeVar('file_to_delete', 'post');
+
+// 1a. User has requested a file to be deleted
+if(FALSE===empty($action) && FALSE===empty($file) && TRUE===userCanUpload())
+{
+	echo '<h3>'.FILES_DELETE_FILE.'</h3><br /><ul>'."\n";
+	echo "<li>$file</li></ul><br />\n";
+
+	echo $this->FormOpen(); 
+	?>
+	<table border="0" cellspacing="0" cellpadding="0">
+		<tr>
+			<td> 
+				<!-- nonsense input so form submission works with rewrite mode -->
+				<input type="hidden" value="" name="null"/>
+				<input type="hidden" name="file_to_delete" value="<?php echo rawurlencode($file); ?>"/>
+				<input type="submit" value="<?php echo FILES_DELETE_FILE_BUTTON;?>"  style="width: 120px"   />
+<!--				<input type="button" value="<?php echo FILES_CANCEL_BUTTON;?>" onclick="history.back();" style="width: 120px" /> -->
+					<input type="submit" value="<?php echo FILES_CANCEL_BUTTON;?>" style="width: 120px" name="cancel"/>
+
+			</td>
+		</tr>
+	</table>
+	<?php
+	print($this->FormClose());
+}
+
+// 1b. User has confirmed file deletion
+elseif(FALSE===empty($file_to_delete) && TRUE===userCanUpload())
+{
+	$this->Redirect($this->Href('files.xml',$this->tag,'action=delete&file='.rawurlencode($file_to_delete)));
+}
+
 // 2. print a simple download link for the specified file, if it exists
-if (isset($vars['download']))
+elseif (isset($vars['download']))
 {
 	if (file_exists($upload_path.DIRECTORY_SEPARATOR.$vars['download'])) # #89
 	{
@@ -209,6 +247,9 @@ if (isset($vars['download']))
 	{
 		echo '<em class="error">'.sprintf(ERROR_NONEXISTENT_FILE, '<tt>'.$vars['download'].'</tt>').'</em>';
 	}
+	$output .= '</div>';
+	$output = $this->ReturnSafeHTML($output);
+	echo $output;
 }
 
 // 3. user is trying to upload
@@ -316,7 +357,7 @@ if (is_readable($upload_path))
 	$sortby = SORT_BY_FILENAME;
 	if(isset($_GET['sortby']))
 	{
-		$sortby = $_GET['sortby'];
+		$sortby = $this->GetSafeVar('sortby', 'get');
 	}
 	switch($sortby)
 	{
@@ -343,7 +384,7 @@ if (is_readable($upload_path))
 		{
 			// TODO #72
 			$delete_link = '<a class="keys" href="'
-			.$this->Href('files.xml',$this->tag,'action=delete&amp;file='.rawurlencode($file))	// @@@ should be POST form button, not link
+			.$this->Href('', '', 'action=delete&amp;file='.rawurlencode($file))	// @@@ should be POST form button, not link
 			.'" title="'.sprintf(DELETE_LINK_TITLE, $file).'">x</a>';
 		}
 		$download_link = '<a href="' .$this->Href('files.xml',$this->tag,'action=download&amp;file='.rawurlencode($file))
@@ -433,10 +474,8 @@ if ($is_writable && userCanUpload())
 	// add to output
 	$output .= $form;
 	}
+	$output .= '</div>';
+	$output = $this->ReturnSafeHTML($output);
+	echo $output;
 }
-$output .= '</div>';
-
-// 6. print output to screen
-$output = $this->ReturnSafeHTML($output);
-echo $output;
 ?>
