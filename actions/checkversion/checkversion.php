@@ -21,7 +21,9 @@
  * @todo	move GUI strings to lang in 1.1.7
  */
 
-if($this->IsAdmin() && TRUE == $this->config['enable_version_check'])
+if($this->IsAdmin() && 
+   TRUE == $this->config['enable_version_check'] &&
+   FALSE === $this->IsWikkaVersionUnstable())
 {
 	//defaults
 	define('DOWNLOAD_URL', 'http://docs.wikkawiki.org/WhatsNew');	
@@ -62,7 +64,7 @@ if($this->IsAdmin() && TRUE == $this->config['enable_version_check'])
 				if(TRUE === version_compare($this->config['wakka_version'], $latest, "<"))
 				{
 					$s = 'F'; //green badge
-					echo '<div title="A new version of WikkaWiki is available. Please upgrade!" style="float: left; width: 300px; border: 1px solid '.$c[$s][0].'; background-color: '.$c[$s][1].'; color: '.$c[$s][2].'; margin: 10px 0">'."\n";
+					echo '<div title="A new version of WikkaWiki is available. Please upgrade! (This notice is displayed for admin users only.)" style="float: left; width: 300px; border: 1px solid '.$c[$s][0].'; background-color: '.$c[$s][1].'; color: '.$c[$s][2].'; margin: 10px 0">'."\n";
 					echo '<div style="text-align: center; padding: 0 3px 0 3px; background-color: '.$c[$s][3].'; font-size: 85%; font-weight: bold">UPGRADE NOTE</div>'."\n";
 					echo '<div style="padding: 0 3px 2px 3px; font-size: 85%; line-height: 150%; border-top: 1px solid '.$c[$s][4].';">'."\n";
 					echo '<strong>WikkaWiki '.$latest.'</strong> is available for <a href="'.DOWNLOAD_URL.'">download</a>!'."\n";

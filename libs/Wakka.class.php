@@ -1275,6 +1275,21 @@ if ($debug) echo 'tag is '.$this->tag."<br/>\n";
 	}
 
 	/**
+	 * Currently, a Wikka "unstable" version is defined as a version
+	 * containing the string "trunk". 
+	 *
+	 * @return	boolean true if unstable; false otherwise 
+	 */
+	function IsWikkaVersionUnstable()
+	{
+		if(FALSE===strpos($this->VERSION, 'trunk'))
+		{
+			return FALSE;
+		}
+		return TRUE;
+	}
+
+	/**
 	 * PAGE-related methods
 	 */
 
