@@ -81,23 +81,7 @@ else
 // -------------------- END DEBUGGING AND ERROR REPORTING ---------------------
 
 // ---------------------------- VERSIONING ------------------------------------
-/**
- * Defines the current Wikka version.
- * Leave null except for release versions!
- */
-$svn_version = '';
-
-/**
- * Used to generate WAKKA_VERSION value. Changes here may be be
- * modified during SVN checkin.
- */
-$svn_revision = '$Rev$';
-if(empty($svn_version))
-{
-	list($t1, $svn_version, $t2) = explode(' ', $svn_revision);
-	$svn_version = 'trunk-'.trim($svn_version);
-}
-if (!defined('WAKKA_VERSION')) define('WAKKA_VERSION', $svn_version);
+include_once('./version.php');
 
 // ----------------------------- BASIC CONSTANTS -------------------------------
 /**
