@@ -44,6 +44,23 @@ if ($this->UserIsOwner())
 		$posted_comment_post_acl = $_POST['comment_post_acl'];
 		$message = '';
 
+		if(empty($posted_read_acl))
+		{
+			$posted_read_acl = $default_read_acl;
+		}
+		if(empty($posted_write_acl))
+		{
+			$posted_write_acl = $default_write_acl;
+		}
+		if(empty($posted_comment_read_acl))
+		{
+			$posted_comment_read_acl = $default_comment_read_acl;
+		}
+		if(empty($posted_comment_post_acl))
+		{
+			$posted_comment_post_acl = $default_comment_post_acl;
+		}
+
 		// store lists only if ACLs have previously been defined,
 		// or if the posted values are different than the defaults
 
@@ -155,6 +172,7 @@ if ($this->UserIsOwner())
 		$acls_syntax_help .= ' ---##!'.$acls_sample_wiki_name_escaped.'## = '.sprintf(ACLS_DENY_USER_ACCESS,$acls_sample_wiki_name_escaped);
 		$acls_syntax_help .= ' --- --- //'.ACLS_TESTING_ORDER1.'//';
 		$acls_syntax_help .= ' --- '.sprintf(ACLS_TESTING_ORDER2,'##*##','//'.ACLS_AFTER.'//');
+		$acls_syntax_help .= ' --- --- '.sprintf(ACLS_DEFAULT_ACLS, '##wikka.config.php##');
 
 		echo $this->Format($acls_syntax_help);
 		echo $this->FormClose();
