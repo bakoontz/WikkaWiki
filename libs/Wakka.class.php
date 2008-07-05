@@ -565,15 +565,12 @@ class Wakka
 	 */
 	function IncludeBuffered($filename, $path, $not_found_text, $makepage=FALSE, $vars='', &$err='')
 	{
-#echo 'IncludeBuffered - filename specified: '.$filename."<br/>\n";
-#echo 'IncludeBuffered - path specified: '.$path."<br/>\n";
 		$output = '';
 		$not_found_text = trim($not_found_text);
 		// build full (relative) path to requested plugin (method/action/formatter/...)
-		$fullfilepath = trim($path).DIRECTORY_SEPARATOR.$filename;	#89
-#echo 'IncludeBuffered - fullfilepath derived: '.$fullfilepath."<br/>\n";
+		$fullfilepath = $this->BuildFullpathFromMultipath($filename, $path);
 		// check if requested file (method/action/formatter/...) actually exists
-		if (file_exists($fullfilepath))
+		if (FALSE===empty($fullfilepath))
 		{
 			if (is_array($vars))
 			{
@@ -2909,7 +2906,7 @@ if ($debug) echo "<br/>\n";
 	 */
 	function Header()
 	{
-		$header = $this->IncludeBuffered('header.php', $this->GetConfigValue('wikka_template_path'), ERROR_HEADER_MISSING);
+		$header = $this->IncludeBuffered('header.php', $this->GetConfigValue('wikka_template_path'), ERROR_HEADER_MISSING, FALSE, '', $err);
 		return $header;
 	}
 	/**
@@ -2920,7 +2917,7 @@ if ($debug) echo "<br/>\n";
 	 */
 	function Footer()
 	{
-		$footer = $this->IncludeBuffered('footer.php', $this->GetConfigValue('wikka_template_path'), ERROR_FOOTER_MISSING);
+		$footer = $this->IncludeBuffered('footer.php', $this->GetConfigValue('wikka_template_path'), ERROR_FOOTER_MISSING, FALSE, '', $err);
 		return $footer;
 	}
 
@@ -3293,8 +3290,7 @@ if ($debug) echo "<br/>\n";
 			$action_location_disp	= '<code>'.$this->htmlspecialchars_ent($action_location).'</code>';	// [SEC] make error (including (part of) request) safe to display
 			$action_not_found		= sprintf(ACTION_UNKNOWN,$action_location_disp);
 			// produce output
-			#$out = $this->IncludeBuffered($action_location, $this->GetConfigValue('action_path'), $action_not_found, $vars);
-			$out = $this->IncludeBuffered($action_location, $this->GetConfigValue('wikka_action_path'), $action_not_found, FALSE, $vars);
+			$out = $this->IncludeBuffered($action_location, $this->GetConfigValue('wikka_action_path'), $action_not_found, FALSE, $vars, $err);
 			// @@@ a little encapsulation here would be nice: move the conditions within the functions! (can do if it's an object variabl!)
 			if ($link_tracking_state)
 			{
@@ -3350,9 +3346,7 @@ if ($debug) echo 'Handler - handler specified: '.$handler."<br/>\n";
 			$handler_location_disp	= '<code>'.$this->htmlspecialchars_ent($handler_location).'</code>';	// [SEC] make error (including (part of) request) safe to display
 			$handler_not_found		= sprintf(HANDLER_UNKNOWN,$handler_location_disp);
 			// produce output
-			#$out = $this->IncludeBuffered($handler_location, $this->GetConfigValue('handler_path'), $handler_error_body);
-			#$out = $this->IncludeBuffered($handler_location, $this->GetConfigValue('wikka_handler_path'), $handler_error_body,TRUE);
-			$out = $this->IncludeBuffered($handler_location, $this->GetConfigValue('wikka_handler_path'), $handler_not_found, TRUE);
+			$out = $this->IncludeBuffered($handler_location, $this->GetConfigValue('wikka_handler_path'), $handler_not_found, TRUE, '', $err);
 		}
 		return $out;
 	}
@@ -3376,12 +3370,14 @@ if ($debug) echo 'Handler - handler specified: '.$handler."<br/>\n";
 		// first strip off any query string
 		$parts = preg_split('/&/',$handler,1);				# return only one part
 		$handler = $parts[0];
-#echo 'handler: '.$handler.'<br/>';
 		// now check if a handler by that name exists
-#echo 'checking path: '.$this->GetConfigValue('wikka_handler_path').DIRECTORY_SEPARATOR.$handler.DIRECTORY_SEPARATOR.$handler.'.php'.'<br/>';
-		$exists = file_exists($this->GetConfigValue('wikka_handler_path').DIRECTORY_SEPARATOR.$handler.DIRECTORY_SEPARATOR.$handler.'.php');
+		$exists = $this->BuildFullpathFromMultipath($handler.DIRECTORY_SEPARATOR.$handler.'.php', $this->GetConfigValue('wikka_handler_path'));
 		// return conclusion
-		return $exists;
+		if(TRUE===empty($exists))
+		{
+			return FALSE;
+		}
+		return TRUE;
 	}
 	/**
 	 * Render a string using a given formatter or the standard Wakka by default.
@@ -3418,7 +3414,7 @@ if ($debug) echo 'Handler - handler specified: '.$handler."<br/>\n";
 			$formatter_location_disp	= '<code>'.$this->htmlspecialchars_ent($formatter_location).'</code>';	// [SEC] make error (including (part of) request) safe to display
 			$formatter_not_found		= sprintf(FORMATTER_UNKNOWN,$formatter_location_disp);
 			// produce output
-			$out = $this->IncludeBuffered($formatter_location, $this->GetConfigValue('wikka_formatter_path'), $formatter_not_found, FALSE, compact('text', 'format_option')); // @@@
+				$out = $this->IncludeBuffered($formatter_location, $this->GetConfigValue('wikka_formatter_path'), $formatter_not_found, FALSE, compact('text', 'format_option'), $err); // @@@
 		}
 		return $out;
 	}
@@ -4770,6 +4766,53 @@ if ($debug) echo 'HasAccess calling... ';
 
 		// return result
 		return $hasaccess;
+	}
+
+	/**
+	 * Build a (possibly valid) filepath from a delimited list of paths 
+	 *
+	 * This function takes a list of paths delimited by either ":"
+	 * (Unix-style) or ";" (Window-style) and attempts to construct a
+	 * fully-qualified pathname to a specific file.  By default, this
+	 * function checks to see if the file pointed to by the
+	 * fully-qualified pathname exists.  First valid match wins.
+	 * Disabling this feature will return the first valid constructed
+	 * path (i.e, a path containing a valid directory, but not
+	 * necessarily pointing to an existant file).
+	 * 
+	 * @param string $filename mandatory: filename to be used in
+	 *		construction of fully-qualified filepath 
+	 * @param string $pathlist mandatory: ;- or :-delimted list of
+	 *		paths
+	 * @param  boolean $checkIfFileExists optional: if TRUE, returns
+	 *		only a pathname that points to a file that exists
+	 *		(default)
+	 * @return string A fully-qualified pathname or NULL if none found
+	 */
+	function BuildFullpathFromMultipath($filename, $pathlist, $checkIfFileExists=TRUE)
+	{
+		$paths = preg_split('/;|:/', $pathlist);
+		if(empty($paths[0])) return NULL;
+		if(FALSE === $checkIfFileExists)
+		{
+			// Just return first directory that exists
+			foreach($paths as $path)
+			{
+				$path = trim($path);
+				if(file_exists($path))
+				{
+					return $path.DIRECTORY_SEPARATOR.$filename;
+				}
+			}
+			return NULL;
+		}
+		foreach($paths as $path)
+		{
+			$path = trim($path);
+			$fqfn = $path.DIRECTORY_SEPARATOR.$filename;
+			if(file_exists($fqfn)) return $fqfn;
+		}
+		return NULL;
 	}
 
 	/**

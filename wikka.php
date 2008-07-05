@@ -273,6 +273,15 @@ if ($debug) echo "default 3rd-party component paths...<br/>\n";
 	 not a concatenation.
 */
 
+if(FALSE !== strpos(strtolower(PHP_OS), strtolower('windows')))
+{
+	define('PATH_SEPARATOR', ';');
+}
+else
+{
+	define('PATH_SEPARATOR', ':');
+}
+
 /**#@+
  * Default for a (configurable) filesystem directory for a component.
  */
@@ -281,25 +290,25 @@ if ($debug) echo "default 3rd-party component paths...<br/>\n";
  * May be overridden as well as configured to enable sharing Wikka components
  * between Wikka installations.
  */
-if (!defined('DEFAULT_ACTION_PATH'))	define('DEFAULT_ACTION_PATH', 'actions');
+if (!defined('DEFAULT_ACTION_PATH'))	define('DEFAULT_ACTION_PATH', 'plugins/actions'.PATH_SEPARATOR.'actions');
 /**
  * Default <b>directory</b> where handlers bundled with Wikka are stored.
  * May be overridden as well as configured to enable sharing Wikka components
  * between Wikka installations.
  */
-if (!defined('DEFAULT_HANDLER_PATH'))	define('DEFAULT_HANDLER_PATH', 'handlers');
+if (!defined('DEFAULT_HANDLER_PATH'))	define('DEFAULT_HANDLER_PATH', 'plugins/handlers'.PATH_SEPARATOR.'handlers');
 /**
  * Default <b>directory</b> where formatters and highlighters bundled with Wikka are stored.
  * May be overridden as well as configured to enable sharing Wikka components
  * between Wikka installations.
  */
-if (!defined('DEFAULT_FORMATTER_PATH'))	define('DEFAULT_FORMATTER_PATH', 'formatters');
+if (!defined('DEFAULT_FORMATTER_PATH')) define('DEFAULT_FORMATTER_PATH', 'plugins/formatters'.PATH_SEPARATOR.'formatters');
 /**
  * Default <b>directory</b> where template files bundled with Wikka are stored.
  * May be overridden as well as configured to enable sharing Wikka components
  * between Wikka installations.
  */
-if (!defined('DEFAULT_TEMPLATE_PATH'))	define('DEFAULT_TEMPLATE_PATH', 'templates');
+if (!defined('DEFAULT_TEMPLATE_PATH')) define('DEFAULT_TEMPLATE_PATH', 'plugins/templates'.PATH_SEPARATOR.'templates');
 /**
  * Default <b>directory</b> where 3rd-party components bundled with Wikka are stored.
  * This path isn't used directly but can be used in building other 3rd-party
