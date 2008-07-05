@@ -560,9 +560,10 @@ class Wakka
 	 *					if the intention is to let this fail silently, just pass an empty string here
 	 * @param	boolean	$makepage	optional: create a "page" div for error; default FALSE
 	 * @param	string	$vars	optional: vars to be passed to the file to handle. default: ''
+	 * @param   boolean  $err    optional: error flag indicating whether or not an error message was returned
 	 * @return	string	the included file's output or the $not_found_text if the file could not be found
 	 */
-	function IncludeBuffered($filename, $path, $not_found_text, $makepage=FALSE, $vars='')
+	function IncludeBuffered($filename, $path, $not_found_text, $makepage=FALSE, $vars='', &$err='')
 	{
 #echo 'IncludeBuffered - filename specified: '.$filename."<br/>\n";
 #echo 'IncludeBuffered - path specified: '.$path."<br/>\n";
@@ -582,6 +583,7 @@ class Wakka
 				// NOTE: this usage is DEPRECATED
 				extract($vars, EXTR_SKIP);	// [SEC] EXTR_SKIP avoids collision with existing filenames
 			}
+			$err = false;
 			ob_start();
 			include $fullfilepath;			// this is where it all happens!
 			$output = ob_get_contents();
@@ -592,6 +594,7 @@ class Wakka
 			// @@@ wrap in <em class="error"> here, not in callers
 			$output = ($makepage) ? '<div class="page"><em class="error">'.$not_found_text.'</em></div>' : '<em class="error">'.$not_found_text.'</em>';
 		}
+		$err = true;
 		return $output;
 	}
 
