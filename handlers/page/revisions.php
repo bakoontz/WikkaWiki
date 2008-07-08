@@ -13,6 +13,7 @@ if (!defined('REVISIONS_NO_REVISIONS_YET')) define('REVISIONS_NO_REVISIONS_YET',
 <?php
 if ($this->HasAccess("read"))
 {
+	$output = '';
 	$pages = $this->LoadRevisions($this->tag);
 	// load revisions for this page
 	if (count($pages)>1)
