@@ -105,7 +105,7 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 	}
 	$body = '';
 	$id = $this->page['id'];
-	if($_GET['id'])
+	if(isset($_GET['id']))
 	{
 		$page = $this->LoadPageById(mysql_real_escape_string($_GET['id']));
 		if($page['tag'] != $this->page['tag'])
