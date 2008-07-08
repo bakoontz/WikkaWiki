@@ -1,4 +1,11 @@
 <?php
+// Init UniversalEditButton (http://universaleditbutton.org/Universal_Edit_Button) #779
+$ueb = ''; 
+if ($this->GetMethod() != 'edit' && $this->HasAccess("write", $this->page["tag"])) 
+{ 
+	$ueb .= '<link rel="alternate" type="application/x-wiki" title="'.sprintf('Click to edit %s', $this->page["tag"]).'" href="'.$this->Href('edit', $this->page["tag"]).'"/>'."\n"; 
+} 
+
 	$message = $this->GetRedirectMessage();
 	$user = $this->GetUser();
       $site_base = $this->GetConfigValue("base_url");
@@ -23,6 +30,8 @@ if ($this->GetMethod() != 'edit') {
 	$rsslink .= '	<link rel="alternate" type="application/rss+xml" title="'.$this->GetWakkaName().': recently edited pages (RSS)" href="'.$this->Href('recentchanges.xml', $this->tag).'" />'."\n";
 	echo $rsslink;	
 }
+// UniversalEditButton
+echo "\t".$ueb;	
 ?>
 </head>
 <body <?php echo $message ? "onLoad=\"alert('".$message."');\" " : "" ?> >
