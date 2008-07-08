@@ -45,8 +45,9 @@ if(isset($vars['cachetime']))
 $rss_cache_file = ""; // initial value, no need to ever change
 
 //Action configuration
-$rss_path = $vars['url'];
-if ((!$rss_path) && $wikka_vars) $rss_path = $wikka_vars;
+$rss_path = '';
+if (isset($vars['url'])) $rss_path = $vars['url'];
+if ($rss_path = '' && isset($wikka_vars)) $rss_path = $wikka_vars;
 $rss_path = $this->cleanUrl(trim($rss_path));
 
 // override
