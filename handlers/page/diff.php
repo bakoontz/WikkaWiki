@@ -78,7 +78,7 @@ if ($this->HasAccess('read'))
 		$added   = array_diff($bodyA, $bodyB);
 		$deleted = array_diff($bodyB, $bodyA);
 		
-		$output .= '<div class="revisioninfo">'."\n";
+		$output = '<div class="revisioninfo">'."\n";
 		$output .= '<h3>Comparing <a title="Display the revision list for '.$pageA['tag'].'" href="'.$this->Href('revisions').'">revisions</a> for <a title="Return to the current revision of the page" href="'.$this->Href().'">'.$pageA['tag'].'</a></h3>'."\n";
 		$output .= '<ul style="margin: 10px 0;">'."\n";
 		$output .= '	<li><a href="'.$this->Href('show', '', 'time='.urlencode($pageA['time'])).'">['.$pageA['id'].']</a> '.sprintf(WHEN_BY_WHO, '<a class="datetime" href="'.$this->Href('show','','time='.urlencode($pageA["time"])).'">'.$pageA['time'].'</a>', $pageA_edited_by).' <span class="pagenote smaller">'.$noteA.'</span></li>'."\n";
