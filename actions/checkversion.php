@@ -39,7 +39,7 @@ if($this->IsAdmin() && TRUE == $this->config['enable_version_check'])
 			'E' => array('#669', '#BFBFFF', '#303030', '#A0A0E0', '#9090B0'),
 			'F' => array('#696', '#BFFFBF', '#303030', '#A0E0A0', '#90B090')
 	);
-	if ($vars['display'] == '')
+	if (!isset($vars['display']) || $vars['display'] == '')
 	{
 		$vars['display'] = "upgrade";
 	}
