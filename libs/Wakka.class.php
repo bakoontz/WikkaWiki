@@ -1639,6 +1639,7 @@ class Wakka
 		if ($this->UserIsOwner($tag)) return true;
 
 		// see whether user is registered and logged in
+		$registered = false;
 		if ($this->GetUser()) $registered = true;
 
 		// load acl
