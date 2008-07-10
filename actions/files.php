@@ -104,7 +104,7 @@ if (! function_exists('bytesToHumanReadableUsage')) {
 }
 
 
-if ($download <> '') {
+if (isset($download) && $download <> '') {
 
     // link to download a file
     if ($text == '') $text = $download;
@@ -121,12 +121,13 @@ if ($download <> '') {
     $upload_path = $this->config['upload_path'].'/'.$this->GetPageTag();
     if (! is_dir($upload_path)) mkdir_r($upload_path);
 
-    // upload action
-    $uploaded = $_FILES['file'];
+	// upload action
+
    // if ($_SERVER['REQUEST_METHOD'] == 'POST') 
    // if ($_REQUEST['action'] == 'upload' AND $uploaded['size'] > 0) {
-   if ($_POST['action'] == 'upload') {
- 
+	if (isset($_POST['action']) && $_POST['action'] == 'upload') 
+	{
+ 		$uploaded = $_FILES['file']; 
 		switch($_FILES['file']['error'])
 		{
 				case 0:
@@ -243,7 +244,7 @@ if ($download <> '') {
     closedir($dir);
 
         // print n/a if no files currently exist
-        if (!$num)  print "<tr><td>&nbsp;</td><td colspan='3' align='center'><font color='gray' size='-1'><em>&nbsp;&nbsp;&nbsp;</em></font></td></tr>";
+        if (!isset($num))  print "<tr><td>&nbsp;</td><td colspan='3' align='center'><font color='gray' size='-1'><em>&nbsp;&nbsp;&nbsp;</em></font></td></tr>";
         else  print "<tr><td>&nbsp;</td></tr>";
 
    // if ($this->HasAccess('write')) {
