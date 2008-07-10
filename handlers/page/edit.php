@@ -138,7 +138,7 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 			$note = trim($_POST['note']);
 		}
 		// only if saving:
-		if ($_POST['submit'] == 'Store')
+		if (isset($_POST['submit']) && $_POST['submit'] == 'Store')
 		{
 			// check for overwriting
 			if ($this->page)
