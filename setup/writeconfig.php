@@ -86,6 +86,11 @@ if (!empty($config['comment_stylesheet']))
 	$config['comment_stylesheet'] .= strstr($config['comment_stylesheet'], '?') ? '&amp;' : '?';
 	$config['comment_stylesheet'] .= substr(md5(time()),1,5);
 }
+// Enable edit drafts by default
+if(TRUE===empty($config['enable_drafts']))
+{
+	$config['enable_drafts'] = '1';
+}
 // convert config array into PHP code
 $double_backslash = '\\\\';
 $single_quote = '\'';

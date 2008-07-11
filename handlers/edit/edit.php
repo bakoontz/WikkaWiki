@@ -64,6 +64,7 @@ $edit_note_field = '';
 $note = '';
 $ondblclick = ''; //#123
 $body = '';
+$user = $this->GetUser();
 
 if ($this->GetConfigValue('edit_buttons_position') == 'top' || $this->GetConfigValue('edit_buttons_position') == 'bottom')
 {
@@ -74,7 +75,7 @@ else
 	$buttons_position = DEFAULT_BUTTONS_POSITION;
 }
 
-if (isset($_POST['submit']) && ($_POST['submit'] == EDIT_PREVIEW_BUTTON) && ($user = $this->GetUser()) && ($user['doubleclickedit'] != 'N'))
+if (isset($_POST['submit']) && ($_POST['submit'] == EDIT_PREVIEW_BUTTON) && isset($user) && ($user['doubleclickedit'] != 'N'))
 {
 	$ondblclick = ' ondblclick=\'document.getElementById("reedit_id").click();\'';
 	//history.back() not working on IE. (changes are lost)
@@ -110,17 +111,70 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 		}
 	}
 
-
 	if ($_POST)
 	{
-		// strip CRLF line endings down to LF to achieve consistency ... plus it saves database space.
-		// Note: these codes must remain enclosed in double-quotes to work!
-		$body = str_replace("\r\n", "\n", $_POST['body']);
-
-		$body = preg_replace("/\n[ ]{4}/", "\n\t", $body);	// FIXME: misses first line and multiple sets of four spaces - solution in formatter??
+		// Retrieve draft version
+		if($_POST['submit'] == PAGE_EDIT_CACHE_RETRIEVE_BUTTON)
+		{
+			// Set body and continue
+			$cache_tag = GetEditCacheTag($this);
+			$body = GetEditCacheContents($this);
+		}
+		elseif($_POST['submit'] == PAGE_EDIT_CACHE_DELETE_BUTTON)
+		{
+			// Delete cache and continue
+			DeleteEditCache($this);
+		}
+		elseif($_POST['submit'] == PAGE_EDIT_CACHE_CONTINUE_BUTTON)
+		{
+			$cache_tag = GetEditCacheTag($this);
+		}
+		elseif(TRUE===isset($_POST['body']))	
+		{
+			// strip CRLF line endings down to LF to achieve consistency ... plus it saves database space.
+			// Note: these codes must remain enclosed in double-quotes to work!
+			$body = str_replace("\r\n", "\n", $_POST['body']);
+			$body = preg_replace("/\n[ ]{4}/", "\n\t", $body);	// FIXME: misses first line and multiple sets of four spaces - solution in formatter??
+		}
 
 		// we don't need to escape here, we do that just before display (i.e., treat note just like body!)
 		$note = trim($_POST['note']);
+
+
+		// Save and continue
+		if($_POST['submit'] == EDIT_SAVE_AND_CONTINUE_BUTTON &&
+	       $this->GetConfigValue('enable_drafts') == '1')
+		{
+			// Save content, then redirect to edit page
+			if(FALSE===SaveEditCache($this, $body))
+			{
+				$error = ERROR_EDIT_CACHE_SAVE_FAIL;
+			}
+			// Otherwise, just fall off the end and magically populate
+			// the edit area again!
+		}
+
+		// Save and quit
+		// TODO: Alert asking if user wants to publish instead
+		if($_POST['submit'] == EDIT_SAVE_AND_QUIT_BUTTON &&
+	       $this->GetConfigValue('enable_drafts') == '1')
+		{
+			// Save content, then redirect to page view
+			if(FALSE===SaveEditCache($this, $body))
+			{
+				$error = ERROR_EDIT_CACHE_SAVE_FAIL;
+			}
+			else
+			{
+				$this->Redirect($this->Href());
+			}
+		}
+
+		// Cancel -- need to clear the SESSION var
+		if($_POST['submit'] == EDIT_CANCEL_BUTTON)
+		{
+			$this->Redirect($this->Href(''));
+		}
 
 		// only if saving:
 		if ($_POST['submit'] == EDIT_STORE_BUTTON)
@@ -159,6 +213,7 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 					$this->WriteLinkTable();
 					$this->ClearLinkTable();
 				}
+				DeleteEditCache($this);
 
 				// forward
 				$this->Redirect($this->Href());
@@ -178,9 +233,11 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 	// fetch fields
 	$previous = $this->page['id'];
 	if (isset($_POST['previous'])) $previous = $_POST['previous'];
-	if (empty($body)) $body = $this->page['body'];
-	$body = preg_replace("/\n[ ]{4}/", "\n\t", $body);	// FIXME misses first line and multiple sets of four spaces - JW 2005-01-16
-
+	if (TRUE===empty($body)) 
+	{
+		$body = $this->page['body'];
+		$body = preg_replace("/\n[ ]{4}/", "\n\t", $body);	// FIXME misses first line and multiple sets of four spaces - JW 2005-01-16
+	}
 
 	$maxtaglen = MAX_TAG_LENGTH; #38 - #376
 	if ( ($field = $this->LoadSingle("describe ".$this->GetConfigValue('table_prefix')."pages tag"))
@@ -196,7 +253,7 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 							$edit_note_field.
 							'<input name="submit" type="submit" value="'.EDIT_STORE_BUTTON.'" accesskey="'.ACCESSKEY_STORE.'" />'."\n".
 							'<input name="submit" type="submit" value="'.EDIT_REEDIT_BUTTON.'" accesskey="'.ACCESSKEY_REEDIT.'" id="reedit_id" />'."\n".
-							'<input type="button" value="'.EDIT_CANCEL_BUTTON.'" onclick="document.location=\''.$this->href('').'\';" />'."\n".
+							'<input type="submit" name = "submit" value="'.EDIT_CANCEL_BUTTON.'" />'."\n".
 							'</fieldset>'."\n";
 
 		$preview_form = $this->FormOpen('edit')."\n";
@@ -232,6 +289,7 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 		$output .= '<input name="submit" type="submit" value="'.EDIT_RENAME_BUTTON.'" />'."\n";
 		$output .= $this->FormClose();
 	}
+
 	// EDIT Screen
 	else
 	{
@@ -248,12 +306,25 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 		{
 			$body = trim($body)."\n\n----\n\n-- ".$this->GetUserName().' '.sprintf(EDIT_COMMENT_TIMESTAMP_CAPTION,strftime("%c")).')';
 		}
-		$edit_buttons = '<fieldset><legend>'.EDIT_STORE_PAGE_LEGEND.'</legend>'."\n".
-						$edit_note_field.
-						'<input name="submit" type="submit" value="'.EDIT_STORE_BUTTON.'" accesskey="'.ACCESSKEY_STORE.'" />'."\n".
-						'<input name="submit" type="submit" value="'.EDIT_PREVIEW_BUTTON.'" accesskey="'.ACCESSKEY_PREVIEW.'" />'."\n".
-						'<input type="button" value="'.EDIT_CANCEL_BUTTON.'" onclick="document.location=\''.$this->Href('').'\';" />'."\n".
-						'</fieldset>'."\n";
+		$edit_buttons = '<fieldset><legend>'.EDIT_STORE_PAGE_LEGEND.'</legend>'."\n".$edit_note_field;
+		$edit_buttons .= '<input name="submit" type="submit" value="'.EDIT_STORE_BUTTON.'" accesskey="'.ACCESSKEY_STORE.'" />'."\n".
+				'<input name="submit" type="submit" value="'.EDIT_PREVIEW_BUTTON.'" accesskey="'.ACCESSKEY_PREVIEW.'" />'."\n".
+				'<input type="submit" name="submit" value="'.EDIT_CANCEL_BUTTON.'" />'."\n";
+		if($this->GetConfigValue('enable_drafts') == '1')
+		{
+			$disabled = '';
+			if(FALSE===DoesEditCacheExist($this))
+			{
+				$disabled = 'disabled';
+			}
+		    $edit_buttons .= '<fieldset><legend>'.EDIT_CACHE_LEGEND.'</legend>'."\n".
+			'<input name="submit" type="submit" value="'.EDIT_SAVE_AND_CONTINUE_BUTTON.'" accesskey="'.ACCESSKEY_SAVE_AND_CONTINUE_BUTTON.'" />'."\n".
+			'<input name="submit" type="submit" value="'.EDIT_SAVE_AND_QUIT_BUTTON.'" accesskey="'.ACCESSKEY_SAVE_AND_QUIT_BUTTON.'" />'."\n".
+			'<input '.$disabled.' name="submit" type="submit" value="'.PAGE_EDIT_CACHE_RETRIEVE_BUTTON.'"/>'."\n".
+			'<input '.$disabled.' name="submit" type="submit" value="'.PAGE_EDIT_CACHE_DELETE_BUTTON.'"/>'."\n";
+			$edit_buttons .= '</fieldset>'."\n";
+		}
+	    $edit_buttons .= '</fieldset>'."\n";
 		$output .= $this->FormOpen('edit');
 		if ($buttons_position == 'top')
 		{
@@ -291,5 +362,104 @@ else
 	if ($this->ExistsPage($this->tag)) $message .= '<a href="'.$this->Href('showcode').'" title="'.SHOWCODE_LINK_TITLE.'">'.SHOWCODE_LINK.'</a>'."<br />\n";
 	echo $message;
 }
-echo '</div>'."\n"
+echo '</div>'."\n";
+
+function DeleteEditCache(&$wakka)
+{
+	$cache_tag = GetEditCacheTag($wakka);
+	if(NULL===$cache_tag)
+	{
+		return FALSE;
+	}
+	// Delete DB record
+	$query = "
+		DELETE FROM ".$wakka->GetConfigValue('table_prefix')."edit_cache
+		WHERE page_tag = '".$wakka->page['tag']."' AND
+	     	  owner = '".$wakka->GetUserName()."'";
+	$wakka->Query($query);
+}
+
+function GetEditCacheContents(&$wakka)
+{
+	$cache_tag = GetEditCacheTag($wakka);
+	if(NULL===$cache_tag)
+	{
+		return FALSE;
+	}
+	$query = "
+		SELECT contents 
+		FROM ".$wakka->GetConfigValue('table_prefix')."edit_cache
+		WHERE page_tag = '".$wakka->page['tag']."' AND
+		      owner = '".$wakka->GetUserName()."'";
+	$res = $wakka->LoadSingle($query);
+	return $res['contents'];
+}
+
+function GetEditCacheTag(&$wakka)
+{
+	$query = "
+		SELECT *
+		FROM ".$wakka->GetConfigValue('table_prefix')."edit_cache
+		WHERE page_tag = '".$wakka->page['tag']."' AND
+		      owner = '".$wakka->GetUserName()."'"; 
+	$result = $wakka->LoadSingle($query);	
+	if(TRUE===isset($result['cache_tag']))
+	{
+		return $result['cache_tag'];
+	}
+	else
+	{
+		// Create a cache record
+		// Modified from: http://us3.php.net/manual/en/function.session-regenerate-id.php
+		$tv = gettimeofday();
+		$buf = sprintf("%.15s%ld%ld%0.8f", $_SERVER['REMOTE_ADDR'], $tv['sec'], $tv['usec'], lcg_value());
+		$cache_tag = md5($buf);
+		// Create DB record
+		$query = "
+			INSERT INTO ".$wakka->GetConfigValue('table_prefix')."edit_cache
+			SET owner = '".$wakka->GetUserName()."',
+			    page_tag = '".$wakka->page['tag']."',
+				cache_tag = '".$cache_tag."',
+				created = now(),
+				updated = now()
+			";
+		$wakka->Query($query);
+	}
+	return (FALSE===empty($cache_tag)) ? $cache_tag : NULL;
+}
+
+function DoesEditCacheExist(&$wakka)
+{
+	// Check both DB record and file cache
+	$query = "
+		SELECT *
+		FROM ".$wakka->GetConfigValue('table_prefix')."edit_cache
+		WHERE page_tag = '".$wakka->page['tag']."' AND
+		      owner = '".$wakka->GetUserName()."'"; 
+	$result = $wakka->LoadSingle($query);	
+	if(TRUE===isset($result['cache_tag']))
+	{
+		$cache_tag = $result['cache_tag'];
+		if(TRUE===isset($cache_tag))
+		{
+			return TRUE;
+		}
+	}
+	return FALSE;
+}
+
+function SaveEditCache(&$wakka, &$contents)
+{
+	$cache_tag = GetEditCacheTag($wakka);
+	if(NULL===$cache_tag)
+	{
+		return FALSE;
+	}
+	$query = "
+		UPDATE ".$wakka->GetConfigValue('table_prefix')."edit_cache
+		SET contents='".$contents."', updated=now()
+		WHERE page_tag='".$wakka->page['tag']."' AND
+		      owner='".$wakka->GetUserName()."'"; 
+	$res = $wakka->Query($query);
+}
 ?>

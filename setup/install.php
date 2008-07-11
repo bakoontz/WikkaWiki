@@ -134,6 +134,17 @@ case "0":
 			 "PRIMARY KEY (sessionid, userid),".
 			 "session_start datetime NOT NULL".
 			") TYPE=MyISAM;", $dblink), __('Already exists?'), 0);
+	test(sprintf(__('Creating %s table'), __('edit_cache')).'...',
+		@mysql_query(
+			"CREATE TABLE ".$config["table_prefix"]."edit_cache (".
+			 "owner varchar(75) NOT NULL default '',".
+			 "page_tag varchar(75) NOT NULL default '',".
+			 "cache_tag varchar(32) NOT NULL default '',".
+			 "created datetime NOT NULL default '0000-00-00 00:00:00',".
+			 "contents mediumtext,".
+			 "updated datetime NOT NULL default '0000-00-00 00:00:00',".
+			 "PRIMARY KEY (owner, page_tag)".
+			 ") TYPE=MyISAM;", $dblink), __('Already exists?'), 0);
 
 	$challenge = dechex(crc32(time()));
 	$pass_val = md5($challenge.md5(mysql_real_escape_string($_SESSION['wikka']['install']['password'])));
@@ -363,6 +374,17 @@ case "1.1.6.5":
 	@unlink('handlers'.DIRECTORY_SEPARATOR.'referrers_sites'.DIRECTORY_SEPARATOR.'referrers_sites.php');
 	rmdirr('handlers'.DIRECTORY_SEPARATOR.'referrers_sites');
 case "trunk": //latest development version from the SVN repository - do not remove
+	test(sprintf(__('Creating %s table'), __('edit_cache')).'...',
+		@mysql_query(
+			"CREATE TABLE ".$config["table_prefix"]."edit_cache (".
+			 "owner varchar(75) NOT NULL default '',".
+			 "page_tag varchar(75) NOT NULL default '',".
+			 "cache_tag varchar(32) NOT NULL default '',".
+			 "created datetime NOT NULL default '0000-00-00 00:00:00',".
+			 "contents mediumtext,".
+			 "updated datetime NOT NULL default '0000-00-00 00:00:00',".
+			 "PRIMARY KEY (owner, page_tag)".
+			 ") TYPE=MyISAM;", $dblink), __('Already done? Hmm!'), 1);
 	break;
 }
 
