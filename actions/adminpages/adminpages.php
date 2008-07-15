@@ -44,8 +44,7 @@
  * 			- move icons to buddy file or action folder in 1.1.7;
  */
 
-
- include_once($this->config['wikka_action_path'].DIRECTORY_SEPARATOR.'../libs/admin.lib.php');
+ include_once($this->BuildFullpathFromMultipath('..'.DIRECTORY_SEPARATOR.'libs'.DIRECTORY_SEPARATOR.'admin.lib.php', $this->config['wikka_action_path']));
 
 //utilities
 

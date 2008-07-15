@@ -142,10 +142,11 @@ switch($display)
 	if ($type !== 'C')
 	{
 		$output .= '<div style="padding: 1em; font-family: Georgia, Times, serif; border: 1px solid #CCA; background-color: #FFD">'."\n";
-		if (file_exists($this->GetConfigValue('wikka_action_path').'/license/inc/buttons/'.$type.'.png'))
+		$buttonImage = BuildFullpathFromMultipath('license'.DIRECTORY_SEPARATOR.'inc'.DIRECTORY_SEPARATOR.'buttons'.DIRECTORY_SEPARATOR.$type.'.png', $this->GetConfigValue('wikka_action_path'));
+		if (NULL != $buttonImage)
 		{
 			$output .= '<p>'."\n";
-			$output .= '<a rel="license" title="'.$license_fullname[$type].'" href="'.$link.'"><img src="'.$this->GetConfigValue('wikka_action_path').'/license/inc/buttons/'.$type.'.png" alt="'.$license_fullname[$type].'" /></a>'."\n";
+			$output .= '<a rel="license" title="'.$license_fullname[$type].'" href="'.$link.'"><img src="'.$buttonImage.'" alt="'.$license_fullname[$type].'" /></a>'."\n";
 			$output .= '</p>'."\n";
 		}
 		$output .= $this->IncludeBuffered($type.'.htm', $this->GetConfigValue('wikka_action_path').'/license/inc/fulltext/', "Error")."\n";
@@ -171,18 +172,20 @@ switch($display)
 
 	//display a button with a link to the license
 	case 'button':
-	if (file_exists($this->GetConfigValue('wikka_action_path').'/license/inc/buttons/'.$type.'.png')) //TODO #718
-	{
-		$output .= '<a rel="license" title="'.$license_fullname[$type].'" href="'.$link.'"><img src="'.$this->StaticHref($this->GetConfigValue('wikka_action_path').'/license/inc/buttons/'.$type.'.png').'" alt="'.$license_fullname[$type].'" /></a>'	."\n";
-	}
+		$buttonImage = $this->BuildFullpathFromMultipath('license'.DIRECTORY_SEPARATOR.'inc'.DIRECTORY_SEPARATOR.'buttons'.DIRECTORY_SEPARATOR.$type.'.png', $this->GetConfigValue('wikka_action_path'));
+		if (NULL != $buttonImage) //TODO #718
+		{
+			$output .= '<a rel="license" title="'.$license_fullname[$type].'" href="'.$link.'"><img src="'.$this->StaticHref($buttonImage).'" alt="'.$license_fullname[$type].'" /></a>'	."\n";
+		}
 	break;
 
 	//display a 80x15 badge with a link to the license
 	case 'badge':
-	if (file_exists($this->GetConfigValue('wikka_action_path').'/license/inc/badges/'.$type.'.png')) //TODO #718
-	{
-		$output .= '<a rel="license" title="'.$license_fullname[$type].'" href="'.$link.'"><img src="'.$this->StaticHref($this->GetConfigValue('wikka_action_path').'/license/inc/badges/'.$type.'.png').'" alt="'.$license_fullname[$type].'" /></a>'	."\n";
-	}
+		$badgeImage = $this->BuildFullpathFromMultipath('license'.DIRECTORY_SEPARATOR.'inc'.DIRECTORY_SEPARATOR.'badges'.DIRECTORY_SEPARATOR.$type.'.png', $this->GetConfigValue('wikka_action_path'));
+		if (NULL != $badgeImage) //TODO #718
+		{
+			$output .= '<a rel="license" title="'.$license_fullname[$type].'" href="'.$link.'"><img src="'.$this->StaticHref($badgeImage).'" alt="'.$license_fullname[$type].'" /></a>'	."\n";
+		}
 	break;
 	
 	//display an acronym with a link to the license

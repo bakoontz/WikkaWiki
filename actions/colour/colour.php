@@ -13,5 +13,5 @@
 /**
  * color.php action.
  */
-include $this->GetConfigValue('wikka_action_path').DIRECTORY_SEPARATOR.'color'.DIRECTORY_SEPARATOR.'color.php';
+include_once($this->BuildFullpathFromMultipath('color'.DIRECTORY_SEPARATOR.'color.php', $this->config['wikka_action_path']));
 ?>
