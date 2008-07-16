@@ -36,6 +36,7 @@ if ($this->GetConfigValue('public_sysinfo') == '1' || $this->IsAdmin())
 	{
 		foreach ($vars as $param => $value)
 		{
+			$value = $this->htmlspecialchars_ent($value);
 			switch ($param)
 			{
 				case 'show':

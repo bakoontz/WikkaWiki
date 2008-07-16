@@ -72,12 +72,12 @@ $month	= CUR_MONTH;
 // 1) overrride defaults with parameters provided in URL (accept only valid values)
 if (isset($_GET['year']))
 {
-	$uYear = (int)$_GET['year'];
+	$uYear = (int)$this->GetSafeVar('year', 'get');
 	if ($uYear >= MIN_YEAR && $uYear <= MAX_YEAR) $year = $uYear;
 }
 if (isset($_GET['month']))
 {
-	$uMonth = (int)$_GET['month'];
+	$uMonth = (int)$this->GetSafeVar('month', 'get');
 	if ($uMonth >= 1 && $uMonth <= 12) $month = $uMonth;
 }
 // 2) override with parameters provided in action itself (accept only valid values)
@@ -86,6 +86,7 @@ if (is_array($vars))
 {
 	foreach ($vars as $param => $value)
 	{
+		$value = $this->htmlspecialchars_ent($value);
 		switch ($param)
 		{
 			case 'year':

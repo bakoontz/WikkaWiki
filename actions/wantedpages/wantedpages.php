@@ -45,7 +45,7 @@ for ($i = 1; $i <= 3; $i ++)
 			{
 				$sort .= ',';
 			}
-			$sort .= $_GET['ob'.$i].' ';
+			$sort .= $this->GetSafeVar('ob'.$i, 'get').' ';
 			if (isset($_GET['de'.$i]))
 			{
 				$sort .= 'desc';

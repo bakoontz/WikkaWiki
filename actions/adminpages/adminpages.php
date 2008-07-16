@@ -244,6 +244,7 @@ if ($this->IsAdmin($this->GetUser()))
 	{
 		foreach ($vars as $param => $value)
 		{
+			$value = $this->htmlspecialchars_ent($value);
 			switch ($param)
 			{
 				case 'colcolor':
@@ -278,8 +279,9 @@ if ($this->IsAdmin($this->GetUser()))
 		{
 			$id_params = array();
 			$tags = array();
-			foreach($_GET as $key=>$val)
+			foreach($_GET as $key)
 			{
+				$val = $this->GetSafeVar($key, 'get');
 				if(FALSE !== strpos($key, "id_"))
 				{
 					array_push($id_params, $key);
@@ -364,8 +366,9 @@ if ($this->IsAdmin($this->GetUser()))
 	else if(isset($_POST['massaction']) && $_POST['massaction'] == 'massrevert')
 	{
 		$ids = array();
-		foreach($_POST as $key=>$val)
+		foreach($_POST as $key)
 		{
+			$val = $this->GetSafeVar($key, 'post'); 
 			if(FALSE !== strpos($key, "id_"))
 			{
 				$id = substr($key, strpos($key,'_')+1);
@@ -377,7 +380,7 @@ if ($this->IsAdmin($this->GetUser()))
 			$comment = '';
 			if(isset($_POST['comment']))
 			{
-				$comment = $_POST['comment'];
+				$comment = $this->GetSafeVar('comment', 'post');
 			}
 			foreach($ids as $id)
 			{
@@ -394,11 +397,11 @@ if ($this->IsAdmin($this->GetUser()))
 		// number of records per page
 		if (isset($_POST['l']))
 		{
-			$l = $_POST['l'];
+			$l = $this->GetSafeVar('l', 'post');
 		}
 		elseif (isset($_GET['l']))
 		{
-			$l = $_GET['l'];
+			$l = $this->GetSafeVar('l', 'get');
 		}
 		else
 		{
@@ -406,34 +409,34 @@ if ($this->IsAdmin($this->GetUser()))
 		}
 
 		// last edit date range
-		$start_YY = (isset($_POST['start_YY'])) ? $this->htmlspecialchars_ent($_POST['start_YY']) : ADMINPAGES_DEFAULT_START_YEAR;
-		$start_MM = (isset($_POST['start_MM'])) ? $this->htmlspecialchars_ent($_POST['start_MM']) : ADMINPAGES_DEFAULT_START_MONTH;
-		$start_DD = (isset($_POST['start_DD'])) ? $this->htmlspecialchars_ent($_POST['start_DD']) : ADMINPAGES_DEFAULT_START_DAY;
-		$start_hh = (isset($_POST['start_hh'])) ? $this->htmlspecialchars_ent($_POST['start_hh']) : ADMINPAGES_DEFAULT_START_HOUR;
-		$start_mm = (isset($_POST['start_mm'])) ? $this->htmlspecialchars_ent($_POST['start_mm']) : ADMINPAGES_DEFAULT_START_MINUTE;
-		$start_ss = (isset($_POST['start_ss'])) ? $this->htmlspecialchars_ent($_POST['start_ss']) : ADMINPAGES_DEFAULT_START_SECOND;
-		$end_YY = (isset($_POST['end_YY'])) ? $this->htmlspecialchars_ent($_POST['end_YY']) : ADMINPAGES_DEFAULT_END_YEAR;
-		$end_MM = (isset($_POST['end_MM'])) ? $this->htmlspecialchars_ent($_POST['end_MM']) : ADMINPAGES_DEFAULT_END_MONTH;
-		$end_DD = (isset($_POST['end_DD'])) ? $this->htmlspecialchars_ent($_POST['end_DD']) : ADMINPAGES_DEFAULT_END_DAY;
-		$end_hh = (isset($_POST['end_hh'])) ? $this->htmlspecialchars_ent($_POST['end_hh']) : ADMINPAGES_DEFAULT_END_HOUR;
-		$end_mm = (isset($_POST['end_mm'])) ? $this->htmlspecialchars_ent($_POST['end_mm']) : ADMINPAGES_DEFAULT_END_MINUTE;
-		$end_ss = (isset($_POST['end_ss'])) ? $this->htmlspecialchars_ent($_POST['end_ss']) : ADMINPAGES_DEFAULT_END_SECOND;
+		$start_YY = (isset($_POST['start_YY'])) ?  $this->GetSafeVar('start_YY', 'post') : ADMINPAGES_DEFAULT_START_YEAR;
+		$start_MM = (isset($_POST['start_MM'])) ?  $this->GetSafeVar('start_MM', 'post') : ADMINPAGES_DEFAULT_START_MONTH;
+		$start_DD = (isset($_POST['start_DD'])) ?  $this->GetSafeVar('start_DD', 'post') : ADMINPAGES_DEFAULT_START_DAY;
+		$start_hh = (isset($_POST['start_hh'])) ?  $this->GetSafeVar('start_hh', 'post') : ADMINPAGES_DEFAULT_START_HOUR;
+		$start_mm = (isset($_POST['start_mm'])) ?  $this->GetSafeVar('start_mm', 'post') : ADMINPAGES_DEFAULT_START_MINUTE;
+		$start_ss = (isset($_POST['start_ss'])) ?  $this->GetSafeVar('start_ss', 'post') : ADMINPAGES_DEFAULT_START_SECOND;
+		$end_YY = (isset($_POST['end_YY'])) ? $this->GetSafeVar('end_YY', 'post') : ADMINPAGES_DEFAULT_END_YEAR;
+		$end_MM = (isset($_POST['end_MM'])) ? $this->GetSafeVar('end_MM', 'post') : ADMINPAGES_DEFAULT_END_MONTH;
+		$end_DD = (isset($_POST['end_DD'])) ? $this->GetSafeVar('end_DD', 'post') : ADMINPAGES_DEFAULT_END_DAY;
+		$end_hh = (isset($_POST['end_hh'])) ? $this->GetSafeVar('end_hh', 'post') : ADMINPAGES_DEFAULT_END_HOUR;
+		$end_mm = (isset($_POST['end_mm'])) ? $this->GetSafeVar('end_mm', 'post') : ADMINPAGES_DEFAULT_END_MINUTE;
+		$end_ss = (isset($_POST['end_ss'])) ? $this->GetSafeVar('end_ss', 'post') : ADMINPAGES_DEFAULT_END_SECOND;
 
 		// sort field
-		$sort = (isset($_GET['sort'])) ? $_GET['sort'] : ADMINPAGES_DEFAULT_SORT_FIELD;
+		$sort = (isset($_GET['sort'])) ? $this->GetSafeVar('sort', 'get') : ADMINPAGES_DEFAULT_SORT_FIELD;
 		// sort order
-		$d = (isset($_GET['d'])) ? $_GET['d'] : ADMINPAGES_DEFAULT_SORT_ORDER;
+		$d = (isset($_GET['d'])) ? $this->GetSafeVar('d', 'get') : ADMINPAGES_DEFAULT_SORT_ORDER;
 		// start record
-		$s = (isset($_GET['s'])) ? $_GET['s'] : ADMINPAGES_DEFAULT_START;
+		$s = (isset($_GET['s'])) ? $this->GetSafeVar('s', 'get') : ADMINPAGES_DEFAULT_START;
 
 		// search string
 		if (isset($_POST['q']))
 		{
-			$q = $_POST['q'];
+			$q = $this->GetSafeVar('q', 'post');
 		}
 		elseif (isset($_GET['q']))
 		{
-			$q = $_GET['q'];
+			$q = $this->GetSafeVar('q', 'get');
 		}
 		else
 		{
@@ -462,8 +465,8 @@ if ($this->IsAdmin($this->GetUser()))
 		$end_ts = '';
 		if (!empty($_GET['start_ts']) && !empty($_GET['end_ts']))
 		{
-			$start_ts = $this->htmlspecialchars_ent($_GET['start_ts']);
-			$end_ts = $this->htmlspecialchars_ent($_GET['end_ts']); 
+			$start_ts = $this->GetSafeVar('start_ts', 'get');
+			$end_ts = $this->GetSafeVar('end_ts', 'get'); 
 		}
 		elseif (is_numeric($start_YY) && $start_YY > 1000 && $start_YY < 9999 &&
 				   is_numeric($start_MM) && $start_MM > 0 && $start_MM < 13 &&

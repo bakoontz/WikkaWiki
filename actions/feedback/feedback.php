@@ -141,9 +141,9 @@ if (ALLOW_FEEDBACK_FROM_UNREGISTERED || $this->existsUser())	// just check for *
 	if (isset($_POST['feedback']) && $_POST['feedback'] == FEEDBACK_SEND_BUTTON)	// Send button pressed
 	{
 		//get user input
-		$sender_name = (isset($_POST['name'])) ? trim($_POST['name']) : '';
-		$sender_email = (isset($_POST['email'])) ? trim($_POST['email']) : '';
-		$comments = (isset($_POST['comments'])) ? trim($_POST['comments']) : '';
+		$sender_name = (isset($_POST['name'])) ?  trim($this->GetSafeVar('name', 'post')) : '';
+		$sender_email = (isset($_POST['email'])) ?  trim($this->GetSafeVar('email', 'post')) : '';
+		$comments = (isset($_POST['comments'])) ?  trim($this->GetSafeVar('comments', 'post')) : '';
 
 		// validate user input
 		#list($local_part, $domain) = sscanf($email, VALID_EMAIL_FORMAT); // use central regex library #34

@@ -36,7 +36,7 @@ $output .= '<h3>'.PW_FORGOTTEN_HEADING.'</h3>';
 // process input
 if (isset($_POST['wikiname'])) // get posted values
 {
-	$input = $_POST['wikiname'];
+	$input = $this->GetSafeVar('wikiname', 'post');
 	#$user = $this->LoadUser($input);
 	$user = $this->loadUserData($input);
 

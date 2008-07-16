@@ -106,7 +106,7 @@ $license_url = array(
 // is license type valid?
 if (isset($vars['type']) && in_array($vars['type'], $license_valid_types))
 {
-	$type = $vars['type'];
+	$type = $this->htmlspecialchars_ent($vars['type']);
 }
 else
 {
@@ -116,7 +116,7 @@ else
 // is display mode valid?
 if (isset($vars['display'])  && in_array($vars['display'], $valid_display_modes))
 {
-	$display = $vars['display'];
+	$display = $this->htmlspecialchars_ent($vars['display']);
 }
 else
 {
@@ -126,7 +126,7 @@ else
 // is a custom license link specified?
 if (isset($vars['link']) && $type = 'C')
 {
-	$link = $vars['link'];
+	$link = $this->htmlspecialchars($vars['link']);
 }
 else
 {

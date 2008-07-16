@@ -21,7 +21,7 @@
  * @todo	replace with advanced category action (which not only produces
  *			better output but also solves bugs)
  */
-if ($tag = $_GET['wakka'])	#312 (only files action uses POST for wakka)
+ if ($tag = $this->GetSafeVar('wakka', 'get'))	#312 (only files action uses POST for wakka)
 {
 	// init
 	$str ='';

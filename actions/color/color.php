@@ -73,6 +73,7 @@ if (is_array($vars))
 {
 	foreach ($vars as $param => $value)
 	{
+		$value = $this->htmlspecialchars_ent($value);
 		if ($param == 'text')
 		{
 			$mytext = $this->htmlspecialchars_ent($value);

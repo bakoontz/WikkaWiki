@@ -23,7 +23,7 @@ $showform = TRUE;
 
 if (isset($_POST['pagename']))
 {
-	$pagename = $_POST['pagename'];
+	$pagename = $this->GetSafeVar('pagename', 'post');
 
 	if (!(preg_match("/^[A-ZÄÖÜ]+[a-zßäöü]+[A-Z0-9ÄÖÜ][A-Za-z0-9ÄÖÜßäöü]*$/s", $pagename))) #34 (use !IsWikiName())
 	{

@@ -201,6 +201,7 @@ if ($this->IsAdmin($this->GetUser()))
 	{
 		foreach ($vars as $param => $value)
 		{
+			$value = $this->htmlspecialchars_ent($value);
 			switch ($param)
 			{
 				case 'colcolor':
@@ -217,7 +218,7 @@ if ($this->IsAdmin($this->GetUser()))
 	$g_action = '';
 	if(isset($_GET['action']))
 	{
-		$g_action = $_GET['action'];
+		$g_action = $this->GetSafeVar('action', 'get');
 	}
 	if($g_action == 'owned') 
 	{
@@ -242,7 +243,7 @@ if ($this->IsAdmin($this->GetUser()))
 		if(isset($_GET['user']))
 		{
 			include_once($this->BuildFullpathFromMultipath('..'.DIRECTORY_SEPARATOR.'libs'.DIRECTORY_SEPARATOR.'admin.lib.php', $this->config['wikka_action_path']));
-			$status = DeleteUser($this, $this->htmlspecialchars_ent($_GET['user']));
+			$status = DeleteUser($this, $this->GetSafeVar('user', 'get'));
 			if(false===$status)
 			{
 				$this->Redirect($this->Href(), USERDELETE_MESSAGE_FAILURE);
@@ -256,8 +257,9 @@ if ($this->IsAdmin($this->GetUser()))
 	else if($g_action == 'massdelete')
 	{
 		$usernames = array();
-		foreach($_GET as $key=>$val)
+		foreach($_GET as $key)
 		{
+			$val = $this->GetSafeVar($key, 'get');
 			if($val == "on")
 			{
 				array_push($usernames, $this->htmlspecialchars_ent($key));
@@ -311,8 +313,9 @@ if ($this->IsAdmin($this->GetUser()))
 	else if(isset($_POST['massaction']) && $_POST['massaction'] == 'massdelete')
 	{
 		$usernames = array();
-		foreach($_POST as $key=>$val)
+		foreach($_POST as $key)
 		{
+			$val = $this->GetSafeVar($key, 'post');
 			if($val == "username")
 			{
 				array_push($usernames, $this->htmlspecialchars_ent($key));
@@ -344,11 +347,11 @@ if ($this->IsAdmin($this->GetUser()))
 		// number of records per page
 		if (isset($_POST['l']))
 		{
-			$l = $_POST['l'];
+			$l = $this->GetSafeVar('l', 'post');
 		}
 		elseif (isset($_GET['l']))
 		{
-			$l = $_GET['l'];
+			$l = $this->GetSafeVar('l', 'get');
 		}
 		else
 		{
@@ -356,21 +359,21 @@ if ($this->IsAdmin($this->GetUser()))
 		}
 
 		// sort field
-		$sort = (isset($_GET['sort'])) ? $_GET['sort'] : ADMINUSERS_DEFAULT_SORT_FIELD;
+		$sort = (isset($_GET['sort'])) ? $this->GetSafeVar('sort', 'get') : ADMINUSERS_DEFAULT_SORT_FIELD;
 		// sort order
-		$d = (isset($_GET['d'])) ? $_GET['d'] : ADMINUSERS_DEFAULT_SORT_ORDER;
+		$d = (isset($_GET['d'])) ? $this->GetSafeVar('d', 'get') : ADMINUSERS_DEFAULT_SORT_ORDER;
 		// start record
-		$s = (isset($_GET['s'])) ? $_GET['s'] : ADMINUSERS_DEFAULT_START;
+		$s = (isset($_GET['s'])) ? $this->GetSafeVar('s', 'get') : ADMINUSERS_DEFAULT_START;
 	
 		// search string
 		$q = '';
 		if (isset($_POST['q']))
 		{
-			$q = $_POST['q'];
+			$q = $this->GetSafeVar('q', 'post');
 		}
 		elseif (isset($_GET['q']))
 		{
-			$q = $_GET['q'];
+			$q = $this->GetSafeVar('q', 'get');
 		}
 		elseif(isset($_POST['submit']) && $_POST['submit'] == ADMINUSERS_FORM_SEARCH_SUBMIT)
 		{

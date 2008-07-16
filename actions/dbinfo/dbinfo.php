@@ -82,6 +82,7 @@ if ($isAdmin)
 	{
 		foreach ($vars as $param => $value)
 		{
+			$value = $this->htmlspecialchars_ent($value);
 			switch ($param)
 			{
 				case 'all':
@@ -129,7 +130,7 @@ if ($isAdmin)
 		{
 			if (isset($_POST['seldb']) && in_array($_POST['seldb'],$aDbList))		# valid choice
 			{
-				$seldb = $_POST['seldb'];
+				$seldb = $this->GetSafeVar('seldb', 'post');
 			}
 			else										# ignore invalid choice
 			{
@@ -182,7 +183,7 @@ if ($isAdmin)
 	{
 		if (isset($_POST['seltable']) && in_array($_POST['seltable'],$aTableList))	# valid choice
 		{
-			$seltable = $_POST['seltable'];
+			$seltable = $this->GetSafeVar('seltable', 'post');
 			$query = 'SHOW CREATE TABLE '.$seltable;
 			$tablecreateresult = mysql_query($query);
 			if ($tablecreateresult)

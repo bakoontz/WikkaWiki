@@ -29,7 +29,7 @@ else $height = (int)$height;
 if ($height>950) $height = 950;
 
 if (!$url) $url = $vars[0];
-$url = $this->StaticHref($this->cleanUrl(trim($url)));
+$url = $this->StaticHref($this->cleanUrl(trim($this->htmlspecialchars_ent($url))));
 
 if ($url)
   echo '<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,29,0" width="'.$width.'" height="'.$height.'">

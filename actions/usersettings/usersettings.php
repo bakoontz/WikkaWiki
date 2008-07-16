@@ -95,7 +95,7 @@ $params = ($this->GetConfigValue('rewrite_mode') == 1) ? '?' : '&';
 
 // BEGIN *** LOGOUT ***
 // is user trying to log out?
-if (isset($_POST['logout']) && $_POST['logout'] == LOGOUT_BUTTON)	// replaced with normal form button #353, #312
+if (isset($_POST['logout']) && LOGOUT_BUTTON == $this->GetSafeVar('logout', 'post'))	// replaced with normal form button #353, #312
 {
 	$this->LogoutUser();
 }
@@ -106,7 +106,7 @@ if (isset($_POST['logout']) && $_POST['logout'] == LOGOUT_BUTTON)	// replaced wi
 if ($user = $this->GetUser())
 {
 	// is user trying to update user settings?
-	if (isset($_POST['action']) && ($_POST['action'] == 'update'))
+	if (isset($_POST['action']) && ($this->GetSafeVar('action', 'post') == 'update'))
 	{
 		// get POST parameters
 		$email = $this->GetSafeVar('email', 'post');
@@ -192,7 +192,7 @@ if ($user = $this->GetUser())
 			$success = SUCCESS_USER_REGISTERED;
 			break;
 		//case (isset($_GET['stored']) && $_GET['stored'] == 'true'):
-		case (isset($_POST['action']) && $_POST['action'] == 'update' && !isset($error)):
+		case (isset($_POST['action']) && $this->GetSafeVar('action', 'post') == 'update' && !isset($error)):
 			$success = SUCCESS_USER_SETTINGS_STORED;
 			break;
 	}
@@ -209,12 +209,12 @@ if ($user = $this->GetUser())
 	}
 
 	// BEGIN *** PASSWORD UPDATE ***
-	if (isset($_POST['action']) && ($_POST['action'] == 'changepass'))
+	if (isset($_POST['action']) && ($this->GetSafeVar('action', 'post') == 'changepass'))
 	{
 		// check password
-		$oldpass = $_POST['oldpass']; //can be current password or hash sent as password reminder
-		$password = $_POST['password'];
-		$password_confirm = $_POST['password_confirm'];
+		$oldpass = $this->GetSafeVar('oldpass', 'post'); //can be current password or hash sent as password reminder
+		$password = $this->GetSafeVar('password', 'post');
+		$password_confirm = $this->GetSafeVar('password_confirm', 'post');
 		$update_option = $this->GetSafeVar('update_option', 'post');
 		
 		switch (TRUE)
@@ -350,7 +350,7 @@ if ($user = $this->GetUser())
 else
 {
 	// BEGIN *** LOGOUT 2 ***
-	if (isset($_POST['logout']) && $_POST['logout'] == LOGOUT_BUTTON)
+	if (isset($_POST['logout']) && $this->GetSafeVar('logout', 'post') == LOGOUT_BUTTON)
 	{
 		// print confirmation message on successful logout
 		$success = SUCCESS_USER_LOGGED_OUT;
@@ -360,12 +360,12 @@ else
 	// is user trying to log in or register?
 	// BEGIN *** LOGIN/REGISTER ***
 	$register = $this->GetConfigValue('allow_user_registration'); 
-	if (isset($_POST['submit']) && ($_POST['submit'] == LOGIN_BUTTON))
+	if (isset($_POST['submit']) && ($this->GetSafeVar('submit', 'post') == LOGIN_BUTTON))
 	{
 		// BEGIN *** LOGIN ***
 		// if user name already exists, check password
-		#if (isset($_POST['name']) && $existingUser = $this->LoadUser($_POST['name']))
-		if (isset($_POST['name']) && $existingUser = $this->loadUserData($_POST['name']))
+		#if (isset($this->GetSafeVar('name', 'post')) && $existingUser = $this->LoadUser($this->GetSafeVar('name', 'post')))
+		if (isset($_POST['name']) && $existingUser = $this->loadUserData($this->GetSafeVar('name', 'post')))
 		{
 			// check password
 			$status = $existingUser['status'];
@@ -375,11 +375,11 @@ else
 					  $status=='banned'):
 					$error = ERROR_USER_SUSPENDED;
 					break;
-				case (strlen($_POST['password']) == 0):
+				case (strlen($this->GetSafeVar('password', 'post')) == 0):
 					$error = ERROR_EMPTY_PASSWORD;
 					$password_highlight = INPUT_ERROR_STYLE;
 					break;
-				case (md5($_POST['password']) != $existingUser['password']):
+				case (md5($this->GetSafeVar('password', 'post')) != $existingUser['password']):
 					$error = ERROR_INVALID_PASSWORD;
 					$password_highlight = INPUT_ERROR_STYLE;
 					break;
@@ -407,15 +407,15 @@ else
 
 	// END *** LOGIN ***
 	// BEGIN *** REGISTER ***
-	if (isset($_POST['submit']) && ($_POST['submit'] == REGISTER_BUTTON) && $register == '1')
+	if (isset($_POST['submit']) && ($this->GetSafeVar('submit', 'post') == REGISTER_BUTTON) && $register == '1')
 	{
-		$name = trim($_POST['name']);
+		$name = trim($this->GetSafeVar('name', 'post'));
 		$email = trim($this->GetSafeVar('email', 'post'));
-		$password = $_POST['password'];
-		$confpassword = $_POST['confpassword'];
+		$password = $this->GetSafeVar('password', 'post');
+		$confpassword = $this->GetSafeVar('confpassword', 'post');
 
-//echo $_POST['name']."<br/>\n";
-//echo $this->LoadUser($_POST['name']);
+//echo $this->GetSafeVar('name', 'post')."<br/>\n";
+//echo $this->LoadUser($this->GetSafeVar('name', 'post'));
 //exit;
 
 		// validate input
@@ -424,7 +424,7 @@ else
 			case (FALSE===$urobj->URAuthVerify()):
 				$error = ERROR_VALIDATION_FAILED;
 				break;
-			case (isset($_POST['name']) && TRUE === $this->existsUser($_POST['name'])):
+			case (isset($_POST['name']) && TRUE === $this->existsUser($this->GetSafeVar('name', 'post'))):
 				$error = ERROR_USERNAME_UNAVAILABLE;
 				$username_highlight = INPUT_ERROR_STYLE;
 				break;
@@ -479,7 +479,7 @@ else
 					"signuptime = now(), ".
 					"name = '".mysql_real_escape_string($name)."', ".
 					"email = '".mysql_real_escape_string($email)."', ".
-					"password = md5('".mysql_real_escape_string($_POST['password'])."')");
+					"password = md5('".mysql_real_escape_string($this->GetSafeVar('password', 'post'))."')");
 				unset($this->specialCache['user'][strtolower($name)]);	//invalidate cache if exists #368
 
 				// log in
@@ -499,9 +499,9 @@ else
 	// END *** REGISTER ***
 
 	// BEGIN *** USERSETTINGS PW ***
-	elseif (isset($_POST['action']) && ($_POST['action'] == 'updatepass'))
+	elseif (isset($_POST['action']) && ($this->GetSafeVar('action', 'post') == 'updatepass'))
 	{
-			$name = trim($_POST['yourname']);
+			$name = trim($this->GetSafeVar('yourname', 'post'));
 		if (strlen($name) == 0)	// empty username	
 		{
 			$newerror = WIKKA_ERROR_EMPTY_USERNAME;
@@ -512,19 +512,19 @@ else
 			$newerror = ERROR_WIKINAME;
 			$username_temp_highlight = INPUT_ERROR_STYLE;
 		}
-		#elseif (!($this->LoadUser($_POST['yourname'])))	//check if user exists
-		elseif (!($this->existsUser($_POST['yourname'])))	//check if user exists
+		#elseif (!($this->LoadUser($this->GetSafeVar('yourname', 'post'))))	//check if user exists
+		elseif (!($this->existsUser($this->GetSafeVar('yourname', 'post'))))	//check if user exists
 		{
 			$newerror = ERROR_NONEXISTENT_USERNAME;
 			$username_temp_highlight = INPUT_ERROR_STYLE;
 		}
-		#elseif ($existingUser = $this->LoadUser($_POST['yourname']))	// if user name already exists, check password
-		elseif ($existingUser = $this->loadUserData($_POST['yourname']))	// if user name already exists, check password
+		#elseif ($existingUser = $this->LoadUser($this->GetSafeVar('yourname', 'post')))	// if user name already exists, check password
+		elseif ($existingUser = $this->loadUserData($this->GetSafeVar('yourname', 'post')))	// if user name already exists, check password
 		{
 			// updatepassword
-			if ($existingUser['password'] == $_POST['temppassword'])
+			if ($existingUser['password'] == $this->GetSafeVar('temppassword', 'post'))
 			{
-				$this->SetUser($existingUser, $_POST['remember']);
+				$this->SetUser($existingUser, $this->GetSafeVar('remember', 'post'));
 				$this->Redirect($url);
 			}
 			else

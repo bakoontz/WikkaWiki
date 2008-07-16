@@ -24,7 +24,7 @@
 $username = '';
 if(isset($_REQUEST['user']))
 {
-	$username = $this->htmlspecialchars_ent($_REQUEST['user']); 
+	$username = $this->GetSafeVar('user', 'request'); 
 }
 if (($this->IsAdmin() && !empty($username)) || 
 		($this->GetUser() && $username = $this->GetUserName())) 

@@ -38,14 +38,14 @@ $params = '';
 $username = ''; 
 if(isset($_REQUEST['user'])) 
 { 
-	$username = $this->htmlspecialchars_ent($_REQUEST['user']); 
+	$username = $this->GetSafeVar('user', 'request'); 
 	$params .= "user=$username&"; 
 } 
  
 $action = ''; 
 if(isset($_REQUEST['action'])) 
 { 
-	$action = $this->htmlspecialchars_ent($_REQUEST['action']); 
+	$action = $this->GetSafeVar('action', 'request'); 
 	$params .= "action=$action&"; 
 } 
 $params = substr($params, 0, -1); 

@@ -40,7 +40,7 @@
 
 // get parameters
 if (!$page) $page = $wikka_vars;	// @@@ sanitize (update Action() first!) @@@ and get real name from DB #60
-
+$page = $this->htmlspecialchars_ent($page);
 
 // init variables
 $_included_page = $page;

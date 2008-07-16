@@ -226,26 +226,26 @@ elseif(FALSE===empty($file_to_delete) && TRUE===userCanUpload())
 // 2. print a simple download link for the specified file, if it exists
 elseif (isset($vars['download']))
 {
-	if (file_exists($upload_path.DIRECTORY_SEPARATOR.$vars['download'])) # #89
+	if
+	(file_exists($upload_path.DIRECTORY_SEPARATOR.$this->htmlspecialchars_ent($vars['download']))) # #89
 	{
 		if (!isset($vars['text']))
 		{
-			$text = $vars['download'];
+			$text = $this->htmlspecialchars_ent($vars['download']);
 		} else
 		{
-			$text = $vars['text'];
+			$text = $this->htmlspecialchars_ent($vars['text']);
 		}
 		//Although $output is passed to ReturnSafeHTML, it's better to sanitize $text here. At least it can avoid invalid XHTML.
-		$text = $this->htmlspecialchars_ent($text);
 		$output .=  '<a href="'
-			. $this->Href('files.xml', $this->tag, 'action=download&amp;file='.rawurlencode($vars['download']))
+			. $this->Href('files.xml', $this->tag, 'action=download&amp;file='.rawurlencode($this->htmlspecialchars_ent($vars['download'])))
 			. '" title="'.sprintf(DOWNLOAD_LINK_TITLE, $text).'">'
 			. urldecode($text)
 			. '</a>';
 	}
 	else
 	{
-		echo '<em class="error">'.sprintf(ERROR_NONEXISTENT_FILE, '<tt>'.$vars['download'].'</tt>').'</em>';
+		echo '<em class="error">'.sprintf(ERROR_NONEXISTENT_FILE, '<tt>'.$this->htmlspecialchars_ent($vars['download']).'</tt>').'</em>';
 	}
 	$output .= '</div>';
 	$output = $this->ReturnSafeHTML($output);

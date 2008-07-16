@@ -30,13 +30,13 @@ if (!defined('SAMPLE_SYNTAX2')) define('SAMPLE_SYNTAX2','{{mindmap url="'.SAMPLE
 // initialization
 $mm_archivepath = $this->StaticHref($this->GetConfigValue('freemind_uripath').'/freemindbrowser.jar');
 // get action parameters
-$mindmap_url = $vars['url'];
+$mindmap_url = $this->htmlspecialchars_ent($vars['url']);
 if ((!$mindmap_url && !$height) && $wikka_vars)
 {
 	$mindmap_url = $wikka_vars;
 }
 $mindmap_url = $this->cleanUrl(trim($mindmap_url));
-$height = isset($vars['height']) ? $this->htmlspecialchars_ent(trim($vars['height'])) : '550';
+$height = isset($vars['height']) ?  $this->htmlspecialchars_ent(trim($this->htmlspecialchars_ent($vars['height']))) : '550';
 if (!$height) $height = '550';
 
 // output

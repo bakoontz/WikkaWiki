@@ -30,6 +30,7 @@ if (is_array($vars))
 {
 	foreach ($vars as $param => $value)
 	{
+		$value = $this->htmlspecialchars_ent($value);
 		if ($param == 'src' and $vars['url'] == '') {$vars['url']=$value;}
 		if ($param == 'title') {$title = $this->htmlspecialchars_ent($vars['title']);}
 		if ($param == 'class') {$class = $this->htmlspecialchars_ent($vars['class']);}
@@ -37,7 +38,7 @@ if (is_array($vars))
 		if ($param == 'link') {$link = $this->htmlspecialchars_ent($vars['link']);}
 	}
 }
-$url = $this->StaticHref($this->cleanUrl(trim($vars['url'])));
+$url = $this->StaticHref($this->cleanUrl(trim($this->htmlspecialchars_ent($vars['url']))));
 
 $output = '<img class="'.$class.'" src="'.$url.'" alt="'.$alt.'" title="'.$title.'" />';
 

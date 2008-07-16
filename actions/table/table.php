@@ -29,6 +29,7 @@ if (is_array($vars))
 {
 	foreach ($vars as $param => $value)
 	{
+		$value = $this->htmlspecialchars_ent($value);
 		if ($param == 'style') {$style=$value;}
 		if ($param == 'columns') {$columns=$value;}
 		if ($param == 'cellpadding')

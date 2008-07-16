@@ -40,6 +40,7 @@ if (is_array($vars))
 {
 	foreach ($vars as $param => $value)
 	{
+		$value = $this->htmlspecialchars_ent($value);
 		if ($param == 'q')
 		{
 			$query = $value;
@@ -50,7 +51,7 @@ if ($query == '')
 {
 	// backward compatibility for {{googleform query}} usage
 	#$query = (isset($vars['wikka_vars'])) ? $vars['wikka_vars'] : $this->GetPageTag();
-	$query = (isset($vars['wikka_vars'])) ? $vars['wikka_vars'] : $this->tag;
+	$query = (isset($vars['wikka_vars'])) ?  $this->htmlspecialchars_ent($vars['wikka_vars']) : $this->tag;
 }
 // Sanitization: Passing $query to htmlspecialchars_ent instead of ReturnSafeHTML(). Inside the value parameter of the input field,
 // we definitely don't want any occurence of ", <, > or unescaped &. IMPORTANT: Use doublequote to enclose value supplied by user, W3C

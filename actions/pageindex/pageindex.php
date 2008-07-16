@@ -40,7 +40,7 @@ if (isset($vars['showpagetitle']) && 1 == (int) $vars['showpagetitle'])
 if ($pages = $this->LoadPageTitles())
 {
 	// filter by letter
-	$requested_letter = (isset($_GET['letter'])) ? $_GET['letter'] : ''; # #312
+	$requested_letter = (isset($_GET['letter'])) ?  $this->GetSafeVar('letter', 'get') : ''; # #312
 	if (!$requested_letter && isset($letter))
 	{
 		$requested_letter = strtoupper($letter); // TODO action parameter (letter) needs to be validated and sanitized (make sure it's a single character)
