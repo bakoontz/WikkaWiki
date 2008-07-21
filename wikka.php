@@ -275,11 +275,11 @@ if ($debug) echo "default 3rd-party component paths...<br/>\n";
 
 if(FALSE !== strpos(strtolower(PHP_OS), strtolower('windows')))
 {
-	define('PATH_SEPARATOR', ';');
+	define('PATH_DIVIDER', ';');
 }
 else
 {
-	define('PATH_SEPARATOR', ':');
+	define('PATH_DIVIDER', ':');
 }
 
 /**#@+
@@ -290,25 +290,25 @@ else
  * May be overridden as well as configured to enable sharing Wikka components
  * between Wikka installations.
  */
-if (!defined('DEFAULT_ACTION_PATH'))	define('DEFAULT_ACTION_PATH', 'plugins/actions'.PATH_SEPARATOR.'actions');
+if (!defined('DEFAULT_ACTION_PATH'))	define('DEFAULT_ACTION_PATH', 'plugins/actions'.PATH_DIVIDER.'actions');
 /**
  * Default <b>directory</b> where handlers bundled with Wikka are stored.
  * May be overridden as well as configured to enable sharing Wikka components
  * between Wikka installations.
  */
-if (!defined('DEFAULT_HANDLER_PATH'))	define('DEFAULT_HANDLER_PATH', 'plugins/handlers'.PATH_SEPARATOR.'handlers');
+if (!defined('DEFAULT_HANDLER_PATH'))	define('DEFAULT_HANDLER_PATH', 'plugins/handlers'.PATH_DIVIDER.'handlers');
 /**
  * Default <b>directory</b> where formatters and highlighters bundled with Wikka are stored.
  * May be overridden as well as configured to enable sharing Wikka components
  * between Wikka installations.
  */
-if (!defined('DEFAULT_FORMATTER_PATH')) define('DEFAULT_FORMATTER_PATH', 'plugins/formatters'.PATH_SEPARATOR.'formatters');
+if (!defined('DEFAULT_FORMATTER_PATH')) define('DEFAULT_FORMATTER_PATH', 'plugins/formatters'.PATH_DIVIDER.'formatters');
 /**
  * Default <b>directory</b> where template files bundled with Wikka are stored.
  * May be overridden as well as configured to enable sharing Wikka components
  * between Wikka installations.
  */
-if (!defined('DEFAULT_TEMPLATE_PATH')) define('DEFAULT_TEMPLATE_PATH', 'plugins/templates'.PATH_SEPARATOR.'templates');
+if (!defined('DEFAULT_TEMPLATE_PATH')) define('DEFAULT_TEMPLATE_PATH', 'plugins/templates'.PATH_DIVIDER.'templates');
 /**
  * Default <b>directory</b> where 3rd-party components bundled with Wikka are stored.
  * This path isn't used directly but can be used in building other 3rd-party
