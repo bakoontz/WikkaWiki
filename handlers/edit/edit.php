@@ -318,8 +318,8 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 				$disabled = 'disabled';
 			}
 		    $edit_buttons .= '<fieldset><legend>'.EDIT_CACHE_LEGEND.'</legend>'."\n".
-			'<input name="submit" type="submit" value="'.EDIT_SAVE_AND_CONTINUE_BUTTON.'" accesskey="'.ACCESSKEY_SAVE_AND_CONTINUE_BUTTON.'" />'."\n".
-			'<input name="submit" type="submit" value="'.EDIT_SAVE_AND_QUIT_BUTTON.'" accesskey="'.ACCESSKEY_SAVE_AND_QUIT_BUTTON.'" />'."\n".
+			'<input name="submit" type="submit" value="'.EDIT_SAVE_AND_CONTINUE_BUTTON.'" accesskey="'.ACCESSKEY_SAVE_AND_CONTINUE.'" />'."\n".
+			'<input name="submit" type="submit" value="'.EDIT_SAVE_AND_QUIT_BUTTON.'" accesskey="'.ACCESSKEY_SAVE_AND_QUIT.'" />'."\n".
 			'<input '.$disabled.' name="submit" type="submit" value="'.PAGE_EDIT_CACHE_RETRIEVE_BUTTON.'"/>'."\n".
 			'<input '.$disabled.' name="submit" type="submit" value="'.PAGE_EDIT_CACHE_DELETE_BUTTON.'"/>'."\n";
 			$edit_buttons .= '</fieldset>'."\n";
@@ -457,7 +457,7 @@ function SaveEditCache(&$wakka, &$contents)
 	}
 	$query = "
 		UPDATE ".$wakka->GetConfigValue('table_prefix')."edit_cache
-		SET contents='".$contents."', updated=now()
+		SET contents='".mysql_real_escape_string($contents)."', updated=now()
 		WHERE page_tag='".$wakka->page['tag']."' AND
 		      owner='".$wakka->GetUserName()."'"; 
 	$res = $wakka->Query($query);
