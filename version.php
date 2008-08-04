@@ -6,7 +6,7 @@
  *
  * @package		Wikka
  * @subpackage	Core
- * @version		$Id: wikka.php 1173 2008-07-03 09:25:33Z BrianKoontz $
+ * @version		$Id$
  * @license		http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @see			/docs/Wikka.LICENSE
  * @filesource
