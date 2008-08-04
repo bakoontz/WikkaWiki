@@ -28,7 +28,7 @@ $svn_version = '';
  * Used to generate WAKKA_VERSION value. Changes here might be
  * modified during SVN checkin.
  */
-$svn_revision = '$Revision$';
+$svn_revision = '$Rev$';
 if(empty($svn_version))
 {
 	list($t1, $svn_version, $t2) = explode(' ', $svn_revision);
