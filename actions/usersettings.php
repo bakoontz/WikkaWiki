@@ -98,6 +98,7 @@ if (!defined('CONFIRM_PASSWORD_LABEL')) define('CONFIRM_PASSWORD_LABEL', "Confir
 if (!defined('RETRIEVE_PASSWORD_HEADING')) define('RETRIEVE_PASSWORD_HEADING', "===Forgot your password?===");
 if (!defined('RETRIEVE_PASSWORD_MESSAGE')) define('RETRIEVE_PASSWORD_MESSAGE', "If you need a password reminder, click [[PasswordForgotten here]]. --- You can login here using your password reminder.");
 if (!defined('TEMP_PASSWORD_LABEL')) define('TEMP_PASSWORD_LABEL', "Password reminder:");
+if (!defined('USERSETTINGS_REDIRECT_AFTER_LOGIN_LABEL')) define('USERSETTINGS_REDIRECT_AFTER_LOGIN_LABEL', 'Redirect to %s after login');	// %s page to redirect to
 
 //initialize variables
 $params = '';
@@ -131,6 +132,18 @@ $url = $this->config['base_url'].$this->tag;
 
 // append URL params depending on rewrite_mode
 $params = ($this->config['rewrite_mode'] == 1) ? '?' : '&';
+
+$regex_referrer = '@^'.preg_quote($this->config['base_url'], '@').'([^\/\?&]*)@i';
+if (isset($_SERVER['HTTP_REFERER']) && preg_match($regex_referrer, $_SERVER['HTTP_REFERER'], $match))
+{
+	if (strcasecmp($this->tag, $match[1]))
+	{
+		$_SESSION['go_back'] = $_SERVER['HTTP_REFERER'];
+		//We save the tag of the referring page, this tag is to be shown in label <Go back to ...>. We must use a session here because if the user 
+		//Refresh the page by hitting <Enter> on the address bar, the value would be lost.
+		$_SESSION['go_back_tag'] = $match[1];
+	}
+}
 
 // BEGIN *** Logout ***
 // is user trying to log out?
@@ -403,7 +416,17 @@ else
 					break;
 				default:
 					$this->SetUser($existingUser);
-					$this->Redirect($url, '');
+					if ((isset($_SESSION['go_back'])) && (isset($_POST['do_redirect'])))
+					{
+						$go_back = $_SESSION['go_back'];
+						unset($_SESSION['go_back']);
+						unset($_SESSION['go_back_tag']);
+						$this->Redirect($go_back);
+					}
+					else
+					{
+						$this->Redirect($url, '');
+					}
 			}
 		}
 		else
@@ -486,8 +509,18 @@ else
 
 				// log in
 				$this->SetUser($this->LoadUser($name));
-				$params .= 'registered=true';
-				$this->Redirect($url.$params);
+				if ((isset($_SESSION['go_back'])) && (isset($_POST['do_redirect'])))
+				{
+					$go_back = $_SESSION['go_back'];
+					unset($_SESSION['go_back']);
+					unset($_SESSION['go_back_tag']);
+					$this->Redirect($go_back);
+				}
+				else
+				{
+					$params .= 'registered=true';
+					$this->Redirect($url.$params);
+				}
 		}
 		// END *** Register ***
 	}
@@ -560,6 +593,17 @@ else
 		<td align="right"><?php echo sprintf(PASSWORD_LABEL, PASSWORD_MIN_LENGTH) ?></td>
 		<td><input <?php echo $password_highlight; ?> type="password" name="password" size="40" /></td>
 	</tr>
+	<?php
+		if (isset($_SESSION['go_back']))
+		{
+		?>
+	<tr>
+		<td align="right"><?php printf(USERSETTINGS_REDIRECT_AFTER_LOGIN_LABEL, $_SESSION['go_back_tag']); ?></td>
+		<td><input type='checkbox' name='do_redirect' id='do_redirect'<?php if(isset($_POST['do_redirect']) || empty($_POST)) echo 'checked="checked"'; ?> />
+	</tr>
+	<?php
+		}
+	?>
 	<tr>
 		<td>&nbsp;</td>
 		<td><input name="submit" type="submit" value="<?php echo LOGIN_BUTTON_LABEL ?>" size="40" /></td>
