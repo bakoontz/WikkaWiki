@@ -41,10 +41,12 @@
  
 echo '<div class="page">'."\n";
 $start = (int) $this->GetSafeVar('start', 'get');	// @@@ accept only positive value here
+
 if ($this->HasAccess("read")) {
 	// load revisions for this page
 	if ($pages = $this->LoadRevisions($this->tag, $start))
 	{
+		$note = '';
 		$output = "";
 		$additional_output = '';
 		$c = 0;
@@ -74,11 +76,7 @@ if ($this->HasAccess("read")) {
 					$added = array_diff($bodyA, $bodyB);
 					$deleted = array_diff($bodyB, $bodyA);
 
-					if (strlen($pageA['note']) == 0)
-					{
-						$note = '';
-					}
-					else
+					if (strlen($pageA['note']) > 0)
 					{
 						$note = '['.$this->htmlspecialchars_ent($pageA['note']).']';
 					}
