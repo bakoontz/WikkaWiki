@@ -170,7 +170,9 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 			if (preg_match("/\.(mm)$/si", $url)) { #145
 				return $wakka->Action("mindmap ".$url);
 			} else
-				return $wakka->Link($url).$matches[2];
+				$link = $wakka->Link($url);
+				if(isset($matches[2])) $link .= $matches[2];
+				return $link;
 		}
 		// header level 5
 		else if ($thing == "==")
