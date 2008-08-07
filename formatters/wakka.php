@@ -311,11 +311,12 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 		// \s : any whitespace character
 		else if (preg_match("/^\[\[(\S*)(\s+(.+))?\]\]$/s", $thing, $matches))		# recognize forced links across lines
 		{
-			list (, $url, , $text) = $matches;
-			if ($url)
+			if (isset($matches[1])) // url?
 			{
 				//if ($url!=($url=(preg_replace("/@@|&pound;&pound;||\[\[/","",$url))))$result="</span>";
-				if (!$text) $text = $url;
+				$text = '';
+				$url = $matches[1];
+				if (isset($matches[3])) $text = $matches[3]; // forced link title
 				//$text=preg_replace("/@@|&pound;&pound;|\[\[/","",$text);
 				return $result.$wakka->Link($url, "", $text);
 			}
