@@ -268,24 +268,30 @@ div.alertbox {
 
 /* text formatting */
 
-h5 {
-	font-size: 10pt;
+h1, h2, h3, h4, h5 {
+	font-family: Georgia, Times, serif;
+	font-weight: normal;
 }
 
-h4 {
+
+h5 {
 	font-size: 12pt;
 }
 
-h3 {
+h4 {
 	font-size: 14pt;
 }
 
-h2 {
+h3 {
 	font-size: 16pt;
 }
 
-h1 {
+h2 {
 	font-size: 18pt;
+}
+
+h1 {
+	font-size: 20pt;
 }
 
 .header h2 {
