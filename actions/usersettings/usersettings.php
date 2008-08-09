@@ -400,7 +400,7 @@ else
 		}
 		else
 		{
-			$error = ERROR_NON_EXISTENT_USERNAME;
+			$error = ERROR_NONEXISTENT_USERNAME;
 			$username_highlight = INPUT_ERROR_STYLE;
 		}
 	}
