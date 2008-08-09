@@ -111,7 +111,7 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 		}
 	}
 
-	if ($_POST)
+	if (isset($_POST['submit']))
 	{
 		// Retrieve draft version
 		if($_POST['submit'] == PAGE_EDIT_CACHE_RETRIEVE_BUTTON)
@@ -138,8 +138,11 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 		}
 
 		// we don't need to escape here, we do that just before display (i.e., treat note just like body!)
-		$note = trim($_POST['note']);
 
+		if (isset($POST_['note']))
+		{
+			$note = trim($_POST['note']);
+		}
 
 		// Save and continue
 		if($_POST['submit'] == EDIT_SAVE_AND_CONTINUE_BUTTON &&
