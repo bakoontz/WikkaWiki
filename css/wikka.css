@@ -7,7 +7,7 @@ Wikka Default Stylesheet (screen)
 /* global styling */
 
 body {
-	font-family: "Lucida Grande", "Lucida Sans Unicode", Verdana, Tahoma, sans-serif;
+	font-family: "Lucida Grande", "Lucida Sans Unicode", "DejaVu Sans", Verdana, sans-serif;
 	font-size: 13px;
 /*	text-align: justify; */			/* comment out this line if you really need justified text */
 	line-height: 20px;
