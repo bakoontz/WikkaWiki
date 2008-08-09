@@ -539,11 +539,10 @@ if ($loggedin)
 	}
 
 	// ids - use constant for variable-content heading
-	$idTitle = $this->makeId('hn','title');
 	$idTotal = $this->makeId('hn','total');
 	$idResult = $this->makeId('hn','result');
 }
-
+$idTitle = $this->makeId('hn','title');
 // -------------------------------------
 
 // show user interface (pre-template)
