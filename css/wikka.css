@@ -7,19 +7,13 @@ Wikka Default Stylesheet (screen)
 /* global styling */
 
 body {
-	font-family: Verdana, Tahoma, Arial, Helvetica, sans-serif;
+	font-family: "Lucida Grande", "Lucida Sans Unicode", Verdana, Tahoma, sans-serif;
 	font-size: 13px;
 /*	text-align: justify; */			/* comment out this line if you really need justified text */
 	line-height: 20px;
 	color: #000000;
 	background-color: #F8F8F8;
 	margin: 0;
-}
-
-p, td, li, input, select, textarea {
-	font-family: Verdana, Tahoma, Arial, Helvetica, sans-serif;
-	line-height: 20px;
-	font-size: 13px;
 }
 
 form, h1, h2, h3, h4, h5 {
@@ -35,8 +29,6 @@ form, h1, h2, h3, h4, h5 {
 
 .page {
 	color: #000;
-	font-size: 13px;
-	font-family: Verdana, Tahoma, Arial, Helvetica, sans-serif;
 	background-color: white;
 	padding: 15px;
 	border-top: 1px solid #CCC;
