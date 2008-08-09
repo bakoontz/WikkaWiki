@@ -33,6 +33,7 @@
 //defaults
 define('HIGHSCORES_DISPLAY_TOP', 10); //limit output to top n users
 define('HIGHSCORES_DEFAULT_STYLE', 'complex'); //set default layout style
+define('HIGHSCORES_DEFAULT_RANK', 'pages'); //set default layout style
 $table = '';
 
 //valid options
@@ -55,6 +56,10 @@ if (!isset($style) || !in_array($style, $valid_styles))
 	$style = HIGHSCORES_DEFAULT_STYLE;
 }
 
+if (!isset($rank) || !in_array($rank, $valid_rank))
+{
+	$rank = HIGHSCORES_DEFAULT_RANK;
+}
 
 switch($rank)
 {
