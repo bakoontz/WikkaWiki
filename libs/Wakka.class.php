@@ -4126,7 +4126,7 @@ if ($debug) echo 'FormatUser calling... ';
 				array_push($transformed_map[$parent], $id);
 			}
 		}
-		if (is_array($transformed_map[end($visited)]))	// @@@ causes NOTICE
+		if (array_key_exists(end($visited), $transformed_map) && is_array($transformed_map[end($visited)]))
 		{
 			$id = array_shift($transformed_map[end($visited)]);
 		}
