@@ -261,10 +261,9 @@ div.alertbox {
 /* text formatting */
 
 h1, h2, h3, h4, h5 {
-	font-family: Georgia, Times, serif;
+	font-family: Georgia, "DejaVu Serif", Times, serif;
 	font-weight: normal;
 }
-
 
 h5 {
 	font-size: 12pt;
