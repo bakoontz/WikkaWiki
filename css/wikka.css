@@ -95,6 +95,19 @@ a.keys:hover {
 	color: #333;	
 }
 
+.page h1:hover:after, .page h2:hover:after, .page h3:hover:after, .page h4:hover:after, .page h5:hover:after, .page h6:hover:after {
+	color: #aaa; content: "\0020\0020\00b6";
+}
+
+a.heading {
+	color: #000;
+}
+
+a.heading:hover {
+	color: #000;
+	text-decoration: none;
+}
+
 /* link icons */
 
 .page a.ext {

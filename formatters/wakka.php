@@ -121,6 +121,30 @@ if (isset($format_option) && preg_match(PATTERN_MATCH_PAGE_FORMATOPTION, $format
 					// now create id based on resulting heading text
 					$h_id = $wakka->makeId('hn', $headingtext);
 
+					#503 - The text of a heading is now becoming a link to this heading, allowing an easy way to copy link to clipboard.
+					// For this, we take the textNode child of a heading, and if it is not enclosed in <a...></a>, we enclose it in 
+					// $opening_anchor and $closing_anchor.
+					$opening_anchor = '<a class="heading" href="#'.$h_id.'">';
+					$closing_anchor = '</a>';
+					/**
+					 * Match "<a " when it isn't preceded by "</a>"
+					 */
+					define('PATTERN_OPEN_A_ALONE', '(?<!</a>|^)<a ');
+					/**
+					 * Match the end of a string when the string doesn't end with </a>
+					 */
+					define('PATTERN_END_OF_STRING_ALONE', '(?<!</a>)$');
+					/**
+					 * Match "</a>" when it is not followed by an opening link markup (<a )
+					 */
+					define('PATTERN_CLOSE_A_ALONE', '</a>(?!<a |$)');
+					/**
+					 * Match the start of a string when the string doesn't start with "<a "
+					 */
+					define('PATTERN_START_OF_STRING_ALONE', '^(?!<a )');
+					$h_heading = preg_replace('@('.PATTERN_OPEN_A_ALONE. '|'.PATTERN_END_OF_STRING_ALONE.  ')@', $closing_anchor.'\\0', $h_heading);
+					$h_heading = preg_replace('@('.PATTERN_CLOSE_A_ALONE.'|'.PATTERN_START_OF_STRING_ALONE.')@', '\\0'.$opening_anchor, $h_heading);
+
 					// rebuild element, adding id
 					return '<'.$h_tagname.$h_attribs.' id="'.$h_id.'">'.$h_heading.'</'.$h_tagname.'>';
 				}
