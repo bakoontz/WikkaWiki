@@ -145,7 +145,7 @@ if (isset($format_option) && preg_match(PATTERN_MATCH_PAGE_FORMATOPTION, $format
 					$h_heading = preg_replace('@('.PATTERN_CLOSE_A_ALONE.'|'.PATTERN_START_OF_STRING_ALONE.')@', '\\0'.$opening_anchor, $h_heading);
 
 					// rebuild element, adding id
-					return '<a class="heading" href="#'.$h_id.'"><'.$h_tagname.$h_attribs.' id="'.$h_id.'">'.$h_heading.'</'.$h_tagname.'></a>';
+					return '<'.$h_tagname.$h_attribs.' id="'.$h_id.'">'.$h_heading.'</'.$h_tagname.'>';
 				}
 			}
 			// other elements to be treated go here (tables, images, code sections...)
