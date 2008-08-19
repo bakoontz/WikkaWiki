@@ -242,8 +242,12 @@ class Wakka
 
 	/**
 	 * Constructor.
+	 * Database connection is established when the main class Wakka is constructed.
 	 *
-	 * @uses	Wakka::GetConfigValue()
+	 * @uses	Config::$mysql_database
+	 * @uses	Config::$mysql_host
+	 * @uses	Config::$mysql_password
+	 * @uses	Config::$mysql_user
 	 */
 	function Wakka($config)
 	{
@@ -272,7 +276,7 @@ class Wakka
 	 * Debugging is enabled, the query and the time it took to execute
 	 * are added to the Query-Log.
 	 *
-	 * @uses	Wakka::GetConfigValue()
+	 * @uses	Config::$sql_debugging
 	 * @uses	getmicrotime()
 	 *
 	 * @param	string	$query	mandatory: the query to be executed.
@@ -357,7 +361,7 @@ class Wakka
 	 * @version		1.1
 	 *
 	 * @access	public
-	 * @uses	Wakka::GetConfigValue()
+	 * @uses	Config::$table_prefix
 	 * @uses	Wakka::Query()
 	 *
 	 * @param	string	$table	required: (logical) table name to query;
@@ -386,6 +390,7 @@ class Wakka
 	 * !param	integer $major mandatory: INTERFACE CHANGE
 	 * !param	integer $minor mandatory: INTERFACE CHANGE
 	 * !param	integer $subminor mandatory: INTERFACE CHANGE
+	 * @uses getMysqlVersion()
 	 * @param	string	$min_version	optional; default: 3.23, the minimum for Wikka to run
 	 * @return	boolean TRUE if version is sufficient (higher or equal specified version); FALSE if not or n/a
 	 * @todo	move into a database class
@@ -552,6 +557,8 @@ class Wakka
 	/**
 	 * Buffer the output from an included file.
 	 *
+	 * @uses	Wakka::BuildFullpathFromMultipath()
+	 *
 	 * @param	string	$filename	mandatory: name of the file to be included;
 	 *					note this may already contain a (partial) path!
 	 *					(see {@link http://wush.net/trac/wikka/ticket/446 #446})
@@ -696,6 +703,10 @@ class Wakka
 	/**
 	 * Strip potentially dangerous tags from embedded HTML.
 	 *
+	 * @uses	Config::$safehtml_path
+	 * @uses	instantiate()
+	 * @uses	SafeHTML::parse()
+	 *
 	 * @param	string $html mandatory: HTML to be secured
 	 * @return	string sanitized HTML
 	 */
@@ -725,6 +736,7 @@ class Wakka
 	 *
 	 * @access	public
 	 * @uses	Wakka::Format()
+	 * @uses	Wakka::Link()
 	 *
 	 * @param	mixed	$pages			mandatory: Array of pages returned by LoadAll
 	 * @param	string	$nopagesText	optional: Error message returned if $pages is void. Default: ''
@@ -1011,6 +1023,8 @@ class Wakka
 	 * @since	Wikka 1.1.7.0
 	 * @version	1.0
 	 *
+	 * @uses	Wakka::htmlspecialchars_ent()
+	 *
 	 * @access	public
 	 *
 	 * @param	string	$varname required: field name on get or post or cookie name
@@ -1066,7 +1080,11 @@ class Wakka
 	 * @since	wikka 1.1.6.0
 	 *
 	 * @access	public
-	 * @uses	Wakka::GetConfigValue()
+	 * @uses	Config::$geshi_path
+	 * @uses	Config::$geshi_languages_path
+	 * @uses	Config::$geshi_header
+	 * @uses	Config::$geshi_line_numbers
+	 * @uses	Config::$geshi_tab_width
 	 * @uses	GeShi
 	 *
 	 * @param	string	$sourcecode	required: source code to be highlighted
@@ -1223,6 +1241,7 @@ if ($debug) echo 'tag is '.$this->tag."<br/>\n";
 	/**
 	 * Get the handler used on the page.
 	 *
+	 * @uses	Wakka::$handler
 	 * @return string name of the handler.
 	 */
 	function GetHandler()
@@ -1232,7 +1251,7 @@ if ($debug) echo 'tag is '.$this->tag."<br/>\n";
 	/**
 	 * Get the value of a given item from the wikka config.
 	 *
-	 * @uses	Wakka::config
+	 * @uses	Wakka::$config
 	 *
 	 * @param	$name	mandatory: name of a key in the config array
 	 * @return	mixed	the value of the configuration item, or NULL if not found
@@ -1245,7 +1264,7 @@ if ($debug) echo 'tag is '.$this->tag."<br/>\n";
 	/**
 	 * Set the value of a given item from the wikka config.
 	 *
-	 * @uses	Wakka::config
+	 * @uses	Wakka::$config
 	 *
 	 * @param	$name mandatory: name of a key in the config array
 	 * @param	$value mandatory: the value to set the item at
@@ -1257,7 +1276,7 @@ if ($debug) echo 'tag is '.$this->tag."<br/>\n";
 	/**
 	 * Get the name of the Wiki.
 	 *
-	 * @uses	Wakka::GetConfigValue()
+	 * @uses	Config::$wakka_name
 	 * @return	string the name of the Wiki.
 	 */
 	function GetWakkaName()
@@ -1302,7 +1321,7 @@ if ($debug) echo 'tag is '.$this->tag."<br/>\n";
 	 * so, these methods try first to retrieve data from cache if available.
 	 *
 	 * @access	public
-	 * @uses	Wakka::GetConfigValue()
+	 * @uses	Config::$table_prefix
 	 * @uses	Wakka:LoadSingle()
 	 * @uses	Wakka:CachePage()
 	 * @uses	Wakka:CacheNonExistentPage()
@@ -1364,6 +1383,7 @@ if ($debug) echo "<br/>\n";
 	/**
 	 * GetCachedPageById gets a page from cache whose id is $id.
 	 *
+	 * @uses	Wakka::GetCachedPageById()
 	 * @access	public
 	 * @param	mixed	$id	the id of the page to retrieve from cache
 	 * @return	mixed	an array as returned by LoadPage(), or NULL if absent from cache.
@@ -1379,7 +1399,6 @@ if ($debug) echo "<br/>\n";
 	 * @access	public
 	 * @see		Wakka::CachePage()
 	 * @uses	Wakka::$pageCache
-	 * @uses	Wakka::GetConfigValue()
 	 * @uses	Config::$pagename_case_sensitive
 	 *
 	 * @param	mixed	$tag	the name of the page to retrieve from cache.
@@ -1418,7 +1437,6 @@ if ($debug) echo "<br/>\n";
 	 *
 	 * @access	public
 	 * @uses	Wakka::$pageCache
-	 * @uses	Wakka::GetConfigValue()
 	 * @uses	Config::$pagename_case_sensitive
 	 *
 	 * @param	mixed	$page
@@ -1443,7 +1461,6 @@ if ($debug) echo "<br/>\n";
 	 *
 	 * @access	public
 	 * @uses	Wakka::$pageCache
-	 * @uses	Wakka::GetConfigValue()
 	 * @uses	Config::$pagename_case_sensitive
 	 *
 	 * @param	string	$tag the name of the page.
@@ -1465,10 +1482,10 @@ if ($debug) echo "<br/>\n";
 	 *
 	 * @access	public
 	 * @uses	Wakka::GetCachedPageById()
-	 * @uses	Wakka::GetConfigValue()
 	 * @uses	Wakka::LoadSingle()
 	 * @uses	Wakka::CachePage()
 	 * @uses	Wakka::CacheNonExistentPage()
+	 * @uses	Config::$table_prefix
 	 *
 	 * @param	int		$id		mandatory: Id of the page to load.
 	 * @param	boolean	$cache	optional: if TRUE, an attempt to retrieve from
@@ -1528,9 +1545,9 @@ if ($debug) echo "<br/>\n";
 	 *
 	 * @access	public
 	 * @uses	Wakka::GetUser()
-	 * @uses	Wakka::GetConfigValue()
 	 * @uses	Wakka::LoadAll()
 	 * @uses	Config::$default_revisioncount
+	 * @uses	Config::$table_prefix
 	 * @uses	Config::$pagename_case_sensitive
 	 *
 	 * @param	string	$tag Name of the page to view revisions of
@@ -1605,9 +1622,9 @@ if ($debug) echo "<br/>\n";
 	 *
 	 * @access	public
 	 * @uses	Config::$pagename_case_sensitive
-	 * @uses	Wakka::GetConfigValue()
+	 * @uses	Config::$table_prefix
 	 * @uses	Wakka::$specialCache
-	 * @uses	Wakka::LoadSingle
+	 * @uses	Wakka::LoadSingle()
 	 *
 	 * @param	string	$tag	The name of the page to load oldest revision of.
 	 * @return	array
@@ -1645,6 +1662,8 @@ if ($debug) echo "<br/>\n";
 	/**
 	 * Load pages linking to a given page.
 	 *
+	 * @uses	Config::$table_prefix
+	 * @uses	Wakka::LoadAll()
 	 * @param	string	$tag	mandatory: name of page to find referring links to
 	 * @return	array	one record with a page name for each page found (empty array if none found).
 	 */
@@ -1661,8 +1680,9 @@ if ($debug) echo "<br/>\n";
 	/**
 	 * Load the last x edited pages on the wiki.
 	 *
-	 * @uses	Wakka::GetConfigValue()
+	 * @uses	Config::$table_prefix
 	 * @uses	Wakka::LoadAll()
+	 * @uses	Wakka::CachePage()
 	 *
 	 * @param	integer	$limit optional: number of edited pages to show. default: 50
 	 * @return	array	the last x pages that were changed (empty array if none found)
@@ -1702,7 +1722,7 @@ if ($debug) echo "<br/>\n";
 	 * WARNING: The parameter $sort passed to this method is considered sanitized.
 	 *
 	 * @access	public
-	 * @uses	Wakka::GetConfigValue()
+	 * @uses	Config::$table_prefix
 	 * @uses	Wakka::LoadAll()
 	 *
 	 * @param	string	$sort	Sorting needed: Legal SQL expression after ORDER BY clause. Field names are count, time and page_tag.
@@ -1734,6 +1754,18 @@ if ($debug) echo "<br/>\n";
 			);
 		return $pages;
 	}
+	/**
+	 * Ask if a pagename needs to be created.
+	 *
+	 * When an existing page links to a page that hasn't yet been created, this latter needs
+	 * to be created, or the reference needs to be deleted.
+	 *
+	 * @access	public
+	 * @uses	Wakka::LoadWantedPages()
+	 *
+	 * @param	string	$tag	Name of the page to ask if it needs to be created
+	 * @return	boolean	TRUE if $tag needs to be created
+	 */
 	function IsWantedPage($tag)		// #410 - but function not used in 1.1.6.3 -OR- trunk?
 	{
 		$wanted = FALSE;
@@ -1750,6 +1782,18 @@ if ($debug) echo "<br/>\n";
 		}
 		return $wanted;
 	}
+	/**
+	 * Load all orphaned pages.
+	 *
+	 * Orphaned pages are existing pages that no others page on the wiki links to.
+	 * Thus, the only chance this page could be reached may be from search or 
+	 * special pages like PageIndex. A good quality wiki should not have any orphaned page.
+	 *
+	 * @uses	Config::$table_prefix
+	 * @uses	Wakka::LoadAll()
+	 * @access	public
+	 * @return	array	List of orphaned pages
+	 */
 	function LoadOrphanedPages()
 	{
 		$pre = $this->GetConfigValue('table_prefix');
@@ -1763,6 +1807,14 @@ if ($debug) echo "<br/>\n";
 			);
 		return $pages;
 	}
+	/**
+	 * Load all active page names of the wiki and their respective owners.
+	 *
+	 * @uses	Config::$table_prefix
+	 * @uses	Wakka::LoadAll()
+	 * @access	public
+	 * @return	array	List of all page titles (and the page owner), ordered by page name
+	 */
 	function LoadPageTitles()		// @@@ name no longer matches function
 	{
 		$tags = $this->LoadAll("
@@ -1776,7 +1828,8 @@ if ($debug) echo "<br/>\n";
 	/**
 	 * Get names of pages (tags) owned by the specified user.
 	 *
-	 * @uses	Wakka::GetConfigValue()
+	 * @uses	Config::$table_prefix
+	 * @uses	Wakka::LoadAll()
 	 *
 	 * @param	string	$owner
 	 * @return	array	one row for each page owned by $owner
@@ -1793,7 +1846,12 @@ if ($debug) echo "<br/>\n";
 		$pages = $this->LoadAll($query);
 		return $pages;
 	}
-	// DEPRECATED
+	/**
+		* LoadAllPages is deprecated because it could consume too much resources with a big wiki.
+		* Use {@link Wakka::LoadPageTitles()} instead.
+		* @deprecated
+		* @see	Wakka::LoadPageTitles()
+		*/
 	function LoadAllPages()
 	{
 		$pages = $this->LoadAll("
@@ -1807,16 +1865,17 @@ if ($debug) echo "<br/>\n";
 	/**
 	 * Save a page.
 	 *
-	 * @uses	Wakka::reg_username
+	 * @uses	Wakka::$reg_username
 	 * @uses	Wakka::GetPingParams()
 	 * @uses	Wakka::existsUser()
 	 * @uses	Wakka::GetUserName()
 	 * @uses	Wakka::HasAccess()
 	 * @uses	Wakka::LoadPage()
-	 * @uses	Wakka::GetConfigValue()
+	 * @uses	Config::$table_prefix
 	 * @uses	Wakka::Query()
 	 * @uses	Wakka::WikiPing()
 	 * @uses	Wakka::ParsePageTitle()
+	 * @uses	Config::$wikiping_server
 	 *
 	 * @todo	document params and return
 	 */
