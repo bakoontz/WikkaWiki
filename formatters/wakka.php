@@ -59,6 +59,22 @@ if (!defined('PATTERN_MATCH_ID_ATTRIBUTES')) define('PATTERN_MATCH_ID_ATTRIBUTES
  * The string $format_option is a semicolon separated list of strings, including the word `page'
  */
 if (!defined('PATTERN_MATCH_PAGE_FORMATOPTION')) define('PATTERN_MATCH_PAGE_FORMATOPTION', '/(^|;)page(;|$)/');
+/**
+ * Match "<a " when it isn't preceded by "</a>"
+ */
+if (!defined('PATTERN_OPEN_A_ALONE')) define('PATTERN_OPEN_A_ALONE', '(?<!</a>|^)<a ');
+/**
+ * Match the end of a string when the string doesn't end with </a>
+ */
+if (!defined('PATTERN_END_OF_STRING_ALONE')) define('PATTERN_END_OF_STRING_ALONE', '(?<!</a>)$');
+/**
+ * Match "</a>" when it is not followed by an opening link markup (<a )
+ */
+if (!defined('PATTERN_CLOSE_A_ALONE')) define('PATTERN_CLOSE_A_ALONE', '</a>(?!<a |$)');
+/**
+ * Match the start of a string when the string doesn't start with "<a "
+ */
+if (!defined('PATTERN_START_OF_STRING_ALONE')) define('PATTERN_START_OF_STRING_ALONE', '^(?!<a )');
 
 // @@@	is this condition handy? would prevent generating IDs on a page fragment
 //		- unless formatter is called on those with an explicit foprmat option!
@@ -121,6 +137,14 @@ if (isset($format_option) && preg_match(PATTERN_MATCH_PAGE_FORMATOPTION, $format
 					// now create id based on resulting heading text
 					$h_id = $wakka->makeId('hn', $headingtext);
 
+					#503 - The text of a heading is now becoming a link to this heading, allowing an easy way to copy link to clipboard.
+					// For this, we take the textNode child of a heading, and if it is not enclosed in <a...></a>, we enclose it in 
+					// $opening_anchor and $closing_anchor.
+					$opening_anchor = '<a class="heading" href="#'.$h_id.'">';
+					$closing_anchor = '</a>';
+					$h_heading = preg_replace('@('.PATTERN_OPEN_A_ALONE. '|'.PATTERN_END_OF_STRING_ALONE.  ')@', $closing_anchor.'\\0', $h_heading);
+					$h_heading = preg_replace('@('.PATTERN_CLOSE_A_ALONE.'|'.PATTERN_START_OF_STRING_ALONE.')@', '\\0'.$opening_anchor, $h_heading);
+
 					// rebuild element, adding id
 					return '<'.$h_tagname.$h_attribs.' id="'.$h_id.'">'.$h_heading.'</'.$h_tagname.'>';
 				}
@@ -139,7 +163,8 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 	{
 		$thing = $things[0];
 		$result='';
-
+		$valid_filename = '';
+		
 		static $oldIndentLevel = 0;
 		static $oldIndentLength= 0;
 		static $indentClosers = array();
@@ -160,11 +185,9 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 		static $trigger_floatr = 0;
 		static $trigger_keys = 0;
 		static $trigger_strike = 0;
-		static $trigger_inserted = 0;
 		static $trigger_center = 0;
 		static $trigger_l = array(-1, 0, 0, 0, 0, 0);
 		static $output = '';
-		static $valid_filename = '';
 		static $invalid = '';
 		static $curIndentType;
 
@@ -215,7 +238,11 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 			}
 			if ($trigger_inserted % 2)
 			{
-				$result .=  '</span>';
+				$result .=  '</ins>';
+			}
+			if ($trigger_deleted % 2)
+			{
+				$result .=  '</del>';
 			}
 			if ($trigger_underline % 2)
 			{

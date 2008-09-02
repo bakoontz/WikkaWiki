@@ -43,8 +43,8 @@ if ($pages = $this->LoadRecentlyChanged())
 {
 	$curday = '';
 	//print feed link icon
-	$xmlicon_url = $this->StaticHref('images/xml.png');
-	echo '<p><a href="'.$this->Href('recentchanges.xml', $this->page['tag']).'"><img src="'.$xmlicon_url.'" width="36" height="14" alt="XML" /></a></p>'."\n";
+	$xmlicon_url = $this->StaticHref('images/feed.png');
+	echo '<p><a href="'.$this->Href('recentchanges.xml', $this->page['tag']).'"><img class="icon" src="'.$xmlicon_url.'" width="14" height="14" alt="feed icon" /></a></p>'."\n";
 
 	if ($user = $this->GetUser())
 	{
@@ -119,7 +119,7 @@ if ($pages = $this->LoadRecentlyChanged())
 	}
 	if ($readable == 0)
 	{
-		echo '<em>'.RECENTCHANGES_NONE_ACCESSIBLE.'</em>';
+		echo '<em class="error">'.RECENTCHANGES_NONE_ACCESSIBLE.'</em>';
 	}
 	echo '</ul>'."\n";
 
@@ -135,6 +135,6 @@ if ($pages = $this->LoadRecentlyChanged())
 }
 else
 {
-	echo '<em>'.RECENTCHANGES_NONE_FOUND.'</em>';
+	echo '<em class="error">'.RECENTCHANGES_NONE_FOUND.'</em>';
 }
 ?>
