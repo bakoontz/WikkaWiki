@@ -567,10 +567,9 @@ class Wakka
 	 *					if the intention is to let this fail silently, just pass an empty string here
 	 * @param	boolean	$makepage	optional: create a "page" div for error; default FALSE
 	 * @param	string	$vars	optional: vars to be passed to the file to handle. default: ''
-	 * @param   boolean  $err    optional: error flag indicating whether or not an error message was returned
 	 * @return	string	the included file's output or the $not_found_text if the file could not be found
 	 */
-	function IncludeBuffered($filename, $path, $not_found_text, $makepage=FALSE, $vars='', &$err='')
+	function IncludeBuffered($filename, $path, $not_found_text, $makepage=FALSE, $vars='')
 	{
 		$output = '';
 		$not_found_text = trim($not_found_text);
@@ -587,7 +586,6 @@ class Wakka
 				// NOTE: this usage is DEPRECATED
 				extract($vars, EXTR_SKIP);	// [SEC] EXTR_SKIP avoids collision with existing filenames
 			}
-			$err = false;
 			ob_start();
 			include $fullfilepath;			// this is where it all happens!
 			$output = ob_get_contents();
@@ -598,7 +596,6 @@ class Wakka
 			// @@@ wrap in <em class="error"> here, not in callers
 			$output = ($makepage) ? '<div class="page"><em class="error">'.$not_found_text.'</em></div>' : '<em class="error">'.$not_found_text.'</em>';
 		}
-		$err = true;
 		return $output;
 	}
 
@@ -2965,7 +2962,7 @@ if ($debug) echo "<br/>\n";
 	 */
 	function Header()
 	{
-		$header = $this->IncludeBuffered('header.php', $this->GetConfigValue('wikka_template_path'), ERROR_HEADER_MISSING, FALSE, '', $err);
+		$header = $this->IncludeBuffered('header.php', $this->GetConfigValue('wikka_template_path'), ERROR_HEADER_MISSING, FALSE, '');
 		return $header;
 	}
 	/**
@@ -2976,7 +2973,7 @@ if ($debug) echo "<br/>\n";
 	 */
 	function Footer()
 	{
-		$footer = $this->IncludeBuffered('footer.php', $this->GetConfigValue('wikka_template_path'), ERROR_FOOTER_MISSING, FALSE, '', $err);
+		$footer = $this->IncludeBuffered('footer.php', $this->GetConfigValue('wikka_template_path'), ERROR_FOOTER_MISSING, FALSE, '');
 		return $footer;
 	}
 
@@ -3349,7 +3346,7 @@ if ($debug) echo "<br/>\n";
 			$action_location_disp	= '<code>'.$this->htmlspecialchars_ent($action_location).'</code>';	// [SEC] make error (including (part of) request) safe to display
 			$action_not_found		= sprintf(ACTION_UNKNOWN,$action_location_disp);
 			// produce output
-			$out = $this->IncludeBuffered($action_location, $this->GetConfigValue('wikka_action_path'), $action_not_found, FALSE, $vars, $err);
+			$out = $this->IncludeBuffered($action_location, $this->GetConfigValue('wikka_action_path'), $action_not_found, FALSE, $vars);
 			// @@@ a little encapsulation here would be nice: move the conditions within the functions! (can do if it's an object variabl!)
 			if ($link_tracking_state)
 			{
@@ -3405,7 +3402,7 @@ if ($debug) echo 'Handler - handler specified: '.$handler."<br/>\n";
 			$handler_location_disp	= '<code>'.$this->htmlspecialchars_ent($handler_location).'</code>';	// [SEC] make error (including (part of) request) safe to display
 			$handler_not_found		= sprintf(HANDLER_UNKNOWN,$handler_location_disp);
 			// produce output
-			$out = $this->IncludeBuffered($handler_location, $this->GetConfigValue('wikka_handler_path'), $handler_not_found, TRUE, '', $err);
+			$out = $this->IncludeBuffered($handler_location, $this->GetConfigValue('wikka_handler_path'), $handler_not_found, TRUE, '');
 		}
 		return $out;
 	}
@@ -3473,7 +3470,7 @@ if ($debug) echo 'Handler - handler specified: '.$handler."<br/>\n";
 			$formatter_location_disp	= '<code>'.$this->htmlspecialchars_ent($formatter_location).'</code>';	// [SEC] make error (including (part of) request) safe to display
 			$formatter_not_found		= sprintf(FORMATTER_UNKNOWN,$formatter_location_disp);
 			// produce output
-				$out = $this->IncludeBuffered($formatter_location, $this->GetConfigValue('wikka_formatter_path'), $formatter_not_found, FALSE, compact('text', 'format_option'), $err); // @@@
+				$out = $this->IncludeBuffered($formatter_location, $this->GetConfigValue('wikka_formatter_path'), $formatter_not_found, FALSE, compact('text', 'format_option')); // @@@
 		}
 		return $out;
 	}
