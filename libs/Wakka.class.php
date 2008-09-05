@@ -5063,6 +5063,10 @@ if ($debug)
 		{
 			print($this->Handler($this->GetHandler()));
 		}
+		elseif ($this->GetHandler() == 'html')
+		{
+			print($this->Handler($this->GetHandler()));
+		}
 		/*..leads to endless loop!
 		 *  This WAS a workaround for relative paths and rewrite gone wrong
 		 *  but with a correct .htaccess and using StaticHref() this is not
