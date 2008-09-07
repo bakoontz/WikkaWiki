@@ -699,24 +699,15 @@ define('ERROR_OVERWRITE_ALERT2', 'Please copy your changes and re-edit this page
 define('ERROR_MISSING_EDIT_NOTE', 'MISSING EDIT NOTE: Please fill in an edit note!');
 define('ERROR_TAG_TOO_LONG', 'Page name too long! %d characters max.'); // %d - maximum page name length
 define('ERROR_NO_WRITE_ACCESS', 'You don\'t have write access to this page. You might need to [[UserSettings login]] or [[UserSettings register an account]] to be able to edit this page.'); //TODO Distinct links for login and register actions
-define('ERROR_EDIT_CACHE_SAVE_FAIL', 'Cache was not saved. Please copy your changes and re-edit page.');
-define('EDIT_STORE_PAGE_LEGEND', 'Publish page');
-define('EDIT_CACHE_LEGEND', 'Page draft');
-define('PAGE_EDIT_CACHE_RETRIEVE_BUTTON', 'Retrieve draft');
-define('PAGE_EDIT_CACHE_DELETE_BUTTON', 'Delete draft');
-define('PAGE_EDIT_CACHE_CONTINUE_BUTTON', 'Keep draft and continue');
+define('EDIT_STORE_PAGE_LEGEND', 'Store page');
 define('EDIT_PREVIEW_HEADER', 'Preview');
 define('EDIT_NOTE_LABEL', 'Please add a note on your edit'); // label after field, so no colon!
 define('MESSAGE_AUTO_RESIZE', 'Clicking on %s will automatically truncate the page name to the correct size'); // %s - rename button text
 define('EDIT_PREVIEW_BUTTON', 'Preview');
-define('EDIT_SAVE_AND_CONTINUE_BUTTON', 'Save and Continue');
-define('EDIT_SAVE_AND_QUIT_BUTTON', 'Save and Quit');
-define('EDIT_STORE_BUTTON', 'Publish');
+define('EDIT_STORE_BUTTON', 'Store');
 define('EDIT_REEDIT_BUTTON', 'Re-edit');
 define('EDIT_CANCEL_BUTTON', 'Cancel');
 define('EDIT_RENAME_BUTTON', 'Rename');
-define('ACCESSKEY_SAVE_AND_CONTINUE', 'c');
-define('ACCESSKEY_SAVE_AND_QUIT', 'q');
 define('ACCESSKEY_PREVIEW', 'p'); // ideally, should match EDIT_PREVIEW_BUTTON
 define('ACCESSKEY_STORE', 's'); // ideally, should match EDIT_STORE_BUTTON
 define('ACCESSKEY_REEDIT', 'r'); // ideally, should match EDIT_REEDIT_BUTTON
