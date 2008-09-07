@@ -705,18 +705,40 @@ if ($debug) echo "get language file...<br/>\n";
  *
  * Language files are bundled under <b>lang/</b> (default, overridable) in a
  * folder named after their ISO 639-1 code (e.g. 'en' for English).
+ *
+ * Other language files that exist in the language folder will be
+ * included as well (useful for plugins that define their own
+ * language strings).
  */
 //check if a custom language definition is specified; if not, set a default
 $wakkaConfig['default_lang'] = (isset($wakkaConfig['default_lang'])) ? $wakkaConfig['default_lang'] : CONFIG_DEFAULT_LANGUAGE;
 // setup variables
 $default_lang	= $wakkaConfig['default_lang'];
+$lang_base_dir = WIKKA_LANG_PATH;
 $fallback_lang	= CONFIG_DEFAULT_LANGUAGE;			// should always be available
-$default_language_file  = WIKKA_LANG_PATH.DIRECTORY_SEPARATOR.$default_lang.DIRECTORY_SEPARATOR.$default_lang.'.inc.php';
-$fallback_language_file = WIKKA_LANG_PATH.DIRECTORY_SEPARATOR.$fallback_lang.DIRECTORY_SEPARATOR.$fallback_lang.'.inc.php';
+$default_language_file  = $lang_base_dir.DIRECTORY_SEPARATOR.$default_lang.DIRECTORY_SEPARATOR.$default_lang.'.inc.php';
+$fallback_language_file = $lang_base_dir.$fallback_lang.DIRECTORY_SEPARATOR.$fallback_lang.'.inc.php';
 $language_file_not_found = sprintf(ERROR_LANGUAGE_FILE_MISSING,$default_language_file);
 // load language package if it exists
 if (file_exists($default_language_file))
 {
+	/**
+	 * Check for other language files (i.e., for plugins)
+	 */
+	$lang_dir = $lang_base_dir.DIRECTORY_SEPARATOR.$default_lang;
+	$hdir = opendir($lang_dir);
+	if(FALSE !== $hdir)
+	{
+		while(FALSE !== ($file = readdir($hdir)))
+		{
+			if(0 == preg_match('/\.inc\.php$/', $file))
+			{
+				continue; // .inc.php files only!
+			}
+			require_once $lang_dir.DIRECTORY_SEPARATOR.$file;
+		}
+	}
+
 	/**
 	 * Language file for configured default language.
 	 */
@@ -724,6 +746,23 @@ if (file_exists($default_language_file))
 }
 elseif (file_exists($fallback_language_file))
 {
+	/**
+	 * Check for other language files (i.e., for plugins)
+	 */
+	$lang_dir = $lang_base_dir.DIRECTORY_SEPARATOR.$fallback_lang;
+	$hdir = opendir($lang_dir);
+	if(FALSE !== $hdir)
+	{
+		while(FALSE !== ($file = readdir($hdir)))
+		{
+			if(0 == preg_match('/\.inc\.php$/', $file))
+			{
+				continue; // .inc.php files only!
+			}
+			require_once $lang_dir.DIRECTORY_SEPARATOR.$file;
+		}
+	}
+
 	/**
 	 * Language file for system default language: fallback.
 	 */
