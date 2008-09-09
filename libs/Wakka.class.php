@@ -47,6 +47,7 @@ class Wakka
 	var $cookies_sent = false;
 	var $cookie_expiry = PERSISTENT_COOKIE_EXPIRY; 
 	var $wikka_cookie_path;
+	var $additional_headers = array();
 
 	/**
 	 * Constructor
@@ -1696,6 +1697,22 @@ class Wakka
 		return false;
 	}
 
+	/** 
+	 * Add a custom header to be inserted inside the <meta> tag.  
+	 *  
+	 * @uses Wakka::$additional_headers 
+	 * @param string $additional_headers any valid XHTML code that is legal inside the <meta> tag. 
+	 * @param string $indent optional indent string, default is a tabulation. This will be inserted before $additional_headers 
+	 * @param string $sep optional separator string, this will separate you additional headers. This will be inserted after 
+	 *      $additional_headers, default value is a line feed. 
+	 * @access public 
+	 * @return void 
+	 */ 
+	function AddCustomHeader($additional_headers, $indent = "\t", $sep = "\n") 
+	{ 
+		$this->additional_headers[] = $indent.$additional_headers.$sep; 
+	}
+
 	// MAINTENANCE
 	function Maintenance()
 	{
@@ -1764,7 +1781,8 @@ class Wakka
 		}
 		else
 		{
-			print($this->Header().$this->Method($this->method).$this->Footer());
+			$content_body = $this->Method($this->method);
+			print($this->Header().$content_body.$this->Footer());
 		}
 	}
 }

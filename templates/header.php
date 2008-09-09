@@ -30,6 +30,14 @@ if ($this->GetMethod() != 'edit') {
 	$rsslink .= '	<link rel="alternate" type="application/rss+xml" title="'.$this->GetWakkaName().': recently edited pages (RSS)" href="'.$this->Href('recentchanges.xml', $this->tag).'" />'."\n";
 	echo $rsslink;	
 }
+if (isset($this->additional_headers) && is_array($this->additional_headers) && count($this->additional_headers)) 
+{ 
+		foreach ($this->additional_headers as $additional_headers) 
+		{ 
+				echo $additional_headers; 
+		} 
+} 
+
 // UniversalEditButton
 echo "\t".$ueb;	
 ?>
