@@ -1357,12 +1357,12 @@ class Wakka
 #echo 'handler: '.$handler.'<br/>';
 		// now check if a handler by that name exists
 #echo 'checking path: '.$this->GetConfigValue('handler_path').DIRECTORY_SEPARATOR.'page'.DIRECTORY_SEPARATOR.$handler.'.php'.'<br/>';
-		$exists = $this->BuildFullpathFromMultipath($handler.DIRECTORY_SEPARATOR.$handler.'.php', $this->GetConfigValue('wikka_handler_path')); 
+		$exists = $this->BuildFullpathFromMultipath('page'.DIRECTORY_SEPARATOR.$handler.'.php', $this->GetConfigValue('handler_path')); 
 		// return conclusion
 		if(TRUE===empty($exists)) 
-			{ 
-				return FALSE; 
-			} 
+		{ 
+			return FALSE; 
+		} 
 		return TRUE; 
 	}
 
