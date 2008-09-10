@@ -164,6 +164,16 @@ else
 	$t_query = '?wakka=';
 	$t_rewrite_mode = 0;
 }
+
+if(FALSE !== strpos(strtolower(PHP_OS), strtolower('windows')))
+{
+        define('PATH_DIVIDER', ';');
+}
+else
+{
+        define('PATH_DIVIDER', ':');
+}
+	
 $wakkaDefaultConfig = array(
 	'mysql_host'				=> 'localhost',
 	'mysql_database'			=> 'wikka',
@@ -176,19 +186,19 @@ $wakkaDefaultConfig = array(
 	'rewrite_mode'				=> $t_rewrite_mode,
 	'wiki_suffix'				=> '@wikka',
 
-	'action_path'				=> 'actions',
-	'handler_path'				=> 'handlers',
+	'action_path'				=> 'plugins/actions'.PATH_DIVIDER.'actions',
+	'handler_path'				=> 'plugins/handlers'.PATH_DIVIDER.'handlers',
 	'gui_editor'				=> '1',
 	'stylesheet'				=> 'wikka.css',
 
 	// formatter and code highlighting paths
-	'wikka_formatter_path' 		=> 'formatters',		# (location of Wikka formatter - REQUIRED)
+	'wikka_formatter_path' 		=> 'plugins/formatters'.PATH_DIVIDER.'formatters',		# (location of Wikka formatter - REQUIRED)
 	'wikka_highlighters_path'	=> 'formatters',		# (location of Wikka code highlighters - REQUIRED)
 	'geshi_path' 				=> '3rdparty/plugins/geshi',				# (location of GeSHi package)
 	'geshi_languages_path' 		=> '3rdparty/plugins/geshi/geshi',		# (location of GeSHi language highlighting files)
 
 	// template
-	'wikka_template_path' 		=> 'templates',		# (location of Wikka template files - REQUIRED)
+	'wikka_template_path' 		=> 'plugins/templates'.PATH_DIVIDER.'templates',		# (location of Wikka template files - REQUIRED)
 
 	'navigation_links'			=> '[[CategoryCategory Categories]] :: PageIndex ::  RecentChanges :: RecentlyCommented :: [[UserSettings Login/Register]]',
 	'logged_in_navigation_links' => '[[CategoryCategory Categories]] :: PageIndex :: RecentChanges :: RecentlyCommented :: [[UserSettings Change settings/Logout]]',

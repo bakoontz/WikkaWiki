@@ -191,9 +191,9 @@ class Wakka
 		if ('' != trim($path))
 		{
 			// build full (relative) path to requested plugin (method/action/formatter)
-			$fullfilepath = trim($path).DIRECTORY_SEPARATOR.$filename;	#89 - Note $filename may actually already contain a (partial) path
+			$fullfilepath = $this->BuildFullpathFromMultipath($filename, $path);
 			// check if requested file (method/action/formatter) actually exists
-			if (file_exists($fullfilepath))
+			if (FALSE===empty($fullfilepath))
 			{
 				if (is_array($vars))
 				{
@@ -1357,9 +1357,13 @@ class Wakka
 #echo 'handler: '.$handler.'<br/>';
 		// now check if a handler by that name exists
 #echo 'checking path: '.$this->GetConfigValue('handler_path').DIRECTORY_SEPARATOR.'page'.DIRECTORY_SEPARATOR.$handler.'.php'.'<br/>';
-		$exists = file_exists($this->GetConfigValue('handler_path').DIRECTORY_SEPARATOR.'page'.DIRECTORY_SEPARATOR.$handler.'.php');
+		$exists = $this->BuildFullpathFromMultipath($handler.DIRECTORY_SEPARATOR.$handler.'.php', $this->GetConfigValue('wikka_handler_path')); 
 		// return conclusion
-		return $exists;
+		if(TRUE===empty($exists)) 
+			{ 
+				return FALSE; 
+			} 
+		return TRUE; 
 	}
 
 	// PLUGINS
@@ -1450,6 +1454,53 @@ class Wakka
 		}
 		return $this->IncludeBuffered($formatter.'.php', 'Formatter "'.$formatter.'" not found', compact("text"), $this->config['wikka_formatter_path']);
 	}
+
+	/** 
+	 * Build a (possibly valid) filepath from a delimited list of paths  
+	 * 
+	 * This function takes a list of paths delimited by either ":" 
+	 * (Unix-style) or ";" (Window-style) and attempts to construct a 
+	 * fully-qualified pathname to a specific file.  By default, this 
+	 * function checks to see if the file pointed to by the 
+	 * fully-qualified pathname exists.  First valid match wins. 
+	 * Disabling this feature will return the first valid constructed 
+	 * path (i.e, a path containing a valid directory, but not 
+	 * necessarily pointing to an existant file). 
+	 *  
+	 * @param string $filename mandatory: filename to be used in 
+	 *              construction of fully-qualified filepath  
+	 * @param string $pathlist mandatory: ;- or :-delimted list of 
+	 *              paths 
+	 * @param  boolean $checkIfFileExists optional: if TRUE, returns 
+	 *              only a pathname that points to a file that exists 
+	 *              (default) 
+	 * @return string A fully-qualified pathname or NULL if none found 
+	 */ 
+	function BuildFullpathFromMultipath($filename, $pathlist, $checkIfFileExists=TRUE) 
+	{ 
+		$paths = preg_split('/;|:/', $pathlist); 
+		if(empty($paths[0])) return NULL; 
+		if(FALSE === $checkIfFileExists) 
+		{ 
+			// Just return first directory that exists 
+			foreach($paths as $path) 
+			{ 
+				$path = trim($path); 
+				if(file_exists($path)) 
+				{ 
+						return $path.DIRECTORY_SEPARATOR.$filename; 
+				} 
+			} 
+			return NULL; 
+		} 
+		foreach($paths as $path) 
+		{ 
+			$path = trim($path); 
+			$fqfn = $path.DIRECTORY_SEPARATOR.$filename; 
+			if(file_exists($fqfn)) return $fqfn; 
+		} 
+		return NULL; 
+	} 
 
 	// USERS
 	function LoadUser($name, $password = 0) { return $this->LoadSingle("select * from ".$this->config['table_prefix']."users where name = '".mysql_real_escape_string($name)."' ".($password === 0 ? "" : "and password = '".mysql_real_escape_string($password)."'")." limit 1"); }
