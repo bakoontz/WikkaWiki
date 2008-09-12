@@ -6,7 +6,7 @@
  *
  * @package 		Language
  *
- * @version		$Id: vn.inc.php.txt 18 2008-07-31 05:17:31Z kyanh $
+ * @version		$Id: vn.inc.php.txt 24 2008-09-06 15:53:43Z kyanh $
  * @license 		http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
  *
@@ -18,7 +18,7 @@
  *
  * @note	This Vietnamese pack is translated from
  * @note		http://wush.net/trac/wikka/browser/trunk/lang/en/en.inc.php
- * @note	svn revision: $Id$
+ * @note	svn revision: Id:en.inc.php 481 2007-05-17 16:34:24Z DarTar
  *
  */
 
@@ -30,7 +30,7 @@
 // NOTE: all common names (used in multiple files) should start with WIKKA_ !
 define('WIKKA_ADMIN_ONLY_TITLE', 'Xin lỗi! Chỉ người điều hành mới xem được thông tin này.'); //title for elements that are only displayed to admins
 define('WIKKA_ERROR_SETUP_FILE_MISSING', 'Không tìm thấy tập tin dùng cho việc cài đặt hoặc nâng cấp! Hãy cài lại WikkaWiki');
-define('WIKKA_ERROR_MYSQL_ERROR', 'MySQL error: %d - %s');	// %d - error number; %s - error text
+define('WIKKA_ERROR_MYSQL_ERROR', 'Lỗi MySQL: %d - %s');	// %d - error number; %s - error text
 define('WIKKA_ERROR_CAPTION', 'Lỗi');
 define('WIKKA_ERROR_ACL_READ', 'Bạn chưa được cấp quyền xem trang này');
 define('WIKKA_ERROR_ACL_READ_SOURCE', 'Bạn chưa có quyền xem mã nguồn của trang này.');
@@ -84,8 +84,8 @@ define('ERROR_WRONG_MYSQL_VERSION', 'Wikka cần MySQL phiên bản %s hoặc ca
 define('STATUS_WIKI_UPGRADE_NOTICE', 'Trang này đang được nâng cấp. Vui lòng ghé thăm sau!');
 define('STATUS_WIKI_UNAVAILABLE', 'Trang wiki này đang tạm ngưng hoạt động.');
 define('PAGE_GENERATION_TIME', 'Trang được tạo ra trong %.4f giây'); // %.4f - page generation time
-define('ERROR_HEADER_MISSING', 'Không tìm ra mẫu cho header. Hãy chắc rằng tập tin <code>header.php</code> có trong thư mục các mẫu.'); //TODO Make sure this message matches any filename/folder change
-define('ERROR_FOOTER_MISSING', 'Không tìm thấy mẫu cho footer. Hãy chắc rằng tập tin <code>footer.php</code> có trong thư mục các mẫu.'); //TODO Make sure this message matches any filename/folder change
+define('ERROR_HEADER_MISSING', 'Không tìm ra mẫu cho đầu trang. Hãy chắc rằng tập tin <code>header.php</code> có trong thư mục các mẫu.'); //TODO Make sure this message matches any filename/folder change
+define('ERROR_FOOTER_MISSING', 'Không tìm thấy mẫu cho chân trang. Hãy chắc rằng tập tin <code>footer.php</code> có trong thư mục các mẫu.'); //TODO Make sure this message matches any filename/folder change
 
 #define('ERROR_WRONG_PHP_VERSION', 'Không tìm thấy biến $_REQUEST[]. Wakka cần PHP phiên bản 4.1.0 hoặc cao hơn!'); //TODO remove referral to PHP internals; refer only to required version
 #define('ERROR_SETUP_HEADER_MISSING', 'Tập tin "setup/header.php" ở đâu rồi! Hãy cài Wikka lại nhé!');
@@ -99,9 +99,9 @@ define('ERROR_FOOTER_MISSING', 'Không tìm thấy mẫu cho footer. Hãy chắc
  */
 // header
 define('GENERIC_DOCTITLE', '%1$s: %2$s');	// %1$s - wiki name; %2$s - page title
-define('RSS_REVISIONS_TITLE', '%1$s: revisions for %2$s');	// %1$s - wiki name; %2$s - current page name
-define('RSS_RECENTCHANGES_TITLE', '%s: recently edited pages');	// %s - wiki name
-define('YOU_ARE', 'You are %s'); // %s - name / ip of the user.
+define('RSS_REVISIONS_TITLE', '%1$s: các phiên bản cho %2$s');	// %1$s - wiki name; %2$s - current page name
+define('RSS_RECENTCHANGES_TITLE', '%s: các trang được chỉnh sửa gần đây');	// %s - wiki name
+define('YOU_ARE', 'Bạn là %s'); // %s - name / ip of the user.
 /**#@-*/
 
 /**#@+
@@ -117,10 +117,10 @@ define('PAGE_ACLS_EDIT_LINK_DESC', 'Sửa quyền truy cập');
 define('PAGE_ACLS_EDIT_ADMIN_LINK_DESC', '('.PAGE_ACLS_EDIT_LINK_DESC.')');
 define('PUBLIC_PAGE', 'Trang công cộng');
 define('USER_IS_OWNER', 'Bạn sỡ hữu trang này.');
-define('TAKE_OWNERSHIP', 'Take Ownership');
+define('TAKE_OWNERSHIP', 'Lấy quyền sở hữu');
 define('REFERRERS_LINK_TITLE', 'Xem cách liên kết đến trang này'); // @@@ TODO 'View a list of URLs referring to this page'
 define('REFERRERS_LINK_DESC', 'Tham chiếu');
-define('QUERY_LOG', 'Query log:');
+define('QUERY_LOG', 'Nhật ký truy vấn:');
 define('SEARCH_LABEL', 'Tìm:');
 /**#@-*/
 
@@ -131,31 +131,31 @@ define('SEARCH_LABEL', 'Tìm:');
  * Language constant used by the {@link calendar.php calendar} action
  */
 // calendar
-define('FMT_SUMMARY', 'Calendar for %s');	// %s - ???@@@
-define('TODAY', 'today');
+define('FMT_SUMMARY', 'Lịch cho %s');	// %s - ???@@@
+define('TODAY', 'hôm nay');
 /**#@-*/
 
 /**#@+
  * Language constant used by the {@link category.php category} action
  */
 // category
-define('ERROR_NO_PAGES', 'Sorry, No items found for %s');	// %s - ???@@@
-define('PAGES_BELONGING_TO', 'The following %1$d page(s) belong to %2$s'); // %1$d number found; %2$s category
+define('ERROR_NO_PAGES', 'Xin lỗi! Không tìm thấy thành phần nào cho trang %s');	// %s - ???@@@
+define('PAGES_BELONGING_TO', 'Có %1$d trang sau thuộc về phạm trù %2$s'); // %1$d number found; %2$s category
 /**#@-*/
 
 /**#@+
  * Language constant used by the {@link color.php color} action
  */
 // color
-define('ERROR_NO_TEXT_GIVEN', 'There is no text to highlight!');
-define('ERROR_NO_COLOR_SPECIFIED', 'Sorry, but you did not specify a color for highlighting!');
+define('ERROR_NO_TEXT_GIVEN', 'Không có đoạn văn nào để tô màu!');
+define('ERROR_NO_COLOR_SPECIFIED', 'Bạn chưa chỉ ra màu để tô!');
 /**#@-*/
 
 /**#@+
  * Language constant used by the {@link contact.php contact} action
  */
 // contact
-define('SEND_FEEDBACK_LINK_TITLE', 'Send us your feedback');
+define('SEND_FEEDBACK_LINK_TITLE', 'Gửi phản hồi');
 define('SEND_FEEDBACK_LINK_TEXT', 'Liên hệ');
 /**#@-*/
 
@@ -163,7 +163,7 @@ define('SEND_FEEDBACK_LINK_TEXT', 'Liên hệ');
  * Language constant used by the {@link countowned.php countowned} action
  */
 // countowned
-define('DISPLAY_MYPAGES_LINK_TITLE', 'Display a list of the pages you currently own');
+define('DISPLAY_MYPAGES_LINK_TITLE', 'Danh sách các trang của bạn');
 /**#@-*/
 
 /**#@+
@@ -177,21 +177,21 @@ define('INDEX_LINK_TITLE', 'Danh sách ABC các trang');
  * Language constant used by the {@link dbinfo.php dbinfo} action
  */
 // dbinfo
-define('HD_DBINFO','Database Information');
-define('HD_DBINFO_DB','Database');
-define('HD_DBINFO_TABLES','Tables');
-define('HD_DB_CREATE_DDL','DDL to create database %s:');				# %s will hold database name
-define('HD_TABLE_CREATE_DDL','DDL to create table %s:');				# %s will hold table name
+define('HD_DBINFO','Thông tin về cơ sỡ dữ liệu');
+define('HD_DBINFO_DB','Cơ sở dữ liệu');
+define('HD_DBINFO_TABLES','Các bảng');
+define('HD_DB_CREATE_DDL','DDL tạo cơ sở dữ liệu %s:');				# %s will hold database name
+define('HD_TABLE_CREATE_DDL','DDL tạo bảng %s:');				# %s will hold table name
 define('TXT_INFO_1','This utility provides some information about the database(s) and tables in your system.');
 define('TXT_INFO_2',' Depending on permissions for the Wikka database user, not all databases or tables may be visible.');
 define('TXT_INFO_3',' Where creation DDL is given, this reflects everything that would be needed to exactly recreate the same database and table definitions,');
 define('TXT_INFO_4',' including defaults that may not have been specified explicitly.');
-define('FORM_SELDB_LEGEND','Databases');
-define('FORM_SELTABLE_LEGEND','Tables');
-define('FORM_SELDB_OPT_LABEL','Select a database:');
-define('FORM_SELTABLE_OPT_LABEL','Select a table:');
-define('FORM_SUBMIT_SELDB','Select');
-define('FORM_SUBMIT_SELTABLE','Select');
+define('FORM_SELDB_LEGEND','Các cơ sở dữ liệu');
+define('FORM_SELTABLE_LEGEND','Các bảng');
+define('FORM_SELDB_OPT_LABEL','Chọn một cơ sở dữ liệu:');
+define('FORM_SELTABLE_OPT_LABEL','Chọn một bảng:');
+define('FORM_SUBMIT_SELDB','Chọn');
+define('FORM_SUBMIT_SELTABLE','Chọn');
 define('MSG_ONLY_ADMIN','Sorry, only administrators can view database information.');
 define('MSG_SINGLE_DB','Information for the <tt>%s</tt> database.');			# %s will hold database name
 define('MSG_NO_TABLES','No tables found in the <tt>%s</tt> database. Your MySQL user may not have sufficient privileges to access this database.');		# %s will hold database name
@@ -203,17 +203,17 @@ define('MSG_NO_TABLE_DDL','Creation DDL for <tt>%s</tt> could not be retrieved.'
  * Language constant used by the {@link emailpassword.php emailpassword} action
  */
 // emailpassword
-define('PW_FORGOTTEN_HEADING', 'Password reminder');
-define('PW_CHK_SENT', 'A password reminder has been sent to %s\'s registered email address.'); // %s - username
-define('PW_FORGOTTEN_MAIL', 'Hello, %1$s\n\n\nSomeone requested that we send to this email address a password reminder to login at %2$s. If you did not request this reminder, disregard this email. -- No action is necessary. -- Your password will stay the same.\n\nYour wikiname: %1$s \nPassword reminder: %3$s \nURL: %4$s \n\nDo not forget to change the password immediately after logging in.'); // %1$s - username; %2$s - wiki name; %3$s - md5 sum of pw; %4$s - login url of the wiki
-define('PW_FORGOTTEN_MAIL_REF', 'Password reminder for %s'); // %s - wiki name
-define('PW_FORM_TEXT', 'Enter your WikiName and a password reminder will be sent to your registered email address.');
-define('PW_FORM_FIELDSET_LEGEND', 'Your WikiName:');
-define('ERROR_UNKNOWN_USER', 'You have entered a non-existent user!');
+define('PW_FORGOTTEN_HEADING', 'Nhắc nhở mật mã');
+define('PW_CHK_SENT', 'Mật mã nhắc nhở được gửi tới email của người dùng %s\'s.'); // %s - username
+define('PW_FORGOTTEN_MAIL', 'Xin chào %1$s!\n\n\nCó ai đó yêu cầu chúng tôi gửi mật mã nhắc nhở đến email này để đăng nhập vào trang %2$s. Nếu người đó chẳng phải là bạn, hãy bỏ qua email này, vì chúng tôi sẽ không có thay đổi nào về mật mã dành cho bạn.\n\nTài khoản: %1$s \nMật mã nhắc nhở: %3$s \nURL: %4$s \n\nNhớ đổi mật mã ngay sau khi sử dụng thông tin vừa nêu để đăng nhập.'); // %1$s - username; %2$s - wiki name; %3$s - md5 sum of pw; %4$s - login url of the wiki
+define('PW_FORGOTTEN_MAIL_REF', 'Mật mã nhắc nhở cho %s'); // %s - wiki name
+define('PW_FORM_TEXT', 'Nhập tên tài khoản của bạn và mật mã nhắc nhở sẽ được chuyển đến email đã dùng để đăng ký.');
+define('PW_FORM_FIELDSET_LEGEND', 'Tài khoản (WikiName):');
+define('ERROR_UNKNOWN_USER', 'Tài khoản đã chỉ ra không tồn tại trên hệ thống!');
 #define('ERROR_MAIL_NOT_SENT', 'An error occurred while trying to send the password. Outgoing mail might be disabled. Please contact your server administrator.');
-define('ERROR_MAIL_NOT_SENT', 'An error occurred while trying to send the password. Outgoing mail might be disabled. Please try to contact your wiki administrator by posting a page comment.');
-define('BUTTON_SEND_PW', 'Send reminder');
-define('USERSETTINGS_REF', 'Return to the %s page.'); // %s - UserSettings link
+define('ERROR_MAIL_NOT_SENT', 'Lỗi xảy ra khi cố gửi password qua email. Hệ thống gửi mail không hoạt động. Vui lòng liên hệ người quản trị hệ thống để được hướng dẫn thêm.');
+define('BUTTON_SEND_PW', 'Gửi mật mã nhắc nhở');
+define('USERSETTINGS_REF', 'Trở về trang %s.'); // %s - UserSettings link
 /**#@-*/
 
 /**#@+
@@ -237,32 +237,32 @@ define('SUCCESS_FEEDBACK_SENT', 'Thông điệp đã được gửi. Cảm ơn b
  * Language constant used by the {@link files.php files action} and {@link handlers/files.xml/files.xml.php files.xml handler}
  */
 // files
-define('ERROR_UPLOAD_DIRECTORY_NOT_WRITABLE', 'Please make sure that the server has write access to a folder named %s.'); // %s Upload folder ref #89
-define('ERROR_UPLOAD_DIRECTORY_NOT_READABLE', 'Please make sure that the server has read access to a folder named %s.'); // %s Upload folder ref #89
-define('ERROR_NONEXISTENT_FILE', 'Sorry, a file named %s does not exist.'); // %s - file name ref
-define('ERROR_FILE_UPLOAD_INCOMPLETE', 'File upload incomplete! Please try again.');
-define('ERROR_UPLOADING_FILE', 'There was an error uploading your file');
-define('ERROR_FILE_ALREADY_EXISTS', 'Sorry, a file named %s already exists.'); // %s - file name ref
-define('ERROR_EXTENSION_NOT_ALLOWED', 'Sorry, files with this extension are not allowed.');
-define('ERROR_FILETYPE_NOT_ALLOWED', 'Sorry, files of this type are not allowed.');
-define('ERROR_FILE_NOT_DELETED', 'Sorry, the file could not be deleted!');
-define('ERROR_FILE_TOO_BIG', 'Attempted file upload was too big. Maximum allowed size is %s.'); // %s - allowed filesize
-define('ERROR_NO_FILE_SELECTED', 'No file selected.');
-define('ERROR_FILE_UPLOAD_IMPOSSIBLE', 'File upload impossible due to misconfigured server.');
-define('SUCCESS_FILE_UPLOADED', 'File was successfully uploaded.');
-define('FILE_TABLE_CAPTION', 'Attachments');
-define('FILE_TABLE_HEADER_NAME', 'File');
-define('FILE_TABLE_HEADER_SIZE', 'Size');
-define('FILE_TABLE_HEADER_DATE', 'Last modified');
-define('FILE_UPLOAD_FORM_LEGEND', 'Add new attachment:');
-define('FILE_UPLOAD_FORM_LABEL', 'File:');
-define('FILE_UPLOAD_FORM_BUTTON', 'Upload');
-define('DOWNLOAD_LINK_TITLE', 'Download %s'); // %s - file name
-define('DELETE_LINK_TITLE', 'Remove %s'); // %s - file name
-define('NO_ATTACHMENTS', 'This page contains no attachment.');
-define('FILES_DELETE_FILE', 'Delete this file?');
-define('FILES_DELETE_FILE_BUTTON', 'Delete File');
-define('FILES_CANCEL_BUTTON', 'Cancel');
+define('ERROR_UPLOAD_DIRECTORY_NOT_WRITABLE', 'Hãy chắc rằng server có quyền ghi vào thư mục %s.'); // %s Upload folder ref #89
+define('ERROR_UPLOAD_DIRECTORY_NOT_READABLE', 'Hãy chắc rằng server có quyền đọc từ thư mục %s.'); // %s Upload folder ref #89
+define('ERROR_NONEXISTENT_FILE', 'Xin lỗi! Tập tin % không tồn tại trên server.'); // %s - file name ref
+define('ERROR_FILE_UPLOAD_INCOMPLETE', 'Việc tải tập tin lên không hoàn thành 100%. Vui lòng thử lại');
+define('ERROR_UPLOADING_FILE', 'Có lỗi xảy ra trong quá trình tải tập tin len');
+define('ERROR_FILE_ALREADY_EXISTS', 'Lỗi: tập tin %s đã có trên server.'); // %s - file name ref
+define('ERROR_EXTENSION_NOT_ALLOWED', 'Xin lỗi. Các tập tin với phần mở rộng này không được phép tải lên');
+define('ERROR_FILETYPE_NOT_ALLOWED', 'Xin lỗi. Các tập tin thuộc loại này không được phép tải lên!');
+define('ERROR_FILE_NOT_DELETED', 'Xin lỗi! Không thể xóa tập tin!');
+define('ERROR_FILE_TOO_BIG', 'Bạn đang cố tải lên tập tin quá lớn. Kích thước tối đa cho phép là %s.'); // %s - allowed filesize
+define('ERROR_NO_FILE_SELECTED', 'Không có tập tin nào được chọn.');
+define('ERROR_FILE_UPLOAD_IMPOSSIBLE', 'Không thể tải tập tin vì thiếu cấu hình cho server.');
+define('SUCCESS_FILE_UPLOADED', 'Tập tin đã được tải lên thành công.');
+define('FILE_TABLE_CAPTION', 'Đính kèm');
+define('FILE_TABLE_HEADER_NAME', 'Tập tin');
+define('FILE_TABLE_HEADER_SIZE', 'Cỡ');
+define('FILE_TABLE_HEADER_DATE', 'Cập nhật lần cuối');
+define('FILE_UPLOAD_FORM_LEGEND', 'Đính kèm tập tin khác:');
+define('FILE_UPLOAD_FORM_LABEL', 'Tập tin:');
+define('FILE_UPLOAD_FORM_BUTTON', 'Tải lên');
+define('DOWNLOAD_LINK_TITLE', 'Tải xuống %s'); // %s - file name
+define('DELETE_LINK_TITLE', 'Xóa tập tin %s'); // %s - file name
+define('NO_ATTACHMENTS', 'Trang này không đính kèm tập tin.');
+define('FILES_DELETE_FILE', 'Xóa tập tin này?');
+define('FILES_DELETE_FILE_BUTTON', 'Xóa tập tin');
+define('FILES_CANCEL_BUTTON', 'Bỏ qua');
 /**#@-*/
 
 /**#@+
@@ -277,7 +277,7 @@ define('GOOGLE_BUTTON', 'Google');
  */
 // include
 define('HIGHSCORES_LABEL_EDITS', 'edits');
-define('HIGHSCORES_LABEL_COMMENTS', 'comments');
+define('HIGHSCORES_LABEL_COMMENTS', 'bình luận');
 define('HIGHSCORES_LABEL_PAGES', 'pages owned');
 define('HIGHSCORES_CAPTION', 'Top %1$s contributor(s) by number of %2$s');
 define('HIGHSCORES_HEADER_RANK', 'rank');
@@ -306,23 +306,23 @@ define('LASTEDIT_DIFF_LINK_TITLE', 'Show differences from last revision');
  * Language constant used by the {@link lastusers.php lastusers} action
  */
 // lastusers
-define('LASTUSERS_CAPTION', 'Recently registered users');
-define('SIGNUP_DATE_TIME', 'Signup Date/Time');
-define('NAME_TH', 'Username');
-define('OWNED_PAGES_TH', 'Owned pages');
-define('SIGNUP_DATE_TIME_TH', 'Signup date/time');
+define('LASTUSERS_CAPTION', 'Các thành viên mới đăng ký');
+define('SIGNUP_DATE_TIME', 'Ngày giờ đăng ký');
+define('NAME_TH', 'Tên tài khoảng');
+define('OWNED_PAGES_TH', 'Trang sở hữu');
+define('SIGNUP_DATE_TIME_TH', 'Ngày giờ đăng ký');
 /**#@-*/
 
 /**#@+
  * Language constant used by the {@link mindmap.php mindmap} action
  */
 // mindmap
-define('MM_JRE_INSTALL_REQ', 'Please install a %s on your computer.'); // %s - JRE install link
-define('MM_DOWNLOAD_LINK_DESC', 'Download this mind map');
+define('MM_JRE_INSTALL_REQ', 'Vui lòng cài đặt %s (JRE) trên máy của bạn.'); // %s - JRE install link
+define('MM_DOWNLOAD_LINK_DESC', 'Tải về ánh xạ tư duy này');
 define('MM_EDIT', 'Use %s to edit it'); // %s - link to freemind project
-define('MM_FULLSCREEN_LINK_DESC', 'Open fullscreen');
-define('ERROR_INVALID_MM_SYNTAX', 'Error: Invalid MindMap action syntax.');
-define('PROPER_USAGE_MM_SYNTAX', 'Proper usage: %1$s or %2$s'); // %1$s - syntax sample 1; %2$s - syntax sample 2
+define('MM_FULLSCREEN_LINK_DESC', 'Mở ở chế độ toàn màn hình');
+define('ERROR_INVALID_MM_SYNTAX', 'Lỗi: cú pháp ánh xạ tư duy không hợp lệ.');
+define('PROPER_USAGE_MM_SYNTAX', 'Cách dùng đúng: %1$s hoặc %2$s'); // %1$s - syntax sample 1; %2$s - syntax sample 2
 /**#@-*/
 
 /**#@+
@@ -330,11 +330,11 @@ define('PROPER_USAGE_MM_SYNTAX', 'Proper usage: %1$s or %2$s'); // %1$s - syntax
  */
 // mychanges
 define('NO_PAGES_EDITED', 'Bạn chưa sửa trang này xong.');
-define('MYCHANGES_ALPHA_LIST', "This is a list of pages edited by %s, along with the time of the last change.");
-define('MYCHANGES_DATE_LIST', "This is a list of pages edited by %s, ordered by the time of the last change.");
-define('ORDER_DATE_LINK_DESC', 'order by date');
-define('ORDER_ALPHA_LINK_DESC', 'order alphabetically');
-define('MYCHANGES_NOT_LOGGED_IN', "You're not logged in, thus the list of pages you've edited couldn't be retrieved.");
+define('MYCHANGES_ALPHA_LIST', "Đây là danh sách các trang soạn bởi %s cùng với thời gian của lần cập nhật cuối.");
+define('MYCHANGES_DATE_LIST', "Đây là danh sách các trang soạn bởi %s, sắp xếp theo thời gian cập nhật cuối.");
+define('ORDER_DATE_LINK_DESC', 'sắp xếp theo ngày');
+define('ORDER_ALPHA_LINK_DESC', 'sắp xếp theo thứ tự ABC');
+define('MYCHANGES_NOT_LOGGED_IN', "Bạn chưa đăng nhập, vì thế danh sách các trang bạn soạn không thể xem được.");
 /**#@-*/
 
 /**#@+
@@ -383,12 +383,12 @@ define('PAGEINDEX_ALL_PAGES', 'All');
  * Language constant used by the {@link recentchanges.php recentchanges} action
  */
 // recentchanges
-define('RECENTCHANGES_HEADING', 'Recently changed pages');
-define('REVISIONS_LINK_TITLE', 'View recent revisions list for %s'); // %s - page name
-define('HISTORY_LINK_TITLE', 'View edit history of %s'); // %s - page name
+define('RECENTCHANGES_HEADING', 'Những trang thay đổi gần đây');
+define('REVISIONS_LINK_TITLE', 'Xem danh sách các phiên bản mới nhất của %s'); // %s - page name
+define('HISTORY_LINK_TITLE', 'Xem lịch sử của trang %s'); // %s - page name
 define('WIKIPING_ENABLED', 'WikiPing enabled: Changes on this wiki are broadcast to %s'); // %s - link to wikiping server
-define('RECENTCHANGES_NONE_FOUND', 'There are no recently changed pages.');
-define('RECENTCHANGES_NONE_ACCESSIBLE', 'There are no recently changed pages you have access to.');
+define('RECENTCHANGES_NONE_FOUND', 'Không có các trang nào thay đổi gần đây.');
+define('RECENTCHANGES_NONE_ACCESSIBLE', 'Bạn chưa có quyền xem những trang thay đổi gần đây.');
 /**#@-*/
 
 /**#@+
@@ -398,7 +398,7 @@ define('RECENTCHANGES_NONE_ACCESSIBLE', 'There are no recently changed pages you
 define('RECENTCOMMENTS_HEADING', 'Bình luận gần đây');
 define('RECENTCOMMENTS_TIMESTAMP_CAPTION', '%s'); // %s - timestamp
 define('RECENTCOMMENTS_NONE_FOUND', 'Không có bình luận.');
-define('RECENTCOMMENTS_NONE_ACCESSIBLE', 'There are no recent comments you have access to.');
+define('RECENTCOMMENTS_NONE_ACCESSIBLE', 'Không có bình luận nào bạn có quyền xem.');
 /**#@-*/
 
 /**#@+
@@ -448,13 +448,13 @@ define('SEARCH_TIPS', "<br /><br /><hr /><br /><strong>Search Tips:</strong><br 
 	."Find pages that contain the exact phrase 'some words' (for example, pages that contain 'some words of wisdom' <br />"
 	."but not 'some noise words'). <br />");
 */
-define('SEARCH_TIPS', 'Search Tips:');
-define('SEARCH_WORD_1', 'apple');
-define('SEARCH_WORD_2', 'banana');
-define('SEARCH_WORD_3', 'juice');
+define('SEARCH_TIPS', 'Mẹo tìm kiếm:');
+define('SEARCH_WORD_1', 'táo');
+define('SEARCH_WORD_2', 'chuối');
+define('SEARCH_WORD_3', 'trái cây');
 define('SEARCH_WORD_4', 'macintosh');
-define('SEARCH_WORD_5', 'some');
-define('SEARCH_WORD_6', 'words');
+define('SEARCH_WORD_5', 'vài');
+define('SEARCH_WORD_6', 'từ');
 define('SEARCH_PHRASE',sprintf('%s %s',SEARCH_WORD_5,SEARCH_WORD_6));
 define('SEARCH_TARGET_1', 'Find pages that contain at least one of the two words.');
 define('SEARCH_TARGET_2', 'Find pages that contain both words.');
@@ -470,39 +470,39 @@ define('SEARCH_TARGET_5',sprintf("Find pages that contain the exact phrase '%1\$
 // - error messages
 define('ERROR_EMPTY_USERNAME', 'Vui lòng cho biết tên của bạn.');
 define('ERROR_NONEXISTENT_USERNAME', 'Xin lỗi. Tên này không tồn tại.'); // @@@ too specific
-define('ERROR_RESERVED_PAGENAME', 'Sorry, this name is reserved for a page. Please choose a different name.');
-define('ERROR_WIKINAME', 'Username must be formatted as a %1$s, e.g. %2$s.'); // %1$s - identifier WikiName; %2$s - sample WikiName
-define('ERROR_EMPTY_EMAIL_ADDRESS', 'Please specify an email address.');
-define('ERROR_INVALID_EMAIL_ADDRESS', 'That doesn\'t quite look like an email address.');
-define('ERROR_INVALID_PASSWORD', 'Sorry, you entered the wrong password.');	// @@@ too specific
-define('ERROR_INVALID_HASH', 'Sorry, you entered a wrong password reminder.');
-define('ERROR_INVALID_OLD_PASSWORD', 'The old password you entered is wrong.');
-define('ERROR_EMPTY_PASSWORD', 'Please fill in a password.');
-define('ERROR_EMPTY_PASSWORD_OR_HASH', 'Please fill your password or password reminder.');
-define('ERROR_EMPTY_CONFIRMATION_PASSWORD', 'Please confirm your password in order to register a new account.');
-define('ERROR_EMPTY_NEW_CONFIRMATION_PASSWORD', 'Please confirm your new password in order to update your account.');
-define('ERROR_EMPTY_NEW_PASSWORD', 'You must also fill in a new password.');
-define('ERROR_PASSWORD_MATCH', 'Passwords don\'t match.');
-define('ERROR_PASSWORD_NO_BLANK', 'Sorry, blanks are not permitted in the password.');
-define('ERROR_PASSWORD_TOO_SHORT', 'Sorry, the password must contain at least %d characters.'); // %d - minimum password length
+define('ERROR_RESERVED_PAGENAME', 'Xin lỗi. Tên này dành riêng cho việc đặt tên trang. Vui lòng chọn tên khác.');
+define('ERROR_WIKINAME', 'Tên người dùng phải ở dạng %1$s, ví dụ %2$s.'); // %1$s - identifier WikiName; %2$s - sample WikiName
+define('ERROR_EMPTY_EMAIL_ADDRESS', 'Vui lòng cho biết email.');
+define('ERROR_INVALID_EMAIL_ADDRESS', 'Dường như bạn chưa chỉ ra một email thật sự.');
+define('ERROR_INVALID_PASSWORD', 'Xin lỗi! Bạn đã chỉ ra mật mã chưa hợp lệ.');	// @@@ too specific
+define('ERROR_INVALID_HASH', 'Mật mã nhắc nhở không đúng.');
+define('ERROR_INVALID_OLD_PASSWORD', 'Bạn đã gõ sai mật mã cũ.');
+define('ERROR_EMPTY_PASSWORD', 'Vui lòng cho biết mật mã.');
+define('ERROR_EMPTY_PASSWORD_OR_HASH', 'Vui lòng cho biết mật mã hoặc mật mã nhắc nhở.');
+define('ERROR_EMPTY_CONFIRMATION_PASSWORD', 'Vui lòng xác nhận lại mật mã để đăng ký tài khoản mới.');
+define('ERROR_EMPTY_NEW_CONFIRMATION_PASSWORD', 'Vui lòng xác nhận lại mật mã để cập nhận thông tin cá nhân.');
+define('ERROR_EMPTY_NEW_PASSWORD', 'Vui lòng cho biết mậ mã mới.');
+define('ERROR_PASSWORD_MATCH', 'Hai mật mã không khớp nhau.');
+define('ERROR_PASSWORD_NO_BLANK', 'Ồ không! Mật mã không thể trống trơn như vậy!');
+define('ERROR_PASSWORD_TOO_SHORT', 'Mật mã phải chứa ít nhất %d ký tự.'); // %d - minimum password length
 define('ERROR_INVALID_REVISION_DISPLAY_LIMIT', 'The number of page revisions should not exceed %d.'); // %d - maximum revisions to view
 define('ERROR_INVALID_RECENTCHANGES_DISPLAY_LIMIT', 'The number of recently changed pages should not exceed %d.'); // %d - maximum changed pages to view
-if(!defined('ERROR_VALIDATION_FAILED')) define('ERROR_VALIDATION_FAILED', "Registration validation failed, please try again!");
+if(!defined('ERROR_VALIDATION_FAILED')) define('ERROR_VALIDATION_FAILED', "Chứng thực đăng ký bị lỗi. Vui lòng thử lại!");
 // - success messages
 define('SUCCESS_USER_LOGGED_OUT', 'Đã thoát thành công khỏi hệ thống.');
 define('SUCCESS_USER_REGISTERED', 'Đã đăng ký thành công!');
-define('SUCCESS_USER_SETTINGS_STORED', 'User settings stored!');
+define('SUCCESS_USER_SETTINGS_STORED', 'Thiết lập cá nhân đã được lưu!');
 define('SUCCESS_USER_PASSWORD_CHANGED', 'Đã cập nhật chìa khóa!');
 // - captions
-define('NEW_USER_REGISTER_CAPTION', 'If you are signing up as a new user:');
-define('REGISTERED_USER_LOGIN_CAPTION', 'If you already have a login, sign in here:');
+define('NEW_USER_REGISTER_CAPTION', 'Nếu bạn đăng ký tài khoản mới:');
+define('REGISTERED_USER_LOGIN_CAPTION', 'Nếu bạn đã có tài khoản, đăng nhập ở đây:');
 define('RETRIEVE_PASSWORD_CAPTION', 'Log in with your [[%s password reminder]]:'); //%s PasswordForgotten link
 define('USER_LOGGED_IN_AS_CAPTION', 'You are logged in as %s'); // %s user name
 // - form legends
-define('USER_ACCOUNT_LEGEND', 'Your account');
-define('USER_SETTINGS_LEGEND', 'Settings');
-define('LOGIN_REGISTER_LEGEND', 'Login/Register');
-define('LOGIN_LEGEND', 'Login');
+define('USER_ACCOUNT_LEGEND', 'Tài khoản của bạn');
+define('USER_SETTINGS_LEGEND', 'Thiết lập');
+define('LOGIN_REGISTER_LEGEND', 'Đăng nhập/Đăng ký');
+define('LOGIN_LEGEND', 'Đăng nhập');
 #define('REGISTER_LEGEND', 'Register'); // @@@ TODO to be used later for register-action
 define('CHANGE_PASSWORD_LEGEND', 'Change your password');
 define('RETRIEVE_PASSWORD_LEGEND', 'Password forgotten');
@@ -512,11 +512,11 @@ define('USER_EMAIL_LABEL', 'Your email address:');
 define('DOUBLECLICK_LABEL', 'Doubleclick editing:');
 define('SHOW_COMMENTS_LABEL', 'Show comments by default:');
 define('DEFAULT_COMMENT_STYLE_LABEL', 'Default comment style');
-define('COMMENT_ASC_LABEL', 'Flat (oldest first)');
-define('COMMENT_DEC_LABEL', 'Flat (newest first)');
-define('COMMENT_THREADED_LABEL', 'Threaded');
+define('COMMENT_ASC_LABEL', 'Phẳng (cũ trước)');
+define('COMMENT_DEC_LABEL', 'Phẳng (mới trước)');
+define('COMMENT_THREADED_LABEL', 'Luồng');
 define('COMMENT_DELETED_LABEL', '[Comment deleted]');
-define('COMMENT_BY_LABEL', 'Comment by ');
+define('COMMENT_BY_LABEL', 'Bình luận bởi ');
 define('RECENTCHANGES_DISPLAY_LIMIT_LABEL', 'RecentChanges display limit:');
 define('PAGEREVISION_LIST_LIMIT_LABEL', 'Page revisions list limit:');
 define('NEW_PASSWORD_LABEL', 'Your new password:');
@@ -532,25 +532,25 @@ define('WIKINAME_SHORT', 'WikiName');
 define('WIKINAME_LONG',sprintf('A WikiName is formed by two or more capitalized words without space, e.g. %s',WIKKA_SAMPLE_WIKINAME));
 define('WIKINAME_LABEL', 'Your %s:'); // %s - expanded short wiki name prompt
 // - form options
-define('CURRENT_PASSWORD_OPTION', 'Your current password');
-define('PASSWORD_REMINDER_OPTION', 'Password reminder');
+define('CURRENT_PASSWORD_OPTION', 'Mật mã hiện tại');
+define('PASSWORD_REMINDER_OPTION', 'Mật mã nhắc nhở');
 // - form buttons
-define('UPDATE_SETTINGS_BUTTON', 'Update Settings');
-define('LOGIN_BUTTON', 'Login');
-define('LOGOUT_BUTTON', 'Logout');
-define('CHANGE_PASSWORD_BUTTON', 'Change password');
-define('REGISTER_BUTTON', 'Register');
+define('UPDATE_SETTINGS_BUTTON', 'Cập nhật thông tin');
+define('LOGIN_BUTTON', 'Đăng nhập');
+define('LOGOUT_BUTTON', 'Thoát');
+define('CHANGE_PASSWORD_BUTTON', 'Đổi mật mã');
+define('REGISTER_BUTTON', 'Đăng ký');
 /**#@-*/
 
 /**#@+
  * Language constant used by the {@link wantedpages.php wantedpages} action
  */
 // wantedpages
-define('SORTING_LEGEND', 'Sorting ...');
-define('SORTING_NUMBER_LABEL', 'Sorting #%d:');
-define('SORTING_DESC_LABEL', 'desc');
+define('SORTING_LEGEND', 'Sắp xếp ...');
+define('SORTING_NUMBER_LABEL', 'Sắp xếp #%d:');
+define('SORTING_DESC_LABEL', 'giảm');
 define('OK_BUTTON', '   OK   ');
-define('NO_WANTED_PAGES', 'No wanted pages. Good!');
+define('NO_WANTED_PAGES', 'Không có trang chờ. Tốt lắm!');
 /**#@-*/
 
 /**#@+
@@ -569,7 +569,7 @@ define('WIKKACONFIG_TH_VALUE', "Value");
  * Language constant used by the {@link fullscreen.php fullscreen} 3rd party MindMap display utility
  */
 // fullscreen
-define('CLOSE_WINDOW', 'Close Window');
+define('CLOSE_WINDOW', 'Đóng cửa sổ');
 define('MM_GET_JAVA_PLUGIN_LINK_DESC', 'get the latest Java Plug-in here'); // used in MM_GET_JAVA_PLUGIN
 define('MM_GET_JAVA_PLUGIN', 'so if it does not work, %s.'); // %s - plugin download link
 /**#@-*/
@@ -606,53 +606,52 @@ define('SET_OWNER_LABEL', 'Set Page Owner:');
 define('SET_OWNER_CURRENT_OPTION', '(Current Owner)');
 define('SET_OWNER_PUBLIC_OPTION', '(Public)'); // actual DB value will remain '(Public)' even if this option text is translated!
 define('SET_NO_OWNER_OPTION', '(Nobody - Set free)');
-define('ACLS_STORE_BUTTON', 'Store ACLs');
-define('CANCEL_BUTTON', 'Cancel');
+define('ACLS_STORE_BUTTON', 'Lưu ACL');
+define('CANCEL_BUTTON', 'Bỏ qua');
 // - syntax
-define('ACLS_SYNTAX_HEADING', 'Syntax:');
-define('ACLS_EVERYONE', 'Everyone');
-define('ACLS_REGISTERED_USERS', 'Registered users');
-define('ACLS_NONE_BUT_ADMINS', 'No one (except admins)');
-define('ACLS_ANON_ONLY', 'Anonymous users only');
-define('ACLS_LIST_USERNAMES', 'the user called %s; enter as many users as you want, one per line'); // %s - sample user name
+define('ACLS_SYNTAX_HEADING', 'Cú pháp:');
+define('ACLS_EVERYONE', 'Mọi người');
+define('ACLS_REGISTERED_USERS', 'Số người dùng có đăng ký');
+define('ACLS_NONE_BUT_ADMINS', 'Không ai (trừ admin)');
+define('ACLS_ANON_ONLY', 'Chỉ dành cho khách');
+define('ACLS_LIST_USERNAMES', 'dành cho người dùng %s; liệt kê mỗi người dùng trên một dòng'); // %s - sample user name
 define('ACLS_NEGATION', 'Any of these items can be negated with a %s:'); // %s - 'negation' mark
-define('ACLS_DENY_USER_ACCESS', '%s will be denied access'); // %s - sample user name
-define('ACLS_AFTER', 'after');
-define('ACLS_TESTING_ORDER1', 'ACLs are tested in the order they are specified:');
+define('ACLS_DENY_USER_ACCESS', '%s sẽ bị ngăn cản truy cập'); // %s - sample user name
+define('ACLS_AFTER', 'sau');
+define('ACLS_TESTING_ORDER1', 'ACLs được kiểm tra theo thứ tự đã chỉ ra:');
 define('ACLS_TESTING_ORDER2', 'So be sure to specify %1$s on a separate line %2$s negating any users, not before.'); // %1$s - 'all' mark; %2$s - emphasised 'after'
-define('ACLS_DEFAULT_ACLS', 'Any lists that are left empty will be set to
-the defaults as specified in %s.');
+define('ACLS_DEFAULT_ACLS', 'Danh sách rỗng sẽ được thiết lập giá trị mặc định như chỉ ra trong %s.');
 /**#@-*/
 
 /**#@+
  * Language constant used by the {@link backlinks.php backlinks} (page) handler
  */
 // backlinks
-define('BACKLINKS_HEADING', 'Pages linking to %s');
-define('BACKLINKS_NO_PAGES', 'There are no backlinks to this page.');
+define('BACKLINKS_HEADING', 'Các trang liên kết tới %s');
+define('BACKLINKS_NO_PAGES', 'Không có liên kết ngược cho trang này.');
 /**#@-*/
 
 /**#@+
  * Language constant used by the {@link claim.php claim} (page) handler
  */
 // claim
-define('USER_IS_NOW_OWNER', 'You are now the owner of this page.');
+define('USER_IS_NOW_OWNER', 'Bây giờ bạn là chủ sở hữu trang này.');
 /**#@-*/
 
 /**#@+
  * Language constant used by the {@link clone.php clone} (page) handler
  */
 // clone
-define('ERROR_ACL_WRITE', 'Sorry! You don\'t have write-access to %s');
-define('CLONE_VALID_TARGET', 'Please fill in a valid target page name and an (optional) edit note.');
-define('CLONE_LEGEND', 'Clone %s'); // %s source page name
-define('CLONED_FROM', 'Cloned from %s'); // %s source page name
-define('SUCCESS_CLONE_CREATED', '%s was succesfully created!'); // %s new page name
-define('CLONE_X_TO_LABEL', 'Clone as:');
-define('CLONE_EDIT_NOTE_LABEL', 'Edit note:');
-define('CLONE_EDIT_OPTION_LABEL', ' Edit after creation');
-define('CLONE_ACL_OPTION_LABEL', ' Clone ACL');
-define('CLONE_BUTTON', 'Clone');
+define('ERROR_ACL_WRITE', 'Bạn chưa có quyền ghi vào trang  %s');
+define('CLONE_VALID_TARGET', 'Vui lòng cho tên thích hợp để nhân bản và vài ghi chú (tùy chọn):');
+define('CLONE_LEGEND', 'Nhân bản trang %s'); // %s source page name
+define('CLONED_FROM', 'Nhân bản từ trang %s'); // %s source page name
+define('SUCCESS_CLONE_CREATED', 'trang %s đã được tạo ra!'); // %s new page name
+define('CLONE_X_TO_LABEL', 'Nhân bản với tên:');
+define('CLONE_EDIT_NOTE_LABEL', 'Ghi chú:');
+define('CLONE_EDIT_OPTION_LABEL', ' Sửa sau khi nhân bản');
+define('CLONE_ACL_OPTION_LABEL', ' Nhân bản ACL');
+define('CLONE_BUTTON', 'Nhân bản');
 /**#@-*/
 
 /**#@+
@@ -671,16 +670,16 @@ define('PAGE_DELETION_CANCEL_BUTTON', 'Bỏ qua');
  * Language constant used by the {@link diff.php diff} (page) handler
  */
 // diff
-define('ERROR_DIFF_LIBRARY_MISSING', 'The file <tt>'.WIKKA_LIBRARY_PATH.DIRECTORY_SEPARATOR.'diff.lib.php</tt> could not be found. You may want to notify the wiki administrator');
-define('ERROR_BAD_PARAMETERS', 'The parameters you supplied are incorrect, one of the two revisions may have been removed.');
-define('DIFF_COMPARISON_HEADER', 'Comparing %1$s for %2$s'); // %1$s - link to revision list; %2$s - link to page
-define('DIFF_REVISION_LINK_TITLE', 'Display the revision list for %s'); // %s page name
-define('DIFF_PAGE_LINK_TITLE', 'Return to the latest version of this page');
-define('DIFF_SAMPLE_ADDITION', 'addition');
-define('DIFF_SAMPLE_DELETION', 'deletion');
-define('DIFF_SIMPLE_BUTTON', 'Simple Diff');
-define('DIFF_FULL_BUTTON', 'Full Diff');
-define('HIGHLIGHTING_LEGEND', 'Highlighting Guide:');
+define('ERROR_DIFF_LIBRARY_MISSING', 'Tập tin <tt>'.WIKKA_LIBRARY_PATH.DIRECTORY_SEPARATOR.'diff.lib.php</tt> không được tìm thấy. Vui lòng liên hệ người quản trị hệ thống.');
+define('ERROR_BAD_PARAMETERS', 'Tham số bạn chỉ ra không hợp lệ: một trong hai phiên bản đã bị xóa.');
+define('DIFF_COMPARISON_HEADER', 'So sánh %1$s cho %2$s'); // %1$s - link to revision list; %2$s - link to page
+define('DIFF_REVISION_LINK_TITLE', 'Danh sách các phiên bản của trang %s'); // %s page name
+define('DIFF_PAGE_LINK_TITLE', 'Xem bản cuối cùng của trang này');
+define('DIFF_SAMPLE_ADDITION', 'thêm');
+define('DIFF_SAMPLE_DELETION', 'xóa');
+define('DIFF_SIMPLE_BUTTON', 'So sánh đơn giản');
+define('DIFF_FULL_BUTTON', 'So sánh đầy đủ');
+define('HIGHLIGHTING_LEGEND', 'Hướng dẫn về tô màu:');
 
 /**#@-*/
 
@@ -688,15 +687,15 @@ define('HIGHLIGHTING_LEGEND', 'Highlighting Guide:');
  * Language constant used by the {@link edit.php edit} (page) handler
  */
 // edit
-define('ERROR_OVERWRITE_ALERT1', 'OVERWRITE ALERT: This page was modified by someone else while you were editing it.');
-define('ERROR_OVERWRITE_ALERT2', 'Please copy your changes and re-edit this page.');
-define('ERROR_MISSING_EDIT_NOTE', 'MISSING EDIT NOTE: Please fill in an edit note!');
-define('ERROR_TAG_TOO_LONG', 'Page name too long! %d characters max.'); // %d - maximum page name length
-define('ERROR_NO_WRITE_ACCESS', 'You don\'t have write access to this page. You might need to [[UserSettings login]] or [[UserSettings register an account]] to be able to edit this page.'); //TODO Distinct links for login and register actions
-define('EDIT_STORE_PAGE_LEGEND', 'Store page');
-define('EDIT_PREVIEW_HEADER', 'Preview');
-define('EDIT_NOTE_LABEL', 'Please add a note on your edit'); // label after field, so no colon!
-define('MESSAGE_AUTO_RESIZE', 'Clicking on %s will automatically truncate the page name to the correct size'); // %s - rename button text
+define('ERROR_OVERWRITE_ALERT1', 'CẢNH BÁO: bạn và ai khác đang đồng thời soạn trang này.');
+define('ERROR_OVERWRITE_ALERT2', 'Vui lòng chép lại các thay đổi của bạn và tiếp tục soan thảo trang.');
+define('ERROR_MISSING_EDIT_NOTE', 'Vui lòng ghi chú về thay đổi của bạn!');
+define('ERROR_TAG_TOO_LONG', 'Tên trang quá dài. Chỉ tối đa %d ký tự thôi!'); // %d - maximum page name length
+define('ERROR_NO_WRITE_ACCESS', 'Bạn chưa có quyền truy cập trang này. Có khi bạn cần [[UserSettings đăng nhập]] hoặc [[UserSettings đăng ký tài khoản]] để tạo, sửa trang này.'); //TODO Distinct links for login and register actions
+define('EDIT_STORE_PAGE_LEGEND', 'Lưu trang');
+define('EDIT_PREVIEW_HEADER', 'Xem trước');
+define('EDIT_NOTE_LABEL', 'Vui lòng thêm ghi chú về thay đổi của bạn'); // label after field, so no colon!
+define('MESSAGE_AUTO_RESIZE', 'Click chuột vào %s sẽ tự động thu gọn tên trang để điều chỉnh kích cỡ'); // %s - rename button text
 define('EDIT_PREVIEW_BUTTON', 'Xem trước');
 define('EDIT_STORE_BUTTON', 'Lưu');
 define('EDIT_REEDIT_BUTTON', 'Tiếp tục soạn');
@@ -708,26 +707,26 @@ define('ACCESSKEY_REEDIT', 'r'); // ideally, should match EDIT_REEDIT_BUTTON
 define('SHOWCODE_LINK', 'Xem mã nguồn wiki của trang này');
 define('SHOWCODE_LINK_TITLE', 'Xem mã nguồn'); // @@@ TODO 'View page formatting code'
 define('EDIT_COMMENT_TIMESTAMP_CAPTION', '(%s)'); // %s timestamp
-if (!defined('ERROR_INVALID_PAGEID')) define('ERROR_INVALID_PAGEID', 'The revision id does not exist for the requested page');
+if (!defined('ERROR_INVALID_PAGEID')) define('ERROR_INVALID_PAGEID', 'Không có phiên bản với id đã chỉ ra');
 /**#@-*/
 
 /**#@+
  * Language constant used by the {@link grabcode.php grabcode} (page) handler
  */
 // grabcode
-define('ERROR_NO_CODE', 'Sorry, there is no code to download.');
+define('ERROR_NO_CODE', 'Xin lỗi: không có mã nào để tải về.');
 /**#@-*/
 
 /**#@+
  * Language constant used by the {@link history.php history} (page) handler
  */
 // history
-define('EDITED_ON', 'Edited on %1$s by %2$s'); // %1$s - time; %2$s - user name
-define('HISTORY_PAGE_VIEW', 'History of recent changes for %s'); // %s pagename
-define('OLDEST_VERSION_EDITED_ON_BY', 'The oldest known version of this page was created on %1$s by %2$s'); // %1$s - time; %2$s - user name
-define('MOST_RECENT_EDIT', 'Last edited on %1$s by %2$s');
+define('EDITED_ON', 'Sửa vào thởi điểm %1$s bởi %2$s'); // %1$s - time; %2$s - user name
+define('HISTORY_PAGE_VIEW', 'Lịch sử các thay đổi gần đây của trang %s'); // %s pagename
+define('OLDEST_VERSION_EDITED_ON_BY', 'Bản cũ nhất của trang này tạo vào thời điểm %1$s bởi %2$s'); // %1$s - time; %2$s - user name
+define('MOST_RECENT_EDIT', 'Sửa lần cuối vào %1$s bởi %2$s');
 define('HISTORY_MORE_LINK_DESC', 'here'); // used for alternative history link in HISTORY_MORE
-define('HISTORY_MORE', 'Full history for this page cannot be displayed within a single page, click %s to view more.'); // %s alternative history link # @@@ TODO avoid using 'here' ^
+define('HISTORY_MORE', 'Lịch sử đầy đủ của trang này không thể xem vừa vẹn trên chỉ một trang. Click chuột vào %s để xem thêm.'); // %s alternative history link # @@@ TODO avoid using 'here' ^
 /**#@-*/
 
 /**#@+
@@ -745,25 +744,25 @@ define('COMMENT_NEW_BUTTON', 'Bình luận mới');
  * Language constant used by the {@link processcomment.php processcomment} (page) handler
  */
 // processcomment
-define('ERROR_NO_COMMENT_DEL_ACCESS', 'Sorry, you\'re not allowed to delete this comment!');
-define('ERROR_NO_COMMENT_WRITE_ACCESS', 'Sorry, you\'re not allowed to post comments to this page');
-define('ERROR_EMPTY_COMMENT', 'Comment body was empty -- not saved!');
-define('ADD_COMMENT_LABEL', 'In reply to %s:');
-define('NEW_COMMENT_LABEL', 'Post a new comment:');
+define('ERROR_NO_COMMENT_DEL_ACCESS', 'Bạn chưa có quyền xóa bình luận!');
+define('ERROR_NO_COMMENT_WRITE_ACCESS', 'Bạn chưa có quyền gửi bình luận ở trang này');
+define('ERROR_EMPTY_COMMENT', 'Nội dung bình luận chưa có gì!');
+define('ADD_COMMENT_LABEL', 'Trả lời cho %s:');
+define('NEW_COMMENT_LABEL', 'Gửi bình luận:');
 /**#@-*/
 
 /**#@+
  * Language constant used by the {@link recentchanges_simple.xml.mm.php recentchanges_simple.xml.mm} (page) handler
  */
 // recentchanges_simple.xml.mm
-define('FIRST_NODE_LABEL', 'Recent Changes');
+define('FIRST_NODE_LABEL', 'Thay đổi gần đây');
 /**#@-*/
 
 /**#@+
  * Language constant used by the {@link recentchanges.xml.php recentchanges.xml} (page) handler
  */
 // recentchanges.xml
-define('RECENTCHANGES_DESC', 'Recent changes of %s'); // %s - page name
+define('RECENTCHANGES_DESC', 'Thay đổi gần đây của trang %s'); // %s - page name
 /**#@-*/
 
 /**#@+
@@ -771,54 +770,54 @@ define('RECENTCHANGES_DESC', 'Recent changes of %s'); // %s - page name
  */
 // referrers_sites + referrers + review_blacklist
 define('REFERRERS_PURGE_24_HOURS', '24 giờ cuối');
-define('REFERRERS_PURGE_N_DAYS', 'last %d days'); // %d number of days
-define('REFERRERS_NO_SPAM', 'Note to spammers: This page is not indexed by search engines, so don\'t waste your time.');
-define('REFERRERS_DOMAINS_TO_WIKI_LINK_DESC', 'View global referring sites');
-define('REFERRERS_DOMAINS_TO_PAGE_LINK_DESC', 'View referring sites for %s only'); // %s - page name
-define('REFERRERS_URLS_TO_WIKI_LINK_DESC', 'View global referrers');
-define('REFERRERS_URLS_TO_PAGE_LINK_DESC', 'View referrers for %s only'); // %s - page name
-define('REFERRER_BLACKLIST_LINK_DESC', 'View referrer blacklist');
-define('BLACKLIST_LINK_DESC', 'Blacklist');
-define('NONE_CAPTION', 'None');
-define('PLEASE_LOGIN_CAPTION', 'You need to login to see referring sites');
+define('REFERRERS_PURGE_N_DAYS', '%d ngày vừa qua'); // %d number of days
+define('REFERRERS_NO_SPAM', 'Lời nhắn đến người người quấy rối: Trang này không được đánh dấu bởi các chương trình tìm kiếm; vì thế đừng mất thời gian của bạn với trang này!');
+define('REFERRERS_DOMAINS_TO_WIKI_LINK_DESC', 'Xem tên miền tham chiếu đến wiki');
+define('REFERRERS_DOMAINS_TO_PAGE_LINK_DESC', 'Xem tên miền tham chiếu đến %s'); // %s - page name
+define('REFERRERS_URLS_TO_WIKI_LINK_DESC', 'Xem tham chiếu toàn cục');
+define('REFERRERS_URLS_TO_PAGE_LINK_DESC', 'Xem địa chỉ tham chiếu cho trang %s'); // %s - page name
+define('REFERRER_BLACKLIST_LINK_DESC', 'Xem danh sách địa chỉ tham chiếu đen');
+define('BLACKLIST_LINK_DESC', 'Danh sách đen');
+define('NONE_CAPTION', 'Không');
+define('PLEASE_LOGIN_CAPTION', 'Bạn cần đăng nhập để xem danh sách các tham chiếu');
 /**#@-*/
 
 /**#@+
  * Language constant used by the {@link referrers_sites.php referrers_sites} (page) handler
  */
 // referrers_sites
-define('REFERRERS_URLS_LINK_DESC', 'see list of different URLs');
-define('REFERRERS_DOMAINS_TO_WIKI', 'Domains/sites linking to this wiki (%s)'); // %s - link to referrers handler
-define('REFERRERS_DOMAINS_TO_PAGE', 'Domains/sites linking to %1$s %2$s (%3$s)'); // %1$s - page link; %2$s - purge time; %3$s - link to referrers handler
+define('REFERRERS_URLS_LINK_DESC', 'Danh các các địa chỉ khác nhau');
+define('REFERRERS_DOMAINS_TO_WIKI', 'Các trang, tên miền tham khảo đến wiki (%s)'); // %s - link to referrers handler
+define('REFERRERS_DOMAINS_TO_PAGE', 'Các trang, tên miền tham khảo đến trang %1$s %2$s (%3$s)'); // %1$s - page link; %2$s - purge time; %3$s - link to referrers handler
 /**#@-*/
 
 /**#@+
  * Language constant used by the {@link referrers.php referrers} (page) handler
  */
 // referrers
-define('REFERRERS_DOMAINS_LINK_DESC', 'see list of domains');
-define('REFERRERS_URLS_TO_WIKI', 'External pages linking to this wiki (%s)'); // %s - link to referrers_sites handler
-define('REFERRERS_URLS_TO_PAGE', 'External pages linking to %1$s %2$s (%3$s)'); // %1$s - page link; %2$s - purge time; %3$s - link to referrers_sites handler
+define('REFERRERS_DOMAINS_LINK_DESC', 'Xem danh sách tên miền');
+define('REFERRERS_URLS_TO_WIKI', 'Liên kết ngoài tham chiếu đến wiki (%s)'); // %s - link to referrers_sites handler
+define('REFERRERS_URLS_TO_PAGE', 'Liên kết ngoài tham chiếu đến trang %1$s %2$s (%3$s)'); // %1$s - page link; %2$s - purge time; %3$s - link to referrers_sites handler
 /**#@-*/
 
 /**#@+
  * Language constant used by the {@link review_blacklist.php review_blacklist} (page) handler
  */
 // review_blacklist
-define('BLACKLIST_HEADING', 'Referrer Blacklist');
+define('BLACKLIST_HEADING', 'Danh sách liên đen các tham chiếu');
 define('BLACKLIST_REMOVE_LINK_DESC', 'Xóa');
-define('STATUS_BLACKLIST_EMPTY', 'Blacklist is empty.');
+define('STATUS_BLACKLIST_EMPTY', 'Không có gì trong danh sách đen.');
 /**#@-*/
 
 /**#@+
  * Language constant used by the {@link revisions.php revisions} (page) handler
  */
 // revisions
-define('REVISIONS_CAPTION', 'Revisions for %s'); // %s pagename
-define('REVISIONS_NO_REVISIONS_YET', 'There are no revisions for this page yet');
-define('REVISIONS_SIMPLE_DIFF', 'Simple Diff');
-define('REVISIONS_MORE_CAPTION', 'There are more revisions that were not shown here, click the button labelled %s below to view these entries'); // %S - text of REVISIONS_MORE_BUTTON
-define('REVISIONS_RETURN_TO_NODE_BUTTON', 'Return To Node / Cancel');
+define('REVISIONS_CAPTION', 'Phiên bản cho trang %s'); // %s pagename
+define('REVISIONS_NO_REVISIONS_YET', 'Chưa có phiên bản nào của trang này');
+define('REVISIONS_SIMPLE_DIFF', 'So sánh đơn giản');
+define('REVISIONS_MORE_CAPTION', 'Có vài phiên bản khác không được trình bày ở đây. Click chuột vào nút %s để xem các phiên bản này'); // %S - text of REVISIONS_MORE_BUTTON
+define('REVISIONS_RETURN_TO_NODE_BUTTON', 'Trở về nốt / Bỏ qua');
 define('REVISIONS_SHOW_DIFFERENCES_BUTTON', 'Xem sự khác biệt');
 define('REVISIONS_MORE_BUTTON', 'Tiếp...');
 /**#@-*/
@@ -828,7 +827,7 @@ define('REVISIONS_MORE_BUTTON', 'Tiếp...');
  */
 // revisions.xml
 define('REVISIONS_EDITED_BY', 'Sửa bởi %s'); // %s user name
-define('HISTORY_REVISIONS_OF', 'History/revisions of %s'); // %s - page name
+define('HISTORY_REVISIONS_OF', 'Lịch sử của trang %s'); // %s - page name
 /**#@-*/
 
 /**#@+
@@ -838,8 +837,8 @@ define('HISTORY_REVISIONS_OF', 'History/revisions of %s'); // %s - page name
 define('SHOW_RE_EDIT_BUTTON', 'Sửa lại phiên bản cũ này');
 define('SHOW_FORMATTED_BUTTON', 'Xem bản đã định dạng');
 define('SHOW_SOURCE_BUTTON', 'Xem mã nguồn');
-define('SHOW_ASK_CREATE_PAGE_CAPTION', 'This page doesn\'t exist yet. Maybe you want to %s it?'); // %s - page create link
-define('SHOW_OLD_REVISION_CAPTION', 'This is an old revision of %1$s made by %2$s on %3$s.'); // %1$s - page link; %2$s - username; %3$s - timestamp;
+define('SHOW_ASK_CREATE_PAGE_CAPTION', 'Trang này chưa tồi tại. Bạn có muốn %s nó?'); // %s - page create link
+define('SHOW_OLD_REVISION_CAPTION', 'Đây là phiên bản cũ của trang %1$s tạo bởi %2$s vào thời điểm %3$s.'); // %1$s - page link; %2$s - username; %3$s - timestamp;
 define('COMMENTS_CAPTION', 'Bình luận');
 define('DISPLAY_COMMENTS_LABEL', 'Xem bình luận');
 define('DISPLAY_COMMENT_LINK_DESC', 'Xem bình luận');
@@ -857,8 +856,8 @@ define('COMMENT_TIME_CAPTION', '%s'); // %s comment time
  * Language constant used by the {@link showcode.php showcode} (page) handler
  */
 // showcode
-define('SOURCE_HEADING', 'Wiki source for %s'); // %s - page link
-define('SHOW_RAW_LINK_DESC', 'Show raw source');
+define('SOURCE_HEADING', 'Mã nguồn wiki cho trang %s'); // %s - page link
+define('SHOW_RAW_LINK_DESC', 'Xem mã nguồn nguyên thủy');
 /**#@-*/
 
 /* ------------------ LIBS ------------------*/
@@ -867,7 +866,7 @@ define('SHOW_RAW_LINK_DESC', 'Show raw source');
  * Language constant used by the {@link Wakka.class.php Wakka class} (the Wikka core containing most methods)
  */
 // Wakka.class
-define('QUERY_FAILED', 'Query failed:');
+define('QUERY_FAILED', 'Truy vẫn bị lỗi:');
 define('REDIR_DOCTITLE', 'Chuyển hướng đến %s'); // %s - target page
 define('REDIR_LINK_DESC', 'liên kết này'); // used in REDIR_MANUAL_CAPTION
 define('REDIR_MANUAL_CAPTION', 'Trường hợp trình duyệt của bạn không chuyển trang, vui lòng dùng liên kết %s'); // %s target page link
