@@ -1,66 +1,79 @@
 <?php
 /**
- * Display a list of newly registered users.
+ * Display a table of recently registered users.
  *
  * @package		Actions
- * @version		$Id:lastusers.php 369 2007-03-01 14:38:59Z DarTar $
+ * @version		$Id$
  * @license		http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
  *
  * @uses	Wakka::LoadAll()
  * @uses	Wakka::getCount()
- * @uses	Wakka::Link()
+ * @uses	Wakka::GetConfigValue()
  * @uses	Wakka::FormatUser()
  *
- * @todo	document usage and parameters
- * @todo	use constants instead of "magic numbers"
- * @todo	use standard way to fetch and validate action parameters
+ * @input		integer  $max  optional: number of rows to be displayed;
+ *				default: 10
+ * @input		string  $style  optional (simple|complex): displays a simple table or a table with caption and headers and statistics on the number of pages owned;
+ *				default: "complex"
+ * @output		a table with the last registered users
+ * 
  */
-if (!isset($stat))
-{
-	$stat = 0;
-}
-if (!isset($max))
-{
-	$max = 0;
-}
+ 
+//defaults
+define('LASTUSERS_DEFAULT_STYLE', 'complex'); # consistent parameter naming with HighScores action
+define('LASTUSERS_MAX_USERS_DISPLAY', 10);
 
-if ($stat===0)
+//initialize
+$htmlout = '';
+$style = '';
+$max = '';
+
+//validate action parameters
+if (isset($vars['style']) && in_array($vars['style'], array('complex','simple')))
 {
-	$limit = 1000; //TODO remove hardcoded defaults
+	$style = $vars['style'];
 }
 else
 {
-	$limit = 100; //TODO remove hardcoded defaults
+	$style = LASTUSERS_DEFAULT_STYLE;	
 }
-
-if (!$max || $limit<$max)
+if (isset($vars['max']) && $vars['max'] > 0)
 {
-	$max = $limit;
+	$max = (int) $vars['max'];
+}
+else
+{
+	$max = LASTUSERS_MAX_USERS_DISPLAY;	
 }
 
 // @@@TODO reformat query
-$last_users = $this->LoadAll("SELECT name, signuptime FROM ".$this->GetConfigValue('table_prefix')."users ORDER BY signuptime DESC LIMIT ".(int) $max);
+$last_users = $this->LoadAll("SELECT name, signuptime FROM ".$this->GetConfigValue('table_prefix')."users ORDER BY signuptime DESC LIMIT ".$max);
 
-$htmlout = '<table class="data">'."\n".
-	'<caption>'.LASTUSERS_CAPTION.'</caption>'."\n".
-	'  <tr>'."\n".
-	'    <th>'.NAME_TH.'</th>'."\n".
-	'    <th>'.OWNED_PAGES_TH.'</th>'."\n".
-	'    <th>'.SIGNUP_DATE_TIME_TH.'</th>'."\n".
-	'  </tr>'."\n";
-
+$htmlout .= '<table class="data lastusers">'."\n";
+if ($style == 'complex')
+{
+	$htmlout .= '<caption>'.LASTUSERS_CAPTION.'</caption>'."\n";
+	$htmlout .= '  <tr>'."\n";
+	$htmlout .= '    <th>'.NAME_TH.'</th>'."\n";
+	$htmlout .= '    <th>'.OWNED_PAGES_TH.'</th>'."\n";
+	$htmlout .= '    <th>'.SIGNUP_DATE_TIME_TH.'</th>'."\n";
+	$htmlout .= '  </tr>'."\n";
+}
 foreach($last_users as $user)
 {
 	$htmlout .= '  <tr>'."\n";
-	if (0 !== $stat)
+	if ($style == 'complex')
 	{
 		$where = "`owner` = '".mysql_real_escape_string($user['name'])."' AND `latest` = 'Y'";
-		$htmlout .= '    <td>'.$this->FormatUser($user['name'])."</td>\n    <td>".' . . . . . '.$this->getCount('pages', $where).'</td>'."\n".'    <td class="datetime">('.$user['signuptime'].')</td>'."\n";
+		$htmlout .= '    <td>'.$this->FormatUser($user['name']).'</td>'."\n";
+		$htmlout .= '    <td class="number">'.$this->getCount('pages', $where).'</td>'."\n";
+		$htmlout .= '    <td class="datetime">('.$user['signuptime'].')</td>'."\n";
 	}
 	else
 	{
-		$htmlout .= '    <td>'.$this->FormatUser($user['name']).'</td>'."\n".'    <td></td>'."\n".'    <td class="datetime">'.$user['signuptime'].'</td>'."\n";
+		$htmlout .= '    <td>'.$this->FormatUser($user['name']).'</td>'."\n";
+		$htmlout .= '    <td class="datetime">'.$user['signuptime'].'</td>'."\n";
 	}
 	$htmlout .= "  </tr>\n";
 }
