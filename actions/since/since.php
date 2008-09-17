@@ -4,10 +4,10 @@
  */
 
 //defaults
-define('INFOBOX_LATEST_VERSION', '1.1.6.4');
+define('INFOBOX_LATEST_VERSION', '1.1.6.5');
 define('INFOBOX_DEFAULT_ALIGN', 'float: right');
 define('INFOBOX_DEFAULT_MARGIN', 'margin: 0 0 10px 10px');
-$valid_versions = array('1.1.6.0', '1.1.6.1', '1.1.6.2', '1.1.6.3', '1.1.6.4', '1.1.7');
+$valid_versions = array('1.1.6.0', '1.1.6.1', '1.1.6.2', '1.1.6.3', '1.1.6.4', '1.1.6.5', '1.1.6.6', '1.1.7');
 
 //color scheme array
 $c = array(
@@ -33,27 +33,35 @@ else
 switch ($display_version)
 {
 	case "1.1.7":
-	$s = 'A';
-	break;
-		
-	case "1.1.6.4":
 	$s = 'B';
 	break;
-
-	case "1.1.6.3":
-	$s = 'C';
+	
+	case "1.1.6.6":
+	$s = 'A';
 	break;
-
-	case "1.1.6.2":
-	$s = 'D';
+	
+	case "1.1.6.5":
+	$s = 'F';
 	break;
-
-	case "1.1.6.1":
+	
+	case "1.1.6.4":
 	$s = 'E';
 	break;
 
+	case "1.1.6.3":
+	$s = 'D';
+	break;
+
+	case "1.1.6.2":
+	$s = 'C';
+	break;
+
+	case "1.1.6.1":
+	$s = 'B';
+	break;
+
 	case "1.1.6.0":
-	$s = 'F';
+	$s = 'A';
 	break;
 
 	default:
