@@ -18,8 +18,8 @@ if ($this->GetMethod() != 'edit' && $this->HasAccess("write", $this->page["tag"]
 	<base href="<?php echo $site_base ?>" />
 	<?php if ($this->GetMethod() != 'show' || $this->page["latest"] == 'N' || $this->page["tag"] == 'SandBox') echo "<meta name=\"robots\" content=\"noindex, nofollow, noarchive\" />\n"; ?>
 	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-	<meta name="keywords" content="<?php echo $this->GetConfigValue("meta_keywords") ?>" />
-	<meta name="description" content="<?php echo $this->GetConfigValue("meta_description") ?>" />
+	<meta name="keywords" content="<?php echo $this->htmlspecialchars_ent($this->GetConfigValue("meta_keywords")) ?>" />
+	<meta name="description" content="<?php echo $this->htmlspecialchars_ent($this->GetConfigValue("meta_description")) ?>" />
 	<link rel="stylesheet" type="text/css" href="css/<?php echo $this->GetConfigValue("stylesheet") ?>" />
 	<link rel="stylesheet" type="text/css" href="css/print.css" media="print" />
 	<link rel="icon" href="images/favicon.ico" type="image/x-icon" />
