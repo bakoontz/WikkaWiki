@@ -73,11 +73,11 @@ if ($this->GetHandler() != 'show' || $this->page['latest'] == 'N' || $this->page
 {
 	$extra_meta .= '	<meta name="robots" content="noindex, nofollow, noarchive" />'."\n";
 }
-if ('' != ($meta_keywords = $this->GetConfigValue('meta_keywords')))
+if ('' != ($meta_keywords = $this->htmlspecialchars_ent($this->GetConfigValue('meta_keywords'))))
 {
 	$extra_meta .= '	<meta name="keywords" content="'.$meta_keywords.'" />'."\n";
 }
-if ('' != ($meta_description = $this->GetConfigValue('meta_description')))
+if ('' != ($meta_description = $this->htmlspecialchars_ent($this->GetConfigValue('meta_description'))))
 {
 	$extra_meta .= '	<meta name="description" content="'.$meta_description.'" />'."\n";
 }
