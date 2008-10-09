@@ -1,5 +1,4 @@
 <?php
-if ($cattag = $_REQUEST["wakka"])
 /**
  * Shows the pages and subcategories belonging to a category.
  * 
