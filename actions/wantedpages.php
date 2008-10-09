@@ -1,7 +1,7 @@
 <?php
-if (isset($_REQUEST["linking_to"]))
+if (isset($_GET["linking_to"]))
 {
-	$linking_to = $_REQUEST["linking_to"];
+	$linking_to = $_GET["linking_to"];
 	if ($pages = $this->LoadPagesLinkingTo($linking_to))
 	{
 		print("Pages linking to ".$this->Link($linking_to).":<br />\n");
