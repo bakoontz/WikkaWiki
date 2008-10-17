@@ -14,6 +14,7 @@
 $title = 'WikiImage';
 $class = $link = '';
 $alt = 'image';
+$url = '';
 
 if (is_array($vars))
 {
@@ -26,7 +27,7 @@ if (is_array($vars))
     	if ($param == 'link') {$link = $this->htmlspecialchars_ent($vars['link']);}
 	}
 }
-$url = $this->cleanUrl(trim($vars['url']));
+if(isset($vars['url'])) $url = $this->cleanUrl(trim($vars['url']));
 
 $output = '<img class="'.$class.'" src="'.$url.'" alt="'.$alt.'" title="'.$title.'" />';
 
