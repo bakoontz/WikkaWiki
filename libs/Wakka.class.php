@@ -896,6 +896,13 @@ class Wakka
 	}
 
 	// COOKIES
+	// Note: Be sure to check the auto login functionality in
+	// setup/install.php if any changes are made to the way session
+	// cookies are set. Since these functions are not yet available
+	// when install.php is called, they must be duplicated in that
+	// file. Changes here without appropriate changes in install.php
+	// may result in login/logout failures! See ticket #800 for more
+	// info.
 	function SetSessionCookie($name, $value) {
 		SetCookie($name.$this->config['wiki_suffix'], $value, 0, $this->wikka_cookie_path); $_COOKIE[$name.$this->config['wiki_suffix']] = $value; $this->cookies_sent = true; }
 	function SetPersistentCookie($name, $value) {

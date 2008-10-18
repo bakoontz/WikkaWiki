@@ -165,10 +165,16 @@ case "0":
 	mysql_query("insert into ".$config['table_prefix']."acls set page_tag = 'AdminPages', read_acl = '!*', write_acl = '!*', comment_acl = '!*'", $dblink);
 	mysql_query("insert into ".$config['table_prefix']."acls set page_tag = 'DatabaseInfo', read_acl = '!*', write_acl = '!*', comment_acl = '!*'", $dblink);
 
-//Auto login wiki admin"
-	SetCookie('user_name'.$config['wiki_suffix'], $config['admin_users'], time() + PERSISTENT_COOKIE_EXPIRY, "/"); 
+	//
+	// Auto login wiki admin
+	//
+	// Set default cookie path
+	$base_url_path = preg_replace('/wikka\.php/', '', $_SERVER['SCRIPT_NAME']);
+	$wikka_cookie_path = ('/' == $base_url_path) ? '/' : substr($base_url_path,0,-1);
+	// Set cookies
+	SetCookie('user_name'.$config['wiki_suffix'], $config['admin_users'], time() + PERSISTENT_COOKIE_EXPIRY, $wikka_cookie_path); 
 	$_COOKIE['user_name'.$config['wiki_suffix']] = $config['admin_users']; 
-	SetCookie('pass'.$config['wiki_suffix'], md5(mysql_real_escape_string($_POST['password'])), time() + PERSISTENT_COOKIE_EXPIRY, "/"); 
+	SetCookie('pass'.$config['wiki_suffix'], md5(mysql_real_escape_string($_POST['password'])), time() + PERSISTENT_COOKIE_EXPIRY, $wikka_cookie_path); 
 	$_COOKIE['pass'.$config['wiki_suffix']] = md5(mysql_real_escape_string($_POST['password'])); 
 
 	break;
