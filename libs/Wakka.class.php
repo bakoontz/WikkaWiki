@@ -730,13 +730,23 @@ class Wakka
 		$data = "";
 		if ($this->CheckMySQLVersion(4,00,01))
 		{
-			if (preg_match('/[A-Z]/', $phrase)) $phrase = "\"".$phrase."\"";
-			$data = $this->LoadAll(" select * from "
-			.$this->config["table_prefix"]
-			."pages where latest = 'Y' and tag like('%".mysql_real_escape_string($phrase)."%') UNION select * from "
-			.$this->config["table_prefix"]
-			."pages where latest = 'Y' and match(tag, body) against('".mysql_real_escape_string($phrase)
-			."' IN BOOLEAN MODE) order by time DESC");
+			$collate = '';
+			// Should work with any browser/entity conversion scheme
+			$search_phrase = stripslashes(str_replace("&quot;", "\"", mysql_real_escape_string($phrase)));
+			if (preg_match('/[A-Z]/', $phrase)) 
+				$collate = "COLLATE latin1_general_cs";
+			$sql = 
+				" select * from "
+				.$this->config["table_prefix"]
+				."pages where latest = 'Y' and tag
+				like('%".mysql_real_escape_string($phrase)."%') "
+				.$collate
+				." UNION select * from "
+				.$this->config["table_prefix"]
+				."pages where latest = 'Y' and match(tag, body) against('"
+				.$search_phrase
+				."' IN BOOLEAN MODE) order by time DESC";
+			$data = $this->LoadAll($sql);
 		}
 
 		// else if ($this->CheckMySQLVersion(3,23,23))
