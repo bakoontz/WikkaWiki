@@ -1545,7 +1545,7 @@ class Wakka
 	{ 
 		$where = '';
 		if(!empty($user) && 
-		   ($this->GetUser() || $this->IsAdmin()))
+		   ($user == $this->GetUser() || $this->IsAdmin()))
 		{
 			$where = " where user = '".mysql_real_escape_string($user)."' ";
 		}
@@ -1563,7 +1563,7 @@ class Wakka
 	{
 		$where = ' and 1 ';
 		if(!empty($user) && 
-		   ($this->GetUser() || $this->IsAdmin()))
+		   ($user == $this->GetUser() || $this->IsAdmin()))
 		{
 			$where = " and comments.user = '".mysql_real_escape_string($user)."' ";
 		}
