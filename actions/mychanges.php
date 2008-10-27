@@ -49,7 +49,7 @@ $params = '';
 $username = '';
 if(isset($_GET['user']))
 {
-	$username = $this->htmlspecialchars_ent($_REQUEST['user']);
+	$username = $this->htmlspecialchars_ent($_GET['user']);
 	$params .= "user=$username&";
 }
 
