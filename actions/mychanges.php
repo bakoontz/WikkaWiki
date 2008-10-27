@@ -13,9 +13,13 @@
  * @author	{@link http://web.archive.org/web/20040616194824/http://www.wakkawiki.com/CarloZottmann Carlo Zottmann}
  * @author	{@link http://wikkawiki.org/NilsLindenberg Nils Lindenberg} (rewrite, i18n)
  *
- * @uses	Wakka::GetUserName()
+ * @uses	Wakka::GetConfig()
  * @uses	Wakka::GetPageTag()
- * @uses	Wakka::href()
+ * @uses	Wakka::GetUser() 
+ * @uses	Wakka::GetUserName()
+ * @uses	Wakka::Href()
+ * @uses	Wakka::htmlspecialchars_ent()
+ * @uses	Wakka::IsAdmin()
  * @uses	Wakka::LoadAll()
  * @uses	Wakka::Link()
  * @todo	fix RE (#104 etc.); also lose the comma in there!
@@ -43,16 +47,16 @@ $time_output = '';
 
 $params = '';
 $username = '';
-if(isset($_REQUEST['user']))
+if(isset($_GET['user']))
 {
 	$username = $this->htmlspecialchars_ent($_REQUEST['user']);
 	$params .= "user=$username&";
 }
 
 $action = '';
-if(isset($_REQUEST['action']))
+if(isset($_GET['action']))
 {
-	$action = $this->htmlspecialchars_ent($_REQUEST['action']);
+	$action = $this->htmlspecialchars_ent($_GET['action']);
 	$params .= "action=$action&";
 }
 $params = substr($params, 0, -1);
