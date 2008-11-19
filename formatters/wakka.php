@@ -165,9 +165,9 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 		$valid_filename = '';
 		
 		static $oldIndentLevel = 0;
-		static $oldIndentLength= 0;
 		static $indentClosers = array();
-		static $newIndentSpace= array();
+		static $curIndentType;
+		static $li = 0;
 		static $br = 1;
 		static $trigger_table = 0;
 		static $trigger_rowgroup = 0;
@@ -188,7 +188,6 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 		static $trigger_l = array(-1, 0, 0, 0, 0, 0);
 		static $output = '';
 		static $invalid = '';
-		static $curIndentType;
 
 		global $wakka;
 
@@ -775,32 +774,24 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 		// indented text
 		elseif (preg_match("/(^|\n)([\t~]+)(-|&|([0-9a-zA-Z]+)\))?(\n|$)/s", $thing, $matches))
 		{
-			// new line
-			$result .= ($br ? "<br />\n" : "\n");
+			// find out which indent type we want
+			$newIndentType = $matches[3];
+			$newIndentLevel = strlen($matches[2]);
+
+			//Close indent or list element
+			if ( $li == 2 && $curIndentType != '.' ) $result .= '</li>';
+			if ( $li == 2 ) $result .= ($br ? "<br />\n" : "\n");
+			$li = 0;
 
 			// we definitely want no line break in this one.
 			$br = 0;
 
-			// find out which indent type we want
-			$newIndentType = $matches[3];
-			
 			if (!$newIndentType)
 			{
-				$opener = "<div class=\"indent\">";
-				$closer = "</div>"; $br = 1;
-			}
-			elseif ($newIndentType == "-")
-			{
-				$opener = "<ul><li>";
-				$closer = "</li></ul>";
+				$br = 1;
+				$newIndentType = '.';
 				$li = 1;
 			}
-			elseif ($newIndentType == "&")
-			{
-				$opener = "<ul class=\"thread\"><li>";
-				$closer = "</li></ul>";
-				$li = 1;
-			} #inline comments
 			else
 			{
 				if (ereg('[0-9]', $newIndentType[0])) { $newIndentType = '1'; }
@@ -809,41 +800,81 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 				elseif (ereg('[A-Z]', $newIndentType[0])) { $newIndentType = 'A'; }
 				elseif (ereg('[a-z]', $newIndentType[0])) { $newIndentType = 'a'; }
 
-				$opener = '<ol type="'.$newIndentType.'"><li>';
-				$closer = '</li></ol>';
 				$li = 1;
 			}
 
-			// get new indent level
-			$newIndentLevel = strlen($matches[2]);
-			if (($newIndentType != $curIndentType) && ($oldIndentLevel > 0))
+			if ($newIndentLevel < $oldIndentLevel)
 			{
-				for (; $oldIndentLevel > 0; $oldIndentLevel--)
+				for (; $newIndentLevel < $oldIndentLevel; $oldIndentLevel--) {
+					$curIndentType = array_pop($indentClosers);
+					if ($oldIndentLevel > 1) $result .= str_repeat("\t", $oldIndentLevel -1);
+					if ($curIndentType == '.') {
+						$result .= '</div>';
+					} else if ( $curIndentType == '-' || $curIndentType == '&' ) {
+						$result .= '</ul>';
+					} else {
+						$result .= '</ol>';
+					}
+					$result .= "\n";
+				}
+			}
+			if ( $oldIndentLevel == $newIndentLevel )
+			{
+				$curIndentType = array_pop($indentClosers);
+				if ( $newIndentType != $curIndentType )
 				{
-					$result .= array_pop($indentClosers);
+					if ($oldIndentLevel > 1) $result .= str_repeat("\t", $oldIndentLevel -1);
+					if ($curIndentType == '.')
+					{
+						$result .= '</div>';
+					}
+					else if ( $curIndentType == '-' || $curIndentType == '&' )
+					{
+						$result .= '</ul>';
+					}
+					else
+					{
+						$result .= '</ol>';
+					}
+					$oldIndentLevel = $newIndentLevel - 1;
+					$result .= "\n";
+				}
+				else
+				{
+					array_push($indentClosers, $curIndentType);
 				}
 			}
 			if ($newIndentLevel > $oldIndentLevel)
 			{
-				for ($i = 0; $i < $newIndentLevel - $oldIndentLevel; $i++)
+				for (; $newIndentLevel > $oldIndentLevel; $oldIndentLevel++)
 				{
-					$result .= $opener;
-					array_push($indentClosers, $closer);
-				}
-			}
-			elseif ($newIndentLevel < $oldIndentLevel)
-			{
-				for ($i = 0; $i < $oldIndentLevel - $newIndentLevel; $i++)
-				{
-					$result .= array_pop($indentClosers);
+					$result .= str_repeat("\t", $oldIndentLevel);
+					if ($newIndentType == '.')
+					{
+						$result .= '<div class="indent">';
+					}
+					else if ( $newIndentType == '-' || $newIndentType == '&' )
+					{
+						$result .= '<ul';
+						if ( $newIndentType == '&' ) $result .= ' class="thread"';
+						$result .= '>';
+					}
+					else
+					{
+						$result .= '<ol type="'.$newIndentType.'">';
+					}
+					$result .= "\n";
+					array_push($indentClosers, $newIndentType);
 				}
 			}
 
 			$oldIndentLevel = $newIndentLevel;
-
-			if (isset($li) && !preg_match("/".str_replace(")", "\)", $opener)."$/", $result))
+			
+			$result .= str_repeat("\t", $oldIndentLevel);
+			if ( $li == 1 )
 			{
-				$result .= "</li><li>";
+				if ( $newIndentType != '.' ) $result .= '<li>';
+				$li = 2;
 			}
 
 			$curIndentType = $newIndentType;
@@ -852,16 +883,35 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 		// new lines
 		else if ($thing == "\n")
 		{
-			// if we got here, there was no tab in the next line; this means that we can close all open indents.
-			$c = count($indentClosers);
-			for ($i = 0; $i < $c; $i++)
+			//Close lines in indents and list elements
+			if ( $li == 2 )
 			{
-				$result .= array_pop($indentClosers);
+				if ( $curIndentType != '.' ) $result .= '</li>';
+				else $result .= '<br/>';
+				$result .= "\n";
+				$li = 0;
+			}
+			// if we got here, there was no tab in the next line; this means that we can close all open indents and lists.
+			for (; 0 < $oldIndentLevel; $oldIndentLevel--)
+			{
+				$curIndentType = array_pop($indentClosers);
+				if ($oldIndentLevel > 1) $result .= str_repeat("\t", $oldIndentLevel -1 );
+				if ($curIndentType == '.')
+				{
+					$result .= '</div>';
+				}
+				else if ( $curIndentType == '-' || $curIndentType == '&' )
+				{
+					$result .= '</ul>';
+				}
+				else
+				{
+					$result .= '</ol>';
+				}
+				$result .= "\n";
 				$br = 0;
 			}
 			$oldIndentLevel = 0;
-			$oldIndentLength= 0;
-			$newIndentSpace=array();
 
 			$result .= ($br ? "<br />\n" : "\n");
 			$br = 1;
