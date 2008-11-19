@@ -202,7 +202,8 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 							'<input type="button" value="'.EDIT_CANCEL_BUTTON.'" onclick="document.location=\''.$this->href('').'\';" />'."\n".
 							'</fieldset>'."\n";
 
-		$preview_form = $this->FormOpen('edit')."\n";
+		$preview_form  = '</div>'."\n".'<div class="clear">'."\n";
+		$preview_form .= $this->FormOpen('edit')."\n";
 		$preview_form .= '<input type="hidden" name="previous" value="'.$previous.'" />'."\n".
 			// We need to escape ALL entity refs before display so we display them _as_ entities instead of interpreting them
 			// hence hsc_secure() instead of htmlspecialchars_ent() which UNescapes entities!
