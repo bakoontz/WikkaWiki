@@ -202,7 +202,7 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 							'<input type="button" value="'.EDIT_CANCEL_BUTTON.'" onclick="document.location=\''.$this->href('').'\';" />'."\n".
 							'</fieldset>'."\n";
 
-		$preview_form  = '</div>'."\n".'<div class="clear">'."\n";
+		$preview_form  = '<div class="clear">'."\n";
 		$preview_form .= $this->FormOpen('edit')."\n";
 		$preview_form .= '<input type="hidden" name="previous" value="'.$previous.'" />'."\n".
 			// We need to escape ALL entity refs before display so we display them _as_ entities instead of interpreting them
@@ -211,6 +211,7 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 			'<input type="hidden" name="body" value="'.$this->hsc_secure($body).'" />'."\n";	# #427
 		$preview_form .= $preview_buttons."\n";
 		$preview_form .= $this->FormClose()."\n";
+		$preview_form .= '</div>'."\n";
 
 		//build page
 		$output .= '<div class="previewhead">'.EDIT_PREVIEW_HEADER.'</div>'."\n";
