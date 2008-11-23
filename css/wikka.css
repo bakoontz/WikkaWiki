@@ -505,7 +505,7 @@ em.success {
 	margin: auto;
 	z-index:20;
 	position:fixed;
-	top: 40px;
+	top: 80px;
 	left: 10px;
 	color: red;
 	font-size: xx-large;
