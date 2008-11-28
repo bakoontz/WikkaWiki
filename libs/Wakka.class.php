@@ -720,52 +720,20 @@ class Wakka
 	function LoadOrphanedPages() { return $this->LoadAll("select distinct tag from ".$this->config["table_prefix"]."pages left join ".$this->config["table_prefix"]."links on ".$this->config["table_prefix"]."pages.tag = ".$this->config["table_prefix"]."links.to_tag where ".$this->config["table_prefix"]."links.to_tag is NULL order by tag"); }
 	function LoadPageTitles() { return $this->LoadAll("select distinct tag from ".$this->config["table_prefix"]."pages order by tag"); }
 	function LoadAllPages() { return $this->LoadAll("select * from ".$this->config["table_prefix"]."pages where latest = 'Y' order by tag"); }
-	// function FullTextSearch($phrase) { return $this->LoadAll("select * from ".$this->config["table_prefix"]."pages where latest = 'Y' and match(tag, body) against('".mysql_real_escape_string($phrase)."')"); }
-	function FullTextSearch($phrase)
+	function FullTextSearch($phrase, $caseSensitive = 0)
 	{
-		$data = "";
-		if ($this->CheckMySQLVersion(4,00,01))
-		{
-			$collate = '';
-			// Should work with any browser/entity conversion scheme
-			$search_phrase = stripslashes(str_replace("&quot;", "\"", mysql_real_escape_string($phrase)));
-			if (preg_match('/[A-Z]/', $phrase)) 
-				$collate = "COLLATE latin1_general_cs";
-			$sql = 
-				" select * from "
-				.$this->config["table_prefix"]
-				."pages where latest = 'Y' and tag
-				like('%".mysql_real_escape_string($phrase)."%') "
-				.$collate
-				." UNION select * from "
-				.$this->config["table_prefix"]
-				."pages where latest = 'Y' and match(tag, body) against('"
-				.$search_phrase
-				."' IN BOOLEAN MODE) order by time DESC";
-			$data = $this->LoadAll($sql);
-		}
+		$id = '';
+		// Should work with any browser/entity conversion scheme
+		$search_phrase = mysql_real_escape_string($phrase);
+		if ( 1 == $caseSensitive ) $id = ', id';
+		$sql  = 'select * from '.$this->config['table_prefix'].'pages';
+		$sql .= ' where latest = '.  "'Y'"  .' and match(tag, body'.$id.')';
+		$sql .= ' against('.  "'$search_phrase'"  .' IN BOOLEAN MODE)';
+		$sql .= ' order by time DESC';
 
-		// else if ($this->CheckMySQLVersion(3,23,23))
-		// {
-		//	$data = $this->LoadAll("select * from "
-		//	.$this->config["table_prefix"]
-		//	."pages where latest = 'Y' and
-		//		  match(tag, body)
-		//		  against('".mysql_real_escape_string($phrase)."')
-		//		  order by time DESC");
-		// }
+		$data = $this->LoadAll($sql);
 
-		/* if no results perform a more general search */
-		if (!$data)  {
-				$data = $this->LoadAll("select * from "
-				.$this->config["table_prefix"]
-				."pages where latest = 'Y' and
-				  (tag like '%".mysql_real_escape_string($phrase)."%' or
-				   body like '%".mysql_real_escape_string($phrase)."%')
-				   order by time DESC");
-		}
-
-		return($data);
+		return $data;
 	}
 	function FullCategoryTextSearch($phrase) { return $this->LoadAll("select * from ".$this->config["table_prefix"]."pages where latest = 'Y' and match(body) against('".mysql_real_escape_string($phrase)."' IN BOOLEAN MODE)"); }
 	function SavePage($tag, $body, $note, $owner=null)

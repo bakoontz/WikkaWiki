@@ -49,7 +49,9 @@ $result_page_list = '';
 
 // get input
 $phrase = (isset($_GET['phrase'])) ? stripslashes(trim($_GET['phrase'])) : ''; #312
+$case = (isset($_GET['case'])) ? stripslashes(trim($_GET['case'])) : 0; #312
 $phrase_disp = $this->htmlspecialchars_ent($phrase);
+$case_disp = $this->htmlspecialchars_ent($case);
 
 // display form
 ?>		
@@ -57,9 +59,7 @@ $phrase_disp = $this->htmlspecialchars_ent($phrase);
 <table border="0" cellspacing="0" cellpadding="0">
 	<tr>
 		<td><?php echo SEARCH_FOR; ?>:&nbsp;</td>
-		<!--td><input name="phrase" size="40" value="<?php if (isset($_REQUEST["phrase"])) echo $this->htmlspecialchars_ent(stripslashes($_REQUEST["phrase"])); ?>" /> <input type="submit" value="Search"/></td>
-		<!<td><input name="phrase" size="40" value="<?php if (isset($_REQUEST['phrase'])) echo $this->htmlspecialchars_ent(stripslashes($_REQUEST['phrase'])); ?>" /> <input type="submit" value="Search"/></td>-->
-		<td><input name="phrase" size="40" value="<?php echo $phrase_disp ?>" /> <input type="submit" value="Search"/></td><!--i18n-->
+		<td><input name="phrase" size="40" value="<?php echo $phrase_disp ?>" /> <input name="case" type="checkbox" value="1" <?php echo (1==$case?'checked="checked"':'') ?> /><label for="case">Case sensitive</label> <input type="submit" value="Search"/></td><!--i18n-->
 	</tr>
 </table><br />
 <?php echo $this->FormClose(); ?>
@@ -71,13 +71,9 @@ $phrase_disp = $this->htmlspecialchars_ent($phrase);
 // if 'phrase' is empty after trimming and removing slashes, search tips NOT displayed
 
 // process search request  
-#if (isset($_REQUEST['phrase']) && ($phrase = $_REQUEST['phrase']))
 if ('' !== $phrase)
 {
-	#$phrase_re = stripslashes(trim($phrase)); 
-	#if (!$phrase_re) return;
-	#$results = $this->FullTextSearch($phrase_re);
-	$results = $this->FullTextSearch($phrase);
+	$results = $this->FullTextSearch($phrase, $case);
 	$total_results = 0;
 	if ($results)
 	{
