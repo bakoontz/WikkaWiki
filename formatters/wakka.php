@@ -662,19 +662,32 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 					return $wakka->htmlspecialchars_ent($embedded);	# display only
 			}
 		}
+		// Elided content (eliminates trailing ws)
+		elseif(preg_match("/^\/\*(.*?)\*\/[\s]*$/s", $thing, $matches))
+		{
+			return null;
+		}
+		// Elided content (preserves trailing ws)
+		elseif(preg_match("/``(.*?)``/s", $thing, $matches))
+		{
+			return null;
+		}
 		// code text
 		elseif (preg_match("/^%%(.*?)%%$/s", $thing, $matches))
 		{
 			/*
-			* Note: this routine is rewritten such that (new) language formatters
-			* will automatically be found, whether they are GeSHi language config files
-			* or "internal" Wikka formatters.
-			* Path to GeSHi language files and Wikka formatters MUST be defined in config.
-			* For line numbering (GeSHi only) a starting line can be specified after the language
-			* code, separated by a ; e.g., %%(php;27)....%%.
-			* Specifying >= 1 turns on line numbering if this is enabled in the configuration.
-			* An optional filename can be specified as well, e.g. %%(php;27;myfile.php)....%%
-			* This filename will be used by the grabcode handler.			
+			* Note: this routine is rewritten such that (new) language
+			* formatters will automatically be found, whether they are
+			* GeSHi language config files or "internal" Wikka
+			* formatters.  Path to GeSHi language files and Wikka
+			* formatters MUST be defined in config.  For line
+			* numbering (GeSHi only) a starting line can be specified
+			* after the language code, separated by a ; e.g.,
+			* %%(php;27)....%%.  Specifying >= 1 turns on line
+			* numbering if this is enabled in the configuration.  An
+			* optional filename can be specified as well, e.g.
+			* %%(php;27;myfile.php)....%% This filename will be used
+			* by the grabcode handler.			
 			*/
 			$output = ''; //reinitialize variables 
 			$filename = '';
@@ -689,8 +702,10 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 			{
 				list(, $language, , $start, , $filename, $invalid, $code) = $matches;
 			}
-			// get rid of newlines at start and end (and preceding/following whitespace)
-			// Note: unlike trim(), this preserves any tabs at the start of the first "real" line
+			// get rid of newlines at start and end (and
+			// preceding/following whitespace) Note: unlike trim(),
+			// this preserves any tabs at the start of the first
+			// "real" line
 			$code = preg_replace('/^\s*\n+|\n+\s*$/','',$code);
 
 			// check if GeSHi path is set and we have a GeSHi highlighter for this language
@@ -1018,21 +1033,39 @@ if ($this->handler == "show") $mind_map_pattern = "<map.*?<\/map>|"; else $mind_
 
 $text = preg_replace_callback(
 	"/".
-	"%%.*?%%|".																				# code
-	"\"\".*?\"\"|".																			# literal
+	# code
+	"%%.*?%%|".
+	# elided content (eliminates trailing ws)
+	"\/\*.*?\*\/[\s]*|".
+	# elided content (preserves trailing ws)
+	"``.*?``|".
+	# literal
+	"\"\".*?\"\"|".
 	$mind_map_pattern.
-	"\[\[[^\[]*?\]\]|".																		# forced link
-	"-{3,}|".																				# forced linebreak and hr
-	"\b[a-z]+:\/\/\S+|".																	# URL
-	"\*\*|\'\'|\#\#|\#\%|@@|::c::|\>\>|\<\<|&pound;&pound;|&yen;&yen;|\+\+|__|<|>|\/\/|".	# Wiki markup
-	"======|=====|====|===|==|".															# headings
-	"(^|\n)[\t~]+(-(?!-)|&|([0-9]+|[a-zA-Z]+)\))?|".										# indents and lists
-	"\|(?:[^\|])?\|(?:\(.*?\))?(?:\{[^\{\}]*?\})?(?:\n)?|".									# Simple Tables	
-	"\{\{.*?\}\}|".																			# action
-	"\b[A-ZÄÖÜ][A-Za-zÄÖÜßäöü]+[:](?![=_])\S*\b|".											# InterWiki link
-	"\b([A-ZÄÖÜ]+[a-zßäöü]+[A-Z0-9ÄÖÜ][A-Za-z0-9ÄÖÜßäöü]*)\b|".								# CamelWords
-	'\\&([#a-zA-Z0-9]+;)?|'. #ampersands! Track single ampersands or any htmlentity-like (&...;)
-	"\n".																					# new line
+	# forced link
+	"\[\[[^\[]*?\]\]|".
+	# forced linebreak and hr
+	"-{3,}|".  
+	# URL
+	"\b[a-z]+:\/\/\S+|".
+	# Wiki markup
+	"\*\*|\'\'|\#\#|\#\%|@@|::c::|\>\>|\<\<|&pound;&pound;|&yen;&yen;|\+\+|__|<|>|\/\/|".
+	# headings
+	"======|=====|====|===|==|".
+	# indents and lists
+	"(^|\n)[\t~]+(-(?!-)|&|([0-9]+|[a-zA-Z]+)\))?|".
+	# Simple Tables	
+	"\|(?:[^\|])?\|(?:\(.*?\))?(?:\{[^\{\}]*?\})?(?:\n)?|".
+	# action
+	"\{\{.*?\}\}|".
+	# InterWiki link
+	"\b[A-ZÄÖÜ][A-Za-zÄÖÜßäöü]+[:](?![=_])\S*\b|".
+	# CamelWords
+	"\b([A-ZÄÖÜ]+[a-zßäöü]+[A-Z0-9ÄÖÜ][A-Za-z0-9ÄÖÜßäöü]*)\b|".
+	#ampersands! Track single ampersands or any htmlentity-like (&...;)
+	'\\&([#a-zA-Z0-9]+;)?|'. 	
+	# newline
+	"\n".
 	"/ms", "wakka2callback", $text."\n"); #append \n (#444)
 
 // we're cutting the last <br />

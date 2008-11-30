@@ -5,54 +5,87 @@ Once you have read through this, test your formatting skills in the SandBox.
 ----
 ===1. Text Formatting===
 
+<<
 ~##""**I'm bold**""##
 ~**I'm bold **
-
+<<::c::
+<<
 ~##""//I'm italic text!//""##
 ~//I'm italic text!//
-
+<<::c::
+<<
 ~##""And I'm __underlined__!""##
 ~And I'm __underlined__!
-
+<<::c::
+<<
 ~##""##monospace text##""##
 ~##monospace text##
-
+<<::c::
+<<
 ~##""''highlight text''""## (using 2 single-quotes)
 ~''highlight text''
-
+<<::c::
+<<
 ~##""++Strike through text++""##
 ~++Strike through text++
-
+<<::c::
+<<
+~##""&pound;&pound;Text insertion&pound;&pound;""##
+~ &pound;&pound;Text insertion&pound;&pound;
+<<::c::
+<<
+~##""&yen;&yen;Text deletion&yen;&yen;""##
+~ &yen;&yen;Text deletion&yen;&yen;
+<<::c::
+<<
 ~##""Press #%ANY KEY#%""##
 ~Press #%ANY KEY#%
-
+<<::c::
+<<
 ~##""@@Center text@@""##
 ~@@Center text@@
+<<::c::
+<<
+~##""/* Elided content (eliminates trailing ws */""##
+~Elides (hides) content from displaying.  Eliminates trailing whitespace so there are no unsightly gaps in output. Useful for commenting Wikka markup.
+<<::c::
+<<
+~##""`` Elided content (preserves trailing ws ``""##
+~Elides (hides) content from displaying.  Preserves trailing whitespace.
+<<::c::
 
 ===2. Headers===
 
 Use between six ##=## (for the biggest header) and two ##=## (for the smallest header) on both sides of a text to render it as a header.
 
+<<
 ~##""====== Really big header ======""##
 ~====== Really big header ======
-
+<<::c::
+<<
 ~##""===== Rather big header =====""##
 ~===== Rather big header =====
-
+<<::c::
+<<
 ~##""==== Medium header ====""##
 ~==== Medium header ====
-
+<<::c::
+<<
 ~##""=== Not-so-big header ===""##
 ~=== Not-so-big header ===
-
+<<::c::
+<<
 ~##""== Smallish header ==""##
 ~== Smallish header ==
+<<::c::
 
 ===3. Horizontal separator===
+
 ~##""----""##
 ----
 
 ===4. Forced line break===
+
 ~##""---""##
 ---
 
@@ -60,78 +93,100 @@ Use between six ##=## (for the biggest header) and two ##=## (for the smallest h
 
 You can indent text using a **~**, a **tab** or **4 spaces** (which will auto-convert into a tab).
 
+<<
 ##""~This text is indented<br />~~This text is double-indented<br />&nbsp;&nbsp;&nbsp;&nbsp;This text is also indented""##
-
+<<::c::
+<<
 ~This text is indented
 ~~This text is double-indented
 ~This text is also indented
+<<::c::
 
 To create bulleted/ordered lists, use the following markup (you can always use 4 spaces instead of a ##**~**##):
 
 **Bulleted lists**
+<<
 ##""~- Line one""##
 ##""~- Line two""##
-
+<<::c::
+<<
 ~- Line one
 ~- Line two
+<<::c::
 
 **Numbered lists**
+<<
 ##""~1) Line one""##
 ##""~1) Line two""##
-
+<<::c::
+<<
 ~1) Line one
 ~1) Line two
+<<::c::
 
 **Ordered lists using uppercase characters**
+<<
 ##""~A) Line one""##
 ##""~A) Line two""##
-
+<<::c::
+<<
 ~A) Line one
 ~A) Line two
+<<::c::
 
 **Ordered lists using lowercase characters**
+<<
 ##""~a) Line one""##
 ##""~a) Line two""##
-
+<<::c::
+<<
 ~a) Line one
 ~a) Line two
+<<::c::
 
 **Ordered lists using roman numerals**
+<<
 ##""~I) Line one""##
 ##""~I) Line two""##
-
+<<::c::
+<<
 ~I) Line one
 ~I) Line two
+<<::c::
 
 **Ordered lists using lowercase roman numerals**
+<<
 ##""~i) Line one""##
 ##""~i) Line two""##
-
+<<::c::
+<<
 ~i) Line one
 ~i) Line two
+<<::c::
 
 ===6. Inline comments===
 
 To format some text as an inline comment, use an indent ( **~**, a **tab** or **4 spaces**) followed by a **""&amp;""**.
 
-**Example:**
-
+<<
 ##""~&amp; Comment""##
 ##""~~&amp; Subcomment""##
 ##""~~~&amp; Subsubcomment""##
-
+<<::c::
+<<
 ~& Comment
 ~~& Subcomment
 ~~~& Subsubcomment
+<<::c::
 
 ===7. Images===
 
 To place images on a Wiki page, you can use the ##image## action.
 
-**Example:**
-
+<<
 ~##""{{image class="center" alt="DVD logo" title="An Image Link" url="images/dvdvideo.gif" link="RecentChanges"}}""##
 ~{{image class="center" alt="dvd logo" title="An Image Link" url="images/dvdvideo.gif" link="RecentChanges"}}
+<<::c::
 
 Links can be external, or internal Wiki links. You don't need to enter a link at all, and in that case just an image will be inserted. You can use the optional classes ##left## and ##right## to float images left and right. You don't need to use all those attributes, only ##url## is required while ##alt## is recommended for accessibility.
 
@@ -152,11 +207,10 @@ To **link to external pages**, you can do any of the following: ---
 
 To create a table, you can use the ##table## action.
 
-**Example:**
-
+<<
 ~##""{{table columns="3" cellpadding="1" cells="BIG;GREEN;FROGS;yes;yes;no;no;no;###"}}""##
-
 ~{{table columns="3" cellpadding="1" cells="BIG;GREEN;FROGS;yes;yes;no;no;no;###"}}
+<<::c::
 
 Note that ##""###""## must be used to indicate an empty cell.
 Complex tables can also be created by embedding HTML code in a wiki page (see instructions below).
@@ -165,28 +219,28 @@ Complex tables can also be created by embedding HTML code in a wiki page (see in
 
 Colored text can be created using the ##color## action:
 
-**Example:**
-
+<<
 ~##""{{color c="blue" text="This is a test."}}""##
 ~{{color c="blue" text="This is a test."}}
+<<::c::
 
 You can also use hex values:
 
-**Example:**
-
+<<
 ~##""{{color hex="#DD0000" text="This is another test."}}""##
 ~{{color hex="#DD0000" text="This is another test."}}
+<<::c::
 
 Alternatively, you can specify a foreground and background color using the ##fg## and ##bg## parameters (they accept both named and hex values):
 
-**Examples:**
-
+<<
 ~##""{{color fg="#FF0000" bg="#000000" text="This is colored text on colored background"}}""##
 ~{{color fg="#FF0000" bg="#000000" text="This is colored text on colored background"}}
-
+<<::c::
+<<
 ~##""{{color fg="yellow" bg="black" text="This is colored text on colored background"}}""##
 ~{{color fg="yellow" bg="black" text="This is colored text on colored background"}}
-
+<<::c::
 
 ===11. Floats===
 
@@ -301,13 +355,14 @@ You can easily paste HTML in a wiki page by wrapping it into two sets of doubleq
 
 ~##&quot;&quot;[html code]&quot;&quot;##
 
-**Examples:**
-
+<<
 ~##&quot;&quot;y = x<sup>n+1</sup>&quot;&quot;##
 ~""y = x<sup>n+1</sup>""
-
+<<::c::
+<<
 ~##&quot;&quot;<acronym title="Cascade Style Sheet">CSS</acronym>&quot;&quot;##
 ~""<acronym title="Cascade Style Sheet">CSS</acronym>""
+<<::c::
 
 By default, some HTML tags are removed by the ""SafeHTML"" parser to protect against potentially dangerous code.  The list of tags that are stripped can be found on the Wikka:SafeHTML page.
 
