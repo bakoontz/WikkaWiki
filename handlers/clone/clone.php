@@ -33,6 +33,7 @@
  * @uses	Wakka::Href()
  * @uses	Wakka::Redirect()
  * @uses	Wakka::SavePage()
+ * @uses	Wakka::Link()
  *
  * @input	string	$to 	required: the page to be created
  *					must be a non-existing page and current user must have privs to create it
@@ -134,8 +135,10 @@ if (!$this->ExistsPage($from))
 						}
 						else
 						{
+							//remove target page from cache - #832
+							unset($this->pageCache[$to]);
 							// show confirmation message
-							$box = '<em class="success">'.sprintf(SUCCESS_CLONE_CREATED, $to).'</em>';
+							$box = '<em class="success">'.sprintf(SUCCESS_CLONE_CREATED, $this->Link($to)).'</em>';
 						}
 					}
 				}
