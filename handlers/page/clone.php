@@ -16,16 +16,15 @@
  *
  * @author		{@link http://wikkawiki.org/ChristianBarthelemy Christian Barthelemy} - original idea and code.
  * @author		{@link http://wikkawiki.org/DarTar Dario Taraborelli} - bugs fixed, code improved, removed popup alerts.
- * @version		0.4
  * @since		Wikka 1.1.6.0
  *
  * @uses	Wakka::HasAccess()
  * @uses	Wakka::existsPage()
  * @uses	Wakka::LoadPage()
- * @uses	Wakka::Savepage()
+ * @uses	Wakka::SavePage()
  * @uses	Wakka::Redirect()
  * @uses	Wakka::Link()
- * @uses	Wakka::GetpageTag()
+ * @uses	Wakka::GetPageTag()
  * @uses	Wakka;:FormOpen()
  * @uses	Wakka::FormClose()
  *
@@ -127,8 +126,10 @@ if (!$this->existsPage($from))		// name change, interface change (allows only ac
 							$this->Redirect($this->href('edit', $to));
 						} else
 						{
+							//remove target page from cache
+							unset($this->pageCache[$to]);
 							// show confirmation message
-							$box = '<em class="success">'.sprintf(CLONE_SUCCESSFUL, $to).'</em>';
+							$box = '<em class="success">'.sprintf(CLONE_SUCCESSFUL, $this->Link($to)).'</em>';
 						}
 					}
 				}
