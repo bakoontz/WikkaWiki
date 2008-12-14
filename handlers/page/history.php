@@ -95,7 +95,7 @@ if ($this->HasAccess('read'))
 						{
 							$output .= "<br />\n".DIFF_NO_DIFFERENCES;
 						}
-						$output .= "<br />\n<hr /><br />\n";
+						$output .= "<br />\n<hr class=\"clear\" /><br />\n";
 					}
 				}
 				else
