@@ -147,7 +147,6 @@ if (isset($_SERVER['HTTP_REFERER']) && preg_match($regex_referrer, $_SERVER['HTT
 
 // BEGIN *** Logout ***
 // is user trying to log out?
-#if (isset($_REQUEST['action']) && ($_REQUEST['action'] == 'logout'))	// JavaScript button with GET
 if (isset($_POST['logout']) && $_POST['logout'] == LOGOUT_BUTTON_LABEL)		// replaced with normal form button #353, #312
 {
 	$this->LogoutUser();

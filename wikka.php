@@ -29,8 +29,6 @@
  *
  * @todo use templating class for page generation;
  * @todo add phpdoc documentation for configuration array elements;
- * @todo	replace $_REQUEST with either $_GET or $_POST (or both if really
- * 			necessary) - #312
  */
 
 //error_reporting(E_ALL);
@@ -300,7 +298,6 @@ if ($wakkaConfig['wakka_version'] !== WAKKA_VERSION)
 	 * installer (which will receive this data) is passed as a $_GET parameter!
 	 */
 	$installAction = 'default';
-	#if (isset($_REQUEST['installAction'])) $installAction = trim($_REQUEST['installAction']);
 	if (isset($_GET['installAction'])) $installAction = trim($_GET['installAction']);	#312
 	if (file_exists('setup'.DIRECTORY_SEPARATOR.'header.php'))
 	include('setup'.DIRECTORY_SEPARATOR.'header.php'); else print '<em class="error">'.ERROR_SETUP_HEADER_MISSING.'</em>'; #89
@@ -327,7 +324,6 @@ session_start();
  *
  * @todo files action uses POST, everything else uses GET #312
  */
-#$wakka = $_REQUEST["wakka"];
 $wakka = $_GET['wakka']; #312
 
 /**

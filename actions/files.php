@@ -124,7 +124,6 @@ if (isset($download) && $download <> '') {
 	// upload action
 
    // if ($_SERVER['REQUEST_METHOD'] == 'POST') 
-   // if ($_REQUEST['action'] == 'upload' AND $uploaded['size'] > 0) {
 	if (isset($_POST['action']) && $_POST['action'] == 'upload') 
 	{
  		$uploaded = $_FILES['file']; 

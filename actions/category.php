@@ -18,7 +18,6 @@
  * @uses	Wakka::FullTextSearch()
  */
  
-#if ($cattag = $_REQUEST["wakka"])
 if ($cattag = $_GET['wakka'])	#312 (only files action uses POST for wakka)
 {
 	$str ="";

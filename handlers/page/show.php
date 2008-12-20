@@ -31,7 +31,6 @@
  * @uses		Config::$hide_comments
  * 
  * @todo		move <div> to template;
- * @todo	replace $_REQUEST with either $_GET or $_POST (or both if really
  * 			necessary) - #312  
  */
 
@@ -92,10 +91,8 @@ else
 			$tag = $this->GetPageTag();
 			if (!isset($_SESSION['show_comments'][$tag]))
 				$_SESSION['show_comments'][$tag] = ($this->UserWantsComments() ? '1' : '0');
-			#if (isset($_REQUEST['show_comments']))
 			if (isset($_GET['show_comments'])) #312
 			{
-				#switch($_REQUEST['show_comments'])
 				switch($_GET['show_comments']) #312
 				{
 				case "0":

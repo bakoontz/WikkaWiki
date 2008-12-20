@@ -25,10 +25,8 @@ $IsAdmin = $this->IsAdmin();
 
 echo '<div class="page">'."\n"; //TODO: move to templating class
 
-#if ($IsAdmin && isset($_REQUEST["whitelist"]))
 if ($IsAdmin && isset($_GET["whitelist"]))
 {
-	#$whitelist = $_REQUEST["whitelist"];
 	$whitelist = $_GET['whitelist'];
 	$this->Query('DELETE FROM '.$this->config['table_prefix'].'referrer_blacklist WHERE spammer = "'.mysql_real_escape_string($whitelist).'"');
 	$this->redirect($this->Href('review_blacklist'));

@@ -895,7 +895,7 @@ class Wakka
 		}
 	}
 
-	// HTTP/REQUEST/LINK RELATED
+	// HTTP/GET/POST/LINK RELATED
 
 	function SetRedirectMessage($message) { $_SESSION["redirectmessage"] = $message; }
 	function GetRedirectMessage() { $message = $_SESSION["redirectmessage"]; $_SESSION["redirectmessage"] = ""; return $message; }
@@ -1783,7 +1783,6 @@ class Wakka
 			$_COOKIE['wikka_pass'] = "";
 			$this->SetUser($user);
 		}
-		#$this->SetPage($this->LoadPage($tag, (isset($_REQUEST["time"]) ? $_REQUEST["time"] :'')));
 		$this->SetPage($this->LoadPage($tag, (isset($_GET['time']) ? $_GET['time'] :''))); #312
 
 		$this->LogReferrer();

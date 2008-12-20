@@ -27,12 +27,10 @@
 $global = '';
 $IsAdmin = $this->IsAdmin();
 
-#if ($global = $_REQUEST["global"])
 if (isset($_GET["global"])) #312
 {
 	// referrers to this wiki
 	// prepare UI
-	#$global = $_REQUEST["global"];
 	$global = $_GET["global"]; #312
 	$title = "Sites linking to this wiki (<a href=\"".$this->Href("referrers_sites", "", "global=1")."\">see list of domains</a>):";
 	$referrers = $this->LoadReferrers();

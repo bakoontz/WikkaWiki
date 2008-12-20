@@ -34,7 +34,6 @@ if(!defined('ERROR_NO_PAGES_FOUND')) define('ERROR_NO_PAGES_FOUND', "No pages fo
 if ($pages = $this->LoadAllPages())
 {
 	// filter by letter
-	#if (isset($_REQUEST['letter'])) $requested_letter = $_REQUEST['letter']; else $requested_letter = '';
 	$requested_letter = (isset($_GET['letter'])) ? $_GET['letter'] : ''; #312 
 	if (!$requested_letter && isset($letter)) $requested_letter = strtoupper($letter); // TODO action parameter (letter) needs to be validated 
 
