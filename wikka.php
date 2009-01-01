@@ -76,6 +76,10 @@ if (!defined('BASIC_COOKIE_NAME')) define('BASIC_COOKIE_NAME', 'Wikkawiki');
  * Length to use for generated part of id attribute.
  */
 define('ID_LENGTH',10);			// @@@ maybe make length configurable
+/**
+ * Character used for multi-path lists
+ */
+if(!defined('PATH_DIVIDER')) define('PATH_DIVIDER', ',');
 /**#@-*/
 
 // Sanity checks - we die if these conditions aren't met
@@ -163,15 +167,6 @@ else
 	$t_rewrite_mode = 0;
 }
 
-if(FALSE !== strpos(strtolower(PHP_OS), strtolower('windows')))
-{
-        define('PATH_DIVIDER', ';');
-}
-else
-{
-        define('PATH_DIVIDER', ':');
-}
-	
 $wakkaDefaultConfig = array(
 	'mysql_host'				=> 'localhost',
 	'mysql_database'			=> 'wikka',
