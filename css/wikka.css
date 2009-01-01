@@ -27,12 +27,12 @@ body {
 }
 
 .header {
+	position: relative; /* needed for the correct positioning of system messages */
 	padding: 10px;
 	padding-top: 0px;
 }
 
 .page {
-	position: relative; /* needed for the correct positioning of system messages */
 	color: #000;
 	font-size: 13px;
 	font-family: Verdana, Tahoma, Arial, Helvetica, sans-serif;
