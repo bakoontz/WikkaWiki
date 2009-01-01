@@ -4828,14 +4828,14 @@ if ($debug) echo 'HasAccess calling... ';
 	/**
 	 * Build a (possibly valid) filepath from a delimited list of paths 
 	 *
-	 * This function takes a list of paths delimited by either ":"
-	 * (Unix-style) or ";" (Window-style) and attempts to construct a
-	 * fully-qualified pathname to a specific file.  By default, this
-	 * function checks to see if the file pointed to by the
-	 * fully-qualified pathname exists.  First valid match wins.
-	 * Disabling this feature will return the first valid constructed
-	 * path (i.e, a path containing a valid directory, but not
-	 * necessarily pointing to an existant file).
+	 * This function takes a list of paths delimited by ":"
+	 * (Unix-style), ";" (Window-style), or "," (Wikka-style)  and
+	 * attempts to construct a fully-qualified pathname to a specific
+	 * file.  By default, this function checks to see if the file
+	 * pointed to by the fully-qualified pathname exists.  First valid
+	 * match wins.  Disabling this feature will return the first valid
+	 * constructed path (i.e, a path containing a valid directory, but
+	 * not necessarily pointing to an existant file).
 	 * 
 	 * @param string $filename mandatory: filename to be used in
 	 *		construction of fully-qualified filepath 
@@ -4848,7 +4848,7 @@ if ($debug) echo 'HasAccess calling... ';
 	 */
 	function BuildFullpathFromMultipath($filename, $pathlist, $checkIfFileExists=TRUE)
 	{
-		$paths = preg_split('/;|:/', $pathlist);
+		$paths = preg_split('/;|:|,/', $pathlist);
 		if(empty($paths[0])) return NULL;
 		if(FALSE === $checkIfFileExists)
 		{

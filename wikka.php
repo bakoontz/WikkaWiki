@@ -272,15 +272,7 @@ if ($debug) echo "default 3rd-party component paths...<br/>\n";
 	 configuration file) can only be initialized with a literal or a constant,
 	 not a concatenation.
 */
-
-if(FALSE !== strpos(strtolower(PHP_OS), strtolower('windows')))
-{
-	define('PATH_DIVIDER', ';');
-}
-else
-{
-	define('PATH_DIVIDER', ':');
-}
+define('PATH_DIVIDER', ',');
 
 /**#@+
  * Default for a (configurable) filesystem directory for a component.
