@@ -32,6 +32,7 @@ body {
 }
 
 .page {
+	position: relative; /* needed for the correct positioning of system messages */
 	color: #000;
 	font-size: 13px;
 	font-family: Verdana, Tahoma, Arial, Helvetica, sans-serif;
@@ -466,18 +467,32 @@ input.highlight {
 	border-bottom-style: dashed;
 }
 
-em.error {
+.error {
+	position: absolute;
+	top: 1.5em;
+	right: 1.5em;
+	max-width: 40%;
+	border: 2px solid #A33;
+	padding: .2em .4em;
 	color: #A33; 
+	background-color: #FEE;
 	font-style: normal;
 	font-weight: bold;
-	font-size: 95%;
+	font-size: 90%;
 }
 
-em.success {
+.success {
+	position: absolute;
+	top: 1.5em;
+	right: 1.5em;
+	max-width: 40%;
+	border: 2px solid #3A3;
+	padding: .2em .4em;
 	color: #3A3; 
+	background-color: #EFE;
 	font-style: normal;
 	font-weight: bold;
-	font-size: 95%;
+	font-size: 90%;
 }
 
 .comments {display: none;}

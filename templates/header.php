@@ -42,7 +42,14 @@ if (isset($this->additional_headers) && is_array($this->additional_headers) && c
 echo "\t".$ueb;	
 ?>
 </head>
-<body <?php echo $message ? "onLoad=\"alert('".$message."');\" " : "" ?> >
+<body>
+<?php
+//display system messages
+if (isset($message) && strlen($message)>0)
+{
+	echo '<div class="success">'.$message.'</div>';
+}
+?>
 <div class="header">
 	<h2><a id="homepage_link" href="<?php echo $this->href('', $this->config['root_page'], ''); ?>"><?php echo $this->config['wakka_name'];?></a> : <a href="<?php echo $this->href('backlinks', '', ''); ?>" title="Display a list of pages linking to <?php echo $this->tag ?>"><?php echo $this->GetPageTag(); ?></a></h2>
 	<?php echo $this->Link($this->config["root_page"]); ?> ::
