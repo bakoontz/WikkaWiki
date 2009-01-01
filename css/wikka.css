@@ -468,8 +468,8 @@ input.highlight {
 }
 
 .error {
-	position: absolute;
-	top: 1.5em;
+	position: fixed;
+	top: 6em;
 	right: 1.5em;
 	max-width: 40%;
 	border: 2px solid #A33;
@@ -482,8 +482,8 @@ input.highlight {
 }
 
 .success {
-	position: absolute;
-	top: 1.5em;
+	position: fixed;
+	top: 6em;
 	right: 1.5em;
 	max-width: 40%;
 	border: 2px solid #3A3;
