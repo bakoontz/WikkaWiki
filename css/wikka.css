@@ -467,21 +467,24 @@ input.highlight {
 	border-bottom-style: dashed;
 }
 
-.error {
-	position: fixed;
-	top: 6em;
-	right: 1.5em;
-	max-width: 40%;
-	border: 2px solid #A33;
-	padding: .2em .4em;
+/* inline system messages */
+em.error {
 	color: #A33; 
-	background-color: #FEE;
 	font-style: normal;
 	font-weight: bold;
-	font-size: 90%;
+	font-size: 95%;
 }
 
-.success {
+em.success {
+	color: #3A3; 
+	font-style: normal;
+	font-weight: bold;
+	font-size: 95%;
+}
+
+/* redirection messages */
+
+div.success {
 	position: fixed;
 	top: 6em;
 	right: 1.5em;
