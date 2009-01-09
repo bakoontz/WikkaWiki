@@ -69,6 +69,7 @@ $href_favicon = $this->StaticHref('images/favicon.ico');
 
 // Init Metadata: robots, keywords, description
 $extra_meta = '';
+$extra_meta .= 	'	<meta name="generator" content="WikkaWiki" />'."\n";
 if ($this->GetHandler() != 'show' || $this->page['latest'] == 'N' || $this->page['tag'] == 'SandBox')
 {
 	$extra_meta .= '	<meta name="robots" content="noindex, nofollow, noarchive" />'."\n";
