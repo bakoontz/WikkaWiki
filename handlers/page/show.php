@@ -34,6 +34,9 @@
  * 			necessary) - #312  
  */
 
+//include antispam library
+include_once('libs/antispam.lib.php');
+
 echo "\n".'<!--starting page content-->'."\n";
 echo '<div class="page"';
 echo (($user = $this->GetUser()) && ($user['doubleclickedit'] == 'N') || !$this->HasAccess('write')) ? '' : ' ondblclick="document.location=\''.$this->Href('edit', '', 'id='.$this->page['id']).'\';" '; #268
@@ -138,14 +141,16 @@ else
 					}
 				}
 				// display comment form
+				$keyfield = createSessionKeyFieldset($this, createSessionKey($this, $this->tag.'_commentkey'));
 				echo '<div class="commentform">'."\n";
 				if ($this->HasAccess('comment'))
 				{?>
-		    			<?php echo $this->FormOpen('addcomment'); ?>
+		    		<?php echo $this->FormOpen('addcomment'); ?>
 					<label for="commentbox">Add a comment to this page:<br />
-					<textarea id="commentbox" name="body" rows="6" cols="78"></textarea><br />
-					<input type="submit" value="Add Comment" accesskey="s" />
-            			</label>
+						<textarea id="commentbox" name="body" rows="6" cols="78"></textarea><br />
+						<input type="submit" value="Add Comment" accesskey="s" />
+            		</label>
+					<?php echo $keyfield; ?>
 					<?php echo $this->FormClose(); ?>
 				<?php
 				}
