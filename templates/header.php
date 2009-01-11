@@ -16,7 +16,7 @@ if ($this->GetMethod() != 'edit' && $this->HasAccess("write", $this->page["tag"]
 <head>
 	<title><?php echo $this->GetWakkaName().": ".$this->PageTitle(); ?></title>
 	<base href="<?php echo $site_base ?>" />
-	<?php if ($this->GetMethod() != 'show' || $this->page["latest"] == 'N' || $this->page["tag"] == 'SandBox') echo "<meta name=\"robots\" content=\"noindex, nofollow, noarchive\" />\n"; ?>
+<?php if ($this->GetMethod() != 'show' || $this->page["latest"] == 'N' || $this->page["tag"] == 'SandBox') echo "<meta name=\"robots\" content=\"noindex, nofollow, noarchive\" />\n"; ?>
 	<meta name="generator" content="WikkaWiki" />
 	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
 	<meta name="keywords" content="<?php echo $this->htmlspecialchars_ent($this->GetConfigValue("meta_keywords")) ?>" />
