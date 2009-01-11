@@ -8,7 +8,6 @@
  *
  * @author		{@link http://wikkawiki.org/JsnX JsnX} (first draft)
  * @author		{@link http://wikkawiki.org/DarTar Dario Taraborelli} (code cleanup, i18n strings and DB check)
- * @version		0.3
  * @since		Wikka 1.1.6.0
  *
  * @uses		Wakka::existsPage()
@@ -22,25 +21,24 @@
  */
 
 // i18n strings
-#if(!defined('SOURCE_HEADING')) define('SOURCE_HEADING', '=== Formatting code for [[%s]] ==='); //TODO: check for consistency with other handlers (formatting code vs. source vs. markup)
 if (!defined('SOURCE_HEADING')) define('SOURCE_HEADING', 'Formatting code for %s'); //TODO: check for consistency with other handlers (formatting code vs. source vs. markup)
-if (!defined('RAW_LINK_LABEL')) define('RAW_LINK_LABEL', 'show source only');
+if (!defined('RAW_LINK_DESC')) define('RAW_LINK_DESC', 'show source only');
 if (!defined('ERROR_NOT_EXISTING_PAGE')) define('ERROR_NOT_EXISTING_PAGE', 'Sorry, this page doesn\'t exist.');
 if (!defined('ERROR_NO_READ_ACCESS')) define('ERROR_NO_READ_ACCESS', 'Sorry, you aren\'t allowed to read this page.');
 
 echo '<div class="page">'."\n";
 
 //check if page exists
-if ($this->existsPage($this->tag))		// name change, interface change (allow active page only)
+if ($this->ExistsPage($this->tag))
 {
 	//check if user has read access
 	if ($this->HasAccess('read'))
 	{
 		// display raw page, slightly formatted for viewing
-		#echo $this->Format(sprintf(SOURCE_HEADING.' --- ', $this->tag));
-		echo '<h3>'.sprintf(SOURCE_HEADING, $this->Link($this->tag)).'</h3><br />'."\n";;
-		echo '(<a href="'.$this->href('raw').'">'.RAW_LINK_LABEL.'</a>)<br /><br />';
-		echo '<tt>'.nl2br($this->htmlspecialchars_ent($this->page['body'], ENT_QUOTES)).'</tt>';
+		$pagelink = $this->Link($this->tag, '', $this->tag);
+		printf('<h4>'.SOURCE_HEADING.'</h4><br />', $pagelink);
+		echo '<p><a class="keys" href="'.$this->href('raw').'">'.RAW_LINK_DESC.'</a></p>';
+		echo '<div class="wikisource">'.nl2br($this->htmlspecialchars_ent($this->page["body"], ENT_QUOTES)).'</div>';
 	}
 	else
 	{
@@ -49,7 +47,7 @@ if ($this->existsPage($this->tag))		// name change, interface change (allow acti
 }
 else
 {
-	echo '<em class="error">'.ERROR_NOT_EXISTING_PAGE.'</em>';
+	echo '<em class="error">'.sprintf(ERROR_NOT_EXISTING_PAGE,$this->tag).'</em>';
 }
 
 echo '</div>';

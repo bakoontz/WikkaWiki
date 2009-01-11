@@ -37,6 +37,9 @@
 //include antispam library
 include_once('libs/antispam.lib.php');
 
+//validate URL parameters
+$raw = (!empty($_GET['raw']))? (int) $this->GetSafeVar('raw', 'get') : SHOW_OLD_REVISION_SOURCE;
+
 echo "\n".'<!--starting page content-->'."\n";
 echo '<div class="page"';
 echo (($user = $this->GetUser()) && ($user['doubleclickedit'] == 'N') || !$this->HasAccess('write')) ? '' : ' ondblclick="document.location=\''.$this->Href('edit', '', 'id='.$this->page['id']).'\';" '; #268
@@ -61,7 +64,14 @@ else
 			echo '<div class="revisioninfo">'."\n";
 			echo '<h4>Revision ['.$this->page['id'].']</h4>'."\n";
 			echo 'This is an <a href="'.$this->Href('revisions').'">old revision</a> of <a href="'.$this->Href().'">'.$this->GetPageTag().'</a> made by '.$this->page['user'].' on <span class="datetime">'.$this->page['time'].'</span>.'."\n";
-
+?>
+				<br />
+				<?php echo $this->FormOpen('show', '', 'GET', '', 'left') ?>
+				<input type="hidden" name="time" value="<?php echo $this->GetSafeVar('time', 'get') ?>" />
+				<input type="hidden" name="raw" value="<?php echo ($raw == 1)? '0' :'1' ?>" />
+				<input type="submit" value="<?php echo ($raw == 1)? 'Show formatted' : 'Show source' ?>" />&nbsp;
+				<?php echo $this->FormClose(); ?>
+<?php
 			// if this is an old revision, display some buttons
 			if ($this->HasAccess('write'))
 			{
@@ -80,10 +90,17 @@ else
 			echo '</div>'."\n";
 		}
 		// display page
-		echo $this->Format($this->page['body'], 'wakka');
-		echo '<div style="clear: both"></div>'."\n";
-		echo '</div>'."\n";
-		echo '<!--closing page content-->'."\n";
+		if ($raw == 1)
+		{
+			echo '<div class="wikisource">'.nl2br($this->htmlspecialchars_ent($this->page["body"], ENT_QUOTES)).'</div>';
+		}
+		else
+		{
+			echo $this->Format($this->page['body'], 'wakka', 'page');
+		}
+		//clear floats at the end of the main div
+		echo "\n".'<div style="clear: both"></div>'."\n";
+		echo "\n".'</div><!--closing page content-->'."\n\n";
 		
 		if ($this->GetConfigValue('hide_comments') != 1)
 		{

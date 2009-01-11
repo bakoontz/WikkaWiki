@@ -6,8 +6,8 @@ if (!defined('DIFF_NO_DIFFERENCES'))  define('DIFF_NO_DIFFERENCES', 'No differen
 if (!defined('REVISION_NUMBER'))  define('REVISION_NUMBER', 'Revision %s');
 if (!defined('EDITED_ON'))  define('EDITED_ON', 'Edited on %1$s by %2$s');
 if (!defined('ERROR_ACL_READ'))  define('ERROR_ACL_READ', 'You aren\'t allowed to read this page.');
-if (!defined('OLDEST_VERSION_EDITED_ON_BY'))  define('OLDEST_VERSION_EDITED_ON_BY', 'The oldest known version of this page was edited on %1$s by %2$s');
-if (!defined('MOST_RECENT_EDIT'))  define('MOST_RECENT_EDIT', 'Most recent edit made on %1$s by %2$s');
+if (!defined('OLDEST_VERSION_EDITED_ON_BY'))  define('OLDEST_VERSION_EDITED_ON_BY', 'The oldest known version of this page was created on %1$s by %2$s');
+if (!defined('MOST_RECENT_EDIT'))  define('MOST_RECENT_EDIT', 'Last edited on %1$s by %2$s');
 if (!defined('UNREGISTERED_USER')) define('UNREGISTERED_USER', 'unregistered user');
 ?>
 <div class="page">
@@ -81,21 +81,21 @@ if ($this->HasAccess('read'))
 						if ($added)
 						{
 							// remove blank lines
-							$output .= '<br />'."\n".'<h5 class="clear">'.DIFF_ADDITIONS.'</h5>'."\n";
-							$output .= '<div class="additions">'.$this->Format(implode("\n", $added)).'</div><br />';
+							$output .= '<h5 class="clear">'.DIFF_ADDITIONS.'</h5>'."\n";
+							$output .= '<div class="wikisource"><ins>'.nl2br(implode("\n", $added)).'</ins></div>'."\n";
 						}
 
 						if ($deleted)
 						{
-							$output .= '<br />'."\n".'<h5 class="clear">'.DIFF_DELETIONS.'</h5>'."\n";
-							$output .= '<div class="deletions">'.$this->Format(implode("\n", $deleted)).'</div><br />';
+							$output .= '<h5 class="clear">'.DIFF_DELETIONS.'</h5>'."\n";
+							$output .= '<div class="wikisource"><del>'.nl2br(implode("\n", $deleted)).'</del></div>'."\n";
 						}
 
 						if (!$added && !$deleted)
 						{
 							$output .= "<br />\n".DIFF_NO_DIFFERENCES;
 						}
-						$output .= "<br />\n<hr class=\"clear\" /><br />\n";
+						$output .= "\n".'<br /><hr class="clear" />'."\n";
 					}
 				}
 				else
@@ -123,7 +123,6 @@ if ($this->HasAccess('read'))
 		$output .= '<h4 class="clear">'.sprintf(REVISION_NUMBER, '<a href="'.$this->Href('', '', 'time='.urlencode($pageB['time'])).'">['.$pageB['id'].']</a>').'</h4>'."\n";
 		$output .= sprintf(OLDEST_VERSION_EDITED_ON_BY, '<a class="datetime" href="'.$this->href('', '', 'time='.urlencode($pageB['time'])).'">'.$pageB['time'].'</a>', $EditedByUser).' <span class="pagenote smaller">'.$note."</span>\n";
 		$output .= '</div>'."\n";
-		$output .= $this->Format(implode("\n", $bodyB));
 		echo $output;
 	}
 }
