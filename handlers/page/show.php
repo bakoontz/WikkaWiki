@@ -87,7 +87,7 @@ else
 <?php
 				}
 			}
-			echo '</div>'."\n";
+			echo '<div class="clear"></div></div>'."\n";
 		}
 		// display page
 		if ($raw == 1)
