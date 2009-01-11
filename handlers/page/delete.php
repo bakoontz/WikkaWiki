@@ -1,10 +1,17 @@
 <div class="page">
 <?php
 
+if (!defined('CANCEL_ACL_LABEL')) define('CANCEL_ACL_LABEL', 'Cancel');
+
 if ($this->IsAdmin())
 {
     if ($_POST)
     {
+		if($_POST['cancel'] == CANCEL_ACL_LABEL)
+		{
+			$this->Redirect($this->Href());
+		}
+
         $tag = $this->GetPageTag();
 
         //  delete the page, comments, related links, acls and referrers 
@@ -31,7 +38,7 @@ if ($this->IsAdmin())
             </tr>
             <tr>
                 <td> <!-- nonsense input so form submission works with rewrite mode --><input type="hidden" value="" name="null"><input type="submit" value="Delete Page"  style="width: 120px"   />
-                <input type="button" value="Cancel" onclick="history.back();" style="width: 120px" /></td>
+                <input type="submit" value="<?php echo CANCEL_ACL_LABEL?>" name="cancel" style="width: 120px" /></td>
             </tr>
         </table>
         <?php

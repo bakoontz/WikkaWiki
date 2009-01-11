@@ -62,6 +62,7 @@
  * @todo	find a better name
  * @todo	move to core
  */
+
 if(!function_exists('optionRanges'))
 {
 	function optionRanges($limits, $max, $firstinc = 1)
@@ -170,6 +171,11 @@ if ($this->IsAdmin($this->GetUser()))
 	define('ADMINUSERS_DELETE_USERS_HEADING', 'Delete these users?');
 	define('ADMINUSERS_DELETE_USERS_BUTTON', 'Delete Users');
 	define('ADMINUSERS_CANCEL_BUTTON', 'Cancel'); #TODO: replace with appropriate constant from language file!
+
+	if(isset($_POST) && ($_POST['cancel'] == ADMINUSERS_CANCEL_BUTTON))
+	{
+		$this->Redirect($this->Href());
+	}
 
 	//initialize row & column colors variables
 	$r = 1; #initialize row counter
@@ -285,7 +291,7 @@ if ($this->IsAdmin($this->GetUser()))
 						<?php if($errors < count($usernames)) { ?>
 						<input type="submit" value="<?php echo ADMINUSERS_DELETE_USERS_BUTTON;?>"  style="width: 120px"   />
 						<?php } ?>
-						<input type="button" value="<?php echo ADMINUSERS_CANCEL_BUTTON;?>" onclick="history.back();" style="width: 120px" />
+						<input type="submit" value="<?php echo ADMINUSERS_CANCEL_BUTTON;?>" name="cancel" style="width: 120px" />
 					</td>
 				</tr>
 			</table>

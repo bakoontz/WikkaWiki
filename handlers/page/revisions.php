@@ -13,6 +13,11 @@ if (!defined('REVISIONS_NO_REVISIONS_YET')) define('REVISIONS_NO_REVISIONS_YET',
 <?php
 if ($this->HasAccess("read"))
 {
+	if(isset($_POST) && ($_POST['cancel'] == BUTTON_RETURN_TO_NODE))
+	{
+		$this->Redirect($this->Href());
+	}
+
 	$output = '';
 	$pages = $this->LoadRevisions($this->tag);
 	// load revisions for this page
@@ -52,7 +57,9 @@ if ($this->HasAccess("read"))
 			}
 		}
 		$output .= "</table><br />\n";
-		$output .= '<input type="button" value="'.BUTTON_RETURN_TO_NODE.'" onclick="document.location=\''.$this->Href('').'\';" />'."\n";
+		$output .= $this->FormClose()."\n";
+		$output .= $this->FormOpen("revisions", "", "post")."\n";
+		$output .= '<input type="submit" value="'.BUTTON_RETURN_TO_NODE.'" name="cancel"/>'."\n";
 		$output .= $this->FormClose()."\n";
 	}
 	else

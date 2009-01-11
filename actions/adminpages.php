@@ -224,7 +224,13 @@ if ($this->IsAdmin($this->GetUser()))
 	define('ADMINPAGES_ERROR_NO_MATCHES','Sorry, there are no pages matching "%s"');
 	define('ADMINPAGES_LABEL_EDIT_NOTE','Please enter a comment, or leave blank for default');
 	if (!defined('WHEN_BY_WHO')) define('WHEN_BY_WHO', '%1$s by %2$s');
-	
+	if (!defined('ADMINPAGES_CANCEL_LABEL')) define('ADMINPAGES_CANCEL_LABEL', 'Cancel');
+
+	if(isset($_POST) && ($_POST['cancel'] == ADMINPAGES_CANCEL_LABEL))
+	{
+		$this->Redirect($this->Href());
+	}
+
 	// -------------------------------------
 	// Initialize variables
 	
@@ -342,7 +348,7 @@ if ($this->IsAdmin($this->GetUser()))
 							<?php if($errors < count($tags)) { ?>
 							<input type="submit" value="Revert Pages"  style="width: 120px"   />
 							<?php } ?>
-							<input type="button" value="Cancel" onclick="history.back();" style="width: 120px" />
+							<input type="submit" value="<?php echo ADMINPAGES_CANCEL_LABEL?>" name="cancel" style="width: 120px" />
 						</td>
 					</tr>
 				</table>

@@ -34,7 +34,6 @@
  * @uses	Wakka::StopLinkTracking()
  * @uses	Wakka::WriteLinkTable()
  *
- * @todo	optimization using history.back();
  * @todo	use central regex library for validation;
  * @todo	replace $_REQUEST with either $_GET or $_POST (or both if really
  * 			necessary) - #312 => NOT CLEAR here what to do; see also #449
@@ -81,12 +80,15 @@ $error = '';
 $highlight_note = '';
 $note = '';
 $ondblclick = ''; //#123
+
+if($_POST['cancel'] == INPUT_BUTTON_CANCEL)
+{
+	$this->Redirect($this->Href());
+}
+
 if (isset($_POST['submit']) && ($_POST['submit'] == 'Preview') && ($user = $this->GetUser()) && ($user['doubleclickedit'] != 'N'))
 {
 	$ondblclick = ' ondblclick=\'document.getElementById("reedit_id").click();\'';
-	//history.back() not working on IE. (changes are lost)
-	//however, history.back() works fine in FF, and this is the optimized choice
-	//TODO Optimization: Look $_SERVER['HTTP_USER_AGENT'] and use history.back() for good browsers like FF.
 }
 ?>
 <div class="page"<?php echo $ondblclick;?>>
@@ -216,7 +218,7 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 		}
 		$preview_buttons .= '<input name="submit" type="submit" value="'.INPUT_SUBMIT_STORE.'" accesskey="'.ACCESSKEY_STORE.'" />'."\n".
 			'<input name="submit" type="submit" value="'.INPUT_SUBMIT_REEDIT.'" accesskey="'.ACCESSKEY_REEDIT.'" id="reedit_id" />'."\n".
-			'<input type="button" value="'.INPUT_BUTTON_CANCEL.'" onclick="document.location=\''.$this->href('').'\';" />'."\n";
+			'<input type="submit" value="'.INPUT_BUTTON_CANCEL.'" name="cancel"/>'."\n";
 
 		$output .= '<div class="previewhead">'.PREVIEW_HEADER.'</div>'."\n";
 
@@ -280,7 +282,7 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 			$output .= '<input size="'.MAX_EDIT_NOTE_LENGTH.'" maxlength="'.MAX_EDIT_NOTE_LENGTH.'" type="text" name="note" value="'.$this->hsc_secure($note).'" '.$highlight_note.'/> '.LABEL_EDIT_NOTE.'<br />'."\n";
 		}
 		//finish
-		$output .=	'<input name="submit" type="submit" value="'.INPUT_SUBMIT_STORE.'" accesskey="'.ACCESSKEY_STORE.'" /> <input name="submit" type="submit" value="'.INPUT_SUBMIT_PREVIEW.'" accesskey="'.ACCESSKEY_PREVIEW.'" /> <input type="button" value="'.INPUT_BUTTON_CANCEL.'" onclick="document.location=\''.$this->Href('').'\';" />'."\n".
+		$output .=	'<input name="submit" type="submit" value="'.INPUT_SUBMIT_STORE.'" accesskey="'.ACCESSKEY_STORE.'" /> <input name="submit" type="submit" value="'.INPUT_SUBMIT_PREVIEW.'" accesskey="'.ACCESSKEY_PREVIEW.'" /> <input type="submit" value="'.INPUT_BUTTON_CANCEL.'" name="cancel" />'."\n".
 			$this->FormClose();
 
 		if ($this->config['gui_editor'] == 1)

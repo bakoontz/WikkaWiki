@@ -22,6 +22,8 @@ if (!defined('ACL_HEADING')) define('ACL_HEADING', '====Access Control Lists for
 if (!defined('READ_ACL_LABEL')) define('READ_ACL_LABEL', 'Read ACL:');
 if (!defined('WRITE_ACL_LABEL')) define('WRITE_ACL_LABEL', 'Write ACL:');
 if (!defined('COMMENT_ACL_LABEL')) define('COMMENT_ACL_LABEL', 'Comment ACL:');
+if (!defined('CANCEL_ACL_LABEL')) define('CANCEL_ACL_LABEL', 'Cancel');
+if (!defined('STORE_ACL_LABEL')) define('STORE_ACL_LABEL', 'Store ACLs');
 if (!defined('SET_OWNER_LABEL')) define('SET_OWNER_LABEL', 'Set Page Owner:');
 if (!defined('SET_OWNER_CURRENT_LABEL')) define('SET_OWNER_CURRENT_LABEL', '(Current Owner)');
 if (!defined('SET_OWNER_PUBLIC_LABEL')) define('SET_OWNER_PUBLIC_LABEL','(Public)');
@@ -34,6 +36,10 @@ if ($this->UserIsOwner())
 {
 	if ($_POST)
 	{
+		if($_POST['cancel'] == CANCEL_ACL_LABEL)
+		{
+			$this->Redirect($this->Href());
+		}
 		$default_read_acl	= $this->GetConfigValue('default_read_acl');
 		$default_write_acl	= $this->GetConfigValue('default_write_acl');
 		$default_comment_acl	= $this->GetConfigValue('default_comment_acl');
@@ -104,8 +110,8 @@ if ($this->UserIsOwner())
 <tr>
 	<td colspan="2">
 	<br />
-	<input type="submit" value="Store ACLs" />
-	<input type="button" value="Cancel" onclick="history.back();" />
+	<input type="submit" value="<?php echo STORE_ACL_LABEL?>" />
+	<input type="submit" value="<?php echo CANCEL_ACL_LABEL?>" name="cancel" />
 	</td>
 
 	<td>
