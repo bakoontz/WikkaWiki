@@ -36,7 +36,6 @@
  * @uses	Wakka::WriteLinkTable()
  * @uses	Wakka::StaticHref()
  *
- * @todo	optimization using history.back();
  * @todo	use central regex library for validation;
  * @todo	document edit_button_position
  * @todo	don't show cancel button if JavaScript is not available
@@ -65,6 +64,11 @@ $note = '';
 $ondblclick = ''; //#123
 $body = '';
 
+if(isset($_POST['cancel']) && ($_POST['cancel'] == EDIT_CANCEL_BUTTON))
+{   
+    $this->Redirect($this->Href());
+}
+
 if ($this->GetConfigValue('edit_buttons_position') == 'top' || $this->GetConfigValue('edit_buttons_position') == 'bottom')
 {
 	$buttons_position = $this->GetConfigValue('edit_buttons_position');
@@ -77,10 +81,6 @@ else
 if (isset($_POST['submit']) && ($_POST['submit'] == EDIT_PREVIEW_BUTTON) && ($user = $this->GetUser()) && ($user['doubleclickedit'] != 'N'))
 {
 	$ondblclick = ' ondblclick=\'document.getElementById("reedit_id").click();\'';
-	//history.back() not working on IE. (changes are lost)
-	//however, history.back() works fine in FF, and this is the optimized choice
-	//TODO Optimization: Look at $_SERVER['HTTP_USER_AGENT'] and use history.back() for good browsers like FF.
-	// JW: this page may have a solution: http://forums.oracle.com/forums/thread.jspa?messageID=210396
 }
 ?>
 <div class="page"<?php echo $ondblclick;?>>
@@ -199,7 +199,7 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 							$edit_note_field.
 							'<input name="submit" type="submit" value="'.EDIT_STORE_BUTTON.'" accesskey="'.ACCESSKEY_STORE.'" />'."\n".
 							'<input name="submit" type="submit" value="'.EDIT_REEDIT_BUTTON.'" accesskey="'.ACCESSKEY_REEDIT.'" id="reedit_id" />'."\n".
-							'<input type="button" value="'.EDIT_CANCEL_BUTTON.'" onclick="document.location=\''.$this->href('').'\';" />'."\n".
+							'<input type="submit" value="'.EDIT_CANCEL_BUTTON.'" name="cancel" />'."\n".
 							'</fieldset>'."\n";
 
 		$preview_form  = '<div class="clear">'."\n";
@@ -257,7 +257,7 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 						$edit_note_field.
 						'<input name="submit" type="submit" value="'.EDIT_STORE_BUTTON.'" accesskey="'.ACCESSKEY_STORE.'" />'."\n".
 						'<input name="submit" type="submit" value="'.EDIT_PREVIEW_BUTTON.'" accesskey="'.ACCESSKEY_PREVIEW.'" />'."\n".
-						'<input type="button" value="'.EDIT_CANCEL_BUTTON.'" onclick="document.location=\''.$this->Href('').'\';" />'."\n".
+						'<input type="submit" value="'.EDIT_CANCEL_BUTTON.'" name="cancel" />'."\n".
 						'</fieldset>'."\n";
 		$output .= $this->FormOpen('edit');
 		if ($buttons_position == 'top')

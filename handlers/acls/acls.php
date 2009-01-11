@@ -34,6 +34,12 @@ if ($this->UserIsOwner())
 {
 	if ($_POST)
 	{
+
+        if(isset($_POST['cancel'] && ($_POST['cancel'] == CANCEL_BUTTON))
+        {
+            $this->Redirect($this->Href());
+        }
+
 		$default_read_acl = $this->GetConfigValue('default_read_acl');
 		$default_write_acl = $this->GetConfigValue('default_write_acl');
 		$default_comment_read_acl = $this->GetConfigValue('default_comment_read_acl');
@@ -135,7 +141,7 @@ if ($this->UserIsOwner())
 	<td colspan="2">
 	<br />
 	<input type="submit" value="<?php echo ACLS_STORE_BUTTON ?>" />
-	<input type="button" value="<?php echo CANCEL_BUTTON ?>" onclick="history.back();" />
+	<input type="submit" value="<?php echo CANCEL_BUTTON ?>" name="cancel"/>
 	</td>
 
 	<td>

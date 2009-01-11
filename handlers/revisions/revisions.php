@@ -40,6 +40,12 @@ $start = 0;
 
 if ($this->HasAccess('read'))
 {
+
+    if(isset($_POST['cancel']) && ($_POST['cancel'] == REVISIONS_RETURN_TO_NODE_BUTTON))
+    {
+        $this->Redirect($this->Href());
+    }
+
 	if (isset($_GET['start']))
 	{
 		$start = (int) $this->GetSafeVar('start', 'get');
@@ -88,7 +94,6 @@ if ($this->HasAccess('read'))
 		}
 		$output .= "</table>\n";
 		$output .= "</fieldset>\n";
-		$output .= '<input type="button" value="'.REVISIONS_RETURN_TO_NODE_BUTTON.'" onclick="document.location=\''.$this->Href('').'\';" />'."\n"; // @@@
 		$oldest_revision = $this->LoadOldestRevision($this->tag);
 		if ($oldest_revision['id'] != $page['id'])
 		{
@@ -97,6 +102,9 @@ if ($this->HasAccess('read'))
 			$output .= "\n".'<br /><input type="submit" name="more_revisions" value="'.REVISIONS_MORE_BUTTON.'" onclick="this.form.action=\''.$this->Href('revisions').'\'; return true;" />';	// @@@
 		}
 		$output .= $this->FormClose()."\n";
+        $output .= $this->FormOpen("revisions", "", "post")."\n";
+        $output .= '<input type="submit" value="'.REVISIONS_RETURN_TO_NODE_BUTTON.'" name="cancel"/>'."\n";
+        $output .= $this->FormClose()."\n";
 	}
 	else
 	{

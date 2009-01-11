@@ -626,8 +626,8 @@ define('ACLS_DENY_USER_ACCESS', '%s will be denied access'); // %s - sample user
 define('ACLS_AFTER', 'after');
 define('ACLS_TESTING_ORDER1', 'ACLs are tested in the order they are specified:');
 define('ACLS_TESTING_ORDER2', 'So be sure to specify %1$s on a separate line %2$s negating any users, not before.'); // %1$s - 'all' mark; %2$s - emphasised 'after'
-define('ACLS_DEFAULT_ACLS', 'Any lists that are left empty will be set to
-the defaults as specified in %s.');
+define('ACLS_DEFAULT_ACLS', 'Any lists that are left empty will be set to the defaults as specified in %s.');
+
 /**#@-*/
 
 /**#@+
