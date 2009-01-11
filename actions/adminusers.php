@@ -172,7 +172,7 @@ if ($this->IsAdmin($this->GetUser()))
 	define('ADMINUSERS_DELETE_USERS_BUTTON', 'Delete Users');
 	define('ADMINUSERS_CANCEL_BUTTON', 'Cancel'); #TODO: replace with appropriate constant from language file!
 
-	if(isset($_POST) && ($_POST['cancel'] == ADMINUSERS_CANCEL_BUTTON))
+	if(isset($_POST['cancel']) && ($_POST['cancel'] == ADMINUSERS_CANCEL_BUTTON))
 	{
 		$this->Redirect($this->Href());
 	}

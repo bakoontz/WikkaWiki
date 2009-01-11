@@ -13,7 +13,7 @@ if (!defined('REVISIONS_NO_REVISIONS_YET')) define('REVISIONS_NO_REVISIONS_YET',
 <?php
 if ($this->HasAccess("read"))
 {
-	if(isset($_POST) && ($_POST['cancel'] == BUTTON_RETURN_TO_NODE))
+	if(isset($_POST['cancel']) && ($_POST['cancel'] == BUTTON_RETURN_TO_NODE))
 	{
 		$this->Redirect($this->Href());
 	}

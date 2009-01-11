@@ -81,7 +81,7 @@ $highlight_note = '';
 $note = '';
 $ondblclick = ''; //#123
 
-if($_POST['cancel'] == INPUT_BUTTON_CANCEL)
+if(isset($_POST['cancel']) && ($_POST['cancel'] == INPUT_BUTTON_CANCEL))
 {
 	$this->Redirect($this->Href());
 }

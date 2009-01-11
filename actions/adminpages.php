@@ -226,7 +226,7 @@ if ($this->IsAdmin($this->GetUser()))
 	if (!defined('WHEN_BY_WHO')) define('WHEN_BY_WHO', '%1$s by %2$s');
 	if (!defined('ADMINPAGES_CANCEL_LABEL')) define('ADMINPAGES_CANCEL_LABEL', 'Cancel');
 
-	if(isset($_POST) && ($_POST['cancel'] == ADMINPAGES_CANCEL_LABEL))
+	if(isset($_POST['cancel']) && ($_POST['cancel'] == ADMINPAGES_CANCEL_LABEL))
 	{
 		$this->Redirect($this->Href());
 	}

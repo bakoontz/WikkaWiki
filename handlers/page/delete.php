@@ -7,7 +7,7 @@ if ($this->IsAdmin())
 {
     if ($_POST)
     {
-		if($_POST['cancel'] == CANCEL_ACL_LABEL)
+		if(isset($_POST['cancel']) && ($_POST['cancel'] == CANCEL_ACL_LABEL))
 		{
 			$this->Redirect($this->Href());
 		}
