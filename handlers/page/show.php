@@ -111,9 +111,10 @@ else
 			{
 				// display comments header
 ?>
-				<div class="commentsheader">
-				<span id="comments">&nbsp;</span>Comments [<a href="<?php echo $this->Href('', '', 'show_comments=0') ?>">Hide comments/form</a>]
-				</div>
+<!--starting comment block-->
+<div class="commentsheader">
+<span id="comments">&nbsp;</span>Comments [<a href="<?php echo $this->Href('', '', 'show_comments=0') ?>">Hide comments/form</a>]
+</div>
 <?php
 				// display comments themselves
 				if ($comments)
@@ -131,8 +132,8 @@ else
 						{
 							echo $this->FormOpen("delcomment");
 ?>
-   <input type="hidden" name="comment_id" value="<?php echo $comment['id'] ?>" />
-   <input type="submit" value="Delete Comment" />
+<input type="hidden" name="comment_id" value="<?php echo $comment['id'] ?>" />
+<input type="submit" value="Delete Comment" />
 <?php 
 							echo $this->FormClose();
 						}
@@ -159,8 +160,9 @@ else
 			else
 			{
 			?>
-				<div class="commentsheader">
-				<?php
+<!--starting comment block-->
+<div class="commentsheader">
+<?php
 				switch (count($comments))
 				{
 				case 0:
@@ -175,12 +177,13 @@ else
 					echo '<p>There are '.count($comments).' comments on this page. ';
 					$showcomments_text = 'Display comments';
 				}
-				?>
-				[<a href="<?php echo $this->Href('', '', 'show_comments=1#comments'); ?>"><?php echo $showcomments_text; ?></a>]</p>
-				</div>
-				<?php
+?>
+[<a href="<?php echo $this->Href('', '', 'show_comments=1#comments'); ?>"><?php echo $showcomments_text; ?></a>]</p>
+</div>
+<?php
 			}
 		}
 	}
 }
 ?>
+<!--closing comment block-->

@@ -1,15 +1,15 @@
 <?php
-// Init UniversalEditButton (http://universaleditbutton.org/Universal_Edit_Button) #779
-$ueb = ''; 
+//init
+$message = $this->GetRedirectMessage();
+$user = $this->GetUser();
+$site_base = $this->GetConfigValue("base_url");
+//UniversalEditButton (http://universaleditbutton.org/Universal_Edit_Button) #779
+$ueb = '';
 if ($this->GetMethod() != 'edit' && $this->HasAccess("write", $this->page["tag"])) 
-{ 
-	$ueb .= '<link rel="alternate" type="application/x-wiki" title="'.sprintf('Click to edit %s', $this->page["tag"]).'" href="'.$this->Href('edit', $this->page["tag"]).'"/>'."\n"; 
-} 
-
-	$message = $this->GetRedirectMessage();
-	$user = $this->GetUser();
-      $site_base = $this->GetConfigValue("base_url");
-      if ( substr_count($site_base, 'wikka.php?wakka=') > 0 ) $site_base = substr($site_base,0,-16);
+{
+	$ueb .= '	<link rel="alternate" type="application/x-wiki" title="'.sprintf('Click to edit %s', $this->page["tag"]).'" href="'.$this->Href('edit', $this->page["tag"]).'"/>'."\n"; 
+}
+if ( substr_count($site_base, 'wikka.php?wakka=') > 0 ) $site_base = substr($site_base,0,-16);
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -26,7 +26,8 @@ if ($this->GetMethod() != 'edit' && $this->HasAccess("write", $this->page["tag"]
 	<link rel="icon" href="images/favicon.ico" type="image/x-icon" />
 	<link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon" />
 <?php
-if ($this->GetMethod() != 'edit') {
+if ($this->GetMethod() != 'edit')
+{
 	$rsslink  = '	<link rel="alternate" type="application/rss+xml" title="'.$this->GetWakkaName().': revisions for '.$this->tag.' (RSS)" href="'.$this->Href('revisions.xml', $this->tag).'" />'."\n";
 	$rsslink .= '	<link rel="alternate" type="application/rss+xml" title="'.$this->GetWakkaName().': recently edited pages (RSS)" href="'.$this->Href('recentchanges.xml', $this->tag).'" />'."\n";
 	echo $rsslink;	
@@ -37,10 +38,9 @@ if (isset($this->additional_headers) && is_array($this->additional_headers) && c
 		{ 
 				echo $additional_headers; 
 		} 
-} 
-
-// UniversalEditButton
-echo "\t".$ueb;	
+}
+//UniversalEditButton
+echo $ueb;
 ?>
 </head>
 <body>
@@ -51,15 +51,18 @@ if (isset($message) && strlen($message)>0)
 	echo '<div class="success">'.$message.'</div>';
 }
 ?>
+<!--starting page header-->
 <div class="header">
-	<h2><a id="homepage_link" href="<?php echo $this->href('', $this->config['root_page'], ''); ?>"><?php echo $this->config['wakka_name'];?></a> : <a href="<?php echo $this->href('backlinks', '', ''); ?>" title="Display a list of pages linking to <?php echo $this->tag ?>"><?php echo $this->GetPageTag(); ?></a></h2>
-	<?php echo $this->Link($this->config["root_page"]); ?> ::
-	<?php 
-		if ($this->GetUser()) {
-			echo $this->config["logged_in_navigation_links"] ? $this->Format($this->config["logged_in_navigation_links"])." :: " : ""; 
-			echo "You are ".$this->Format($this->GetUserName());
-		} else { 
-			echo $this->config["navigation_links"] ? $this->Format($this->config["navigation_links"]) : ""; 
-		} 
-	?> 	
+<h2><a id="homepage_link" href="<?php echo $this->href('', $this->config['root_page'], ''); ?>"><?php echo $this->config['wakka_name'];?></a> : <a href="<?php echo $this->href('backlinks', '', ''); ?>" title="Display a list of pages linking to <?php echo $this->tag ?>"><?php echo $this->GetPageTag(); ?></a></h2>
+<?php echo $this->Link($this->config["root_page"]); ?> ::
+<?php 
+	if ($this->GetUser())
+	{
+		echo $this->config["logged_in_navigation_links"] ? $this->Format($this->config["logged_in_navigation_links"])." :: " : ""; 
+		echo "You are ".$this->Format($this->GetUserName());
+	} else { 
+		echo $this->config["navigation_links"] ? $this->Format($this->config["navigation_links"]) : ""; 
+	}
+?>
 </div>
+<!--closing page header-->

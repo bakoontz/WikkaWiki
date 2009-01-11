@@ -1,3 +1,4 @@
+<!--starting footer-->
 <div class="footer">
 <?php 
 	echo $this->FormOpen('', 'TextSearch', 'get'); 
@@ -38,8 +39,8 @@
 	}
 ?>
 <?php
-echo ($this->GetUser() ? '<a href="'.$this->Href('referrers').'" title="Click to view a list of URLs referring to this page.">Referrers</a> :: ' : '')."\n";
-?> 
+echo ($this->GetUser() ? '<a href="'.$this->Href('referrers').'" title="Click to view a list of URLs referring to this page.">Referrers</a> :: '."\n" : '');
+?>
 Search: <input name="phrase" size="15" class="searchbox" />
 <?php
 echo $this->FormClose();
@@ -65,3 +66,4 @@ if ($this->GetConfigValue('sql_debugging'))
 	echo '</div>'."\n";
 }
 ?>
+<!--closing footer-->
