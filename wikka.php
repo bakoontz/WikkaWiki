@@ -33,10 +33,11 @@
  * @author	{@link http://wikkawiki.org/DotMG Mahefa Randimbisoa}
  * @author	{@link http://wikkawiki.org/DarTar Dario Taraborelli}
  * @author	{@link http://wikkawiki.org/BrianKoontz Brian Koontz}
+ * @author	{@link http://www.tormodh.net/ Tormod Haugen}
  *
  * @copyright	Copyright 2002-2003, Hendrik Mans <hendrik@mans.de>
  * @copyright	Copyright 2004-2005, Jason Tourtelotte <wikka-admin@jsnx.com>
- * @copyright	Copyright 2006-2008, {@link http://wikkawiki.org/CreditsPage Wikka Development Team}
+ * @copyright	Copyright 2006-2009, {@link http://wikkawiki.org/CreditsPage Wikka Development Team}
  *
  * @uses	validLocalPath()	for validating path override
  * @uses	getmicrotime()		for determining page generation time
