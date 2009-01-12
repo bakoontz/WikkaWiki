@@ -1,40 +1,41 @@
 Wikka Changelog
 ------------------------------------------------------------------------
 
-Wikka 1.1.6.5 Release Notes
+Wikka 1.1.6.6 Release Notes
 
-1.1.6.5 released on June 24, 2008
+1.1.6.6 released on XXX XX, XXXX
 
-          Acknowledgments
+Acknowledgments
+Thanks to doomedfox, Vincent Mayoux, martin_misuth, Krzysztof Trybowski, bikoz, toringe.
 
-Thanks to ajmh, Vincent Fretin, VokinLoksar, BugMeNot for feedback, bug
-reports and patches.
+Security fixes
+- Removed generic references to $_REQUEST global variable. Ticket: 312
+- Restricted size of note field in editor. Ticket: 826
+- New antispam measure: Random tokens added to submitted forms to discourage scripted comment/page spam attacks. Ticket: 154
 
+Bug fixes
+- Under some conditions, a user attempting to log out will discover he/she is not able to do so. Ticket: 800
+- Prevent filename inheritance across multiple code blocks in grabcode handler. Ticket: 783
+- meta_keyword and meta_description config entries now escaped to ensure XHTML validation. Ticket: 816
+- Fixed DB error generated during some page ACL operations. Ticket: 811
+- Floats properly cleared when closing main <div>. Ticket: 683
+- Comment search filters now work correctly for registered users. Ticket: 810
 
-          Bug fixes
+New features
+- Universal Edit Button support. Ticket: 779
+- Redirection on login. Users attempting to write-access a wiki page are now redirected to the page after logging in. Ticket: 245
+- Full text search now has option to perform case-sensitive searches (non-case-sensitive searches are performed by default). Ticket: 821
+- {{rev}} action: a simple action to display the current revision number of a page. Ticket: 813
+- Fast switch between source view and rendered view for old page revisions. Ticket: 844
+- Support for multiple paths in config file to permit directory overrides for actions, handlers, templates, formatters, and CSS files. Ticket: 805
 
-    * Fixed wrong display of links in WantedPages with MySQL 5 (credits:
-      Vincent Fretin). Ticket: 309.
-    * Changed {{include}} action to display more user-friendly message
-      based on target page ACL. Ticket: 710
-    * Added utilities and compatibility methods. Ticket: 721.
-    * Version check was not working correctly with the Alternative PHP
-      Cache installed (credits: VokinLoksar). Ticket: 740
-    * (PHP 5 compatibility) Fixed issue when instantiating Wakka object
-      (credits: VokinLoksar). Ticket: 741
-    * (PHP 5 compatibility) Fixed issue preventing the creation of
-      tables when no prefix is specified (credits: VokinLoksar). Ticket:
-      742
-    * Referrers in 1.1.6.4 were not correctly logged. Ticket: 746
-    * Minor cleanup of {{adminusers}} action. Ticket: 753
-    * Preventing comments on non-existing pages. Ticket: 747
-    * Correcting path handling in cookies. Ticket: 748, 767, 768
-    * Simplified installer: removing GeSHi configuration. Ticket: 751
-    * Fixing broken revision links from revision feed. Ticket: 759
-    * Fixing broken help link in WikkaEdit. Ticket: 760
-    * Replacing invalid character in default suffix for cookie. Ticket: 761
-    * XHTML validation in user registration module. Ticket: 763
-      (credits: BugMeNot)
-    * Fixed incorrect description of markup for headings in
-      FormattingRules. Ticket: 758
-    * Corrected typo in HighScores action. Ticket: 720
+Misc
+- Added new library function, AddCustomHeaders(), to facilitate customization of output based upon runtime config options. New config option (additional_stylesheets) currently supported. Ticket: 804
+- Minor code cleanup. Ticket: 828
+- Added a courtesy link pointing to new page created by clone handler. Ticket: 832
+- Normalized separators used in config file. Ticket: 842
+- Removed some JS dependencies in core actions and handlers. Ticket: 353
+- Diff should output differences in raw wiki markup. Ticket: 770
+- Semantically correct use of <ins> and <del> in the formatter and diff handler. Ticket: 274
+- Added meta generator tag. Ticket: 839
+- Added link to the configuration settings documentation page from wikka.config.php. Ticket: 841
