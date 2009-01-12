@@ -179,19 +179,20 @@ else
 			?>
 <!--starting comment block-->
 <div class="commentsheader">
+<p>
 <?php
 				switch (count($comments))
 				{
 				case 0:
-					echo '<p>There are no comments on this page. ';
+					echo 'There are no comments on this page. ';
 					$showcomments_text = 'Add comment';
 					break;
 				case 1:
-					echo '<p>There is one comment on this page. ';
+					echo 'There is one comment on this page. ';
 					$showcomments_text = 'Display comment';
 					break;
 				default:
-					echo '<p>There are '.count($comments).' comments on this page. ';
+					echo 'There are '.count($comments).' comments on this page. ';
 					$showcomments_text = 'Display comments';
 				}
 ?>
