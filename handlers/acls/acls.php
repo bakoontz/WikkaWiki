@@ -35,7 +35,7 @@ if ($this->UserIsOwner())
 	if ($_POST)
 	{
 
-        if(isset($_POST['cancel'] && ($_POST['cancel'] == CANCEL_BUTTON))
+        if(isset($_POST['cancel']) && ($_POST['cancel'] == CANCEL_BUTTON))
         {
             $this->Redirect($this->Href());
         }
