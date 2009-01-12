@@ -44,5 +44,5 @@ if ($pages = $this->LoadPagesLinkingTo($this->tag)) {
 } else {
 	print MESSAGE_NO_BACKLINKS;
 }
+echo '</div>'."\n";
 ?>
-</div>

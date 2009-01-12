@@ -163,5 +163,5 @@ if (!$this->existsPage($from))		// name change, interface change (allows only ac
 if (isset($box)) echo '<p>'.$box.'</p><br />'."\n";
 // print form
 if (isset($form)) print $form;
+echo '</div>'."\n";
 ?>
-</div>

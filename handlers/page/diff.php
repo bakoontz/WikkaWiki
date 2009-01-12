@@ -223,6 +223,6 @@ else
 {
 	echo '<em class="error">'.ERROR_NO_PAGE_ACCESS.'</em>'."\n";
 }
+echo '<div style="clear: both"></div>'."\n";
+echo '</div>'."\n";
 ?>
-<div style="clear: both"></div>
-</div>
