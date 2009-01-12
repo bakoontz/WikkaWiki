@@ -11,16 +11,17 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
  *
- * @author Hendrik Mans <hendrik@mans.de>
- * @author Jason Tourtelotte <wikka-admin@jsnx.com>
- * @author {@link http://wikkawiki.org/JavaWoman Marjolein Katsma}
- * @author {@link http://wikkawiki.org/NilsLindenberg Nils Lindenberg}
- * @author {@link http://wikkawiki.org/DotMG Mahefa Randimbisoa}
- * @author {@link http://wikkawiki.org/DarTar Dario Taraborelli}
+ * @author	{@link http://www.mornography.de/ Hendrik Mans}
+ * @author	{@link http://wikkawiki.org/JsnX Jason Tourtelotte}
+ * @author	{@link http://wikkawiki.org/JavaWoman Marjolein Katsma}
+ * @author	{@link http://wikkawiki.org/NilsLindenberg Nils Lindenberg}
+ * @author	{@link http://wikkawiki.org/DotMG Mahefa Randimbisoa}
+ * @author	{@link http://wikkawiki.org/DarTar Dario Taraborelli}
+ * @author	{@link http://wikkawiki.org/BrianKoontz Brian Koontz}
  *
  * @copyright Copyright 2002-2003, Hendrik Mans <hendrik@mans.de>
  * @copyright Copyright 2004-2005, Jason Tourtelotte <wikka-admin@jsnx.com>
- * @copyright Copyright 2006-2007 {@link http://wikkawiki.org/CreditsPage Wikka Development Team}
+ * @copyright Copyright 2006-2009 {@link http://wikkawiki.org/CreditsPage Wikka Development Team}
  */
 
 // Time to live for client-side cookies in seconds (90 days)
