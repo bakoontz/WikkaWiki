@@ -5,8 +5,11 @@ $config = $config2 = unserialize($_POST["config"]);
 // merge existing configuration with new one
 $config = array_merge($wakkaConfig, $config);
 
-// remove config values for whatever reason
+// remove obsolete config settings if present
 unset($config["allow_doublequote_html"]);
+unset($config["header_action"]);
+unset($config["footer_action"]);
+unset($config["external_link_tail"]);
 
 // set version to current version, yay!
 $config["wakka_version"] = WAKKA_VERSION;
