@@ -111,8 +111,33 @@ a.ext:hover {
 	color: #933;
 }
 
-.exttail {
-	font-size: 80%;
+.page a.ext:after {
+	content: "\221e";
+	font-size: 75%;
+	color: #CCC;
+	position: relative;
+	bottom: 0.5ex;
+}
+
+.page a.mailto:after {
+	content: "\270e";
+	font-size: 100%;
+	color: #CCC;
+	position: relative;
+	bottom: 0.1ex;
+}
+
+.page a.interwiki:after {
+	content: "\2606";
+	font-size: 75%;
+	color: #CCC;
+	position: relative;
+	bottom: 0.5ex;
+}
+
+.page a.missingpage:after {
+	content: "?";
+	font-size: 75%;
 	color: #CCC;
 	position: relative;
 	bottom: 0.5ex;

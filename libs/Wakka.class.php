@@ -943,64 +943,119 @@ class Wakka
 		return $href;
 	}
 	/**
-	 * Link
+	 * Creates a link from Wikka markup.
 	 *
-	 * Beware of the $title parameter: quotes and backslashes should be previously escaped before passed to
-	 * this method.
+	 * Beware of the $title parameter: quotes and backslashes should be previously
+	 * escaped before the title is passed to this method.
 	 *
-	 * @param mixed $tag
-	 * @param string $method
-	 * @param string $text
-	 * @param boolean $track
-	 * @param boolean $escapeText
-	 * @param string $title
-	 * @access public
-	 * @return string
+	 * @access	public
+	 *
+	 * @uses	Wakka::GetInterWikiUrl()
+	 * @uses	Wakka::Href()
+	 * @uses	Wakka::htmlspecialchars_ent()
+	 * @uses	Wakka::LoadPage()
+	 * @uses	Wakka::TrackLinkTo()
+	 * @uses	Wakka::existsPage()
+	 *
+	 * @param	mixed	$tag		mandatory:
+	 * @param	string	$handler	optional:
+	 * @param	string	$text		optional:
+	 * @param	boolean	$track		optional:
+	 * @param	boolean	$escapeText	optional:
+	 * @param	string	$title		optional:
+	 * @param	string	$class		optional:
+	 * @return	string	an HTML hyperlink (a href) element
+	 * @todo	move regexps to regexp-library		#34
 	 */
-	function Link($tag, $method='', $text='', $track=TRUE, $escapeText=TRUE, $title='') {
-		if (!$text) $text = $tag;
-		// escape text?
-		if ($escapeText) $text = $this->htmlspecialchars_ent($text);
+	function Link($tag, $handler='', $text='', $track=TRUE, $escapeText=TRUE, $title='', $class='')
+	{
+		// init
+		if (!$text)
+		{
+			$text = $tag;
+		}
+		if ($escapeText)	// escape text?
+		{
+			$text = $this->htmlspecialchars_ent($text);
+		}
 		$tag = $this->htmlspecialchars_ent($tag); #142 & #148
-		$method = $this->htmlspecialchars_ent($method);
+		$handler = $this->htmlspecialchars_ent($handler);
 		$title_attr = $title ? ' title="'.$this->htmlspecialchars_ent($title).'"' : '';
 		$url = '';
+		$wikilink = '';
 
 		// is this an interwiki link?
-		if (preg_match("/^([A-ZÄÖÜ][A-Za-zÄÖÜßäöü]+)[:](\S*)$/", $tag, $matches))	# before the : should be a WikiName; anything after can be (nearly) anything that's allowed in a URL
+		// before the : should be a WikiName; anything after can be (nearly) anything that's allowed in a URL
+		if (preg_match('/^([A-ZÄÖÜ][A-Za-zÄÖÜßäöü]+)[:](\S*)$/', $tag, $matches))	// @@@ FIXME #34 (inconsistent with Formatter)
 		{
 			$url = $this->GetInterWikiUrl($matches[1], $matches[2]);
+			$class = 'interwiki';
 		}
-		elseif (preg_match("/^(http|https|ftp):\/\/([^\\s\"<>]+)$/", $tag))
+		// fully-qualified URL? this uses the same pattern as StaticHref() does;
+		// it's a recognizing pattern, not a validation pattern
+		// @@@ move to regex libary!
+		elseif (preg_match('/^(http|https|ftp|news|irc|gopher):\/\/([^\\s\"<>]+)$/', $tag))
 		{
 			$url = $tag; // this is a valid external URL
+			// add ext class only if URL is external
+			if (!preg_match('/'.$_SERVER['SERVER_NAME'].'/', $tag))
+			{
+				$class = 'ext';
+			}
 		}
-		// is this a full link? ie, does it contain alpha-numeric characters?
-		elseif (preg_match("/[^[:alnum:],ÄÖÜ,ßäöü]/", $tag))
+		// is this a full link? i.e., does it contain something *else* than valid WikiName characters?
+		// FIXME just use (!IsWikiName($tag)) here (then fix the RE there!)
+		// @@@ First move to regex library
+		elseif (preg_match('/[^[:alnum:]ÄÖÜßäöü]/', $tag))		// FIXED #34 - removed commas
 		{
 			// check for email addresses
-			if (preg_match("/^.+\@.+$/", $tag))
+			if (preg_match('/^.+\@.+$/', $tag))
 			{
-				$url = "mailto:".$tag;
+				$url = 'mailto:'.$tag;
+				$class = 'mailto';
 			}
 			// check for protocol-less URLs
-			else if (!preg_match("/:/", $tag))
+			elseif (!preg_match('/:/', $tag))
 			{
-				$url = "http://".$tag;
+				$url = 'http://'.$tag;
+				$class = 'ext';
 			}
 		}
 		else
 		{
 			// it's a wiki link
-			if ($_SESSION["linktracking"] && $track) $this->TrackLinkTo($tag);
-			$linkedPage = $this->LoadPage($tag);
-			// return ($linkedPage ? "<a href=\"".$this->Href($method, $linkedPage['tag'])."\">".$text."</a>" : "<span class=\"missingpage\">".$text."</span><a href=\"".$this->Href("edit", $tag)."\" title=\"Create this page\">?</a>");
-			return ($linkedPage ? "<a href=\"".$this->Href($method, $linkedPage['tag'])."\"$title_attr>".$text."</a>" : "<a class=\"missingpage\" href=\"".$this->Href("edit", $tag)."\" title=\"Create this page\">".$text."</a>");
+			if (isset($_SESSION['linktracking']) && $_SESSION['linktracking'] && $track)
+			{
+				$this->TrackLinkTo($tag);
+			}
+			//$linkedPage = $this->LoadPage($tag);
+			// return ($linkedPage ? '<a class="'.$class.'" href="'.$this->Href($handler, $linkedPage['tag']).'"'.$title_attr.'>'.$text.'</a>' : '<a class="missingpage" href="'.$this->Href("edit", $tag).'" title="'.CREATE_THIS_PAGE_LINK_TITLE.'">'.$text.'</a>'); #i18n
+			// MODIFIED to use existsPage() (more efficient!)
+			if (!$this->existsPage($tag))
+			{
+				$link = '<a class="missingpage" href="'.$this->Href('edit', $tag).'" title="'.CREATE_THIS_PAGE_LINK_TITLE.'">'.$text.'</a>';
+			}
+			else
+			{
+				$link = '<a class="'.$class.'" href="'.$this->Href($handler, $tag).'"'.$title_attr.'>'.$text.'</a>';
+			}
 		}
-		$external_link_tail = $this->GetConfigValue("external_link_tail");
-		return $url ? "<a class=\"ext\" href=\"$url\">$text</a>$external_link_tail" : $text;
-	}
 
+		//return $url ? '<a class="'.$class.'" href="'.$url.'">'.$text.'</a>' : $text;
+		if ('' != $url)
+		{
+			$result = '<a class="'.$class.'" href="'.$url.'">'.$text.'</a>';
+		}
+		elseif ('' != $link)
+		{
+			$result = $link;
+		}
+		else
+		{
+			$result = $text;
+		}
+		return $result;
+	}
 	// function PregPageLink($matches) { return $this->Link($matches[1]); }
 	function IsWikiName($text) { return preg_match("/^[A-Z,ÄÖÜ][a-z,ßäöü]+[A-Z,0-9,ÄÖÜ][A-Z,a-z,0-9,ÄÖÜ,ßäöü]*$/", $text); }
 	function TrackLinkTo($tag) { $_SESSION["linktable"][] = $tag; }
