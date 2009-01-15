@@ -307,32 +307,39 @@ div.alertbox {
 
 /* text formatting */
 
-h1, h2, h3, h4, h5 {
+
+h1, h2, h3, h4, h5, h6 {
 	font-family: Georgia, "DejaVu Serif", Times, serif;
 	font-weight: normal;
 }
 
-h5 {
+.page h5 {
 	font-size: 12pt;
+	margin: 2pt 0 3pt 0;
 }
 
-h4 {
+.page h4 {
 	font-size: 14pt;
+	margin: 2pt 0 3pt 0;
 }
 
-h3 {
+.page h3 {
 	font-size: 16pt;
+	margin: 2pt 0 3pt 0;
 }
 
-h2 {
+.page h2 {
 	font-size: 18pt;
+	margin: 2pt 0 5pt 0;
 }
 
-h1 {
+.page h1 {
 	font-size: 20pt;
+	margin: 2pt 0 3pt 0;
 }
 
 .header h2 {
+	font-size: 18pt;
 	padding: .3em 0; 
 }
 
