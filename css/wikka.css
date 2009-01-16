@@ -111,38 +111,27 @@ a.ext:hover {
 	color: #933;
 }
 
-.page a.ext:after {
-	content: "\221e";
-	font-size: 75%;
-	color: #CCC;
-	position: relative;
-	bottom: 0.5ex;
+/* link icons */
+
+.page a.ext {
+	background: url('../images/icons/ext_simple.gif') left bottom no-repeat;
+	padding-left: .8em;
 }
 
-.page a.mailto:after {
-	content: "\270e";
-	font-size: 100%;
-	color: #CCC;
-	position: relative;
-	bottom: 0.1ex;
+.page a.mailto {
+	background: url('../images/icons/mail.gif') left bottom no-repeat;
+	padding-left: .9em;
 }
 
-.page a.interwiki:after {
-	content: "\2606";
-	font-size: 75%;
-	color: #CCC;
-	position: relative;
-	bottom: 0.5ex;
+.page a.interwiki {
+	background: url('../images/icons/ext.gif') left bottom no-repeat;
+	padding-left: 1em;
 }
 
-.page a.missingpage:after {
-	content: "?";
-	font-size: 75%;
-	color: #CCC;
-	position: relative;
-	bottom: 0.5ex;
+a.user, a.user:hover {
+	background: url('../images/icons/user.gif') left bottom no-repeat;
+	padding-left: 1em;
 }
-
 .header a:hover {
 	color: #933;
 	background: transparent;
