@@ -41,6 +41,7 @@ switch ($_GET['action'])	#312
 		    Header("Content-Length: ".filesize($path));
 		    Header("Content-Type: application/x-download");
 		    Header("Content-Disposition: attachment; filename=".$filename);
+			Header("Cache-control: must-revalidate");
     		    Header("Connection: close");
     		    @readfile($path);
 		    exit();
