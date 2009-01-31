@@ -37,7 +37,8 @@ echo '<div class="page">'."\n";
 echo '<h3>'.sprintf(PAGE_TITLE,$this->tag).'</h3><br />'."\n";
 if ($pages = $this->LoadPagesLinkingTo($this->tag)) {
 	foreach ($pages as $page) {
-		if ($this->existsPage($page['tag'])) {			// name change, interface change (active pages only)
+		$tag = $page['tag'];
+		if ($this->existsPage($tag) && $this->HasAccess("read", $tag)) {			// name change, interface change (active pages only)
 			print $this->Link($page['tag']).'<br />';
 		}
 	}
