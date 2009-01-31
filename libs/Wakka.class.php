@@ -759,7 +759,13 @@ class Wakka
 		foreach ($pages as $page)
 		{
 			#$list[] = $page['tag'];
-			$list[] = $page['page_tag'];	#487 - was not handled in [520]!
+			$tag = $page['page_tag'];
+			# We should never display a page that isn't accessible by
+			# the current user!
+			if($this->HasAccess("read", $tag))
+			{
+				$list[] = $tag;	#487 - was not handled in [520]!
+			}
 		}
 		sort($list);			// @@@ caller should ensure (via query!) the list is already sorted
 								// this could break an already-sorted list!
