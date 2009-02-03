@@ -30,8 +30,7 @@
  * @todo		use error handler for displaying messages and highlighting
  * 				invalid input fields;
  * @todo		remove useless redirections;
- * @todo		avoid use of Format() (too costly for just headings and erro rstrings)
- * @todo		[accessibility] make logout independent of JavaScript
+ * @todo		avoid use of Format() (too costly for just headings and error strings)
  */
 
 // defaults
