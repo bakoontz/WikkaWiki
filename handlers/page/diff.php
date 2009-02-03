@@ -61,9 +61,16 @@ if ($this->HasAccess('read'))
 	}
 
 	// load pages
-	$pageA = $this->LoadPageById($_GET['a']);	#312
-	$pageB = $this->LoadPageById($_GET['b']);	#312
-
+	$pageA = (isset($_GET['a'])) ? $this->LoadPageById($_GET['a']) : '';	# #312
+	$pageB = (isset($_GET['b'])) ? $this->LoadPageById($_GET['b']) : '';	# #312
+	if ('' == $pageA || '' == $pageB)
+	{
+		echo '<div class="page">'."\n";
+		echo '<em class="error">'.ERROR_BAD_PARAMETERS.'</em><br />';
+		echo '</div>'."\n";
+		return;
+	}
+	
 	$pageA_edited_by = $pageA['user'];
 	if (!$this->LoadUser($pageA_edited_by)) $pageA_edited_by .= ' ('.UNREGISTERED_USER.')';
 	if ($pageA['note']) $noteA='['.$this->htmlspecialchars_ent($pageA['note']).']'; else $noteA ='';
@@ -77,8 +84,8 @@ if ($this->HasAccess('read'))
 	if (isset($_GET['fastdiff']) && $_GET['fastdiff'])	#312
 	{
 		// prepare bodies
-		$bodyA = explode("\n", $pageA['body']);
-		$bodyB = explode("\n", $pageB['body']);
+		$bodyA = explode("\n", $this->htmlspecialchars_ent($pageA['body']));
+		$bodyB = explode("\n", $this->htmlspecialchars_ent($pageB['body']));
 
 		$added   = array_diff($bodyA, $bodyB);
 		$deleted = array_diff($bodyB, $bodyA);
@@ -95,7 +102,7 @@ if ($this->HasAccess('read'))
 		$info .= '<input type="hidden" name="b" value="'.$_GET['b'].'" />'."\n";
 		$info .= '<input type="submit" value="'.DIFF_FULL_BUTTON.'" />';
 		$info .= $this->FormClose();		
-		$output .= '</div>'."\n";
+		$info .= '</div>'."\n";
 		if ($added)
 		{
 			// remove blank lines
@@ -116,17 +123,17 @@ if ($this->HasAccess('read'))
 	}
 	else
 	{
-		// extract text from bodies (see #701, part 3) $textA = $pageB['body'] and not $pageA['body'].
-		$textA = $pageB['body'];
-		$textB = $pageA['body'];
-	
+		// extract text from bodies
+		$textA = $this->htmlspecialchars_ent($pageB['body']);
+		$textB = $this->htmlspecialchars_ent($pageA['body']);
+			
 		$sideA = new Side($textA);
 		$sideB = new Side($textB);
 	
-		$bodyA='';
+		$bodyA = '';
 		$sideA->split_file_into_words($bodyA);
 	
-		$bodyB='';
+		$bodyB = '';
 		$sideB->split_file_into_words($bodyB);
 	
 		// diff on these two file
