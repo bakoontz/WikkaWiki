@@ -29,21 +29,40 @@
 // User-interface: strings
 define('PAGE_TITLE','Pages linking to %s');
 define('MESSAGE_NO_BACKLINKS','There are no backlinks to this page.');
+define('MESSAGE_MISSING_PAGE','Sorry, page %s does not exist.');
+define('MESSAGE_PAGE_INACCESSIBLE',	'You are not allowed to read this page');
 
 echo '<div class="page">'."\n";
 
 // build backlinks list
-#echo $this->Format('=== '.sprintf(PAGE_TITLE,'[['.$this->tag.']]').' === --- ---');
 echo '<h3>'.sprintf(PAGE_TITLE,$this->tag).'</h3><br />'."\n";
-if ($pages = $this->LoadPagesLinkingTo($this->tag)) {
-	foreach ($pages as $page) {
-		$tag = $page['tag'];
-		if ($this->existsPage($tag) && $this->HasAccess("read", $tag)) {			// name change, interface change (active pages only)
-			print $this->Link($page['tag']).'<br />';
+
+switch(TRUE) 
+{
+	case (!$this->existsPage($this->tag)):
+	echo '<em class="error">'.sprintf(MESSAGE_MISSING_PAGE,$this->tag).'</em>'."\n";
+	break;
+
+	case (!$this->HasAccess('read')):
+	echo '<em class="error">'.MESSAGE_PAGE_INACCESSIBLE.'</em>'."\n";
+	break;
+	
+	default:	
+	if ($pages = $this->LoadPagesLinkingTo($this->tag))
+	{
+		foreach ($pages as $page) {
+			$tag = $page['tag'];
+			// name change, interface change (active pages only)
+			if ($this->existsPage($tag) && $this->HasAccess("read", $tag))
+			{			
+				print $this->Link($page['tag']).'<br />';
+			}
 		}
 	}
-} else {
-	print MESSAGE_NO_BACKLINKS;
+	else
+	{
+		echo MESSAGE_NO_BACKLINKS;
+	}
 }
 echo '</div>'."\n";
 ?>
