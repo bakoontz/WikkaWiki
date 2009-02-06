@@ -1,11 +1,64 @@
 <?php
 
+// Start session
+session_set_cookie_params(0, '/');
+session_name(md5('WikkaWiki'));
+session_start();
+
+// Copy POST params to SESSION in preparation for redirect to install
+// page
+$_SESSION['post'] = array();
+$_SESSION['post'] = array_merge($_SESSION['post'], $_POST);
+
+// Validate data
+$error['flag'] = false;
+if(!isset($_SESSION['error_flag'])) 
+{
+	// We need to skip the error checks and just jump to the install
+	// page for an upgrade
+	if(!$wakkaConfig["wakka_version"])
+	{
+		$error['flag'] = true; 
+	}
+} 
+else 
+{
+	if(!isset($_POST['config']['admin_users']) || 
+	   preg_match('/^[A-Z][a-z]+[A-Z0-9][A-Za-z0-9]*$/', $_POST['config']['admin_users']) == 0) { 
+		$error['admin_users'] = "Admin name must be a WikiName. This means it must start with a capital letter, then have some lowercase letters, then have an uppercase letter.\nExamples: JohnSmith or JsnX"; 
+		$error['flag'] = true;
+	}
+	if(isset($_POST['password'])) {
+		if(strlen($_POST['password']) < 5 ) {
+			$error['password'] = "Password is too short.  It must be at least five (5) characters long.";
+			$error['flag'] = true;
+		}
+		if(isset($_POST['password2']) &&
+		   strcmp($_POST['password'], $_POST['password2']) != 0 ) {
+			$error['password2'] = "Passwords don't match.";
+			$error['flag'] = true;
+		}
+	}
+	else {
+		$error['password'] = "Password is too short.  It must be at least five (5) characters long.";
+		$error['flag'] = true;
+	}
+	if(!isset($_POST['config']['admin_email']) || 
+	   preg_match("/^[A-Za-z0-9.!#$%&'*+\/=?^_`{|}~-]+@[A-Za-z0-9.-]+$/i", $_POST['config']['admin_email']) == 0) { 
+		$error['admin_email'] = "Email address appears incorrect.";
+		$error['flag'] = true;
+	}
+}
+
 // i18n section
 if (!defined('SITE_SUFFIX_INFO')) define ('SITE_SUFFIX_INFO', 'Suffix used for cookies and part of the session name. This allows you to run multiple Wikka installations on the same server by configuring them to use different wiki prefixes.');
 if (!defined('SITE_SUFFIX_LABEL')) define ('SITE_SUFFIX_LABEL', 'Your Wiki suffix:');
 
 if (!$wakkaConfig["wakka_version"])
 {
+	$_SESSION['error_flag'] = $error['flag'];
+
+/*
 ?>
 <script type="text/javascript">
 function check() {
@@ -38,8 +91,19 @@ function check() {
  return true;
 }
 </script>
-<?php } ?>
-<form action="<?php echo myLocation() ?>?installAction=install" name="form1" method="post">
+<?php 
+*/
+
+
+} 
+
+if(false === $_SESSION['error_flag'])
+{
+	header("Location: ".myLocation()."?installAction=install");
+}
+
+?>
+<form action="<?php echo myLocation() ?>?installAction=default" name="form1" method="post">
 <table>
 
 	<tr><td></td><td><h1>Wikka Installation</h1></td></tr>
@@ -48,6 +112,8 @@ function check() {
 	if ($wakkaConfig["wakka_version"])
 	{
 		print("<tr><td></td><td>Your installed Wikka is reporting itself as <tt>".$wakkaConfig["wakka_version"]."</tt>. You are about to <strong>upgrade</strong> to Wikka ".WAKKA_VERSION.". Please review your configuration settings below.</td></tr>\n");
+		// This needs to be set to false for redirect to install page
+		$_SESSION['error_flag'] = false;
 	}
 	else
 	{
@@ -97,12 +163,23 @@ function check() {
 
 	 <tr><td></td><td>This is the username of the person running this wiki. Later you'll be able to add other admins. The admin username should be formatted as a <abbr title="A WikiName is formed by two or more capitalized words without space, e.g. JohnDoe">WikiName</abbr>.</td></tr>
 	 <tr><td align="right" nowrap="nowrap">Admin name:</td><td><input type="text" size="50" name="config[admin_users]" value="<?php echo $wakkaConfig["admin_users"] ?>" /></td></tr>
-
+	<?php if(isset($error['admin_users'])) { ?>
+	<tr><td></td><td><font color="red"><?php echo $error['admin_users']; ?></font></td></tr>
+	<?php } ?>
 	 <tr><td></td><td>Choose a password for administrator (5+ chars)</td></tr>
 	 <tr><td align="right" nowrap="nowrap">Enter password:</td><td><input type="password" size="50" name="password" value="" /></td></tr>
+	<?php if(isset($error['password'])) { ?>
+	<tr><td></td><td><font color="red"><?php echo $error['password']; ?></font></td></tr>
+	<?php } ?>
 	 <tr><td align="right" nowrap="nowrap">Confirm password:</td><td><input type="password" size="50" name="password2" value="" /></td></tr>
+	<?php if(isset($error['password2'])) { ?>
+	<tr><td></td><td><font color="red"><?php echo $error['password2']; ?></font></td></tr>
+	<?php } ?>
 	 <tr><td></td><td>Administrator email.</td></tr>
 	 <tr><td align="right" nowrap="nowrap">Email:</td><td><input type="text" size="50" name="config[admin_email]" value="<?php echo $wakkaConfig["admin_email"] ?>" /></td></tr>
+	<?php if(isset($error['admin_email'])) { ?>
+	<tr><td></td><td><font color="red"><?php echo $error['admin_email']; ?></font></td></tr>
+	<?php } ?>
 
 	<tr><td></td><td><br /><h2>Wikka URL Configuration</h2><?php echo $wakkaConfig["wakka_version"] ? '' : '<span class="note">Since this is a new installation, the installer tried to guess the proper values.<br />Change them only if you know what you\'re doing! 	See <a href="http://docs.wikkawiki.org/ModRewrite" target="_blank">Docs:ModRewrite</a> for details.</span>' ?></td></tr>
 	<tr><td></td><td>First you'll need to set up your Wikka site's base URL. Page names get appended to it, so: <ul>

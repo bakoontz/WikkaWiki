@@ -1,5 +1,34 @@
 <?php
 
+// Start session
+session_set_cookie_params(0, '/');
+session_name(md5('WikkaWiki'));
+session_start();
+
+// Copy POST params from SESSION, then destroy SESSION
+if(isset($_SESSION['post']))
+{
+	$_POST = array_merge($_POST, $_SESSION['post']);
+}
+$_SESSION=array();
+if(isset($_COOKIE[session_name()]))
+{
+	setcookie(session_name(), '', time()-42000, '/');
+}
+session_destroy();
+
+/*
+foreach($_POST as $key=>$value)
+{
+	print $key.":".$value."<br/>";
+}
+foreach($_POST['config'] as $key=>$value)
+{
+	print $key.":".$value."<br/>";
+}
+exit;
+*/
+
 // i18n section
 if (!defined('ADDING_CONFIG_ENTRY')) define('ADDING_CONFIG_ENTRY', 'Adding a new option to the wikka.config file: %s'); // %s - name of the config option
 if (!defined('DELETING_COOKIES')) define('DELETING_COOKIES', 'Deleting wikka cookies since their name has changed.');
@@ -8,6 +37,16 @@ if (!defined('DELETING_COOKIES')) define('DELETING_COOKIES', 'Deleting wikka coo
 $config = array(); //required since PHP5, to avoid warning on array_merge #94
 // fetch configuration
 $config = $_POST["config"];
+
+/*
+print "\$config:<br/>";
+foreach($config as $key=>$value)
+{
+	print $key.":".$value."<br/>";
+}
+exit;
+*/
+
 // if the checkbox was not checked, $_POST['config']['enable_version_check'] would not be defined. We must explicitly set it to "0" to overwrite any value already set (if exists).
 if (!isset($config["enable_version_check"]))
 {
@@ -15,6 +54,15 @@ if (!isset($config["enable_version_check"]))
 }
 // merge existing configuration with new one
 $config = array_merge($wakkaConfig, $config);
+
+/*
+print "\$config:<br/>";
+foreach($config as $key=>$value)
+{
+	print $key.":".$value."<br/>";
+}
+exit;
+*/
 
 // test configuration
 print("<h2>Testing Configuration</h2>\n");
