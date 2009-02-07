@@ -109,4 +109,19 @@ xmp{
 	padding: 10px;
 }
 
+/* inline system messages */
+em.error {
+	color: #A33; 
+	font-style: normal;
+	font-weight: bold;
+	font-size: 95%;
+}
+
+em.success {
+	color: #3A3; 
+	font-style: normal;
+	font-weight: bold;
+	font-size: 95%;
+}
+
 /* Version: $Id$ */
