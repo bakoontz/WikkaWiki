@@ -27,6 +27,9 @@
 // Time to live for client-side cookies in seconds (90 days)
 if(!defined('PERSISTENT_COOKIE_EXPIRY')) define('PERSISTENT_COOKIE_EXPIRY', 7776000);
 
+// i18n TODO:move to language file
+if(!defined('CREATE_THIS_PAGE_LINK_TITLE')) define('CREATE_THIS_PAGE_LINK_TITLE', 'Create this page');
+
 /**
  * The Wikka core.
  *
