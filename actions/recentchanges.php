@@ -37,7 +37,7 @@ if ($pages = $this->LoadRecentlyChanged())
 {
 	$curday = '';
 	//print feed link icon
-	echo '<p><a href="'.$this->href('recentchanges.xml', $this->page['tag']).'"><img src="images/xml.png" class="icon" width="36" height="14" alt="feed icon" /></a></p>'."\n";
+	echo '<p><a href="'.$this->href('recentchanges.xml', $this->page['tag']).'"><img src="images/feed.png" class="icon" width="14" height="14" alt="feed icon" /></a></p>'."\n";
 
 	if ($user = $this->GetUser()) 
 	{
