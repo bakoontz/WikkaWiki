@@ -13,7 +13,8 @@ $_SESSION['post'] = array_merge($_SESSION['post'], $_POST);
 //Override default values with posted values
 if (isset($_POST['config']))
 {
-	print_r($_POST['config']);
+	/* debug */
+	//print_r($_POST['config']);
 	foreach($_POST['config'] as $key => $value)
 	{
 		$wakkaConfig[$key] = $value;
@@ -33,64 +34,85 @@ if(!isset($_SESSION['error_flag']))
 } 
 else
 {
-	switch(TRUE)
+	if (isset($_POST['config']['mysql_host']) && strlen($_POST['config']['mysql_host']) == 0)
 	{
-		//check for each option individually, required options should be non-empty, all options should be within valid value range 
-
-		case(isset($_POST['config']['mysql_host']) && strlen($_POST['config']['mysql_host']) == 0):
-		$error['mysql_host'] = "Please fill in a valid host."; 
+		$error['mysql_host'] = "Please fill in a valid MySQL host."; 
 		$error['flag'] = true;
-		break;
-
-		case(isset($_POST['config']['mysql_database']) && strlen($_POST['config']['mysql_database']) == 0):
-		$error['mysql_host'] = "Please fill in a valid database name."; 
+	}
+	if (isset($_POST['config']['mysql_database']) && strlen($_POST['config']['mysql_database']) == 0)
+	{
+		$error['mysql_database'] = "Please fill in a valid database."; 
 		$error['flag'] = true;
-		break;
-
-		case(isset($_POST['config']['mysql_user']) && strlen($_POST['config']['mysql_user']) == 0):
-		$error['mysql_host'] = "Please fill in a valid MySQL username."; 
+	}
+	if	(isset($_POST['config']['mysql_user']) && strlen($_POST['config']['mysql_user']) == 0)
+	{
+		$error['mysql_user'] = "Please fill in a valid MySQL username."; 
 		$error['flag'] = true;
-		break;
-
-		case(isset($_POST['config']['admin_users']) && strlen($_POST['config']['admin_users']) == 0):
-		$error['admin_users'] = "Please fill in an admin name."; 
+	}
+	if	(isset($_POST['config']['wakka_name']) && strlen($_POST['config']['wakka_name']) == 0)
+	{
+		$error['wakka_name'] = "Please fill in a title for your wiki.<br />For example: <em>My Wikka website</em>"; 
 		$error['flag'] = true;
-		break;
-
-		case(strlen($_POST['config']['admin_users']) > 0 && preg_match('/^[A-Z][a-z]+[A-Z0-9][A-Za-z0-9]*$/', $_POST['config']['admin_users']) == 0):
-		$error['admin_users'] = "Admin name must be formatted as a WikiName.<br />Examples: JohnSmith or AbC or Ted22"; 
-		$error['flag'] = true;
-		break;
-
-		case(isset($_POST['password']) && strlen($_POST['password']) == 0):
-		$error['password'] = "Please fill in a valid password.";
-		$error['flag'] = true;
-		break;
-		
-		case(isset($_POST['password']) && strlen($_POST['password']) > 0 && strlen($_POST['password']) < 5):
-		$error['password'] = "Password must be at least five (5) characters long.";
-		$error['flag'] = true;
-		break;
-
-		case(isset($_POST['password2']) && strlen($_POST['password2']) == 0):
-		$error['password2'] = "Please confirm your password.";
-		$error['flag'] = true;
-		break;
-
-		case(isset($_POST['password2']) && strcmp($_POST['password'], $_POST['password2']) != 0):
-		$error['password2'] = "Passwords don't match.";
-		$error['flag'] = true;
-		break;
-
-		case(isset($_POST['config']['admin_email']) && (strlen($_POST['config']['admin_email']) == 0 || preg_match("/^[A-Za-z0-9.!#$%&'*+\/=?^_`{|}~-]+@[A-Za-z0-9.-]+$/i", $_POST['config']['admin_email']) == 0)):
-		$error['admin_email'] = "Please fill in a valid email address.";
-		$error['flag'] = true;
-		break;
-
-		//to be completed to include all required fields and all fields to be validated
-				
-		default:
-		$error['flag'] = false;
+	}
+	if	(isset($_POST['config']['root_page']))
+	{
+		if  (strlen($_POST['config']['root_page']) == 0 || preg_match('/^[A-Za-z0-9]{3,}$/', $_POST['config']['root_page']) == 0)
+		{
+			$error['root_page'] = "Please fill a valid name for your wiki's homepage.<br />For example: <em>start</em> or <em>HomePage</em>"; 
+			$error['flag'] = true;
+		}
+	}
+	if (isset($_POST['config']['admin_users']))
+	{ 
+		if (strlen($_POST['config']['admin_users']) == 0)
+		{
+			$error['admin_users'] = "Please fill in an admin name."; 
+			$error['flag'] = true;
+		}
+		else if (strlen($_POST['config']['admin_users']) > 0 && preg_match('/^[A-Z][a-z]+[A-Z0-9][A-Za-z0-9]*$/', $_POST['config']['admin_users']) == 0)
+		{
+			$error['admin_users'] = "Admin name must be formatted as a WikiName.<br />For example: <em>JohnSmith</em> or <em>AbC</em> or <em>Ted22</em>"; 
+			$error['flag'] = true;
+		}
+	}
+	if (isset($_POST['password']))
+	{
+		if (strlen($_POST['password']) == 0)
+		{
+			$error['password'] = "Please fill in a password.";
+			$error['flag'] = true;
+		}
+		else if (strlen($_POST['password']) < 5)
+		{
+			$error['password'] = "Password must be at least five (5) characters long.";
+			$error['flag'] = true;
+		}
+	}
+	if (isset($_POST['password2']))
+	{
+		if (strlen($_POST['password2']) == 0)
+		{
+			$error['password2'] = "Please confirm your password.";
+			$error['flag'] = true;
+		}
+		else if (strcmp($_POST['password'], $_POST['password2']) != 0)
+		{
+			$error['password2'] = "Passwords don't match.";
+			$error['flag'] = true;
+		}
+	}
+	if (isset($_POST['config']['admin_email']))
+	{
+		if (strlen($_POST['config']['admin_email']) == 0)
+		{
+			$error['admin_email'] = "Please fill in your email address.";
+			$error['flag'] = true;
+		}
+		else if (preg_match("/^[A-Za-z0-9.!#$%&'*+\/=?^_`{|}~-]+@[A-Za-z0-9.-]+$/i", $_POST['config']['admin_email']) == 0)
+		{
+			$error['admin_email'] = "Please fill in a valid email address.";
+			$error['flag'] = true;
+		}
 	}
 }
 // i18n section
@@ -139,8 +161,14 @@ if(false === $_SESSION['error_flag'])
 	<?php } ?>
 	<tr><td align="right" nowrap="nowrap">MySQL host:</td><td><input type="text" size="50" name="config[mysql_host]" value="<?php echo $wakkaConfig["mysql_host"] ?>" /></td></tr>
 	<tr><td></td><td>The MySQL database Wikka should use. This database needs to exist already before you continue!</td></tr>
+	<?php if(isset($error['mysql_database'])) { ?>
+	<tr><td></td><td><em class="error"><?php echo $error['mysql_database']; ?></em></td></tr>
+	<?php } ?>
 	<tr><td align="right" nowrap="nowrap">MySQL database:</td><td><input type="text" size="50" name="config[mysql_database]" value="<?php echo $wakkaConfig["mysql_database"] ?>" /></td></tr>
 	<tr><td></td><td>Name and password of the MySQL user used to connect to your database.</td></tr>
+	<?php if(isset($error['mysql_user'])) { ?>
+	<tr><td></td><td><em class="error"><?php echo $error['mysql_user']; ?></em></td></tr>
+	<?php } ?>
 	<tr><td align="right" nowrap="nowrap">MySQL user name:</td><td><input type="text" size="50" name="config[mysql_user]" value="<?php echo $wakkaConfig["mysql_user"] ?>" /></td></tr>
 	<tr><td align="right" nowrap="nowrap">MySQL password:</td><td><input type="password" size="50" name="config[mysql_password]" value="<?php echo $wakkaConfig["mysql_password"] ?>" /></td></tr>
 	<tr><td></td><td>Prefix of all tables used by Wikka. This allows you to run multiple Wikka installations using the same MySQL database by configuring them to use different table prefixes.</td></tr>
@@ -150,9 +178,14 @@ if(false === $_SESSION['error_flag'])
 	?>
 	<tr><td></td><td><br /><h2>Wikka Site Configuration</h2></td></tr>
 	<tr><td></td><td>The name of your Wikka site, as it will be displayed in the title.</td></tr>
+	<?php if(isset($error['wakka_name'])) { ?>
+	<tr><td></td><td><em class="error"><?php echo $error['wakka_name']; ?></em></td></tr>
+	<?php } ?>
 	<tr><td align="right" nowrap="nowrap">Your Wikka site's name:</td><td><input type="text" size="50" name="config[wakka_name]" value="<?php echo $wakkaConfig["wakka_name"] ?>" /></td></tr>
-
-	<tr><td></td><td>Your Wikka site's home page. Should be formatted as a <abbr title="A WikiName is formed by two or more capitalized words without space, e.g. JohnDoe">WikiName</abbr>.</td></tr>
+	<tr><td></td><td>Your Wikka site's home page. It should not contain any space or special character. It is typically formatted as a <abbr title="A WikiName is formed by two or more capitalized words without space, e.g. HomePage">WikiName</abbr>.</td></tr>
+	<?php if(isset($error['root_page'])) { ?>
+	<tr><td></td><td><em class="error"><?php echo $error['root_page']; ?></em></td></tr>
+	<?php } ?>
 	<tr><td align="right" nowrap="nowrap">Home page:</td><td><input type="text" size="50" name="config[root_page]" value="<?php echo $wakkaConfig["root_page"] ?>" /></td></tr>
 
 	<tr><td></td><td><?php echo SITE_SUFFIX_INFO; ?></td></tr>
