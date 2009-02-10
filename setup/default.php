@@ -182,7 +182,7 @@ if(false === $_SESSION['error_flag'])
 	<tr><td></td><td><em class="error"><?php echo $error['wakka_name']; ?></em></td></tr>
 	<?php } ?>
 	<tr><td align="right" nowrap="nowrap">Your Wikka site's name:</td><td><input type="text" size="50" name="config[wakka_name]" value="<?php echo $wakkaConfig["wakka_name"] ?>" /></td></tr>
-	<tr><td></td><td>Your Wikka site's home page. It should not contain any space or special character. It is typically formatted as a <abbr title="A WikiName is formed by two or more capitalized words without space, e.g. HomePage">WikiName</abbr>.</td></tr>
+	<tr><td></td><td>Your Wikka site's home page. It should not contain any space or special character and be at least 3 characters long. It is typically formatted as a <abbr title="A WikiName is formed by two or more capitalized words without space, e.g. HomePage">WikiName</abbr>.</td></tr>
 	<?php if(isset($error['root_page'])) { ?>
 	<tr><td></td><td><em class="error"><?php echo $error['root_page']; ?></em></td></tr>
 	<?php } ?>
