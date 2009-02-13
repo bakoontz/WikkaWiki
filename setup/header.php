@@ -186,22 +186,41 @@ xmp{
 
 /* inline system messages */
 em.error {
+	border: 2px solid #A33;
+	padding: .2em .4em;
 	color: #A33; 
+	background-color: #FEE;
 	font-style: normal;
 	font-weight: bold;
-	font-size: 95%;
+	font-size: 85%;
 }
 
-em.success {
-	color: #3A3; 
-	font-style: normal;
-	font-weight: bold;
-	font-size: 95%;
+.replace{
+      position:relative;
+      margin:0px; padding:0px;
+      /* hide overflow:hidden from IE5/Mac */
+      /* \*/
+      overflow: hidden;
+      /* */
+}
+.replace span{
+      display:block;
+      position:absolute;
+      top:0px;
+      left:0px;
+      z-index:1; /*for Opera 5 and 6*/
+}
+
+#myh1, #myh1 span{
+	color: #AAA;
+      height:39px;
+      width:169px;
+      background-image: url('images/wikka_logo.jpg');
 }
 </style>	
 </head>
 <body>
 <div class="header">
-	<img src="images/wikka_logo.jpg" alt="wikka logo" title="Welcome to Wikka" />
+	<h1 class="replace" id="myh1">WikkaWiki<span></span></h1>
 </div>
 <div class="page"><!--START page body -->
