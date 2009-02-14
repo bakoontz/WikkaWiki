@@ -23,16 +23,7 @@ if (isset($_POST['config']))
 
 // Validate data
 $error['flag'] = false;
-if(!isset($_SESSION['error_flag']))
-{
-	// We need to skip the error checks and just jump to the install
-	// page for an upgrade.
-	if(!$wakkaConfig["wakka_version"])
-	{
-		$error['flag'] = true; 
-	}
-} 
-else
+if(isset($_SESSION['error_flag']))
 {
 	if (isset($_POST['config']['mysql_host']) && strlen($_POST['config']['mysql_host']) == 0)
 	{

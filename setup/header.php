@@ -1,7 +1,7 @@
 <?php
 
 // stuff
-function test($text, $condition, $errorText = "", $stopOnError = 1) {
+function test($text, $condition, $errorText = "<em class=\"error\">Please use your browser's back button to correct any errors on the previous page.</em>", $stopOnError = 1) {
 	print("$text ");
 	if ($condition)
 	{
