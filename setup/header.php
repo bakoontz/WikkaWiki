@@ -1,17 +1,17 @@
 <?php
 
 // stuff
-function test($text, $condition, $errorText = "<em class=\"error\">Please use your browser's back button to correct any errors on the previous page.</em>", $stopOnError = 1) {
-	print("$text ");
+function test($text, $condition, $errorText = '<em class="error">Please use your browser\'s back button to correct any errors on the previous page.</em>', $stopOnError = 1) {
+	echo $text;
 	if ($condition)
 	{
-		print("<span class=\"ok\">OK</span><br />\n");
+		echo ' <span class="ok">OK</span><br />'."\n";
 	}
 	else
 	{
-		print("<span class=\"failed\">FAILED</span>");
-		if ($errorText) print(": ".$errorText);
-		print("<br />\n");
+		echo ' <span class="failed">FAILED</span>';
+		if ($errorText) echo '<p>'.$errorText.'</p>'."\n";
+		echo '<br />'."\n";
 		if ($stopOnError)
 		{
 			include('setup/footer.php');
@@ -184,7 +184,6 @@ xmp{
 	padding: 10px;
 }
 
-/* inline system messages */
 em.error {
 	border: 2px solid #A33;
 	padding: .2em .4em;
