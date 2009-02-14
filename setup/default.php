@@ -244,7 +244,7 @@ if(false === $_SESSION['error_flag'] &&
 	 }
 	?>
 
-	<tr><td></td><td><br /><h2>Version update check</h2></td></tr>
+	<tr><td></td><td><br /><h2>5. Version update check</h2></td></tr>
 	<tr><td></td><td><span class="note">It is <strong>strongly recommended</strong> that you leave this option checked if your run your wiki on the internet. Administrator(s) will be notified automatically on the wiki if a new version of WikkaWiki is available for download. 	See the <a href="http://docs.wikkawiki.org/CheckVersionActionInfo" target="_blank">documentation</a> for details.
 	</span></td></tr>
 	<tr><td align="right" nowrap="nowrap"><label for="id_enable_version_check">Enable version checking:</label></td><td><input type="checkbox"<?php echo !isset($wakkaConfig["enable_version_check"]) || $wakkaConfig["enable_version_check"] == "1" ? ' checked="checked"' : ""; ?> name="config[enable_version_check]" value="1" id="id_enable_version_check" /></td></tr>
