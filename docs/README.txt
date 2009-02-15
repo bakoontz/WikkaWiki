@@ -10,7 +10,9 @@ For some quick installation instructions, please check out INSTALL.txt.
 
 Documentation
 -------------
-Most of the Wikka documentation is available online. Please visit the official Wikka website at http://wikkawiki.org to find help and tutorials.
+Most of the Wikka documentation is available online. Please visit the
+official Wikka documentation website at http://docs.wikkawiki.org to
+find help and tutorials.
 
 The Wikka Development Team
 --------------------------
