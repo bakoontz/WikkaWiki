@@ -62,15 +62,8 @@ if (!defined('PHP_EOL')) define ('PHP_EOL', strtoupper(substr(PHP_OS,0,3) == 'WI
  */
 function getmicrotime($get_as_float=FALSE)
 {
-	if (version_compare(phpversion(),'5','>='))		// >= PHP 5?
-	{
-		return microtime($get_as_float);
-	}
-	else
-	{
-		$time = strtok(microtime(), ' ') + strtok('');
-		return (FALSE === $get_as_float) ? $time : (float) $time;
-	}
+	$time = strtok(microtime(), ' ') + strtok('');
+	return (FALSE === $get_as_float) ? $time : (float) $time;
 }
 
 if (!function_exists('mysql_real_escape_string'))
