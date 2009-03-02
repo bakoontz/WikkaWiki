@@ -634,8 +634,10 @@ define('ACLS_DEFAULT_ACLS', 'Any lists that are left empty will be set to the de
  * Language constant used by the {@link backlinks.php backlinks} (page) handler
  */
 // backlinks
-define('BACKLINKS_HEADING', 'Pages linking to %s');
-define('BACKLINKS_NO_PAGES', 'There are no backlinks to this page.');
+define('PAGE_TITLE','Pages linking to %s');
+define('MESSAGE_NO_BACKLINKS','There are no backlinks to this page.');
+define('MESSAGE_MISSING_PAGE','Sorry, page %s does not exist.');
+define('MESSAGE_PAGE_INACCESSIBLE', 'You are not allowed to read this page');
 /**#@-*/
 
 /**#@+
