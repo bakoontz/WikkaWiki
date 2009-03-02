@@ -67,6 +67,7 @@ switch ($action)	# #312
 		$filename = basename($path);
 		header("Content-Type: application/x-download");
 		header("Content-Disposition: attachment; filename=\"".urldecode($filename)."\"");
+		header("Cache-control: must-revalidate");
 		if (!file_exists($path))
 		{
 			$this->Redirect($this->Href(), sprintf(ERROR_NONEXISTENT_FILE, $file));
