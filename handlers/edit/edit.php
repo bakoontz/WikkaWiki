@@ -175,7 +175,7 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 		// We need to escape ALL entity refs before display so we display them _as_ entities instead of interpreting them
 		// so we use hsc_secure() on the edit note (as on the body)
 		// JW/2007-02-20: why is this? wouldn't it be  easier for the person editing to show actual characters instead of entities?
-		$edit_note_field = '<input id="note" size="'.MAX_EDIT_NOTE_LENGTH.'" type="text" name="note" value="'.$this->hsc_secure($note).'" '.$highlight_note.'/> <label for="note">'.EDIT_NOTE_LABEL.'</label><br />'."\n";	#427
+		$edit_note_field = '<input id="note" size="'.MAX_EDIT_NOTE_LENGTH.'" maxlength="'.MAX_EDIT_NOTE_LENGTH.'" type="text" name="note" value="'.$this->hsc_secure($note).'" '.$highlight_note.'/> <label for="note">'.EDIT_NOTE_LABEL.'</label><br />'."\n";	#427
 	}
 
 	// fetch fields
