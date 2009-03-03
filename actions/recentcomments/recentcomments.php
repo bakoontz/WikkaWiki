@@ -25,8 +25,14 @@ if (!defined('COMMENT_SNIPPET_LENGTH')) define('COMMENT_SNIPPET_LENGTH', 120);
 
 $readable = 0;
 
+$username = '';
+if(isset($_GET['user']))
+{
+    $username = $this->htmlspecialchars_ent($_GET['user']);
+}
+
 echo '<h2>'.RECENTCOMMENTS_HEADING.'</h2><br />'."\n";
-if ($comments = $this->LoadRecentComments())
+if ($comments = $this->LoadRecentComments(50, $username))
 {
 	$curday = '';
 	foreach ($comments as $comment)
@@ -69,6 +75,13 @@ if ($comments = $this->LoadRecentComments())
 }
 else
 {
-	echo '<em class="error">'.RECENTCOMMENTS_NONE_FOUND.'</em>';
+    if(!empty($username))
+    {
+        echo '<em class="error">'.sprintf(RECENTCOMMENTS_NONE_FOUND, " by $username.").'</em>';
+    }
+	else
+	{
+		echo '<em class="error">'.RECENTCOMMENTS_NONE_FOUND.'</em>';
+	}
 }
 ?>

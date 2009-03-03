@@ -38,8 +38,14 @@ else
 	$show_comments = $this->GetConfigValue('default_comment_display');
 }
 
+$username = '';
+if(isset($_GET['user']))
+{
+    $username = $this->htmlspecialchars_ent($_GET['user']);
+}
+
 echo '<h2>'.RECENTLYCOMMENTED_HEADING.'</h2><br />'."\n";
-if ($comments = $this->LoadRecentlyCommented())
+if ($comments = $this->LoadRecentlyCommented(50, $username))
 {
 	$curday = '';
 	foreach ($comments as $comment)
@@ -70,16 +76,6 @@ if ($comments = $this->LoadRecentlyCommented())
 				$comment_preview = substr($comment_preview, 0, COMMENT_SNIPPET_LENGTH).$comment_spillover_link;
 			}
 			$commentlink = '<a href="'.$this->Href('', $page_tag, 'show_comments='.$show_comments).'#comment_'.$comment['id'].'" title="View comment">'.$page_tag.'</a>'; # i18n
-			/*
-			$comment_by = $comment['user'];
-			// @@@ as in recentchanges: whole user record NOT needed here; we only need to know if page editor is registered #368/comment3
-			if (!$this->LoadUser($comment_by))
-			{
-				$comment_by .= ' '.WIKKA_ANONYMOUS_AUTHOR_CAPTION;
-			}
-			// print entry
-			echo $commentlink.WIKKA_COMMENT_AUTHOR_DIVIDER.$this->FormatUser($comment_by).'<blockquote>'.$comment_preview.'</blockquote>'."\n";
-			*/
 			echo $commentlink.WIKKA_COMMENT_AUTHOR_DIVIDER.$this->FormatUser($comment['user']).'<blockquote>'.$comment_preview.'</blockquote>'."\n";
 		}
 	}
@@ -90,7 +86,13 @@ if ($comments = $this->LoadRecentlyCommented())
 }
 else
 {
-	echo '<em class="error">'.RECENTLYCOMMENTED_NONE_FOUND.'</em>';
+	if(!empty($username))    
+	{        
+		echo '<em class="error">'.sprintf(RECENTLYCOMMENTED_NONE_FOUND, " by $username.").'</em>'; 
+    } 
+	else
+	{
+		echo '<em class="error">'.RECENTLYCOMMENTED_NONE_FOUND.'</em>';
+	}
 }
-
 ?>

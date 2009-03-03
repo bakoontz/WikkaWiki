@@ -4268,21 +4268,25 @@ if ($debug) echo 'FormatUser calling... ';
 	 * @uses	Wakka::LoadAll()
 	 *
 	 * @param	integer	$limit	optional: number of last comments. default: 50
-	 * @param	string	$tag	optional: name of page to retrieve comments for
+	 * @param	string	$user	optional: name of user to retrieve comments for
 	 * @return	array	the last x comments
 	 * @todo	use constant for default limit value (no "magic numbers!")
 	 */
-	function LoadRecentComments($limit=50, $tag='')		// @@@
+	function LoadRecentComments($limit=50, $user='')		// @@@
 	{
 		$limit = (int) $limit;
 		if ($limit < 1)
 		{
 			$limit = 50;		// @@@
 		}
-		#$recentcomments = $this->LoadAll('SELECT * FROM '.$this->GetConfigValue('table_prefix').'comments'.$where.' AND (status IS NULL or status != \'deleted\') ORDER BY time DESC LIMIT '.$limit);
-		$wheretag = ('' == $tag) ? '' : "tag = '".mysql_real_escape_string($tag)."'";
+		$whereuser = '';
+		if(!empty($user) && 
+		   ($this->GetUser() || $this->IsAdmin()))
+		{
+				$whereuser= "user = '".mysql_real_escape_string($user)."' ";
+		}
 		$wherestatus = "(status IS NULL OR status != 'deleted')";
-		$where = ('' == $wheretag) ? $wherestatus : $wheretag.' AND '.$status;
+		$where = ('' == $whereuser) ? $wherestatus : $whereuser.' AND '.$wherestatus;
 		$query = "
 			SELECT *
 			FROM ".$this->GetConfigValue('table_prefix')."comments
@@ -4299,24 +4303,32 @@ if ($debug) echo 'FormatUser calling... ';
 	 * @uses	Wakka::LoadAll()
 	 *
 	 * @param	integer	$limit	optional: number of last comments on different pages. default: 50
+   	 * @param   string $user optional: list only comments by this user
 	 * @return	array	the last comments on x different pages
 	 * @todo	use constant for default limit value (no "magic numbers!")
 	 */
-	function LoadRecentlyCommented($limit = 50)	// @@@
+	function LoadRecentlyCommented($limit = 50, $user = '')	// @@@
 	{
 		$limit = (int) $limit;
 		if ($limit < 1)
 		{
 			$limit = 50;		// @@@
 		}
+		$whereuser = '';
+		if(!empty($user) && 
+		   ($this->GetUser() || $this->IsAdmin()))
+		{
+				$whereuser= "comments.user = '".mysql_real_escape_string($user)."' ";
+		}
+		$wherestatus = "c2.page_tag IS NULL AND (comments.status IS NULL OR comments.status != 'deleted')";
+		$where = ('' == $whereuser) ? $wherestatus : $whereuser.' AND '.$wherestatus;
 		$sql = "
 			SELECT comments.id, comments.page_tag, comments.time, comments.comment, comments.user
 			FROM ".$this->GetConfigValue('table_prefix')."comments AS comments
 			LEFT JOIN ".$this->GetConfigValue('table_prefix')."comments AS c2
 				ON comments.page_tag = c2.page_tag
 					AND comments.id < c2.id
-			WHERE c2.page_tag IS NULL
-				AND (comments.status IS NULL OR comments.status != 'deleted')
+			WHERE ".$where."
 			ORDER BY time DESC
 			LIMIT ".$limit;
 		$pages = $this->LoadAll($sql);
