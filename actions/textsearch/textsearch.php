@@ -16,8 +16,6 @@
  * @uses	Wakka::htmlspecialchars_ent()
  *
  * @todo	[accesibility] make form accessible
- * @todo	replace $_REQUEST with either $_GET or $_POST (or both if really
- * 			necessary) - #312
  * @todo	i18n search button text
  */
 
@@ -44,7 +42,6 @@ $phrase_disp = $this->htmlspecialchars_ent($phrase);
 // if 'phrase' is empty after trimming and removing slashes, search tips NOT displayed
 
 // process search request
-#if (isset($_REQUEST['phrase']) && ($phrase = $_REQUEST['phrase']))
 if ('' !== $phrase)
 {
 	#$phrase_re = stripslashes(trim($phrase));

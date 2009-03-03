@@ -39,8 +39,6 @@
  * @todo	use central regex library for validation;
  * @todo	document edit_button_position
  * @todo	don't show cancel button if JavaScript is not available
- * @todo	replace $_REQUEST with either $_GET or $_POST (or both if really
- * 			necessary) - #312 => NOT CLEAR here what to do; see also #449
  */
 
 /**#@+
@@ -249,7 +247,7 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 		// append a comment?
 		// TODO not clear if this is/was intended as a URL parameter (GET), or a check box on the edito form (POST) ....
 		// would be nice as a checkbox, provided it is acted upon only when user is actually submitting - NOT on preview or re-edit
-		if (isset($_REQUEST['appendcomment'])) #312, #449
+		if (isset($_POST['appendcomment'])) #312, #449
 		{
 			$body = trim($body)."\n\n----\n\n-- ".$this->GetUserName().' '.sprintf(EDIT_COMMENT_TIMESTAMP_CAPTION,strftime("%c")).')';
 		}

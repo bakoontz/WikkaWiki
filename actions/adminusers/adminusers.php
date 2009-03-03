@@ -237,12 +237,6 @@ if ($this->IsAdmin($this->GetUser()))
 	{
 		echo $this->Action('recentcomments');
 	} 
-	/*
-	elseif ($g_action == 'feedback' || $_REQUEST['mail']) 
-	{
-		echo $this->Action('userfeedback'); #to be added in 1.1.7, see #608
-	}
-	*/
 	elseif($g_action == 'delete')
 	{
 		if(isset($_GET['user']))

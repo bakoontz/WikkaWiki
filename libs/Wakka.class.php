@@ -1032,18 +1032,14 @@ class Wakka
 	 *
 	 * @param	string	$varname required: field name on get or post or cookie name
 	 * @param	string	$gpc one of get, post, request and cookie. Optional, defaults to request.
-	 * @return	string	sanitized value of $_REQUEST[$varname] (or $_GET, $_POST, $_COOKIE, depending on $gpc)
+	 * @return	string	sanitized value of $_GET[$varname] (or $_POST, $_COOKIE, depending on $gpc)
 	 */
-	function GetSafeVar($varname, $gpc='request')
+	function GetSafeVar($varname, $gpc='get')
 	{
 		$safe_var = NULL;
 		if ($gpc == 'post')
 		{
 			$safe_var = isset($_POST[$varname]) ? $_POST[$varname] : NULL;
-		}
-		elseif ($gpc == 'request')
-		{
-			$safe_var = isset($_REQUEST[$varname]) ? $_REQUEST[$varname] : NULL;
 		}
 		elseif ($gpc == 'get')
 		{

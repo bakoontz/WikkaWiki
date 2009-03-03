@@ -22,7 +22,7 @@
  */
 
 $username = '';
-if(isset($_REQUEST['user']))
+if(isset($_GET['user']))
 {
 	$username = $this->GetSafeVar('user', 'request'); 
 }

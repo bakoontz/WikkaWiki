@@ -14,11 +14,14 @@
  * @author	{@link http://wikkawiki.org/NilsLindenberg Nils Lindenberg} (rewrite, i18n)
  *
  * @uses	Wakka::existsUser()
+ * @uses	Wakka::GetConfigValue()
  * @uses	Wakka::GetUserName()
  * @uses	Wakka::GetPageTag()
- * @uses	Wakka::href()
+ * @uses	Wakka::Href()
+ * @uses	Wakka::htmlspecialchars_ent()
  * @uses	Wakka::LoadAll()
  * @uses	Wakka::Link()
+ * @uses	Wakka::IsAdmin()
  * @todo	fix RE (#104 etc.); also lose the comma in there!
  */
 
@@ -36,14 +39,14 @@ $time_output = '';
 
 $params = ''; 
 $username = ''; 
-if(isset($_REQUEST['user'])) 
+if(isset($_GET['user'])) 
 { 
 	$username = $this->GetSafeVar('user', 'request'); 
 	$params .= "user=$username&"; 
 } 
  
 $action = ''; 
-if(isset($_REQUEST['action'])) 
+if(isset($_GET['action'])) 
 { 
 	$action = $this->GetSafeVar('action', 'request'); 
 	$params .= "action=$action&"; 
