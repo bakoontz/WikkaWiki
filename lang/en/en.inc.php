@@ -756,6 +756,8 @@ define('COMMENT_NEW_BUTTON', 'New Comment');
 define('ERROR_NO_COMMENT_DEL_ACCESS', 'Sorry, you\'re not allowed to delete this comment!');
 define('ERROR_NO_COMMENT_WRITE_ACCESS', 'Sorry, you\'re not allowed to post comments to this page');
 define('ERROR_EMPTY_COMMENT', 'Comment body was empty -- not saved!');
+define('ERROR_COMMENT_NO_KEY', "Your comment cannot be saved. Please contact the wiki administrator.");
+define('ERROR_COMMENT_INVALID_KEY', "Your comment cannot be saved. Please contact the wiki administrator.");
 define('ADD_COMMENT_LABEL', 'In reply to %s:');
 define('NEW_COMMENT_LABEL', 'Post a new comment:');
 /**#@-*/

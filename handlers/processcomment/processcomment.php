@@ -21,6 +21,8 @@
  *
  * @todo	move main <div> to templating class
  */
+//include antispam library
+include_once('libs/antispam.lib.php');
 
 // Get comment id
 #$comment_id = (int) trim($_POST['comment_id']);	// causes NOTICE on opening form for first comment
@@ -54,6 +56,8 @@ if(($_POST['submit']==COMMENT_REPLY_BUTTON || $_POST['submit']==COMMENT_NEW_BUTT
 	{
 		$comment = $this->LoadSingle("SELECT user, comment FROM ".$this->GetConfigValue('table_prefix')."comments WHERE id = '".$comment_id."' LIMIT 1");
 	}
+
+	$keyfield = createSessionKeyFieldset($this, createSessionKey($this, $this->tag.'_commentkey'));
 ?>
 	<div class="commentform">
 	<?php echo $this->FormOpen('processcomment'); ?>
@@ -66,6 +70,7 @@ if(($_POST['submit']==COMMENT_REPLY_BUTTON || $_POST['submit']==COMMENT_NEW_BUTT
 	<?php } ?>
 	<textarea id="commentbox" name="body" rows="6" cols="78"></textarea><br />
 	<input type="submit" name="submit" value="<?php echo COMMENT_ADD_BUTTON; ?>" accesskey="s" />
+	<?php echo $keyfield; ?>
 	<?php echo $this->FormClose(); ?>
 	</div>
 <?php
@@ -82,6 +87,14 @@ if ($_POST['submit']==COMMENT_ADD_BUTTON)
 		if (!$body)
 		{
 			$redirectmessage = ERROR_EMPTY_COMMENT;
+		}
+		elseif (FALSE === ($aKey = getSessionKey($this, $this->tag.'_commentkey'))) # check if page key was stored in session
+		{
+			$redirectmessage = ERROR_COMMENT_NO_KEY;
+		}
+		elseif (TRUE !== ($rc = hasValidSessionKey($this, $aKey)))  # check if correct name,key pair was passed
+		{
+			$redirectmessage = ERROR_COMMENT_INVALID_KEY;
 		}
 		else
 		{
