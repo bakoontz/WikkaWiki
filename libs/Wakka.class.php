@@ -1957,7 +1957,6 @@ if ($debug) echo 'SavePage calling... ';
                 ."pages where latest = 'Y' and match(tag, body) against('"
                 .$search_phrase
                 ."' IN BOOLEAN MODE) order by time DESC";
-			echo $sql;
             $data = $this->LoadAll($sql);
 		}
 
