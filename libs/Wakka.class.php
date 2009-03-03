@@ -1936,56 +1936,30 @@ if ($debug) echo 'SavePage calling... ';
 	 * SEARCH
 	 */
 
-	#function FullTextSearch($phrase) { return $this->LoadAll("select * from ".$this->config["table_prefix"]."pages where latest = 'Y' and match(tag, body) against('".mysql_real_escape_string($phrase)."')"); }
-	function FullTextSearch($phrase)
-	{
-		$data = "";
-		if ($this->CheckMySQLVersion(4,00,01))
-		{
-            $collate = '';
-            // Should work with any browser/entity conversion scheme
-            $search_phrase = stripslashes(str_replace("&quot;", "\"", mysql_real_escape_string($phrase)));
-            if (preg_match('/[A-Z]/', $phrase))
-                $collate = "COLLATE latin1_general_cs";
-            $sql =
-                " select * from "                .$this->config["table_prefix"]
-                ."pages where latest = 'Y' and tag
-                like('%".mysql_real_escape_string($phrase)."%') "
-                .$collate
-                ." UNION select * from "
-                .$this->config["table_prefix"]
-                ."pages where latest = 'Y' and match(tag, body) against('"
-                .$search_phrase
-                ."' IN BOOLEAN MODE) order by time DESC";
-            $data = $this->LoadAll($sql);
-		}
+	/**
+	 * Full text search, case-sensitive 
+	 *
+	 * @access	public
+	 *
+	 * @param	string	$phrase	the text to be searched for 
+     * @param   string  $caseSensitive	optional: 0 for case-insensitive search (default), 1 for case-sensitive search
+	 * @return	string  Search results	
+	 */
+    function FullTextSearch($phrase, $caseSensitive = 0)
+    {
+        $id = '';
+        // Should work with any browser/entity conversion scheme
+        $search_phrase = mysql_real_escape_string($phrase);
+        if ( 1 == $caseSensitive ) $id = ', id';
+        $sql  = 'select * from '.$this->config['table_prefix'].'pages';
+        $sql .= ' where latest = '.  "'Y'"  .' and match(tag, body'.$id.')';
+        $sql .= ' against('.  "'$search_phrase'"  .' IN BOOLEAN MODE)';
+        $sql .= ' order by time DESC';
 
-		//#elseif ($this->CheckMySQLVersion(3,23,23))
-		//elseif ($this->CheckMySQLVersion('3.23.23'))
-		//{
-		//	$data = $this->LoadAll("select * from "
-		//	.$this->config["table_prefix"]
-		//	."pages where latest = 'Y' and
-		//		  match(tag, body)
-		//		  against('".mysql_real_escape_string($phrase)."')
-		//		  order by time DESC");
-		//}
+        $data = $this->LoadAll($sql);
 
-		/* if no results perform a more general search */
-		if (!$data)
-		{
-			$data = $this->LoadAll("
-				SELECT *
-				FROM ".$this->GetConfigValue('table_prefix')."pages
-				WHERE latest = 'Y'
-					AND (tag LIKE '%".mysql_real_escape_string($phrase)."%'
-						OR body LIKE '%".mysql_real_escape_string($phrase)."%')
-				ORDER BY time DESC"
-				);
-		}
-
-		return $data;
-	}
+        return $data;
+    }
 
 	/**
 	 * [Short description needed here].

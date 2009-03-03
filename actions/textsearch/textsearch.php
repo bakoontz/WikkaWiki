@@ -24,14 +24,16 @@ $result_page_list = '';
 
 // get input
 $phrase = (isset($_GET['phrase'])) ? stripslashes(trim($_GET['phrase'])) : ''; #312
+$case = (isset($_GET['case'])) ? stripslashes(trim($_GET['case'])) : 0; #312
 $phrase_disp = $this->htmlspecialchars_ent($phrase);
+$case_disp = $this->htmlspecialchars_ent($case);
 
 // display form
 // TODO i18n
 ?>
 <?php echo $this->FormOpen('', '', 'get'); ?>
 <fieldset><legend><?php echo SEARCH_FOR; ?></legend>
-<input name="phrase" size="40" value="<?php echo $phrase_disp ?>" /> <input type="submit" value="Search"/>
+<input name="phrase" size="40" value="<?php echo $phrase_disp ?>" /> <input name="case" type="checkbox" value="1" <?php echo (1==$case?'checked="checked"':'') ?> /><label for="case">Case sensitive</label> <input type="submit" value="Search"/>
 </fieldset>
 <?php echo $this->FormClose(); ?>
 
@@ -44,10 +46,7 @@ $phrase_disp = $this->htmlspecialchars_ent($phrase);
 // process search request
 if ('' !== $phrase)
 {
-	#$phrase_re = stripslashes(trim($phrase));
-	#if (!$phrase_re) return;
-	#$results = $this->FullTextSearch($phrase_re);
-	$results = $this->FullTextSearch($phrase);
+	$results = $this->FullTextSearch($phrase, $case);
 	$total_results = 0;
 	if ($results)
 	{
