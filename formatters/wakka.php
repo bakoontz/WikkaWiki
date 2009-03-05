@@ -14,6 +14,7 @@
  * @author {@link http://wikkawiki.org/JavaWoman Marjolein Katsma}
  * @author {@link http://wikkawiki.org/NilsLindenberg Nils Lindenberg} (code cleanup)
  * @author {@link http://wikkawiki.org/DarTar Dario Taraborelli} (grab handler and filename support for codeblocks)
+ * @author {@link http://wikkawiki.org/TormodHaugen Tormod Haugen} (table formatter support)
  * 
  * @uses	Wakka::htmlspecialchars_ent()
  * 
@@ -48,7 +49,10 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 		static $indentClosers = array();
 		static $newIndentSpace= array();
 		static $br = 1;
-		static $trigger_bold = 0;
+                static $trigger_table = 0;
+                static $trigger_rowgroup = 0;
+                static $trigger_colgroup = 0;
+ 		static $trigger_bold = 0;
 		static $trigger_italic = 0;
 		static $trigger_underline = 0;
 		static $trigger_monospace = 0;
@@ -70,6 +74,13 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 
 		if ((!is_array($things)) && ($things == 'closetags'))
 		{
+                        if (3 < $trigger_table) echo ('</caption>');
+                        elseif (2 < $trigger_table) echo ('</th></tr>');
+                        elseif (1 < $trigger_table) echo ('</td></tr>');
+                        if (2 < $trigger_rowgroup) echo ('</tbody>');
+                        elseif (1 < $trigger_rowgroup) echo ('</tfoot>');
+                        elseif (0 < $trigger_rowgroup) echo ('</thead>');
+                        if (0 < $trigger_table) echo ('</table>');
 			if ($trigger_strike % 2) echo ('</span>');
 			if ($trigger_notes % 2) echo ('</span>');
 			if ($trigger_inserted % 2) echo ('</div>');
@@ -87,6 +98,222 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 			$trigger_monospace = $trigger_notes = $trigger_strike = $trigger_underline = 0;
 			return;
 		}
+                // Ignore the closing delimiter if there is nothing to close.
+                elseif ( preg_match("/^\|\|\n$/", $thing, $matches) && $trigger_table == 1 )
+                {
+                        return '';
+                }
+
+                // $matches[1] is element, $matches[2] is attributes, $matches[3] is styles and $matches[4] is linebreak
+                elseif ( preg_match("/^\|([^\|])?\|(\(.*?\))?(\{.*?\})?(\n)?$/", $thing, $matches) )
+                {
+                        for ( $i = 1; $i < 5; $i++ ) #38
+                        {
+                                if (!isset($matches[$i])) $matches[$i] = '';
+                        }
+                        //Set up the variables that will aggregate the html markup
+                        $close_part = '';
+                        $open_part  = '';
+                        $linebreak_after_open = '';
+                        $selfclose = '';
+
+                        // $trigger_table == 0 means no table, 1 means in table but no cell, 2 is in datacell, 3 is in headercell, 4 is in caption.
+
+                        //If we have parsed the caption, close it, set trigger = 1 and return.
+                        if ( $trigger_table == 4 )
+                        {
+                                $close_part = '</caption>'."\n";
+                                $trigger_table = 1;
+                                return $close_part;
+                        }
+
+                        //If we have parsed a cell - close it, go on to open new.
+                        if ( $trigger_table == 3 )
+                        {
+                                $close_part = '</th>';
+                        }
+                        elseif ( $trigger_table == 2 )
+                        {
+                                $close_part = '</td>';
+                        }
+                        // If no cell, or we want to open a table; then there is nothing to close
+                        elseif ( $trigger_table == 1 || $matches[1] == '!')
+                        {
+                                $close_part = '';
+                        }
+                        else
+                        {
+                                //This is actually opening the table (i.e. nothing at all to close). Go on to open a cell.
+                                $trigger_table = 1;
+                                $close_part = '<table class="data">'."\n";
+                        }
+
+                        //If we are in a cell and there is a linebreak - then it is end of row.
+                        if ( $trigger_table > 1 && $matches[4] == "\n" )
+                        {
+                                $trigger_table = 1;
+                                return $close_part .= '</tr>'."\n"; //Can return here, it is closed-
+                        }
+
+                        //If we were in a colgroup and there is a linebreak, then it is the end.
+                        if ( $trigger_colgroup == 1 && $matches[4] == "\n" )
+                        {
+                                $trigger_colgroup = 0;
+                                return $close_part .= '</colgroup>'."\n"; //Can return here, it is closed-
+                        }
+
+                        //We want to start a new table, and most likely have attributes to parse.
+                        //TODO: Need to find out if class="data" should be auto added, and if so - put it in the attribute list to add up.
+                        if ( $matches[1] == '!' )
+                        {
+                                $trigger_table = 1;
+                                $open_part = '<table class="data"';
+                                $linebreak_after_open = "\n";
+                        }
+                        //Open a caption.
+                        elseif ( $matches[1] == '?' )
+                        {
+                                $trigger_table = 4;
+                                $open_part = '<caption';
+                        }
+                        //Start a rowgroup.
+                        elseif ( $matches[1] == '#' || $matches[1] == '[' || $matches[1] == ']' )
+                        {
+                                //If we're here, we want to close any open rowgroup.
+                                if (2 < $trigger_rowgroup)
+                                {
+                                        $close_part .= '</tbody>'."\n";
+                                }
+                                elseif (1 < $trigger_rowgroup)
+                                {
+                                        $close_part .= '</tfoot>'."\n";
+                                }
+                                elseif (0 < $trigger_rowgroup)
+                                {
+                                        $close_part .= '</thead>'."\n";
+                                }
+
+                                //Then open the appropriate rowgroup.
+                                if ($matches[1] == '[' )
+                                {
+                                        $open_part .= '<thead';
+                                        $trigger_rowgroup = 1;
+                                }
+                                elseif ($matches[1] == ']' )
+                                {
+                                        $open_part .= '<tfoot';
+                                        $trigger_rowgroup = 2;
+                                }
+                                else
+                                {
+                                        $open_part .= '<tbody';
+                                        $trigger_rowgroup = 3;
+                                }
+
+                                $linebreak_after_open = "\n";
+                        }
+                        //Here we want to add colgroup.
+                        elseif ( $matches[1] == '_' )
+                        {
+                                //close any open colgroup
+                                if ( $trigger_colgroup == 1 )
+                                {
+                                        $close_part .= '</colgroup>'."\n";
+                                }
+
+                                $trigger_colgroup = 1;
+                                $open_part .= '<colgroup';
+                        }
+                        //And col elements
+                        elseif ( $matches[1] == '-' )
+                        {
+                                $open_part .= '<col';
+                                $selfclose = ' /';
+                                if ( $matches[4] ) $linebreak_after_open = "\n";
+                        }
+                        //Ok, then it is cells.
+                        else
+                        {
+                                $open_part = '';
+                                //Need a tbody if no other rowgroup open.
+                                if ($trigger_rowgroup == 0)
+                                {
+                                        $open_part .= '<tbody>'."\n";
+                                        $trigger_rowgroup = 3;
+                                }
+
+                                //If no row, open a new one.
+                                if ( $trigger_table == 1 )
+                                {
+                                        $open_part .= '<tr>';
+                                }
+
+                                //Header cell.
+                                if ( $matches[1] == '=' )
+                                {
+                                        $trigger_table = 3;
+                                        $open_part .= '<th';
+                                }
+                                //Datacell
+                                else
+                                {
+                                        $trigger_table = 2;
+                                        $open_part .= '<td';
+                                }
+                        }
+
+                        //If attributes...
+                        if ( preg_match("/\((.*)\)/", $matches[2], $attribs ) )
+                        {
+                                $hints = array();
+                                //allow / disallow different attribute keys. (ie. data/header cell only.
+                                if ($trigger_table == 2 || $trigger_table == 3)
+                                {
+                                        $hints['cell'] = 'cell';
+                                }
+                                else
+                                {
+                                        $hints['other_table'] = 'other_table';
+                                }
+                                $open_part .= parse_attributes($attribs[1], $hints);
+                        }
+
+                        //If styles, just make attribute of it and parse again.
+                        if ( preg_match("/\{(.*)\}/", $matches[3], $attribs ) )
+                        {
+                                $attribs = "s:".$attribs[1];
+                                $open_part .= parse_attributes($attribs, array() );
+                        }
+
+                        //the variable $selfclose is "/" if this is a <col/> element.
+                        $open_part .= $selfclose.'>';
+                        return $close_part . $open_part . $linebreak_after_open;
+                }
+                //Are in table, no cell - but not asked to open new: please close and parse again. ;)
+                else if ( $trigger_table == 1 )
+                {
+                        $close_part = '';
+                        if (2 < $trigger_rowgroup)
+                        {
+                                $close_part .= '</tbody>'."\n";
+                        }
+                        elseif (1 < $trigger_rowgroup)
+                        {
+                                $close_part .= '</tfoot>'."\n";
+                        }
+                        elseif (0 < $trigger_rowgroup)
+                        {
+                                $close_part .= '</thead>'."\n";
+                        }
+
+                        $close_part .= '</table>'."\n";
+
+                        $trigger_table = $trigger_rowgroup = 0;
+
+                        //And remember to parse what we got.
+                        return $close_part.wakka2callback($things);
+                }
+
 		// convert HTML thingies
 		if ($thing == "<")
 			return "&lt;";
@@ -443,6 +670,54 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 	}
 }
 
+if (!function_exists('parse_attributes'))
+{
+        function parse_attributes($attribs, $hints) {
+
+                //Sort different attributes / keys to use for different elements.
+                static $attributes = array(
+                        'core' => array( 'c' => 'class','i' => 'id','s' => 'style','t' => 'title'),
+                        'i18n' => array( 'd' => 'dir','l' => 'xml:lang'),
+                        'cell' => array( 'a' => 'abbr','h' => 'headers','o' => 'scope','x' => 'colspan','y' => 'rowspan','z' => 'axis'),
+                        'other_table' => array( 'p' => 'span','u' => 'summary')
+                        );
+
+                //adds in default hints ( core + i18n )
+                $hints['core'] = 'core';
+                $hints['i18n'] = 'i18n';
+
+                $attribs = preg_split('/;(?=.:)/', $attribs);
+                $return_value = '';
+
+                foreach ( $attribs as $attrib )
+                {
+                        list ($key, $value) = explode(':', $attrib, 2);
+                        foreach ( $hints as $hint )
+                        {
+                                $temp = $attributes[$hint];
+                                if ($temp) $a = $temp[$key];
+                                if ($a) break;
+                        }
+
+                        if (!$a)
+                        {
+                                //This attribute isn't allowed here / is wrong.
+                                // WARNING: JS vulnerability: two minus signs are not allowed in a comment, so we replace any occurence of them by underscore.
+                                // Consider the code ||(p--><font size=1px><a href=...<!--:blabla
+                                // When migrating to UTF-8, we could use str_replace('--', 'â<88><92>â<88><92>', $key) to make things more pretty. //TODO garbled ... mdash?
+                                echo '<!--Cannot find attribute for key "'.str_replace('--', '__', $key).'" from hints given.-->'."\n"; #i18n
+                        }
+                        else
+                        {
+                                // WARNING: JS vulnerability: use htmlspecialchars_ent to prevent JS attack!
+                                $return_value .= ' '.$a.'="'.$GLOBALS['wakka']->htmlspecialchars_ent($value).'"';
+                        }
+                }
+
+                return $return_value;
+        }
+}
+
 $text = str_replace("\r\n", "\n", $text);
 
 // replace 4 consecutive spaces at the beginning of a line with tab character
@@ -461,6 +736,8 @@ $text = preg_replace_callback(
 	"\*\*|\'\'|\#\#|\#\%|@@|::c::|\>\>|\<\<|&pound;&pound;|&yen;&yen;|\+\+|__|<|>|\/\/|".	# Wiki markup
 	"======|=====|====|===|==|".															# headings
 	"(^|\n)([\t~]+)(-(?!-)|&|([0-9]+|[a-zA-Z]+)\))?|".														# indents and lists
+        # Simple Tables
+        "\|(?:[^\|])?\|(?:\(.*?\))?(?:\{[^\{\}]*?\})?(?:\n)?|".
 	"\{\{.*?\}\}|".																			# action
 	"\b[A-ZÄÖÜ][A-Za-zÄÖÜßäöü]+[:](?![=_])\S*\b|".											# InterWiki link
 	"\b([A-ZÄÖÜ]+[a-zßäöü]+[A-Z0-9ÄÖÜ][A-Za-z0-9ÄÖÜßäöü]*)\b|".								# CamelWords
