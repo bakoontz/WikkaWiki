@@ -118,8 +118,8 @@ else
 // Sanity checks OK - start rolling....
 
 ob_start();
+global $tstart;
 $tstart = getmicrotime();
-
 set_magic_quotes_runtime(0);
 if (get_magic_quotes_gpc())
 {
@@ -385,15 +385,6 @@ if(NULL != $user)
  */
 if (!isset($method)) $method='';
 $wakka->Run($page, $method);
-if (!preg_match("/(xml|raw|mm|grabcode)$/", $method))
-{
-	$tend = getmicrotime();
-	//calculate the difference
-	$totaltime = ($tend - $tstart);
-	//output result
-	print '<div class="smallprint">'.sprintf(PAGE_GENERATION_TIME, $totaltime)."</div>\n</body>\n</html>";
-}
-
 $content =  ob_get_contents();
 /**
  * Use gzip compression if possible.

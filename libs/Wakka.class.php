@@ -1094,7 +1094,17 @@ class Wakka
 		$footer = $this->IncludeBuffered('footer.php', ERROR_FOOTER_MISSING, '', $this->GetConfigValue('wikka_template_path'));
 		return $footer;
 	}
-
+	/*
+	 * Calculates the difference between two microtimes
+	 * 
+	 * @uses Wakka::getmicrotime()
+	 */
+	function microTimeDiff($from, $to ='') {
+		if (strlen($to) == 0) $to = getmicrotime();
+		$totaltime = ($to - $from);
+		return $totaltime;
+	}
+	
 	// FORMS
 	/**
 	 * Open form.
@@ -1875,8 +1885,11 @@ class Wakka
 		}
 		else
 		{
+			//output page
 			$content_body = $this->Method($this->method);
-			print($this->Header().$content_body.$this->Footer());
+			echo $this->Header();
+			echo $content_body;
+			echo $this->Footer();
 		}
 	}
 }

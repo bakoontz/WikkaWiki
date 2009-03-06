@@ -1,6 +1,8 @@
 <!--starting footer-->
 <div class="footer">
-<?php 
+<?php
+	//page generation start
+	global $tstart;
 	echo $this->FormOpen('', 'TextSearch', 'get'); 
 	echo $this->HasAccess('write') ? '<a href="'.$this->Href('edit').'" title="Click to edit this page">Edit</a> ::'."\n" : '';
 	echo '<a href="'.$this->Href('history').'" title="Click to view recent edits to this page">Page History</a> ::'."\n";
@@ -55,6 +57,7 @@ echo $this->Link('http://jigsaw.w3.org/css-validator/check/referer', '', 'Valid 
 ?> ::
 Powered by <?php echo $this->Link('http://wikkawiki.org/', '', 'WikkaWiki ' . ($this->IsAdmin() ? $this->GetWakkaVersion() : "")); ?>
 </div>
+<!--closing footer-->
 <?php
 if ($this->GetConfigValue('sql_debugging'))
 {
@@ -65,5 +68,6 @@ if ($this->GetConfigValue('sql_debugging'))
 	}
 	echo '</div>'."\n";
 }
+echo '<!--'.sprintf(PAGE_GENERATION_TIME, $this->microTimeDiff($tstart)).'-->'."\n";
+echo "</body>\n</html>";
 ?>
-<!--closing footer-->
