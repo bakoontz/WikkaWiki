@@ -39,11 +39,12 @@
  * @todo make datetime format configurable;
  * @todo add support for file versioning;
  * @todo add (AJAX-powered?) confirmation check on file deletion;
- * @todo integrate file table in page template, à la Wacko;
+ * @todo integrate file table in page template, a la Wacko;
  */
 
 // $max_upload_size = "1048576"; // 1 Megabyte
 $max_upload_size = "2097152"; // 2 Megabyte
+
 
 if (! function_exists('mkdir_r')) 
 {
@@ -135,7 +136,6 @@ else
 		$text = $this->htmlspecialchars_ent($text);
 	    echo "<a href=\"".$this->href('files.xml',$this->GetPageTag(),'action=download&amp;file='.urlencode($download))."\">".$text."</a>";
 	
-	// } elseif ($this->page AND $this->HasAccess('write') AND ($this->method <> 'print.xml') AND ($this->method <> 'edit')) {
 	// Show files to anyone with read access, we'll check for write access if they try to delete a file.
 	} 
 	elseif ($this->page AND $this->HasAccess('read') AND ($this->method <> 'print.xml') AND ($this->method <> 'edit')) 
@@ -147,8 +147,6 @@ else
 	    if (! is_dir($upload_path)) mkdir_r($upload_path);
 	
 		// upload action
-	
-	   // if ($_SERVER['REQUEST_METHOD'] == 'POST') 
 		if (isset($_POST['action']) && $_POST['action'] == 'upload') 
 		{
 	 		$uploaded = $_FILES['file']; 
@@ -197,33 +195,34 @@ else
 	    }
 	
 	    // uploaded files
-	        print "
+	        print '
 	
-	                        <table cellspacing='0' cellpadding='0'>
+	                        <table cellspacing="0" cellpadding="0">
 	                          <tr>
 	                                <td>
 	                                  &nbsp;
 	                                </td>
-	                                <td bgcolor='gray' valign='bottom' align='center'>
-	                                  <font color='white' size='-2'>
+	                                <td bgcolor="gray" valign="bottom" align="center">
+	                                  <span style="color:white;font-size:x-small">
 	                                        Attachment
-	                                  </font>
+	                                  </span>
 	                                </td>
-	                                <td bgcolor='gray' valign='bottom' align='center'>
-	                                  <font color='white' size='-2'>
+	                                <td bgcolor="gray" valign="bottom" align="center">
+	                                   <span style="color:white;font-size:x-small">
 	                                        Size
-	                                  </font>
+	                                  </span>
 	                                </td>
-	                                <td bgcolor='gray' valign='bottom' align='center'>
-	                                  <font color='white' size='-2'>
+	                                <td bgcolor="gray" valign="bottom" align="center">
+	                                   <span style="color:white;font-size:x-small">
 	                                        Date Added
-	                                  </font>
+	                                  </span>
 	                                </td>
 	                          </tr>
 	
-	                ";
+	                ';
 	
 	    $dir = opendir($upload_path);
+	    $num = 0;
 	    while ($file = readdir($dir)) 
 	    {
 	        if (!preg_match('/^\\./', $file)) 
@@ -238,44 +237,42 @@ else
 	            	{
 	            		$delete_link = "";
 					}
-					// $download_link = "<a href=\"".$this->href('files.xml',$this->GetPageTag(),'action=download&amp;file='.urlencode($file))."\">".$file."</a>";
 	            	$download_link = "<a href=\"".$this->href('files.xml',$this->GetPageTag(),'action=download&amp;file='.rawurlencode($file))."\">".$file."</a>";
-	            	// $download_link = "<a href=\"".$this->config["base_url"].$upload_path."\\".rawurlencode($file)."\">".$file."</a>";
 	                $size = bytesToHumanReadableUsage(filesize("$upload_path/$file"));
 	                $date = date("n/d/Y g:i a",filemtime("$upload_path/$file"));
 	
-	                        print  "
+	                        print  '
 	
 	                                        <tr>
-	                                          <td valign='top' align='center'>
+	                                          <td valign="top" align="center">
 	                                                &nbsp;&nbsp;
-	                                                {$delete_link}
+	                                                '.$delete_link.'
 	                                                &nbsp;&nbsp;
 	                                          </td>
-	                                          <td valign='top'>
-	                                                $download_link
+	                                          <td valign="top">
+	                                                '.$download_link.'
 	                                          </td>
-	                                          <td valign='top'>
+	                                          <td valign="top">
 	                                                &nbsp;
-	                                                <font size='-1' color='gray'>
-	                                                  $size
-	                                                </font>
+	                                                <span style="color:gray;font-size:small">
+	                                                  '.$size.'
+	                                                </span>
 	                                          </td>
-	                                          <td valign='top'>
+	                                          <td valign="top">
 	                                                &nbsp;
-	                                                <font size='-1' color='gray'>
-	                                                  $date
-	                                                </font>
+	                                                <span style="color:gray;font-size:small">
+	                                                 '.$date.'
+	                                                </span>
 	                                          </td>
 	                                        </tr>
 	
-	                                ";
+	                                ';
 	        }
 	    }
 	    closedir($dir);
 	
 	        // print n/a if no files currently exist
-	        if (!isset($num))  print "<tr><td>&nbsp;</td><td colspan='3' align='center'><font color='gray' size='-1'><em>&nbsp;&nbsp;&nbsp;</em></font></td></tr>";
+	        if ($num > 0)  print '<tr><td>&nbsp;</td><td colspan="3" align="center"><span style="color:gray;font-size:small"><em>&nbsp;&nbsp;&nbsp;</em></span></td></tr>';
 	        else  print "<tr><td>&nbsp;</td></tr>";
 	
 	   // if ($this->HasAccess('write')) {
@@ -283,31 +280,32 @@ else
 	   {
 	   		// form
 	    	$result = "<form action=\"".$this->href()."\" method=\"post\" enctype=\"multipart/form-data\">\n";
-	    	if (!$this->config["rewrite_mode"]) $result .= "<input type=\"hidden\" name=\"wakka\" value=\"".$this->MiniHref()."\">\n";
-	    	echo $result;
-	    	echo $this->FormClose();
-	
+	    	if (!$this->config["rewrite_mode"]) 
+	    	{
+	    		$result .= "<input type=\"hidden\" name=\"wakka\" value=\"".$this->MiniHref()."\">\n";
+	    		echo $result;
+	    		echo $this->FormClose();
+	    	}
+	    	
 	        // close disp table
-	        print "
+	        print '
 	
 	                          <tr>
 	                                <td>
 	                                  &nbsp;
 	                                </td>
-	                                <td colspan='4' valign='top' align='right' nowrap>
-	                                  <em>
-	                                        $result
-	                                        <input type=\"hidden\" name=\"action\" value=\"upload\"></input>
-						 	    <input type=\"hidden\" name=\"MAX_FILE_SIZE\" value=\"$max_upload_size\">
-	                                        <font color='gray' size='-2'>
+	                                <td colspan="4" valign="top" align="right" nowrap="nowrap">                          
+	                                        '.$result.'
+	                                        <input type="hidden" name="action" value="upload" />
+						 	    			<input type="hidden" name="MAX_FILE_SIZE" value="'.$max_upload_size.'" />
+	                                        <span style="color:gray;font-size:x-small;font-style:italic;">
 	                                          add new attachment:
-	                                          <input type=\"file\" name=\"file\" style=\"padding: 0px; margin: 0px; font-size: 8px; height: 15px\"></input>
-	                                          <input type=\"submit\" value=\"+\" style=\"padding: 0px; margin: 0px; font-size: 8px; height: 15px\"></input>
-							    </font>
-	                                        ".$this->FormClose()."
-	                                  </em>
+	                                          <input type="file" name="file" style="padding: 0px; margin: 0px; font-size: 8px; height: 15px" />
+	                                          <input type="submit" value="+" style="padding: 0px; margin: 0px; font-size: 8px; height: 15px" />
+										   </span>
+	                                        '.$this->FormClose().'	                                  
 	                                </td>
-	                          </tr> ";
+	                          </tr> ';
 	
 	   }
 	   print " </table>  ";
