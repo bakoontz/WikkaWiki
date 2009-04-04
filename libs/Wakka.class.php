@@ -257,7 +257,7 @@ class Wakka
 	 * overall).
 	 *
 	 * @author		{@link http://wikka.jsnx.com/JavaWoman JavaWoman}
-	 * @copyright	Copyright ï¿½ 2005, Marjolein Katsma
+	 * @copyright	Copyright © 2005, Marjolein Katsma
 	 * @license		http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
 	 * @since		Wikka 1.1.6.4
 	 * @version		1.0
@@ -357,7 +357,7 @@ class Wakka
 	 * See #427.
 	 *
 	 * @author		{@link http://wikkawiki.org/JavaWoman JavaWoman}
-	 * @copyright	Copyright ï¿½ 2004, Marjolein Katsma
+	 * @copyright	Copyright © 2004, Marjolein Katsma
 	 * @license		http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
 	 * @version		1.0
 	 *
@@ -1101,7 +1101,7 @@ class Wakka
 
 		// is this an interwiki link?
 		// before the : should be a WikiName; anything after can be (nearly) anything that's allowed in a URL
-		if (preg_match('/^([A-Zï¿½ï¿½ï¿½][A-Za-zï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½]+)[:](\S*)$/', $tag, $matches))	// @@@ FIXME #34 (inconsistent with Formatter)
+		if (preg_match('/^([A-ÄÖÜ][A-Za-zÄÖÜßäöü]+)[:](\S*)$/', $tag, $matches))	// @@@ FIXME #34 (inconsistent with Formatter)
 		{
 			$url = $this->GetInterWikiUrl($matches[1], $matches[2]);
 			$class = 'interwiki';
@@ -1121,7 +1121,7 @@ class Wakka
 		// is this a full link? i.e., does it contain something *else* than valid WikiName characters?
 		// FIXME just use (!IsWikiName($tag)) here (then fix the RE there!)
 		// @@@ First move to regex library
-		elseif (preg_match('/[^[:alnum:]ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½]/', $tag))		// FIXED #34 - removed commas
+		elseif (preg_match('/[^[:alnum:]ÄÖÜßäöü]/', $tag))		// FIXED #34 - removed commas
 		{
 			// check for email addresses
 			if (preg_match('/^.+\@.+$/', $tag))
@@ -1172,7 +1172,7 @@ class Wakka
 		return $result;
 	}
 	// function PregPageLink($matches) { return $this->Link($matches[1]); }
-	function IsWikiName($text) { return preg_match("/^[A-Z,ï¿½ï¿½ï¿½][a-z,ï¿½ï¿½ï¿½ï¿½]+[A-Z,0-9,ï¿½ï¿½ï¿½][A-Z,a-z,0-9,ï¿½ï¿½ï¿½,ï¿½ï¿½ï¿½ï¿½]*$/", $text); }
+	function IsWikiName($text) { return preg_match("/^[A-Z,ÄÖÜ][a-z,ßäöü]+[A-Z,0-9,ÄÖÜ][A-Z,a-z,0-9,ÄÖÜ,ßäöü]*$/", $text); }
 	function TrackLinkTo($tag) { $_SESSION["linktable"][] = $tag; }
 	function GetLinkTable() { return $_SESSION["linktable"]; }
 	function ClearLinkTable() { $_SESSION["linktable"] = array(); }
@@ -1447,7 +1447,7 @@ class Wakka
 	 * Check by name if a page exists.
 	 *
 	 * @author		{@link http://wikkawiki.org/JavaWoman JavaWoman}
-	 * @copyright	Copyright ï¿½ 2004, Marjolein Katsma
+	 * @copyright	Copyright © 2004, Marjolein Katsma
 	 * @license		http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
 	 * @version		1.1
 	 *
