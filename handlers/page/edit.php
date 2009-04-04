@@ -42,7 +42,7 @@
 /**#@+
  * Default value.
  */
-if (!defined('VALID_PAGENAME_PATTERN')) define ('VALID_PAGENAME_PATTERN', '/^[A-Za-zï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½]+[A-Za-z0-9ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½]*$/s'); //TODO use central regex library
+if (!defined('VALID_PAGENAME_PATTERN')) define ('VALID_PAGENAME_PATTERN', '/^[A-Za-zÄÖÜßäöü]+[A-Za-z0-9ÄÖÜßäöü]*$/s'); //TODO use central regex library
 if (!defined('MAX_TAG_LENGTH')) define ('MAX_TAG_LENGTH', 75);
 if (!defined('MAX_EDIT_NOTE_LENGTH')) define ('MAX_EDIT_NOTE_LENGTH', 50);
 /**
