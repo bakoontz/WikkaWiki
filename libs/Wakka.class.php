@@ -257,7 +257,7 @@ class Wakka
 	 * overall).
 	 *
 	 * @author		{@link http://wikka.jsnx.com/JavaWoman JavaWoman}
-	 * @copyright	Copyright © 2005, Marjolein Katsma
+	 * @copyright	Copyright ï¿½ 2005, Marjolein Katsma
 	 * @license		http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
 	 * @since		Wikka 1.1.6.4
 	 * @version		1.0
@@ -357,7 +357,7 @@ class Wakka
 	 * See #427.
 	 *
 	 * @author		{@link http://wikkawiki.org/JavaWoman JavaWoman}
-	 * @copyright	Copyright © 2004, Marjolein Katsma
+	 * @copyright	Copyright ï¿½ 2004, Marjolein Katsma
 	 * @license		http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
 	 * @version		1.0
 	 *
@@ -734,7 +734,7 @@ class Wakka
 		$sql .= ' where latest = '.  "'Y'"  .' and match(tag, body'.$id.')';
 		$sql .= ' against('.  "'$search_phrase'"  .' IN BOOLEAN MODE)';
 		$sql .= ' order by time DESC';
-
+		
 		$data = $this->LoadAll($sql);
 
 		return $data;
@@ -898,6 +898,118 @@ class Wakka
 			return FALSE;
 		}
 	}
+	
+	// SESSION
+	
+	/**
+	 * Create and store a secret session key.
+	 *
+	 * Creates a random value and a random field name to be used to pass on the value.
+	 * The key,value pair is stored in the session as a serialized array.
+	 *
+	 * @author		{@link http://wikkawiki.org/JavaWoman JavaWoman}
+	 * @copyright	Copyright © 2005, Marjolein Katsma
+	 * @license		http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
+	 * @version		0.5
+	 *
+	 * @access		public
+	 *
+	 * @param		string	$keyname	required: name under which created secret key should be stored in the session
+	 * @return		array				fieldname and key value.
+	 */
+	function createSessionKey($keyname)
+	{
+		// create key and field name for it
+		$key = md5(getmicrotime());
+		$field = 'f'.substr(md5($key.getmicrotime()),0,10);
+		// store session key
+		$_SESSION[$keyname] = serialize(array($field,$key));
+		# BEGIN DEBUG - do not activate on a production server!
+		echo '<div class="debug">'."\n";
+		echo 'Session key:<br/>';
+		echo 'name: '.$keyname.' - field: '.$field.' - key: '.$key.'<br/>';
+		echo '</div>'."\n";
+		# END DEBUG
+		// return name, value pair
+		return array($field,$key);
+	}
+	/**
+	 * Retrieve the secret session key.
+	 *
+	 * Retrieves a named secret key and returns the result as an array with name,value pair.
+	 * Returns FALSE if the key is not found.
+	 *
+	 * @author		{@link http://wikkawiki.org/JavaWoman JavaWoman}
+	 * @copyright	Copyright © 2005, Marjolein Katsma
+	 * @license		http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
+	 * @version		0.5
+	 *
+	 * @access		public
+	 *
+	 * @param		string	$keyname	required: name of secret key to retrieve from the session
+	 * @return		mixed				array with name,value pair on success, FALSE if entry not found.
+	 */
+	function getSessionKey($keyname)
+	{
+		if (!isset($_SESSION[$keyname]))
+		{
+			return FALSE;
+		}
+		else
+		{
+			$aKey = unserialize($_SESSION[$keyname]);		# retrieve secret key data
+			unset($_SESSION[$keyname]);						# clear secret key
+			return $aKey;
+		}
+	}
+	/**
+	 * Check hidden session key: it must be passed and it must have the correct name & value.
+	 *
+	 * Looks for a given name,value pair passed either in POST (default) or in GET request.
+	 * Returns TRUE if the correct field and value is found, a reason for failure otherwise.
+	 * Make sure to check for identity TRUE (TRUE === returnval), do not evaluate return value
+	 * as boolean!!
+	 *
+	 * @author		{@link http://wikkawiki.org/JavaWoman JavaWoman}
+	 * @copyright	Copyright © 2005, Marjolein Katsma
+	 * @license		http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
+	 * @version		0.5
+	 *
+	 * @access		public
+	 * @todo		- prepare strings for internationalization
+	 *
+	 * @param		array	$aKey	required: fieldname, key value pair.
+	 * @param		string	$method	optional: form method; default post;
+	 * @return		mixed			TRUE if correct name,value found; reason for failure otherwise.
+	 */
+	function hasValidSessionKey($aKey, $method='post')
+	{
+		// get pair to look for
+		list($ses_field,$ses_key) = $aKey;
+		// check method and prepare what to look for
+		if (isset($method))
+		{
+			$aServervars = ($method == 'get') ? $_GET : $_POST;
+		}
+		else
+		{
+			$aServervars = $_POST;					# default
+		}
+	
+		// check passed values
+		if (!isset($aServervars[$ses_field]))
+		{
+			return 'form no key';					# key not present
+		}
+		elseif ($aServervars[$ses_field] != $ses_key)
+		{
+			return 'form bad key';					# incorrect value passed
+		}
+		else
+		{
+			return TRUE;							# all is well
+		}
+	}
 
 	// HTTP/GET/POST/LINK RELATED
 
@@ -989,7 +1101,7 @@ class Wakka
 
 		// is this an interwiki link?
 		// before the : should be a WikiName; anything after can be (nearly) anything that's allowed in a URL
-		if (preg_match('/^([A-ZÄÖÜ][A-Za-zÄÖÜßäöü]+)[:](\S*)$/', $tag, $matches))	// @@@ FIXME #34 (inconsistent with Formatter)
+		if (preg_match('/^([A-Zï¿½ï¿½ï¿½][A-Za-zï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½]+)[:](\S*)$/', $tag, $matches))	// @@@ FIXME #34 (inconsistent with Formatter)
 		{
 			$url = $this->GetInterWikiUrl($matches[1], $matches[2]);
 			$class = 'interwiki';
@@ -1009,7 +1121,7 @@ class Wakka
 		// is this a full link? i.e., does it contain something *else* than valid WikiName characters?
 		// FIXME just use (!IsWikiName($tag)) here (then fix the RE there!)
 		// @@@ First move to regex library
-		elseif (preg_match('/[^[:alnum:]ÄÖÜßäöü]/', $tag))		// FIXED #34 - removed commas
+		elseif (preg_match('/[^[:alnum:]ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½]/', $tag))		// FIXED #34 - removed commas
 		{
 			// check for email addresses
 			if (preg_match('/^.+\@.+$/', $tag))
@@ -1060,7 +1172,7 @@ class Wakka
 		return $result;
 	}
 	// function PregPageLink($matches) { return $this->Link($matches[1]); }
-	function IsWikiName($text) { return preg_match("/^[A-Z,ÄÖÜ][a-z,ßäöü]+[A-Z,0-9,ÄÖÜ][A-Z,a-z,0-9,ÄÖÜ,ßäöü]*$/", $text); }
+	function IsWikiName($text) { return preg_match("/^[A-Z,ï¿½ï¿½ï¿½][a-z,ï¿½ï¿½ï¿½ï¿½]+[A-Z,0-9,ï¿½ï¿½ï¿½][A-Z,a-z,0-9,ï¿½ï¿½ï¿½,ï¿½ï¿½ï¿½ï¿½]*$/", $text); }
 	function TrackLinkTo($tag) { $_SESSION["linktable"][] = $tag; }
 	function GetLinkTable() { return $_SESSION["linktable"]; }
 	function ClearLinkTable() { $_SESSION["linktable"] = array(); }
@@ -1215,7 +1327,16 @@ class Wakka
 		{
 			$attrClass = ' class="'.$class.'"';
 		}
-
+		
+		// add validation key fields
+		if('post' == $formMethod)
+		{
+			$tmp = $this->createSessionKey($id);
+			$hidden[$tmp[0]] = $tmp[1];
+			unset($tmp);
+			$hidden['form_id'] = $id;	
+		}
+		
 		// build HTML fragment
 		$fragment = '<form'.$attrAction.$attrMethod.$attrEnctype.$attrId.$attrClass.'>'."\n";
 		// construct and add hidden fields (necessary if we are NOT using rewrite mode)
@@ -1326,7 +1447,7 @@ class Wakka
 	 * Check by name if a page exists.
 	 *
 	 * @author		{@link http://wikkawiki.org/JavaWoman JavaWoman}
-	 * @copyright	Copyright © 2004, Marjolein Katsma
+	 * @copyright	Copyright ï¿½ 2004, Marjolein Katsma
 	 * @license		http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
 	 * @version		1.1
 	 *
