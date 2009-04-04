@@ -162,7 +162,6 @@ else if ($user = $this->GetUser())
 	$keep_post_data = FALSE;
 	if (isset($_POST['form_id']) && FALSE != ($aKey = $this->getSessionKey($_POST['form_id'])))	# check if page key was stored in session
 	{
-		print 'true';
 		if (TRUE == ($rc = $this->hasValidSessionKey($aKey)))	# check if correct name,key pair was passed
 		{
 			$keep_post_data  = TRUE;
