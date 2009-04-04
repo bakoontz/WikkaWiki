@@ -34,55 +34,73 @@ echo '<div class="page">'."\n"; //TODO: move to templating class
 
 if ($this->UserIsOwner())
 {
-	if ($_POST)
+	if (isset($_POST['form_id']))
 	{
-		if(isset($_POST['cancel']) && ($_POST['cancel'] == CANCEL_ACL_LABEL))
+
+		// validate data source 
+		$keep_post_data = FALSE; 
+		if (FALSE != ($aKey = $this->getSessionKey($_POST['form_id'])))     # check if page key was stored in session 
+		{ 
+			if (TRUE == ($rc = $this->hasValidSessionKey($aKey)))   # check if correct name,key pair was passed 
+			{ 
+				$keep_post_data  = TRUE; 
+			} 
+        } 
+        if(!$keep_post_data) unset($_POST); 
+		
+		// cancel action and return to the page
+		if (isset($_POST['cancel']) && ($_POST['cancel'] == CANCEL_ACL_LABEL))
 		{
 			$this->Redirect($this->Href());
 		}
-		$default_read_acl	= $this->GetConfigValue('default_read_acl');
-		$default_write_acl	= $this->GetConfigValue('default_write_acl');
-		$default_comment_acl	= $this->GetConfigValue('default_comment_acl');
-		$posted_read_acl	= $_POST['read_acl'];
-		$posted_write_acl	= $_POST['write_acl'];
-		$posted_comment_acl	= $_POST['comment_acl'];
-		$message = '';
-
-		// store lists only if ACLs have previously been defined,
-		// or if the posted values are different than the defaults
-
-		$page = $this->LoadSingle('SELECT * FROM '.$this->config['table_prefix'].
-		    "acls WHERE page_tag = '".mysql_real_escape_string($this->GetPageTag()).
-		    "' LIMIT 1");
-
-		if ($page ||
-		    ($posted_read_acl	 != $default_read_acl	||
-		     $posted_write_acl	 != $default_write_acl	||
-		     $posted_comment_acl != $default_comment_acl))
+		
+		// change ACL(s) and/or username
+		if (isset($_POST['store']) && ($_POST['store'] == STORE_ACL_LABEL))
 		{
-			$this->SaveACL($this->GetPageTag(), 'read', $this->TrimACLs($posted_read_acl));
-			$this->SaveACL($this->GetPageTag(), 'write', $this->TrimACLs($posted_write_acl));
-			$this->SaveACL($this->GetPageTag(), 'comment', $this->TrimACLs($posted_comment_acl));
-			$message = ACLS_UPDATED;
-		}
-
-		// change owner?
-		$newowner = $_POST['newowner'];
-
-		if (($newowner != 'same') &&
-		    ($this->GetPageOwner($this->GetPageTag()) != $newowner))
-		{
-			if ($newowner == '')
+			$default_read_acl	= $this->GetConfigValue('default_read_acl');
+			$default_write_acl	= $this->GetConfigValue('default_write_acl');
+			$default_comment_acl	= $this->GetConfigValue('default_comment_acl');
+			$posted_read_acl	= $_POST['read_acl'];
+			$posted_write_acl	= $_POST['write_acl'];
+			$posted_comment_acl	= $_POST['comment_acl'];
+			$message = '';
+	
+			// store lists only if ACLs have previously been defined,
+			// or if the posted values are different than the defaults
+	
+			$page = $this->LoadSingle('SELECT * FROM '.$this->config['table_prefix'].
+			    "acls WHERE page_tag = '".mysql_real_escape_string($this->GetPageTag()).
+			    "' LIMIT 1");
+	
+			if ($page ||
+			    ($posted_read_acl	 != $default_read_acl	||
+			     $posted_write_acl	 != $default_write_acl	||
+			     $posted_comment_acl != $default_comment_acl))
 			{
-				$newowner = NO_PAGE_OWNER;
+				$this->SaveACL($this->GetPageTag(), 'read', $this->TrimACLs($posted_read_acl));
+				$this->SaveACL($this->GetPageTag(), 'write', $this->TrimACLs($posted_write_acl));
+				$this->SaveACL($this->GetPageTag(), 'comment', $this->TrimACLs($posted_comment_acl));
+				$message = ACLS_UPDATED;
 			}
-
-			$this->SetPageOwner($this->GetPageTag(), $newowner);
-			$message .= sprintf(PAGE_OWNERSHIP_CHANGED, $newowner);
+	
+			// change owner?
+			$newowner = $_POST['newowner'];
+	
+			if (($newowner != 'same') &&
+			    ($this->GetPageOwner($this->GetPageTag()) != $newowner))
+			{
+				if ($newowner == '')
+				{
+					$newowner = NO_PAGE_OWNER;
+				}
+	
+				$this->SetPageOwner($this->GetPageTag(), $newowner);
+				$message .= sprintf(PAGE_OWNERSHIP_CHANGED, $newowner);
+			}
+	
+			// redirect back to page
+			$this->Redirect($this->Href(), $message);
 		}
-
-		// redirect back to page
-		$this->Redirect($this->Href(), $message);
 	}
 	else	// show form
 	{
@@ -110,7 +128,7 @@ if ($this->UserIsOwner())
 <tr>
 	<td colspan="2">
 	<br />
-	<input type="submit" value="<?php echo STORE_ACL_LABEL?>" />
+	<input type="submit" value="<?php echo STORE_ACL_LABEL?>" name="store" />
 	<input type="submit" value="<?php echo CANCEL_ACL_LABEL?>" name="cancel" />
 	</td>
 
