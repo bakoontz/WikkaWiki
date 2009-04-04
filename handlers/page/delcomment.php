@@ -1,20 +1,55 @@
 <?php
+/**
+ * Delete a comment if the user is an admin, page owner or has posted the comment.
+ * 
+ * @package		Handlers
+ * @subpackage	Page
+ * @version		$Id$
+ * @license		http://www.gnu.org/copyleft/gpl.html GNU General Public License
+ * @filesource
+ * 
+ * @uses	Config::table_prefix
+ * @uses	Wakka::UserIsOwner()
+ * @uses	Wakka::LoadSingle()
+ * @uses	Wakka::GetUserName()
+ * @uses	Wakka::getSessionKey()
+ * @uses	Wakka::hasValidSessionKey()
+ * @uses	Wakka::Query()
+ * @uses	Href()
+ * 
+ */
 
-//select comment and delete it
-$comment_id = intval(trim($_POST["comment_id"]));
-$comment = $this->LoadSingle("select user from ".$this->config["table_prefix"]."comments where id = '".$comment_id."' limit 1");
-$current_user = $this->GetUserName();
-
-if ($this->UserIsOwner() || $comment["user"]==$current_user)
+if(isset($_POST['form_id']) && isset($_POST["comment_id"])) 
 {
-	$this->Query("DELETE FROM ".$this->config["table_prefix"]."comments WHERE id = '".$comment_id."' LIMIT 1");
+	//select comment
+	$comment_id = intval(trim($_POST["comment_id"]));
+	$comment = $this->LoadSingle("select user from ".$this->config["table_prefix"]."comments where id = '".$comment_id."' limit 1");
+	$current_user = $this->GetUserName();	
+	
+	$delete = FALSE;
+    if (FALSE != ($aKey = $this->getSessionKey($_POST['form_id'])))	# check if form key was stored in session
+	{
+		if (TRUE == ($rc = $this->hasValidSessionKey($aKey)))	# check if correct name,key pair was passed
+		{
+			
+			if ($this->UserIsOwner() || $comment["user"]==$current_user)
+			{
+				$delete = TRUE;
+			}
+			
+		}
+	}
 
-	// redirect to page
-	$this->redirect($this->Href());
+	// delete comment
+	if (TRUE === $delete)
+	{
+		$this->Query("DELETE FROM ".$this->config["table_prefix"]."comments WHERE id = '".$comment_id."' LIMIT 1");
+		// redirect to page
+		$this->redirect($this->Href(), 'Comment succesfully deleted.');
+	}
+	else
+	{
+		echo '<div class="page"><em class="error">Sorry, you\'re not allowed to delete this comment!</em></div>'."\n";
+	}
 }
-else
-{
-	print("<div class=\"page\"><em class='error'>Sorry, you're not allowed to delete this comment!</em></div>\n");
-}
-
 ?>

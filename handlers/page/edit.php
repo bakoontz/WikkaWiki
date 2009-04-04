@@ -42,7 +42,7 @@
 /**#@+
  * Default value.
  */
-if (!defined('VALID_PAGENAME_PATTERN')) define ('VALID_PAGENAME_PATTERN', '/^[A-Za-zÄÖÜßäöü]+[A-Za-z0-9ÄÖÜßäöü]*$/s'); //TODO use central regex library
+if (!defined('VALID_PAGENAME_PATTERN')) define ('VALID_PAGENAME_PATTERN', '/^[A-Za-zï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½]+[A-Za-z0-9ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½]*$/s'); //TODO use central regex library
 if (!defined('MAX_TAG_LENGTH')) define ('MAX_TAG_LENGTH', 75);
 if (!defined('MAX_EDIT_NOTE_LENGTH')) define ('MAX_EDIT_NOTE_LENGTH', 50);
 /**
@@ -81,6 +81,7 @@ $highlight_note = '';
 $note = '';
 $ondblclick = ''; //#123
 
+// cancel operation and return to page
 if(isset($_POST['cancel']) && ($_POST['cancel'] == INPUT_BUTTON_CANCEL))
 {
 	$this->Redirect($this->Href());
@@ -120,7 +121,7 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 			$id = $page['id'];
 		}
 	}
-	if ($_POST)
+	if (isset($_POST['form_id']))
 	{
 		// strip CRLF line endings down to LF to achieve consistency ... plus it saves database space.
 		// Note: these codes must remain enclosed in double-quotes to work! -- JsnX
@@ -142,6 +143,14 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 		// only if saving:
 		if (isset($_POST['submit']) && $_POST['submit'] == 'Store')
 		{
+			if (FALSE != ($aKey = $this->getSessionKey($_POST['form_id'])))	# check if form key was stored in session
+			{
+				if (TRUE != ($rc = $this->hasValidSessionKey($aKey)))	# check if correct name,key pair was passed
+				{
+					$error = 'Something went wrong with your credentials. Page was not saved';
+				}
+			}
+			
 			// check for overwriting
 			if ($this->page)
 			{

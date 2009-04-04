@@ -34,9 +34,6 @@
  * 			necessary) - #312  
  */
 
-//include antispam library
-include_once('libs/antispam.lib.php');
-
 //constants
 define('SHOW_OLD_REVISION_SOURCE', 0); # if set to 1 shows by default the source of an old revision instead of the rendered version
 
@@ -162,7 +159,6 @@ else
 					}
 				}
 				// display comment form
-				$keyfield = createSessionKeyFieldset($this, createSessionKey($this, $this->tag.'_commentkey'));
 				echo '<div class="commentform">'."\n";
 				if ($this->HasAccess('comment'))
 				{?>
@@ -171,7 +167,6 @@ else
 						<textarea id="commentbox" name="body" rows="6" cols="78"></textarea><br />
 						<input type="submit" value="Add Comment" accesskey="s" />
             		</label>
-					<?php echo $keyfield; ?>
 					<?php echo $this->FormClose(); ?>
 				<?php
 				}
