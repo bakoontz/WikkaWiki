@@ -925,10 +925,10 @@ class Wakka
 		// store session key
 		$_SESSION[$keyname] = serialize(array($field,$key));
 		# BEGIN DEBUG - do not activate on a production server!
-		echo '<div class="debug">'."\n";
-		echo 'Session key:<br/>';
-		echo 'name: '.$keyname.' - field: '.$field.' - key: '.$key.'<br/>';
-		echo '</div>'."\n";
+		# echo '<div class="debug">'."\n";
+		# echo 'Session key:<br/>';
+		# echo 'name: '.$keyname.' - field: '.$field.' - key: '.$key.'<br/>';
+		# echo '</div>'."\n";
 		# END DEBUG
 		// return name, value pair
 		return array($field,$key);
