@@ -330,38 +330,42 @@ if ($this->IsAdmin($this->GetUser()))
 	else 
 	{
 		// process URL variables
-		# JW 2005-07-19 some modifications to avoid notices but these are still not actually secure
 	
 		// number of records per page
-		if (isset($_POST['l']))
+		$l = ADMINUSERS_DEFAULT_RECORDS_LIMIT;
+		if (isset($_POST['l']) && (int)$_POST['l'] > 0)
 		{
-			$l = $_POST['l'];
+			$l = (int)$_POST['l'];
 		}
-		elseif (isset($_GET['l']))
+		elseif (isset($_GET['l']) && (int)$_GET['l'] > 0)
 		{
-			$l = $_GET['l'];
-		}
-		else
-		{
-			$l = ADMINUSERS_DEFAULT_RECORDS_LIMIT;
+			$l = (int)$_GET['l'];
 		}
 
 		// sort field
-		$sort = (isset($_GET['sort'])) ? $_GET['sort'] : ADMINUSERS_DEFAULT_SORT_FIELD;
+		$sort = ADMINUSERS_DEFAULT_SORT_FIELD;
+		$sort_fields = array('name', 'email', 'signuptime');
+		if(isset($_GET['sort']) && in_array($_GET['sort'], $sort_fields)) $sort = $_GET['sort'];
 		// sort order
-		$d = (isset($_GET['d'])) ? $_GET['d'] : ADMINUSERS_DEFAULT_SORT_ORDER;
+		$d = ADMINUSERS_DEFAULT_SORT_ORDER;
+		$sort_order = array('asc', 'desc');
+		if(isset($_GET['d']) && in_array($_GET['d'], $sort_order)) $d = $_GET['d'];
 		// start record
-		$s = (isset($_GET['s'])) ? $_GET['s'] : ADMINUSERS_DEFAULT_START;
+		$s = ADMINUSERS_DEFAULT_START;
+		if (isset($_GET['s']) && (int)$_GET['s'] >=0) $s = (int)$_GET['s']; 
 	
 		// search string
-		$q = '';
-		if (isset($_POST['q']))
+		$search = ADMINUSERS_DEFAULT_SEARCH;
+		$search_disp = ADMINUSERS_DEFAULT_SEARCH;
+		if (isset($_POST['search']))
 		{
-			$q = $_POST['q'];
+			$search = mysql_real_escape_string($_POST['search']);
+			$search_disp = $this->htmlspecialchars_ent($_POST['search']);
 		}
-		elseif (isset($_GET['q']))
+		elseif (isset($_GET['search']))
 		{
-			$q = $_GET['q'];
+			$search = mysql_real_escape_string($_GET['search']);
+			$search_disp = $this->htmlspecialchars_ent($_GET['search']);
 		}
 		elseif(isset($_POST['submit']) && $_POST['submit'] == ADMINUSERS_FORM_SEARCH_SUBMIT)
 		{
@@ -378,7 +382,7 @@ if ($this->IsAdmin($this->GetUser()))
 	
 		// restrict MySQL query by search string
 		$where = "(status IS NULL OR status != 'deleted') AND ";
-		$where .= ('' == $q) ? '1' : "name LIKE '%".$q."%'";
+		$where .= ('' == $search) ? '1' : "name LIKE '%".$search."%'";
 		// get total number of users
 		$numusers = $this->getCount('users', $where);
 		// If the user doesn't specifically want to change the records
@@ -399,7 +403,7 @@ if ($this->IsAdmin($this->GetUser()))
 		// build pager form	
 		$form_filter = $this->FormOpen('','','post','user_admin_panel');
 		$form_filter .= '<fieldset><legend>'.ADMINUSERS_FORM_LEGEND.'</legend>'."\n";
-		$form_filter .= '<label for="q">'.ADMINUSERS_FORM_SEARCH_STRING_LABEL.'</label> <input type ="text" id="q" name="q" title="'.ADMINUSERS_FORM_SEARCH_STRING_TITLE.'" size="20" maxlength="50" value="'.$q.'"/> <input name="submit" type="submit" value="'.ADMINUSERS_FORM_SEARCH_SUBMIT.'" /><br />'."\n";
+		$form_filter .= '<label for="search">'.ADMINUSERS_FORM_SEARCH_STRING_LABEL.'</label> <input type ="text" id="search" name="search" title="'.ADMINUSERS_FORM_SEARCH_STRING_TITLE.'" size="20" maxlength="50" value="'.$search_disp.'"/> <input name="submit" type="submit" value="'.ADMINUSERS_FORM_SEARCH_SUBMIT.'" /><br />'."\n";
 		// get values range for drop-down
 		$users_opts = optionRanges($user_limits,$numusers, ADMINUSERS_DEFAULT_MIN_RECORDS_DISPLAY);
 		$form_filter .= '<label for="l">'.ADMINUSERS_FORM_PAGER_LABEL_BEFORE.'</label> '."\n";
@@ -417,11 +421,11 @@ if ($this->IsAdmin($this->GetUser()))
 		$ul = ($s+2*$l) > $numusers ? $numusers : ($s+2*$l);
 		if ($s > 0)
 		{
-			$prev = '<a href="'.$this->Href('','','l='.$l.'&amp;sort='.$sort.'&amp;d='.$d.'&amp;s='.($s-$l)).  '&amp;q='.$q.  '&amp;start_ts='.urlencode($start_ts).  '&amp;end_ts='.urlencode($end_ts).  '" title="'.sprintf(ADMINUSERS_FORM_PAGER_LINK, ($s-$l+1), $s).'">'.($s-$l+1).'-'.$s.'</a> |  '."\n";
+			$prev = '<a href="'.$this->Href('','','l='.$l.'&amp;sort='.$sort.'&amp;d='.$d.'&amp;s='.($s-$l)).  '&amp;search='.urlencode($search).  '&amp;start_ts='.urlencode($start_ts).  '&amp;end_ts='.urlencode($end_ts).  '" title="'.sprintf(ADMINUSERS_FORM_PAGER_LINK, ($s-$l+1), $s).'">'.($s-$l+1).'-'.$s.'</a> |  '."\n";
 		}
 		if ($numusers > ($s + $l))
 		{
-			$next = ' | <a href="'.$this->Href('','','l='.$l.'&amp;sort='.$sort.'&amp;d='.$d.'&amp;s='.($s+$l)).'&amp;q='.$q.'&amp;start_ts='.urlencode($start_ts).'&amp;end_ts='.urlencode($end_ts).'" title="'.sprintf(ADMINUSERS_FORM_PAGER_LINK, $ll, $ul).'">'.$ll.(($ll==$ul)?'':('-'.$ul)).'</a>'."\n";
+			$next = ' | <a href="'.$this->Href('','','l='.$l.'&amp;sort='.$sort.'&amp;d='.$d.'&amp;s='.($s+$l)).'&amp;search='.urlencode($search).'&amp;start_ts='.urlencode($start_ts).'&amp;end_ts='.urlencode($end_ts).'" title="'.sprintf(ADMINUSERS_FORM_PAGER_LINK, $ll, $ul).'">'.$ll.(($ll==$ul)?'':('-'.$ul)).'</a>'."\n";
 		}
 		$form_filter .= ADMINUSERS_FORM_RESULT_INFO.' ('.$numusers.'): '.$prev.(($s+$l)>$numusers?($s+1).'-'.$numusers:($s+1).'-'.($s+$l)).$next.'<br />'."\n";
 		$form_filter .= '<span class="sortorder">'.ADMINUSERS_FORM_RESULT_SORTED_BY.' <tt>'.$sort.', '.$d.'</tt></span>'."\n";
@@ -443,7 +447,7 @@ if ($this->IsAdmin($this->GetUser()))
 			$data_table = '<table id="adminusers" summary="'.ADMINUSERS_TABLE_SUMMARY.'" border="1px" class="data">'."\n".
 				'<thead>'."\n".
 	  			'	<tr>'."\n".
-				'		<th> </th>'."\n".
+				'		<th> </th>'."\n".
 				'		<th>'.$nameheader.'</th>'."\n".
 				'		<th>'.$emailheader.'</th>'."\n".
 				'		<th>'.$timeheader.'</th>'."\n".
@@ -519,7 +523,7 @@ if ($this->IsAdmin($this->GetUser()))
 			$form_mass .= $data_table;			
 			$form_mass .= '<fieldset>'."\n".
 				'	<legend>'.ADMINUSERS_FORM_MASSACTION_LEGEND.'</legend>'."\n".
-				'	[<a href="'.$this->Href('','','l='.$l.'&amp;sort='.$sort.'&amp;d='.$d.'&amp;s='.$s.'&amp;q='.$q.'&amp;selectall=1').'" title="'.ADMINUSERS_SELECT_ALL_TITLE.'">'.ADMINUSERS_SELECT_ALL.'</a> | <a href="'.$this->Href('','','l='.$l.'&amp;sort='.$sort.'&amp;d='.$d.'&amp;s='.$s.'&amp;q='.$q.'&amp;selectall=0').'" title="'.ADMINUSERS_DESELECT_ALL_TITLE.'">'.ADMINUSERS_DESELECT_ALL.'</a>]<br />'."\n".
+				'	[<a href="'.$this->Href('','','l='.$l.'&amp;sort='.$sort.'&amp;d='.$d.'&amp;s='.$s.'&amp;search='.urlencode($search).'&amp;selectall=1').'" title="'.ADMINUSERS_SELECT_ALL_TITLE.'">'.ADMINUSERS_SELECT_ALL.'</a> | <a href="'.$this->Href('','','l='.$l.'&amp;sort='.$sort.'&amp;d='.$d.'&amp;s='.$s.'&amp;search='.urlencode($search).'&amp;selectall=0').'" title="'.ADMINUSERS_DESELECT_ALL_TITLE.'">'.ADMINUSERS_DESELECT_ALL.'</a>]<br />'."\n".
 				'	<label for="action" >'.ADMINUSERS_FORM_MASSACTION_LABEL.'</label>'."\n".
 				'	<select title="'.ADMINUSERS_FORM_MASSACTION_SELECT_TITLE.'" id="action" name="action">'."\n".
 				'		<option value="" selected="selected">---</option>'."\n".
@@ -536,7 +540,7 @@ if ($this->IsAdmin($this->GetUser()))
 		else
 		{
 			// no records matching the search string: print error message
-			echo '<p><em class="error">'.sprintf(ADMINUSERS_ERROR_NO_MATCHES, $q).'</em></p>';
+			echo '<p><em class="error">'.sprintf(ADMINUSERS_ERROR_NO_MATCHES, $search_disp).'</em></p>';
 		}
 	}
 }

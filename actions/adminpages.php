@@ -393,20 +393,16 @@ if ($this->IsAdmin($this->GetUser()))
 	else
 	{
 		// process URL variables
-		# JW 2005-07-19 some modifications to avoid notices but these are still not actually secure
 
 		// number of records per page
-		if (isset($_POST['l']))
+		$l = ADMINPAGES_DEFAULT_RECORDS_LIMIT;
+		if (isset($_POST['l']) && (int)$_POST['l'] > 0)
 		{
-			$l = $_POST['l'];
+			$l = (int)$_POST['l'];
 		}
-		elseif (isset($_GET['l']))
+		elseif (isset($_GET['l']) && (int)$_GET['l'] > 0)
 		{
-			$l = $_GET['l'];
-		}
-		else
-		{
-			$l = ADMINPAGES_DEFAULT_RECORDS_LIMIT;
+			$l = (int)$_GET['l'];
 		}
 
 		// last edit date range
@@ -424,24 +420,31 @@ if ($this->IsAdmin($this->GetUser()))
 		$end_ss = (isset($_POST['end_ss'])) ? $this->htmlspecialchars_ent($_POST['end_ss']) : ADMINPAGES_DEFAULT_END_SECOND;
 
 		// sort field
-		$sort = (isset($_GET['sort'])) ? $_GET['sort'] : ADMINPAGES_DEFAULT_SORT_FIELD;
+		$sort = ADMINPAGES_DEFAULT_SORT_FIELD;
+		$sort_fields = array('owner', 'tag', 'user', 'time');
+		if(isset($_GET['sort']) && in_array($_GET['sort'], $sort_fields)) $sort = $_GET['sort'];
+
 		// sort order
-		$d = (isset($_GET['d'])) ? $_GET['d'] : ADMINPAGES_DEFAULT_SORT_ORDER;
+		$d = ADMINPAGES_DEFAULT_SORT_ORDER;
+		$sort_order = array('asc', 'desc');
+		if(isset($_GET['d']) && in_array($_GET['d'], $sort_order)) $d = $_GET['d'];
 		// start record
-		$s = (isset($_GET['s'])) ? $_GET['s'] : ADMINPAGES_DEFAULT_START;
+		$s = ADMINPAGES_DEFAULT_START;
+		if (isset($_GET['s']) && (int)$_GET['s'] >=0) $s = (int)$_GET['s']; 
+
 
 		// search string
-		if (isset($_POST['q']))
+		$search = ADMINPAGES_DEFAULT_SEARCH;
+		$search_disp = ADMINPAGES_DEFAULT_SEARCH;
+		if (isset($_POST['search']))
 		{
-			$q = $_POST['q'];
+			$search = mysql_real_escape_string($_POST['search']);
+			$search_disp = $this->htmlspecialchars_ent($_POST['search']);
 		}
-		elseif (isset($_GET['q']))
+		elseif (isset($_GET['search']))
 		{
-			$q = $_GET['q'];
-		}
-		else
-		{
-			$q = ADMINPAGES_DEFAULT_SEARCH;
+			$search = mysql_real_escape_string($_GET['search']);
+			$search_disp = $this->htmlspecialchars_ent($_GET['search']);
 		}
 
 		// select all	added JW 2005-07-19
@@ -457,7 +460,7 @@ if ($this->IsAdmin($this->GetUser()))
 		// build pager form	
 		$form_filter = $this->FormOpen('','','post','page_admin_panel');
 		$form_filter .= '<fieldset><legend>'.ADMINPAGES_FORM_LEGEND.'</legend>'."\n";
-		$form_filter .= '<label for="q">'.ADMINPAGES_FORM_SEARCH_STRING_LABEL.'</label> <input type ="text" id="q" name="q" title="'.ADMINPAGES_FORM_SEARCH_STRING_TITLE.'" size="20" maxlength="50" value="'.$q.'"/> <input type="submit" value="'.ADMINPAGES_FORM_SEARCH_SUBMIT.'" /><br />'."\n";
+		$form_filter .= '<label for="search">'.ADMINPAGES_FORM_SEARCH_STRING_LABEL.'</label> <input type ="text" id="search" name="search" title="'.ADMINPAGES_FORM_SEARCH_STRING_TITLE.'" size="20" maxlength="50" value="'.$search_disp.'"/> <input type="submit" value="'.ADMINPAGES_FORM_SEARCH_SUBMIT.'" /><br />'."\n";
 		// build date range fields
 		$form_filter .= '<label>'.ADMINPAGES_FORM_DATE_RANGE_STRING_LABEL.'</label>&nbsp;<input class="datetime" type="text" name="start_YY" size="4" maxlength="4" value="'.$start_YY.'"/>-<input class="datetime" type="text" name="start_MM" size="2" maxlength="2" value="'.$start_MM.'"/>-<input class="datetime" type="text" name="start_DD" size="2" maxlength="2" value="'.$start_DD.'"/>&nbsp;<input class="datetime" type="text" name="start_hh" size="2" maxlength="2" value="'.$start_hh.'"/>:<input class="datetime" type="text" name="start_mm" size="2" maxlength="2" value="'.$start_mm.'"/>:<input class="datetime" type="text" name="start_ss" size="2" maxlength="2" value="'.$start_ss.'"/>&nbsp;'.ADMINPAGES_FORM_DATE_RANGE_CONNECTOR_LABEL.'&nbsp;<input class="datetime" type="text" name="end_YY" size="4" maxlength="4" value="'.$end_YY.'"/>-<input class="datetime" type="text" name="end_MM" size="2" maxlength="2" value="'.$end_MM.'"/>-<input class="datetime" type="text" name="end_DD" size="2" maxlength="2" value="'.$end_DD.'"/>&nbsp;<input class="datetime" type="text" name="end_hh" size="2" maxlength="2" value="'.$end_hh.'"/>:<input class="datetime" type="text" name="end_mm" size="2" maxlength="2" value="'.$end_mm.'"/>:<input class="datetime" type="text" name="end_ss" size="2" maxlength="2" value="'.$end_ss.'"/><br />'."\n";
 
@@ -535,7 +538,7 @@ if ($this->IsAdmin($this->GetUser()))
 		}
 
 		// restrict MySQL query by search string	 modified JW 2005-07-19
-		$where = ('' == $q) ? "`latest` = 'Y'" : "`tag` LIKE '%".$q."%' AND `latest` = 'Y'";
+		$where = ('' == $search) ? "`latest` = 'Y'" : "`tag` LIKE '%".$search."%' AND `latest` = 'Y'";
 		if (!empty($start_ts) && !empty($end_ts))
 		{
 			$where .= " AND time > '".$start_ts."' AND time < '".$end_ts."'"; 
@@ -560,11 +563,11 @@ if ($this->IsAdmin($this->GetUser()))
 		$ul = ($s+2*$l) > $numpages ? $numpages : ($s+2*$l);
 		if ($s > 0)
 		{
-			$prev = '<a href="'.$this->Href('','','l='.$l.'&amp;sort='.$sort.'&amp;d='.$d.'&amp;s='.($s-$l)).  '&amp;q='.$q.  '&amp;start_ts='.urlencode($start_ts).  '&amp;end_ts='.urlencode($end_ts).  '" title="'.sprintf(ADMINPAGES_FORM_PAGER_LINK, ($s-$l+1), $s).'">'.($s-$l+1).'-'.$s.'</a> |  '."\n";
+			$prev = '<a href="'.$this->Href('','','l='.$l.'&amp;sort='.$sort.'&amp;d='.$d.'&amp;s='.($s-$l)).  '&amp;search='.urlencode($search).  '&amp;start_ts='.urlencode($start_ts).  '&amp;end_ts='.urlencode($end_ts).  '" title="'.sprintf(ADMINPAGES_FORM_PAGER_LINK, ($s-$l+1), $s).'">'.($s-$l+1).'-'.$s.'</a> |  '."\n";
 		}
 		if ($numpages > ($s + $l))
 		{
-			$next = ' | <a href="'.$this->Href('','','l='.$l.'&amp;sort='.$sort.'&amp;d='.$d.'&amp;s='.($s+$l)).'&amp;q='.$q.'&amp;start_ts='.urlencode($start_ts).'&amp;end_ts='.urlencode($end_ts).'" title="'.sprintf(ADMINPAGES_FORM_PAGER_LINK, $ll, $ul).'">'.$ll.(($ll==$ul)?'':('-'.$ul)).'</a>'."\n";
+			$next = ' | <a href="'.$this->Href('','','l='.$l.'&amp;sort='.$sort.'&amp;d='.$d.'&amp;s='.($s+$l)).'&amp;search='.urlencode($search).'&amp;start_ts='.urlencode($start_ts).'&amp;end_ts='.urlencode($end_ts).'" title="'.sprintf(ADMINPAGES_FORM_PAGER_LINK, $ll, $ul).'">'.$ll.(($ll==$ul)?'':('-'.$ul)).'</a>'."\n";
 		}
 		$form_filter .= ADMINPAGES_FORM_RESULT_INFO.' ('.$numpages.'): '.$prev.(($s+$l)>$numpages?($s+1).'-'.$numpages:($s+1).'-'.($s+$l)).$next.'<br />'."\n";
 		$form_filter .= '<span class="sortorder">'.ADMINPAGES_FORM_RESULT_SORTED_BY.' <tt>'.$sort.', '.$d.'</tt></span>'."\n";
@@ -581,7 +584,7 @@ if ($this->IsAdmin($this->GetUser()))
 				$count = ', COUNT(*) as edits';
 				$group = 'GROUP BY tag';	
 				$where .= 'AND 1';
-				//$where = ('' == $q) ? "1" : "`tag` LIKE '%".$q."%'";
+				//$where = ('' == $search) ? "1" : "`tag` LIKE '%".$search."%'";
 				$table = 'pages';	
 				break;
 			case 'comments': #to implement
@@ -602,11 +605,11 @@ if ($this->IsAdmin($this->GetUser()))
 		if ($pagedata)
 		{
 			// build table headers
-			$tagheader = '<a href="'.$this->Href('','', (($sort == 'tag' && $d == 'asc')? 'l='.$l.'&amp;sort=tag&amp;d=desc&amp;q='.$q.'&amp;start_ts='.urlencode($start_ts).'&amp;end_ts='.urlencode($end_ts) : 'l='.$l.'&amp;sort=tag&amp;d=asc&amp;q='.$q.'&amp;start_ts='.urlencode($start_ts).'&amp;end_ts='.urlencode($end_ts))).'" title="'.ADMINPAGES_TABLE_HEADING_PAGENAME_TITLE.'">'.ADMINPAGES_TABLE_HEADING_PAGENAME.'</a>';
-			$ownerheader = '<a href="'.$this->Href('','', (($sort == 'owner' && $d == 'asc')? 'l='.$l.'&amp;sort=owner&amp;d=desc&amp;q='.$q.'&amp;start_ts='.urlencode($start_ts).'&amp;end_ts='.urlencode($end_ts) : 'l='.$l.'&amp;sort=owner&amp;d=asc&amp;q='.$q.'&amp;start_ts='.urlencode($start_ts).'&amp;end_ts='.urlencode($end_ts))).'" title="'.ADMINPAGES_TABLE_HEADING_OWNER_TITLE.'">'.ADMINPAGES_TABLE_HEADING_OWNER.'</a>';
-			$userheader = '<a href="'.$this->Href('','', (($sort == 'user' && $d == 'asc')? 'l='.$l.'&amp;sort=user&amp;d=desc&amp;q='.$q.'&amp;start_ts='.urlencode($start_ts).'&amp;end_ts='.urlencode($end_ts) : 'l='.$l.'&amp;sort=user&amp;d=asc&amp;q='.$q.'&amp;start_ts='.urlencode($start_ts).'&amp;end_ts='.urlencode($end_ts))).'" title="'.ADMINPAGES_TABLE_HEADING_LASTAUTHOR_TITLE.'">'.ADMINPAGES_TABLE_HEADING_LASTAUTHOR.'</a>';
-			$lasteditheader = '<a href="'.$this->Href('','', (($sort == 'time' && $d == 'desc')? 'l='.$l.'&amp;sort=time&amp;d=asc&amp;q='.$q.'&amp;start_ts='.urlencode($start_ts).'&amp;end_ts='.urlencode($end_ts) : 'l='.$l.'&amp;sort=time&amp;d=desc&amp;q='.$q.'&amp;start_ts='.urlencode($start_ts).'&amp;end_ts='.urlencode($end_ts))).'" title="'.ADMINPAGES_TABLE_HEADING_LASTEDIT_TITLE.'">'.ADMINPAGES_TABLE_HEADING_LASTEDIT.'</a>';
-			/* $revisionsheader = '<a href="'.$this->Href('','', (($sort == 'edits' && $d == 'desc')? 'l='.$l.'&amp;sort=edits&amp;d=asc&amp;q='.$q.'&amp;start_ts='.urlencode($start_ts).'&amp;end_ts='.urlencode($end_ts) : 'l='.$l.'&amp;sort=edits&amp;d=desc&amp;q='.$q.'&amp;start_ts='.urlencode($start_ts).'&amp;end_ts='.urlencode($end_ts))).'" title="'.ADMINPAGES_TABLE_HEADING_REVISIONS_TITLE.'"><img src="'.ADMINPAGES_REVISIONS_ICON.'" alt="'.ADMINPAGES_TABLE_HEADING_REVISIONS_ALT.'"/></a>'; */ #not implemented
+			$tagheader = '<a href="'.$this->Href('','', (($sort == 'tag' && $d == 'asc')? 'l='.$l.'&amp;sort=tag&amp;d=desc&amp;search='.urlencode($search).'&amp;start_ts='.urlencode($start_ts).'&amp;end_ts='.urlencode($end_ts) : 'l='.$l.'&amp;sort=tag&amp;d=asc&amp;search='.urlencode($search).'&amp;start_ts='.urlencode($start_ts).'&amp;end_ts='.urlencode($end_ts))).'" title="'.ADMINPAGES_TABLE_HEADING_PAGENAME_TITLE.'">'.ADMINPAGES_TABLE_HEADING_PAGENAME.'</a>';
+			$ownerheader = '<a href="'.$this->Href('','', (($sort == 'owner' && $d == 'asc')? 'l='.$l.'&amp;sort=owner&amp;d=desc&amp;search='.urlencode($search).'&amp;start_ts='.urlencode($start_ts).'&amp;end_ts='.urlencode($end_ts) : 'l='.$l.'&amp;sort=owner&amp;d=asc&amp;search='.urlencode($search).'&amp;start_ts='.urlencode($start_ts).'&amp;end_ts='.urlencode($end_ts))).'" title="'.ADMINPAGES_TABLE_HEADING_OWNER_TITLE.'">'.ADMINPAGES_TABLE_HEADING_OWNER.'</a>';
+			$userheader = '<a href="'.$this->Href('','', (($sort == 'user' && $d == 'asc')? 'l='.$l.'&amp;sort=user&amp;d=desc&amp;search='.urlencode($search).'&amp;start_ts='.urlencode($start_ts).'&amp;end_ts='.urlencode($end_ts) : 'l='.$l.'&amp;sort=user&amp;d=asc&amp;search='.urlencode($search).'&amp;start_ts='.urlencode($start_ts).'&amp;end_ts='.urlencode($end_ts))).'" title="'.ADMINPAGES_TABLE_HEADING_LASTAUTHOR_TITLE.'">'.ADMINPAGES_TABLE_HEADING_LASTAUTHOR.'</a>';
+			$lasteditheader = '<a href="'.$this->Href('','', (($sort == 'time' && $d == 'desc')? 'l='.$l.'&amp;sort=time&amp;d=asc&amp;search='.urlencode($search).'&amp;start_ts='.urlencode($start_ts).'&amp;end_ts='.urlencode($end_ts) : 'l='.$l.'&amp;sort=time&amp;d=desc&amp;search='.urlencode($search).'&amp;start_ts='.urlencode($start_ts).'&amp;end_ts='.urlencode($end_ts))).'" title="'.ADMINPAGES_TABLE_HEADING_LASTEDIT_TITLE.'">'.ADMINPAGES_TABLE_HEADING_LASTEDIT.'</a>';
+			/* $revisionsheader = '<a href="'.$this->Href('','', (($sort == 'edits' && $d == 'desc')? 'l='.$l.'&amp;sort=edits&amp;d=asc&amp;search='.urlencode($search).'&amp;start_ts='.urlencode($start_ts).'&amp;end_ts='.urlencode($end_ts) : 'l='.$l.'&amp;sort=edits&amp;d=desc&amp;search='.urlencode($search).'&amp;start_ts='.urlencode($start_ts).'&amp;end_ts='.urlencode($end_ts))).'" title="'.ADMINPAGES_TABLE_HEADING_REVISIONS_TITLE.'"><img src="'.ADMINPAGES_REVISIONS_ICON.'" alt="'.ADMINPAGES_TABLE_HEADING_REVISIONS_ALT.'"/></a>'; */ #not implemented
 
 			$data_table = '<table id="adminpages" summary="'.ADMINPAGES_TABLE_SUMMARY.'" border="1px" class="data">'."\n".
 			'<thead>'."\n".
@@ -781,7 +784,7 @@ if ($this->IsAdmin($this->GetUser()))
 
 			// multiple-page operations (forthcoming)		JW 2005-07-19 accesskey removed (causes more problems than it solves)
 			$form_mass .= '<fieldset><legend>'.ADMINPAGES_FORM_MASSACTION_LEGEND.'</legend>';
-			$form_mass .= '[<a href="'.$this->Href('','','l='.$l.'&amp;sort='.$sort.'&amp;d='.$d.'&amp;s='.$s.'&amp;q='.$q.'&amp;start_ts='.urlencode($start_ts).'&amp;end_ts='.urlencode($end_ts).'&amp;selectall=1').'" title="'.ADMINPAGES_CHECK_ALL_TITLE.'">'.ADMINPAGES_CHECK_ALL.'</a> | <a href="'.$this->Href('','','l='.$l.'&amp;sort='.$sort.'&amp;d='.$d.'&amp;s='.$s.'&amp;q='.$q.'&amp;start_ts='.urlencode($start_ts).'&amp;end_ts='.urlencode($end_ts).'&amp;selectall=0').'" title="'.ADMINPAGES_UNCHECK_ALL_TITLE.'">'.ADMINPAGES_UNCHECK_ALL.'</a>]<br />';
+			$form_mass .= '[<a href="'.$this->Href('','','l='.$l.'&amp;sort='.$sort.'&amp;d='.$d.'&amp;s='.$s.'&amp;search='.urlencode($search).'&amp;start_ts='.urlencode($start_ts).'&amp;end_ts='.urlencode($end_ts).'&amp;selectall=1').'" title="'.ADMINPAGES_CHECK_ALL_TITLE.'">'.ADMINPAGES_CHECK_ALL.'</a> | <a href="'.$this->Href('','','l='.$l.'&amp;sort='.$sort.'&amp;d='.$d.'&amp;s='.$s.'&amp;search='.urlencode($search).'&amp;start_ts='.urlencode($start_ts).'&amp;end_ts='.urlencode($end_ts).'&amp;selectall=0').'" title="'.ADMINPAGES_UNCHECK_ALL_TITLE.'">'.ADMINPAGES_UNCHECK_ALL.'</a>]<br />';
 			$form_mass .= '<label for="action" >'.ADMINPAGES_FORM_MASSACTION_LABEL.'</label> <select title="'.ADMINPAGES_FORM_MASSACTION_SELECT_TITLE.'" id="action" name="action">';
 			$form_mass .= '<option value="" selected="selected">---</option>';
 			// Temporarily disabling all but massrevert
@@ -804,7 +807,7 @@ if ($this->IsAdmin($this->GetUser()))
 		else
 		{
 			// no records matching the search string: print error message
-			echo '<p><em class="error">'.sprintf(ADMINPAGES_ERROR_NO_MATCHES, $q).'</em></p>';
+			echo '<p><em class="error">'.sprintf(ADMINPAGES_ERROR_NO_MATCHES, $search_disp).'</em></p>';
 		}
 	}
 }
