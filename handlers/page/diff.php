@@ -65,7 +65,7 @@ if ($this->HasAccess('read'))
 	$pageB = (isset($_GET['b'])) ? $this->LoadPageById($_GET['b']) : '';	# #312
 	if ('' == $pageA || '' == $pageB)
 	{
-		echo '<div class="page">'."\n";
+		echo '<div id="content">'."\n";
 		echo '<em class="error">'.ERROR_BAD_PARAMETERS.'</em><br />';
 		echo '</div>'."\n";
 		return;
