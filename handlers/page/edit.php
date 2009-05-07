@@ -91,7 +91,7 @@ if (isset($_POST['submit']) && ($_POST['submit'] == 'Preview') && ($user = $this
 	$ondblclick = ' ondblclick=\'document.getElementById("reedit_id").click();\'';
 }
 ?>
-<div class="page"<?php echo $ondblclick;?>>
+<div id="content"<?php echo $ondblclick;?>>
 <?php
 if (!(preg_match(VALID_PAGENAME_PATTERN, $this->tag))) { //TODO use central regex library
 	echo '<em class="error">'.ERROR_INVALID_PAGENAME.'</em>';

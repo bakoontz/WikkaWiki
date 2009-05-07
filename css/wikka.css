@@ -26,13 +26,15 @@ body {
 	background-color: #F8F8F8;
 }
 
-.header {
+#page {}
+
+#header {
 	position: relative; /* needed for the correct positioning of system messages */
 	padding: 10px;
 	padding-top: 0px;
 }
 
-.page {
+#content {
 	color: #000;
 	font-size: 13px;
 	font-family: Verdana, Tahoma, Arial, Helvetica, sans-serif;
@@ -43,7 +45,7 @@ body {
 	height: 100%;
 }
 
-.footer {
+#footer {
 	clear: both;
 	background-color: #DDD;
 	padding: 5px 10px;
@@ -54,7 +56,9 @@ body {
 
 /* comments */
 
-.commentsheader {
+#comments {}
+
+#commentheader {
 	clear: both;
 	background-color: #DDD;
 	padding: 2px 10px;
@@ -62,6 +66,8 @@ body {
 	border-right: 1px solid #CCC;
 	border-top: 1px solid #CCC;
 }
+
+#commentlist {}
 
 .comment {
 	background-color: #EEE;
@@ -76,7 +82,7 @@ body {
 	color: #AAA;
 }
 
-.commentform {
+#commentform {
 	background-color: #EEE;
 	padding: 10px;
 	border-left: 1px solid #CCC;
@@ -113,17 +119,17 @@ a.ext:hover {
 
 /* link icons */
 
-.page a.ext {
+#content a.ext {
 	background: url('../images/icons/ext_simple.gif') left bottom no-repeat;
 	padding-left: .8em;
 }
 
-.page a.mailto {
+#content a.mailto {
 	background: url('../images/icons/mail.gif') left bottom no-repeat;
 	padding-left: .9em;
 }
 
-.page a.interwiki {
+#content a.interwiki {
 	background: url('../images/icons/ext.gif') left bottom no-repeat;
 	padding-left: 1em;
 }
@@ -132,7 +138,7 @@ a.user, a.user:hover {
 	background: url('../images/icons/user.gif') left bottom no-repeat;
 	padding-left: 1em;
 }
-.header a:hover {
+#header a:hover {
 	color: #933;
 	background: transparent;
 	border-bottom: 0px;
@@ -142,11 +148,11 @@ a#homepage_link {
 	color: #000;
 }
 
-.page a {
+#content a {
 	text-decoration: none;
 }
 
-.page a:hover {
+#content a:hover {
 	color: #933;
 	text-decoration: underline;
 }

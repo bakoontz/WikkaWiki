@@ -1,4 +1,4 @@
-<div class="page">
+<div id="content">
 <?php
 
 if (!defined('CANCEL_ACL_LABEL')) define('CANCEL_ACL_LABEL', 'Cancel');

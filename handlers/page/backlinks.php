@@ -32,7 +32,7 @@ define('MESSAGE_NO_BACKLINKS','There are no backlinks to this page.');
 define('MESSAGE_MISSING_PAGE','Sorry, page %s does not exist.');
 define('MESSAGE_PAGE_INACCESSIBLE',	'You are not allowed to read this page');
 
-echo '<div class="page">'."\n";
+echo '<div id="content">'."\n";
 
 // build backlinks list
 echo '<h3>'.sprintf(PAGE_TITLE,$this->tag).'</h3><br />'."\n";

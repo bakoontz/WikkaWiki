@@ -10,7 +10,7 @@ if (!defined('OLDEST_VERSION_EDITED_ON_BY'))  define('OLDEST_VERSION_EDITED_ON_B
 if (!defined('MOST_RECENT_EDIT'))  define('MOST_RECENT_EDIT', 'Last edited on %1$s by %2$s');
 if (!defined('UNREGISTERED_USER')) define('UNREGISTERED_USER', 'unregistered user');
 ?>
-<div class="page">
+<div id="content">
 <?php
 if ($this->HasAccess('read'))
 	{

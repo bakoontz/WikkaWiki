@@ -1,5 +1,5 @@
-<!--starting footer-->
-<div class="footer">
+<!-- BEGIN PAGE FOOTER -->
+<div id="footer">
 <?php
 	//page generation start
 	global $tstart;
@@ -48,6 +48,8 @@ Search: <input name="phrase" size="15" class="searchbox" />
 echo $this->FormClose();
 ?>
 </div>
+<!-- END PAGE FOOTER -->
+<!-- BEGIN SYSTEM INFO -->
 <div class="smallprint">
 <?php
 echo $this->Link('http://validator.w3.org/check/referer', '', 'Valid XHTML 1.0 Transitional');
@@ -57,7 +59,6 @@ echo $this->Link('http://jigsaw.w3.org/css-validator/check/referer', '', 'Valid 
 ?> ::
 Powered by <?php echo $this->Link('http://wikkawiki.org/', '', 'WikkaWiki ' . ($this->IsAdmin() ? $this->GetWakkaVersion() : "")); ?>
 </div>
-<!--closing footer-->
 <?php
 if ($this->GetConfigValue('sql_debugging'))
 {
@@ -69,5 +70,9 @@ if ($this->GetConfigValue('sql_debugging'))
 	echo '</div>'."\n";
 }
 echo '<!--'.sprintf(PAGE_GENERATION_TIME, $this->microTimeDiff($tstart)).'-->'."\n";
-echo "</body>\n</html>";
 ?>
+<!-- END SYSTEM INFO -->
+	</div>
+<!-- END PAGE WRAPPER -->
+</body>
+</html>

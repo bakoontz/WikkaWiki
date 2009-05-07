@@ -40,7 +40,7 @@ if (!defined('UNREGISTERED_USER')) define('UNREGISTERED_USER', 'unregistered use
 if (!defined('DIFF_SIMPLE_BUTTON')) define('DIFF_SIMPLE_BUTTON', 'Simple Diff');
 if (!defined('DIFF_FULL_BUTTON')) define('DIFF_FULL_BUTTON', 'Full Diff');
 
-echo '<div class="page">'."\n"; //TODO: move to templating class //TODO move _after_ redirect
+echo '<div id="content">'."\n"; //TODO: move to templating class //TODO move _after_ redirect
 
 $output = '';
 $info = '';

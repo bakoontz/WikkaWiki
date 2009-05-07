@@ -68,7 +68,7 @@ $note = sprintf(CLONED_FROM, $from);
 $editoption = '';
 $box = PLEASE_FILL_VALID_TARGET;
 
-echo '<div class="page">'."\n";
+echo '<div id="content">'."\n";
 
 // print header
 #echo $this->Format(CLONE_HEADER);

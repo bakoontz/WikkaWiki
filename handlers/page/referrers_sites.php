@@ -19,7 +19,7 @@
  * @todo		move <div> to template
  */
 
-echo '<div class="page">'."\n"; //TODO: move to templating class
+echo '<div id="content">'."\n"; //TODO: move to templating class
 
 $global = '';
 $IsAdmin = $this->IsAdmin();

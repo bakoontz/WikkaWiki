@@ -44,7 +44,7 @@ else
 	$referrers = $this->LoadReferrers($this->GetPageTag());
 }
 
-echo '<div class="page">'."\n"; //TODO: move to templating class
+echo '<div id="content">'."\n"; //TODO: move to templating class
 
 echo '<strong>'.$title.'</strong><br />'."\n";
 echo '<em class="error">Note to spammers: This page is not indexed by search engines, so don\'t waste your time.</em><br /><br />'."\n";

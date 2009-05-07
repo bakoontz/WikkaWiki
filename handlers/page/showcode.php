@@ -26,7 +26,7 @@ if (!defined('RAW_LINK_DESC')) define('RAW_LINK_DESC', 'show source only');
 if (!defined('ERROR_NOT_EXISTING_PAGE')) define('ERROR_NOT_EXISTING_PAGE', 'Sorry, this page doesn\'t exist.');
 if (!defined('ERROR_NO_READ_ACCESS')) define('ERROR_NO_READ_ACCESS', 'Sorry, you aren\'t allowed to read this page.');
 
-echo '<div class="page">'."\n";
+echo '<div id="content">'."\n";
 
 //check if page exists
 if ($this->ExistsPage($this->tag))

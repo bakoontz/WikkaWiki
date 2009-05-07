@@ -36,6 +36,6 @@ if (($this->HasAccess('comment') || $this->IsAdmin()) && $this->existsPage($this
 }
 else
 {
-	echo '<div class="page"><em class="error">'.ERROR_NO_COMMENT_WRITE_ACCESS.'</em></div>'."\n";
+	echo '<div id="content"><em class="error">'.ERROR_NO_COMMENT_WRITE_ACCESS.'</em></div>'."\n";
 }
 ?>

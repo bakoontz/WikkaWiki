@@ -1,4 +1,4 @@
-<div class="page">
+<div id="content">
 <?php
 
 /**

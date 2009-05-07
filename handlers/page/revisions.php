@@ -9,7 +9,7 @@ if (!defined('UNREGISTERED_USER')) define('UNREGISTERED_USER', 'unregistered use
 if (!defined('REVISIONS_NO_REVISIONS_YET')) define('REVISIONS_NO_REVISIONS_YET', 'There are no revisions for this page yet');
 
 ?>
-<div class="page">
+<div id="content">
 <?php
 if ($this->HasAccess("read"))
 {
