@@ -84,7 +84,7 @@ else
 					<?php echo $this->FormOpen('edit') ?>
 					<input type="hidden" name="previous" value="<?php echo $latest['id'] ?>" />
 					<input type="hidden" name="body" value="<?php echo $this->htmlspecialchars_ent($this->page['body']) ?>" />
-					<input type="submit" value="<?php echo SHOW_RE_EDIT_BUTTON ?>" />
+					<input type="submit" name="submit" value="<?php echo SHOW_RE_EDIT_BUTTON ?>" />
 					<?php echo $this->FormClose(); ?>
 <?php
 				}
