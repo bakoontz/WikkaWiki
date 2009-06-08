@@ -572,8 +572,8 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 		{
 			return (++$trigger_center % 2 ? "<div class=\"center\">\n" : "\n</div>\n");
 		}
-		// urls
-		elseif (preg_match("/^([a-z]+:\/\/\S+?)([^[:alnum:]^\/])?$/", $thing, $matches))
+		// urls (see RFC 1738 <http://www.ietf.org/rfc/rfc1738.txt>)
+		elseif (preg_match("/^([a-z]+:\/\/[[:alnum:]\/?;:@&=\.]+[[:alnum:]\/])(.*)$/", $thing, $matches))
 		{
 			$url = $matches[1];
 			/* Inline images are disabled for security reason, use {{image action}} #142
