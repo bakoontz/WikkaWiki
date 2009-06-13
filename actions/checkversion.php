@@ -28,7 +28,7 @@ if($this->IsAdmin() && TRUE == $this->config['enable_version_check'])
 	define('CHECKVERSION_HOST', 'wikkawiki.org');	
 	define('CHECKVERSION_RELEASE_FILE', '/downloads/latest_wikka_version.txt');	
 	define('CHECKVERSION_DOWNLOAD_URL', 'http://docs.wikkawiki.org/WhatsNew');	
-	define('CHECKVERSION_CONNECTION_TIMEOUT', 10);
+	define('CHECKVERSION_CONNECTION_TIMEOUT', 5);
 	$latest = '';
 	//color scheme array (ported from {{since}})
 	$c = array(
@@ -86,6 +86,18 @@ if($this->IsAdmin() && TRUE == $this->config['enable_version_check'])
 				{
 					echo '<span class="debug">[Cannot initiate socket connection]</span>'."\n";
 				}
+				else
+				{
+					// Display warning message
+					$s = "D";
+					echo '<div title="Cannot initiate network connection" style="text-align: center; float: left; width: 300px; border: 1px solid '.$c[$s][0].'; background-color: '.$c[$s][1].'; color: '.$c[$s][2].'; margin: 10px 0">'."\n";
+					echo '<div style="padding: 0 3px 0 3px; background-color: '.$c[$s][3].'; font-size: 85%; font-weight: bold">CHECKVERSION FAILED</div>'."\n";
+					echo '<div style="padding: 0 3px 2px 3px; font-size: 85%; line-height: 150%; border-top: 1px solid '.$c[$s][4].';">'."\n";
+					echo 'The network connection with the WikkaWiki server could not be established. To prevent delays in loading this page, please set enable_version_check to 0 in your wikka.config.php file.'."\n";
+					echo '</div>'."\n";
+					echo '</div>'."\n";
+					echo '<div class="clear"></div>'."\n";
+				}
 				return;
 			}
 			else
@@ -107,8 +119,8 @@ if($this->IsAdmin() && TRUE == $this->config['enable_version_check'])
 						break;
 
 						case "debug":
-						//display raw version number
-						echo '<span class="debug">['.$latest.']</span>'."\n";
+						//display raw version number and //checkversion_host ip
+						echo '<span class="debug">['.$latest.' from host '.$ip.']</span>'."\n";
 						break;
 						
 						default:						
