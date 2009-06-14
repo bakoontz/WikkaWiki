@@ -107,7 +107,7 @@ switch ($action)	# #312
 		fclose($fp);
 		exit();
 	case 'delete':
-		if ($this->IsAdmin() && FALSE===empty($file))
+		if ($this->IsAdmin() && FALSE===empty($file) && FILE_DELETED == $_SESSION['redirectmessage'])
 		{
 			$delete_success = @unlink($upload_path.DIRECTORY_SEPARATOR.$file); # #89, #312 
 			if (!$delete_success)

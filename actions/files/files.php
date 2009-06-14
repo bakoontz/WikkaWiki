@@ -220,7 +220,7 @@ if(FALSE===empty($action) && FALSE===empty($file) && TRUE===userCanUpload())
 // 1b. User has confirmed file deletion
 elseif(FALSE===empty($file_to_delete) && TRUE===userCanUpload())
 {
-	$this->Redirect($this->Href('files.xml',$this->tag,'action=delete&file='.rawurlencode($file_to_delete)));
+	$this->Redirect($this->Href('files.xml',$this->tag,'action=delete&file='.rawurlencode($file_to_delete)), FILE_DELETED);
 }
 
 // 2. print a simple download link for the specified file, if it exists

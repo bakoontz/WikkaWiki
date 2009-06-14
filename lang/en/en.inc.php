@@ -269,6 +269,7 @@ define('NO_ATTACHMENTS', 'This page contains no attachment.');
 define('FILES_DELETE_FILE', 'Delete this file?');
 define('FILES_DELETE_FILE_BUTTON', 'Delete File');
 define('FILES_CANCEL_BUTTON', 'Cancel');
+define('FILE_DELETED', 'File deleted');
 /**#@-*/
 
 /**#@+
