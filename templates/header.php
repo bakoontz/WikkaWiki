@@ -56,15 +56,6 @@ if (isset($message) && strlen($message)>0)
 <!-- BEGIN PAGE HEADER -->
 <div id="header">
 <h2><a id="homepage_link" href="<?php echo $this->href('', $this->config['root_page'], ''); ?>"><?php echo $this->config['wakka_name'];?></a> : <a href="<?php echo $this->href('backlinks', '', ''); ?>" title="Display a list of pages linking to <?php echo $this->tag ?>"><?php echo $this->GetPageTag(); ?></a></h2>
-<?php echo $this->Link($this->config["root_page"]); ?> ::
-<?php 
-	if ($this->GetUser())
-	{
-		echo $this->config["logged_in_navigation_links"] ? $this->Format($this->config["logged_in_navigation_links"])." :: " : ""; 
-		echo "You are ".$this->Format($this->GetUserName());
-	} else { 
-		echo $this->config["navigation_links"] ? $this->Format($this->config["navigation_links"]) : ""; 
-	}
-?>
+<?php echo $this->MakeMenu('main_menu'); ?>
 </div>
 <!-- END PAGE HEADER -->

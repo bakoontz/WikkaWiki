@@ -791,7 +791,41 @@ class Wakka
 		if ($title) return strip_tags($this->Format($title));				# fix for forced links in heading
 		else return $this->GetPageTag();
 	}
+	function MakeMenu($menu) {
+		switch(TRUE)
+		{
+			case $this->IsAdmin():
+			$menu_file = $menu.'.admin.inc';
+			break;
 
+			case $this->GetUser():
+			$menu_file = $menu.'.user.inc';
+			break;
+
+			default:
+			$menu_file = $menu.'.inc';
+			break;
+		}
+		if (file_exists('config/'.$menu_file))
+		{
+			$menu_src = $this->IncludeBuffered($menu_file, '', '', 'config/');
+			$menu_array = explode("\n", $menu_src);
+			$menu_output = '<ul id="'.$menu.'">'."\n";
+			foreach ($menu_array as $menu_item)
+			{
+				$menu_output .= '<li>'.$this->Format($menu_item).'</li>'."\n";
+			}
+			$menu_output .= '</ul>'."\n";
+		}
+		else
+		{
+			$menu_output = '<ul id="'.$menu.'">'."\n";
+			$menu_output .= '<li>no menu defined</li>'."\n";
+			$menu_output .= '</ul>'."\n";
+		}
+		return $menu_output;
+	}
+	
 	// WIKI PING  -- Coded by DreckFehler
 	function HTTPpost($host, $data, $contenttype="application/x-www-form-urlencoded", $maxAttempts = 5) {
 		$attempt =0; $status = 300; $result = "";

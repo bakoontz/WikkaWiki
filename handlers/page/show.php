@@ -208,9 +208,11 @@ Comments [<a href="<?php echo $this->Href('', '', 'show_comments=0') ?>">Hide co
 </div>
 <?php
 			}
+?>
+</div>
+<!-- END COMMENT BLOCK -->
+<?php
 		}
 	}
 }
 ?>
-</div>
-<!-- END COMMENT BLOCK -->
