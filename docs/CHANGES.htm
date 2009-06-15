@@ -2,7 +2,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
 <head>
-    <title>WikkaReleaseNotes1166</title>
+    <title>WikkaReleaseNotes1167</title>
     <meta http-equiv="Content-Type" content="text/html;
 charset=iso-8859-1" />
     <style type="text/css">
@@ -1152,66 +1152,31 @@ table.acls {
 <a class="" href="http://docs.wikkawiki.org/WikkaReleaseNotes">Wikka Changelog</a><br />
 <hr />
 
-<h2> <a class="" href="http://docs.wikkawiki.org/WhatsNew1166">Wikka 1.1.6.6</a> Release Notes </h2>
+<h2> <a class="" href="http://docs.wikkawiki.org/WhatsNew1166">Wikka 1.1.6.7</a> Release Notes </h2>
 
-<span class="notes">Released on XXX XX, XXXX</span><br />
+<span class="notes">Released on Jun 15, 2009</span><br />
 <br />
 <div class="floatr"><h5>See also:</h5>
 
-<ul><li><strong><a class="" href="http://docs.wikkawiki.org/WhatsNew1166">What's new in 1.1.6.6</a></strong>
-</li><li><a class="" href="http://docs.wikkawiki.org/Installing1166">Installation &amp; upgrade notes for 1.1.6.6</a></li></ul>
+<ul><li><strong><a class="missingpage" href="http://docs.wikkawiki.org/WhatsNew1167/edit" title="Create this page">What's new in 1.1.6.7</a></strong>
+</li><li><a class="missingpage" href="http://docs.wikkawiki.org/Installing1167/edit" title="Create this page">Installation &amp; upgrade notes for 1.1.6.7</a>
+</li><li> <a class="" href="http://docs.wikkawiki.org/InstallingPlugins">How to use the plugins folder</a></li></ul>
 </div><h5>Acknowledgments</h5>
 
-Thanks to doomedfox, Vincent Mayoux, martin_misuth, Krzysztof Trybowski, bikoz, toringe, Eclipse, apxrms.<br />
+Thanks to Ian Andolina, Sven Krewitt (Secunia).<br />
 <br />
 <h5>Security fixes</h5>
 
-<ul><li> Removed generic references to <tt>$_REQUEST</tt> global variable. Ticket: 312
-</li><li> Restricted size of note field in editor. Ticket: 826
-</li><li> New antispam measure: Random tokens added to submitted forms to discourage scripted comment/page spam attacks. Ticket: 154
-</li><li> Pages that are not accessible to the current user are now filtered from the backlinks handler. Ticket: 851 </li></ul>
-<br />
-<h5>Bug fixes</h5>
-
-<ul><li> Under some conditions, a user attempting to log out will discover he/she is not able to do so. Ticket: 800
-</li><li> Prevent filename inheritance across multiple code blocks in grabcode handler. Ticket: 783
-</li><li> <tt>meta_keyword</tt> and <tt>meta_description</tt> config entries now escaped to ensure XHTML validation. Ticket: 816
-</li><li> Fixed DB error generated during some page ACL operations. Ticket: 811
-</li><li> Floats properly cleared when closing main <tt>&lt;div&gt;</tt>. Ticket: 683
-</li><li> Comment search filters now work correctly for registered users. Ticket: 810
-</li><li> Fixed bug that prevented file downloads in IE. Ticket: 848</li></ul>
-<br />
-<h5>New features</h5>
-
-<ul><li> <a class="ext" href="http://www.universaleditbutton.org">Universal Edit Button</a> support. Ticket: 779
-</li><li> Redirection on login. Users attempting to write-access a wiki page are now redirected to the page after logging in. Ticket: 245
-</li><li> Full text search now has option to perform case-sensitive searches (non-case-sensitive searches are performed by default). Ticket: 821
-</li><li> <a class="" href="http://docs.wikkawiki.org/RevActionInfo">{{rev}}</a> action: a simple action to display the current revision number of a page. Ticket: 813
-</li><li> Fast switch between source view and rendered view for old page revisions. Ticket: 844 <span class="notes">(not included in RC1)</span>
-</li><li> Fast switch between <em>full diff</em> and <em>simple diff</em> mode. Ticket: 844 <span class="notes">(not included in RC1)</span>
-</li><li> Support for multiple paths in config file to permit <a class="" href="http://docs.wikkawiki.org/InstallingPlugins">directory overrides for plugins</a> (actions, handlers, templates, formatters, and CSS files). Ticket: 805</li></ul>
+<ul><li> Added random tokens (form IDs) to form submissions to mitigate CSRF attacks. Ticket: 154
+</li><li> Added validation checks for GET params on admin pages to mitigate XSS attacks. Ticket: 879</li></ul>
 <br />
 <h5>Misc</h5>
 
-<ul><li> Added support for <tt>width</tt> and <tt>height</tt> parameters in <a class="" href="http://docs.wikkawiki.org/AddingImages">image</a> action. Ticket: 853
-</li><li> CSS-driven link tails (replace the hardcoded <tt>external_link_tail</tt>). Ticket: 35 <span class="notes">(not included in RC1)</span>
-</li><li> Added new library function, <tt>AddCustomHeaders()</tt>, to facilitate customization of output based upon runtime config options. Ticket: 804
-</li><li> Minor code cleanup. Ticket: 828
-</li><li> Added a courtesy link pointing to new page created by clone handler. Ticket: 832
-</li><li> Normalized separators used in config file. Ticket: 842
-</li><li> Removed unnecessary JS dependencies in core actions, handlers and installer. Ticket: 353
-</li><li> Diff to output differences in raw wiki markup. Ticket: 770 <span class="notes">(not included in RC1)</span>
-</li><li> Semantically correct use of <tt>&lt;ins&gt;</tt> and <tt>&lt;del&gt;</tt> in the formatter and diff handler. Ticket: 274 <span class="notes">(not included in RC1)</span>
-</li><li> Added meta generator tag. Ticket: 839
-</li><li> Added link to the configuration settings documentation page from <tt>wikka.config.php</tt>. Ticket: 841
-</li><li> New logo. Ticket: 784 <span class="notes">(not included in RC1)</span>
-</li><li> New feed icon. Ticket: 150 <span class="notes">(not included in RC1)</span>
-</li><li> Improved XHTML source layout for readability. Ticket: 784 <span class="notes">(not included in RC1)</span>
-</li><li> Fixed issue that may result in incorrect display of page generation time. Ticket: 850.</li></ul>
+<ul><li> Shortened default timeout when Wikka server not reachable for version checks; produce a more meaningful error message. Ticket: 884</li></ul>
 <br />
 <hr />
 
 CategoryEN
-<div class="smallprint">Page was generated in 0.1302 seconds</div>
+<div class="smallprint">Page was generated in 0.0303 seconds</div>
 </body>
 </html>

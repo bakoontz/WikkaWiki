@@ -1,79 +1,43 @@
-_W_i_k_k_a_ _C_h_a_n_g_e_l_o_g
-===============================================================================
-********** _WW_ii_kk_kk_aa_ _11_.._11_.._66_.._66 RReelleeaassee NNootteess **********
-Released on XXX XX, XXXX
 
-**** SSeeee aallssoo:: ****
-    * _WW_hh_aa_tt_''_ss_ _nn_ee_ww_ _ii_nn_ _11_.._11_.._66_.._66
-    * _I_n_s_t_a_l_l_a_t_i_o_n_ _&_ _u_p_g_r_a_d_e_ _n_o_t_e_s_ _f_o_r_ _1_._1_._6_._6
-**** AAcckknnoowwlleeddggmmeennttss ****
-Thanks to doomedfox, Vincent Mayoux, martin_misuth, Krzysztof Trybowski, bikoz,
-toringe, Eclipse, apxrms.
+   [1]Wikka Changelog
+     _________________________________________________________________
 
-**** SSeeccuurriittyy ffiixxeess ****
-    * Removed generic references to $_REQUEST global variable. Ticket: 312
-    * Restricted size of note field in editor. Ticket: 826
-    * New antispam measure: Random tokens added to submitted forms to
-      discourage scripted comment/page spam attacks. Ticket: 154
-    * Pages that are not accessible to the current user are now filtered from
-      the backlinks handler. Ticket: 851
+[2]Wikka 1.1.6.7 Release Notes
 
-**** BBuugg ffiixxeess ****
-    * Under some conditions, a user attempting to log out will discover he/she
-      is not able to do so. Ticket: 800
-    * Prevent filename inheritance across multiple code blocks in grabcode
-      handler. Ticket: 783
-    * meta_keyword and meta_description config entries now escaped to ensure
-      XHTML validation. Ticket: 816
-    * Fixed DB error generated during some page ACL operations. Ticket: 811
-    * Floats properly cleared when closing main <div>. Ticket: 683
-    * Comment search filters now work correctly for registered users. Ticket:
-      810
-    * Fixed bug that prevented file downloads in IE. Ticket: 848
+   Released on Jun 15, 2009
 
-**** NNeeww ffeeaattuurreess ****
-    * _U_n_i_v_e_r_s_a_l_ _E_d_i_t_ _B_u_t_t_o_n support. Ticket: 779
-    * Redirection on login. Users attempting to write-access a wiki page are
-      now redirected to the page after logging in. Ticket: 245
-    * Full text search now has option to perform case-sensitive searches (non-
-      case-sensitive searches are performed by default). Ticket: 821
-    * _{_{_r_e_v_}_} action: a simple action to display the current revision number of
-      a page. Ticket: 813
-    * Fast switch between source view and rendered view for old page revisions.
-      Ticket: 844 (not included in RC1)
-    * Fast switch between ffuullll ddiiffff and ssiimmppllee ddiiffff mode. Ticket: 844 (not
-      included in RC1)
-    * Support for multiple paths in config file to permit _d_i_r_e_c_t_o_r_y_ _o_v_e_r_r_i_d_e_s
-      _f_o_r_ _p_l_u_g_i_n_s (actions, handlers, templates, formatters, and CSS files).
-      Ticket: 805
+See also:
 
-**** MMiisscc ****
-    * Added support for width and height parameters in _i_m_a_g_e action. Ticket:
-      853
-    * CSS-driven link tails (replace the hardcoded external_link_tail). Ticket:
-      35 (not included in RC1)
-    * Added new library function, AddCustomHeaders(), to facilitate
-      customization of output based upon runtime config options. Ticket: 804
-    * Minor code cleanup. Ticket: 828
-    * Added a courtesy link pointing to new page created by clone handler.
-      Ticket: 832
-    * Normalized separators used in config file. Ticket: 842
-    * Removed unnecessary JS dependencies in core actions, handlers and
-      installer. Ticket: 353
-    * Diff to output differences in raw wiki markup. Ticket: 770 (not included
-      in RC1)
-    * Semantically correct use of <ins> and <del> in the formatter and diff
-      handler. Ticket: 274 (not included in RC1)
-    * Added meta generator tag. Ticket: 839
-    * Added link to the configuration settings documentation page from
-      wikka.config.php. Ticket: 841
-    * New logo. Ticket: 784 (not included in RC1)
-    * New feed icon. Ticket: 150 (not included in RC1)
-    * Improved XHTML source layout for readability. Ticket: 784 (not included
-      in RC1)
-    * Fixed issue that may result in incorrect display of page generation time.
-      Ticket: 850.
+     * [3]What's new in 1.1.6.7
+     * [4]Installation & upgrade notes for 1.1.6.7
+     * [5]How to use the plugins folder
 
-===============================================================================
-CategoryEN
-Page was generated in 0.1302 seconds
+      Acknowledgments
+
+   Thanks to Ian Andolina, Sven Krewitt (Secunia).
+
+      Security fixes
+
+     * Added random tokens (form IDs) to form submissions to mitigate
+       CSRF attacks. Ticket: 154
+     * Added validation checks for GET params on admin pages to mitigate
+       XSS attacks. Ticket: 879
+
+      Misc
+
+     * Shortened default timeout when Wikka server not reachable for
+       version checks; produce a more meaningful error message. Ticket:
+       884
+     _________________________________________________________________
+
+   CategoryEN
+
+   Page was generated in 0.0296 seconds
+
+References
+
+   1. http://docs.wikkawiki.org/WikkaReleaseNotes
+   2. http://docs.wikkawiki.org/WhatsNew1166
+   3. http://docs.wikkawiki.org/WhatsNew1167
+   4. http://docs.wikkawiki.org/Installing1167/edit
+   5. http://docs.wikkawiki.org/InstallingPlugins
