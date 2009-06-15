@@ -26,15 +26,20 @@ body {
 	background-color: #F8F8F8;
 }
 
-#page {}
+#page {
+	width: 100%;
+	float: left;
+
+}
 
 #header {
 	position: relative; /* needed for the correct positioning of system messages */
-	padding: 10px;
-	padding-top: 0px;
+	padding: 10px 10px 0 10px;
+	float: left;
 }
 
 #content {
+	clear: both;
 	color: #000;
 	font-size: 13px;
 	font-family: Verdana, Tahoma, Arial, Helvetica, sans-serif;
@@ -46,17 +51,26 @@ body {
 }
 
 #footer {
+	margin: 0;
 	clear: both;
-	background-color: #DDD;
-	padding: 5px 10px;
-	border: 1px solid #CCC;
-	border-top: none;
-	border-top: 1px solid #CCC;
+	float: left;
+	padding: 2px;
+}
+
+#smallprint {
+	clear: both;
+	float: right;
+	font-size: 0.8em;
+	color: #777;
+	padding-right: 0.5%;
+	text-align: right;
 }
 
 /* comments */
 
-#comments {}
+#comments {
+	border-bottom: 1px solid #CCC;
+}
 
 #commentheader {
 	clear: both;
@@ -588,8 +602,6 @@ del {
 
 .smaller {font-size: smaller;}
 
-#smallprint {font-size: 0.8em; color: #777; padding-right: 0.5%; text-align: right;}
-
 #smallprint a {
 	color: #987;
 }
@@ -974,10 +986,10 @@ table.acls {
 
 
 ul#main_menu {
+	margin-top: 10px;
 	text-align: left;
 	list-style-type: none;
 	padding: 0px;
-	float: left;
 }
 
 ul#main_menu li {
@@ -989,7 +1001,7 @@ ul#main_menu li {
 }
 
 ul#main_menu li+li:before {
-	content: " :: ";
+	content: " ";
 }
 
 ul#options_menu {
