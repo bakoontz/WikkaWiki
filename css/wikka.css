@@ -3,12 +3,16 @@
 Wikka Default Stylesheet (screen)
 ----------------------------------------------- */
 
-/* global styling */
+/* page layout */
 
-p, td, li, input, select, textarea {
-	font-family: Verdana, Tahoma, Arial, Helvetica, sans-serif;
-	line-height: 20px;
+body {
+	font-family: "Lucida Grande", "Lucida Sans Unicode", "DejaVu Sans", Verdana, sans-serif;
 	font-size: 13px;
+/*	text-align: justify; */			/* comment out this line if you really need justified text */
+	line-height: 20px;
+	color: #000000;
+	background-color: #F8F8F8;
+	margin: 0;
 }
 
 form, h1, h2, h3, h4, h5 {
@@ -18,24 +22,13 @@ form, h1, h2, h3, h4, h5 {
 
 /* page layout */
 
-body {
-	font-family: Verdana, Tahoma, Arial, Helvetica, sans-serif;	font-size: 13px;
-/*	text-align: justify; */			/* comment out this line if you really need justified text */
-	line-height: 20px;
-	color: #000000;
-	background-color: #F8F8F8;
-}
 
 #page {
-	width: 100%;
-	float: left;
-
 }
 
 #header {
 	position: relative; /* needed for the correct positioning of system messages */
 	padding: 10px 10px 0 10px;
-	float: left;
 }
 
 #content {
@@ -47,14 +40,13 @@ body {
 	padding: 15px;
 	border: 1px solid #CCC;
 	border-bottom: none;
-	height: 100%;
 }
 
 #footer {
-	margin: 0;
-	clear: both;
+	width: 100%;
 	float: left;
-	padding: 2px;
+	background-color: #E3E3E3;
+	padding: 0 10px;
 }
 
 #smallprint {
@@ -266,24 +258,29 @@ img.icon {
 
 /* text formatting */
 
-h5 {
-	font-size: 10pt;
+h1, h2, h3, h4, h5 {
+	font-family: Georgia, "DejaVu Serif", Times, serif;
+	font-weight: normal;
 }
 
-h4 {
+h5 {
 	font-size: 12pt;
 }
 
-h3 {
+h4 {
 	font-size: 14pt;
 }
 
-h2 {
+h3 {
 	font-size: 16pt;
 }
 
-h1 {
+h2 {
 	font-size: 18pt;
+}
+
+h1 {
+	font-size: 20pt;
 }
 
 tt {
@@ -997,14 +994,15 @@ ul#main_menu li {
 	width: auto;
 	text-align: left; 
 	padding: 2pt;
-	margin-right: 10px;
 }
 
 ul#main_menu li+li:before {
-	content: " ";
+	content: " :: ";
 }
 
 ul#options_menu {
+	padding: 5px 10px;
+	border-bottom: 1px solid #CCCCCC;
 	text-align: left;
 	list-style-type: none;
 	padding: 0px;
@@ -1016,7 +1014,7 @@ ul#options_menu li {
     width: auto;
     text-align: left; 
     padding: 2pt;
-    margin-left: 10px;
+    margin-right: 15px;
 }
 
 ul#options_menu li input {
