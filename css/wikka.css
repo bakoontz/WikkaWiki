@@ -15,13 +15,7 @@ body {
 /*	text-align: justify; */			/* comment out this line if you really need justified text */
 }
 
-form, h1, h2, h3, h4, h5 {
-	margin: 0px;
-	padding: 0px;
-}
-
 /* page layout */
-
 
 #page {
 }
@@ -258,6 +252,8 @@ img.icon {
 h1, h2, h3, h4, h5 {
 	font-family: Georgia, "DejaVu Serif", Times, serif;
 	font-weight: normal;
+	margin: 0px;
+	padding: 0px;
 }
 
 h5 {
@@ -402,6 +398,11 @@ hr {
 }
 
 /* form elements */
+
+form {
+	margin: 0px;
+	padding: 0px;
+}
 
 fieldset {
 	margin-top: 10px;

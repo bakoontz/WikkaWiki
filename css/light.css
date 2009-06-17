@@ -52,14 +52,14 @@ body{
 	border: 1px solid #DDD;
 	text-align: justify;
 	background-color: #FFF; 
-	padding: 30px;
+	padding: 40px 30px 30px 30px;
 }
 
 #footer {
 	float:left;	
 /*	background-color: #DDD; */
 	width: auto;
-	padding: 0;
+	padding: 0 10px;
 }
 
 #smallprint {
@@ -1050,15 +1050,14 @@ ul#main_menu li {
     width: auto;
     text-align: left;
     font-size: 70%; 
+    margin-right: 5px;
 }
 
 ul#main_menu li a {
-/*	  border-top: 2px solid #935; */
 	color: #935;
 }
 
 ul#main_menu li > a:hover {
-/*	  border-top: 2px solid #999; */
 	  background-color: transparent;
 	  color: #333;
 }
@@ -1068,13 +1067,9 @@ ul#main_menu li form {
 }
 
 ul#main_menu li form input {
-    border: none;
-    border-bottom: 1px solid #CCC;
-}
-
-ul#main_menu li form input {
     font-size: 1.1em;
-    vertical-align: bottom;
+    line-height: 1.1em;
+    font-weight: bold;
     color: #333;
     border: none;
     border-bottom: 1px solid #CCC;
