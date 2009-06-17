@@ -1,6 +1,7 @@
 {{editlink}}
-{{clonelink}}
 {{revertlink}}
+{{deletelink}}
+{{clonelink}}
 {{historylink}}
 {{revisionlink}}
 {{ownerlink}}
