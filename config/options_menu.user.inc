@@ -2,4 +2,3 @@
 {{historylink}}
 {{revisionlink}}
 {{ownerlink}}
-{{searchform}}

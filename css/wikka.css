@@ -1017,7 +1017,11 @@ ul#options_menu li {
     margin-right: 15px;
 }
 
-ul#options_menu li input {
+ul#main_menu li form {
+    display: inline;
+}
+
+ul#main_menu li input {
 	font-weight: bold;
 	border: none;
 	border-bottom: 2px solid #CCC;
