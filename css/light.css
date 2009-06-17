@@ -734,6 +734,9 @@ table.data td.number {
 }
 
 table.data td.datetime {
+	color: #666;
+	font-size: 80%;
+	font-family: "Lucida Console", Monaco, monospace;
 	text-align: right;
 	white-space: nowrap;
 }
@@ -840,6 +843,12 @@ form#form_page_admin_panel fieldset {
 table#adminusers {
 	border: 1px solid #CCC;
 	width: 100%;
+}
+
+table#adminusers td.actions {
+	text-align: center;
+	font-size: 70%;
+	font-family: Verdana, Arial, Helvetica, sans-serif; 	
 }
 
 form#form_user_admin_panel fieldset {

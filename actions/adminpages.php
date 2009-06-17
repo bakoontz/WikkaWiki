@@ -767,7 +767,7 @@ if ($this->IsAdmin($this->GetUser()))
 				'		<td class="number'.(($c_color == 1)? ' c3' : '').'">'.$commentspage.'</td>'."\n".
 				'		<td class="number'.(($c_color == 1)? ' c4' : '').'">'.$backlinkpage.'</td>'."\n".
 				'		<td class="number'.(($c_color == 1)? ' c5' : '').'">'.$refpage.'</td>'."\n".
-				'		<td class="center">'.$revertpage.' :: '.$editpage.' :: '.$deletepage.' :: '.$clonepage.' :: '.$aclpage.'</td>'."\n".
+				'		<td class="actions">'.$revertpage.' :: '.$editpage.' :: '.$deletepage.' :: '.$clonepage.' :: '.$aclpage.'</td>'."\n".
 				'	</tr>'."\n".
 				'</tbody>'."\n";
 

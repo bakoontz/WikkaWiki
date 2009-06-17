@@ -773,6 +773,12 @@ table#adminpages {
 	width: 100%;
 }
 
+table#adminpages td.actions {
+	text-align: center;
+	font-size: 70%;
+	font-family: Verdana, Arial, Helvetica, sans-serif; 	
+}
+
 form#form_page_admin_panel fieldset {
 	line-height: 2em;	
 }
@@ -782,6 +788,12 @@ form#form_page_admin_panel fieldset {
 table#adminusers {
 	border: 1px solid #CCC;
 	width: 100%;
+}
+
+table#adminusers td.actions {
+	text-align: center;
+	font-size: 70%;
+	font-family: Verdana, Arial, Helvetica, sans-serif; 	
 }
 
 form#form_user_admin_panel fieldset {

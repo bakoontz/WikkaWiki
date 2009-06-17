@@ -506,7 +506,7 @@ if ($this->IsAdmin($this->GetUser()))
 					'		<td class="number'.(($c_color == 1)? ' c1' : '').'">'.$ownedlink.'</td>'."\n".  #set column color
 					'		<td class="number'.(($c_color == 1)? ' c2' : '').'">'.$changeslink.'</td>'."\n". #set column color
 					'		<td class="number'.(($c_color == 1)? ' c3' : '').'">'.$commentslink.'</td>'."\n".   #set column color
-					'		<td class="center">'.$deleteuser.'</td>'."\n". 
+					'		<td class="actions">'.$deleteuser.'</td>'."\n". 
 	 				'	</tr>'."\n".
 	 				'</tbody>'."\n";
 	
