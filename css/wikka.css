@@ -37,7 +37,6 @@ form, h1, h2, h3, h4, h5 {
 	background-color: white;
 	padding: 15px;
 	border: 1px solid #CCC;
-	border-bottom: none;
 }
 
 #footer {
@@ -68,7 +67,7 @@ form, h1, h2, h3, h4, h5 {
 	padding: 2px 10px;
 	border-left: 1px solid #CCC;
 	border-right: 1px solid #CCC;
-	border-top: 1px solid #CCC;
+	border-top: none;
 }
 
 #commentlist {}
