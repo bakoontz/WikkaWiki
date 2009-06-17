@@ -158,6 +158,17 @@ if (isset($_POST['logout']) && $_POST['logout'] == LOGOUT_BUTTON_LABEL)		// repl
 // user is still logged in
 else if ($user = $this->GetUser())
 {
+	// validate data source
+	$keep_post_data = FALSE;
+	if (isset($_POST['form_id']) && FALSE != ($aKey = $this->getSessionKey($_POST['form_id'])))	# check if page key was stored in session
+	{
+		if (TRUE == ($rc = $this->hasValidSessionKey($aKey)))	# check if correct name,key pair was passed
+		{
+			$keep_post_data  = TRUE;
+		}
+	}
+	if(!$keep_post_data) unset($_POST);
+	
 	// is user trying to update user settings?
 	if (isset($_POST['action']) && ($_POST['action'] == 'update'))
 	{
