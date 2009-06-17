@@ -122,13 +122,13 @@ a.ext:hover {
 	color: #933;
 }
 
-#content a.keys:hover {
+a.keys, a.keys:hover {
 	text-decoration: none;
 	color: #333;	
 }
 
-#header a {
-	color: #339;
+#header a, #footer a {
+	color: #369;
 	font-family: Verdana, Arial, Helvetica, sans-serif; 	
 }
 
@@ -374,21 +374,25 @@ tt {
 
 .center, .center p {text-align: center;}
 
-.keys {	
-	color: #333;
-	background-color: #EFEFEF;
-	font: normal 80% "Verdana", sans-serif;
+.keys {
+	color: #666;
+	background-color: #DDD;
+	font: normal 95% Verdana, sans-serif;
 	text-align: center;
-	border-top: 2px double #CFCFCF;
-	border-left: 3px solid #BABABA;
-	border-right: 4px solid #AAA;
-	border-bottom: 6px solid #909090;
-	padding-left: 0.2em;
-	padding-top: 0em;
-	padding-right: 0.2em;
-	padding-bottom: 0em;
-	line-height: 1.6em;
-	vertical-align: top;
+	border-top: 1px solid #FFF;
+	border-left: 1px solid #FFF;
+	border-right: 1px solid #AAA;
+	border-bottom: 1px solid #AAA;
+	padding: .1em .2em;
+}
+
+.keys:hover {
+	color: #555;
+	background-color: #CCC;
+	border-top: 1px solid #FFF;
+	border-left: 1px solid #FFF;
+	border-right: 1px solid #999;
+	border-bottom: 1px solid #999;
 }
 
 acronym {
@@ -1036,7 +1040,7 @@ ul#main_menu {
 	float: right;
 	list-style-type: none;
 	padding: 0px;
-	margin-top: 10px;
+	margin-top: 15px;
 }
 
 ul#main_menu li {
@@ -1059,11 +1063,35 @@ ul#main_menu li > a:hover {
 	  color: #333;
 }
 
+ul#main_menu li form {
+    display: inline;
+}
 
-ul#main_menu li+li:before {
-	content: " :: "; 
+ul#main_menu li form input {
+    border: none;
+    border-bottom: 1px solid #CCC;
+}
+
+ul#main_menu li form input {
+    font-size: 1.1em;
+    vertical-align: bottom;
+    color: #333;
+    border: none;
+    border-bottom: 1px solid #CCC;
 }
 
 ul#options_menu {
-	display: none;	
+	float: left;
+	list-style-type: none;
+	padding: 0px;
+	margin-top: 0px;
+}
+
+ul#options_menu li {
+    margin-top: 0;
+    padding: 0;
+    float: left;
+    width: auto;
+    text-align: left;
+    font-size: 70%; 
 }
