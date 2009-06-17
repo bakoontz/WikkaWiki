@@ -140,3 +140,4 @@ if($this->IsAdmin() && TRUE == $this->config['enable_version_check'])
 		}
 	}
 }			
+?>

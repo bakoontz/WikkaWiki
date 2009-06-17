@@ -89,7 +89,7 @@ body{
 }
 
 .comment {
-	border: 1px solid #FFF;
+	border-bottom: 2px solid #FFF;
 	margin: 10px 5px;
 	padding: 5px;
 }
@@ -823,6 +823,12 @@ table.data tr.alt td.c6 {
 table#adminpages {
 	border: 1px solid #CCC;
 	width: 100%;
+}
+
+table#adminpages td.actions {
+	text-align: center;
+	font-size: 70%;
+	font-family: Verdana, Arial, Helvetica, sans-serif; 	
 }
 
 form#form_page_admin_panel fieldset {
