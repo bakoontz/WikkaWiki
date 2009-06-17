@@ -15,8 +15,6 @@ body {
 /*	text-align: justify; */			/* comment out this line if you really need justified text */
 }
 
-/* page layout */
-
 #page {
 }
 
@@ -256,24 +254,33 @@ h1, h2, h3, h4, h5 {
 	padding: 0px;
 }
 
-h5 {
+#content h5 {
+	margin-bottom: 4pt;
 	font-size: 12pt;
 }
 
-h4 {
+#content h4 {
+	margin-bottom: 5pt;
 	font-size: 14pt;
 }
 
-h3 {
+#content h3 {
 	font-size: 16pt;
+	margin-bottom: 6pt;
 }
 
-h2 {
+#content h2 {
 	font-size: 18pt;
+	margin-bottom: 8pt;
 }
 
-h1 {
+#content h1 {
 	font-size: 20pt;
+	margin-bottom: 10pt;
+}
+
+#header h2 {
+	font-size: 18pt;
 }
 
 tt {
