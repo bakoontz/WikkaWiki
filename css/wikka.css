@@ -163,7 +163,7 @@ a#homepage_link {
 	text-decoration: underline;
 }
 
-a.keys:hover {
+#content a.keys:hover {
 	text-decoration: none;
 	color: #333;	
 }
