@@ -24,6 +24,8 @@
  * @copyright	Copyright 2006-2009, {@link http://wikkawiki.org/CreditsPage Wikka Development Team}
  */
 
+require_once('action.class.php');
+
 /**#@+
  * Numeric constant used as default. May be made a configurable value.
  */
@@ -588,6 +590,12 @@ class Wakka
 			}
 			ob_start();
 			include $fullfilepath;			// this is where it all happens!
+			if(TRUE === class_exists("WikkaAction_".basename($filename, '.php')))
+			{
+				$action_class = "WikkaAction_".basename($filename, '.php');
+				$action = new $action_class ($this);
+				$action->process($vars);
+			}
 			$output = ob_get_contents();
 			ob_end_clean();
 		}
