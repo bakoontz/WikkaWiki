@@ -225,7 +225,8 @@ $wakkaDefaultConfig = array(
 	'default_read_acl'			=> '*',
 	'default_comment_acl'		=> '*',
 	'allow_user_registration'	=> '1',
-	'enable_version_check'      => '1'
+	'enable_version_check'      => '1',
+	'version_check_interval'	=> '1h'
 	);
 
 // load config
