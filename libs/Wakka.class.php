@@ -331,7 +331,9 @@ class Wakka
 	 */
 	function ReturnSafeHTML($html)
 	{
-		require_once('3rdparty/core/safehtml/classes/safehtml.php');
+        $safehtml_classpath =
+		$this->GetConfigValue('safehtml_path').DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'safehtml.php';
+        require_once $safehtml_classpath;
 
 		// Instantiate the handler
 		$safehtml =& new safehtml();
