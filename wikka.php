@@ -255,6 +255,16 @@ if (isset($wakkaConfig['footer_action'])) //since 1.1.6.4
 	unset($wakkaConfig['footer_action']);
 }
 
+// Add plugin paths if they do not already exist
+if(isset($wakkaConfig['action_path'] && preg_match('/plugins\/actions/', $wakkaConfig['action_path']) <= 0)
+	$wakkaConfig['action_path'] = "plugins/actions," .  $wakkaConfig['action_path'];	
+if(isset($wakkaConfig['handler_path'] && preg_match('/plugins\/handlers/', $wakkaConfig['handler_path']) <= 0)
+	$wakkaConfig['handler_path'] = "plugins/handlers," .  $wakkaConfig['handler_path'];	
+if(isset($wakkaConfig['wikka_template_path'] && preg_match('/plugins\/templates/', $wakkaConfig['wikka_template_path']) <= 0)
+	$wakkaConfig['wikka_template_path'] = "plugins/templates," .  $wakkaConfig['wikka_template_path'];	
+if(isset($wakkaConfig['wikka_formatter_path'] && preg_match('/plugins\/formatters/', $wakkaConfig['wikka_formatter_path']) <= 0)
+	$wakkaConfig['wikka_formatter_path'] = "plugins/formatters," .  $wakkaConfig['wikka_formatter_path'];	
+
 $wakkaConfig = array_merge($wakkaDefaultConfig, $wakkaConfig);	// merge defaults with config from file
 
 /**
