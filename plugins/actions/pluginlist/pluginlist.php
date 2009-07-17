@@ -34,6 +34,7 @@
 					{
 						$path = trim($path);
 						$actions = glob($path.DIRECTORY_SEPARATOR."*");
+						$action_info_array = array();
 						foreach($actions as $action)
 						{
 							$action_class = "WikkaAction_".basename($action);
@@ -54,43 +55,13 @@
 							eval("\$action_info = $action_class::getInfo();");
 							if(is_array($action_info))
 							{
-								if(FALSE===$header_output)
-								{
-									$this->print_header();
-									$header_output = TRUE;
-								}
-								echo "<tr>\n";
-								echo "<td>".$action_info['name']."</td>\n";
-								echo "<td>".$action_info['desc']."</td>\n";
-								echo "<td>".$action_info['author']."</td>\n";
-								echo "<td>".$action_info['email']."</td>\n";
-								echo "<td>".$action_info['date']."</td>\n";
-								echo "<td>".$action_info['url']."</td>\n";
-								echo "<td>".$action_info['since']."</td>\n";
-								echo "</tr>\n";
+								array_push($action_info_array, $action_info);
 							}
 						}
-					echo "</table>\n";
+						include_once("pluginlist.html");
 					}
 				}
 			}
 		}
-
-		function print_header()
-		{
-?>
-<table>
-<tr>
-<th>Name</th>
-<th>Desc</th>
-<th>Author</th>
-<th>Email</th>
-<th>Date</th>
-<th>URL</th>
-<th>Since</th>
-</tr>
-<?php
-		}
-
 	}
 ?>

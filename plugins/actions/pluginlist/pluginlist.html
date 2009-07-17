@@ -1,0 +1,25 @@
+<table id="pluginlist" summary="Plugin List" border="1px" class="data">
+<tr>
+<thead>
+<th>Name</th>
+<th>Desc</th>
+<th>Author</th>
+<th>Email</th>
+<th>Date</th>
+<th>URL</th>
+<th>Since</th>
+</thead>
+</tr>
+
+	<?php foreach($action_info_array as $action_info) { ?>
+<tr>
+	<td><?php echo($action_info['name']); ?></td>
+	<td><?php echo($action_info['desc']); ?></td>
+	<td><?php echo($action_info['author']); ?></td>
+	<td><?php echo($action_info['email']); ?></td>
+	<td><?php echo($action_info['date']); ?></td>
+	<td><?php echo($action_info['url']); ?></td>
+	<td><?php echo($action_info['since']); ?></td>
+</tr>
+	<?php } ?>
+</table>
