@@ -28,22 +28,74 @@
 				return;
 
 			// Action invoked?
-			// TODO: Might be better to have checkboxes to allow for
-			// multiple selection...
-			foreach($_POST as $key=>$val)
+			if(null != $this->wakka->GetSafeVar('install', 'post'))
 			{
-				$parts = explode('_', $key);
-				if($parts[0] == 'enable')
+				$plugin_url =
+				$this->wakka->htmlspecialchars_ent($this->wakka->GetSafeVar('plugin_url', 'post'));
+				if(!isset($plugin_url))
+					return;
+				// TODO: This requires libcurl to be installed. 
+				// TODO: Error handling...
+				// Download to tmpdir
+				$tmpdir = ini_get('session.save_path');
+				$ch = curl_init($plugin_url);
+				$output_file = $tmpdir.DIRECTORY_SEPARATOR.basename($plugin_url);
+				$fp = fopen($output_file, "w");
+				curl_setopt($ch, CURLOPT_HEADER, 0);
+				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+				curl_setopt($ch, CURLOPT_BINARYTRANSFER, true);
+				$data = curl_exec($ch);
+				fwrite($fp, $data);
+				curl_close($ch);
+				fclose($fp);
+
+				// Install!
+				// TODO: Overwrites existing files, need to prompt
+				// user before doing this.  Maybe a version check as
+				// well?
+				// TODO: Hardcoded paths need to be placed elsewhere
+				// TODO: Make this portable across platforms
+				// TODO: It would be nice to have a library function
+				// that returns physical install directory
+				// TODO: Sanity check before deleting plugin archive?
+				if(file_exists($output_file))
 				{
-					// TODO: Danger! Need to untaint this safely
-					unlink($parts[1].DIRECTORY_SEPARATOR.'disabled');
-					break;
+					$file_parts = explode('.', $output_file);
+					switch(end($file_parts))
+					{
+						case "tgz":
+						case "tar": 
+							system("tar -xzf $output_file -C ".dirname(__FILE__).DIRECTORY_SEPARATOR."..");
+							break;
+						case "zip":
+							// TODO
+							break;
+					}
 				}
-				else if($parts[0] == 'disable')
+				else 
 				{
-					// TODO: Danger! Need to untaint this safely
-					touch($parts[1].DIRECTORY_SEPARATOR.'disabled');
-					break;
+					return;
+				}
+			}
+			else
+			{
+				// TODO: Might be better to have checkboxes to allow for
+				// multiple selection...
+				foreach($_POST as $key=>$val)
+				{
+					$parts = explode('_', $key);
+					if($parts[0] == 'enable')
+					{
+						// TODO: Danger! Need to untaint this safely
+						unlink($parts[1].DIRECTORY_SEPARATOR.'disabled');
+						break;
+					}
+					else if($parts[0] == 'disable')
+					{
+						// TODO: Danger! Need to untaint this safely
+						touch($parts[1].DIRECTORY_SEPARATOR.'disabled');
+						break;
+					}
 				}
 			}
 
