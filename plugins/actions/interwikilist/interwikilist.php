@@ -14,7 +14,7 @@ class WikkaAction_interwikilist extends WikkaAction
 {
 	function WikkaAction_interwikilist($wakka)
 	{
-		parent::WikkaAction($wakka);
+		parent::WikkaAction($wakka, __FILE__);
 	}	
 
 	static function getInfo()
@@ -32,6 +32,9 @@ class WikkaAction_interwikilist extends WikkaAction
 
 	function process($vars = null)
 	{
+		if($this->_isDisabled())
+			return;
+
 		$file = implode("", file("interwiki.conf", 1));
 		print($this->wakka->Format("%%".$file."%%"));
 	}

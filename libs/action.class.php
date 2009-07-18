@@ -6,10 +6,12 @@
 	class WikkaAction
 	{
 		var $wakka;
+		var $filename;
 
-		function WikkaAction($wakka)
+		function WikkaAction($wakka, $filename)
 		{
 			$this->wakka = $wakka;
+			$this->filename = $filename;
 		}
 
 		static function getInfo()
@@ -29,4 +31,12 @@
 		{
 			return "<em class='error'>Please define process() in your WikkaAction class!</em>";
 		}
+
+		function _isDisabled()
+		{	
+			if(file_exists(dirname($this->filename).DIRECTORY_SEPARATOR.'disabled'))
+				return true;
+			else
+				return false;
+		}	
 	}

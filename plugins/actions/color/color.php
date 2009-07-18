@@ -33,7 +33,7 @@ class WikkaAction_color extends WikkaAction
 {
 	function WikkaAction_color($wakka)
 	{
-		parent::WikkaAction($wakka);
+		parent::WikkaAction($wakka, __FILE__);
 	}
 
 	static function getInfo()
@@ -81,6 +81,8 @@ class WikkaAction_color extends WikkaAction
 
 	function process($vars = null)
 	{
+		if($this->_isDisabled()) 
+			return;
 
 		// initialization
 		$mytext = '';

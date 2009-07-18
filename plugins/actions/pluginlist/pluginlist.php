@@ -6,7 +6,7 @@
 	{
 		function WikkaAction_pluginlist($wakka)
 		{
-			parent::WikkaAction($wakka);
+			parent::WikkaAction($wakka, __FILE__);
 		}
 
 		static function getInfo()
@@ -24,6 +24,34 @@
 
 		function process($vars = null)
 		{
+			if(!$this->wakka->IsAdmin() || $this->_isDisabled()) 
+				return;
+
+			// Action invoked?
+			// TODO: Might be better to have checkboxes to allow for
+			// multiple selection...
+			foreach($_POST as $key=>$val)
+			{
+				$parts = explode('_', $key);
+				if($parts[0] == 'enable')
+				{
+					// TODO: Danger! Need to untaint this safely
+					unlink($parts[1].DIRECTORY_SEPARATOR.'disabled');
+					break;
+				}
+				else if($parts[0] == 'disable')
+				{
+					// TODO: Danger! Need to untaint this safely
+					touch($parts[1].DIRECTORY_SEPARATOR.'disabled');
+					break;
+				}
+			}
+
+			// Set row colors
+			// TODO: Probably need to move this to a stylesheet
+			$enabled_row_color = $this->_getColor('F','1');			
+			$disabled_row_color = $this->_getColor('D','1');
+
 			$header_output = FALSE;
 			if(is_array($vars))
 			{
@@ -55,6 +83,17 @@
 							eval("\$action_info = $action_class::getInfo();");
 							if(is_array($action_info))
 							{
+								if(file_exists($action.DIRECTORY_SEPARATOR."disabled"))
+								{
+									$action_info['row_color'] = $disabled_row_color;
+									$action_info['status'] = "disabled";
+								}
+								else
+								{
+									$action_info['row_color'] = $enabled_row_color;
+									$action_info['status'] = "enabled";
+								}
+								$action_info['action_path'] = $action;
 								array_push($action_info_array, $action_info);
 							}
 						}
@@ -62,6 +101,27 @@
 					}
 				}
 			}
+		}
+		
+		// TODO: Proabably should move this to a stylesheet
+		function _getColor($idx1, $idx2)
+		{
+			//color scheme array (ported from {{since}})
+			$c = array(
+					// cyan
+					'A' => array('#699', '#BFFFFF', '#303030', '#A0E0E0', '#90B0B0'),
+					// yellow
+					'B' => array('#996', '#FFFFBF', '#303030', '#E0E0A0', '#B0B090'),
+					// magenta
+					'C' => array('#969', '#FFBFFF', '#303030', '#E0A0E0', '#B090B0'),
+					// red
+					'D' => array('#966', '#FFBFBF', '#303030', '#E0A0A0', '#B09090'),
+					// blue
+					'E' => array('#669', '#BFBFFF', '#303030', '#A0A0E0', '#9090B0'),
+					// green
+					'F' => array('#696', '#BFFFBF', '#303030', '#A0E0A0', '#90B090')
+			);
+			return $c[$idx1][$idx2];
 		}
 	}
 ?>

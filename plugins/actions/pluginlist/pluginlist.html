@@ -1,3 +1,4 @@
+<?php echo($this->wakka->FormOpen()); ?>
 <table id="pluginlist" summary="Plugin List" border="1px" class="data">
 <tr>
 <thead>
@@ -8,11 +9,12 @@
 <th>Date</th>
 <th>URL</th>
 <th>Since</th>
+<th>Actions</th>
 </thead>
 </tr>
 
 	<?php foreach($action_info_array as $action_info) { ?>
-<tr>
+<tr style="background-color: <?php echo($action_info['row_color']); ?>;">
 	<td><?php echo($action_info['name']); ?></td>
 	<td><?php echo($action_info['desc']); ?></td>
 	<td><?php echo($action_info['author']); ?></td>
@@ -20,6 +22,12 @@
 	<td><?php echo($action_info['date']); ?></td>
 	<td><?php echo($action_info['url']); ?></td>
 	<td><?php echo($action_info['since']); ?></td>
+	<?php if($action_info['status'] == 'disabled') { ?>
+	<td><input type="submit" value="Enable" name="enable_<?php echo($action_info['action_path']); ?>"/></td>
+	<?php } else { ?>
+	<td><input type="submit" value="Disable" name="disable_<?php echo($action_info['action_path']); ?>"/></td>
+	<?php } ?>
 </tr>
 	<?php } ?>
 </table>
+<?php echo($this->wakka->FormClose()); ?>
