@@ -87,7 +87,7 @@ if(isset($_POST['cancel']) && ($_POST['cancel'] == INPUT_BUTTON_CANCEL))
 	$this->Redirect($this->Href());
 }
 
-if (isset($_POST['submit']) && ($_POST['submit'] == 'Preview') && ($user = $this->GetUser()) && ($user['doubleclickedit'] != 'N'))
+if (isset($_POST['submit']) && ($_POST['submit'] == INPUT_SUBMIT_PREVIEW) && ($user = $this->GetUser()) && ($user['doubleclickedit'] != 'N'))
 {
 	$ondblclick = ' ondblclick=\'document.getElementById("reedit_id").click();\'';
 }
@@ -141,7 +141,7 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 			$note = trim($_POST['note']);
 		}
 		// only if saving:
-		if (isset($_POST['submit']) && $_POST['submit'] == 'Store')
+		if (isset($_POST['submit']) && $_POST['submit'] == INPUT_SUBMIT_STORE)
 		{
 			if (FALSE != ($aKey = $this->getSessionKey($_POST['form_id'])))	# check if form key was stored in session
 			{
