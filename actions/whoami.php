@@ -12,12 +12,12 @@ if (strlen($currentuser)>0)
 	//user is registered
 	if ($this->GetUser())
 	{
-		echo "You are ".$this->Link($currentuser);
+		echo $this->Link($currentuser);
 	}
 	//user is anonymous
 	else
 	{
-		echo "Hello <tt>".$currentuser."</tt>";
+		echo "<tt>".$currentuser."</tt>";
 	}
 }
 ?>

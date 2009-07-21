@@ -4,4 +4,4 @@ RecentChanges
 RecentlyCommented
 [[UserSettings Login/Register]]
 {{searchform}}
-{{whoami}}
+Hello, {{whoami}}

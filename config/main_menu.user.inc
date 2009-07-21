@@ -4,4 +4,4 @@ RecentChanges
 RecentlyCommented
 [[UserSettings Change settings/Logout]]
 {{searchform}}
-{{whoami}}
+You are {{whoami}}
