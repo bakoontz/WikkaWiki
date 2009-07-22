@@ -195,7 +195,7 @@ else
 	    }
 	
 	    // uploaded files
-	        print '
+	        echo '
 	
 	                        <table cellspacing="0" cellpadding="0">
 	                          <tr>
@@ -241,7 +241,7 @@ else
 	                $size = bytesToHumanReadableUsage(filesize("$upload_path/$file"));
 	                $date = date("n/d/Y g:i a",filemtime("$upload_path/$file"));
 	
-	                        print  '
+	                        echo '
 	
 	                                        <tr>
 	                                          <td valign="top" align="center">
@@ -272,43 +272,30 @@ else
 	    closedir($dir);
 	
 	        // print n/a if no files currently exist
-	        if ($num > 0)  print '<tr><td>&nbsp;</td><td colspan="3" align="center"><span style="color:gray;font-size:small"><em>&nbsp;&nbsp;&nbsp;</em></span></td></tr>';
-	        else  print "<tr><td>&nbsp;</td></tr>";
+	        if ($num > 0)  echo '<tr><td>&nbsp;</td><td colspan="3" align="center"><span style="color:gray;font-size:small"><em>&nbsp;&nbsp;&nbsp;</em></span></td></tr>';
+	        else  echo "<tr><td>&nbsp;</td></tr>";
 	
 	   // if ($this->HasAccess('write')) {
 	   if ($this->IsAdmin()) 
 	   {
-	   		// form
-	    	$result = "<form action=\"".$this->href()."\" method=\"post\" enctype=\"multipart/form-data\">\n";
-	    	if (!$this->config["rewrite_mode"]) 
-	    	{
-	    		$result .= "<input type=\"hidden\" name=\"wakka\" value=\"".$this->MiniHref()."\">\n";
-	    		echo $result;
-	    		echo $this->FormClose();
-	    	}
-	    	
-	        // close disp table
-	        print '
-	
+	        echo '
 	                          <tr>
 	                                <td>
 	                                  &nbsp;
 	                                </td>
-	                                <td colspan="4" valign="top" align="right" nowrap="nowrap">                          
-	                                        '.$result.'
-	                                        <input type="hidden" name="action" value="upload" />
-						 	    			<input type="hidden" name="MAX_FILE_SIZE" value="'.$max_upload_size.'" />
-	                                        <span style="color:gray;font-size:x-small;font-style:italic;">
+	                                <td colspan="4" valign="top" align="right" nowrap="nowrap">';  	   		
+	   		echo $this->FormOpen('','','post','','file_upload', TRUE);
+	   		echo '<input type="hidden" name="MAX_FILE_SIZE" value="'.$max_upload_size.'" />';
+	   		echo '<input type="hidden" name="action" value="upload" />';
+	   		echo '	                                        <span style="color:gray;font-size:x-small;font-style:italic;">
 	                                          add new attachment:
 	                                          <input type="file" name="file" style="padding: 0px; margin: 0px; font-size: 8px; height: 15px" />
 	                                          <input type="submit" value="+" style="padding: 0px; margin: 0px; font-size: 8px; height: 15px" />
-										   </span>
-	                                        '.$this->FormClose().'	                                  
-	                                </td>
-	                          </tr> ';
-	
+										   </span>';
+	   		echo $this->FormClose();
+			echo "</td>\n</tr>";	
 	   }
-	   print " </table>  ";
+	   echo ' </table>  ';
 	}
 }
 ?>
