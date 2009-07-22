@@ -8,6 +8,18 @@
  * gracefully. Disable by setting config param 'enable_version_check' to
  * 0.
  *
+ * The time interval between checks can be set using the 
+ * config param 'version_check_interval'.
+ * Valid time interval units for 'version_check_interval':
+ * h=hours
+ * m=minutes
+ * s=seconds
+ * d=days
+ * w=weeks (7 days)
+ * M=months (30 days)
+ * y=years (365 days)
+ *
+ *
  * Syntax: {{checkversion}}
  *
  * @package		Actions
@@ -22,25 +34,24 @@
  * @todo	use error handler for debugging
  */
 
-if($this->IsAdmin())
+if($this->IsAdmin() && TRUE == $this->config['enable_version_check'])
 {
+	
+	$debug = FALSE;
+	if(isset($vars['debug'])) $debug = TRUE;
+		
+	$do_version_check = TRUE;
+	
 	# Has version_check_interval expired?
 	if(!isset($_SESSION['last_version_check']))
 	{
 		$_SESSION['last_version_check'] = time();
-		$version_check_interval_expired = TRUE;
 	}
+	# default intervall if config param not set in wikka.config.php: 1h 
 	elseif(isset($this->config['version_check_interval']))
 	{
 		$interval = $this->config['version_check_interval'];
-		# Valid time interval units:
-		# h=hours
-		# m=minutes
-		# s=seconds
-		# d=days
-		# w=weeks (7 days)
-		# M=months (30 days)
-		# y=years (365 days)
+		
 		if(preg_match("/^(\d+)([hmsdwMy])$/", $interval, $matches) > 0)
 		{
 			$scalar = $matches[1];
@@ -57,28 +68,23 @@ if($this->IsAdmin())
 				default: $scalar = 0;
 			}
 			$elapsed_time = time() - $_SESSION['last_version_check']; 
-			if($vars['display'] == "debug")
+			if($debug)
 			{
 				echo "Elapsed time: $elapsed_time<br/>\n";
 			}
 			if($elapsed_time > $scalar)
 			{
-				$version_check_interval_expired = TRUE;
 				$_SESSION['last_version_check'] = time();
 			}
 			else
 			{
-				$version_check_interval_expired = FALSE;
+				$do_version_check = FALSE;
 			}
 		}
 	}
-	else
-	{
-		$version_check_interval_expired = TRUE;
-	}
 
-	if(TRUE == $this->config['enable_version_check'] &&
-       TRUE == $version_check_interval_expired)
+	// Attempt to get latest_wikka_version.txt
+	if($do_version_check)
 	{
 		//defaults
 		define('CHECKVERSION_HOST', 'wikkawiki.org');	
@@ -95,104 +101,90 @@ if($this->IsAdmin())
 				'E' => array('#669', '#BFBFFF', '#303030', '#A0A0E0', '#9090B0'),
 				'F' => array('#696', '#BFFFBF', '#303030', '#A0E0A0', '#90B090')
 		);
-		if (!isset($vars['display']) || $vars['display'] == '')
-		{
-			$vars['display'] = "upgrade";
-		}
 		
-		// Attempt to get latest_wikka_version.txt
 		// The action won't work on Windows PHP <4.3.0
 		$timeout = CHECKVERSION_CONNECTION_TIMEOUT;
-		if (FALSE !== strpos(strtolower(PHP_OS), 'windows') &&
+		if(FALSE !== strpos(strtolower(PHP_OS), 'windows') &&
 			TRUE === version_compare(PHP_VERSION, '4.3.0', '<'))
 		{
-			if ($vars['display'] == "debug")
+			if($debug)
 			{
 				echo '<span class="debug">['.PHP_OS.' PHP '.PHP_VERSION.' does not support this feature]</span>'."\n";
 			}
 			return;
 		}
-		else
+		
+		if(FALSE == ini_get('allow_url_fopen'))
 		{
-			if (FALSE == ini_get('allow_url_fopen'))
+			if($debug)
 			{
-				if ($vars['display'] == "debug")
-				{
-					echo '<span class="debug">[allow_url_fopen disabled]</span>'."\n";
-				}
-				return;
+				echo '<span class="debug">[allow_url_fopen disabled]</span>'."\n";
+			}
+			return;
+		}
+
+		$hostname = CHECKVERSION_HOST;
+		$ip = gethostbyname($hostname);
+		if($ip == $hostname)
+		{
+			// Probably no internet connection...
+			if ($debug)
+			{
+				echo '<span class="debug">[Cannot resolve '.$hostname.']</span>'."\n";
+			}
+			return;
+		}
+
+		$fp = @fsockopen($ip, 80, $errno, $errstr, $timeout);
+		if(!$fp)
+		{
+			if ($debug)
+			{
+				echo '<span class="debug">[Cannot initiate socket connection]</span>'."\n";
 			}
 			else
 			{
-				$hostname = CHECKVERSION_HOST;
-				$ip = gethostbyname($hostname);
-				if($ip == $hostname)
-				{
-					// Probably no internet connection...
-					if ($vars['display'] == "debug")
-					{
-						echo '<span class="debug">[Cannot resolve '.$hostname.']</span>'."\n";
-					}
-					return;
-				}
-				$fp = @fsockopen($ip, 80, $errno, $errstr, $timeout);
-				if(!$fp)
-				{
-					if ($vars['display'] == "debug")
-					{
-						echo '<span class="debug">[Cannot initiate socket connection]</span>'."\n";
-					}
-					else
-					{
-						// Display warning message
-						$s = "D";
-						echo '<div title="Cannot initiate network connection" style="text-align: center; float: left; width: 300px; border: 1px solid '.$c[$s][0].'; background-color: '.$c[$s][1].'; color: '.$c[$s][2].'; margin: 10px 0">'."\n";
-						echo '<div style="padding: 0 3px 0 3px; background-color: '.$c[$s][3].'; font-size: 85%; font-weight: bold">CHECKVERSION FAILED</div>'."\n";
-						echo '<div style="padding: 0 3px 2px 3px; font-size: 85%; line-height: 150%; border-top: 1px solid '.$c[$s][4].';">'."\n";
-						echo 'The network connection with the WikkaWiki server could not be established. To prevent delays in loading this page, please set enable_version_check to 0 in your wikka.config.php file.'."\n";
-						echo '</div>'."\n";
-						echo '</div>'."\n";
-						echo '<div class="clear"></div>'."\n";
-					}
-					return;
-				}
-				else
-				{
-					fwrite($fp, "GET ".CHECKVERSION_RELEASE_FILE." HTTP/1.0\r\n");
-					fwrite($fp, "Host: ".CHECKVERSION_HOST."\r\n");
-					fwrite($fp, "Connection: Close\r\n\r\n");
-					stream_set_timeout($fp, $timeout);
-					$data = fread($fp, 4096);
-					$latest = trim(array_pop(explode("\r\n", $data)));
-					fclose($fp);
-					if(TRUE === version_compare($this->config['wakka_version'], $latest, "<"))
-					{
-						switch($vars['display'])
-						{
-							case "raw":
-							//display raw version number
-							echo $latest;
-							break;
+				// Display warning message
+				$s = "D";
+				echo '<div title="Cannot initiate network connection" style="text-align: center; float: left; width: 300px; border: 1px solid '.$c[$s][0].'; background-color: '.$c[$s][1].'; color: '.$c[$s][2].'; margin: 10px 0">'."\n";
+				echo '<div style="padding: 0 3px 0 3px; background-color: '.$c[$s][3].'; font-size: 85%; font-weight: bold">CHECKVERSION FAILED</div>'."\n";
+				echo '<div style="padding: 0 3px 2px 3px; font-size: 85%; line-height: 150%; border-top: 1px solid '.$c[$s][4].';">'."\n";
+				echo 'The network connection with the WikkaWiki server could not be established. To prevent delays in loading this page, please set enable_version_check to 0 in your wikka.config.php file.'."\n";
+				echo '</div>'."\n";
+				echo '</div>'."\n";
+				echo '<div class="clear"></div>'."\n";
+			}
+			return;
+		}
 
-							case "debug":
-							//display raw version number and //checkversion_host ip
-							echo '<span class="debug">['.$latest.' from host '.$ip.']</span>'."\n";
-							break;
-							
-							default:						
-							case "upgrade":
-							//display upgrade badge
-							$s = 'F'; //green badge
-							echo '<div title="A new version of WikkaWiki is available. Please upgrade!" style="text-align: center; float: left; width: 300px; border: 1px solid '.$c[$s][0].'; background-color: '.$c[$s][1].'; color: '.$c[$s][2].'; margin: 10px 0">'."\n";
-							echo '<div style="padding: 0 3px 0 3px; background-color: '.$c[$s][3].'; font-size: 85%; font-weight: bold">UPGRADE NOTE</div>'."\n";
-							echo '<div style="padding: 0 3px 2px 3px; font-size: 85%; line-height: 150%; border-top: 1px solid '.$c[$s][4].';">'."\n";
-							echo '<strong>WikkaWiki '.$latest.'</strong> is available for <a href="'.CHECKVERSION_DOWNLOAD_URL.'">download</a>!'."\n";
-							echo '</div>'."\n";
-							echo '</div>'."\n";
-							echo '<div class="clear"></div>'."\n";
-						}
-					}
-				}
+		fwrite($fp, "GET ".CHECKVERSION_RELEASE_FILE." HTTP/1.0\r\n");
+		fwrite($fp, "Host: ".CHECKVERSION_HOST."\r\n");
+		fwrite($fp, "Connection: Close\r\n\r\n");
+		stream_set_timeout($fp, $timeout);
+		$data = fread($fp, 4096);
+		$latest = trim(array_pop(explode("\r\n", $data)));
+		fclose($fp);
+		
+		if(TRUE === version_compare($this->config['wakka_version'], $latest, "<"))
+		{
+			if($debug)
+			{
+				echo '<span class="debug">['.$latest.' from host '.$ip.']</span>'."\n";	
+			}
+			if("raw" == $vars['display'])
+			{
+				echo $latest;
+			}
+			else
+			{
+				$s = 'F'; //green badge
+				echo '<div title="A new version of WikkaWiki is available. Please upgrade!" style="text-align: center; float: left; width: 300px; border: 1px solid '.$c[$s][0].'; background-color: '.$c[$s][1].'; color: '.$c[$s][2].'; margin: 10px 0">'."\n";
+				echo '<div style="padding: 0 3px 0 3px; background-color: '.$c[$s][3].'; font-size: 85%; font-weight: bold">UPGRADE NOTE</div>'."\n";
+				echo '<div style="padding: 0 3px 2px 3px; font-size: 85%; line-height: 150%; border-top: 1px solid '.$c[$s][4].';">'."\n";
+				echo '<strong>WikkaWiki '.$latest.'</strong> is available for <a href="'.CHECKVERSION_DOWNLOAD_URL.'">download</a>!'."\n";
+				echo '</div>'."\n";
+				echo '</div>'."\n";
+				echo '<div class="clear"></div>'."\n";
 			}
 		}
 	}			
