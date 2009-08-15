@@ -122,11 +122,6 @@ a.ext:hover {
 	color: #933;
 }
 
-a.keys, a.keys:hover {
-	text-decoration: none;
-	color: #333;	
-}
-
 #header a, #footer a {
 	color: #369;
 	font-family: Verdana, Arial, Helvetica, sans-serif; 	
@@ -182,6 +177,14 @@ a.keys, a.keys:hover {
 	font-size: 80%;
 	font-family: "Lucida Console", Monaco, monospace;
 }
+
+#content a.keys, #content a.keys:hover {
+	color: #666;
+	background-color: #DDD;
+	font: normal 95% Verdana, sans-serif;
+	text-decoration: none;
+}
+
 
 /* lists */
 
