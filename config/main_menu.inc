@@ -5,4 +5,4 @@ RecentChanges
 RecentlyCommented
 [[UserSettings Login/Register]]
 {{searchform}}
-You are logged in from {{whoami}}
+Your hostname is {{whoami}}
