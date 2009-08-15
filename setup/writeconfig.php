@@ -11,6 +11,49 @@ unset($config["header_action"]);
 unset($config["footer_action"]);
 unset($config["external_link_tail"]);
 
+// Parse navlinks, convert to menu configuration files, #891 (since 1.2)
+$path = 'config'.DIRECTORY_SEPARATOR;
+if(isset($wakkaConfig['navigation_links'])){
+	$navlinks = $wakkaConfig['navigation_links'];
+	$links = array();
+	if(FALSE!==preg_match_all('/[A-ZÄÖÜ]+[a-zßäöü]+[A-Z0-9ÄÖÜ][A-Za-z0-9ÄÖÜßäöü]*|[\[[^\[]*?\]\]/', $navlinks, $links))
+	{
+		if(file_exists($path.'main_menu.inc')
+		{
+			rename($path.'main_menu.inc', $path.'main_menu.orig.inc');
+		}
+		$h = fopen($path.'main_menu.inc', 'w'); 
+		foreach($links as $link)
+		{
+			fwrite($h, $link.'\n');
+		}
+		fwrite($h, '{{searchform}}');
+		fwrite($h, 'You are logged in from {{whoami}}');
+		fclose($h);
+	}
+	unset($wakkaConfig['navigation_links']);
+}
+if(isset($wakkaConfig['logged_in_navigation_links'])){
+    $navlinks = $wakkaConfig['logged_in_navigation_links'];
+	$links = array();
+	if(FALSE!==preg_match_all('/[A-ZÄÖÜ]+[a-zßäöü]+[A-Z0-9ÄÖÜ][A-Za-z0-9ÄÖÜßäöü]*|[\[[^\[]*?\]\]/', $navlinks, $links))
+	{
+		if(file_exists($path.'main_menu.user.inc')
+		{
+			rename($path.'main_menu.userinc', $path.'main_menu.user.orig.inc');
+		}
+		$h = fopen($path.'main_menu.user.inc', 'w'); 
+		foreach($links as $link)
+		{
+			fwrite($h, $link.'\n');
+		}
+		fwrite($h, '{{searchform}}');
+		fwrite($h, 'You are {{whoami}}');
+		fclose($h);
+	}
+    unset($wakkaConfig['logged_in_navigation_links']); // since 1.2
+}
+
 // set version to current version, yay!
 $config["wakka_version"] = WAKKA_VERSION;
 

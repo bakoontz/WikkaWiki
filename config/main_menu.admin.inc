@@ -1,5 +1,6 @@
 **AdminUsers**
 **AdminPages**
+HomePage
 [[CategoryCategory Categories]]
 PageIndex
 RecentChanges

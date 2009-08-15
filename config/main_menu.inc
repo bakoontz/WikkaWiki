@@ -1,7 +1,8 @@
+HomePage
 [[CategoryCategory Categories]]
 PageIndex
 RecentChanges
 RecentlyCommented
 [[UserSettings Login/Register]]
 {{searchform}}
-Hello, {{whoami}}
+You are logged in from {{whoami}}

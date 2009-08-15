@@ -184,7 +184,7 @@ $wakkaDefaultConfig = array(
 	'action_path'				=> 'plugins/actions'.PATH_DIVIDER.'actions',
 	'handler_path'				=> 'plugins/handlers'.PATH_DIVIDER.'handlers',
 	'gui_editor'				=> '1',
-	'stylesheet'				=> 'wikka.css',
+	'theme'						=> 'default',
 
 	// formatter and code highlighting paths
 	'wikka_formatter_path' 		=> 'plugins/formatters'.PATH_DIVIDER.'formatters',		# (location of Wikka formatter - REQUIRED)
@@ -195,9 +195,6 @@ $wakkaDefaultConfig = array(
 	// template
 	'wikka_template_path' 		=> 'plugins/templates'.PATH_DIVIDER.'templates',		# (location of Wikka template files - REQUIRED)
 	'safehtml_path'				=> '3rdparty/core/safehtml',
-	'navigation_links'			=> '[[CategoryCategory Categories]] :: PageIndex ::  RecentChanges :: RecentlyCommented :: [[UserSettings Login/Register]]',
-	'logged_in_navigation_links' => '[[CategoryCategory Categories]] :: PageIndex :: RecentChanges :: RecentlyCommented :: [[UserSettings Change settings/Logout]]',
-
 	'referrers_purge_time'		=> '30',
 	'pages_purge_time'			=> '0',
 	'xml_recent_changes'		=> '10',
@@ -253,6 +250,12 @@ if (isset($wakkaConfig['header_action']))
 if (isset($wakkaConfig['footer_action'])) //since 1.1.6.4
 {
 	unset($wakkaConfig['footer_action']);
+}
+
+// Remove old stylesheet, #6
+if(isset($wakkaConfig['stylesheet']))
+{
+	unset($wakkaConfig['stylesheet']); // since 1.2
 }
 
 // Add plugin paths if they do not already exist
