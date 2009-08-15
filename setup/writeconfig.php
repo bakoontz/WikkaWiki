@@ -15,7 +15,7 @@ unset($config["external_link_tail"]);
 // Check to see if config is writeable...
 if(!is_writeable('config'))
 {
-	print("<p><span class=\"failed\">WARNING:</span> The <tt>config</tt> directory is not writeable; therefore, conversion of old navigation links to new menu items cannot be performed. Please give your web server temporary write access to the <tt>config</tt> directory (<tt>chmod 777 config</tt>; don't forget to remove write access later, i.e. <tt>chmod 755 config</tt>). If you are unable to make this directory writeable, you will need to manually edit the menu files in the <tt>config</tt> directory.  You also need to remove the <tt>navigation_links</tt> and <tt>logged_in_navigation_links</tt> parameters in your <tt>wikka.config.php</tt> file. If you are still having difficulties, please visit <a href=\"http://docs.wikkawiki.org/WikkaInstallation\">WikkaInstallation</a>.</p>\n"); 
+	print("<p><span class=\"failed\">WARNING:</span> The <tt>config</tt> directory is not writeable; therefore, conversion of old navigation links to new menu items cannot be performed.  Please give your web server temporary write access to the <tt>config</tt> directory (<tt>chmod 777 config</tt>; don't forget to remove write access later, i.e. <tt>chmod 555 config</tt>). If you are unable to make this directory writeable, you will need to manually edit the menu files in the <tt>config</tt> directory.  You will also need to remove the <tt>navigation_links</tt> and <tt>logged_in_navigation_links</tt> parameters in your <tt>wikka.config.php</tt> file. If you are still having difficulties, please visit <a href=\"http://docs.wikkawiki.org/WikkaInstallation\">WikkaInstallation</a>.</p>\n"); 
 	?>
 	<form action="<?php echo myLocation() ?>?installAction=writeconfig" method="post">
 	<input type="hidden" name="config" value="<?php echo Wakka::hsc_secure(serialize($config2)) ?>" /><?php /*  #427 */ ?>
@@ -24,8 +24,6 @@ if(!is_writeable('config'))
 	<?php
 	return;	
 }
-else
-{
 $path = 'config'.DIRECTORY_SEPARATOR;
 if(isset($wakkaConfig['navigation_links'])){
 	$navlinks = $wakkaConfig['navigation_links'];
@@ -37,7 +35,7 @@ if(isset($wakkaConfig['navigation_links'])){
 			rename($path.'main_menu.inc', $path.'main_menu.orig.inc');
 		}
 		$h = fopen($path.'main_menu.inc', 'w'); 
-		foreach($links as $link)
+		foreach($links[0] as $link)
 		{
 			fwrite($h, $link.'\n');
 		}
@@ -54,10 +52,10 @@ if(isset($wakkaConfig['logged_in_navigation_links'])){
 	{
 		if(file_exists($path.'main_menu.user.inc'))
 		{
-			rename($path.'main_menu.userinc', $path.'main_menu.user.orig.inc');
+			rename($path.'main_menu.user.inc', $path.'main_menu.user.orig.inc');
 		}
 		$h = fopen($path.'main_menu.user.inc', 'w'); 
-		foreach($links as $link)
+		foreach($links[0] as $link)
 		{
 			fwrite($h, $link.'\n');
 		}
