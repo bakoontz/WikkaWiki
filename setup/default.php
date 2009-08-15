@@ -4,9 +4,8 @@
 session_set_cookie_params(0, '/');
 session_name(md5('WikkaWiki'));
 session_start();
-
-// Copy POST params to SESSION in preparation for redirect to install
-// page
+	
+// Copy POST params to SESSION in preparation for redirect to install page
 $_SESSION['post'] = array();
 $_SESSION['post'] = array_merge($_SESSION['post'], $_POST);
 
@@ -196,6 +195,8 @@ if(false === $_SESSION['error_flag'] &&
 	<tr><td></td><td>Optional keywords/description to insert into the HTML meta headers.</td></tr>
 	<tr><td align="right" nowrap="nowrap">Meta Keywords:</td><td><input type="text" size="50" name="config[meta_keywords]" value="<?php if(isset($wakkaConfig["meta_keywords"])) echo $wakkaConfig["meta_keywords"] ?>" /></td></tr>
 	<tr><td align="right" nowrap="nowrap">Meta Description:</td><td><input type="text" size="50" name="config[meta_description]" value="<?php if(isset($wakkaConfig["meta_description"])) echo $wakkaConfig["meta_description"] ?>" /></td></tr>
+	<tr><td></td><td>Choose the <em>look and feel</em> of your wiki (you'll be able to change this later).</td></tr>
+	<tr><td align="right" nowrap="nowrap">Theme:</td><td><?php SelectTheme(); ?></td></tr>
 
 	<?php
 	 $curversion_num = ($wakkaConfig['wakka_version']) ? str_replace('.','',$wakkaConfig['wakka_version']) : 0;

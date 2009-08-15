@@ -1,6 +1,6 @@
 <?php
 
-// stuff
+// utility functions
 function test($text, $condition, $errorText = '<em class="error">Please use your browser\'s back button to correct any errors on the previous page.</em>', $stopOnError = 1) {
 	echo $text;
 	if ($condition)
@@ -64,6 +64,25 @@ function rmdirr($dirname)
 }
 
 function DeleteCookie($name) { SetCookie($name, "", 1, "/"); $_COOKIE[$name] = ""; }
+
+function SelectTheme($default_theme='default')
+{
+	echo '<select name="config[theme]">';
+	// use configured path
+	$hdl = opendir('templates');
+	while ($f = readdir($hdl))
+	{
+		if ($f[0] == '.') continue;
+		// use configured path
+		else
+		{
+			echo "\n ".'<option value="'.$f.'"';
+			if ($f == $default_theme) echo ' selected="selected"';
+			echo '>'.$f.'</option>';
+		}
+	}
+	echo '</select>';
+}
 
 
 ?>
