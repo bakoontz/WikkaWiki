@@ -176,11 +176,11 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 
 					// now we render it internally so we can write the updated link table.
 					$this->ClearLinkTable();
-					$this->StartLinkTracking();
 					$dummy = $this->Header();
+					$this->StartLinkTracking();
 					$dummy .= $this->Format($body);
-					$dummy .= $this->Footer();
 					$this->StopLinkTracking();
+					$dummy .= $this->Footer();
 					$this->WriteLinkTable();
 					$this->ClearLinkTable();
 				}

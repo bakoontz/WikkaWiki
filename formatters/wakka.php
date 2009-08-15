@@ -40,7 +40,7 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 {
 	function wakka2callback($things)
 	{
-		$thing = $things[1];
+		$thing = $things[0];
 		$result='';
 		$valid_filename = '';
 		
@@ -726,23 +726,24 @@ $text = str_replace("\r\n", "\n", $text);
 if ($this->method == "show") $mind_map_pattern = "<map.*?<\/map>|"; else $mind_map_pattern = "";
 
 $text = preg_replace_callback(
-	"/(".
+	"/".
 	"%%.*?%%|".																				# code
 	"\"\".*?\"\"|".																			# literal
 	$mind_map_pattern.
 	"\[\[[^\[]*?\]\]|".																		# forced link
-	"-{4,}|---|".																			# separator (hr)
+	"-{3,}|".
+			# forced linebreak and separator (hr)
 	"\b[a-z]+:\/\/\S+|".																	# URL
 	"\*\*|\'\'|\#\#|\#\%|@@|::c::|\>\>|\<\<|&pound;&pound;|&yen;&yen;|\+\+|__|<|>|\/\/|".	# Wiki markup
 	"======|=====|====|===|==|".															# headings
-	"(^|\n)([\t~]+)(-(?!-)|&|([0-9]+|[a-zA-Z]+)\))?|".														# indents and lists
-        # Simple Tables
-        "\|(?:[^\|])?\|(?:\(.*?\))?(?:\{[^\{\}]*?\})?(?:\n)?|".
+	"(^|\n)[\t~]+(-(?!-)|&|([0-9]+|[a-zA-Z]+)\))?|".										# indents and lists
+    "\|(?:[^\|])?\|(?:\(.*?\))?(?:\{[^\{\}]*?\})?(?:\n)?|".
+	        # simple tables
 	"\{\{.*?\}\}|".																			# action
 	"\b[A-ZÄÖÜ][A-Za-zÄÖÜßäöü]+[:](?![=_])\S*\b|".											# InterWiki link
 	"\b([A-ZÄÖÜ]+[a-zßäöü]+[A-Z0-9ÄÖÜ][A-Za-z0-9ÄÖÜßäöü]*)\b|".								# CamelWords
 	"\n".																					# new line
-	")/ms", "wakka2callback", $text."\n"); #append \n (#444)
+	"/ms", "wakka2callback", $text."\n"); #append \n (#444)
 
 // we're cutting the last <br />
 $text = preg_replace("/<br \/>$/","", $text);
