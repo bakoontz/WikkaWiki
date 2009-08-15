@@ -432,10 +432,9 @@ case "1.1.6.4":
 case "1.1.6.5":
 case "1.1.6.6":
 }
-// #600: Force reloading of stylesheet. '
-$config['stylesheet'] = preg_replace('/(&amp;|\\?)(.*)$/', '', $config['stylesheet']); // Needed in case of reinstall
-$config['stylesheet'] .= strstr($config['stylesheet'], '?') ? '&amp;' : '?';
-$config['stylesheet'] .= substr(md5(time()),1,5);
+// #600: Force reloading of stylesheet.
+// #6: Append this to individual theme stylesheets
+$config['stylesheet_hash'] = substr(md5(time()),1,5);
 ?>
 
 <p>

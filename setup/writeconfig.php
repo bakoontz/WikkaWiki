@@ -18,7 +18,7 @@ if(isset($wakkaConfig['navigation_links'])){
 	$links = array();
 	if(FALSE!==preg_match_all('/[A-ZÄÖÜ]+[a-zßäöü]+[A-Z0-9ÄÖÜ][A-Za-z0-9ÄÖÜßäöü]*|[\[[^\[]*?\]\]/', $navlinks, $links))
 	{
-		if(file_exists($path.'main_menu.inc')
+		if(file_exists($path.'main_menu.inc'))
 		{
 			rename($path.'main_menu.inc', $path.'main_menu.orig.inc');
 		}
@@ -38,7 +38,7 @@ if(isset($wakkaConfig['logged_in_navigation_links'])){
 	$links = array();
 	if(FALSE!==preg_match_all('/[A-ZÄÖÜ]+[a-zßäöü]+[A-Z0-9ÄÖÜ][A-Za-z0-9ÄÖÜßäöü]*|[\[[^\[]*?\]\]/', $navlinks, $links))
 	{
-		if(file_exists($path.'main_menu.user.inc')
+		if(file_exists($path.'main_menu.user.inc'))
 		{
 			rename($path.'main_menu.userinc', $path.'main_menu.user.orig.inc');
 		}
