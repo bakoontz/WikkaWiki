@@ -28,7 +28,7 @@ $path = 'config'.DIRECTORY_SEPARATOR;
 if(isset($config['navigation_links'])){
 	$navlinks = $config['navigation_links'];
 	$links = array();
-	if(FALSE!==preg_match_all('/[A-ZÄÖÜ]+[a-zßäöü]+[A-Z0-9ÄÖÜ][A-Za-z0-9ÄÖÜßäöü]*|[\[[^\[]*?\]\]/', $navlinks, $links))
+	if(FALSE!==preg_match_all('/[A-ZÄÖÜ]+[a-zßäöü]+[A-Z0-9ÄÖÜ][A-Za-z0-9ÄÖÜßäöü]*|\[\[.*?\]\]/', $navlinks, $links))
 	{
 		if(file_exists($path.'main_menu.inc'))
 		{
@@ -39,7 +39,7 @@ if(isset($config['navigation_links'])){
 		{
 			fwrite($h, $link."\n");
 		}
-		fwrite($h, '{{searchform}}');
+		fwrite($h, "{{searchform}}\n");
 		fwrite($h, 'You are logged in from {{whoami}}');
 		fclose($h);
 	}
@@ -48,7 +48,7 @@ if(isset($config['navigation_links'])){
 if(isset($config['logged_in_navigation_links'])){
     $navlinks = $config['logged_in_navigation_links'];
 	$links = array();
-	if(FALSE!==preg_match_all('/[A-ZÄÖÜ]+[a-zßäöü]+[A-Z0-9ÄÖÜ][A-Za-z0-9ÄÖÜßäöü]*|[\[[^\[]*?\]\]/', $navlinks, $links))
+	if(FALSE!==preg_match_all('/[A-ZÄÖÜ]+[a-zßäöü]+[A-Z0-9ÄÖÜ][A-Za-z0-9ÄÖÜßäöü]*|\[\[.*?\]\]/', $navlinks, $links))
 	{
 		if(file_exists($path.'main_menu.user.inc'))
 		{
@@ -59,7 +59,7 @@ if(isset($config['logged_in_navigation_links'])){
 		{
 			fwrite($h, $link."\n");
 		}
-		fwrite($h, '{{searchform}}');
+		fwrite($h, "{{searchform}}\n");
 		fwrite($h, 'You are {{whoami}}');
 		fclose($h);
 	}
