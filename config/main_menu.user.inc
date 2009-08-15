@@ -1,4 +1,3 @@
-HomePage
 [[CategoryCategory Categories]]
 PageIndex
 RecentChanges
