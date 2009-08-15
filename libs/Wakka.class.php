@@ -1235,11 +1235,15 @@ class Wakka
 		}
 	}
 	function Header() {
-		$header = $this->IncludeBuffered('header.php', ERROR_HEADER_MISSING, '',  $this->GetConfigValue('wikka_template_path'));
+		$filename = 'header.php';
+		$path = $this->GetThemePath();
+		$header = $this->IncludeBuffered($filename, ERROR_HEADER_MISSING, '', $path);
 		return $header;
 	}
 	function Footer() {
-		$footer = $this->IncludeBuffered('footer.php', ERROR_FOOTER_MISSING, '', $this->GetConfigValue('wikka_template_path'));
+		$filename = 'footer.php';
+		$path = $this->GetThemePath();
+		$footer = $this->IncludeBuffered($filename, ERROR_FOOTER_MISSING, '', $path);
 		return $footer;
 	}
 	/*
@@ -1660,6 +1664,34 @@ class Wakka
 			$formatter	= strtolower($formatter);
 		}
 		return $this->IncludeBuffered($formatter.'.php', 'Formatter "'.$formatter.'" not found', compact("text"), $this->config['wikka_formatter_path']);
+	}
+	/**
+     * Returns a valid template path (defaults to 'default' if theme
+	 * does not exist)
+	 *
+	 * Tries to resolve valid pathname given a 'theme' param in
+	 * wikka.config.php.  Failing that, tries to revert to a
+	 * "fallback" default theme path (currently 'templates/default').
+	 * Failing that, returns NULL.
+	 *
+     * @return string A fully-qualified pathname or NULL if none found 
+	 */
+	 function GetThemePath()
+	 {
+		 $path = $this->BuildFullpathFromMultipath($this->GetConfigValue('theme'), $this->GetConfigValue('wikka_template_path'));
+		if(FALSE===file_exists($path))
+		{
+			// Check on fallback theme dir...
+			if(FALSE===file_exists('templates/default'))
+			{
+				return null;
+			}
+			else
+			{
+				return 'templates/default';
+			}
+		}
+		return $path;
 	}
 
 	/** 
