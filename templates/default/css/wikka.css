@@ -115,22 +115,22 @@ a.ext:hover {
 /* link icons */
 
 #content a.ext {
-	background: url('../images/icons/ext_simple.gif') left bottom no-repeat;
+	background: url('../images/ext_simple.gif') left bottom no-repeat;
 	padding-left: .8em;
 }
 
 #content a.mailto {
-	background: url('../images/icons/mail.gif') left bottom no-repeat;
+	background: url('../images/mail.gif') left bottom no-repeat;
 	padding-left: .9em;
 }
 
 #content a.interwiki {
-	background: url('../images/icons/ext.gif') left bottom no-repeat;
+	background: url('../images/ext.gif') left bottom no-repeat;
 	padding-left: 1em;
 }
 
 a.user, a.user:hover {
-	background: url('../images/icons/user.gif') left bottom no-repeat;
+	background: url('../images/user.gif') left bottom no-repeat;
 	padding-left: 1em;
 }
 #header a:hover {
