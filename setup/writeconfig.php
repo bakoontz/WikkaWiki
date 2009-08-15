@@ -25,8 +25,8 @@ if(!is_writeable('config'))
 	return;	
 }
 $path = 'config'.DIRECTORY_SEPARATOR;
-if(isset($wakkaConfig['navigation_links'])){
-	$navlinks = $wakkaConfig['navigation_links'];
+if(isset($config['navigation_links'])){
+	$navlinks = $config['navigation_links'];
 	$links = array();
 	if(FALSE!==preg_match_all('/[A-ZÄÖÜ]+[a-zßäöü]+[A-Z0-9ÄÖÜ][A-Za-z0-9ÄÖÜßäöü]*|[\[[^\[]*?\]\]/', $navlinks, $links))
 	{
@@ -37,16 +37,16 @@ if(isset($wakkaConfig['navigation_links'])){
 		$h = fopen($path.'main_menu.inc', 'w'); 
 		foreach($links[0] as $link)
 		{
-			fwrite($h, $link.'\n');
+			fwrite($h, $link."\n");
 		}
 		fwrite($h, '{{searchform}}');
 		fwrite($h, 'You are logged in from {{whoami}}');
 		fclose($h);
 	}
-	unset($wakkaConfig['navigation_links']);
+	unset($config['navigation_links']);
 }
-if(isset($wakkaConfig['logged_in_navigation_links'])){
-    $navlinks = $wakkaConfig['logged_in_navigation_links'];
+if(isset($config['logged_in_navigation_links'])){
+    $navlinks = $config['logged_in_navigation_links'];
 	$links = array();
 	if(FALSE!==preg_match_all('/[A-ZÄÖÜ]+[a-zßäöü]+[A-Z0-9ÄÖÜ][A-Za-z0-9ÄÖÜßäöü]*|[\[[^\[]*?\]\]/', $navlinks, $links))
 	{
@@ -57,13 +57,13 @@ if(isset($wakkaConfig['logged_in_navigation_links'])){
 		$h = fopen($path.'main_menu.user.inc', 'w'); 
 		foreach($links[0] as $link)
 		{
-			fwrite($h, $link.'\n');
+			fwrite($h, $link."\n");
 		}
 		fwrite($h, '{{searchform}}');
 		fwrite($h, 'You are {{whoami}}');
 		fclose($h);
 	}
-    unset($wakkaConfig['logged_in_navigation_links']); // since 1.2
+    unset($config['logged_in_navigation_links']); // since 1.2
 }
 
 // set version to current version, yay!
