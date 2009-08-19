@@ -221,8 +221,7 @@ WikkaEdit.prototype.toolbarButtonClick = function(obj, buttonName, submenuName) 
 
 		case "link" :		this.addToSelection("[[http://www.example.com Page Title]]"); break;
 		case "image" :		this.toolbarActionClick("we_image"); break;
-		case "table" :		this.addToSelection("{{table columns=\"2\" cellpadding=\"1\" cells=\"header1;header2;cell1;cell2\"}}");	// 1.1.6.4
-							//this.addToSelection("|=|header1|=|header2||\n||cell1||cell2||");										// 1.1.7
+		case "table" :		this.addToSelection("|=|header1|=|header2||\n||cell1||cell2||");										// 1.2
 							break;
 		case "rawhtml" :	this.addToSelection("\"\"insert-raw-html-here\"\""); break;
 		case "sourcecode" :	this.addToSelection("%%(language-ref)\ninsert-source-code-here\n%%"); break;
