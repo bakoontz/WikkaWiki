@@ -281,6 +281,7 @@ h1, h2, h3, h4, h5 {
 
 #header h2 {
 	font-size: 18pt;
+	padding: .3em 0; 
 }
 
 tt {
