@@ -180,6 +180,7 @@ $wakkaDefaultConfig = array(
 	'base_url'					=> $t_scheme.$t_domain.$t_port.$t_request.$t_query,
 	'rewrite_mode'				=> $t_rewrite_mode,
 	'wiki_suffix'				=> '@wikka',
+	'enable_user_host_lookup'	=> '1',	#enable (1, default) or disable (0) lookup of user hostname from IP address
 
 	'action_path'				=> 'plugins/actions'.PATH_DIVIDER.'actions',
 	'handler_path'				=> 'plugins/handlers'.PATH_DIVIDER.'handlers',

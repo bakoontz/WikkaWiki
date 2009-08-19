@@ -1759,7 +1759,26 @@ class Wakka
 	// USERS
 	function LoadUser($name, $password = 0) { return $this->LoadSingle("select * from ".$this->config['table_prefix']."users where name = '".mysql_real_escape_string($name)."' ".($password === 0 ? "" : "and password = '".mysql_real_escape_string($password)."'")." limit 1"); }
 	function LoadUsers() { return $this->LoadAll("select * from ".$this->config['table_prefix']."users order by name"); }
-	function GetUserName() { if ($user = $this->GetUser()) $name = $user["name"]; else if (!$name = gethostbyaddr($_SERVER["REMOTE_ADDR"])) $name = $_SERVER["REMOTE_ADDR"]; return $name; }
+	function GetUserName()
+	{
+		if ($user = $this->GetUser())
+		{
+			$name = $user['name'];
+		}
+		else
+		{
+			$ip = $_SERVER['REMOTE_ADDR'];
+			if ($this->config['enable_user_host_lookup'] == 1)	// #240
+			{
+				$name = gethostbyaddr($ip) ? gethostbyaddr($ip) : $ip;
+			}
+			else
+			{
+				$name = $ip;
+			}
+		}
+		return $name;
+	}
 	function GetUser() { return (isset($_SESSION["user"])) ? $_SESSION["user"] : NULL; }
 	function SetUser($user) { $_SESSION["user"] = $user; $this->SetPersistentCookie("user_name", $user["name"]); $this->SetPersistentCookie("pass", $user["password"]); }
 	function LogoutUser() 

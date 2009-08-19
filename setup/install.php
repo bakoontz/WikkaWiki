@@ -430,6 +430,8 @@ case "1.1.6.5":
 case "1.1.6.6":
 case "1.1.6.7":
 case "1.2":
+	test(sprintf(ADDING_CONFIG_ENTRY, 'enable_user_host_lookup' ), 1);
+	$config['enable_user_host_lookup'] = '1';
 	test("Archiving latest FormattingRules revision...", 
 	mysql_query("update ".$config["table_prefix"]."pages set latest = 'N' where tag = 'FormattingRules'"), "Already done? OK!", 0);
 	test("Updating FormattingRules page...",
