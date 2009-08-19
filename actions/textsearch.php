@@ -28,19 +28,19 @@
 	if (!defined('SEARCH_RESULTS')) define('SEARCH_RESULTS', 'Search results: <strong>%1$s</strong> for <strong>%2$s</strong>'); #%1$s: n matches for | %2$s: search term
 	if (!defined('SEARCH_TRY_EXPANDED')) define('SEARCH_TRY_EXPANDED', '<br />Not sure which page to choose?<br />Try the <a href="$1">Expanded Text Search</a> which shows surrounding text.');
 	if (!defined('SEARCH_TIPS')) define('SEARCH_TIPS', "<br /><br /><hr /><br /><strong>Search Tips:</strong><br /><br />"
-		."<div class=\"indent\">apple banana</div>"
+		."<div class=\"indent\"><tt>apple banana</tt></div>"
 		."Find pages that contain at least one of the two words. <br />"
 		."<br />"
-		."<div class=\"indent\">+apple +juice</div>"
+		."<div class=\"indent\"><tt>+apple +juice</tt></div>"
 		."Find pages that contain both words. <br />"
 		."<br />"
-		."<div class=\"indent\">+apple -macintosh</div>"
+		."<div class=\"indent\"><tt>+apple -macintosh</tt></div>"
 		."Find pages that contain the word 'apple' but not 'macintosh'. <br />"
 		."<br />"
-		."<div class=\"indent\">apple*</div>"
+		."<div class=\"indent\"><tt>apple*</tt></div>"
 		."Find pages that contain words such as apple, apples, applesauce, or applet. <br />"
 		."<br />"
-		."<div class=\"indent\">\"some words\"</div>"
+		."<div class=\"indent\"><tt>\"some words\"</tt></div>"
 		."Find pages that contain the exact phrase 'some words' (for example, pages that contain 'some words of wisdom' <br />"
 		."but not 'some noise words'). <br />");
 
