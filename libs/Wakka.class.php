@@ -1694,7 +1694,7 @@ class Wakka
 	 function GetThemePath()
 	 {
 	 	//check if custom theme is set in user preferences
-	 	if ($user = $this->GetUser())
+	 	if ($user = $this->GetUser() && $user['theme']!='')
 		{
 			$theme = $user['theme'];
 		}

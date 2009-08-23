@@ -225,7 +225,7 @@ else if ($user = $this->GetUser())
 		$show_comments = $user['show_comments'];
 		$revisioncount = $user['revisioncount'];
 		$changescount = $user['changescount'];
-		$usertheme = $user['theme'];
+		$usertheme = ($user['theme']!= '')? $user['theme'] : $this->GetConfigValue('theme');
 	}
 
 	// display user settings form
