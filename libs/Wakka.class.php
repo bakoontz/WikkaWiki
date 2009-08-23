@@ -1693,8 +1693,17 @@ class Wakka
 	 */
 	 function GetThemePath()
 	 {
-		 $path = $this->BuildFullpathFromMultipath($this->GetConfigValue('theme'), $this->GetConfigValue('wikka_template_path'));
-		if(FALSE===file_exists($path))
+	 	//check if custom theme is set in user preferences
+	 	if ($user = $this->GetUser())
+		{
+			$theme = $user['theme'];
+		}
+		else
+		{
+			$theme = $this->GetConfigValue('theme');
+		}
+		$path = $this->BuildFullpathFromMultipath($theme, $this->GetConfigValue('wikka_template_path'));
+	 	if(FALSE===file_exists($path))
 		{
 			// Check on fallback theme dir...
 			if(FALSE===file_exists('templates/default'))
@@ -1708,7 +1717,29 @@ class Wakka
 		}
 		return $path;
 	}
-
+	/**
+	* Build a drop-down menu with a list of available themes
+	*
+	* @todo	Add support for plugin themes
+	*/
+	function SelectTheme($default_theme='default')
+	{
+		echo '<select name="theme">';
+		// use configured path
+		$hdl = opendir('templates');
+		while ($f = readdir($hdl))
+		{
+			if ($f[0] == '.') continue;
+			// use configured path
+			else
+			{
+				echo "\n ".'<option value="'.$f.'"';
+				if ($f == $default_theme) echo ' selected="selected"';
+				echo '>'.$f.'</option>';
+			}
+		}
+		echo '</select>';
+	}
 	/** 
 	 * Build a (possibly valid) filepath from a delimited list of paths  
 	 * 
