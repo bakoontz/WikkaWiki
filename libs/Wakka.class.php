@@ -29,6 +29,8 @@ if(!defined('PERSISTENT_COOKIE_EXPIRY')) define('PERSISTENT_COOKIE_EXPIRY', 7776
 
 // i18n TODO:move to language file
 if(!defined('CREATE_THIS_PAGE_LINK_TITLE')) define('CREATE_THIS_PAGE_LINK_TITLE', 'Create this page');
+if(!defined('DEFAULT_THEMES_TITLE')) define('DEFAULT_THEMES_TITLE', 'Default themes (%s)'); //%s: number of available themes
+if(!defined('CUSTOM_THEMES_TITLE')) define('CUSTOM_THEMES_TITLE', 'Custom themes (%s)'); //%s: number of available themes
 
 /**
  * The Wikka core.
@@ -1720,25 +1722,58 @@ class Wakka
 	/**
 	* Build a drop-down menu with a list of available themes
 	*
-	* @todo	Add support for plugin themes
+	* This function reads the content of the templates/ and plugins/templates paths and builds
+	* a list of available themes. Themes in the plugin tree override default themes with the same 
+	* name.
+	* @since
+	* @param string $default_theme optional: marks a specific theme as selected by default  
 	*/
 	function SelectTheme($default_theme='default')
 	{
-		echo '<select name="theme">';
-		// use configured path
+		$plugin = array();
+		$core = array();
+		// plugin path
+		$hdl = opendir('plugins/templates');
+		while ($g = readdir($hdl))
+		{
+			if ($g[0] == '.') continue;
+			else
+			{
+				$plugin[] = $g;
+			}
+		}
+		// default path
 		$hdl = opendir('templates');
 		while ($f = readdir($hdl))
 		{
 			if ($f[0] == '.') continue;
-			// use configured path
-			else
+			// theme override
+			else if (!in_array($f, $plugin))
 			{
-				echo "\n ".'<option value="'.$f.'"';
-				if ($f == $default_theme) echo ' selected="selected"';
-				echo '>'.$f.'</option>';
+				$core[] = $f;
 			}
 		}
-		echo '</select>';
+		$output .= '<select id="select_theme" name="theme">';
+		$output .= '<option disabled="disabled">'.sprintf(DEFAULT_THEMES_TITLE, count($core)).'</option>';
+		foreach ($core as $c)
+		{		
+			$output .= "\n ".'<option value="'.$c.'"';
+			if ($c == $default_theme) $output .= ' selected="selected"';
+			$output .= '>'.$c.'</option>';
+		}
+		//display custom themes if any	
+		if (count($plugin)>0)
+		{
+			$output .= '<option disabled="disabled">'.sprintf(CUSTOM_THEMES_TITLE, count($plugin)).'</option>';
+			foreach ($plugin as $p)
+			{		
+				$output .= "\n ".'<option value="'.$p.'"';
+				if ($p == $default_theme) $output .= ' selected="selected"';
+				$output .= '>'.$p.'</option>';
+			}
+		}
+		$output .= '</select>';
+		echo $output;
 	}
 	/** 
 	 * Build a (possibly valid) filepath from a delimited list of paths  
