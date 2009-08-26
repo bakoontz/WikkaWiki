@@ -257,6 +257,7 @@ h6 {
 }
 
 tt {
+	font-family: "Lucida Console", Monaco, monospace;
 	color: #666;
 }
 
