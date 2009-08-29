@@ -26,7 +26,7 @@ if (!defined('I18N_LANG')) define('I18N_LANG', 'en-us');
 header("Content-type: text/xml");
 
 $xml = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n";
-$xml .= '<?xml-stylesheet href="' . $this->GetConfigValue("base_url") .'/css/xml.css" type="text/css"?' .">\n";
+$xml .= '<?xml-stylesheet href="' . $this->GetThemePath() .'/css/xml.css" type="text/css"?' .">\n";
 $xml .= "<rss version=\"0.92\">\n";
 $xml .= "<channel>\n";
 $xml .= "<title>".$this->GetConfigValue("wakka_name")." - ".$this->tag."</title>\n";
