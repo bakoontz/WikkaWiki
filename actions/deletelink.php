@@ -2,5 +2,9 @@
 /**
  * Delete link menulet
  */
-echo '<a href="'.$this->Href('delete').'" title="Delete this page (requires confirmation)">[Delete]</a>'."\n";
+//i18n
+if (!defined('DELETELINK_TEXT')) define('DELETELINK_TEXT', '[Delete]');
+if (!defined('DELETELINK_TITLE')) define('DELETELINK_TITLE', 'Delete this page (requires confirmation)');
+
+echo '<a href="'.$this->Href('delete').'" title="'.DELETELINK_TITLE.'">'.DELETELINK_TEXT.'</a>'."\n";
 ?>
