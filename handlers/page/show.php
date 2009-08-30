@@ -49,14 +49,14 @@ echo '>'."\n"; //TODO: move to templating class
 
 if (!$this->HasAccess('read'))
 {
-	echo '<p><em class="error">You aren\'t allowed to read this page.</em></p></div>';
+	echo '<p><em class="error">You aren\'t allowed to read this page.</em></p>';
 	echo "\n".'</div><!--closing page content-->'."\n"; //TODO: move to templating class
 }
 else
 {
 	if (!$this->page)
 	{
-		echo '<p>This page doesn\'t exist yet. Maybe you want to <a href="'.$this->Href('edit').'">create</a> it?</p></div>';
+		echo '<p>This page doesn\'t exist yet. Maybe you want to <a href="'.$this->Href('edit').'">create</a> it?</p>';
 		echo '</div><!--closing page content-->'."\n"; //TODO: move to templating class
 	}
 	else
