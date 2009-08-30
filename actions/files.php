@@ -150,7 +150,7 @@ elseif ($this->page &&
 	$upload_path = $this->config['upload_path'].'/'.$this->GetPageTag();
 	if (! is_dir($upload_path)) mkdir_r($upload_path);
 
-	if($this->isAdmin() && $can_upload_files) { 
+	if($this->IsAdmin() && $can_upload_files) { 
 		// upload action
 		if (isset($_POST['action']) && $_POST['action'] == 'upload') 
 		{
