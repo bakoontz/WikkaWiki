@@ -2159,6 +2159,12 @@ class Wakka
 			header("Content-type: text/plain");
 			print($this->Method($this->method));
 		}
+		// html page handler
+		elseif ($this->method == "html")
+		{
+			header("Content-type: text/html");
+			print($this->Method($this->method));
+		}
 		// grabcode page handler
 		elseif ($this->method == "grabcode")
 		{
