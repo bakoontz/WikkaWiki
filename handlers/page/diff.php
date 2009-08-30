@@ -32,6 +32,7 @@
 
 if (!defined('ERROR_DIV_LIBRARY_MISSING')) define ('ERROR_DIV_LIBRARY_MISSING', 'The necessary file "libs/diff.lib.php" could not be found. Please make sure the file exists and is placed in the right directory!');
 if (!defined('ERROR_NO_PAGE_ACCESS')) define ('ERROR_NO_PAGE_ACCESS', 'You are not authorized to view this page.');
+if (!defined('ERROR_BAD_PARAMETERS')) define ('ERROR_BAD_PARAMETERS', 'Sorry, no revisions to compare were specified.');
 if (!defined('CONTENT_ADDITIONS_HEADER')) define ('CONTENT_ADDITIONS_HEADER', 'Additions:');
 if (!defined('CONTENT_DELETIONS_HEADER')) define ('CONTENT_DELETIONS_HEADER', 'Deletions:');
 if (!defined('CONTENT_NO_DIFFERENCES')) define ('CONTENT_NO_DIFFERENCES', 'No Differences');
@@ -65,7 +66,6 @@ if ($this->HasAccess('read'))
 	$pageB = (isset($_GET['b'])) ? $this->LoadPageById($_GET['b']) : '';	# #312
 	if ('' == $pageA || '' == $pageB)
 	{
-		echo '<div id="content">'."\n";
 		echo '<em class="error">'.ERROR_BAD_PARAMETERS.'</em><br />';
 		echo '</div>'."\n";
 		return;
