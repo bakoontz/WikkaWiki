@@ -169,7 +169,7 @@ a.ext:hover {
 	width: auto;
 	color: #666666;
 	background-color: #EEE;
-	font-weight: normal;
+	font-weight: inherit;
 }
 
 #content a.datetime {
