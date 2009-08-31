@@ -47,10 +47,13 @@ $max_upload_size = "2097152"; // 2 Megabyte
 
 // File uploads permitted?
 $can_upload_files = (bool) ini_get('file_uploads');
-if(!defined('NO_FILE_UPLOADS')) define (('NO_FILE_UPLOADS'), "<em class='error'>File uploads are disallowed on this server</em>");
-if(!defined('NO_FILE_UPLOADED')) define (('NO_FILE_UPLOADED'), "<em
-class='error'>No file uploaded</em>");
-
+if(!defined('NO_FILE_UPLOADS')) define ('NO_FILE_UPLOADS', "<em class='error'>File uploads are disallowed on this server</em>");
+if(!defined('NO_FILE_UPLOADED')) define ('NO_FILE_UPLOADED', "<em class='error'>No file uploaded</em>");
+if(!defined('ERROR_DURING_FILE_UPLOAD')) define ('ERROR_DURING_FILE_UPLOAD', "<em class='error'>There was an error uploading your file.  Please try again.</em>");
+if(!defined('ERROR_UPLOAD_DIRECTORY_NOT_WRITABLE')) define('ERROR_UPLOAD_DIRECTORY_NOT_WRITABLE', "<em class='error'>Please make sure that the server has write access to a folder named <tt>%s</tt></em>.");
+if(!defined('ERROR_UPLOAD_DIRECTORY_NOT_READABLE')) define('ERROR_UPLOAD_DIRECTORY_NOT_READABLE', "<em class='error'>Please make sure that the server has read access to a folder named <tt>%s</tt></em>.");
+if(!defined('ERROR_MAX_FILESIZE_EXCEEDED')) define('ERROR_MAX_FILESIZE_EXCEEDED', "<em class='error'>Attempted file upload was too big.  Maximum allowed size is %d MB.</em>"); 
+if(!defined('ERROR_FILE_EXISTS')) define('ERROR_FILE_EXISTS', "<em class='error'>There is already a file named <tt>%s</tt>. Please rename before uploading or delete the existing file first.</em>");
 
 if (! function_exists('mkdir_r')) 
 {
@@ -74,7 +77,7 @@ if (! function_exists('mkdir_r'))
 		{
 			return 1;
 		}
-		return (mkdir_r(dirname($dir)) and mkdir($dir,0755));
+		return (@mkdir($dir,0755));
 	}
 }
 
@@ -144,11 +147,29 @@ elseif ($this->page &&
 {
 
 	// upload path 
-	// (Needed to various read functions, regardless of php.ini file_uploads
+	// (Needed for various read functions, regardless of php.ini file_uploads
 	// setting)
 	if ($this->config['upload_path'] == '') $this->config['upload_path'] = 'files';
-	$upload_path = $this->config['upload_path'].'/'.$this->GetPageTag();
-	if (! is_dir($upload_path)) mkdir_r($upload_path);
+	// Try to create root upload_path if it doesn't exist
+	if (!is_dir($this->config['upload_path'])) 
+	{
+		if(FALSE === mkdir_r($this->config['upload_path']))
+		{
+			echo sprintf(ERROR_UPLOAD_DIRECTORY_NOT_WRITABLE, $this->config['upload_path']);
+			return;
+		}
+	}
+
+	// Try to create page-specific upload_path
+	$upload_path = $this->config['upload_path'] . DIRECTORY_SEPARATOR . $this->GetPageTag();
+	if (!is_dir($upload_path)) 
+	{
+		if(FALSE === mkdir_r($upload_path))
+		{
+			echo sprintf(ERROR_UPLOAD_DIRECTORY_NOT_WRITABLE, $upload_path);
+			return;
+		}
+	}
 
 	if($this->IsAdmin() && $can_upload_files) { 
 		// upload action
@@ -160,7 +181,7 @@ elseif ($this->page &&
 					case 0:
 						if ($_FILES["file"]["size"] > $max_upload_size) 
 						{
-							echo "<b>Attempted file upload was too big.  Maximum allowed size is ".bytesToHumanReadableUsage($max_upload_size).".</b>"; 
+							echo sprintf(ERROR_MAX_FILESIZE_EXCEEDED, bytesToHumanReadableUsage($max_upload_size)); 
 							unlink($uploaded['tmp_name']);
 						} 
 						else 
@@ -172,27 +193,23 @@ elseif ($this->page &&
 
 							if (!file_exists($destfile))
 							{
-								if (move_uploaded_file($uploaded['tmp_name'], $destfile))
+								if (!move_uploaded_file($uploaded['tmp_name'], $destfile))
 								{
-									// echo("<b>File was successfully uploaded.</b><br />\n");
-								}
-								else
-								{
-									echo("<b>There was an error uploading your file.</b><br />\n");
+									echo(ERROR_DURING_FILE_UPLOAD . "<br />\n");
 								}
 							}
 							else
 							{
-								echo("<b>There is already a file named \"" . $strippedname . "\".</b> <br />\nPlease rename before uploading or delete the existing file below.<br />\n");
+								echo sprintf(ERROR_FILE_EXISTS, $strippedname);
 							}
 						}
 						break;
 					case 1:
 					case 2: // File was too big.... as reported by the browser, respecting MAX_FILE_SIZE
-						echo "<b>Attempted file upload was too big. Maximum allowed size is ".bytesToHumanReadableUsage($max_upload_size).".</b>"; 
+						echo sprintf(ERROR_MAX_FILESIZE_EXCEEDED, bytesToHumanReadableUsage($max_upload_size)); 
 						break;
 					case 3:
-						echo("<b>File upload incomplete! Please try again.</b><br />\n");
+						echo ERROR_DURING_FILE_UPLOAD;
 						break;
 					case 4:
 						echo NO_FILE_UPLOADED;
@@ -202,7 +219,13 @@ elseif ($this->page &&
 
 	// If no files exist, then there's no need to display an
 	// attachment table
-	$dir = opendir($upload_path);
+	$dir = @opendir($upload_path);
+	if(FALSE === $dir)
+	{
+		// If it can't be opened, it can't be read!
+		echo sprintf(ERROR_UPLOAD_DIRECTORY_NOT_READABLE, $upload_path);
+		return;
+	}
 	$numfiles = 0;
 	$files = array();
 	while ($file = readdir($dir)) 
@@ -288,29 +311,32 @@ elseif ($this->page &&
 		}
 	}
 
-   if ($this->IsAdmin() && $can_upload_files) 
+   if ($this->IsAdmin()) 
    {
-		echo '
-						  <tr>
-								<td>
-								  &nbsp;
-								</td>
-								<td colspan="4" valign="top" align="right" nowrap="nowrap">';  	   		
-		echo $this->FormOpen('','','post','','file_upload', TRUE);
-		echo '<input type="hidden" name="MAX_FILE_SIZE" value="'.$max_upload_size.'" />';
-		echo '<input type="hidden" name="action" value="upload" />';
-		echo '											<span style="color:gray;font-size:x-small;font-style:italic;">
-										  add new attachment:
-										  <input type="file" name="file" style="padding: 0px; margin: 0px; font-size: 8px; height: 15px" />
-										  <input type="submit" value="+" style="padding: 0px; margin: 0px; font-size: 8px; height: 15px" />
-									   </span>';
-		echo $this->FormClose();
-		echo "</td>\n</tr>";	
+		if(!$can_upload_files)
+		{
+			echo NO_FILE_UPLOADS;
+		}
+		else
+		{
+			echo '
+							  <tr>
+									<td>
+									  &nbsp;
+									</td>
+									<td colspan="4" valign="top" align="right" nowrap="nowrap">';  	   		
+			echo $this->FormOpen('','','post','','file_upload', TRUE);
+			echo '<input type="hidden" name="MAX_FILE_SIZE" value="'.$max_upload_size.'" />';
+			echo '<input type="hidden" name="action" value="upload" />';
+			echo '											<span style="color:gray;font-size:x-small;font-style:italic;">
+											  add new attachment:
+											  <input type="file" name="file" style="padding: 0px; margin: 0px; font-size: 8px; height: 15px" />
+											  <input type="submit" value="+" style="padding: 0px; margin: 0px; font-size: 8px; height: 15px" />
+										   </span>';
+			echo $this->FormClose();
+			echo "</td>\n</tr>";	
+		}
    }
-   else
-	{
-	   echo NO_FILE_UPLOADS;
-	}
    echo ' </table>  ';
 }
 ?>
