@@ -279,8 +279,7 @@ img.icon {
 /* text formatting */
 
 #content h1 {
-	font: normal 18pt/20pt  Arial, Verdana, sans-serif;
-	text-align: left;
+	font: normal 18pt/20pt  Arial, Helvetica, Verdana, sans-serif;
 	margin: 0pt;
 	color: #666;
 	padding-bottom: 10px;
@@ -289,47 +288,37 @@ img.icon {
 }
 
 #content h2 {
-	font: normal 16pt/18pt  Arial, Verdana, sans-serif;
-	text-align: left;
+	font: normal 16pt/18pt  Arial, Helvetica, Verdana, sans-serif;
 	margin: 0pt;
 	color: #666;
 	padding-bottom: 10px;
-	border: none 0;
+	border-bottom: 1px dotted #DDD; 
 }
 
 #content h3 {
-	font: normal 13pt/15pt Arial, Verdana, sans-serif;
-	text-align: left;
+	font: normal 14pt/16pt Arial, Helvetica, Verdana, sans-serif;
 	margin: 0pt;
 	color: #666;
-	padding-top: 10px;
-	padding-bottom: 10px;
+	padding-bottom: 8px;
 }
 
 #content h4 {
-	font: small-caps normal 12pt/15pt Arial, Verdana, sans-serif;
-	text-align: left;
+	font: normal 12pt/14pt Arial, Helvetica, Verdana, sans-serif;
 	margin: 0pt;
 	color: #666;
-	padding-top: 5px;
-	padding-bottom: 5px;
+	padding-bottom: 6px;
 }
 
 #content h5 {
-	font: italic 12pt/18pt Arial, Verdana, sans-serif;
-	text-align: left;
+	font: small-caps normal 12pt/14pt Arial, Helvetica, Verdana, sans-serif;
 	margin: 0pt;
 	color: #666;
-	padding-top: 5px;
 }
 
 #content h6 {
-	font: normal 8pt/15pt Arial, Verdana, sans-serif;
+	font: bold 10pt/12pt Arial, Helvetica, Verdana, sans-serif;
 	color: #666;
-	letter-spacing: 0.7em;
-	text-align: left;
 }
-
 
 tt {
 	font-size: 11px;
