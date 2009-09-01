@@ -185,7 +185,7 @@ $wakkaDefaultConfig = array(
 	'action_path'				=> 'plugins/actions'.PATH_DIVIDER.'actions',
 	'handler_path'				=> 'plugins/handlers'.PATH_DIVIDER.'handlers',
 	'gui_editor'				=> '1',
-	'theme'						=> 'default',
+	'theme'						=> 'light',
 
 	// formatter and code highlighting paths
 	'wikka_formatter_path' 		=> 'plugins/formatters'.PATH_DIVIDER.'formatters',		# (location of Wikka formatter - REQUIRED)
