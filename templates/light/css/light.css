@@ -247,21 +247,23 @@ img.icon {
 /* floats */
 
 .floatl {
-	font-size: 90%; 
-	float: left; 
+	float: left;
+	font-size: 90%;
+	line-height: 1.5em;
+	padding: 5px;
 	width: 48%;
-	padding: 10px;
 	margin-right: 3%;
-	border: 1px dotted #AAA;
+	border: 1px dotted #EBC;
 }
 
 .floatr {
-	font-size: 90%; 
 	float: right; 
+	font-size: 90%; 
+	line-height: 1.5em; 
+	padding: 5px;
 	width: 48%;
-	padding: 10px;
 	margin-left: 3%;
-	border: 1px dotted #AAA;
+	border: 1px dotted #EBC;
 }
 
 /* simply left-float element */
