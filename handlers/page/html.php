@@ -12,8 +12,12 @@ if ($this->HasAccess("read") && $this->page) {
     </style>
 </head>
 <body>
+<div id="page">
 <?php
 	$this->config['external_link_tail'] = '';
     print($this->Format($this->page["body"], "html"));
 }
 ?>
+</div>
+</body>
+</html>
