@@ -34,7 +34,7 @@ body{
 
 #page {
 	margin: 0 auto;
-	width: 800px;
+	width: 850px;
 }
 
 #header {
@@ -310,7 +310,7 @@ img.icon {
 }
 
 #content h5 {
-	font: small-caps normal 12pt/14pt Arial, Helvetica, Verdana, sans-serif;
+	font: small-caps 10pt/16pt Arial, Helvetica, Verdana, sans-serif;
 	margin: 0pt;
 	color: #666;
 	letter-spacing: 0.1em;
@@ -588,7 +588,7 @@ em.success {
 
 div.success {
 	position: fixed;
-	top: 6em;
+	top: 2em;
 	right: 1.5em;
 	max-width: 40%;
 	border: 2px solid #3A3;
