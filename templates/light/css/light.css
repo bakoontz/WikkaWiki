@@ -26,7 +26,7 @@ body{
 	margin-right: 80pt;	
 	margin-bottom: 40pt;
 	font: normal 10pt/16pt Georgia, "Trebuchet MS", Times, serif; 
-	text-align: justify;
+	text-align: left;
 	color: #444;
 	background: #FFF url(../images/bkg.gif) fixed top;
 	border: none 0; 
@@ -50,7 +50,7 @@ body{
 
 #content {
 	border: 1px solid #DDD;
-	text-align: justify;
+	text-align: left;
 	background-color: #FFF; 
 	padding: 40px 30px 30px 30px;
 }
@@ -313,6 +313,7 @@ img.icon {
 	font: small-caps normal 12pt/14pt Arial, Helvetica, Verdana, sans-serif;
 	margin: 0pt;
 	color: #666;
+	letter-spacing: 0.1em;
 }
 
 #content h6 {
@@ -539,6 +540,7 @@ textarea#body{
 	border: 1px solid #CCA;
 	padding: 0px;
 	margin: 0px;
+	width: 80px;
 }
 
 input.grabcode {
