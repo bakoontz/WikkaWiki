@@ -65,7 +65,7 @@ function rmdirr($dirname)
 
 function DeleteCookie($name) { SetCookie($name, "", 1, "/"); $_COOKIE[$name] = ""; }
 
-function SelectTheme($default_theme='default')
+function SelectTheme($default_theme='light')
 {
 	echo '<select name="config[theme]">';
 	// use configured path
