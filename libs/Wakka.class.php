@@ -71,6 +71,7 @@ class Wakka
 			}
 		}
 		$this->VERSION = WAKKA_VERSION;
+		$this->PATCH_LEVEL = WIKKA_PATCH_LEVEL;
 	}
 
 	/**
@@ -673,6 +674,7 @@ class Wakka
 	function GetConfigValue($name) { return (isset($this->config[$name])) ? $this->config[$name] : null; }
 	function GetWakkaName() { return $this->GetConfigValue("wakka_name"); }
 	function GetWakkaVersion() { return $this->VERSION; }
+	function GetWikkaPatchLevel() { return $this->PATCH_LEVEL; }
 
 	/**
 	 * Page-related methods

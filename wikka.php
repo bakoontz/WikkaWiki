@@ -67,6 +67,14 @@ if (!defined('WIKI_UPGRADE_NOTICE')) define('WIKI_UPGRADE_NOTICE', 'This site is
  */
 if (!defined('WAKKA_VERSION')) define('WAKKA_VERSION', '1.2');
 
+/**#@-*/
+/**
+ * Defines the current Wikka patch level. This should be 0 by default, 
+ * and does not need to be changed for major/minor releases.
+ */
+if(!defined('WIKKA_PATCH_LEVEL')) define('WIKKA_PATCH_LEVEL', '1');
+
+
 /**#@+
  * Simple constant. May be made a configurable value.
  */

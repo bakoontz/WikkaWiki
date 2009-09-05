@@ -4,6 +4,7 @@
 	//page generation start
 	global $tstart;
 	echo $this->MakeMenu('options_menu');
+	$wikka_patch_level = ($this->GetWikkaPatchLevel() == '0') ? '' : '-p'.$this->GetWikkaPatchLevel();
 ?>
 </div>
 <!-- END PAGE FOOTER -->
@@ -15,7 +16,7 @@ echo $this->Link('http://validator.w3.org/check/referer', '', 'Valid XHTML 1.0 T
 <?php
 echo $this->Link('http://jigsaw.w3.org/css-validator/check/referer', '', 'Valid CSS');
 ?> ::
-Powered by <?php echo $this->Link('http://wikkawiki.org/', '', 'WikkaWiki ' . ($this->IsAdmin() ? $this->GetWakkaVersion() : "")); ?>
+Powered by <?php echo $this->Link('http://wikkawiki.org/', '', 'WikkaWiki ' . ($this->IsAdmin() ? $this->GetWakkaVersion() . $wikka_patch_level : "")); ?>
 </div>
 <!-- END SYSTEM INFO -->
 <?php
