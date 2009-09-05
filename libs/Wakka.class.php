@@ -1691,9 +1691,13 @@ class Wakka
 	 * "fallback" default theme path (currently 'templates/default').
 	 * Failing that, returns NULL.
 	 *
+	 * @param  string path_sep Use this to override the OS default 
+	 * DIRECTORY_SEPARATOR (usually used in conjunction with CSS path 
+	 * generation). Default is DIRECTORY_SEPARATOR.
+	 *
      * @return string A fully-qualified pathname or NULL if none found 
 	 */
-	 function GetThemePath()
+	 function GetThemePath($path_sep = DIRECTORY_SEPARATOR)
 	 {
 	 	//check if custom theme is set in user preferences
 	 	if ($user = $this->GetUser())
@@ -1704,17 +1708,17 @@ class Wakka
 		{
 			$theme = $this->GetConfigValue('theme');
 		}
-		$path = $this->BuildFullpathFromMultipath($theme, $this->GetConfigValue('wikka_template_path'));
+		$path = $this->BuildFullpathFromMultipath($theme, $this->GetConfigValue('wikka_template_path'), $path_sep);
 	 	if(FALSE===file_exists($path))
 		{
 			// Check on fallback theme dir...
-			if(FALSE===file_exists('templates/default'))
+			if(FALSE===file_exists('templates'.$path_sep.'default'))
 			{
 				return null;
 			}
 			else
 			{
-				return 'templates/default';
+				return 'templates'.$path_sep.'default';
 			}
 		}
 		return $path;
@@ -1791,12 +1795,15 @@ class Wakka
 	 *              construction of fully-qualified filepath  
 	 * @param string $pathlist mandatory: list of 
 	 *              paths (delimited by ":", ";", or ",") 
+	 * @param  string path_sep Use this to override the OS default 
+     *              DIRECTORY_SEPARATOR (usually used in conjunction with CSS path 
+     *              generation). Default is DIRECTORY_SEPARATOR.
 	 * @param  boolean $checkIfFileExists optional: if TRUE, returns 
 	 *              only a pathname that points to a file that exists 
 	 *              (default) 
 	 * @return string A fully-qualified pathname or NULL if none found 
 	 */ 
-	function BuildFullpathFromMultipath($filename, $pathlist, $checkIfFileExists=TRUE) 
+	function BuildFullpathFromMultipath($filename, $pathlist, $path_sep = DIRECTORY_SEPARATOR, $checkIfFileExists=TRUE) 
 	{ 
 		$paths = preg_split('/;|:|,/', $pathlist); 
 		if(empty($paths[0])) return NULL; 
@@ -1808,7 +1815,7 @@ class Wakka
 				$path = trim($path); 
 				if(file_exists($path)) 
 				{ 
-						return $path.DIRECTORY_SEPARATOR.$filename; 
+						return $path.$path_sep.$filename; 
 				} 
 			} 
 			return NULL; 
@@ -1816,7 +1823,7 @@ class Wakka
 		foreach($paths as $path) 
 		{ 
 			$path = trim($path); 
-			$fqfn = $path.DIRECTORY_SEPARATOR.$filename; 
+			$fqfn = $path.$path_sep.$filename; 
 			if(file_exists($fqfn)) return $fqfn; 
 		} 
 		return NULL; 

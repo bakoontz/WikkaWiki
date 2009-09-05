@@ -404,6 +404,7 @@ $content =  ob_get_contents();
 /**
  * Use gzip compression if possible.
  */
+/*
 if ( isset($_SERVER['HTTP_ACCEPT_ENCODING']) && strstr ($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip') && function_exists('gzencode') ) #38
 {
 	// Tell the browser the content is compressed with gzip
@@ -411,9 +412,10 @@ if ( isset($_SERVER['HTTP_ACCEPT_ENCODING']) && strstr ($_SERVER['HTTP_ACCEPT_EN
 	$page_output = gzencode($content);
 	$page_length = strlen($page_output);
 } else {
+ */
 	$page_output = $content;
 	$page_length = strlen($page_output);
-}
+//}
 
 // header("Cache-Control: pre-check=0");
 header("Cache-Control: no-cache");
