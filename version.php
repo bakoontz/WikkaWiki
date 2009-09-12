@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Versioning routines
  *

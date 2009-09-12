@@ -596,5 +596,23 @@ class Config
 	 * {@link actions/checkversion/checkversion.php checkversion * action}.
 	 */
 	var $enable_version_check = '1';
+
+	/**
+	 * Version check interval 
+	 *
+	 *
+	 * Default ('1h') provides for a check each hour.  Other units of
+	 * time intervals:
+	 * h = hours
+	 * m = minutes
+	 * s = seconds
+	 * d = days
+	 * w = weeks (7 days)
+	 * M = months (30 days)
+	 * y = years (365 days)
+	 *
+	 * {@link actions/checkversion/checkversion.php checkversion * action}.
+	 */
+	var $version_check_interval = '1h';
 }
 ?>
