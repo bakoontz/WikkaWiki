@@ -1637,7 +1637,8 @@ class Wakka
 				$link_tracking_state = $_SESSION['linktracking']; 
 				$this->StopLinkTracking(); 
 		} 
-		$result = $this->IncludeBuffered($action_name.'.php', 'Unknown action "'.$action_name.'"', $vars, $this->config['action_path']);
+		$result =
+		$this->IncludeBuffered(strtolower($action_name).DIRECTORY_SEPARATOR.strtolower($action_name).'.php', 'Unknown action "'.$action_name.'"', $vars, $this->config['action_path']);
 		if ($link_tracking_state) 
 		{ 
 			$this->StartLinkTracking(); 
