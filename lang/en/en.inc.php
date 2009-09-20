@@ -597,6 +597,7 @@ define('MM_EDIT', 'Use %s to edit it'); // %s - link to freemind project
 define('MM_FULLSCREEN_LINK_DESC', 'Open fullscreen');
 define('ERROR_INVALID_MM_SYNTAX', 'Error: Invalid MindMap action syntax.');
 define('PROPER_USAGE_MM_SYNTAX', 'Proper usage: %1$s or %2$s'); // %1$s - syntax sample 1; %2$s - syntax sample 2
+define('FREEMIND_PROJECT_URL', 'http://freemind.sourceforge.net/');
 /**#@-*/
 
 /**#@+
@@ -734,7 +735,6 @@ define('COMMENT_TIME_FORMAT', 'H:i T');
 define('COMMENT_SNIPPET_LENGTH', 120);
 define('RECENTLY_COMMENTED_HEADING', '=====Recently commented pages=====');
 define('ANONYMOUS_COMMENT_AUTHOR', '(unregistered user)');
-define ('COMMENT_AUTHOR_DIVIDER', ', comment by ');
 define ('NO_RECENTLY_COMMENTED', 'There are no recently commented pages%s');
 define ('NO_READABLE_RECENTLY_COMMENTED', 'There are no recently commented pages you can read.');
 /**#@-*/
