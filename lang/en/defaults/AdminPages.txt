@@ -1,0 +1,4 @@
+{{adminpages}}
+
+----
+CategoryAdmin
