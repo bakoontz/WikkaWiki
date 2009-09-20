@@ -1667,7 +1667,7 @@ class Wakka
 			// valid handler name; now make sure it's lower case
 			$handler = strtolower($handler);
 		}
-		$handlerLocation = 'page'.DIRECTORY_SEPARATOR.$handler.'.php';	#89
+		$handlerLocation = $handler.DIRECTORY_SEPARATOR.$handler.'.php';	#89
 		return $this->IncludeBuffered($handlerLocation, 'Unknown handler "'.$handlerLocation.'"', '', $this->config['handler_path']);
 	}
 	function Format($text, $formatter='wakka')
