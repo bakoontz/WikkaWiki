@@ -2,14 +2,16 @@
 ===== System Information =====
 
 ~-Wikka version: ##{{wikkaversion}}##
+~-Wikka patch level: ##{{wikkapatchlevel}}##
 ~-PHP version: ##{{phpversion}}##
 ~-""MySQL"" version: ##{{mysqlversion}}##
 ~-""GeSHi"" version: ##{{geshiversion}}##
 ~-Server:
 ~~-Host: ##{{system show="host"}}##
-~~-Operating System: ##{{system show="os"}}##
+~~-Operative System: ##{{system show="os"}}##
 ~~-Machine: ##{{system show="machine"}}##
 
 {{wikkaconfig}}
+
 ----
 CategoryWiki

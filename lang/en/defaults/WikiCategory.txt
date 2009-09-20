@@ -1,24 +1,17 @@
-===This wiki is using a very flexible but simple categorizing system to keep everything properly organized.===
+=====How to use categories=====
+This wiki is using a very flexible but simple categorizing system to keep everything properly organized.
 
-{{Category page="/"  col="10"}}
-==Here's how it works :==
-~- The master list of the categories is **""CategoryCategory""** which will automatically list all known maincategories, and should never be edited. This list is easily accessed from the Wiki's top navigation bar. (Categories).
-~- Each category has a ""WikiName"" name of the form ""CategoryName"" for example CategoryWiki etc. (see list of maincategories above)
-~- Pages can belong to zero or more categories. Including a page in a category is done by simply linking to the ""CategoryName"" on the page (by convention at the very end of the page). To mention a category on a page when the page does not belong to it, write its name in double double quote in order to unwikify it. To link to a category on a page when the page does not belong to it, link it using full URL like ""[[http://yoursite.com/CategoryXy CategoryXy]]"".
-~- The system allows to build hierarchies of categories by referring to the parent category in the subcategory page. The parent category page will then automatically include the subcategory page in its list.
-~- A special kind of category is **""CategoryUsers""** to group the userpages, so your Wiki homepage should include it at the end to be included in the category-driven userlist.
-~- New categories can be created (think very hard before doing this though, you don't need too much of them) by creating a ""CategoryName"" page, including ""{{Category}}"" in it and placing it in the **""CategoryCategory""** category (for a main category or another parent category in case you want to create a subcategory).
+====1. Adding a page to an existing category====
+To ''add a page to an existing category'' simply add a link to the relevant category page. For example, to mark page ##""MyPage""## as a child of category ##""MyCategory""##, just add a link to ##""MyCategory""## from ##""MyPage""##. This will automatically add ##""MyPage""## to the list of pages belonging to that category. Category links are put by convention at the end of the page, but the position of these links does not affect their behavior.
 
-**Please help to keep this place organized by including the relevant categories in new and existing pages !**
+====2. Adding a subcategory to an existing category====
+To ''create a hierarchy of categories'', you can follow the same instructions to add pages to categories. For example, to mark category ##""Category2""## as a child (or subcategory) of another category ##""Category1""##, just add a link to ##""Category1""## in ##""Category2""##. This will automatically add ##""Category2""## to the list of ##""Category1""##'s children.
 
-**Notes:** 
-~- The above bold items were coded using double doublequote in order to unwikify them to prevent this page from showing up in the mentioned categories. This page only belongs in CategoryWiki (which can be safely mentioned) after all !
-~- In order to avoid accidental miscategorization you should unwikify all camelcased non-related ""CategoryName"" on a page. This is a side-effect of how the categorizing system works: it's based on a backlinking and is not restricted to the footer convention.
-~- Don't be put of by the name of this page (WikiCategory) which is a logical name (it's about the Wiki and explains Category) but doesn't have any special role in the Categorizing system.
-~- To end with this is the **standard convention** to include the categories (both the wiki code and the result):
+====3. Creating new categories====
+To ''start a new category'' just create a page containing ##""{{category}}""##. This will mark the page as a special //category page// and will output a list of pages belonging to the category. Category page names start by convention with the word ##Category## but you can also create categories without following this convention. To add a new category to the master list of categories just add a link from it to CategoryCategory.
 
-%%==Categories==
-CategoryWiki%%
+====4. Browsing categories====
+To ''browse the categories'' available on your wiki you can start from CategoryCategory. If all pages and subcategories are properly linked as described above, you will be able to browse the whole hierarchy of categories starting from this page.
 
-==Categories==
+----
 CategoryWiki
