@@ -1,14 +1,3 @@
-<?php
-// i18n strings
-if (!defined('BUTTON_RETURN_TO_NODE')) define('BUTTON_RETURN_TO_NODE', 'Return To Node / Cancel');
-if (!defined('BUTTON_SHOW_DIFFERENCES')) define('BUTTON_SHOW_DIFFERENCES', 'Show Differences');
-if (!defined('ERROR_ACL_READ')) define('ERROR_ACL_READ', 'You aren\'t allowed to read this page.');
-if (!defined('SIMPLE_DIFF')) define('SIMPLE_DIFF', 'Simple Diff');
-if (!defined('WHEN_BY_WHO')) define('WHEN_BY_WHO', '%1$s by %2$s');
-if (!defined('UNREGISTERED_USER')) define('UNREGISTERED_USER', 'unregistered user');
-if (!defined('REVISIONS_NO_REVISIONS_YET')) define('REVISIONS_NO_REVISIONS_YET', 'There are no revisions for this page yet');
-
-?>
 <div id="content">
 <?php
 if ($this->HasAccess("read"))

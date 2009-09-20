@@ -12,21 +12,6 @@
  * 				- added extensive logging of events such as page deletion, cloning, ACL change {@link http://wush.net/trac/wikka/ticket/143 #143};
  */
 
-//defaults
-if(!defined('REVISION_DATE_FORMAT')) define('REVISION_DATE_FORMAT', 'D, d M Y');
-if(!defined('REVISION_TIME_FORMAT')) define('REVISION_TIME_FORMAT', 'H:i T');
-if (!defined('PAGE_EDITOR_DIVIDER')) define ('PAGE_EDITOR_DIVIDER', '&#8594;');
-if (!defined('MAX_REVISION_NUMBER')) define ('MAX_REVISION_NUMBER', '50');
-
-//i18n
-if (!defined('RECENT_CHANGES_HEADING')) define('RECENT_CHANGES_HEADING', '=====Recently changed pages=====');
-if (!defined('UNREGISTERED_USER')) define('UNREGISTERED_USER', 'unregistered user');
-if (!defined('LABEL_HISTORY')) define('LABEL_HISTORY', 'history');
-if (!defined('TITLE_REVISION_LINK')) define('TITLE_REVISION_LINK', 'View recent revisions list for %s');
-if (!defined('TITLE_HISTORY_LINK')) define('TITLE_HISTORY_LINK', 'View edit history of %s');
-if (!defined('WIKIPING_ENABLED')) define('WIKIPING_ENABLED', 'WikiPing enabled: Changes on this wiki are broadcast to <a href="http://%1$s">http://%1$s</a>');
-if (!defined('NO_RECENTLY_CHANGED_PAGES')) define ('NO_RECENTLY_CHANGED_PAGES', 'There are no recently changed pages.');
-if (!defined('NO_READABLE_RECENTLY_CHANGED_PAGES')) define ('NO_READABLE_RECENTLY_CHANGED_PAGES', 'There are no recently changed pages you have access to.');
 
 //initialization
 $max = 0;

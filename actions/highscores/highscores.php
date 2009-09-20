@@ -31,9 +31,6 @@
  */
 
 //defaults
-if(!defined('HIGHSCORES_DISPLAY_TOP')) define('HIGHSCORES_DISPLAY_TOP', 10); //limit output to top n users
-if(!defined('HIGHSCORES_DEFAULT_STYLE')) define('HIGHSCORES_DEFAULT_STYLE', 'complex'); //set default layout style
-
 $rank = 'pages';
 $limit = HIGHSCORES_DISPLAY_TOP;
 

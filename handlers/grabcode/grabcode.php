@@ -14,13 +14,6 @@
  			- check time format for consistency
  */
 
-// i18n strings
-define('ERROR_NO_CODE', 'Sorry, there is no code to download.');
-
-// defaults
-define('DEFAULT_FILENAME', 'codeblock.txt'); # default name for code blocks
-define('FILE_EXTENSION', '.txt'); # extension appended to code block name
-
 // initialize variables
 $code = '';
 $filename = '';

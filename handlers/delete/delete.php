@@ -1,8 +1,6 @@
 <div id="content">
 <?php
 
-if (!defined('CANCEL_ACL_LABEL')) define('CANCEL_ACL_LABEL', 'Cancel');
-
 // cancel operation and return to the page
 if (isset($_POST['cancel']) && ($_POST['cancel'] == CANCEL_ACL_LABEL))
 {

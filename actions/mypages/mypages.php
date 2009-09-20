@@ -13,12 +13,6 @@
  * 
  */
 
-//i18n
-if(!defined('MYPAGES_HEADER')) define('MYPAGES_HEADER', "This is the list of pages owned by %s");
-if(!defined('MYPAGES_NONE_OWNED')) define ('MYPAGES_NONE_OWNED', "You don't own any pages.");
-if(!defined('MYPAGES_NONE_FOUND')) define ('MYPAGES_NONE_FOUND', "No pages found");
-if(!defined('MYPAGES_NOT_LOGGED_IN')) define ('MYPAGES_NOT_LOGGED_IN', "You're not logged in, thus the list of your pages couldn't be retrieved."); 
-
 $username = '';
 if(isset($_GET['user']))
 {

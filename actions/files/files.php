@@ -47,13 +47,6 @@ $max_upload_size = "2097152"; // 2 Megabyte
 
 // File uploads permitted?
 $can_upload_files = (bool) ini_get('file_uploads');
-if(!defined('NO_FILE_UPLOADS')) define ('NO_FILE_UPLOADS', "<em class='error'>File uploads are disallowed on this server</em>");
-if(!defined('NO_FILE_UPLOADED')) define ('NO_FILE_UPLOADED', "<em class='error'>No file uploaded</em>");
-if(!defined('ERROR_DURING_FILE_UPLOAD')) define ('ERROR_DURING_FILE_UPLOAD', "<em class='error'>There was an error uploading your file.  Please try again.</em>");
-if(!defined('ERROR_UPLOAD_DIRECTORY_NOT_WRITABLE')) define('ERROR_UPLOAD_DIRECTORY_NOT_WRITABLE', "<em class='error'>Please make sure that the server has write access to a folder named <tt>%s</tt></em>.");
-if(!defined('ERROR_UPLOAD_DIRECTORY_NOT_READABLE')) define('ERROR_UPLOAD_DIRECTORY_NOT_READABLE', "<em class='error'>Please make sure that the server has read access to a folder named <tt>%s</tt></em>.");
-if(!defined('ERROR_MAX_FILESIZE_EXCEEDED')) define('ERROR_MAX_FILESIZE_EXCEEDED', "<em class='error'>Attempted file upload was too big.  Maximum allowed size is %d MB.</em>"); 
-if(!defined('ERROR_FILE_EXISTS')) define('ERROR_FILE_EXISTS', "<em class='error'>There is already a file named <tt>%s</tt>. Please rename before uploading or delete the existing file first.</em>");
 
 if (! function_exists('mkdir_r')) 
 {

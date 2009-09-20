@@ -30,17 +30,6 @@
  * 			JW: that may be nice but won't work on a Windows system ;) 
  */
 
-if (!defined('ERROR_DIV_LIBRARY_MISSING')) define ('ERROR_DIV_LIBRARY_MISSING', 'The necessary file "libs/diff.lib.php" could not be found. Please make sure the file exists and is placed in the right directory!');
-if (!defined('ERROR_NO_PAGE_ACCESS')) define ('ERROR_NO_PAGE_ACCESS', 'You are not authorized to view this page.');
-if (!defined('ERROR_BAD_PARAMETERS')) define ('ERROR_BAD_PARAMETERS', 'Sorry, no revisions to compare were specified.');
-if (!defined('CONTENT_ADDITIONS_HEADER')) define ('CONTENT_ADDITIONS_HEADER', 'Additions:');
-if (!defined('CONTENT_DELETIONS_HEADER')) define ('CONTENT_DELETIONS_HEADER', 'Deletions:');
-if (!defined('CONTENT_NO_DIFFERENCES')) define ('CONTENT_NO_DIFFERENCES', 'No Differences');
-if (!defined('WHEN_BY_WHO')) define('WHEN_BY_WHO', '%1$s by %2$s');
-if (!defined('UNREGISTERED_USER')) define('UNREGISTERED_USER', 'unregistered user');
-if (!defined('DIFF_SIMPLE_BUTTON')) define('DIFF_SIMPLE_BUTTON', 'Simple Diff');
-if (!defined('DIFF_FULL_BUTTON')) define('DIFF_FULL_BUTTON', 'Full Diff');
-
 echo '<div id="content">'."\n"; //TODO: move to templating class //TODO move _after_ redirect
 
 $output = '';

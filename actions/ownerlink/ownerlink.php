@@ -2,16 +2,6 @@
 /**
  * Ownership menulet
  */
-//i18n
-if (!defined('OWNERLINK_PUBLIC_PAGE')) define('OWNERLINK_PUBLIC_PAGE', 'Public page');
-if (!defined('OWNERLINK_NOBODY')) define('OWNERLINK_NOBODY', 'Nobody');
-if (!defined('OWNERLINK_OWNER')) define('OWNERLINK_OWNER', 'Owner:');
-if (!defined('OWNERLINK_SELF')) define('OWNERLINK_SELF', 'You own this page');
-if (!defined('EDITACLLINK_TEXT')) define('EDITACLLINK_TEXT', '[Edit ACLs]');
-if (!defined('EDITACLLINK_TITLE')) define('EDITACLLINK_TITLE', 'Change the Access Control List for this page');
-if (!defined('CLAIMLINK_TEXT')) define('CLAIMLINK_TEXT', '[Take Ownership]');
-if (!defined('CLAIMLINK_TITLE')) define('CLAIMLINK_TITLE', 'Click to become the owner of this page');
-
 if ($this->page)
 {
 	if ($owner = $this->GetPageOwner())

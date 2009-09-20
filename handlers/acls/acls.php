@@ -13,23 +13,6 @@
  * @todo		- move main <div> to templating class
  */
 
-//i18n
-if (!defined('ACLS_UPDATED')) define('ACLS_UPDATED', 'Access control lists updated.');
-if (!defined('NO_PAGE_OWNER')) define('NO_PAGE_OWNER', '(Nobody)');
-if (!defined('NOT_PAGE_OWNER')) define('NOT_PAGE_OWNER', 'You are not the owner of this page.');
-if (!defined('PAGE_OWNERSHIP_CHANGED')) define('PAGE_OWNERSHIP_CHANGED', 'Ownership changed to %s'); // %s - name of new owner
-if (!defined('ACL_HEADING')) define('ACL_HEADING', '====Access Control Lists for %s===='); // %s - name of current page
-if (!defined('READ_ACL_LABEL')) define('READ_ACL_LABEL', 'Read ACL:');
-if (!defined('WRITE_ACL_LABEL')) define('WRITE_ACL_LABEL', 'Write ACL:');
-if (!defined('COMMENT_ACL_LABEL')) define('COMMENT_ACL_LABEL', 'Comment ACL:');
-if (!defined('CANCEL_ACL_LABEL')) define('CANCEL_ACL_LABEL', 'Cancel');
-if (!defined('STORE_ACL_LABEL')) define('STORE_ACL_LABEL', 'Store ACLs');
-if (!defined('SET_OWNER_LABEL')) define('SET_OWNER_LABEL', 'Set Page Owner:');
-if (!defined('SET_OWNER_CURRENT_LABEL')) define('SET_OWNER_CURRENT_LABEL', '(Current Owner)');
-if (!defined('SET_OWNER_PUBLIC_LABEL')) define('SET_OWNER_PUBLIC_LABEL','(Public)');
-if (!defined('SET_NO_OWNER_LABEL')) define('SET_NO_OWNER_LABEL', '(Nobody - Set free)');
-if (!defined('ACL_SYNTAX_HELP')) define('ACL_SYNTAX_HELP', '===Syntax:=== ---##*## = Everyone ---##+## = Registered users ---##""JohnDoe""## = the user called ""JohnDoe"", enter as many users as you want, one per line --- --- Any of these items can be negated with a ##!##: ---##!*## = No one (except admins) ---##!+## = Anonymous users only ---##""!JohnDoe""## = ""JohnDoe"" will be denied access --- --- //ACLs are tested in the order they are specified:// --- So be sure to specify ##*## on a separate line //after// negating any users, not before.');
-
 echo '<div id="content">'."\n"; //TODO: move to templating class
 
 if ($this->UserIsOwner())

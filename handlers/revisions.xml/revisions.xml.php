@@ -17,22 +17,6 @@
  * @uses		Wakka::htmlspecialchars_ent()
  */
 
-/**
- * Defaults
- */
-if (!defined('I18N_LANG')) define('I18N_LANG', 'en-US');
-if (!defined('I18N_ENCODING_UTF8')) define('I18N_ENCODING_UTF8', 'UTF-8');
-if (!defined('RSS_REVISIONS_VERSION')) define('RSS_REVISIONS_VERSION','2.0');
-if (!defined('RSS_RECENTCHANGES_VERSION')) define('RSS_RECENTCHANGES_VERSION','0.92');
-if (!defined('REVISIONS_EDITED_BY')) define('REVISIONS_EDITED_BY','Edited by %s');
-
-/**
- * i18n
- */
-define('EDITED_BY', 'Edited by %s');
-define('ERROR_ACL_READ_INFO', 'You\'re not allowed to access this information.');
-define('HISTORY_REVISIONS_OF', 'History/revisions of %s');
-
 header("Content-type: text/xml");
 
 $xml = '<?xml version="1.0" encoding="'.I18N_ENCODING_UTF8.'"?>'."\n";

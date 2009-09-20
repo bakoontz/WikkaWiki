@@ -14,10 +14,6 @@
  * @todo	Should not tell the user if he has no right to read the page
  */
 
-// defaults
-if(!defined('ERROR_CIRCULAR_REF')) define('ERROR_CIRCULAR_REF', 'Circular reference detected');
-if(!defined('ERROR_TARGET_ACL')) define('ERROR_TARGET_ACL', "You aren't allowed to read included page <tt>%s</tt>");
-
 $page ='';
 
 // getting params

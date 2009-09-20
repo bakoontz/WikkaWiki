@@ -43,19 +43,10 @@
  */
 
 // ***** CONSTANTS section *****
-define('MIN_DATETIME', strtotime('1970-01-01 00:00:00 GMT'));		# earliest timestamp PHP can handle (Windows and some others - to be safe)
-define('MAX_DATETIME', strtotime('2038-01-19 03:04:07 GMT'));		# latest timestamp PHP can handle
-define('MIN_YEAR', date('Y',MIN_DATETIME));
-define('MAX_YEAR', date('Y',MAX_DATETIME)-1);						# don't include partial January 2038
 // not-quite-constants
 $daysInMonth = array(31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31);
-define('CUR_YEAR', date('Y',mktime()));
-define('CUR_MONTH', date('n',mktime()));
 // format string for locale-specific month (%B) + 4-digit year (%Y) used for caption and title attributes
 // NOTE: monthname is locale-specific but order of month and year may need to be switched: hence the double quotes!
-define('LOC_MON_YEAR', "%B %Y");																	# i18n
-define('FMT_SUMMARY', "Calendar for %s");															# i18n
-define('TODAY', "today");																			# i18n
 // ***** END CONSTANTS section *****
 
 // ***** (ACTION) PARAMETERS Interface *****

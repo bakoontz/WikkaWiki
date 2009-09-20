@@ -22,20 +22,6 @@
  *			- use FormatUser() method to render author name;
  */
 
-// defaults
-define('DEFAULT_SHOW', '3');
-define('DATE_FORMAT', 'D, d M Y'); #TODO make this system-configurable
-define('TIME_FORMAT', 'H:i T'); #TODO make this system-configurable
-
-// style
-define('LASTEDIT_BOX', 'lastedit');
-define('LASTEDIT_NOTES', 'lastedit_notes');
-
-// i18n strings
-define('ANONYMOUS_USER', 'anonymous');
-define('LASTEDIT_MESSAGE', 'Last edited by %s');
-define('DIFF_LINK_TITLE', 'Show differences from last revision');
-
 if (!isset($show)) 
 {
 	$show = DEFAULT_SHOW;

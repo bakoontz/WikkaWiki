@@ -17,16 +17,7 @@
  * @input		none
  * @todo			- make datetime format configurable
  */
-//constants
-if(!defined('COMMENT_DATE_FORMAT')) define('COMMENT_DATE_FORMAT', 'D, d M Y');
-if(!defined('COMMENT_TIME_FORMAT')) define('COMMENT_TIME_FORMAT', 'H:i T');
-if(!defined('COMMENT_SNIPPET_LENGTH')) define('COMMENT_SNIPPET_LENGTH', 120);
 
-//i18n
-if (!defined('RECENT_COMMENTS_HEADING')) define('RECENT_COMMENTS_HEADING', '=====Recent comments=====');
-if (!defined('COMMENT_AUTHOR_DIVIDER')) define ('COMMENT_AUTHOR_DIVIDER', ', comment by ');
-if (!defined('NO_RECENT_COMMENTS')) define ('NO_RECENT_COMMENTS', 'There are no recent comments%s');
-if (!defined('NO_READABLE_RECENT_COMMENTS')) define ('NO_READABLE_RECENT_COMMENTS', 'There are no recent comments you can read.');
 $readable = 0;
 
 $username = '';

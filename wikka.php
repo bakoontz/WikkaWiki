@@ -46,28 +46,19 @@ error_reporting (E_ALL ^ E_NOTICE);
 // reasons. [SEC]
 #if (!defined('WAKKA_CONFIG')) define('WAKKA_CONFIG','path/to/your/wikka.config.php');
 
-/**#@+
- * Internationalization constant.
- */
-if (!defined('ERROR_WAKKA_LIBRARY_MISSING')) define('ERROR_WAKKA_LIBRARY_MISSING','The necessary file "libs/Wakka.class.php" could not be found. To run Wikka, please make sure the file exists and is placed in the right directory!');
-define('ERROR_WRONG_PHP_VERSION', 'Wikka requires PHP %s or higher!');	// %s - version number
-define('MINIMUM_PHP_VERSION', '4.1');
-if (!defined('ERROR_MYSQL_SUPPORT_MISSING')) define('ERROR_MYSQL_SUPPORT_MISSING', 'PHP can\'t find MySQL support but Wikka requires MySQL. Please check the output of <tt>phpinfo()</tt> in a php document for MySQL support: it needs to be compiled into PHP, the module itself needs to be present in the expected location, <strong>and</strong> php.ini needs to have it enabled.<br />Also note that you cannot have <tt>mysqli</tt> and <tt>mysql</tt> support both enabled at the same time.<br />Please double-check all of these things, restart your webserver after any fixes, and then try again!');
-if (!defined('ERROR_SETUP_FILE_MISSING')) define('ERROR_SETUP_FILE_MISSING', 'A file of the installer/ upgrader was not found. Please install Wikka again!');
-if (!defined('ERROR_SETUP_HEADER_MISSING')) define('ERROR_SETUP_HEADER_MISSING', 'The file "setup/header.php" was not found. Please install Wikka again!');
-if (!defined('ERROR_SETUP_FOOTER_MISSING')) define('ERROR_SETUP_FOOTER_MISSING', 'The file "setup/footer.php" was not found. Please install Wikka again!');
-if (!defined('ERROR_HEADER_MISSING')) define('ERROR_HEADER_MISSING', 'A header template could not be found. Please make sure that a file called <code>header.php</code> exists in the templates directory.'); //TODO Make sure this message matches any filename/folder change 
-if (!defined('ERROR_FOOTER_MISSING')) define('ERROR_FOOTER_MISSING', 'A footer template could not be found. Please make sure that a file called <code>footer.php</code> exists in the templates directory.'); //TODO Make sure this message matches any filename/folder change 
-if (!defined('ERROR_NO_DB_ACCESS')) define('ERROR_NO_DB_ACCESS', 'The wiki is currently unavailable. <br /><br />Error: Unable to connect to the MySQL database.');
-if (!defined('PAGE_GENERATION_TIME')) define('PAGE_GENERATION_TIME', 'Page was generated in %.4f seconds'); // %.4f - generation time in seconds with 4 digits after the dot
-if (!defined('WIKI_UPGRADE_NOTICE')) define('WIKI_UPGRADE_NOTICE', 'This site is currently being upgraded. Please try again later.');
-/**#@-*/
+/** 
+ * Include language file if it exists. 
+ * @see /lang/en.inc.php 
+ */ 
+$default_lang_path = 'lang'.DIRECTORY_SEPARATOR.'en'.DIRECTORY_SEPARATOR.'en.inc.php';
+if (file_exists($default_lang_path)) require_once($default_lang_path); 
+else die('Language file '.$default_lang_path.' not found! Please add the file.');
+
 /**
  * Defines the current Wikka version. Do not change the version number or you will have problems upgrading.
  */
 if (!defined('WAKKA_VERSION')) define('WAKKA_VERSION', '1.2');
 
-/**#@-*/
 /**
  * Defines the current Wikka patch level. This should be 0 by default, 
  * and does not need to be changed for major/minor releases.

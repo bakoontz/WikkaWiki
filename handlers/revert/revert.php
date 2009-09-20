@@ -33,9 +33,6 @@
  *
  */
 
-//i18n
-if (!defined('ERROR_NO_REVERT_PRIVS')) define('ERROR_NO_REVERT_PRIVS', "Sorry, you don't have privileges to revert this page");
-
 if(TRUE===$this->IsAdmin())
 {
 	include_once('libs/admin.lib.php');

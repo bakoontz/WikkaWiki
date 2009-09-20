@@ -23,14 +23,6 @@
  * @todo		fix RE (#104 etc.)
  */
 
-// i18n strings
-if(!defined('PAGE_HEADING')) define('PAGE_HEADING',"Page Index");
-if(!defined('INDEX_CAPTION')) define('INDEX_CAPTION',"This is an alphabetical list of pages you can read on this server.");
-if(!defined('ALL_PAGES')) define('ALL_PAGES',"All");
-if(!defined('PAGE_OWNER')) define('PAGE_OWNER'," . . . . Owner: %s");
-if(!defined('OWNED_PAGES_CAPTION')) define('OWNED_PAGES_CAPTION',"Items marked with a * indicate pages that you own.");
-if(!defined('ERROR_NO_PAGES_FOUND')) define('ERROR_NO_PAGES_FOUND', "No pages found.");
-
 if ($pages = $this->LoadAllPages())
 {
 	// filter by letter

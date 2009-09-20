@@ -20,12 +20,6 @@
  *				- create GeSHi highlighter for Wikka markup; #144
  */
 
-// i18n strings
-if (!defined('SOURCE_HEADING')) define('SOURCE_HEADING', 'Formatting code for %s'); //TODO: check for consistency with other handlers (formatting code vs. source vs. markup)
-if (!defined('RAW_LINK_DESC')) define('RAW_LINK_DESC', 'show source only');
-if (!defined('ERROR_NOT_EXISTING_PAGE')) define('ERROR_NOT_EXISTING_PAGE', 'Sorry, this page doesn\'t exist.');
-if (!defined('ERROR_NO_READ_ACCESS')) define('ERROR_NO_READ_ACCESS', 'Sorry, you aren\'t allowed to read this page.');
-
 echo '<div id="content">'."\n";
 
 //check if page exists

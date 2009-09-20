@@ -19,18 +19,6 @@
  * 
  * @todo	document usage and parameters
  */
- 
-//i18n
-if (!defined('LASTUSERS_CAPTION')) define('LASTUSERS_CAPTION', 'Recently registered users');
-if (!defined('SIGNUP_DATE_TIME')) define('SIGNUP_DATE_TIME', 'Signup Date/Time');
-if (!defined('NAME_TH')) define('NAME_TH', 'Username');
-if (!defined('OWNED_PAGES_TH')) define('OWNED_PAGES_TH', 'Owned pages');
-if (!defined('SIGNUP_DATE_TIME_TH')) define('SIGNUP_DATE_TIME_TH', 'Signup date/time');
-
-//defaults
-if (!defined('LASTUSERS_DEFAULT_STYLE')) define('LASTUSERS_DEFAULT_STYLE', 'complex'); # consistent parameter naming with HighScores action
-if (!defined('LASTUSERS_MAX_USERS_DISPLAY')) define('LASTUSERS_MAX_USERS_DISPLAY', 10);
-
 //initialize
 $htmlout = '';
 $style = '';

@@ -37,43 +37,10 @@
  * @todo	use central regex library for validation;
  * @todo	replace $_REQUEST with either $_GET or $_POST (or both if really
  * 			necessary) - #312 => NOT CLEAR here what to do; see also #449
+ * @todo	Move VALID_PAGENAME_PATTERN to lang files
  */
 
-/**#@+
- * Default value.
- */
 if (!defined('VALID_PAGENAME_PATTERN')) define ('VALID_PAGENAME_PATTERN', '/^[A-Za-zÄÖÜßäöü]+[A-Za-z0-9ÄÖÜßäöü]*$/s'); //TODO use central regex library
-if (!defined('MAX_TAG_LENGTH')) define ('MAX_TAG_LENGTH', 75);
-if (!defined('MAX_EDIT_NOTE_LENGTH')) define ('MAX_EDIT_NOTE_LENGTH', 50);
-/**
- * Class attribute to enable styling as error.
- */
-if (!defined('INPUT_ERROR_STYLE')) define('INPUT_ERROR_STYLE', 'class="highlight"');
-/**#@-*/
-
-/**#@+
- * Internationalization (i18n).
- */
-if (!defined('PREVIEW_HEADER')) define('PREVIEW_HEADER', 'Preview');
-if (!defined('LABEL_EDIT_NOTE')) define('LABEL_EDIT_NOTE', 'Please add a note on your edit');
-if (!defined('ERROR_INVALID_PAGENAME')) define('ERROR_INVALID_PAGENAME', 'This page name is invalid. Valid page names must start with a letter and contain only letters and numbers.');
-if (!defined('ERROR_OVERWRITE_ALERT')) define('ERROR_OVERWRITE_ALERT', 'OVERWRITE ALERT: This page was modified by someone else while you were editing it.<br /> Please copy your changes and re-edit this page.');
-if (!defined('ERROR_MISSING_EDIT_NOTE')) define('ERROR_MISSING_EDIT_NOTE', 'MISSING EDIT NOTE: Please fill in an edit note!');
-if (!defined('ERROR_TAG_TOO_LONG')) define('ERROR_TAG_TOO_LONG', 'Tag too long! %d characters max.');
-if (!defined('ERROR_NO_WRITE_ACCESS')) define('ERROR_NO_WRITE_ACCESS', 'You don\'t have write access to this page. You might need to register an account to be able to edit this page.');
-if (!defined('ERROR_INVALID_PAGEID')) define('ERROR_INVALID_PAGEID', 'The revision id does not exist for the requested page');
-if (!defined('MESSAGE_AUTO_RESIZE')) define('MESSAGE_AUTO_RESIZE', 'Clicking on %s will automatically truncate the tag to the correct size');
-if (!defined('INPUT_SUBMIT_PREVIEW')) define('INPUT_SUBMIT_PREVIEW', 'Preview');
-if (!defined('INPUT_SUBMIT_STORE')) define('INPUT_SUBMIT_STORE', 'Store');
-if (!defined('INPUT_SUBMIT_REEDIT')) define('INPUT_SUBMIT_REEDIT', 'Re-edit');
-if (!defined('INPUT_BUTTON_CANCEL')) define('INPUT_BUTTON_CANCEL', 'Cancel');
-if (!defined('INPUT_SUBMIT_RENAME')) define('INPUT_SUBMIT_RENAME', 'Rename');
-if (!defined('ACCESSKEY_STORE')) define('ACCESSKEY_STORE', 's');
-if (!defined('ACCESSKEY_REEDIT')) define('ACCESSKEY_REEDIT', 'r');
-if (!defined('ACCESSKEY_PREVIEW')) define('ACCESSKEY_PREVIEW', 'p');
-if (!defined('SHOWCODE_LINK')) define('SHOWCODE_LINK', 'View formatting code for this page');
-if (!defined('SHOWCODE_LINK_TITLE')) define('SHOWCODE_LINK_TITLE', 'Click to view page formatting code');
-/**#@-*/
 
 //initialization
 $error = '';

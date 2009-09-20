@@ -31,18 +31,12 @@
 * @todo     make it part of the formatter instead of using an action
 */
 
-// *** Constant section ***
-if (!defined('ERROR_NO_TEXT_GIVEN')) define('ERROR_NO_TEXT_GIVEN','There is no text to highlight!');
-if (!defined('ERROR_NO_COLOR_SPECIFIED')) define('ERROR_NO_COLOR_SPECIFIED', 'Sorry, but you did not specify a color for highlighting!');
-
 // ***Internal function to test if syntax is valid
 if (!function_exists('color_syntax_is_valid'))
 {
 	function color_syntax_is_valid($syntax)
 	{
 		//Todo: To be more strict, ensure that when using rgb(r, g, b) syntax, integer values for r, g, and b are less than 256, or if % is used, those values are not greater than 100%
-		if (!defined('PATTERN_VALID_HEX_COLOR')) define('PATTERN_VALID_HEX_COLOR', '#(?>[\da-f]{3}){1,2}');
-		if (!defined('PATTERN_VALID_RGB_COLOR')) define('PATTERN_VALID_RGB_COLOR', 'rgb\(\s*\d+((?>\.\d*)?%)?\s*(?>,\s*\d+(?(1)(\.\d*)?%)\s*){2}\)');
 		$html_color_names = array('aqua', 'black', 'blue', 'fuchsia', 'gray', 'green', 'lime', 'maroon', 'navy', 'olive', 'purple', 'red', 'silver', 
 		 'teal', 'white', 'yellow');
 		$syntax = trim(strtolower($syntax));

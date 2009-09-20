@@ -1,15 +1,3 @@
-<?php
- // i18n strings
-if (!defined('DIFF_ADDITIONS'))  define('DIFF_ADDITIONS', 'Additions:');
-if (!defined('DIFF_DELETIONS'))  define('DIFF_DELETIONS', 'Deletions:');
-if (!defined('DIFF_NO_DIFFERENCES'))  define('DIFF_NO_DIFFERENCES', 'No differences.');
-if (!defined('REVISION_NUMBER'))  define('REVISION_NUMBER', 'Revision %s');
-if (!defined('EDITED_ON'))  define('EDITED_ON', 'Edited on %1$s by %2$s');
-if (!defined('ERROR_ACL_READ'))  define('ERROR_ACL_READ', 'You aren\'t allowed to read this page.');
-if (!defined('OLDEST_VERSION_EDITED_ON_BY'))  define('OLDEST_VERSION_EDITED_ON_BY', 'The oldest known version of this page was created on %1$s by %2$s');
-if (!defined('MOST_RECENT_EDIT'))  define('MOST_RECENT_EDIT', 'Last edited on %1$s by %2$s');
-if (!defined('UNREGISTERED_USER')) define('UNREGISTERED_USER', 'unregistered user');
-?>
 <div id="content">
 <?php
 if ($this->HasAccess('read'))

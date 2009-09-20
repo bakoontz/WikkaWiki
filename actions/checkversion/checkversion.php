@@ -86,11 +86,6 @@ if($this->IsAdmin() && TRUE == $this->config['enable_version_check'])
 	// Attempt to get latest_wikka_version.txt
 	if($do_version_check)
 	{
-		//defaults
-		define('CHECKVERSION_HOST', 'wikkawiki.org');	
-		define('CHECKVERSION_RELEASE_FILE', '/downloads/latest_wikka_version.txt');	
-		define('CHECKVERSION_DOWNLOAD_URL', 'http://docs.wikkawiki.org/WhatsNew');	
-		define('CHECKVERSION_CONNECTION_TIMEOUT', 5);
 		$latest = '';
 		//color scheme array (ported from {{since}})
 		$c = array(
