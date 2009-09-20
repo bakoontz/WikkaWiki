@@ -670,7 +670,7 @@ class Wakka
 	 */
 	function GetPageTag() { return $this->tag; }
 	function GetPageTime() { return $this->page["time"]; }
-	function GetMethod() { return $this->method; }
+	function GetHandler() { return $this->handler; }
 	function GetConfigValue($name) { return (isset($this->config[$name])) ? $this->config[$name] : null; }
 	function GetWakkaName() { return $this->GetConfigValue("wakka_name"); }
 	function GetWakkaVersion() { return $this->VERSION; }
@@ -1645,9 +1645,9 @@ class Wakka
 		} 
 		return $result;
 	}
-	function Method($method)
+	function Handler($handler)
 	{
-		if (strstr($method, '/'))
+		if (strstr($handler, '/'))
 		{
 			# Observations - MK 2007-03-30
 			# extract part after the last slash (if the whole request contained multiple slashes)
@@ -1655,21 +1655,20 @@ class Wakka
 			# but should such requests be accepted in the first place?
 			# at least it is a SORT of defense against directory traversal (but not necessarily XSS)
 			# NOTE that name syntax check now takes care of XSS
-			$method = substr($method, strrpos($method, '/')+1);
+			$handler = substr($handler, strrpos($handler, '/')+1);
 		}
-		// check valid method name syntax (similar to Action())
-		if (!preg_match('/^([a-zA-Z0-9_.-]+)$/', $method)) // allow letters, numbers, underscores, dashes and dots only (for now); see also #34
+		// check valid handler name syntax (similar to Action())
+		if (!preg_match('/^([a-zA-Z0-9_.-]+)$/', $handler)) // allow letters, numbers, underscores, dashes and dots only (for now); see also #34
 		{
-			return '<em class="error">Unknown method; the method name must not contain special characters.</em>';	# [SEC]
+			return '<em class="error">Unknown handler; the handler name must not contain special characters.</em>';	# [SEC]
 		}
 		else
 		{
-			// valid method name; now make sure it's lower case
-			$method	= strtolower($method);
+			// valid handler name; now make sure it's lower case
+			$handler = strtolower($handler);
 		}
-		if (!$handler = $this->page['handler']) $handler = 'page';	# there are no other handlers (yet)
-		$methodLocation = $handler.DIRECTORY_SEPARATOR.$method.'.php';	#89
-		return $this->IncludeBuffered($methodLocation, 'Unknown method "'.$methodLocation.'"', '', $this->config['handler_path']);
+		$handlerLocation = 'page'.DIRECTORY_SEPARATOR.$handler.'.php';	#89
+		return $this->IncludeBuffered($handlerLocation, 'Unknown handler "'.$handlerLocation.'"', '', $this->config['handler_path']);
 	}
 	function Format($text, $formatter='wakka')
 	{
@@ -2139,7 +2138,7 @@ class Wakka
 		$this->wikka_cookie_path = ('/' == $base_url_path) ? '/' : substr($base_url_path,0,-1);
 
 		// do our stuff!
-		if (!$this->method = trim($method)) $this->method = "show";
+		if (!$this->handler = trim($method)) $this->handler = "show";
 		if (!$this->tag = trim($tag)) $this->Redirect($this->Href("", $this->config["root_page"]));
 		if (!$this->GetUser() && ($user = $this->LoadUser($this->GetCookie('user_name'), $this->GetCookie('pass')))) $this->SetUser($user);
 		if ((!$this->GetUser() && isset($_COOKIE["wikka_user_name"])) && ($user = $this->LoadUser($_COOKIE["wikka_user_name"], $_COOKIE["wikka_pass"])))
@@ -2158,34 +2157,34 @@ class Wakka
 		$this->ReadInterWikiConfig();
 		if(!($this->GetMicroTime()%3)) $this->Maintenance();
 
-		if (preg_match('/\.(xml|mm)$/', $this->method))
+		if (preg_match('/\.(xml|mm)$/', $this->handler))
 		{
 			header("Content-type: text/xml");
-			print($this->Method($this->method));
+			print($this->handler($this->handler));
 		}
 		// raw page handler
-		elseif ($this->method == "raw")
+		elseif ($this->handler == "raw")
 		{
 			header("Content-type: text/plain");
-			print($this->Method($this->method));
+			print($this->handler($this->handler));
 		}
 		// grabcode page handler
-		elseif ($this->method == "grabcode")
+		elseif ($this->handler == "grabcode")
 		{
-			print($this->Method($this->method));
+			print($this->handler($this->handler));
 		}
-		elseif (preg_match('/\.(gif|jpg|png)$/', $this->method))		# should not be necessary
+		elseif (preg_match('/\.(gif|jpg|png)$/', $this->handler))		# should not be necessary
 		{
-			header('Location: images/' . $this->method);
+			header('Location: images/' . $this->handler);
 		}
-		elseif (preg_match('/\.css$/', $this->method))					# should not be necessary
+		elseif (preg_match('/\.css$/', $this->handler))					# should not be necessary
 		{
-			header('Location: css/' . $this->method);
+			header('Location: css/' . $this->handler);
 		}
 		else
 		{
 			//output page
-			$content_body = $this->Method($this->method);
+			$content_body = $this->handler($this->handler);
 			echo $this->Header();
 			echo $content_body;
 			echo $this->Footer();

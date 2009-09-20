@@ -41,7 +41,7 @@ if (!isset($show))
 	$show = DEFAULT_SHOW;
 }
 
-if ($this->method == 'show') 
+if ($this->handler == 'show') 
 {
 	$page = $this->page;
 	$pagetag = $page['tag'];

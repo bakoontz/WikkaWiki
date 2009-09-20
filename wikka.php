@@ -352,12 +352,12 @@ $wakka = $_GET['wakka']; #312
 $wakka = preg_replace("/^\//", "", $wakka);
 
 /**
- * Split into page/method.
+ * Extract pagename and handler from URL 
  *
- * Note this splits at the FIRST / so $method may contain one or more slashes;
- * this is not allowed, and ultimately handled in the Method() method. [SEC]
+ * Note this splits at the FIRST / so $handler may contain one or more slashes;
+ * this is not allowed, and ultimately handled in the Handler() method. [SEC]
  */
-if (preg_match("#^(.+?)/(.*)$#", $wakka, $matches)) list(, $page, $method) = $matches;
+if (preg_match("#^(.+?)/(.*)$#", $wakka, $matches)) list(, $page, $handler) = $matches;
 else if (preg_match("#^(.*)$#", $wakka, $matches)) list(, $page) = $matches;
 //Fix lowercase mod_rewrite bug: URL rewriting makes pagename lowercase. #135
 if ((strtolower($page) == $page) && (isset($_SERVER['REQUEST_URI']))) #38
@@ -406,8 +406,8 @@ if(NULL != $user)
 /**
  * Run the engine.
  */
-if (!isset($method)) $method='';
-$wakka->Run($page, $method);
+if (!isset($handler)) $handler='';
+$wakka->Run($page, $handler);
 $content =  ob_get_contents();
 /**
  * Use gzip compression if possible.

@@ -12,7 +12,7 @@
  * @uses		Wakka::GetConfigValue()
  * @uses		Wakka::GetPageTag()
  * @uses		Wakka::GetUser()
- * @uses		Wakka::GetMethod()
+ * @uses		Wakka::GetHandler()
  * @uses		Wakka::Href()
  * @uses		Wakka::htmlspecialchars_ent()
  * @uses		Wakka::IsAdmin()
@@ -58,7 +58,7 @@ if ($this->GetUser())
 		{
 			echo '<tr>'."\n";
 			echo '<td width="30" align="right" valign="top" style="padding-right: 10px">'.$referrer['num'].'</td>'."\n";
-			echo '<td valign="top"><a href="'.$this->htmlspecialchars_ent($referrer['referrer']).'">'.$this->htmlspecialchars_ent($referrer['referrer']).'</a> '.($IsAdmin ? '[<a href="'.$this->href('delete_referrer', '', 'spam_link=').$this->htmlspecialchars_ent($referrer['referrer']).'&redirect='.$this->GetMethod().'">Blacklist</a>]' : '').'</td>'."\n";
+			echo '<td valign="top"><a href="'.$this->htmlspecialchars_ent($referrer['referrer']).'">'.$this->htmlspecialchars_ent($referrer['referrer']).'</a> '.($IsAdmin ? '[<a href="'.$this->href('delete_referrer', '', 'spam_link=').$this->htmlspecialchars_ent($referrer['referrer']).'&redirect='.$this->GetHandler().'">Blacklist</a>]' : '').'</td>'."\n";
 			echo '</tr>'."\n";
 		}
 		echo '</table>'."\n";
