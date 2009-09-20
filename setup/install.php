@@ -92,7 +92,6 @@ case "0":
 			"user varchar(75) NOT NULL default '',".
 			"latest enum('Y','N') NOT NULL default 'N',".
 			"note varchar(100) NOT NULL default '',".
-			"handler varchar(30) NOT NULL default 'page',".
 			"PRIMARY KEY  (id),".
 			"KEY idx_tag (tag),".
 			"FULLTEXT KEY body (body),".
