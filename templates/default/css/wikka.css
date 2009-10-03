@@ -157,6 +157,24 @@ a#homepage_link {
 	color: #333;	
 }
 
+#content h1:hover:after, 
+#content h2:hover:after, 
+#content h3:hover:after, 
+#content h4:hover:after, 
+#content h5:hover:after, 
+#content h6:hover:after {
+	color: #aaa; content: "\0020\0020\00b6";
+}
+
+#content a.heading {
+	color: #000;
+}
+
+#content a.heading:hover {
+	color: #000;
+	text-decoration: none;
+}
+
 /* lists */
 
 ul, ol {

@@ -32,6 +32,25 @@ if(!defined('CREATE_THIS_PAGE_LINK_TITLE')) define('CREATE_THIS_PAGE_LINK_TITLE'
 if(!defined('DEFAULT_THEMES_TITLE')) define('DEFAULT_THEMES_TITLE', 'Default themes (%s)'); //%s: number of available themes
 if(!defined('CUSTOM_THEMES_TITLE')) define('CUSTOM_THEMES_TITLE', 'Custom themes (%s)'); //%s: number of available themes
 
+/**#@+
+ * String constant defining a regular expresion pattern.
+ */
+/**
+ * To be used in replacing img tags having an alt attribute with the value of the alt attribute, trimmed.
+ * - $result[0] : the entire img tag
+ * - $result[1] : If the alt attribute exists, this holds the single character used to delimit the alt string.
+ * - $result[2] : The content of the alt attribute, after it has been trimmed, if the attribute exists.
+ */
+if (!defined('PATTERN_REPLACE_IMG_WITH_ALTTEXT')) define('PATTERN_REPLACE_IMG_WITH_ALTTEXT', '/<img[^>]*(?<=\\s)alt=("|\')\s*(.*?)\s*\\1.*?>/');
+/**
+ * Defines characters that are not valid for an ID.
+ * Defined as the negation of a character class comprising the characters that
+ * <i>are</i> valid in an ID. All but valid characters will be stripped when deriving
+ * an ID froma provided string.
+ */
+if (!defined('PATTERN_INVALID_ID_CHARS')) define ('PATTERN_INVALID_ID_CHARS', '/[^A-Za-z0-9_:.-\s]/');
+/**#@-*/
+
 /**
  * The Wikka core.
  *
@@ -700,7 +719,40 @@ class Wakka
 	}
 	function GetCachedPage($tag) { return (isset($this->pageCache[$tag])) ? $this->pageCache[$tag] : null; }
 	function CachePage($page) { $this->pageCache[$page["tag"]] = $page; }
+	/**
+	 * Check whether the page is already assigned a title to set in the <title> tag.
+	 *
+	 * @access	public
+	 * @uses	Wakka::$page_title
+	 *
+	 * @return	boolean
+	 */
+	function HasPageTitle()
+	{
+		return ('' != $this->page_title);
+	}
 	function SetPage($page) { $this->page = $page; if ($this->page["tag"]) $this->tag = $this->page["tag"]; }
+	/**
+	 * Store the title of a page (as derived by the formatter).
+	 *
+	 * Actually, the title of the page is chosen from the text inside headings
+	 * h1 through h4, that is encountered first.
+	 * (But that process isn't happening in this function! see wakka3callback().)
+	 *
+	 * @access	public
+	 * @uses	Wakka::$page_title
+	 *
+	 * @param	string	$page_title	the new title of the page.
+	 * @return	void
+	 * @todo	probably better to use the already-existing Wakka::$page array to store this?
+	 */
+	function SetPageTitle($page_title)
+	{
+		if (trim($page_title))
+		{
+			$this->page_title = $page_title;
+		}
+	}
 	function LoadPageById($id) { return $this->LoadSingle("select * from ".$this->config["table_prefix"]."pages where id = '".mysql_real_escape_string($id)."' limit 1"); }
 	function LoadRevisions($page) { return $this->LoadAll("select * from ".$this->config["table_prefix"]."pages where tag = '".mysql_real_escape_string($page)."' order by id desc"); }
 	function LoadPagesLinkingTo($tag) { return $this->LoadAll("select from_tag as tag from ".$this->config["table_prefix"]."links where to_tag = '".mysql_real_escape_string($tag)."' order by tag"); }
@@ -744,6 +796,57 @@ class Wakka
 		$data = $this->LoadAll($sql);
 
 		return $data;
+	}
+	/**
+	 * [Short description needed here].
+	 *
+	 * @access	public
+	 *
+	 * @param	string	$textvalue	the text to be cleaned
+	 * @param	string	$pattern_prohibited_chars	optional: valid regular expression pattern.
+	 * 			Characters that match this expression will be stripped.
+	 * 			If this is set to an empty string, every character will be valid.
+	 * @param	boolean	$decode_html_entities	should htmlentities be decoded?
+	 * @return	string	The text after some characters stripped
+	 * @todo	Better strategy:
+	 *			pull out the nodeToTextOnly() bit (usable for TOC) and use this:
+	 *			1) separately in wikka3callback in Formatter (so a TOC can be built!)
+	 *			2) for turning heading into a <title> text (instead of this function!)
+	 *			THEN: rename this to what it was intended to do: textToValidId()
+	 *			(and use that in the Formatter, of course)
+	 * @todo	move regexes to library #34
+	 */
+	function CleanTextNode($textvalue, $pattern_prohibited_chars = '/[^A-Za-z0-9_:.-\s]/', $decode_html_entities = TRUE)
+	{
+		// START -- nodeToTextOnly
+		$textvalue = trim($textvalue);
+		// First find and replace any image having an alt attribute with its (trimmed) alt text
+		// Image tags missing an alt attribute are not replaced.
+		$textvalue = preg_replace(PATTERN_REPLACE_IMG_WITH_ALTTEXT, '\\2', $textvalue);
+		// @@@ JW/2005-05-27 now first replace linebreaks <br/> and other whitespace with single spaces!!
+		// Remove all other tags, including img tags that missed an alt attribute
+		$textvalue = strip_tags($textvalue);
+		// @@@ this all-text result is usable for a TOC!!!
+		// Use this if we have a condition set to generate a TOC
+		// END -- nodeToTextOnly
+
+		if ($decode_html_entities)
+		{
+			if (function_exists('html_entity_decode'))
+			{
+				// replace entities that can be interpreted
+				// use default charset ISO-8859-1 because other chars won't be valid for an ID anyway
+				$textvalue = html_entity_decode($textvalue, ENT_NOQUOTES);
+			}
+			// remove any remaining entities (so we don't end up with strange words and numbers in the ID text)
+			$textvalue = preg_replace('/&[#]?.+?;/','',$textvalue);
+		}
+		// finally remove non-ID characters (except whitespace which is handled by makeId())
+		if ($pattern_prohibited_chars)	// @@@ make this into a global constant instead of a parameter!
+		{
+			$textvalue = preg_replace($pattern_prohibited_chars, '', $textvalue);
+		}
+		return $textvalue;
 	}
 	function FullCategoryTextSearch($phrase) { return $this->LoadAll("select * from ".$this->config["table_prefix"]."pages where latest = 'Y' and match(body) against('".mysql_real_escape_string($phrase)."' IN BOOLEAN MODE)"); }
 	function SavePage($tag, $body, $note, $owner=null)
@@ -1670,19 +1773,44 @@ class Wakka
 		$handlerLocation = $handler.DIRECTORY_SEPARATOR.$handler.'.php';	#89
 		return $this->IncludeBuffered($handlerLocation, 'Unknown handler "'.$handlerLocation.'"', '', $this->config['handler_path']);
 	}
-	function Format($text, $formatter='wakka')
+	/**
+	 * Render a string using a given formatter or the standard Wakka by default.
+	 *
+	 * @uses	Config::$wikka_formatter_path
+	 * @uses	Wakka::GetConfigValue()
+	 * @uses	Wakka::IncludeBuffered()
+	 *
+	 * @param	string	$text			the source text to format
+	 * @param	string	$formatter		the name of the formatter. This name is linked to a file with the same name, located in the folder
+	 *			specified by {@link Config::$wikka_formatter_path}, and with extension .php; which is called to process the text $text
+	 * @param	string	$format_option	a comma separated list of string options, in the form of 'option1;option2;option3'
+	 *   		this value is passed to compact() to re-create the variable on formatters/wakka.php
+	 * @return	string	output produced by {@link Wakka::IncludeBuffered()} or an error message
+	 * @todo	move regexes to central regex library			#34
+	 */
+	function Format($text, $formatter='wakka', $format_option='')
 	{
-		// check valid formatter name syntax (similar to Action())
-		if (!preg_match('/^([a-zA-Z0-9_.-]+)$/', $formatter)) // allow letters, numbers, underscores, dashes and dots only (for now); see also #34
+		// check valid formatter name syntax (same as Handler())
+		// the regex allows an action name consisting of letters, numbers, and
+		// underscores, hyphens and dots ONLY and thus provides defense against
+		// directory traversal or XSS (via handler *name*)
+		if (!preg_match('/^([a-zA-Z0-9_.-]+)$/', $formatter)) # see also #34
 		{
-			return '<em class="error">Unknown formatter; the formatter name must not contain special characters.</em>';	# [SEC]
+			$out = '<em class="error">'.FORMATTER_UNKNOWN_SPECCHARS.'</em>';	# [SEC]
 		}
 		else
 		{
-			// valid method name; now make sure it's lower case
-			$formatter	= strtolower($formatter);
+			// valid formatter name; now make sure it's lower case
+			$formatter = strtolower($formatter);
+			// prepare variables
+			$formatter_location			= $formatter.'.php';
+			$formatter_location_disp	= '<code>'.$this->htmlspecialchars_ent($formatter_location).'</code>';	// [SEC] make error (including (part of) request) safe to display
+			$formatter_not_found		= sprintf(FORMATTER_UNKNOWN,$formatter_location_disp);
+			// produce output
+			//$out = $this->IncludeBuffered($formatter_location, $this->GetConfigValue('wikka_formatter_path'), $formatter_not_found, FALSE, compact('text', 'format_option')); // @@@
+			$out = $this->IncludeBuffered($formatter_location, $formatter_not_found, compact('text', 'format_option'), $this->GetConfigValue('wikka_formatter_path'));				
 		}
-		return $this->IncludeBuffered($formatter.'.php', 'Formatter "'.$formatter.'" not found', compact("text"), $this->config['wikka_formatter_path']);
+		return $out;
 	}
 	/**
      * Returns a valid template path (defaults to 'default' if theme

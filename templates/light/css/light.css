@@ -152,7 +152,7 @@ a.ext:hover {
 	font-size: inherit;
 	padding: 1pt;
 	height: auto;
-	line-height: 13pt;
+	line-height: inherit;
 	width: auto;
 	color: #993357;
 	text-decoration: none;
@@ -165,7 +165,7 @@ a.ext:hover {
 	font-size: inherit;
 	padding: 1pt;
 	height: auto;
-	line-height: 13pt;
+	line-height: inherit;
 	width: auto;
 	color: #666666;
 	background-color: #EEE;
@@ -185,6 +185,27 @@ a.ext:hover {
 	text-decoration: none;
 }
 
+#content h1:hover:after, 
+#content h2:hover:after, 
+#content h3:hover:after, 
+#content h4:hover:after, 
+#content h5:hover:after, 
+#content h6:hover:after {
+	color: #aaa; content: "\0020\0020\00b6";
+}
+
+#content a.heading {
+	line-height: auto;
+	color: #666;
+	padding: 0;
+	margin: 0;
+}
+
+#content a.heading:hover {
+	color: #666;
+	text-decoration: none;
+	background-color: transparent;
+}
 
 /* lists */
 
