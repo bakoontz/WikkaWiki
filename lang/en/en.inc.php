@@ -74,8 +74,17 @@ define('WIKKA_BACKLINKS_LINK_TITLE', 'Display a list of pages linking to %s'); /
 define('WIKKA_JRE_LINK_DESC', 'Java Runtime Environment');
 define('WIKKA_NOTE', 'NOTE:');
 define('WIKKA_JAVA_PLUGIN_NEEDED', 'Java 1.4.1 (or later) Plug-in is needed to run this applet,');
+define('REVISION_DATE_FORMAT', 'D, d M Y'); // @TODO 
+define('REVISION_TIME_FORMAT', 'H:i T'); // @TODO 
+define('TITLE_REVISION_LINK', 'View recent revisions list for %s');  // @TODO
+define('INPUT_ERROR_STYLE', 'class="highlight"'); // @TODO 
+define('CANCEL_ACL_LABEL', 'Cancel'); // @TODO
+define('UNREGISTERED_USER', 'unregistered user');  // @TODO
+define('NOT_AVAILABLE', 'n/a'); // @TODO replace inside the actions with WIKKA_NOT_AVAILABLE
+define('WHEN_BY_WHO', '%1$s by %2$s'); // @TODO
+define('ERROR_ACL_READ_INFO', 'You\'re not allowed to access this information.'); // @TODO
+define('I18N_LANG', 'en-US'); // @TODO
 /**#@-*/
-
 
 /*  ------------------ CORE ------------------  */
 
@@ -257,7 +266,6 @@ define('ADMINPAGES_FORM_MASSACTION_REVERT_ERROR','Cannot be reverted');
 define('ADMINPAGES_FORM_MASSACTION_SUBMIT','Submit');
 define('ADMINPAGES_ERROR_NO_MATCHES','Sorry, there are no pages matching "%s"');
 define('ADMINPAGES_LABEL_EDIT_NOTE','Please enter a comment, or leave blank for default');
-define('WHEN_BY_WHO', '%1$s by %2$s');
 define('ADMINPAGES_CANCEL_LABEL', 'Cancel');
 /**#@-*/
 
@@ -452,7 +460,6 @@ define('ERROR_UNKNOWN_USER', 'You have entered a non-existent user!');
 define('ERROR_MAIL_NOT_SENT', 'An error occurred while trying to send the password. Outgoing mail might be disabled. Please try to contact your wiki administrator by posting a page comment.');
 define('BUTTON_SEND_PW', 'Send reminder');
 define('USERSETTINGS_REF', 'Return to the %s page.'); // %s - UserSettings link
-define('INPUT_ERROR_STYLE', 'class="highlight"');
 define('ERROR_EMPTY_USER', 'Please fill in your username!');
 define('BUTTON_SEND_PW_LABEL', 'Send reminder');
 define('USERSETTINGS_LINK', 'Return to the [[UserSettings login]] screen.');
@@ -516,7 +523,6 @@ define('ERROR_FILE_EXISTS', "<em class='error'>There is already a file named <tt
 /**#@+
  * Language constant used by the {@link geshiversion.php geshiversion} action
  */
-define('NOT_AVAILABLE', 'n/a');
 define('NOT_INSTALLED', 'not installed');
 /**#@-*/
 
@@ -610,9 +616,6 @@ define('MYCHANGES_DATE_LIST', "This is a list of pages edited by %s, ordered by 
 define('ORDER_DATE_LINK_DESC', 'order by date');
 define('ORDER_ALPHA_LINK_DESC', 'order alphabetically');
 define('MYCHANGES_NOT_LOGGED_IN', "You're not logged in, thus the list of pages you've edited couldn't be retrieved.");
-define('REVISION_DATE_FORMAT', 'D, d M Y');
-define('REVISION_TIME_FORMAT', 'H:i T');
-define('TITLE_REVISION_LINK', 'View recent revisions list for %s');
 /**#@-*/
 
 /**#@+
@@ -627,12 +630,6 @@ define('MYPAGES_HEADER', "This is the list of pages owned by %s");
 define ('MYPAGES_NONE_OWNED', "You don't own any pages.");
 define ('MYPAGES_NONE_FOUND', "No pages found");
 define ('MYPAGES_NOT_LOGGED_IN', "You're not logged in, thus the list of your pages couldn't be retrieved.");
-/**#@-*/
-
-/**#@+
- * Language constant used by the {@link mysqlversion.php mysqlversion} action
- */
-define('NOT_AVAILABLE', 'n/a');
 /**#@-*/
 
 /**#@+
@@ -687,12 +684,6 @@ define('ERROR_NO_PAGES_FOUND', "No pages found.");
 /**#@-*/
 
 /**#@+
- * Language constant used by the {@link phpversion.php phpversion} action
- */
-define('NOT_AVAILABLE', 'n/a');
-/**#@-*/
-
-/**#@+
  * Language constant used by the {@link recentchanges.php recentchanges} action
  */
 // recentchanges
@@ -702,14 +693,10 @@ define('HISTORY_LINK_TITLE', 'View edit history of %s'); // %s - page name
 define('WIKIPING_ENABLED', 'WikiPing enabled: Changes on this wiki are broadcast to %s'); // %s - link to wikiping server
 define('RECENTCHANGES_NONE_FOUND', 'There are no recently changed pages.');
 define('RECENTCHANGES_NONE_ACCESSIBLE', 'There are no recently changed pages you have access to.');
-define('REVISION_DATE_FORMAT', 'D, d M Y');
-define('REVISION_TIME_FORMAT', 'H:i T');
 define ('PAGE_EDITOR_DIVIDER', '&#8594;');
 define ('MAX_REVISION_NUMBER', '50');
 define('RECENT_CHANGES_HEADING', '=====Recently changed pages=====');
-define('UNREGISTERED_USER', 'unregistered user');
 define('LABEL_HISTORY', 'history');
-define('TITLE_REVISION_LINK', 'View recent revisions list for %s');
 define('TITLE_HISTORY_LINK', 'View edit history of %s');
 define ('NO_RECENTLY_CHANGED_PAGES', 'There are no recently changed pages.');
 define ('NO_READABLE_RECENTLY_CHANGED_PAGES', 'There are no recently changed pages you have access to.');
@@ -723,9 +710,6 @@ define('RECENTCOMMENTS_HEADING', 'Recent comments');
 define('RECENTCOMMENTS_TIMESTAMP_CAPTION', '%s'); // %s - timestamp
 define('RECENTCOMMENTS_NONE_FOUND', 'There are no recent comments.');
 define('RECENTCOMMENTS_NONE_ACCESSIBLE', 'There are no recent comments you have access to.');
-define('COMMENT_DATE_FORMAT', 'D, d M Y');
-define('COMMENT_TIME_FORMAT', 'H:i T');
-define('COMMENT_SNIPPET_LENGTH', 120);
 define('RECENT_COMMENTS_HEADING', '=====Recent comments=====');
 define ('COMMENT_AUTHOR_DIVIDER', ', comment by ');
 define ('NO_RECENT_COMMENTS', 'There are no recent comments%s');
@@ -781,7 +765,6 @@ define('SEARCHFORM_LABEL', 'Search: ');
 // system
 define('SYSTEM_HOST_CAPTION', '(%s)'); // %s - host name
 define('WIKKA_STATUS_NOT_AVAILABLE', 'n/a');
-define('NOT_AVAILABLE', 'n/a');
 /**#@-*/
 
 /**#@+
@@ -913,7 +896,6 @@ define('REVISION_DISPLAY_LIMIT_MIN', "0"); // 0 means no limit, 1 is the minimum
 define('REVISION_DISPLAY_LIMIT_MAX', "20"); // keep this value within a reasonable limit to avoid an unnecessary long lists
 define('RECENTCHANGES_DISPLAY_LIMIT_MIN', "0"); // 0 means no limit, 1 is the minimum number of changes
 define('RECENTCHANGES_DISPLAY_LIMIT_MAX', "50"); // keep this value within a reasonable limit to avoid an unnecessary long list
-define('INPUT_ERROR_STYLE', 'class="highlight"');
 define('USER_SETTINGS_HEADING', "User settings");
 define('USER_LOGGED_OUT', "You have successfully logged out.");
 define('USER_SETTINGS_STORED', "User settings stored!");
@@ -965,18 +947,6 @@ define('WIKKACONFIG_DOCS_URL', "http://docs.wikkawiki.org/ConfigurationOptions")
 define('WIKKACONFIG_DOCS_TITLE', "Read the documentation on Wikka Configuration Settings");
 define('WIKKACONFIG_TH_OPTION', "Option");
 define('WIKKACONFIG_TH_VALUE', "Value");
-
-/**#@+
- * Language constant used by the {@link wikkapatchlevel.php wikkapatchlevel} action
- */
-define('NOT_AVAILABLE', 'n/a');
-/**#@-*/
-
-/**#@+
- * Language constant used by the {@link wikkaversion.php wikkaversion} action
- */
-define('NOT_AVAILABLE', 'n/a');
-/**#@-*/
 
 /* ------------------ 3RD PARTY ------------------ */
 
@@ -1040,7 +1010,6 @@ define('ACL_HEADING', '====Access Control Lists for %s===='); // %s - name of cu
 define('READ_ACL_LABEL', 'Read ACL:');
 define('WRITE_ACL_LABEL', 'Write ACL:');
 define('COMMENT_ACL_LABEL', 'Comment ACL:');
-define('CANCEL_ACL_LABEL', 'Cancel');
 define('STORE_ACL_LABEL', 'Store ACLs');
 define('SET_OWNER_CURRENT_LABEL', '(Current Owner)');
 define('SET_OWNER_PUBLIC_LABEL','(Public)');
@@ -1102,14 +1071,13 @@ define('SUCCESS_PAGE_DELETED', 'Page has been deleted!');
 define('PAGE_DELETION_CAPTION', 'Completely delete this page, including all comments?');
 define('PAGE_DELETION_DELETE_BUTTON', 'Delete Page');
 define('PAGE_DELETION_CANCEL_BUTTON', 'Cancel');
-define('CANCEL_ACL_LABEL', 'Cancel');
 /**#@-*/
 
 /**#@+
  * Language constant used by the {@link diff.php diff} (page) handler
  */
 // diff
-define('ERROR_DIFF_LIBRARY_MISSING', 'The file <tt>'.WIKKA_LIBRARY_PATH.DIRECTORY_SEPARATOR.'diff.lib.php</tt> could not be found. You may want to notify the wiki administrator');
+define('ERROR_DIFF_LIBRARY_MISSING', 'The file <tt>"libs/diff.lib.php"</tt> could not be found. You may want to notify the wiki administrator');
 define('ERROR_BAD_PARAMETERS', 'The parameters you supplied are incorrect, one of the two revisions may have been removed.');
 define('DIFF_COMPARISON_HEADER', 'Comparing %1$s for %2$s'); // %1$s - link to revision list; %2$s - link to page
 define('DIFF_REVISION_LINK_TITLE', 'Display the revision list for %s'); // %s page name
@@ -1119,13 +1087,11 @@ define('DIFF_SAMPLE_DELETION', 'deletion');
 define('DIFF_SIMPLE_BUTTON', 'Simple Diff');
 define('DIFF_FULL_BUTTON', 'Full Diff');
 define('HIGHLIGHTING_LEGEND', 'Highlighting Guide:');
-define ('ERROR_DIV_LIBRARY_MISSING', 'The necessary file "libs/diff.lib.php" could not be found. Please make sure the file exists and is placed in the right directory!');
+define ('ERROR_DIV_LIBRARY_MISSING', 'The necessary file "libs/diff.lib.php" could not be found. Please make sure the file exists and is placed in the right directory!'); // @TODO: replace with ERROR_DIFF_LIBRARY_MISSING
 define ('ERROR_NO_PAGE_ACCESS', 'You are not authorized to view this page.');
 define ('CONTENT_ADDITIONS_HEADER', 'Additions:');
 define ('CONTENT_DELETIONS_HEADER', 'Deletions:');
 define ('CONTENT_NO_DIFFERENCES', 'No Differences');
-define('WHEN_BY_WHO', '%1$s by %2$s');
-define('UNREGISTERED_USER', 'unregistered user');
 /**#@-*/
 
 /**#@+
@@ -1155,7 +1121,6 @@ define('EDIT_COMMENT_TIMESTAMP_CAPTION', '(%s)'); // %s timestamp
 define('ERROR_INVALID_PAGEID', 'The revision id does not exist for the requested page');
 define ('MAX_TAG_LENGTH', 75);
 define ('MAX_EDIT_NOTE_LENGTH', 50);
-define('INPUT_ERROR_STYLE', 'class="highlight"');
 define('PREVIEW_HEADER', 'Preview');
 define('LABEL_EDIT_NOTE', 'Please add a note on your edit');
 define('ERROR_OVERWRITE_ALERT', 'OVERWRITE ALERT: This page was modified by someone else while you were editing it.<br /> Please copy your changes and re-edit this page.');
@@ -1189,7 +1154,6 @@ define('DIFF_ADDITIONS', 'Additions:');
 define('DIFF_DELETIONS', 'Deletions:');
 define('DIFF_NO_DIFFERENCES', 'No differences.');
 define('REVISION_NUMBER', 'Revision %s');
-define('UNREGISTERED_USER', 'unregistered user');
 /**#@-*/
 
 /**#@+
@@ -1228,9 +1192,7 @@ define('FIRST_NODE_LABEL', 'Recent Changes');
  */
 // recentchanges.xml
 define('RECENTCHANGES_DESC', 'Recent changes of %s'); // %s - page name
-define('ERROR_ACL_READ_INFO', 'You\'re not allowed to access this information.');
 define('LABEL_ERROR', 'Error');
-define('I18N_LANG', 'en-us');
 /**#@-*/
 
 /**#@+
@@ -1297,8 +1259,6 @@ define('REVISIONS_MORE_BUTTON', 'Next...');
 define('REVISIONS_EDITED_BY', 'Edited by %s'); // %s user name
 define('HISTORY_REVISIONS_OF', 'History/revisions of %s'); // %s - page name
 define('EDITED_BY', 'Edited by %s');
-define('ERROR_ACL_READ_INFO', 'You\'re not allowed to access this information.');
-define('I18N_LANG', 'en-US');
 define('I18N_ENCODING_UTF8', 'UTF-8');
 define('RSS_REVISIONS_VERSION','2.0');
 define('RSS_RECENTCHANGES_VERSION','0.92');
@@ -1310,8 +1270,6 @@ define('RSS_RECENTCHANGES_VERSION','0.92');
 define('BUTTON_RETURN_TO_NODE', 'Return To Node / Cancel');
 define('BUTTON_SHOW_DIFFERENCES', 'Show Differences');
 define('SIMPLE_DIFF', 'Simple Diff');
-define('WHEN_BY_WHO', '%1$s by %2$s');
-define('UNREGISTERED_USER', 'unregistered user');
 /**#@-*/
 
 /**#@+
