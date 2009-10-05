@@ -141,6 +141,7 @@ case "0":
 			"doubleclickedit enum('Y','N') NOT NULL default 'Y',".
 			"signuptime datetime NOT NULL default '0000-00-00 00:00:00',".
 			"show_comments enum('Y','N') NOT NULL default 'N',".
+			"default_comment_display enum ('date_asc', 'date_desc', 'threaded') NOT NULL default 'threaded',".
 			"status enum('invited','signed-up','pending','active','suspended','banned','deleted'),".
 			"theme varchar(50) default '',".
 			"PRIMARY KEY  (name),".
@@ -154,6 +155,9 @@ case "0":
 			"time datetime NOT NULL default '0000-00-00 00:00:00',".
 			"comment text NOT NULL,".
 			"user varchar(75) NOT NULL default '',".
+			"parent int(10) unsigned default NULL,". 
+			"status enum('deleted') default NULL,".
+			"deleted char(1) default NULL,".
 			"PRIMARY KEY  (id),".
 			"KEY idx_page_tag (page_tag),".
 			"KEY idx_time (time)".
@@ -442,6 +446,13 @@ case "1.3":
 	// Dropping obsolete "handler" field from pages table, refs #452
 	test(__('Removing handler field from the pages table').'...',
 	@mysql_query("ALTER TABLE ".$config["table_prefix"]."pages DROP handler", $dblink), __('Already done? Hmm!'), 1);
+	// Support for threaded comments
+	test("Adding fields to comments table to enable threading...",  
+	mysql_query("alter table ".$config["table_prefix"]."comments add parent int(10) unsigned default NULL", $dblink), "Already done? OK!", 0);
+	test("Adding fields to comments table to enable threading...",
+	mysql_query("alter table ".$config["table_prefix"]."users add default_comment_display enum('date_asc', 'date_desc', 'threaded') NOT NULL default 'threaded'", $dblink), "Already done? OK!", 0);
+	test("Adding fields to comments table to enable threading...",  
+	mysql_query("alter table ".$config["table_prefix"]."comments add status enum('deleted') default NULL", $dblink), "Already done? OK!", 0);
 }
 
 // #600: Force reloading of stylesheet.

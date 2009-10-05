@@ -24,11 +24,21 @@
  */
 $readable = 0;
 
+$user = $this->GetUser();
 $username = '';
 if(isset($_GET['user']))
 {
 	$username = $this->htmlspecialchars_ent($_GET['user']);
 }
+else
+	$username = $this->GetUserName(); 
+
+$show_comments = ''; 
+if(isset($user['default_comment_display'])) { 
+        $show_comments = $user['default_comment_display']; 
+} else { 
+        $show_comments = $this->config['default_comment_display']; 
+} 
 
 echo $this->Format(RECENTLY_COMMENTED_HEADING.' --- ');
 if ($comments = $this->LoadRecentlyCommented(50, $username))
@@ -56,10 +66,10 @@ if ($comments = $this->LoadRecentlyCommented(50, $username))
 			$comment_preview = str_replace('<br />', '', $comment['comment']);
 			if (strlen($comment_preview) > COMMENT_SNIPPET_LENGTH)
 			{
-				$comment_spillover_link = '<a href="'.$this->href('', $comment['page_tag'], 'show_comments=1').'#comment_'.$comment['id'].'" title="View comment">[&#8230;]</a>'; # i18n
+				$comment_spillover_link = '<a href="'.$this->href('', $comment['page_tag'], 'show_comments='.$show_comments).'#comment_'.$comment['id'].'" title="View comment">[&#8230;]</a>'; # i18n
 				$comment_preview = substr($comment_preview, 0, COMMENT_SNIPPET_LENGTH).$comment_spillover_link;
 			}
-			$commentlink = '<a href="'.$this->href('', $comment['page_tag'], 'show_comments=1').'#comment_'.$comment['id'].'" title="View comment">'.$comment['page_tag'].'</a>'; # i18n
+			$commentlink = '<a href="'.$this->href('', $comment['page_tag'], 'show_comments='.$show_comments).'#comment_'.$comment['id'].'" title="View comment">'.$comment['page_tag'].'</a>'; # i18n
 			$comment_by = $comment['user'];
 			if (!$this->LoadUser($comment_by))
 			{

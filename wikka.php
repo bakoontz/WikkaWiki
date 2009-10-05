@@ -168,6 +168,58 @@ else
 	$t_rewrite_mode = 0;
 }
 
+// ---------------------- DEFINE URL DOMAIN / PATH -----------------------------
+/**#@+*
+ * URL or URL component, derived just once for later usage.
+ */
+// first derive domain, path and base_url, as well as cookie path just once
+// so they are ready for later use.
+// detect actual scheme (might be https!)	@@@ TEST
+// please recopy modif into setup/test/test-mod-rewrite.php
+$scheme = ((isset($_SERVER['HTTPS'])) && !empty($_SERVER['HTTPS']) && 'off' != $_SERVER['HTTPS']) ? 'https://' : 'http://';
+$server_port = ':'.$_SERVER['SERVER_PORT'];
+if ((('http://' == $scheme) && (':80' == $server_port)) || (('https://' == $scheme) && (':443' == $server_port)))
+{
+	$server_port = '';
+}
+/**
+ * URL fragment consisting of scheme + domain part.
+ * Represents the domain URL where the current instance of Wikka is located.
+ * This variable can be overriden in {@link override.config.php}
+ *
+ * @var string
+ */
+if (!defined('WIKKA_BASE_DOMAIN_URL')) define('WIKKA_BASE_DOMAIN_URL', $scheme.$_SERVER['SERVER_NAME'].$server_port);
+/**
+ * URL fragment consisting of a path component.
+ * Points to the instance of Wikka within {@link WIKKA_BASE_DOMAIN_URL}.
+ *
+ * @var string
+ */
+define('WIKKA_BASE_URL_PATH', preg_replace('/wikka\\.php/', '', $_SERVER['SCRIPT_NAME']));
+/**
+ * Base URL consisting of {@link WIKKA_BASE_DOMAIN_URL} and {@link WIKKA_BASE_URL_PATH} concatenated.
+ * Ready to append a relative path to a "static" file to.
+ *
+ * @var string
+ */
+define('WIKKA_BASE_URL', WIKKA_BASE_DOMAIN_URL.WIKKA_BASE_URL_PATH);
+/**
+ * Path to be used for cookies.
+ * Derived from {@link WIKKA_BASE_URL_PATH}
+ *
+ * @var string
+ */
+define('WIKKA_COOKIE_PATH', ('/' == WIKKA_BASE_URL_PATH) ? '/' : substr(WIKKA_BASE_URL_PATH, 0, -1)); 
+/**
+ * Default number of hours after which a permanent cookie is to expire: corresponds to 90 days.
+ */
+if (!defined('DEFAULT_COOKIE_EXPIRATION_HOURS')) define('DEFAULT_COOKIE_EXPIRATION_HOURS',90 * 24);
+
+/**#@-*/
+// ----------------------- END URL DOMAIN / PATH -------------------------------
+
+
 $wakkaDefaultConfig = array(
 	'mysql_host'				=> 'localhost',
 	'mysql_database'			=> 'wikka',
@@ -184,6 +236,7 @@ $wakkaDefaultConfig = array(
 	'action_path'				=> 'plugins/actions'.PATH_DIVIDER.'actions',
 	'handler_path'				=> 'plugins/handlers'.PATH_DIVIDER.'handlers',
 	'gui_editor'				=> '1',
+	'default_comment_display'	=> '1',
 	'theme'						=> 'light',
 
 	// formatter and code highlighting paths
@@ -199,6 +252,7 @@ $wakkaDefaultConfig = array(
 	'pages_purge_time'			=> '0',
 	'xml_recent_changes'		=> '10',
 	'hide_comments'				=> '0',
+	'comment_stylesheet'		=> 'boxed-comments.css',
 	'require_edit_note'			=> '0',		# edit note optional (0, default), edit note required (1) edit note disabled (2)
 	'anony_delete_own_comments'	=> '1',
 	'public_sysinfo'			=> '0',		# enable or disable public display of system information in SysInfo

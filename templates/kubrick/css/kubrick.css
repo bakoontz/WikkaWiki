@@ -103,6 +103,31 @@ body {
 	width: 100%;
 }
 
+div#commentsnav { 
+/*      border:1px solid #CCC; */ 
+/*      background-color:#EEE; */ 
+        float:right; 
+        padding:3px; 
+} 
+ 
+div#commentsnav img.icon { 
+        border: 1px solid #CCC; 
+        padding:3px; 
+        background-color:#EFEFEF; 
+        margin:1px; 
+} 
+ 
+div#commentsnav img.icon_on { 
+        border: 1px solid #CCC; 
+        padding:3px; 
+        background-color:#DDD; 
+        margin:1px; 
+} 
+ 
+div#commentsnav img.icon:hover { 
+        background-color:#DDD;
+}
+
 /* links */
 
 a {
@@ -914,6 +939,117 @@ table.usersettings tbody tr > td {
 	width: 100%;
 }
 
+/* Usersettings action */
+
+fieldset#account {
+	display: block;
+	min-width: 600px;
+	padding: 10px;
+	background-color: #F6F6F6;
+	text-align: left;
+}
+
+fieldset#account span#account_info {
+	display: block;
+	width: 230px;
+	float: left;
+	margin-bottom: 10px;
+	text-align: right;
+	padding-right: 10px;
+}
+
+fieldset#account input#logout {
+	float: left;
+	margin-left: 0;
+}
+
+fieldset.usersettings {
+	display: block;
+	min-width: 600px;
+	padding: 10px;
+}
+
+fieldset.usersettings fieldset {
+	clear: left;
+	display: block;
+	width: 236px;
+	float: left;
+	margin: 0 0 10px 240px;
+}
+
+fieldset.usersettings fieldset legend {
+	margin: 0;
+}
+
+fieldset.usersettings fieldset input{
+	display: block;
+	float: left;
+	padding: 0;
+	margin: 0;
+}
+
+fieldset.usersettings fieldset label {
+	vertical-align: top;
+	margin: 0 0 0 10px;
+	display: inline;
+	text-align: left;
+	width: auto;
+	float:left;
+}
+
+fieldset.usersettings em {
+	clear: left;
+	float: left;
+	display: block;
+	margin: 0 0 0 240px;
+}
+
+fieldset.usersettings em.usersettings_info {
+	clear: left;
+	float: left;
+	display: block;
+	width: 246px;
+	margin: 0 0 5px 240px;
+	font-style: normal;
+	font-size: 85%;
+	color: #666;
+	border: 1px solid #CCC;
+	background-color: #F0F0F0;
+	padding: 2px;
+}
+
+fieldset.usersettings label {
+	display: block;
+	width: 230px;
+	float: left;
+	margin-bottom: 10px;
+	text-align: right;
+	padding-right: 10px;
+}
+
+fieldset.usersettings select#update_option {
+	display: block;
+	width: 230px;
+	float: left;
+	margin: 0px 10px 10px 0px;
+}
+
+fieldset.usersettings input[type=text], fieldset.usersettings input[type=password] {
+	display: block;
+	width: 250px;
+	float: left;
+	margin-bottom: 10px;
+	border:1px solid #CCC;
+}
+
+fieldset.usersettings input[type=submit] {
+	float: left;
+	margin-left: 250px;
+}
+
+fieldset.usersettings br {
+	clear: left;
+}
 
 /* Wikkaconfig action */
 table.wikkaconfig {

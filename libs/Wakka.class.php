@@ -74,6 +74,46 @@ class Wakka
 	var $wikka_cookie_path;
 	var $additional_headers = array();
 
+	/**#@+*
+	 * Variable to store data about users.
+	 */
+	/**
+	 * Tracks whether the <b>current</b> user is registered or not.
+	 *
+	 * @access	public
+	 * @var		boolean
+	 */
+	var $registered = FALSE;
+	/**
+	 * Name of <b>current</b> user if registered.
+	 *
+	 * @access	public
+	 * @var		string
+	 */
+	var $reg_username = '';
+	/**
+	 * Name of <b>current</b> user if anonymous (effectively either IP address or host name).
+	 *
+	 * @access	public
+	 * @var		string
+	 */
+	var $anon_username = '';
+	/**
+	 * Cache for usernames that are known to be registered.
+	 *
+	 * @access	public
+	 * @var		array()
+	 */
+	var $registered_users = array();
+	/**
+	 * Cache for usernames/IP addresses/hostnames that are known to be <b>not</b> registered.
+	 *
+	 * @access	public
+	 * @var		array()
+	 */
+	var $anon_users = array();
+	/**#@-*/
+
 	/**
 	 * Constructor
 	 */
@@ -1314,6 +1354,59 @@ class Wakka
 		}
 		return $result;
 	}
+
+	/**
+	 * Create a href for a static file.
+	 *
+	 * It takes a parameter $filepath, the path of the static file, and returns
+	 * a string representing a fully-qualified URL.
+	 * This function should be used everywhere a static file should be attached
+	 * to a wikkapage via XHTML tag attributes that expect a URL, such as href,
+	 * src, or archive tags, or attributes in elements in XML/RSS.
+	 *
+	 * Its main purpose is to avoid "path confusion" when a relative URL would be
+	 * attached to a <b>rewritten</b> (base) URL; without rewriting there's no
+	 * problem, but when mod_rewrite is active, it's really necessary:
+	 * a base_href doesn't help (and is in fact unnecessary when using
+	 * fully-qualified paths as returned by this method).
+	 *
+	 * @access	public
+	 * @uses WIKKA_BASE_DOMAIN_URL
+	 * @uses WIKKA_BASE_URL
+	 *
+	 * @param	string	$filepath	path for a static file; this can be either:
+	 *				- a relative path
+	 *				- an absolute path (starting with a slash)
+	 *				- a fully-qualified URL (in which case the input is simply returned)
+	 * @return	string	a standardized fully-qualified URL
+	 */
+	function StaticHref($filepath)
+	{
+#echo "\n<!--StaticHref - in: ".$filepath."-->\n";
+		/*
+		$result = $this->Href('dummyhandler','dummypagename');
+		$result = str_replace('wikka.php?wakka=', '', $result);
+		$result = str_replace('dummypagename/dummyhandler', $filepath, $result);
+		*/
+		// fully-qualified URL? this uses the same pattern as Link() does;
+		// it's a recognizing pattern, not a validation pattern
+		// @@@ move to regex libary!
+		if (preg_match('/^(http|https|ftp|news|irc|gopher):\/\/([^\\s\"<>]+)$/', $filepath))
+		{
+			$result = $filepath;
+		}
+		elseif ('/' == substr($filepath,0,1))	// absolute path
+		{
+			$result = WIKKA_BASE_DOMAIN_URL.$filepath;
+		}
+		else								// relative path
+		{
+			$result = WIKKA_BASE_URL.$filepath;
+		}
+#echo "<!--StaticHref - out: ".$result."-->\n";
+		return $result;
+	}
+
 	// function PregPageLink($matches) { return $this->Link($matches[1]); }
 	function IsWikiName($text) { return preg_match("/^[A-Z,ÄÖÜ][a-z,ßäöü]+[A-Z,0-9,ÄÖÜ][A-Z,a-z,0-9,ÄÖÜ,ßäöü]*$/", $text); }
 	function TrackLinkTo($tag) { $_SESSION["linktable"][] = $tag; }
@@ -1372,24 +1465,6 @@ class Wakka
 	
 	// FORMS
 	/**
-	 * Open form.
-	 *
-	 * @uses	Wakka::GetConfigValue()
-	 *
-	 * @todo	replace with advanced FormOpen (so IDs are generated, among other things!)
-	 * @todo	check if the hidden field is still needed - Href() already provides
-	 *			the wakka= part of the URL... everything seems to work fine with
-	 *			or without rewrite mode, and without this hidden field!
-	 */
-	/* replaced by http://wikkawiki.org/AdvancedFormOpen
-	function FormOpen($method = "", $tag = "", $formMethod = "post")
-	{
-		$result = "<form action=\"".$this->Href($method, $tag)."\" method=\"".$formMethod."\">\n";
-		if (!$this->config["rewrite_mode"]) $result .= "<input type=\"hidden\" name=\"wakka\" value=\"".$this->MiniHref($method, $tag)."\" />\n";
-		return $result;
-	}
-	*/
-	/**
 	 * Build an opening form tag with specified or generated attributes.
 	 *
 	 * This method builds an opening form tag, taking care that the result is valid XHTML
@@ -1406,12 +1481,12 @@ class Wakka
 	 * @license		http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
 	 *
 	 * @access	public
+	 * @uses	makeId()
 	 * @uses	ID_LENGTH
-	 * @uses	Wakka::makeId()
-	 * @uses	Wakka::existsHandler()
-	 * @uses	Wakka::existsPage()
-	 * @uses	Wakka::Href()
-	 * @uses	Wakka::MiniHref()	only for hidden field
+	 * @uses	existsHandler()
+	 * @uses	existsPage()
+	 * @uses	Href()
+	 * @uses	MiniHref()	only for hidden field
 	 *
 	 * @param	string	$handler	optional: "handler" which consists of handler name and possibly a query string
 	 *								to be used as part of action attribute
@@ -1441,12 +1516,17 @@ class Wakka
 		$tag = trim($tag);
 		$id = trim($id);
 		$class = trim($class);
-		// validations (needed only if parameters are actually specified)
+		// validations
+		#$validHandler = $this->existsHandler($handler);
+		#$validPage = $this->existsPage($tag);
+		// validation needed only if parameters are actually specified
+		#$handler = ($validHandler) ? $handler : '';
 		if (!empty($handler) && !$this->existsHandler($handler))
 		{
 			$handler = '';
 		}
-		if (!empty($tag) && !$this->existsPage($tag))	// name change, interface change (check for active page only)
+		#$tag = ($validPage) ? $tag : '';
+		if (!empty($tag) && !$this->existspage($tag))
 		{
 			$tag = '';	// Href() will pick up current page name if none specified
 		}
@@ -1490,16 +1570,7 @@ class Wakka
 		{
 			$attrClass = ' class="'.$class.'"';
 		}
-		
-		// add validation key fields
-		if('post' == $formMethod)
-		{
-			$tmp = $this->createSessionKey($id);
-			$hidden[$tmp[0]] = $tmp[1];
-			unset($tmp);
-			$hidden['form_id'] = $id;	
-		}
-		
+
 		// build HTML fragment
 		$fragment = '<form'.$attrAction.$attrMethod.$attrEnctype.$attrId.$attrClass.'>'."\n";
 		// construct and add hidden fields (necessary if we are NOT using rewrite mode)
@@ -1516,6 +1587,7 @@ class Wakka
 		// return resulting HTML fragment
 		return $fragment;
 	}
+
 	/**
 	 * Close form
 	 *
@@ -1681,7 +1753,7 @@ class Wakka
 #echo 'handler: '.$handler.'<br/>';
 		// now check if a handler by that name exists
 #echo 'checking path: '.$this->GetConfigValue('handler_path').DIRECTORY_SEPARATOR.'page'.DIRECTORY_SEPARATOR.$handler.'.php'.'<br/>';
-		$exists = $this->BuildFullpathFromMultipath('page'.DIRECTORY_SEPARATOR.$handler.'.php', $this->GetConfigValue('handler_path')); 
+		$exists = $this->BuildFullpathFromMultipath($handler.DIRECTORY_SEPARATOR.$handler.'.php', $this->GetConfigValue('handler_path')); 
 		// return conclusion
 		if(TRUE===empty($exists)) 
 		{ 
@@ -1986,6 +2058,7 @@ class Wakka
 	function SetUser($user) { $_SESSION["user"] = $user; $this->SetPersistentCookie("user_name", $user["name"]); $this->SetPersistentCookie("pass", $user["password"]); }
 	function LogoutUser() 
 	{ 
+		unset($_SESSION['show_comments']);
 		$this->DeleteCookie("user_name"); 
 		$this->DeleteCookie("pass"); 
 		// Delete this session from sessions table
@@ -1997,18 +2070,349 @@ class Wakka
 		// is that  server-side sessions have long ago been cleaned up by PHP.
 		$this->Query("DELETE FROM ".$this->config['table_prefix']."sessions WHERE DATE_SUB(NOW(), INTERVAL ".PERSISTENT_COOKIE_EXPIRY." SECOND) > session_start");
 	}
-	function UserWantsComments() { if (!$user = $this->GetUser()) return false; return ($user["show_comments"] == "Y"); }
 
+	/**
+	 * Returns user comment default style.
+	 *
+	 * If the user is not logged-in, comments are hidden by default.
+	 *
+	 * Must test for false condition with
+	 * "FALSE===UserWantsComments()" since this function may also
+	 * legally return a zero value.
+	 *
+	 * @uses	Wakka::GetUser()
+	 *
+	 * @param	tag		Page title
+	 * @return	mixed	threadtype if the user wants comments, FALSE otherwise
+	 */
+	function UserWantsComments($tag)
+	{
+		if (!$user = $this->GetUser())
+		{
+			$showcomments = FALSE;
+		}
+		elseif (!isset($user['show_comments'][$tag]))
+		{
+			if (isset($user['default_comment_display']))
+			{
+				$showcomments = $user['default_comment_display'];	// user's default comment display
+			}
+			elseif (isset($config['default_comment_display']))
+			{
+				$showcomments = $config['default_comment_display'];	// configured default comment display
+			}
+			else
+			{
+				$showcomments = COMMENT_ORDER_DATE_ASC;				// system default comment display
+			}
+		}
+		else
+		{
+			$showcomments = $user['show_comments'][$tag];			// user's preference for the given page
+		}
+		return $showcomments;
+	}
+
+	 /**
+	 * Formatter for user names.
+	 *
+	 * Renders usernames as links only when needed, avoiding the creation of
+	 * missing page links for users without a userpage. Makes other options
+	 * configurable (like truncating long hostnames or disabling link formatting).
+	 *
+	 * @author	{@link http://wikkawiki.org/DarTar Dario Taraborelli}
+	 *
+	 * @uses	Wakka::existsUser()
+	 * @uses	Wakka::existsPage()
+	 * @uses	Wakka::Link()
+	 *
+	 * @param	string	$username	mandatory: name of user or hostname retrieved from the DB;
+	 * @param	boolean	$link	optional: enables/disables linking to userpage;
+	 * @param	string	$maxhostlength	optional: max length for hostname, hostnames longer
+	 *					then this will be truncated with an ellipsis;
+	 * @param	string	$ellipsis	optional: character (or string) to be used at the end of truncated hosts;
+	 * @return	string	$formatted_user: formatted username.
+	 * @todo	use constant for ellipsis
+	 * @todo	better title attribute text: a user page is not a 'profile'
+	 * @todo	internationalization (marked with #i18n)
+	 */
+	function FormatUser($username, $link=TRUE, $maxhostlength=MAX_HOSTNAME_LENGTH_DISPLAY, $ellipsis='&#8230;')
+	{
+		global $debug;
+		if (strlen($username) > 0)
+		{
+			// check if user is registered
+			#if ($this->LoadUser($username))	// only checks if user is registered
+if ($debug) echo 'FormatUser calling... ';
+			if ($this->existsUser($username))
+			{
+				// check if userpage exists and if linking is enabled
+				#$formatted_user = ($this->existsPage($username) && ($link == 1)) ? $this->Link($username,'','','','','Open user profile for '.$username,'user') : '<span class="user">'.$username.'</span>'; // @@@ #i18n
+				$formatted_user = ($this->existsPage($username) && ((bool) $link)) ? $this->Link($username,'','','','','Open user profile for '.$username,'user') : '<span class="user">'.$username.'</span>'; // @@@ #i18n
+			}
+			else
+			{
+				// user is not registered (or no longer(!) e.g., user may have
+				// edited a page but since "unregistered": then we have a user
+				// name here, not a host name)
+				// truncate long (host) names
+				$formatted_user = (strlen($username) > $maxhostlength) ? '<span class="user_anonymous" title="'.$username.'">'.substr($username, 0, $maxhostlength).$ellipsis.'</span>' : '<span class="user_anonymous">'.$username.'</span>';
+			}
+		}
+		else
+		{
+			// no user (page has empty user field)
+			$formatted_user = 'anonymous'; // @@@ #i18n WIKKA_ANONYMOUS_AUTHOR_CAPTION or WIKKA_ANONYMOUS_USER
+		}
+		return $formatted_user;
+	}
+
+	/**
+	 * Check whether a given (or implied) user is (currently) registered.
+	 *
+	 * If no username is supplied, it simply returns the current "registered"
+	 * state from the object variable. It also maintains a "cache" of registered
+	 * usernames which is checked before resorting to a database query.
+	 *
+	 * @uses	Wakka::registered
+	 * @uses	Wakka::registered_users
+	 * @uses	Wakka::GetConfigValue()
+	 * @uses	Wakka::LoadSingle()
+	 *
+	 * @param	string	$username	optional: when omitted, "registered" state
+	 *					for current user is returned; when given, we check whether
+	 *					the username occurs in the cache or database.
+	 * @return	boolean	TRUE is user is registered, FALSE otherwise
+	 */
+	function existsUser($username=NULL)
+	{
+		global $debug;
+		// init
+		$result = FALSE;
+		// looking for current user
+		if (!is_string($username))
+		{
+if ($debug) echo 'existsUser - no parameter (current user): ';
+			$result = $this->registered;
+if ($debug) print(($result) ? 'TRUE' : 'FALSE');
+		}
+		// named user cached?
+		elseif (in_array($username, $this->registered_users))
+		{
+			$result = TRUE;
+if ($debug) echo 'existsUser - name '.$username.' cached: TRUE';
+		}
+		elseif (in_array($username,$this->anon_users))
+		{
+			$result = FALSE;
+if ($debug) echo 'existsUser - anon. name '.$username.' cached: FALSE';
+		}
+		// look up named user in database & cache name
+		else
+		{
+			$user = $this->LoadSingle("
+				SELECT `name`
+				FROM ".$this->GetConfigValue('table_prefix')."users
+				WHERE `name` = '".mysql_real_escape_string($username)."'
+				LIMIT 1"
+				);
+			if (is_array($user))
+			{
+if ($debug) echo 'existsUser - '.$username.' found in DB: TRUE';
+				$result = TRUE;
+				$this->registered_users[] = $user['name'];	// cache actual name as in DB
+			}
+			else
+			{
+if ($debug) echo 'existsUser - '.$username.' not found in DB: FALSE';
+				// also cache UNregistered usernames
+				$this->anon_users[] = $username;		// @@@ declare & document
+			}
+		}
+if ($debug) echo "<br/>\n";
+		return $result;
+	}
 
 	// COMMENTS
 	/**
 	 * Load the comments for a (given) page.
 	 *
+	 * @uses	Wakka::GetConfigValue()
 	 * @uses	Wakka::LoadAll()
-	 * @param	string $tag mandatory: name of the page
-	 * @return	array all the comments for this page
+	 * @uses	Wakka::TraverseComments()
+	 *
+	 * @param	string	$tag	mandatory: name of the page
+	 * @param	integer	$order	optional: order of comments. Default: COMMENT_ORDER_DATE_ASC
+	 * @return	array	All the comments for this page ordered by $order
+	 * @todo	make single exit point to enable profiling
 	 */
-	function LoadComments($tag) { return $this->LoadAll("SELECT * FROM ".$this->config["table_prefix"]."comments WHERE page_tag = '".mysql_real_escape_string($tag)."' ORDER BY time"); }
+	function LoadComments($tag, $order=NULL)
+	{
+		// default
+		if ($order == NULL)
+		{
+			if (isset($_SESSION['show_comments'][$tag]))
+			{
+				$order = $_SESSION['show_comments'][$tag];
+			}
+			else
+			{
+				$order = COMMENT_ORDER_DATE_ASC;
+			}
+		}
+		// handle requested order
+		if ($order == COMMENT_ORDER_DATE_ASC)	// Return ASC by date
+		{
+			// always returns an array, but it may be empty
+			return $this->LoadAll("
+				SELECT *
+				FROM ".$this->GetConfigValue('table_prefix')."comments
+				WHERE page_tag = '".mysql_real_escape_string($tag)."'
+					AND (status IS NULL or status != 'deleted')
+				ORDER BY time"
+				);
+		}
+		elseif ($order == COMMENT_ORDER_DATE_DESC)
+		{
+			// always returns an array, but it may be empty
+			return $this->LoadAll("
+				SELECT *
+				FROM ".$this->GetConfigValue('table_prefix')."comments
+				WHERE page_tag = '".mysql_real_escape_string($tag)."'
+					AND (status IS NULL or status != 'deleted')
+				ORDER BY time DESC"
+				);
+		}
+		elseif ($order == COMMENT_ORDER_THREADED)
+		{
+			$record = array();
+			$this->TraverseComments($tag, $record);
+			return $record;
+		}
+	}
+
+	/**
+	 * Traverse comments in threaded order
+	 *
+	 * @uses	Wakka::GetConfigValue()
+	 * @uses	Wakka::LoadAll()
+	 * @uses	Wakka::CountAllComments()
+	 * @uses	Wakka::LoadSingle()
+	 * @uses	Wakka::TraverseComments()
+	 *
+	 * @param	string	$tag	mandatory: name of the page
+	 * @param	array	&$graph	mandatory: empty array
+	 * @return	array	Ordered graph of comments and indent levels (values) for this page
+	 */
+	function TraverseComments($tag, &$graph)
+	{
+		static $level = -1;
+		static $visited = array();
+		static $transformed_map = array();
+		if (!$transformed_map)
+		{
+			array_push($visited, 'NULL');
+			$count = $this->CountAllComments($tag);	// redundant: just count($initial_map) after the query
+			// @@@ miss option for sort order here???
+			$initial_map = $this->LoadAll("
+				SELECT id, parent
+				FROM ".$this->GetConfigValue('table_prefix')."comments
+				WHERE page_tag = '".$tag."'
+				ORDER BY id ASC"
+				);
+			// Create an array of arrays, with the (unique) key of
+			// 'parent' pointing to an array of date-ordered
+			// children.
+			for ($i=0; $i<$count; ++$i)	// prefer to use $i++ here (even if equivalent)
+			{
+				$id = $initial_map[$i]['id'];
+				$parent = $initial_map[$i]['parent'];
+				if (!$parent)
+				{
+					$parent = 'NULL';
+				}
+				if (!array_key_exists($parent, $transformed_map))
+				{
+					$transformed_map[$parent] = array();
+				}
+				array_push($transformed_map[$parent], $id);
+			}
+		}
+		if (array_key_exists(end($visited), $transformed_map) && is_array($transformed_map[end($visited)]))
+		{
+			$id = array_shift($transformed_map[end($visited)]);
+		}
+		if (isset($id))
+		{
+			// Limit recursions to COMMENT_MAX_TRAVERSAL_DEPTH
+			if ($level >= COMMENT_MAX_TRAVERSAL_DEPTH)
+			{
+				--$level;
+				array_pop($visited);
+				$this->TraverseComments($tag, $graph);
+			}
+			else
+			{
+				// Traverse children
+				++$level;
+				array_push($visited, $id);
+				// @@@	should check first whether LoadSingle() actually returns an
+				//		array, or FALSE in case the query fails (not found).
+				//		most of the other statements should probably not be
+				//		executed either if no result was returned from the database!
+				// @@@	can't the records be retrieved from $transformed_map instead?
+				$graph[] = $this->LoadSingle("
+					SELECT *
+					FROM ".$this->GetConfigValue('table_prefix')."comments
+					WHERE id = ".$id
+					);
+				end($graph);
+				$graph[key($graph)]['level'] = $level;
+				$this->TraverseComments($tag, $graph);
+			}
+		}
+		elseif ($level < 0)
+		{
+			// End traversal
+			return;
+		}
+		else
+		{
+			// Step back to the parent to find next child
+			--$level;
+			array_pop($visited);
+			$this->TraverseComments($tag, $graph);
+		}
+	}
+
+	/**
+	 * Count the undeleted comments for a (given) page.
+	 *
+	 * @uses	Wakka::getCount()
+	 *
+	 * @param	string $tag mandatory: name of the page
+	 * @return	integer Count of comments
+	 */
+	function CountComments($tag)
+	{
+		$count = $this->getCount('comments', "page_tag = '".mysql_real_escape_string($tag)."' AND (status IS NULL OR status != 'deleted')");
+		return $count;
+	}
+
+	/**
+	 * Count all comments (deleted and undeleted) for a (given) page.
+	 *
+	 * @uses	Wakka::getCount()
+	 *
+	 * @param	string $tag mandatory: name of the page
+	 * @return	integer Count of comments
+	 */
+	function CountAllComments($tag)
+	{
+		$count = $this->getCount('comments', "page_tag = '".mysql_real_escape_string($tag)."'");
+		return $count;
+	}
+
 	/**
 	 * Load the last 50 comments on the wiki.
 	 *
@@ -2025,8 +2429,9 @@ class Wakka
 		{
 			$where = " where user = '".mysql_real_escape_string($user)."' ";
 		}
-		return $this->LoadAll("SELECT * FROM ".$this->config["table_prefix"]."comments $where ORDER BY time DESC LIMIT ".intval($limit)); 
+		return $this->LoadAll("SELECT * FROM ".$this->config["table_prefix"]."comments $where.' and (status IS NULL or status != \'deleted\') ORDER BY time DESC LIMIT ".intval($limit)); 
 	}
+
 	/**
 	 * Load the last 50 comments on different pages on the wiki.
 	 *
@@ -2048,29 +2453,36 @@ class Wakka
 			. " FROM ".$this->config["table_prefix"]."comments AS comments"
 			. " LEFT JOIN ".$this->config["table_prefix"]."comments AS c2 ON comments.page_tag = c2.page_tag AND comments.id < c2.id"
 			. " WHERE c2.page_tag IS NULL "
+			. " and (comments.status IS NULL or comments.status != 'deleted') "
 			. $where
 			. " ORDER BY time DESC "
 			. " LIMIT ".intval($limit);
 		return $this->LoadAll($sql);
 	}
+
 	/**
 	 * Save a (given) comment for a (given) page.
 	 *
 	 * @uses	Wakka::GetUserName()
 	 * @uses	Wakka::Query()
+	 * @uses	Wakka::LoadSingle()
 	 * @param	string $page_tag mandatory: name of the page
 	 * @param	string $comment mandatory: text of the comment
 	 */
-	function SaveComment($page_tag, $comment)
+	function SaveComment($page_tag, $comment, $parent_id)
 	{
 		// get current user
 		$user = $this->GetUserName();
 
 		// add new comment
+		$parent_id = mysql_real_escape_string($parent_id);
+		if(!$parent_id)
+			$parent_id = "NULL";
 		$this->Query("INSERT INTO ".$this->config["table_prefix"]."comments SET ".
 			"page_tag = '".mysql_real_escape_string($page_tag)."', ".
 			"time = now(), ".
 			"comment = '".mysql_real_escape_string($comment)."', ".
+			"parent = $parent_id, ".
 			"user = '".mysql_real_escape_string($user)."'");
 	}
 

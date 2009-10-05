@@ -1165,6 +1165,14 @@ define('COMMENT_DELETE_BUTTON', 'Delete');
 define('COMMENT_REPLY_BUTTON', 'Reply');
 define('COMMENT_ADD_BUTTON', 'Add Comment');
 define('COMMENT_NEW_BUTTON', 'New Comment');
+define('DISPLAY_COMMENTS_THREADED', 'Threaded');
+define('BUTTON_NEW_COMMENT', 'New Comment');
+define('BUTTON_REPLY_COMMENT', 'Reply to Comment');
+define('COMMENT_NO_DISPLAY', 0);
+define('COMMENT_ORDER_DATE_ASC', 1);
+define('COMMENT_ORDER_DATE_DESC', 2);
+define('COMMENT_ORDER_THREADED', 3);
+define('COMMENT_MAX_TRAVERSAL_DEPTH', 10);
 /**#@-*/
 
 /**#@+
