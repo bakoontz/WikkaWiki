@@ -39,7 +39,7 @@ define('SHOW_OLD_REVISION_SOURCE', 0); # if set to 1 shows by default the source
 $raw = (!empty($_GET['raw']))? (int) $this->GetSafeVar('raw', 'get') : SHOW_OLD_REVISION_SOURCE;
 
 echo "\n".'<!--starting page content-->'."\n";
-echo '<div class="page"';
+echo '<div id="content"';
 echo (($user = $this->GetUser()) && ($user['doubleclickedit'] == 'N') || !$this->HasAccess('write')) ? '' : ' ondblclick="document.location=\''.$this->Href('edit', '', 'id='.$this->page['id']).'\';" '; #268
 echo '>'."\n";
 
@@ -154,7 +154,7 @@ else
 				// display comments header
 ?>
 				<!--starting comments header (show)-->
-				<div class="commentsheader">
+				<div id="commentheader">
 					<div id="commentsnav">
 						<a href="<?php echo $this->Href('', '', 'show_comments='.COMMENT_ORDER_DATE_DESC.'#comments') ?>"><?php echo '<img class="'.($display_mode==COMMENT_ORDER_DATE_DESC ?  "icon_on" : "icon").'" alt="flat" title="Flat (newest first)" src="'.$sort_desc_icon_url.'" />' ?></a>
 						<a href="<?php echo $this->Href('', '', 'show_comments='.COMMENT_ORDER_DATE_ASC.'#comments') ?>"><?php echo '<img class="'.($display_mode==COMMENT_ORDER_DATE_ASC ?  "icon_on" : "icon").'" alt="flat" title="Flat (oldest first)" src="'.$sort_asc_icon_url.'" />' ?></a>
@@ -172,7 +172,7 @@ else
 <?php
 			}
 ?>
-				</div><!--closing commentsheader (show)-->
+				</div><!--closing commentheader (show)-->
 
 <?php
 				// display comments themselves
@@ -185,11 +185,11 @@ else
 			{
 
 				echo '<!--starting comments header (hide)-->'."\n";
-				echo '<div class="commentsheader">'."\n";
+				echo '<div id="commentheader">'."\n";
 				$commentCount = $this->CountComments($this->tag);
 				$showcomments_text = '';
 
-				// Determin comment ordering preference
+				// Determine comment ordering preference
 				$comment_ordering = NULL;
 				if (isset($user['default_comment_display']))
 				{
@@ -238,7 +238,7 @@ else
 
 				echo $comments_message;
 				echo $showcomments_text;
-				echo "\n".'</div><!--closing commentsheader (hide)-->'."\n";
+				echo "\n".'</div><!--closing commentheader (hide)-->'."\n";
 			}
 			echo '</div><!--closing comments block-->'."\n\n";
 		}
