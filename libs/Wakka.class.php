@@ -65,56 +65,69 @@ if (!defined('PATTERN_INVALID_ID_CHARS')) define ('PATTERN_INVALID_ID_CHARS', '/
 class Wakka
 {
 	/**
-	 * 
-	 * @var unknown_type
+	 * Hold the wikka config.
+	 *
+	 * @access	private
+	 * @var		array
 	 */
 	var $config = array();
 	
 	/**
-	 * 
-	 * @var unknown_type
+	 * Hold the connection-link to the database.
+	 *
+	 * @access	private
+	 * @var		resource
 	 */
 	var $dblink;
 	
 	/**
-	 * 
-	 * @var unknown_type
+	 * Hold record for the current page.
+	 *
+	 * @access	private
+	 * @var		array
 	 */
 	var $page;
 	
 	/**
-	 * 
-	 * @var unknown_type
+	 * Hold the name ("tag) of the current page.
+	 *
+	 * @access	private
+	 * @var		string
 	 */
 	var $tag;
 	
 	/**
-	 * 
-	 * @var unknown_type
+	 * Hold a log of queries and the times used for them; used for debugging.
+	 *
+	 * @var		array
 	 */
 	var $queryLog = array();
 	
 	/**
-	 * 
-	 * @var unknown_type
+	 * Hold the interWiki List.
+	 *
+	 * @var		array
 	 */
 	var $interWiki = array();
 	
 	/**
-	 * 
-	 * @var unknown_type
+	 * Hold the Wikka version.
+	 *
+	 * @var		string
 	 */
 	var $VERSION;
 	
 	/**
-	 * 
-	 * @var unknown_type
+	 * Keep track of whether a (at least one) cookie has been sent to the browser.
+	 *
+	 * @var		boolean
 	 */
 	var $cookies_sent = FALSE;
 	
 	/**
+	 * Time to live for client-side cookies in seconds (90 days)
 	 * 
-	 * @var unknown_type
+	 * @var integer
 	 */
 	var $cookie_expiry = PERSISTENT_COOKIE_EXPIRY; 
 	
@@ -125,8 +138,16 @@ class Wakka
 	var $wikka_cookie_path;
 	
 	/**
-	 * 
-	 * @var unknown_type
+	 * Customized head elements to be added in the <head> section.
+	 *
+	 * Array one may use to gather customized elements to be added inside <head>
+	 * section, like additional stylesheet links, customized javascript, ...
+	 * Handlers and/or actions adding items to this variable are responsible for
+	 * sanitizing values passed to it.
+	 * Use {@link Wakka::AddCustomHeader()} to populate this array.
+	 *
+	 * @access	public
+	 * @var		array
 	 */
 	var $additional_headers = array();
 	
@@ -180,7 +201,13 @@ class Wakka
 	/**#@-*/
 
 	/**
-	 * Constructor
+	 * Constructor.
+	 * Database connection is established when the main class Wakka is constructed.
+	 *
+	 * @uses	Config::$mysql_database
+	 * @uses	Config::$mysql_host
+	 * @uses	Config::$mysql_password
+	 * @uses	Config::$mysql_user
 	 */
 	function Wakka($config)
 	{
@@ -199,18 +226,28 @@ class Wakka
 	}
 
 	/**#@+
-	 * @category	Database methods
+	 * @category	Database
+	 * @todo	move into a database class.
 	 */
 	
 	/**
+	 * Send a query to the database.
 	 * 
-	 * @param $query
-	 * @param $dblink
-	 * @return unknown_type
+	 * If the query fails, the function will simply die(). If SQL-
+	 * Debugging is enabled, the query and the time it took to execute
+	 * are added to the Query-Log.
+	 *
+	 * @uses	Config::$sql_debugging
+	 * @uses	Wakka::GetMicroTime()
+	 *
+	 * @param	string	$query	mandatory: the query to be executed.
+	 * @param	resource $dblink optional: connection to the database
+	 * @return	array	the result of the query.
+	 * 
 	 */
 	function Query($query, $dblink='')
 	{
-		// init - detect if called from objct or externally
+		// init - detect if called from object or externally
 		if ('' == $dblink)
 		{
 			$dblink = $this->dblink;
@@ -224,7 +261,7 @@ class Wakka
 		if (!$result = mysql_query($query, $dblink))
 		{
 			ob_end_clean();
-			die("Query failed: ".$query." (".mysql_error().")");
+			die("Query failed: ".$query." (".mysql_error().")"); #i18n
 		}
 		if ($object && $this->config['sql_debugging'])
 		{
@@ -237,9 +274,13 @@ class Wakka
 	}
 	
 	/**
-	 * 
-	 * @param $query
-	 * @return unknown_type
+	 * Return the first row of a query executed on the database.
+	 *
+	 * @uses	Wakka::LoadAll()
+	 *
+	 * @param	string	$query	mandatory: the query to be executed
+	 * @return	mixed	an array with the first result row of the query, or FALSE if nothing was returned.
+	 * @todo	check if indeed false is returned
 	 */
 	function LoadSingle($query) 
 	{ 
@@ -248,9 +289,12 @@ class Wakka
 	}
 	
 	/**
-	 * 
-	 * @param $query
-	 * @return unknown_type
+	 * Return all results of a query executed on the database.
+	 *
+	 * @uses	Wakka::Query()
+	 *
+	 * @param	string $query mandatory: the query to be executed
+	 * @return	array the result of the query.
 	 */
 	function LoadAll($query)
 	{
@@ -277,13 +321,13 @@ class Wakka
 	 * @access	public
 	 * @uses	Wakka::GetConfigValue()
 	 * @uses	Wakka::Query()
+	 * @uses	Config::$table_prefix
 	 *
 	 * @param	string	$table	required: (logical) table name to query;
 	 *							prefix will be automatically added
 	 * @param	string	$where	optional: criteria to be specified for a WHERE clause;
 	 *							do not include WHERE
 	 * @return	integer	number of matches returned by MySQL
-	 * @todo	move into a database class.
 	 */
 	function getCount($table, $where='')							# JW 2005-07-16
 	{
@@ -305,6 +349,7 @@ class Wakka
 	 * @param $minor
 	 * @param $subminor
 	 * @return unknown_type
+	 * @todo	for 1.3: compare with trunk-version!
 	 */
 	function CheckMySQLVersion($major, $minor, $subminor)
 	{
@@ -329,12 +374,18 @@ class Wakka
 		$mysql_minor = $match[1];
 		$mysql_subminor = $match[2][0].$match[2][1];
 
-		if ($mysql_major > $major) {
+		if ($mysql_major > $major) 
+		{
 			return 1;
-		} else {
-			if (($mysql_major == $major) && ($mysql_minor >= $minor) && ($mysql_subminor >= $subminor)) {
+		} 
+		else 
+		{
+			if (($mysql_major == $major) && ($mysql_minor >= $minor) && ($mysql_subminor >= $subminor)) 
+			{
 				return 1;
-			} else {
+			} 
+			else 
+			{
 				return 0;
 			}
 		}
@@ -347,7 +398,7 @@ class Wakka
 	 */
 	
 	/**
-	 * 
+	 * @todo	replace by getmicrotime() in Compatibility library!
 	 * @return unknown_type
 	 */
 	function GetMicroTime() 
@@ -359,7 +410,10 @@ class Wakka
 	/**
 	 * Calculates the difference between two microtimes.
 	 * 
-	 * @uses Wakka::getmicrotime()
+	 * @uses	Wakka::getmicrotime()
+	 * @param	$from mandatory: start time
+	 * @param	$to	optional: end time (default: now)
+	 * @return	unknown_type
 	 */
 	function microTimeDiff($from, $to ='') {
 		if (strlen($to) == 0) $to = getmicrotime();
@@ -374,6 +428,7 @@ class Wakka
 	 * @param $vars
 	 * @param $path
 	 * @return unknown_type
+	 * @todo	for 1.3: compare with trunk-version!
 	 */
 	function IncludeBuffered($filename, $notfoundText='', $vars='', $path='')
 	{
@@ -386,7 +441,7 @@ class Wakka
 		{
 			// build full (relative) path to requested plugin (method/action/formatter)
 			$fullfilepath = $this->BuildFullpathFromMultipath($filename, $path);
-			// check if requested file (method/action/formatter) actually exists
+			// check if requested file (handler/action/formatter) actually exists
 			if (FALSE===empty($fullfilepath))
 			{
 				if (is_array($vars))
@@ -447,7 +502,7 @@ class Wakka
 	 * overall).
 	 *
 	 * @author		{@link http://wikka.jsnx.com/JavaWoman JavaWoman}
-	 * @copyright	Copyright © 2005, Marjolein Katsma
+	 * @copyright	Copyright (c) 2005, Marjolein Katsma
 	 * @license		http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
 	 * @since		Wikka 1.1.6.4
 	 * @version		1.0
@@ -554,7 +609,7 @@ class Wakka
 	 * See #427.
 	 *
 	 * @author		{@link http://wikkawiki.org/JavaWoman JavaWoman}
-	 * @copyright	Copyright © 2004, Marjolein Katsma
+	 * @copyright	Copyright (c) 2004, Marjolein Katsma
 	 * @license		http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
 	 * @version		1.0
 	 *
@@ -634,7 +689,8 @@ class Wakka
 		// [ENT_COMPAT] => 2
 		// [ENT_QUOTES] => 3
 		// [ENT_NOQUOTES] => 0
-		if (!in_array($quote_style,array(ENT_COMPAT,ENT_QUOTES,ENT_NOQUOTES))) {
+		if (!in_array($quote_style,array(ENT_COMPAT,ENT_QUOTES,ENT_NOQUOTES))) 
+		{
 			$quote_style = ENT_COMPAT;
 		}
 
@@ -779,7 +835,7 @@ class Wakka
 	}
 
 	/**
-	 * Create and store a secret session key.
+	 * Create and store a secret key ("session key").
 	 *
 	 * Creates a random value and a random field name to be used to pass on the value.
 	 * The key,value pair is stored in the session as a serialized array.
@@ -801,12 +857,6 @@ class Wakka
 		$field = 'f'.substr(md5($key.getmicrotime()),0,10);
 		// store session key
 		$_SESSION[$keyname] = serialize(array($field,$key));
-		# BEGIN DEBUG - do not activate on a production server!
-		# echo '<div class="debug">'."\n";
-		# echo 'Session key:<br/>';
-		# echo 'name: '.$keyname.' - field: '.$field.' - key: '.$key.'<br/>';
-		# echo '</div>'."\n";
-		# END DEBUG
 		// return name, value pair
 		return array($field,$key);
 	}
@@ -842,24 +892,25 @@ class Wakka
 	}
 	
 	/**
-	 * Check hidden session key: it must be passed and it must have the correct name & value.
+	 * Check if a user-provided key/value matches the one stored in the server-provided "session key".
 	 *
-	 * Looks for a given name,value pair passed either in POST (default) or in GET request.
-	 * Returns TRUE if the correct field and value is found, a reason for failure otherwise.
+	 * <todo>
+	 * 
 	 * Make sure to check for identity TRUE (TRUE === returnval), do not evaluate return value
-	 * as boolean!!
+	 * as boolean!
 	 *
 	 * @author		{@link http://wikkawiki.org/JavaWoman JavaWoman}
-	 * @copyright	Copyright © 2005, Marjolein Katsma
+	 * @copyright	Copyright (c) 2005, Marjolein Katsma
 	 * @license		http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
 	 * @version		0.5
 	 *
 	 * @access		public
-	 * @todo		- prepare strings for internationalization
-	 *
-	 * @param		array	$aKey	required: fieldname, key value pair.
+	 * @param		array	$aKey	required: [0] fieldname, [1] key value.
 	 * @param		string	$method	optional: form method; default post;
-	 * @return		mixed			TRUE if correct name,value found; reason for failure otherwise.
+	 * @return		mixed	TRUE if correct name,value found; reason for failure otherwise.
+	 * @todo	replace $method by $useGet=FALSE (easier since we only have two methods)
+	 * @todo	do we need error messages here? If not, return FALSE instead (more logical). 
+	 * @todo	prepare strings for internationalization 
 	 */
 	function hasValidSessionKey($aKey, $method='post')
 	{
@@ -897,7 +948,10 @@ class Wakka
 	 */
 	
 	/**
-	 * 
+	 * Get the name ("tag") of the current page.
+	 *
+	 * @uses	Wakka::$tag
+	 * @return	string the name of the page
 	 */
 	function GetPageTag() 
 	{ 
@@ -905,8 +959,10 @@ class Wakka
 	}
 
 	/**
-	 * 
-	 * @return unknown_type
+	 * Get the time the current verion of the current page was saved.
+	 *
+	 * @uses	Wakka::$page
+	 * @return	string
 	 */
 	function GetPageTime() 
 	{ 
@@ -914,8 +970,10 @@ class Wakka
 	}
 	
 	/**
-	 * 
-	 * @return unknown_type
+	 * Get the handler used on the page.
+	 *
+	 * @uses	Wakka::$handler
+	 * @return string name of the handler.
 	 */
 	function GetHandler() 
 	{ 
@@ -923,18 +981,23 @@ class Wakka
 	}
 	
 	/**
-	 * 
-	 * @param $name
-	 * @return unknown_type
+	 * Get the value of a given item from the wikka config.
+	 *
+	 * @uses	Wakka::$config
+	 *
+	 * @param	$name	mandatory: name of a key in the config array
+	 * @return	mixed	the value of the configuration item, or NULL if not found
 	 */
 	function GetConfigValue($name) 
 	{ 
-		return (isset($this->config[$name])) ? $this->config[$name] : null; 
+		return (isset($this->config[$name])) ? $this->config[$name] : NULL; 
 	}
 	
 	/**
-	 * 
-	 * @return unknown_type
+	 * Get the name of the Wiki.
+	 *
+	 * @uses	Config::$wakka_name
+	 * @return	string the name of the Wiki.
 	 */
 	function GetWakkaName() 
 	{ 
@@ -942,8 +1005,9 @@ class Wakka
 	}
 	
 	/**
-	 * 
-	 * @return unknown_type
+	 * Get the wikka version.
+	 *
+	 * @return	string the wikka version
 	 */
 	function GetWakkaVersion() 
 	{ 
@@ -962,7 +1026,7 @@ class Wakka
 	/**#@-*/
 	
 	/**#@+
-	 * @category	Page-related methods
+	 * @category	Page
 	 */
 	
 	/**
@@ -971,6 +1035,7 @@ class Wakka
 	 * @param $time
 	 * @param $cache
 	 * @return unknown_type
+	 * @todo	for 1.3: compare with trunk
 	 */
 	function LoadPage($tag, $time = "", $cache = 1) 
 	{
@@ -1121,9 +1186,18 @@ class Wakka
 	}
 	
 	/**
-	 * 
-	 * @param $tag
-	 * @return unknown_type
+	 * Ask if a pagename needs to be created.
+	 *
+	 * When an existing page links to a page that hasn't yet been created, this latter needs
+	 * to be created, or the reference needs to be deleted.
+	 *
+	 * @access	public
+	 * @uses	Wakka::LoadWantedPages()
+	 *
+	 * @param	string	$tag	Name of the page to ask if it needs to be created
+	 * @return	boolean	TRUE if $tag needs to be created
+	 * @todo	exmine old comment: '#410 - but function not used in 1.1.6.3 -OR- trunk?'
+	 * @todo page_tag or tag?
 	 */
 	function IsWantedPage($tag)
 	{
@@ -1131,24 +1205,45 @@ class Wakka
 		{
 			foreach ($pages as $page)
 			{
-				if ($page["tag"] == $tag) return TRUE;
+				if ($page['page_tag'] == $tag)
+				{
+					return TRUE;
+				}
 			}
 		}
 		return FALSE;
 	}
 	
 	/**
-	 * 
-	 * @return unknown_type
+	 * Load all orphaned pages.
+	 *
+	 * Orphaned pages are existing pages that no others page on the wiki links to.
+	 * Thus, the only chance this page could be reached may be from search or 
+	 * special pages like PageIndex. A good quality wiki should not have any orphaned page.
+	 *
+	 * @uses	Config::$table_prefix
+	 * @uses	Wakka::LoadAll()
+	 * @access	public
+	 * @return	array	List of orphaned pages
 	 */
-	function LoadOrphanedPages() 
-	{ 
-		return $this->LoadAll("select distinct tag from ".$this->config["table_prefix"]."pages left join ".$this->config["table_prefix"]."links on ".$this->config["table_prefix"]."pages.tag = ".$this->config["table_prefix"]."links.to_tag where ".$this->config["table_prefix"]."links.to_tag is NULL order by tag"); 
+	function LoadOrphanedPages()
+	{
+		$pre = $this->config["table_prefix"];
+		$pages = $this->LoadAll("
+			SELECT DISTINCT tag
+			FROM ".$pre."pages
+			LEFT JOIN ".$pre."links
+				ON ".$pre."pages.tag = ".$pre."links.to_tag
+			WHERE ".$pre."links.to_tag IS NULL
+			ORDER BY tag"
+			);
+		return $pages;
 	}
 	
 	/**
 	 * 
 	 * @return unknown_type
+	 * @todo	for 1.3:different in trunk: returns owner, too, to be used instead of LoadAllPages()
 	 */
 	function LoadPageTitles() 
 	{ 
@@ -1156,14 +1251,36 @@ class Wakka
 	}
 	
 	/**
+	 * Load all pages in the wiki.
+	 * 
+	 * Using this function should be avoided since it really loads everything from the pages table!
 	 * 
 	 * @return unknown_type
+	 * @todo	for 1.3:see trunk and comment above on LoadPageTitles()
 	 */
 	function LoadAllPages() 
 	{ 
 		return $this->LoadAll("select * from ".$this->config["table_prefix"]."pages where latest = 'Y' order by tag"); 
 	}
 
+	/**
+	 * Save a page.
+	 * 
+	 * @uses	Config::$table_prefix
+	 * @uses	Config::$wikiping_server
+	 * @uses	Wakka::GetPingParams()
+	 * @uses	Wakka::GetUser()
+	 * @uses	Wakka::GetUserName()
+	 * @uses	Wakka::HasAccess
+	 * @uses	Wakka::LoadPage()
+	 * @uses	Wakka::Query()
+	 * @uses	Wakka::WikiPing()
+	 * @param string $tag mandatory:name of the page
+	 * @param string $body mandatory:content of the page
+	 * @param string $note mandatory:edit-note
+	 * @param $owner
+	 * @todo for 1.3:in trunk the page-title is stored together with the page
+	 */
 	function SavePage($tag, $body, $note, $owner=null)
 	{
 		// get current user
@@ -1189,8 +1306,12 @@ class Wakka
 			}
 
 			// set all other revisions to old
-			$this->Query("update ".$this->config["table_prefix"]."pages set latest = 'N' where tag = '".mysql_real_escape_string($tag)."'");
-
+			$this->Query("
+				UPDATE ".$this->config["table_prefix"]."pages
+				SET latest = 'N'
+				WHERE tag = '".mysql_real_escape_string($tag)."'"
+				);
+				
 			// add new revision
 			$this->Query("insert into ".$this->config["table_prefix"]."pages set ".
 				"tag = '".mysql_real_escape_string($tag)."', ".
@@ -1201,6 +1322,7 @@ class Wakka
 				"latest = 'Y', ".
 				"body = '".mysql_real_escape_string($body)."'");
 
+			// WikiPing
 			if ($pingdata = $this->GetPingParams($this->config["wikiping_server"], $tag, $user, $note))
 				$this->WikiPing($pingdata);
 		}
@@ -1224,7 +1346,7 @@ class Wakka
 	/**#@-*/
 	
 	/**#@+
-	 * Search methods
+	 * @category	Search methods
 	 */
 		
 	/**
@@ -1319,10 +1441,16 @@ class Wakka
 	
 	/**
 	 * 
+	 * @uses	Wakka::IsAdmin()
+	 * @uses	Wakka::GetUser()
+	 * @uses	Wakka::IncludeBuffered()
+	 * @uses	Wakka::Format()
+	 * 
 	 * @param $menu
-	 * @return unknown_type
+	 * @return string menu items as an unordered list
 	 */
-	function MakeMenu($menu) {
+	function MakeMenu($menu) 
+	{
 		switch(TRUE)
 		{
 			case $this->IsAdmin():
@@ -1378,16 +1506,20 @@ class Wakka
 	 *
 	 * @access	public
 	 * @since	wikka 1.1.6.0
-	 * @uses	Wakka::config
+	 * @uses	Config::$geshi_path
+	 * @uses	Config::$geshi_header
+	 * @uses	Config::geshi_languages_path
+	 * @uses	Config::$geshi_line_numbers
+	 * @uses	Config::$geshi_tab_width
 	 * @uses	GeShi
-	 * @todo	support for GeSHi line number styles
-	 * @todo	enable error handling
 	 *
 	 * @param	string	$sourcecode	required: source code to be highlighted
 	 * @param	string	$language	required: language spec to select highlighter
 	 * @param	integer	$start		optional: start line number; if supplied and >= 1 line numbering
 	 * 			will be turned on if it is enabled in the configuration.
 	 * @return	string	code block with syntax highlighting classes applied
+	 * @todo	support for GeSHi line number styles
+	 * @todo	enable error handling
 	 */
 	function GeSHi_Highlight($sourcecode, $language, $start=0)
 	{
@@ -1439,7 +1571,7 @@ class Wakka
 	/**#@-*/
 	
 	/**#@+
-	 *@category WIKI PING
+	 * @category WikiPing
 	 * @author	DreckFehler
 	 */
 	
@@ -1499,6 +1631,8 @@ class Wakka
 	
 	/**
 	 * 
+	 * @uses	Wakka::htmlspecialchars_ent()
+	 * @uses	Wakka::HTTPpost()
 	 * @param $ping
 	 * @param $debug
 	 * @return unknown_type
@@ -1535,6 +1669,9 @@ class Wakka
 	
 	/**
 	 * 
+	 * @uses	Wakka::Href()
+	 * @uses	Wakka::LoadPage()
+	 * @uses	Config::$wakka_name
 	 * @param $server
 	 * @param $tag
 	 * @param $user
@@ -1555,6 +1692,7 @@ class Wakka
 			if ($user) 
 			{
 				$ping["author"] = $user; // set username
+				// @todo use existsPage instead
 				if ($this->LoadPage($user)) $ping["authorpage"] = $this->Href("", $user); // set link to user page
 			}
 			if ($changelog) $ping["changelog"] = $changelog;
@@ -1579,6 +1717,7 @@ class Wakka
 
 	/**
 	 * 
+	 * @uses	Wakka::SetCookie()
 	 * @param $name
 	 * @param $value
 	 * @return unknown_type
@@ -1592,6 +1731,7 @@ class Wakka
 	
 	/**
 	 * 
+	 * @uses	Wakka::SetCookie()
 	 * @param $name
 	 * @param $value
 	 * @return unknown_type
@@ -1605,6 +1745,7 @@ class Wakka
 	
 	/**
 	 * 
+	 * @uses	Wakka::SetCookie()
 	 * @param $name
 	 * @return unknown_type
 	 */
@@ -1640,9 +1781,9 @@ class Wakka
 	 */
 
 	/**
-	 * 
-	 * @param $message
-	 * @return unknown_type
+	 * Store a message in the session to be displayed after redirection.
+	 *
+	 * @param	string	$message	text to be stored
 	 */
 	function SetRedirectMessage($message) 
 	{ 
@@ -1650,14 +1791,26 @@ class Wakka
 	}
 	
 	/**
-	 * 
-	 * @return unknown_type
+	 * Get a message, if one was stored before redirection. 
+	 * To set the message, either use {@link Wakka::SetRedirectMessage()} or the second parameter
+	 * of the {@link Wakka::Redirect()} method.
+	 * The message is passed transparently between {@link Wakka::SetRedirectMessage()} and 
+	 * GetRedirectMessage(). It is the responsibility of any code setting and getting that 
+	 * message to perform any validation against the message (quotes handling, XHTML validation, ...)
+	 *
+	 * @see	Wakka::Redirect()
+	 * @see	Wakka::SetRedirectMessage()
+	 * @return string either the text of the message or an empty string.
 	 */
-	function GetRedirectMessage() 
-	{ 
-		$message = $_SESSION["redirectmessage"]; 
-		$_SESSION["redirectmessage"] = ""; 
-		return $message; 
+	function GetRedirectMessage()
+	{
+		$message = '';
+		if (isset($_SESSION['redirectmessage']))
+		{
+			$message = $_SESSION['redirectmessage'];
+			$_SESSION['redirectmessage'] = '';
+		}
+		return $message;
 	}
 	
 	/**
@@ -1669,6 +1822,7 @@ class Wakka
 	 * @access	public
 	 * @since	Wikka 1.1.6.2
 	 *
+	 * @uses	Config::$base_url
 	 * @param	string	$url: destination URL; if not specified redirect to the same page.
 	 * @param	string	$message: message that will show as alert in the destination URL
 	 */
@@ -1707,6 +1861,9 @@ class Wakka
 	/**
 	 * Returns the full url to a page/method.
 	 * 
+	 * @uses	Wakka::MiniHref()
+	 * @uses	Config::$base_url
+	 * @uses	Config::$rewrite_mode
 	 * @param $method
 	 * @param $tag
 	 * @param $params
@@ -1892,9 +2049,13 @@ class Wakka
 	// function PregPageLink($matches) { return $this->Link($matches[1]); }
 	
 	/**
-	 * 
-	 * @param $text
-	 * @return unknown_type
+	 * Check if a given string is in CamelCase format.
+	 *
+	 * @param	string $text mandatory: 
+	 * @return	integer 1 if $text is a wikiname, 0 otherwise
+	 * @todo	remove the comma's in the RE!		#34
+	 * @todo	move regexps to regexp-library		#34
+	 * @todo	return a boolean
 	 */
 	function IsWikiName($text) 
 	{ 
@@ -1903,8 +2064,7 @@ class Wakka
 	
 	/**
 	 * 
-	 * @param $tag
-	 * @return unknown_type
+	 * @param string $tag madatory: (wiki) pagename the link points to.
 	 */
 	function TrackLinkTo($tag) 
 	{ 
@@ -1949,6 +2109,10 @@ class Wakka
 	
 	/**
 	 * 
+	 * @uses	Wakka::GetLinkTable()
+	 * @uses	Wakka::Query()
+	 * @uses	Wakka::GetPageTag()
+	 * @uses	Config::$table_prefix
 	 * @return unknown_type
 	 */
 	function WriteLinkTable()
@@ -2001,8 +2165,11 @@ class Wakka
 	}
 	
 	/**
+	 * Output the header for Wikka-pages.
 	 * 
-	 * @return unknown_type
+	 * @uses	Wakka::GetThemePath()
+	 * @uses	Wakka::IncludeBuffered()
+	 * @return	mixed string with the header of a wikka-page, string with an error-message or FALSE.
 	 */
 	function Header() 
 	{
@@ -2013,8 +2180,11 @@ class Wakka
 	}
 	
 	/**
+	 * Output the footer for Wikka-pages.
 	 * 
-	 * @return unknown_type
+	 * @uses	Wakka::GetThemePath()
+	 * @uses	Wakka::IncludeBuffered()
+	 * @uses	mixed string with the footer of a wikka-page, string with an error-message or FALSE.
 	 */
 	function Footer() 
 	{
@@ -2032,7 +2202,12 @@ class Wakka
 	 * wikka.config.php.  Failing that, tries to revert to a
 	 * "fallback" default theme path (currently 'templates/default').
 	 * Failing that, returns NULL.
-	 *
+	 * 
+	 * @uses	Wakka::GetUser()
+	 * @uses	Wakka::GetConfigValue()
+	 * @uses	Wakka::BuildFullpathFromMultipath()
+	 * @uses	Config::$theme
+	 * @uses	Config::wikka_template_path
 	 * @param  string path_sep Use this to override the OS default 
 	 * DIRECTORY_SEPARATOR (usually used in conjunction with CSS path 
 	 * generation). Default is DIRECTORY_SEPARATOR.
@@ -2056,7 +2231,7 @@ class Wakka
 			// Check on fallback theme dir...
 			if(FALSE===file_exists('templates'.$path_sep.'default'))
 			{
-				return null;
+				return NULL;
 			}
 			else
 			{
@@ -2254,7 +2429,7 @@ class Wakka
 	}
 
 	/**
-	 * Close form
+	 * Close a form.
 	 *
 	 * @return	string	the XHTML tag to close a form and a newline.
 	 */
@@ -2267,12 +2442,21 @@ class Wakka
 	/**#@-*/
 	
 	/**#@+
-	 * @category	INTERWIKI STUFF
+	 * @category	Interwiki
 	 */
 	 
 	/**
-	 * 
-	 * @return unknown_type
+	 * Read the list of interWikis from interwiki.conf.
+	 *
+	 * interwiki.conf in the main dir of wikka holds a list of urls to other
+	 * websites and a shortcut for them, making it possible to use shortcuts
+	 * to their pages instead of the full URL.
+	 *
+	 * The file must have only one entry per line consisting of:
+	 * shortcut full_URL
+	 *
+	 * @uses	Wakka::AddInterWiki()
+	 * @todo	allow multiple spaces and/or tabs as delimiter
 	 */
 	function ReadInterWikiConfig()
 	{
@@ -2282,7 +2466,7 @@ class Wakka
 			{
 				if ($line = trim($line))
 				{
-					list($wikiName, $wikiUrl) = explode(" ", trim($line));
+					list($wikiName, $wikiUrl) = explode(" ", trim($line)); // @@@ allow any tabs/spaces, not just single space
 					$this->AddInterWiki($wikiName, $wikiUrl);
 				}
 			}
@@ -2290,10 +2474,10 @@ class Wakka
 	}
 	
 	/**
+	 * Add an interWiki to the interWiki list.
 	 * 
-	 * @param $name
-	 * @param $url
-	 * @return unknown_type
+	 * @param string $name mandatory: shortcut for the interWiki
+	 * @param string $url mandatory: url for the interwiki
 	 */
 	function AddInterWiki($name, $url)
 	{
@@ -2301,10 +2485,12 @@ class Wakka
 	}
 	
 	/**
-	 * 
-	 * @param $name
-	 * @param $tag
-	 * @return unknown_type
+	 * Return the full URL of an interwiki for a given shortcut, if in the list.
+	 *
+	 * @param  string $name	mandatory: the shortcut for the interWiki
+	 * @param  string $tag	mandatory: name of a page in the other wiki
+	 * @return string the full URL for $tag or an empty string
+	 * @todo	for 1.3: in trunk the function returns an empty string if the IW is not in the list
 	 */
 	function GetInterWikiUrl($name, $tag) 
 	{
@@ -2317,11 +2503,17 @@ class Wakka
 	/**#@-*/
 	
 	/*#@+
-	 * @category	REFERRERS
+	 * @category	Referrers
 	 */ 
 	
 	/**
 	 * 
+	 * @uses	Wakka::cleanUrl()
+	 * @uses	Wakka::GetConfigValue()
+	 * @uses	Wakka::LoadSingle()
+	 * @uses	Wakka::Query()
+	 * @uses	Config::$base_url
+	 * @uses	Config::$table_prefix
 	 * @param $tag
 	 * @param $referrer
 	 * @return unknown_type
@@ -2365,7 +2557,9 @@ class Wakka
 	}
 	
 	/**
-	 * 
+	 * @uses	Wakka::LoadAll()
+	 * @uses	Wakka::GetConfigValue()
+	 * @uses	Config::$table_prefix
 	 * @param $tag
 	 * @return unknown_type
 	 */
@@ -2542,7 +2736,8 @@ class Wakka
 	}
 	
 	/**
-	 * 
+	 * @uses	Wakka::IncludeBuffered()
+	 * @uses	Config::$handler_path
 	 * @param $handler
 	 * @return unknown_type
 	 */
@@ -2559,6 +2754,7 @@ class Wakka
 			$handler = substr($handler, strrpos($handler, '/')+1);
 		}
 		// check valid handler name syntax (similar to Action())
+		// @todo move regexp to library
 		if (!preg_match('/^([a-zA-Z0-9_.-]+)$/', $handler)) // allow letters, numbers, underscores, dashes and dots only (for now); see also #34
 		{
 			return '<em class="error">Unknown handler; the handler name must not contain special characters.</em>';	# [SEC]
@@ -2670,9 +2866,14 @@ class Wakka
 	
 	/**
 	 * 
+	 * in trunk: <b>Replaced by {@link Wakka::authenticateUserFromCookies()},
+	 * {@link Wakka::existsUser()} or {@link Wakka::loadUserData()} depending on
+	 * purpose!</b>
+	 * 
 	 * @param $name
 	 * @param $password
 	 * @return unknown_type
+	 * @todo	see above
 	 */
 	function LoadUser($name, $password = 0) 
 	{ 
@@ -2680,16 +2881,62 @@ class Wakka
 	}
 	
 	/**
-	 * 
-	 * @return unknown_type
+	 * Load all users registered at the wiki from the database.
+	 *
+	 * @uses	Config::$table_prefix
+	 * @uses	Wakka::LoadAll()
+	 *
+	 * @return	array	contains data for all users
+	 * $todo	add 'start' and 'max' parameters to support paging
 	 */
-	function LoadUsers() 
-	{ 
-		return $this->LoadAll("select * from ".$this->config['table_prefix']."users order by name"); 
+	function LoadUsers()
+	{
+		$users = $this->LoadAll("
+			SELECT *
+			FROM ".$this->config['table_prefix']."users
+			ORDER BY name"
+			);
+		return $users;
+	}
+	
+	/**
+	 * Load data for a given user (by name).
+	 *
+	 * Attempts to load the user data from the database, and if successful,
+	 * adds the user name to the registered user name cache.
+	 *
+	 * If the data was successfully retrieved, the user data is returned
+	 * in an array; if not, FALSE is returned.
+	 *
+	 * @uses	Wakka::registered_users
+	 * @uses	Wakka::LoadSingle()
+	 * @uses	Wakka::GetConfigValue()
+	 *
+	 * @param	string	$username	mandatory: user name to retrieve data for
+	 * @return	mixed	array with user data if successful, FALSE otherwise
+	 */
+	function loadUserData($username)
+	{
+		// data retrieval by name: get from database
+		$user = $this->LoadSingle("
+			SELECT *
+			FROM ".$this->GetConfigValue('table_prefix')."users
+			WHERE name = '".mysql_real_escape_string($username)."'
+			LIMIT 1"
+			);
+		if (is_array($user))
+		{
+			// store user name in cache
+			$this->registered_users[] = $user['name'];	// cache actual name as in DB
+		}
+		// return results
+		return $user;
 	}
 	
 	/**
 	 * 
+	 * @uses	Wakka::GetUser()
+	 * @uses	Config::$enable_user_host_lookup
 	 * @return unknown_type
 	 */
 	function GetUserName()
@@ -2724,6 +2971,7 @@ class Wakka
 	
 	/**
 	 * 
+	 * @uses	Wakka::SetPersistentCookie()
 	 * @param $user
 	 * @return unknown_type
 	 */
@@ -2736,6 +2984,9 @@ class Wakka
 	
 	/**
 	 * 
+	 * @uses	Wakka::DeleteCookie()
+	 * @uses	Wakka::GetUserName()
+	 * @uses	Wakka::Query()
 	 * @return unknown_type
 	 */
 	function LogoutUser() 
@@ -2763,7 +3014,7 @@ class Wakka
 	 * legally return a zero value.
 	 *
 	 * @uses	Wakka::GetUser()
-	 *
+	 * @uses	Config::$default_comment_display
 	 * @param	tag		Page title
 	 * @return	mixed	threadtype if the user wants comments, FALSE otherwise
 	 */
@@ -3096,6 +3347,9 @@ class Wakka
 	 * Load the last 50 comments on the wiki.
 	 *
 	 * @uses	Wakka::LoadAll()
+	 * @uses	Wakka::GetUser()
+	 * @uses	Wakka::IsAdmin()
+	 * @uses	Config::$table_prefix
 	 * @param	integer $limit optional: number of last comments. default: 50
 	 * @param   string $user optional: list only comments by this user
 	 * @return	array the last x comments
@@ -3115,6 +3369,9 @@ class Wakka
 	 * Load the last 50 comments on different pages on the wiki.
 	 *
 	 * @uses	Wakka::LoadAll()
+	 * @uses	Wakka::GetUser()
+	 * @uses	Wakka::IsAdmin()
+	 * @uses	Config::$table_prefix
 	 * @param	integer $limit optional: number of last comments on different pages. default: 50
 	 * @param   string $user optional: list only comments by this user
 	 * @return	array the last x comments on different pages
@@ -3393,7 +3650,9 @@ class Wakka
 	/**
 	 * MAINTENANCE
 	 * 
-	 * @return unknown_type
+	 * @uses	Wakka::GetConfigValue()
+	 * @uses	Wakka::Query()
+	 * @uses	Config::$table_prefix
 	 */
 	function Maintenance()
 	{
@@ -3411,6 +3670,22 @@ class Wakka
 	/**
 	 * THE BIG EVIL NASTY ONE!
 	 * 
+	 * @uses	Wakka::Footer()
+	 * @uses	Wakka::GetUser()
+	 * @uses	Wakka::GetCookie()
+	 * @uses	Wakka::GetMicroTime()
+	 * @uses	Wakka::Handler()
+	 * @uses	Wakka::Header()
+	 * @uses	Wakka::Href()
+	 * @uses	Wakka::LoadAllACLs()
+	 * @uses	Wakka::LoadPage()
+	 * @uses	Wakka::LoadUser()
+	 * @uses	Wakka::LogReferrer()
+	 * @uses	Wakka::ReadInterWikiConfig()
+	 * @uses	Wakka::Redirect()
+	 * @uses	Wakka::SetCookie()
+	 * @uses	Wakka::SetUser()
+	 * @uses	Wakka::SetPage()
 	 * @param $tag
 	 * @param $method
 	 * @return unknown_type
