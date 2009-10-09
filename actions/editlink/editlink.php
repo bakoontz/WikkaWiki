@@ -2,7 +2,7 @@
 /**
  * Edit link menulet
  */
-if ($this->method == 'edit' || $this->method == 'showcode')
+if ($this->handler == 'edit' || $this->handler == 'showcode')
 {
 	echo '<a href="'.$this->Href().'" title="'.SHOWLINK_TITLE.'">'.SHOWLINK_TEXT.'</a>';
 }
