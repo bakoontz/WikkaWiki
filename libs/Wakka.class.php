@@ -2411,6 +2411,15 @@ class Wakka
 			$attrClass = ' class="'.$class.'"';
 		}
 
+		// add validation key fields used against FormSpoofing
+		if('post' == $formMethod) 
+		{ 
+			$tmp = $this->createSessionKey($id); 
+			$hidden[$tmp[0]] = $tmp[1]; 
+			unset($tmp); 
+			$hidden['form_id'] = $id;        
+		}		
+		
 		// build HTML fragment
 		$fragment = '<form'.$attrAction.$attrMethod.$attrEnctype.$attrId.$attrClass.'>'."\n";
 		// construct and add hidden fields (necessary if we are NOT using rewrite mode)
