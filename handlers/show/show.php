@@ -32,9 +32,6 @@
  * 
  */
 
-//constants
-define('SHOW_OLD_REVISION_SOURCE', 0); # if set to 1 shows by default the source of an old revision instead of the rendered version
-
 //validate URL parameters
 $raw = (!empty($_GET['raw']))? (int) $this->GetSafeVar('raw', 'get') : SHOW_OLD_REVISION_SOURCE;
 
