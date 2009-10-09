@@ -26,12 +26,6 @@
 *
 */
 
-// User-interface: strings
-define('PAGE_TITLE','Pages linking to %s');
-define('MESSAGE_NO_BACKLINKS','There are no backlinks to this page.');
-define('MESSAGE_MISSING_PAGE','Sorry, page %s does not exist.');
-define('MESSAGE_PAGE_INACCESSIBLE',	'You are not allowed to read this page');
-
 echo '<div id="content">'."\n";
 
 // build backlinks list
