@@ -104,7 +104,8 @@ case "0":
 			"page_tag varchar(75) NOT NULL default '',".
 			"read_acl text NOT NULL,".
 			"write_acl text NOT NULL,".
-			"comment_acl text NOT NULL,".
+			"comment_read_acl text NOT NULL,".
+			"comment_post_acl text NOT NULL,".
 			"PRIMARY KEY  (page_tag)".
 			") TYPE=MyISAM", $dblink), "Already exists?", 0);
 	test("Creating link tracking table...",
@@ -209,10 +210,10 @@ case "0":
 	if (!Wakka::existsPage('TableMarkupReference',$config['table_prefix'],$dblink)) mysql_query("insert into ".$config['table_prefix']."pages set tag = 'TableMarkupReference', body = '======Wikka Table Markup Reference======\n>>==See also:==\n~-For an informal introduction to this markup and several examples consult this server\'s TableMarkup page.\n~-Updated versions of this page can be found on the [[Docs:TableMarkupReference Wikka documentation server]].\n>>\n==== 1. Table Markup Scheme ====\n\nThe generic markup for table elements follows this scheme:\n\n~**##{{color fg=\"#F00\" text=\"|*|\"}}{{color fg=\"blue\" text=\"(attribute parameters)\"}}{{color fg=\"green\" text=\"{style parameters}\"}}content{{color fg=\"#F00\" text=\"||\"}}##**\n\n==Example:==\n\n~##\"\"|=|(i:main_heading){text-size: 120%}This is the main heading||\"\"##\n\n===Understanding the Table Markup Scheme===\n\n~1)**Opening delimiter** --- **##{{color fg=\"#F00\" text=\"|*|\"}}##** is any of the delimiters described in the //elements table// below.\n~1)**Attributes** --- **##{{color fg=\"blue\" text=\"(attribute parameters)\"}}##** is an optional series of ##parameter:value## declarations enclosed in brackets. Valid parameters are described in the //attribute table// below. Multiple parameter declarations can be separated with a semicolon (**##;##**).\n~1)**Style** --- **##{{color fg=\"green\" text=\"{style parameters}\"}}##** is an optional series of CSS style declarations enclosed in braces. Multiple style declarations can be separated with a semicolon (**##;##**).\n~1)**Content** --- **##content##** can be any valid content for that element (including [[Docs:TextFormatting formatted text]]).\n~1)**Closing delimiter** --- **##{{color fg=\"#F00\" text=\"||\"}}##** is the standard delimiter.\n\n==Note:==\nSome elements are //self closing// and do not accept any attributes, style parameters or content. See the notes in the //elements table// below.\n\n==== 2. Elements ====\n\n|!|{width: 80%}||\n|?|Table Elements||\n|=|\"\"XHTML Elements\"\"|=|Delimiter|=|Notes||\n||##<table>##||##\"\"|!|\"\"##||Optional, only useful for adding attributes. **Must** be first in table markup if used. Should be on a line by itself.||\n||##<caption>##||##\"\"|?|\"\"##||||\n||##<colgroup>##||##\"\"|_|\"\"##||||\n||##<col />##||##\"\"|-|\"\"##||Selfclosing - must not be closed!||\n||##<thead>##||##\"\"|[|\"\"##||||\n||##<tfoot>##||##\"\"|]|\"\"##||||\n||##<tbody>##||##\"\"|#|\"\"##||||\n||##<tr>##||none||Will be opened for each row of table cells.||\n||##<th>##||##\"\"|=|\"\"##||||\n||##<td>##||##\"\"||\"\"##||||\n\n==== 3. Attributes ====\n\n|?|Table Attributes||\n|[|\n|=|Attribute|=|Markup key||\n|]|\n|=|Attribute|=|Markup key||\n|#|\n|=|(x:2)Core||\n||##id##||##i##||\n||##title##||##t##||\n||##class##||##c##||\n||##style##||##s##||\n|=|(x:2)i18n||\n||##xml:lang##||##l##||\n||##dir##||##d##||\n|=|(x:2)Table cells||\n||##colspan##||##x##||\n||##rowspan##||##y##||\n||##scope##||##o##||\n||##headers##||##h##||\n||##abbr##||##a##||\n||##axis##||##z##||\n|=|(x:2)Other Table elements||\n||##span##||##p##||\n||##summary##||##u##||\n\n\n----\nCategoryWiki', owner = '(Public)', user = 'WikkaInstaller', time = now(), latest = 'Y'", $dblink);
 
 	test("Setting default ACL...", 1);
-	mysql_query("insert into ".$config['table_prefix']."acls set page_tag = 'UserSettings', read_acl = '*', write_acl = '+', comment_acl = '+'", $dblink);
-	mysql_query("insert into ".$config['table_prefix']."acls set page_tag = 'AdminUsers', read_acl = '!*', write_acl = '!*', comment_acl = '!*'", $dblink);
-	mysql_query("insert into ".$config['table_prefix']."acls set page_tag = 'AdminPages', read_acl = '!*', write_acl = '!*', comment_acl = '!*'", $dblink);
-	mysql_query("insert into ".$config['table_prefix']."acls set page_tag = 'DatabaseInfo', read_acl = '!*', write_acl = '!*', comment_acl = '!*'", $dblink);
+	mysql_query("insert into ".$config['table_prefix']."acls set page_tag = 'UserSettings', read_acl = '*', write_acl = '+', comment_read_acl = '*', comment_post_acl = '+'", $dblink);
+	mysql_query("insert into ".$config['table_prefix']."acls set page_tag = 'AdminUsers', read_acl = '!*', write_acl = '!*', comment_read_acl = '!*', comment_post_acl = '!*'", $dblink);
+	mysql_query("insert into ".$config['table_prefix']."acls set page_tag = 'AdminPages', read_acl = '!*', write_acl = '!*', comment_read_acl = '!*', comment_post_acl = '!*'", $dblink);
+	mysql_query("insert into ".$config['table_prefix']."acls set page_tag = 'DatabaseInfo', read_acl = '!*', write_acl = '!*', comment_read_acl = '!*', comment_post_acl = '!*'", $dblink);
 
 	//
 	// Auto login wiki admin
@@ -453,6 +454,20 @@ case "1.3":
 	mysql_query("alter table ".$config["table_prefix"]."users add default_comment_display enum('date_asc', 'date_desc', 'threaded') NOT NULL default 'threaded'", $dblink), "Already done? OK!", 0);
 	test("Adding fields to comments table to enable threading...",  
 	mysql_query("alter table ".$config["table_prefix"]."comments add status enum('deleted') default NULL", $dblink), "Already done? OK!", 0);
+	// Create new fields for comment_read_acl and comment_post_acl, 
+	// and copy existing comment_acl values to these new fields 
+	test(__('Creating new comment_read_acl field').'...', 
+	@mysql_query("alter table ".$config['table_prefix']."acls add comment_read_acl text not null", $dblink), __('Already done?  OK!'), 0); 
+	test(__('Creating new comment_post_acl field').'...', 
+	@mysql_query("alter table ".$config['table_prefix']."acls add comment_post_acl text not null", $dblink), __('Already done?  OK!'), 0); 
+	test(__('Copying existing comment_acls to new fields').'...', 
+	@mysql_query("update ".$config['table_prefix']."acls as a inner join(select page_tag, comment_acl from wikka_acls) as b on a.page_tag = b.page_tag set a.comment_read_acl=b.comment_acl, a.comment_post_acl=b.comment_acl", $dblink), __('Failed').'. ?', 1);
+	test("Setting default ACL...", 1);
+	@mysql_query("insert into ".$config['table_prefix']."acls set page_tag = 'UserSettings', comment_read_acl = '*', comment_post_acl = '+'", $dblink), __('Already done? OK!'), 0);
+	@mysql_query("insert into ".$config['table_prefix']."acls set page_tag = 'AdminUsers', comment_read_acl = '!*', comment_post_acl = '!*'", $dblink), __('Already done? OK!'), 0);
+	@mysql_query("insert into ".$config['table_prefix']."acls set page_tag = 'AdminPages', comment_read_acl = '!*', comment_post_acl = '!*'", $dblink), __('Already done? OK!'), 0);
+	@mysql_query("insert into ".$config['table_prefix']."acls set page_tag = 'DatabaseInfo', comment_read_acl = '!*', comment_post_acl = '!*'", $dblink), __('Already done? OK!'), 0);
+
 }
 
 // #600: Force reloading of stylesheet.

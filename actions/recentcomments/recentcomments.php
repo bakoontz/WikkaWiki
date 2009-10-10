@@ -32,7 +32,9 @@ if ($comments = $this->LoadRecentComments(50, $username))
 	$curday = '';
 	foreach ($comments as $comment)
 	{
-		if ($this->HasAccess('comment', $comment['page_tag']))
+		$page_tag = $comment['page_tag'];
+		if ($this->HasAccess('read', $page_tag) &&
+	        $this->HasAccess('comment_read', $page_tag))
 		{
 			$readable++;
 			// day header
@@ -57,7 +59,8 @@ if ($comments = $this->LoadRecentComments(50, $username))
 				$comment_preview = $comment_preview.'&#8230;';
 			}
 			// print entry
-			echo '&nbsp;&nbsp;&nbsp; <span class="datetime">'.$timeformatted.'</span> <a href="'.$this->href('', $comment['page_tag'], 'show_comments=1').'#comment_'.$comment['id'].'">'.$comment['page_tag'].'</a>'.COMMENT_AUTHOR_DIVIDER.$this->Format($comment['user'])."\n<blockquote>".$comment_preview."</blockquote>\n";
+			echo
+			sprintf(RECENTCOMMENTS_TIMESTAMP_CAPTION,$timeformatted).' <a href="'.$this->href('', $page_tag, 'show_comments=1').'#comment_'.$comment['id'].'">'.$page_tag.'</a>'.WIKKA_COMMENT_AUTHOR_DIVIDER.$this->FormatUser($comment['user'])."\n<blockquote>".$comment_preview."</blockquote>\n";
 		}
 	}
 	if ($readable == 0)

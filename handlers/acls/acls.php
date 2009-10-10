@@ -40,12 +40,14 @@ if ($this->UserIsOwner())
 		// change ACL(s) and/or username
 		if (isset($_POST['store']) && ($_POST['store'] == STORE_ACL_LABEL))
 		{
-			$default_read_acl	= $this->GetConfigValue('default_read_acl');
-			$default_write_acl	= $this->GetConfigValue('default_write_acl');
-			$default_comment_acl	= $this->GetConfigValue('default_comment_acl');
-			$posted_read_acl	= $_POST['read_acl'];
-			$posted_write_acl	= $_POST['write_acl'];
-			$posted_comment_acl	= $_POST['comment_acl'];
+			$default_read_acl = $this->GetConfigValue('default_read_acl');
+			$default_write_acl = $this->GetConfigValue('default_write_acl');
+			$default_comment_read_acl = $this->GetConfigValue('default_comment_read_acl');
+			$default_comment_post_acl = $this->GetConfigValue('default_comment_post_acl');
+			$posted_read_acl = $_POST['read_acl'];
+			$posted_write_acl = $_POST['write_acl'];
+			$posted_comment_read_acl = $_POST['comment_read_acl'];
+			$posted_comment_post_acl = $_POST['comment_post_acl'];
 			$message = '';
 	
 			// store lists only if ACLs have previously been defined,
@@ -58,11 +60,13 @@ if ($this->UserIsOwner())
 			if ($page ||
 			    ($posted_read_acl	 != $default_read_acl	||
 			     $posted_write_acl	 != $default_write_acl	||
-			     $posted_comment_acl != $default_comment_acl))
+				 $posted_comment_read_acl != $default_comment_read_acl ||
+				 $posted_comment_post_acl != $default_comment_post_acl))
 			{
 				$this->SaveACL($this->GetPageTag(), 'read', $this->TrimACLs($posted_read_acl));
 				$this->SaveACL($this->GetPageTag(), 'write', $this->TrimACLs($posted_write_acl));
-				$this->SaveACL($this->GetPageTag(), 'comment', $this->TrimACLs($posted_comment_acl));
+				$this->SaveACL($this->GetPageTag(), 'comment', $this->TrimACLs($posted_comment_read_acl));
+				$this->SaveACL($this->GetPageTag(), 'comment', $this->TrimACLs($posted_comment_post_acl));
 				$message = ACLS_UPDATED;
 			}
 	
@@ -103,9 +107,15 @@ if ($this->UserIsOwner())
 	</td>
 
 	<td>
-	<strong><?php echo COMMENT_ACL_LABEL; ?></strong><br />
-	<textarea name="comment_acl" rows="4" cols="20"><?php echo $this->ACLs['comment_acl'] ?></textarea>
+	<strong><?php echo ACLS_COMMENT_READ_LABEL; ?></strong><br />
+	<textarea name="comment_read_acl" rows="4" cols="20"><?php echo $this->ACLs['comment_read_acl'] ?></textarea>
 	</td>
+
+	<td>
+	<strong><?php echo ACLS_COMMENT_POST_LABEL; ?></strong><br />
+	<textarea name="comment_post_acl" rows="4" cols="20"><?php echo $this->ACLs['comment_post_acl'] ?></textarea>
+	</td>
+
 </tr>
 
 <tr>
