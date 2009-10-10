@@ -280,7 +280,7 @@ class Wakka
 	 *
 	 * @param	string	$query	mandatory: the query to be executed
 	 * @return	mixed	an array with the first result row of the query, or FALSE if nothing was returned.
-	 * @todo	check if indeed false is returned
+	 * @todo	for 1.3: check if indeed false is returned (compare with trunk)
 	 */
 	function LoadSingle($query) 
 	{ 
@@ -894,7 +894,10 @@ class Wakka
 	/**
 	 * Check if a user-provided key/value matches the one stored in the server-provided "session key".
 	 *
-	 * <todo>
+	 * <p>Used to defend against FormSpoofing: each form gets a unique key+value which are stored 
+	 * on the server(session) as well as send to the user (hidden form fields). If the user $_POSTs data,
+	 * there is a check if key+value are included and match those stored in the session. Otherwise the data is 
+	 * discarded.</p>
 	 * 
 	 * Make sure to check for identity TRUE (TRUE === returnval), do not evaluate return value
 	 * as boolean!
@@ -1131,13 +1134,24 @@ class Wakka
 	}
 	
 	/**
+	 * LoadPageById loads a page whose id is $id.
 	 * 
-	 * @param $id
-	 * @return unknown_type
+	 * @uses	Wakka::LoadSingle()
+	 * @uses	Wakka::GetConfigValue()
+	 * @uses	Config::$table_prefix
+	 * @param	int		$id		mandatory: Id of the page to load.
+	 * @return	array with page structure identified by $id, or ? if no page could be retrieved
+	 * @todo	for 1.3: compare and add caching ability
+	 * @todo	for 1.3: check LoadSingle for return value
 	 */
 	function LoadPageById($id) 
 	{ 
-		return $this->LoadSingle("select * from ".$this->config["table_prefix"]."pages where id = '".mysql_real_escape_string($id)."' limit 1"); 
+		return $this->LoadSingle("
+			SELECT *
+			FROM ".$this->GetConfigValue('table_prefix')."pages
+			WHERE id = '".mysql_real_escape_string($id)."'
+			LIMIT 1"
+			);
 	}
 	
 	/**
@@ -2870,8 +2884,75 @@ class Wakka
 	} 
 
 	/*#@+
-	 *@category	User-related methods
+	 *@category	User
 	 */
+	
+	/**
+	 * Authenticate a user from (persistent) cookies.
+	 *
+	 * @uses	Wakka::GetConfigValue()
+	 * @uses	Wakka::LoadAll()
+	 *
+	 * @return	boolean	TRUE if user authenticated from cookie, FALSE if not
+	 */
+	function authenticateUserFromCookies()
+	{
+		// init
+		$result = NULL;
+		$c_username	= $this->getWikkaCookie('user_name');
+		$c_pass		= $this->getWikkaCookie('pass');
+		// find user(s)
+		$users = $this->LoadAll("
+			SELECT *
+			FROM ".$this->GetConfigValue('table_prefix')."users
+			WHERE name = '".mysql_real_escape_string($c_username)."'"
+			);
+		// evaluate result
+		if (is_array($users))
+		{
+			$count = count($users);
+		}
+		switch (TRUE)
+		{
+			case (FALSE === $users):
+				$result = FALSE;		// query failed!!	@@@ notify admin
+				break;
+			case ($count > 1):
+				$result = FALSE;		// multiple users by same name: DB error!!	@@@ notify admin
+				break;
+			case ($count == 0):
+				$result = FALSE;		// not a registered user
+				break;
+			default:					// $count == 1 - OK: one user found
+				break;
+		}
+		// OK so far, check password
+		if (NULL === $result)
+		{
+			$user_rec = $users[0];		// get first (single) row
+			if (isset($user_rec['challenge']) && isset($user_rec['password']))
+			{
+				$pwd = md5($user_rec['challenge'].$user_rec['password']);
+				if ($c_pass != $pwd)
+				{
+					$result = FALSE;	// "No, not authenticated"
+				}
+				else
+				{
+					// valid password supplied: $user data is authenticated:
+					// cache username and login user
+					$result = TRUE;
+					$this->registered_users[] = $user_rec['name'];	// cache actual name as in DB
+					$this->loginUser($user_rec);
+				}
+			}
+			else
+			{
+				$result = FALSE;		// incomplete record: DB error!!
+			}
+		}
+		return $result;					// will be either TRUE or FALSE
+	}
 	
 	/**
 	 * 
@@ -2966,6 +3047,42 @@ class Wakka
 				$name = $ip;
 			}
 		}
+		return $name;
+	}
+	
+	/**
+	 * Get (and cache) anonymous user "name" for current user.
+	 *
+	 * Depending on configuration settings, the "name" can be either an IP
+	 * address pr a host name found by reverse DNS lookup.
+	 *
+	 * @uses	Wakka::GetConfigValue()
+	 *
+	 * @return	string	name found
+	 * @todo	extend cache if we specify IP *or* hostname
+	 */
+	function getAnonUserName()
+	{
+		if (isset($this->anon_username))
+		{
+			// get name from cache
+			$name = $this->anon_username;
+		}
+		else
+		{
+			// lookup name and cache it
+			$ip = $_SERVER['REMOTE_ADDR'];
+			if ((bool) $this->GetConfigValue('enable_user_host_lookup'))
+			{
+				$name = gethostbyaddr($ip) ? gethostbyaddr($ip) : $ip;
+			}
+			else
+			{
+				$name = $ip;
+			}
+			$this->anon_username = $name;
+		}
+		// return name found
 		return $name;
 	}
 	
@@ -3170,7 +3287,7 @@ class Wakka
 	/**#@-*/
 	
 	/*#@+
-	 * @category Comment-related methods
+	 * @category Comments
 	 */
 
 	/**
@@ -3663,21 +3780,34 @@ class Wakka
 	/**#@-*/
 	
 	/**
-	 * MAINTENANCE
+	 * Purge referrers and old page revisions.
 	 * 
 	 * @uses	Wakka::GetConfigValue()
 	 * @uses	Wakka::Query()
+	 * @uses	Config::$referrers_purge_time
+	 * @uses	Config::$pages_purge_time
 	 * @uses	Config::$table_prefix
+	 * 
 	 */
 	function Maintenance()
 	{
 		// purge referrers
-		if ($days = $this->GetConfigValue("referrers_purge_time")) {
-			$this->Query("DELETE FROM ".$this->config["table_prefix"]."referrers WHERE time < date_sub(now(), interval '".mysql_real_escape_string($days)."' day)");
+		if ($days = $this->GetConfigValue("referrers_purge_time")) 
+		{
+			$this->Query("
+				DELETE FROM ".$this->GetConfigValue('table_prefix')."referrers
+				WHERE time < date_sub(now(), interval '".mysql_real_escape_string($days)."' day)"
+				);			
 		}
 
 		// purge old page revisions
-		if ($days = $this->GetConfigValue("pages_purge_time")) {
+		if ($days = $this->GetConfigValue("pages_purge_time")) 
+		{
+			$this->Query("
+				DELETE FROM ".$this->GetConfigValue('table_prefix')."pages
+				WHERE time < date_sub(now(), interval '".mysql_real_escape_string($days)."' day)
+					AND latest = 'N'"
+				);
 			$this->Query("delete from ".$this->config["table_prefix"]."pages where time < date_sub(now(), interval '".mysql_real_escape_string($days)."' day) and latest = 'N'");
 		}
 	}
