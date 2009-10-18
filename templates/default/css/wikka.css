@@ -719,6 +719,14 @@ div.success {
 	margin-bottom: 1em;
 }
 
+.history_revisioninfo { 
+        float: left; 
+        text-align: left; 
+        padding: 4px; 
+        background: #EEE; 
+        border: 1px solid #CCC;                  
+}
+
 .copyright {
 	font-size: 11px;
 	color: #AAA;
@@ -733,8 +741,8 @@ div.success {
 	margin: auto;
 	z-index:20;
 	position:fixed;
-	top: 80px;
-	left: 10px;
+	top: 70px;
+	right: 10px;
 	color: red;
 	font-size: xx-large;
 	font-weight: bold;

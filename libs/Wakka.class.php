@@ -1163,6 +1163,32 @@ class Wakka
 	{ 
 		return $this->LoadAll("select * from ".$this->config["table_prefix"]."pages where tag = '".mysql_real_escape_string($page)."' order by id desc"); 
 	}
+
+	/**
+	 * LoadOldestRevision: Load the oldest known revision of a page.
+	 *
+	 * @access	public
+	 * @uses	Wakka::LoadSingle()
+	 *
+	 * @param	string	$tag	The name of the page to load oldest revision of.
+	 * @return	array
+	 */
+	function LoadOldestRevision($tag)
+	{
+		if (!$this->GetConfigValue('pagename_case_sensitive'))
+		{
+			$tag_lowercase = strtolower($tag);
+		}
+		// @@@ $tag_lowercase won't have a value if pagename_case_sensitive is TRUE!
+		$oldest_revision = $this->LoadSingle("
+			SELECT note, id, time, user
+			FROM ".$this->GetConfigValue('table_prefix')."pages
+			WHERE tag = '".mysql_real_escape_string($tag)."'
+			ORDER BY time
+			LIMIT 1"
+			);
+		return $oldest_revision;
+	}
 	
 	/**
 	 * 

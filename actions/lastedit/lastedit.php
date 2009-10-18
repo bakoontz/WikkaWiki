@@ -3,12 +3,13 @@
  * Display a box with information on the last edit.
  *
  * @package		Actions
- * @name			Lastedit
+ * @version		$Id:lastedit.php 369 2007-03-01 14:38:59Z DarTar $
+ * @license		http://www.gnu.org/copyleft/gpl.html GNU General Public License
+ * @filesource
  *
  * @author		{@link http://wikkawiki.org/DarTar Dario Taraborelli} (first draft)
  * @author		{@link http://wikkawiki.org/MinusF MinusF} (code cleanup and validation)
- * @version		0.2
- * @since		Wikka 1.1.6.X
+ * @since		Wikka 1.1.6.0
  *
  * @input		integer  $show  optional: amount of details to be displayed;
  *				default: 3
@@ -18,28 +19,44 @@
  *				3: show user, notes (if available), date and quickdiff link
  * @output		box with lastedit information
  *
- * @todo		- make date/time format system-configurable;
- *			- use FormatUser() method to render author name;
+ * @uses	Wakka::Link()
+ * @uses	Wakka::GetPageTag()
+ * @uses	Wakka::Href()
+ * @uses	Wakka::htmlspecialchars_ent()
+ * @uses	Wakka::FormatUser()
+ *
+ * @todo		make date/time format system-configurable;
  */
+/**
+ * defaults
+ */
+define('DEFAULT_SHOW', '3');
+define('DATE_FORMAT', 'D, d M Y'); #TODO make this system-configurable
+define('TIME_FORMAT', 'H:i T'); #TODO make this system-configurable
+/**
+ * style
+ */
+define('LASTEDIT_BOX', 'lastedit');
+define('LASTEDIT_NOTES', 'lastedit_notes');
 
-if (!isset($show)) 
+if (!isset($show))
 {
 	$show = DEFAULT_SHOW;
 }
 
-if ($this->handler == 'show') 
+if ($this->handler == 'show')
 {
 	$page = $this->page;
 	$pagetag = $page['tag'];
-	$user = ($this->LoadUser($page['user'])) ? $this->Link($page['user']) : ANONYMOUS_USER;
+	$user = $this->FormatUser($page['user']);
 
 	switch($show)
 	{
 		case 3:
-		$oldpage = $this->LoadSingle("SELECT * FROM ".$this->config['table_prefix']."pages WHERE tag='".$this->GetPageTag()."' AND latest = 'N' ORDER BY time desc LIMIT 1");
+		$oldpage = $this->LoadSingle("SELECT * FROM ".$this->GetConfigValue('table_prefix')."pages WHERE tag='".$this->GetPageTag()."' AND latest = 'N' ORDER BY time desc LIMIT 1");
 		$newid = $page['id'];
 		$oldid = $oldpage['id'];
-		$difflink = ' [<a title="'.DIFF_LINK_TITLE.'" href="'.$this->Href('diff', $pagetag, 'a='.$page['id'].'&amp;b='.$oldpage['id'].'&amp;fastdiff=1').'">diff</a>]';
+		$difflink = ' [<a title="'.LASTEDIT_DIFF_LINK_TITLE.'" href="'.$this->Href('diff', $pagetag, 'a='.$page['id'].'&amp;b='.$oldpage['id'].'&amp;fastdiff=1').'">diff</a>]';
 
 		case 2:
 		list($day, $time) = explode(' ', $page['time']);
@@ -50,8 +67,8 @@ if ($this->handler == 'show')
 		$note = ($page['note']) ? ':<br/><span class="'.LASTEDIT_NOTES.'">'.
 		$this->htmlspecialchars_ent($page['note']).'</span>' : '';
 
-		default:	
+		default:
 	}
-	echo '<div class="'.LASTEDIT_BOX.'">'.sprintf(LASTEDIT_MESSAGE, $user).$note.'<br /> '.$dateformatted.' '.$timeformatted.$difflink.'</div>';
+	echo '<div class="'.LASTEDIT_BOX.'">'.sprintf(LASTEDIT_DESC, $user).$note.'<br /> '.$dateformatted.' '.$timeformatted.$difflink.'</div>';
 }
 ?>
