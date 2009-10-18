@@ -112,13 +112,13 @@ if ($this->HasAccess('read'))
 		$output .= '<em>'.REVISIONS_NO_REVISIONS_YET.'</em>'."\n";
 	}
 
-	echo '<div class="page">'."\n";
+	echo '<div id="content">'."\n";
 	echo $output;
 	echo '</div>'."\n";
 }
 else
 {
-	echo '<div class="page">'."\n";
+	echo '<div id="content">'."\n";
 	echo '<em class="error">'.WIKKA_ERROR_ACL_READ.'</em>'."\n";
 	echo '</div>'."\n";
 }

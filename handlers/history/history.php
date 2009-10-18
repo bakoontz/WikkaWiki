@@ -39,7 +39,7 @@
  * @todo	use pager for histories
  */
  
-echo '<div class="page">'."\n";
+echo '<div id="content">'."\n";
 $start = (int) $this->GetSafeVar('start', 'get');	// @@@ accept only positive value here
 
 if ($this->HasAccess("read")) {
