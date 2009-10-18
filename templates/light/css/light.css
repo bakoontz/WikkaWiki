@@ -220,7 +220,7 @@ a.ext:hover {
 }
 
 #content a.heading {
-	line-height: auto;
+	line-height: inherit;
 	color: #666;
 	padding: 0;
 	margin: 0;
