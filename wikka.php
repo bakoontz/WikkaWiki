@@ -247,6 +247,7 @@ $wakkaDefaultConfig = array(
 
 	// template
 	'wikka_template_path' 		=> 'plugins/templates'.PATH_DIVIDER.'templates',		# (location of Wikka template files - REQUIRED)
+	'feedcreator_path'			=> '3rdparty/core/feedcreator',
 	'safehtml_path'				=> '3rdparty/core/safehtml',
 	'referrers_purge_time'		=> '30',
 	'pages_purge_time'			=> '0',

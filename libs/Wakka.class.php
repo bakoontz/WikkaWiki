@@ -3512,13 +3512,13 @@ class Wakka
 	 */
 	function LoadRecentComments($limit = 50, $user = '') 
 	{ 
-		$where = '';
+		$where = 'where';
 		if(!empty($user) && 
 		   ($this->GetUser() || $this->IsAdmin()))
 		{
-			$where = " where user = '".mysql_real_escape_string($user)."' ";
+			$where = " where user = '".mysql_real_escape_string($user)."' and ";
 		}
-		return $this->LoadAll("SELECT * FROM ".$this->config["table_prefix"]."comments $where.' and (status IS NULL or status != \'deleted\') ORDER BY time DESC LIMIT ".intval($limit)); 
+		return $this->LoadAll("SELECT * FROM ".$this->config["table_prefix"]."comments $where (status IS NULL or status != 'deleted') ORDER BY time DESC LIMIT ".intval($limit)); 
 	}
 
 	/**
