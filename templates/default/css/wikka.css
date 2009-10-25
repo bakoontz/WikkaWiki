@@ -760,8 +760,6 @@ del {
 	text-decoration: none;
 }
 
-.recentchanges {font-size: 0.9em;}
-
 .pagenote {color: #888;}
 
 .smaller {font-size: smaller;}
@@ -1073,6 +1071,19 @@ table.calendar a:hover {
 table.calendar a:active {
 	color: #339;
 	text-decoration: none;
+}
+
+/* RecentChanges action */
+
+ul.recentchanges {
+	list-style-type: none;
+	padding-left: 0;
+	margin-left: 1em;
+	margin-bottom: 1em;
+}
+
+ul.recentchanges li {
+	font-size: 0.9em;
 }
 
 /* Usersettings action */
