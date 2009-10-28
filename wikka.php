@@ -1063,25 +1063,6 @@ if (!$debug)
  * @todo	use name with Capital for object; also clashes with $wakka (above) now
  */
 $wakka->Run($page, $handler);				// This is where it all happens!
-/**
- * Calculate elapsed microtime
- *
- * @todo	move handler check to handler configuration
- */
-if (!preg_match('/(xml|raw|mm|grabcode|mindmap_fullscreen)$/', $handler))
-{
-	// get new microtime
-	$tend = getmicrotime(TRUE);
-	//calculate the difference
-	$totaltime = ($tend - $tstart);
-	//output result	// @@@ use paragraph
-	echo '<div class="smallprint">'.sprintf(PAGE_GENERATION_TIME, $totaltime)."</div>\n";	// @@@ should be paragraph
-	if ($track_errors)
-	{
-		echo '<p class="debuginfo">'.$debug_info.'</p>'."\n";
-	}
-	echo "</body>\n</html>";
-}
 // ------------------------------- PAGE ROLLED ---------------------------------
 
 
