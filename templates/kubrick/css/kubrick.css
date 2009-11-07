@@ -1215,3 +1215,21 @@ ul#options_menu li {
 ul#options_menu li:before {
 	content: "\00BB \0020";
 }
+
+ul.menu form#form_logout input[type=submit] {
+    background-color: transparent;
+    text-align: left;
+    border: none; 
+    padding: 0; 
+    margin: 0; 
+    font-family: inherit;
+    font-size: inherit;
+    color: #993357;
+    text-decoration: none;
+    cursor: pointer;
+    color: #06c;
+}
+
+ul.menu form#form_logout input[type=submit]:hover {
+	color: #147;
+}

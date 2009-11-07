@@ -1205,13 +1205,26 @@ ul#options_menu li {
     margin-right: 15px;
 }
 
-ul#main_menu li form {
+ul.menu li form {
     display: inline;
 }
 
-ul#main_menu li input {
+ul.menu li input {
 	font-weight: bold;
 	border: none;
 	border-bottom: 2px solid #CCC;
 	background-color: transparent;
+}
+
+ul.menu form#form_logout input[type=submit] {
+    background-color: transparent;
+    border: none; 
+    text-decoration: none;
+    cursor: pointer;
+    color: #339;
+}
+
+ul.menu form#form_logout input[type=submit]:hover {
+    cursor: pointer;
+    color: #933;
 }

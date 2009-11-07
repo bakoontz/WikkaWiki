@@ -1223,6 +1223,8 @@ table.acls {
 .toolbar .btn-pressed { background: ButtonHighlight; }
 .editornamecss { background-color:#CCCCFF; font-size: 18px; padding: 0 10px; }
 
+/* menus */
+
 ul#main_menu {
 	float: right;
 	list-style-type: none;
@@ -1249,11 +1251,11 @@ ul#main_menu li > a:hover {
 	  color: #333;
 }
 
-ul#main_menu li form {
+ul.menu li form {
     display: inline;
 }
 
-ul#main_menu li form input {
+ul.menu li form input {
     font-size: 1.1em;
     line-height: 1.1em;
     font-weight: bold;
@@ -1276,4 +1278,14 @@ ul#options_menu li {
     width: auto;
     text-align: left;
     font-size: 70%; 
+}
+
+ul.menu form#form_logout input[type=submit] {
+    background-color: transparent;
+    border: none; 
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: inherit;
+    color: #993357;
+    text-decoration: none;
+    cursor: pointer;
 }
