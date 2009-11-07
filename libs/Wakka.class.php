@@ -1513,7 +1513,7 @@ class Wakka
 		{
 			$menu_src = $this->IncludeBuffered($menu_file, '', '', 'config/');
 			$menu_array = explode("\n", $menu_src);
-			$menu_output = '<ul id="'.$menu.'">'."\n";
+			$menu_output = '<ul class="menu" id="'.$menu.'">'."\n";
 			foreach ($menu_array as $menu_item)
 			{
 				$menu_output .= '<li>'.$this->Format($menu_item).'</li>'."\n";
