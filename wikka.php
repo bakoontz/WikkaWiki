@@ -9,16 +9,6 @@
  * and released under the terms of the modified BSD license
  * @see	/docs/WakkaWiki.LICENSE
  *
- * (...) Explain basic override mechanism @@@
- *
- * Because we are dealing with overrides here, not all of which need
- * to be defined, we do not assume any dependencies for these
- * overrides: each stands on its own.  (Of course the override file
- * itself may make use of dependencies, but that is up to the
- * administrator setting these up.)
- * All defined and valid override paths are converted to their
- * canonical absolute form.
- *
  * @package		Wikka
  * @subpackage	Core
  * @version		$Id: wikka.php 1293 2009-01-12 17:06:21Z DarTar $
@@ -39,7 +29,6 @@
  * @copyright	Copyright 2004-2005, Jason Tourtelotte <wikka-admin@jsnx.com>
  * @copyright	Copyright 2006-2009, {@link http://wikkawiki.org/CreditsPage Wikka Development Team}
  *
- * @uses	validLocalPath()	for validating path override
  * @uses	getmicrotime()		for determining page generation time
  * @uses	magicQuotesWorkaround()	to overcome magic quotes that may be imposed
  *				on a system
@@ -48,6 +37,8 @@
  *
  * @todo	use templating class for page generation;
  */
+
+require_once('libs'.DIRECTORY_SEPARATOR.'Compatibility.lib.php');
 
 // ---------------------- DEBUGGING AND ERROR REPORTING -----------------------
 /**
@@ -99,8 +90,6 @@ if (!defined('BASIC_SESSION_NAME'))		define('BASIC_SESSION_NAME', 'Wikkawiki');
 
 /**
  * Path where the Wikka installer is located.
- * This value is <b>not</b> overridable or in any way configurable: each (new)
- * Wikka installation must have its own local 'setup' directory (for now, at least).
  */
 if (!defined('WIKKA_SETUP_PATH'))		define('WIKKA_SETUP_PATH', 'setup');
 
@@ -147,17 +136,6 @@ if (!function_exists('version_compare') ||
 }
 // ------------------------- END VERSION CHECK (PHP) ---------------------------
 
-
-// ---------------------- LOAD PATH AND DEFAULT OVERRIDES ----------------------
-if ($debug) echo "load path overrides...<br/>\n";
-// Include configuration override file, if it exists.
-// If it exists at all, it MUST be located in the Wikka installation directory.
-if (file_exists('override.config.php'))
-{
-	include 'override.config.php';
-}
-// ---------------------- END PATH AND DEFAULT OVERRIDES -----------------------
-
 // ---------------------- DEFINE URL DOMAIN / PATH -----------------------------
 /**#@+*
  * URL or URL component, derived just once for later usage.
@@ -175,7 +153,6 @@ if ((('http://' == $scheme) && (':80' == $server_port)) || (('https://' == $sche
 /**
  * URL fragment consisting of scheme + domain part.
  * Represents the domain URL where the current instance of Wikka is located.
- * This variable can be overriden in {@link override.config.php}
  *
  * @var string
  */
@@ -210,409 +187,117 @@ if (!defined('DEFAULT_COOKIE_EXPIRATION_HOURS')) define('DEFAULT_COOKIE_EXPIRATI
 // ----------------------- END URL DOMAIN / PATH -------------------------------
 
 // ------------------------ DEFINE & DERIVE CORE PATHS -------------------------
-if ($debug) echo "core component paths...<br/>\n";
-/**#@+
- * String constant defining the default path to a specific type of core component.
- */
-/**
- * Default path to the Wikka code library which contains core components.
- * May be overridden to enable sharing core components between Wikka installations.
- */
-if (!defined('DEFAULT_LIBRARY_PATH'))	define('DEFAULT_LIBRARY_PATH', 'libs');
-/**
- * Default path to the Wikka language library where language-specific files are stored.
- * May be overridden to enable sharing core components between Wikka installations.
- */
-if (!defined('DEFAULT_LANG_PATH'))		define('DEFAULT_LANG_PATH', 'lang');
-/**#@-*/
+// Universal path divider; path parser also recognizes Unix-style
+// dividers (:) and Windows-style dividers (;)
+define('PATH_DIVIDER', ',');
 
-/**#@+
- * String constant defining the effective path to a specific type of core component.
- */
+if ($debug) echo "default filesystem paths...<br/>\n";
+
+/**
+  * Default filesystem path for the <b>site</b> configuration
+  * <b>file</b>.
+  */
+if(!defined('DEFAULT_SITE_CONFIGFILE')) define ('DEFAULT_SITE_CONFIGFILE', 'wikka.config.php');
+// For backwards compatibility with existing code...probably needs to
+// be removed at some point
+if(!defined('SITE_CONFIGFILE')) define ('SITE_CONFIGFILE', DEFAULT_SITE_CONFIGFILE);
+
+if ($debug) echo "core component paths...<br/>\n";
+
 /**
  * Effective path to the Wikka code library which contains core components.
- * The path takes any optional override into account, and is used directly in
- * Wikka, including in this file.
  */
-if (!defined('WIKKA_LIBRARY_PATH')) define('WIKKA_LIBRARY_PATH',
-	(defined('LOCAL_LIBRARY_PATH') && ($canon_path = validLocalPath(LOCAL_LIBRARY_PATH, 'dir')))
-		? $canon_path
-		: DEFAULT_LIBRARY_PATH
-	);
+if (!defined('WIKKA_LIBRARY_PATH')) define('WIKKA_LIBRARY_PATH', 'libs');
+
 /**
  * Effective path to the Wikka language library which contains language files
  * and localized system content.
- * The path takes any optional override into account, and is used directly in
- * Wikka, including in this file.
  */
-if (!defined('WIKKA_LANG_PATH')) define('WIKKA_LANG_PATH',
-	(defined('LOCAL_LANG_PATH') && ($canon_path = validLocalPath(LOCAL_LANG_PATH, 'dir')))
-		? $canon_path
-		: DEFAULT_LANG_PATH
-	);
-// ---------------------------- CORE PATHS DEFINED -----------------------------
-
-
-// -------------------------- COMPATIBILITY LIBRARY ----------------------------
-if ($debug) echo "loading compatibility library...<br/>\n";
-// ---- requires the effective library path to be defined
-// Now that the "core" paths are defined, include the "compatibility functions".
-// We do this as early as possible: may be used for following defines and
-// derivations!
-require_once WIKKA_LIBRARY_PATH.DIRECTORY_SEPARATOR.'Compatibility.lib.php';
-// ------------------------ END COMPATIBILITY LIBRARY --------------------------
-
-// @@@ include regex library HERE, so this file AND the setup process can use it!
-
-// ---------------- DEFINE & DERIVE CONFIGURABLE COMPONENT PATHS ---------------
-if ($debug) echo "default 3rd-party component paths...<br/>\n";
-/*
-  Although these paths are configurable, we use defined constants here for three
-  reasons:
-  1. Like a core path, these represent paths to components that might be
-	 shared between installations, so we use the same override mechanism here.
-  2. While the paths are configurable, the defaults defined here can be overridden
-	 <i>before</i> they get to the configuration file (and seen by the installer),
-	 so they effectively become the defaults used during the installation process.
-	 This enhances consistency between "sister" installations.
-  3. A (filesystem) file or directory path needs to take the local directory
-	 separator into account but in PHP4 a class variable (as used in the default
-	 configuration file) can only be initialized with a literal or a constant,
-	 not a concatenation.
-*/
-define('PATH_DIVIDER', ',');
-
-/**#@+
- * Default for a (configurable) filesystem directory for a component.
- */
-/**
- * Default <b>directory</b> where actions bundled with Wikka are stored.
- * May be overridden as well as configured to enable sharing Wikka components
- * between Wikka installations.
- */
-if (!defined('DEFAULT_ACTION_PATH'))	define('DEFAULT_ACTION_PATH', 'plugins/actions'.PATH_DIVIDER.'actions');
-/**
- * Default <b>directory</b> where handlers bundled with Wikka are stored.
- * May be overridden as well as configured to enable sharing Wikka components
- * between Wikka installations.
- */
-if (!defined('DEFAULT_HANDLER_PATH'))	define('DEFAULT_HANDLER_PATH', 'plugins/handlers'.PATH_DIVIDER.'handlers');
-/**
- * Default <b>directory</b> where formatters and highlighters bundled with Wikka are stored.
- * May be overridden as well as configured to enable sharing Wikka components
- * between Wikka installations.
- */
-if (!defined('DEFAULT_FORMATTER_PATH')) define('DEFAULT_FORMATTER_PATH', 'plugins/formatters'.PATH_DIVIDER.'formatters');
-/**
- * Default <b>directory</b> where template files bundled with Wikka are stored.
- * May be overridden as well as configured to enable sharing Wikka components
- * between Wikka installations.
- */
-if (!defined('DEFAULT_TEMPLATE_PATH')) define('DEFAULT_TEMPLATE_PATH', 'plugins/templates'.PATH_DIVIDER.'templates');
-/**
- * Default <b>directory</b> where 3rd-party components bundled with Wikka are stored.
- * This path isn't used directly but can be used in building other 3rd-party
- * component paths.
- * May be overridden as well as configured to enable sharing 3rd-party components
- * with other Wikka installations and other applications.
- */
-if (!defined('DEFAULT_3RDPARTY_PATH'))			define('DEFAULT_3RDPARTY_PATH', '3rdparty');
+if (!defined('WIKKA_LANG_PATH')) define('WIKKA_LANG_PATH', 'lang');
 
 /**
- * Default <b>directory</b> for 3rd-party core components; these components are required for
- * basic Wikka functionality.
- * May be overridden as well as configured to enable sharing 3rd-party components
- * with other Wikka installations and other applications.
- */
-if (!defined('DEFAULT_3RDPARTY_CORE_PATH'))		define('DEFAULT_3RDPARTY_CORE_PATH', DEFAULT_3RDPARTY_PATH.DIRECTORY_SEPARATOR.'core');
-/**
- * Default <b>directory</b> for 3rd-party plugin components; these components are optional
- * and extend Wikka functionality.
- * May be overridden as well as configured to enable sharing 3rd-party components
- * with other Wikka installations and other applications.
- */
-if (!defined('DEFAULT_3RDPARTY_PLUGIN_PATH'))	define('DEFAULT_3RDPARTY_PLUGIN_PATH', DEFAULT_3RDPARTY_PATH.DIRECTORY_SEPARATOR.'plugins');
+  * Default <b>directory</b> where actions bundled with Wikka are
+  * stored.
+  */
+if(!defined('DEFAULT_ACTION_PATH')) define('DEFAULT_ACTION_PATH', 'plugins/actions'.PATH_DIVIDER.'actions');
 
 /**
- * Default <b>directory</b> for the FeedCreator 3rd-party core component.
- * May be overridden as well as configured to enable sharing 3rd-party components
- * with other Wikka installations and other applications.
- */
-if (!defined('DEFAULT_FEEDCREATOR_PATH'))		define('DEFAULT_FEEDCREATOR_PATH', DEFAULT_3RDPARTY_CORE_PATH.DIRECTORY_SEPARATOR.'feedcreator');
-/**
- * Default <b>directory</b> for the SafeHTML 3rd-party core component.
- * May be overridden as well as configured to enable sharing 3rd-party components
- * with other Wikka installations and other applications.
- */
-if (!defined('DEFAULT_SAFEHTML_PATH'))			define('DEFAULT_SAFEHTML_PATH', DEFAULT_3RDPARTY_CORE_PATH.DIRECTORY_SEPARATOR.'safehtml');
+  * Default <b>directory</b> where handlers bundled with Wikka are
+  * stored.
+  */
+if(!defined('DEFAULT_HANDLER_PATH')) define('DEFAULT_HANDLER_PATH', 'plugins/handlers'.PATH_DIVIDER.'handlers');
 
 /**
- * Default <b>directory</b> for the optional GeSHi 3rd-party plugin component.
- * May be overridden as well as configured to enable sharing 3rd-party components
- * with other Wikka installations and other applications.
- */
-if (!defined('DEFAULT_GESHI_PATH'))				define('DEFAULT_GESHI_PATH', DEFAULT_3RDPARTY_PLUGIN_PATH.DIRECTORY_SEPARATOR.'geshi');
-/**
- * Default <b>directory</b> for the language files for the GeSHi 3rd-party plugin component.
- * May be overridden as well as configured to enable sharing 3rd-party components
- * with other Wikka installations and other applications.
- */
-if (!defined('DEFAULT_GESHI_LANG_PATH'))		define('DEFAULT_GESHI_LANG_PATH', DEFAULT_GESHI_PATH.DIRECTORY_SEPARATOR.'geshi');
-/**
- * Default <b>directory</b> for the optional Onyx-RSS 3rd-party plugin component.
- * May be overridden as well as configured to enable sharing 3rd-party components
- * with other Wikka installations and other applications.
- */
-if (!defined('DEFAULT_ONYX_PATH'))				define('DEFAULT_ONYX_PATH', DEFAULT_3RDPARTY_PLUGIN_PATH.DIRECTORY_SEPARATOR.'onyx-rss');
-/**#@-*/
-
-/**#@+
- * String constant used as (configurable) filesystem <b>directory</b> for a component.
- */
-/**
- * Effective (configurable) <b>directory</b> for Wikka actions.
- * The path takes any optional override into account; used to define a value in
- * the default configuration file.
- */
-if (!defined('CONFIG_ACTION_PATH')) define('CONFIG_ACTION_PATH',
-	(defined('LOCAL_ACTION_PATH') && ($canon_path = validLocalPath(LOCAL_ACTION_PATH, 'dir')))
-		? $canon_path
-		: DEFAULT_ACTION_PATH
-	);
-/**
- * Effective (configurable) <b>directory</b> for Wikka handlers.
- * The path takes any optional override into account; used to define a value in
- * the default configuration file.
- */
-if (!defined('CONFIG_HANDLER_PATH')) define('CONFIG_HANDLER_PATH',
-	(defined('LOCAL_HANDLER_PATH') && ($canon_path = validLocalPath(LOCAL_HANDLER_PATH, 'dir')))
-		? $canon_path
-		: DEFAULT_HANDLER_PATH
-	);
-/**
- * Effective (configurable) <b>directory</b> for Wikka formatters and highlighters.
- * The path takes any optional override into account; used to define a value in
- * the default configuration file.
- */
-if (!defined('CONFIG_FORMATTER_PATH')) define('CONFIG_FORMATTER_PATH',
-	(defined('LOCAL_FORMATTER_PATH') && ($canon_path = validLocalPath(LOCAL_FORMATTER_PATH, 'dir')))
-		? $canon_path
-		: DEFAULT_FORMATTER_PATH
-	);
-/**
- * Effective (configurable) <b>directory</b> for Wikka templates.
- * The path takes any optional override into account; used to define a value in
- * the default configuration file.
- */
-if (!defined('CONFIG_TEMPLATE_PATH')) define('CONFIG_TEMPLATE_PATH',
-	(defined('LOCAL_TEMPLATE_PATH') && ($canon_path = validLocalPath(LOCAL_TEMPLATE_PATH, 'dir')))
-		? $canon_path
-		: DEFAULT_TEMPLATE_PATH
-	);
-/**
- * Effective (configurable) <b>directory</b> for 3rd-party components; these components
- * are required for basic Wikka functionality.
- * The path takes any optional override into account; used to define a value in
- * the default configuration file.
- */
-if (!defined('CONFIG_3RDPARTY_PATH')) define('CONFIG_3RDPARTY_PATH',
-	(defined('LOCAL_3RDPARTY_PATH') && ($canon_path = validLocalPath(LOCAL_3RDPARTY_PATH, 'dir')))
-		? $canon_path
-		: DEFAULT_3RDPARTY_PATH
-	);
-/**
- * Effective (configurable) <b>directory</b> for 3rd-party core components; these components
- * are required for basic Wikka functionality.
- * The path takes any optional override into account; used to define a value in
- * the default configuration file.
- */
-if (!defined('CONFIG_3RDPARTY_CORE_PATH')) define('CONFIG_3RDPARTY_CORE_PATH',
-	(defined('LOCAL_3RDPARTY_CORE_PATH') && ($canon_path = validLocalPath(LOCAL_3RDPARTY_CORE_PATH, 'dir')))
-		? $canon_path
-		: DEFAULT_3RDPARTY_CORE_PATH
-	);
-/**
- * Effective (configurable) <b>directory</b> for 3rd-party plugin components; these components
- * are optional and extend Wikka functionality.
- * The path takes any optional override into account; used to define a value in
- * the default configuration file.
- */
-if (!defined('CONFIG_3RDPARTY_PLUGIN_PATH')) define('CONFIG_3RDPARTY_PLUGIN_PATH',
-	(defined('LOCAL_3RDPARTY_PLUGIN_PATH') && ($canon_path = validLocalPath(LOCAL_3RDPARTY_PLUGIN_PATH, 'dir')))
-		? $canon_path
-		: DEFAULT_3RDPARTY_PLUGIN_PATH
-	);
+  * Default <b>directory</b> where formatters bundled with Wikka are
+  * stored.
+  */
+if(!defined('DEFAULT_FORMATTER_PATH')) define('DEFAULT_FORMATTER_PATH', 'plugins/formatters'.PATH_DIVIDER.'formatters');
 
 /**
- * Effective (configurable) <b>directory</b> for the FeedCreator 3rd-party core component.
- * The path takes any optional override into account; used to define a value in
- * the default configuration file.
- */
-if (!defined('CONFIG_FEEDCREATOR_PATH')) define('CONFIG_FEEDCREATOR_PATH',
-	(defined('LOCAL_FEEDCREATOR_PATH') && ($canon_path = validLocalPath(LOCAL_FEEDCREATOR_PATH, 'dir')))
-		? $canon_path
-		: DEFAULT_FEEDCREATOR_PATH
-	);
-/**
- * Effective (configurable) <b>directory</b> for the SafeHTML 3rd-party core component.
- * The path takes any optional override into account; used to define a value in
- * the default configuration file.
- */
-if (!defined('CONFIG_SAFEHTML_PATH')) define('CONFIG_SAFEHTML_PATH',
-	(defined('LOCAL_SAFEHTML_PATH') && ($canon_path = validLocalPath(LOCAL_SAFEHTML_PATH, 'dir')))
-		? $canon_path
-		: DEFAULT_SAFEHTML_PATH
-	);
+  * Default <b>directory</b> where templates bundled with Wikka are
+  * stored.
+  */
+if(!defined('DEFAULT_TEMPLATE_PATH')) define('DEFAULT_TEMPLATE_PATH', 'plugins/templates'.PATH_DIVIDER.'templates');
 
 /**
- * Effective (configurable) <b>directory</b> for the optional GeSHi 3rd-party plugin package.
- * The path takes any optional override into account; used to define a value in
- * the default configuration file.
- */
-if (!defined('CONFIG_GESHI_PATH')) define('CONFIG_GESHI_PATH',
-	(defined('LOCAL_GESHI_PATH') && ($canon_path = validLocalPath(LOCAL_GESHI_PATH, 'dir')))
-		? $canon_path
-		: DEFAULT_GESHI_PATH
-	);
-/**
- * Effective (configurable) <b>directory</b> for the language files for the GeSHi 3rd-party
- * plugin component.
- * The path takes any optional override into account; used to define a value in
- * the default configuration file.
- */
-if (!defined('CONFIG_GESHI_LANG_PATH')) define('CONFIG_GESHI_LANG_PATH',
-	(defined('LOCAL_GESHI_LANG_PATH') && ($canon_path = validLocalPath(LOCAL_GESHI_LANG_PATH, 'dir')))
-		? $canon_path
-		: DEFAULT_GESHI_LANG_PATH
-	);
-/**
- * Effective (configurable) <b>directory</b> for the optional Onyx-RSS 3rd-party plugin component.
- * The path takes any optional override into account; used to define a value in
- * the default configuration file.
- */
-if (!defined('CONFIG_ONYX_PATH')) define('CONFIG_ONYX_PATH',
-	(defined('LOCAL_ONYX_PATH') && ($canon_path = validLocalPath(LOCAL_ONYX_PATH, 'dir')))
-		? $canon_path
-		: DEFAULT_ONYX_PATH
-	);
-/**#@-*/
-// ------------------- CONFIGURABLE COMPONENT PATHS DEFINED --------------------
+  * Directory for 3rd-party components
+  */
+if(!defined('DEFAULT_3RDPARTY_PATH')) define('DEFAULT_3RDPARTY_PATH', '3rdparty');
 
-// -------------- DEFINE & DERIVE CONFIGURABLE COMPONENT URI PATHS -------------
-if ($debug) echo "default 3rd-party component URI paths...<br/>\n";
-/**#@+
- * Default for a (configurable) <b>URL path component</b> for a 3rd-party component.
- */
-/**
- * Default <b>URL path component</b> for the WikiEdit scripts.
- * May be overridden as well as configured to enable sharing 3rd-party components
- * between Wikka installations.
- */
-if (!defined('DEFAULT_WIKIEDIT_URIPATH'))	define('DEFAULT_WIKIEDIT_URIPATH', filesys2uri(DEFAULT_3RDPARTY_PLUGIN_PATH).'/wikiedit');
-/**
- * Default <b>URL path component</b> for the FreeMind display applet.
- * May be overridden as well as configured to enable sharing 3rd-party components
- * between Wikka installations.
- */
-if (!defined('DEFAULT_FREEMIND_URIPATH'))	define('DEFAULT_FREEMIND_URIPATH', filesys2uri(DEFAULT_3RDPARTY_PLUGIN_PATH).'/freemind');
-/**#@-*/
+/** Default <b>directory</b> where 3rdparty core components bundled
+  * with Wikka are stored.  These components are required for basic
+  * Wikka functionality.
+  */
+if(!defined('DEFAULT_3RDPARTY_CORE_PATH')) define('DEFAULT_3RDPARTY_CORE_PATH', DEFAULT_3RDPARTY_PATH.DIRECTORY_SEPARATOR.'core');
 
-/**#@+
- * Default for a (configurable) <b>URL path component</b> for a 3rd-party component.
- */
-/**
- * Effective default (configurable) <b>URL path component</b> for the WikiEdit
- * scripts.
- * The path takes any optional override into account; used to define a value in
- * the default configuration file.
- */
-if (!defined('CONFIG_WIKIEDIT_URIPATH'))	define('CONFIG_WIKIEDIT_URIPATH',
-	(defined('LOCAL_WIKIEDIT_URIPATH') && ($uri_path = validUriPath(LOCAL_WIKIEDIT_URIPATH)))	// @@@ URI path
-		? $uri_path
-		: DEFAULT_WIKIEDIT_URIPATH
-	);
-/**
- * Effective default (configurable) <b>URL path component</b> for the FreeMind
- * display applet.
- * The path takes any optional override into account; used to define a value in
- * the default configuration file.
- */
-if (!defined('CONFIG_FREEMIND_URIPATH'))	define('CONFIG_FREEMIND_URIPATH',
-	(defined('LOCAL_FREEMIND_URIPATH') && ($uri_path = validUriPath(LOCAL_FREEMIND_URIPATH)))	// @@@ URI path
-		? $uri_path
-		: DEFAULT_FREEMIND_URIPATH
-	);
-/**#@-*/
-// ----------------- CONFIGURABLE COMPONENT URI PATHS DEFINED ------------------
+/** Default <b>directory</b> where 3rdparty plugin components bundled
+  * with Wikka are stored.  These components are optional and extend
+  * Wikka functionality.
+  */
+if(!defined('DEFAULT_3RDPARTY_PLUGIN_PATH')) define('DEFAULT_3RDPARTY_PLUGIN_PATH', DEFAULT_3RDPARTY_PATH.DIRECTORY_SEPARATOR.'plugin');
 
-// ------------------------- OTHER CONFIGURABLE DEFAULTS -----------------------
-/**#@+
- * String constant used as default for a configurable setting.
- */
-/**
- * Defines the (configurable) default language. Wikka will attempt to load the
- * corresponding language file.
- * This value is directly used here in wikka.php but also used as the default
- * value in the default configuration file.
- */
-if (!defined('CONFIG_DEFAULT_LANGUAGE'))	define('CONFIG_DEFAULT_LANGUAGE', 'en');
-/**#@-*/
-// ----------------------- END OTHER CONFIGURABLE DEFAULTS ---------------------
+/** 
+  * Default <b>directory</b> for the FeedCreator 3rd party component.
+  */
+if(!defined('DEFAULT_FEEDCREATOR_PATH')) define('DEFAULT_FEEDCREATOR_PATH', DEFAULT_3RDPARTY_CORE_PATH.DIRECTORY_SEPARATOR.'feedcreator');
 
+/** 
+  * Default <b>directory</b> for the SafeHTML 3rd party component.
+  */
+if(!defined('DEFAULT_SAFEHTML_PATH')) define('DEFAULT_SAFEHTML_PATH', DEFAULT_3RDPARTY_CORE_PATH.DIRECTORY_SEPARATOR.'safehtml');
 
-// ------------------ DEFINE & DERIVE CONFIGURATION FILE PATHS -----------------
-if ($debug) echo "configuration file paths...<br/>\n";
-// ---- requires WIKKA_LIBRARY_PATH to be defined so this section must come after
-//      that constant is derived.
-/**#@+
- * String constant used as default for the (filesystem) path for a configuration file.
- */
-/**
- * Default filesystem path for the <b>default</b> configuration <b>file</b>.
- * By default located in the Wikka library directory; this setting is overridable
- * on its own, whether or not the default library location has been overridden.
- */
-if (!defined('DEFAULT_DEFAULT_CONFIGFILE'))	define('DEFAULT_DEFAULT_CONFIGFILE', WIKKA_LIBRARY_PATH.DIRECTORY_SEPARATOR.'Config.class.php');
-/**
- * Default filesystem path for the <b>site</b> configuration <b>file</b>.
- * By default located in the Wikka installation directory; this setting is
- * overridable to enable locating it outside the webroot (and/or sharing it with
- * another Wikka installation).
- */
-if (!defined('DEFAULT_SITE_CONFIGFILE'))	define('DEFAULT_SITE_CONFIGFILE', 'wikka.config.php');
-/**#@-*/
+/** 
+  * Default <b>directory</b> for the optional GeSHi 3rd party plugin component.
+  */
+if(!defined('DEFAULT_GESHI_PATH')) define('DEFAULT_GESHI_PATH', DEFAULT_3RDPARTY_PLUGIN_PATH.DIRECTORY_SEPARATOR.'geshi');
 
-// FIXED this is an (improved and extended) version of the method introduced in
-// 1.1.6.3 to avoid GetEnv #470
+/** 
+  * Default <b>directory</b> for the language files for the GeSHi 3rd
+  * party plugin component.
+  */
+if(!defined('DEFAULT_GESHI_LANG_PATH')) define('DEFAULT_GESHI_LANG_PATH', DEFAULT_GESHI_PATH.DIRECTORY_SEPARATOR.'geshi');
 
-/**#@+
- * String constant defining the effective (filesystem) path for a configuration <b>file</b>.
- */
-/**
- * Effective filesystem path for the <b>default</b> configuration <b>file</b>.
- * The path takes any optional override into account, and is used directly in
- * Wikka, including in this file.
- */
-if (!defined('DEFAULT_CONFIGFILE')) define('DEFAULT_CONFIGFILE',
-	(defined('LOCAL_DEFAULT_CONFIGFILE') && ($canon_path = validLocalPath(LOCAL_DEFAULT_CONFIGFILE, 'file')))
-		? $canon_path
-		: DEFAULT_DEFAULT_CONFIGFILE
-	);
-/**
- * Effective filesystem path for the <b>site</b> configuration <b>file</b>.
- * The path takes any optional override into account, and is used directly in
- * Wikka, including in this file. The file does not need to exist; if it doesn't,
- * the installer will be triggered (which will create the file).
- */
-if (!defined('SITE_CONFIGFILE')) define('SITE_CONFIGFILE',
-	(defined('LOCAL_SITE_CONFIGFILE') && ($canon_path = validLocalPath(LOCAL_SITE_CONFIGFILE, 'file', FALSE)))
-		? $canon_path
-		: DEFAULT_SITE_CONFIGFILE
-	);
-/**#@-*/
-// ---------------------- CONFIGURATION FILE PATHS DEFINED ---------------------
+/** 
+  * Default <b>directory</b> for the optional Onyx-RSS 3rd party
+  * plugin component.
+  */
+if(!defined('DEFAULT_ONYX_PATH')) define('DEFAULT_ONYX_PATH', DEFAULT_3RDPARTY_PLUGIN_PATH.DIRECTORY_SEPARATOR.'onyx-rss');
 
+  /**
+   * <b>URL path component</b> pointing to the location of the WikiEdit scripts.
+   * This path will be extended by the system with the file name for each of
+   * the required scripts.
+   */
+if(!defined('DEFAULT_WIKIEDIT_URIPATH')) define('DEFAULT_WIKIEDIT_URIPATH', filesys2uri(DEFAULT_3RDPARTY_PLUGIN_PATH).DIRECTORY_SEPARATOR.'wikiedit');
 
+  /**
+   * <b>URL path component</b> for the FreeMind display applet.
+   * This path will be extended by the system with the file name for the
+   * applet's jar archive.
+   */
+if(!defined('DEFAULT_FREEMIND_URIPATH')) define('DEFAULT_FREEMIND_URIPATH', filesys2uri(DEFAULT_3RDPARTY_PLUGIN_PATH).DIRECTORY_SEPARATOR.'freemind');
+
+// ------------------- COMPONENT PATHS DEFINED --------------------
 
 // -------------------------------- START TIMER --------------------------------
 if ($debug) echo "start timer...<br/>\n";
@@ -623,7 +308,6 @@ if ($debug) echo "start timer...<br/>\n";
 $tstart = getmicrotime(TRUE);
 // ------------------------------- TIMER STARTED -------------------------------
 
-
 // ----------------------------- GATHER CONFIGURATION --------------------------
 if ($debug) echo "gather configuration...<br/>\n";
 // --- this requires a function from the Compatibility library, so it must come
@@ -632,8 +316,7 @@ if ($debug) echo "gather configuration...<br/>\n";
 /**
  * 1. Get the default configuration.
  */
-#require_once('libs'.DIRECTORY_SEPARATOR.'Config.class.php');
-require_once DEFAULT_CONFIGFILE;
+require_once('libs'.DIRECTORY_SEPARATOR.'Config.class.php');
 $DefaultConfig = instantiate('Config');
 $wakkaDefaultConfig = get_object_vars($DefaultConfig);
 unset($DefaultConfig);
@@ -643,17 +326,16 @@ unset($DefaultConfig);
  */
 $wakkaConfig = array();	// empty array in case there's no user configuration yet
 
-// Get any inherited configuration from Wakka - note this won't be picked up if
-// SITE_CONFIGFILE points elsewhere! We assume that a deliberate overide takes
-// precedence over automatic inheritance.
+// Get any inherited configuration from Wakka
 if (file_exists('wakka.config.php'))
 {
 	rename('wakka.config.php', 'wikka.config.php');
 }
-if (file_exists(SITE_CONFIGFILE))
+if(file_exists(SITE_CONFIGFILE))
 {
-	include SITE_CONFIGFILE;		// fills $wakkaConfig
+	include SITE_CONFIGFILE;
 }
+
 // migrate some old to new variable names (should come before merge!)
 //TODO move these checks to a directive file to be used by the installer/upgrader, #97
 if (isset($wakkaConfig['action_path']) && !isset($wakkaConfig['wikka_action_path']))
@@ -666,6 +348,7 @@ if (isset($wakkaConfig['handler_path']) && !isset($wakkaConfig['wikka_handler_pa
 	$wakkaConfig['wikka_handler_path'] = $wakkaConfig['handler_path'];
 	unset($wakkaConfig['handler_path']); //since 1.1.7
 }
+
 // remove obsolete config settings (should come before merge!)
 //TODO move these checks to a directive file to be used by the installer/upgrader, #97
 if (isset($wakkaConfig['header_action']))
@@ -715,19 +398,16 @@ if ($debug) echo "get language file...<br/>\n";
 /**
  * Include language file if one exists.
  *
- * Language files are bundled under <b>lang/</b> (default, overridable) in a
+ * Language files are bundled under <b>lang/</b> in a
  * folder named after their ISO 639-1 code (e.g. 'en' for English).
  *
  * Other language files that exist in the language folder will be
  * included as well (useful for plugins that define their own
  * language strings).
  */
-//check if a custom language definition is specified; if not, set a default
-$wakkaConfig['default_lang'] = (isset($wakkaConfig['default_lang'])) ? $wakkaConfig['default_lang'] : CONFIG_DEFAULT_LANGUAGE;
-// setup variables
-$default_lang	= $wakkaConfig['default_lang'];
-$lang_base_dir = WIKKA_LANG_PATH;
-$fallback_lang	= CONFIG_DEFAULT_LANGUAGE;			// should always be available
+$default_lang = $wakkaConfig['default_lang'];
+$lang_base_dir = 'lang'; 
+$fallback_lang	= 'en';			// should always be available
 $default_language_file  = $lang_base_dir.DIRECTORY_SEPARATOR.$default_lang.DIRECTORY_SEPARATOR.$default_lang.'.inc.php';
 $fallback_language_file = $lang_base_dir.$fallback_lang.DIRECTORY_SEPARATOR.$fallback_lang.'.inc.php';
 $language_file_not_found = sprintf(ERROR_LANGUAGE_FILE_MISSING,$default_language_file);
@@ -784,6 +464,15 @@ else
 {
 	die($language_file_not_found);	# fatalerror - local error message in English because we don't _have_ a language file(!)
 }
+
+/*
+ * Defines the (configurable) default language. Wikka will attempt to
+ * oad the corresponding language file.  This value is directly used
+ * here in wikka.php but also used as the default value in the default
+ * configuration file.
+ */
+if (!defined('DEFAULT_FALLBACK_LANGUAGE')) define('DEFAULT_FALLBACK_LANGUAGE' , $fallback_lang);
+
 // ---------------------------- END LANGUAGE FILE ------------------------------
 
 
@@ -1115,111 +804,4 @@ if (!isset($wakka->do_not_send_anticaching_headers) ||
  */
 echo $page_output;
 // --------------------------------- ALL DONE ----------------------------------
-
-
-// --------------------------- RELOCATION FUNCTIONS ----------------------------
-// These two are needed to validate override paths before we can include the
-// compatibility library.
-/**
- * Check whether a given path is a URL.
- * We do this by checking whether it has a scheme.
- * NOTE: parse_url() is pretty dumb and will think a path like
- * 'J:\Server\XAMPP 1.5.0\var\wikka.config.php' is a URL and parse it, even though
- * it has <b>backslashes</b> and a single (back)slash after the ':'; so we'll check
- * for a double slash before letting it do its work!
- */
-function is_uri($path)
-{
-	// init (assume NOT a uri)
-	$result = FALSE;
-	// URL?
-	if (strstr('//',$path))
-	{
-		$a_components = parse_url($path);
-		if (isset($a_components['scheme']))
-		{
-			$result = TRUE;
-		}
-/**
-echo '<pre>';
-print_r($a_components);
-echo "</pre></br>\n";
-/**/
-	}
-	return $result;
-}
-/**
- * Checks whether a given path is a valid local path.
- *
- * Returns a canonicalized absolute path if valid and local, FALSE otherwise.
- *
- * @param	string	$path	mandatory: path to be checked
- * @param	string	$type	mandatory: type of path to check; 'file' or 'dir'
- * @param	boolean	$mustexist	optional: specify whether the file or directory must already exist; default: TRUE
- * @return	mixed	valid absolute path if valid, FALSE otherwise
- */
-function validLocalPath($path,$type,$must_exist=TRUE)
-{
-	// URL?
-	if (is_uri($path))
-	{
-		$result = FALSE;				// URL not allowed for local path
-#echo 'validLocalPath - is a URL!'."<br/>\n";
-	}
-	else
-	{
-		// realpath() fails on a non-existant file, so if it doesn't exist
-		// we create it temporarily to let realpath() do its work
-		$temp_created = FALSE;
-		if (!file_exists($path))
-		{
-			// attempt to create it temporarily so realpath() can work on it
-			$rc = @touch($path);
-			if ($rc) $temp_created = TRUE;
-		}
-		$result = realpath($path);		// canonicalized absolute path
-/**
-if (!isset($result)) $result_txt = '(nothing)';
-elseif (FALSE === $result) $result_txt = 'FALSE';
-else $result_txt = $result;
-echo 'validLocalPath - realpath() says: '.$result_txt."<br/>\n";
-/**/
-		// if a temp file was created, clear it up again
-		if ($temp_created)
-		{
-			@unlink($path);
-		}
-		// if we still have a path, validate against type and existance requirements
-		if (FALSE !== $result)
-		{
-			switch ($type)
-			{
-				case 'file':
-					if ($must_exist && (!file_exists($result) || !is_file($result)))
-					{
-						$result = FALSE;
-#echo 'validLocalPath - not a file or does not exist!'."<br/>\n";
-					}
-					break;
-				case 'dir':
-					if ($must_exist && (!file_exists($result) || !is_dir($result)))
-					{
-						$result = FALSE;
-#echo 'validLocalPath - not a directory or does not exist!'."<br/>\n";
-					}
-					break;
-				default:
-					// wrong $type spec
-					$result = FALSE;
-#echo 'validLocalPath - invalid type parameter'."<br/>\n";
-			}
-		}
-	}
-/* Debug */
-$result_txt = (FALSE === $result) ? 'FALSE' : $result;
-echo 'validLocalPath - path '.$path.' is really: '.$result_txt."<br/>\n";
-/**/
-	return $result;
-}
-// ------------------------- END RELOCATION FUNCTIONS --------------------------
 ?>

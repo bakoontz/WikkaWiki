@@ -28,7 +28,7 @@ $upgrade_note = sprintf(__('Upgrading from %1$s to %2$s'), $version, WAKKA_VERSI
 $_SESSION['sconfig']['logged_in_navigation_links'] = str_replace('_rootpage', $config['root_page'], $_SESSION['sconfig']['logged_in_navigation_links']);
 $_SESSION['sconfig']['navigation_links'] = str_replace('_rootpage', $config['root_page'], $_SESSION['sconfig']['navigation_links']);
 
-$lang_defaults_fallback_path = WIKKA_LANG_PATH.DIRECTORY_SEPARATOR.CONFIG_DEFAULT_LANGUAGE.DIRECTORY_SEPARATOR.'defaults'.DIRECTORY_SEPARATOR;
+$lang_defaults_fallback_path = WIKKA_LANG_PATH.DIRECTORY_SEPARATOR.DEFAULT_FALLBACK_LANGUAGE.DIRECTORY_SEPARATOR.'defaults'.DIRECTORY_SEPARATOR;
 test('Checking availability of default pages...', is_dir($lang_defaults_fallback_path), 'default pages not found at '.$lang_defaults_fallback_path, 1);
 $lang_defaults_path = WIKKA_LANG_PATH.DIRECTORY_SEPARATOR.$config['default_lang'].DIRECTORY_SEPARATOR.'defaults'.DIRECTORY_SEPARATOR;
 // @@@ use test() here, too? (without stop on error but reporting back we're using sytem default language)

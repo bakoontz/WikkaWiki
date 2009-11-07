@@ -150,8 +150,8 @@ class Config
 	 * Wikka includes the file named "actionname.php" if found in the folder
 	 * specified by this config entry. See {@link Wakka::Action()}.
 	 */
-	#var $wikka_action_path = 'actions';
-	var $wikka_action_path = CONFIG_ACTION_PATH;				// pick up default from wikka.php
+	var $wikka_action_path = DEFAULT_ACTION_PATH;
+
 	/**
 	 * Path to handler files.
 	 * Name of the directory under which Wikka handler files are stored. Handlers
@@ -162,15 +162,15 @@ class Config
 	 * the handler name preceded by a slash must be appended to the page URL, for
 	 * instance: http://wikkawiki.org/HomePage/acls evokes the acls handler for HomePage.
 	 */
-	#var $wikka_handler_path = 'handlers';
-	var $wikka_handler_path = CONFIG_HANDLER_PATH;				// pick up default from wikka.php
+	var $wikka_handler_path = DEFAULT_HANDLER_PATH;
+
 	/**
 	 * Path to the Wikka formatters.
 	 * Formatters are special components that translate a page written in
 	 * wiki markup into valid XHTML. See {@link Wakka::Format()}.
 	 */
-	#var $wikka_formatter_path = 'formatters';
-	var $wikka_formatter_path = CONFIG_FORMATTER_PATH;			// pick up default from wikka.php
+	var $wikka_formatter_path = DEFAULT_FORMATTER_PATH; 
+
 	/**
 	 * Path to the Wikka highlighters.
 	 * Highlighters are special components that enhance the readability of snippets
@@ -183,39 +183,42 @@ class Config
 	 * default Wikka highlighters.
 	 */
 	// @@@ name should use singular 'highlighter' to conform to teh other path "names".
-	#var $wikka_highlighters_path = 'formatters';
-	var $wikka_highlighters_path = CONFIG_FORMATTER_PATH;		// pick up default from wikka.php
+	var $wikka_highlighters_path = DEFAULT_FORMATTER_PATH; 
 
 	/**
 	 * Path to Wikka template action files.
 	 * Name of the directory under which Wikka template files are stored.
 	 * Template files are used to generate the XHTML output.
 	 */
-	var $wikka_template_path = CONFIG_TEMPLATE_PATH;				// pick up default from wikka.php
+	var $wikka_template_path = DEFAULT_TEMPLATE_PATH; 
 	
 	/**
 	 * Directory for 3rd-party components.
 	 */
-	var $thirdparty_path = CONFIG_3RDPARTY_PATH;				// pick up default from wikka.php
-	/**
-	 * Directory for 3rd-party core components; these components are required for
-	 * basic Wikka functionality.
+	var $thirdparty_path = DEFAULT_3RDPARTY_PATH;
+
+	/** 
+	 * Directory for 3rd-party core components; these components are
+	 * required for basic Wikka functionality.
 	 */
-	var $thirdparty_code_path = CONFIG_3RDPARTY_CORE_PATH;		// pick up default from wikka.php
+	var $thirdparty_code_path = DEFAULT_3RDPARTY_CORE_PATH;
+
 	/**
 	 * Directory for 3rd-party plugin components; these components are optional
 	 * and extend Wikka functionality.
 	 */
-	var $thirdparty_plugin_path = CONFIG_3RDPARTY_PLUGIN_PATH;	// pick up default from wikka.php
+	var $thirdparty_plugin_path = DEFAULT_3RDPARTY_PLUGIN_PATH; 
 
 	/**
 	 * Directory for the FeedCreator 3rd-party core component.
 	 */
-	var $feedcreator_path = CONFIG_FEEDCREATOR_PATH;			// pick up default from wikka.php
+	var $feedcreator_path = DEFAULT_FEEDCREATOR_PATH; 
+
 	/**
 	 * Directory for the SafeHTML 3rd-party core component.
 	 */
-	var $safehtml_path = CONFIG_SAFEHTML_PATH;					// pick up default from wikka.php
+	var $safehtml_path = DEFAULT_SAFEHTML_PATH; 
+
 	/**
 	 * Directory for the optional GeSHi 3rd-party plugin package.
 	 * GeSHi is a 3rd-party package bundled with Wikka for advanced code highlighting.
@@ -224,28 +227,31 @@ class Config
 	 * language formatters are stored in a folder declared as
 	 * {@link Config::$geshi_languages_path geshi_language_path}.
 	 */
-	var $geshi_path = CONFIG_GESHI_PATH;						// pick up default from wikka.php
+	var $geshi_path = DEFAULT_GESHI_PATH; 
+
 	/**
 	 * Directory for the language files for the GeSHi 3rd-party plugin package.
 	 */
-	var $geshi_languages_path = CONFIG_GESHI_LANG_PATH;			// pick up default from wikka.php
+	var $geshi_languages_path = DEFAULT_GESHI_LANG_PATH; 
+ 
 	/**
 	 * Directory for the optional Onyx-RSS 3rd-party plugin component.
 	 */
-	var $onyx_path = CONFIG_ONYX_PATH;							// pick up default from wikka.php
+	var $onyx_path = DEFAULT_ONYX_PATH; 
 
 	/**
 	 * <b>URL path component</b> pointing to the location of the WikiEdit scripts.
 	 * This path will be extended by the system with the file name for each of
 	 * the required scripts.
 	 */
-	var $wikiedit_uripath = CONFIG_WIKIEDIT_URIPATH;			// pick up default from wikka.php
+	var $wikiedit_uripath = DEFAULT_WIKIEDIT_URIPATH; 
+
 	/**
 	 * <b>URL path component</b> for the FreeMind display applet.
 	 * This path will be extended by the system with the file name for the
 	 * applet's jar archive.
 	 */
-	var $freemind_uripath = CONFIG_FREEMIND_URIPATH;			// pick up default from wikka.php
+	var $freemind_uripath = DEFAULT_FREEMIND_URIPATH;
 
 	/**
 	 * Path to file upload folder.
@@ -543,13 +549,13 @@ class Config
 	 * 3 = Threaded
 	 */
 	var $default_comment_display = 1;
+
 	/**
 	 * Default language-code used in the wiki.
 	 * This can be overridden with another language to be used as default.
 	 * This should be a ISO 639-1 code (e.g. 'en' for English).
 	 */
-	#var $default_lang = 'en';
-	var $default_lang = CONFIG_DEFAULT_LANGUAGE;	// pick up default from wikka.php
+	var $default_lang = 'en';
 	/**#@-*/
 
 	/**#@+
