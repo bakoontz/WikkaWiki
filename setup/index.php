@@ -81,7 +81,7 @@ if (('grabinfo' == $installAction) || ('install' == $installAction))
 	<meta name="keywords" content="WikkaWiki" />
 	<meta name="description" content="<?php echo _p('A WakkaWiki fork');?>" />
 <?php // @@@ use StaticHref() for href attributes? ?>
-	<link rel="stylesheet" type="text/css" href="css/setup.css" media="screen" />
+	<link rel="stylesheet" type="text/css" href="setup/css/setup.css" media="screen" />
 	<link rel="icon" href="images/favicon.ico" type="image/x-icon" />
 	<link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon" />
 </head>
