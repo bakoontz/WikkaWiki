@@ -90,7 +90,7 @@ if (('grabinfo' == $installAction) || ('install' == $installAction))
 <body>
 <div class="header">
 <?php // @@@ use StaticHref() for src attribute? ?>
-	<img src="images/wikka_logo.jpg" alt="<?php echo _p('wikka logo');?>" title="<?php echo _p('Welcome to Wikka');?>" />
+<img src="<?php echo WIKKA_BASE_URL ?>images/wikka_logo.jpg" alt="<?php echo _p('wikka logo');?>" title="<?php echo _p('Welcome to Wikka');?>" />
 </div>
 <!--START page body -->
 <div class="page">

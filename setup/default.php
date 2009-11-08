@@ -11,7 +11,7 @@
  * @todo	make form accessible!
  */
 ?>
-<form action="setup/test/test-mod-rewrite.php" name="form1" method="post">
+<form action="<?php echo WIKKA_BASE_URL ?>setup/test/test-mod-rewrite.php" name="form1" method="post">
 <table>
 	<?php
 	if (isset($config['wakka_version']) && ($config['wakka_version']))
