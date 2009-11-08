@@ -107,6 +107,7 @@ case "0":
 			"default_comment_display enum ('date_asc', 'date_desc', 'threaded') NOT NULL default 'threaded',".
 			"status enum('invited','signed-up','pending','active','suspended','banned','deleted'),".
 			"theme varchar(50) default '',".
+			"challenge varchar(8) default '00000000',".
 			"PRIMARY KEY  (name),".
 			"KEY idx_signuptime (signuptime)".
 			") TYPE=MyISAM", $dblink), "Already exists?", 0);
