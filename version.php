@@ -22,7 +22,7 @@
  * Defines the current Wikka version.
  * Leave null except for release versions!
  */
-$svn_version = '1.2';
+$svn_version = '1.3';
 
 /**
  * Used to generate WAKKA_VERSION value. Changes here might be
