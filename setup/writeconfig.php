@@ -1,141 +1,109 @@
 <?php
-/**
- * Store the configuration in a file called wikka.config.php
- * 
- * @package	Setup
- * @version	$Id: writeconfig.php 1340 2009-03-03 01:42:06Z BrianKoontz $
- * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
- * @filesource
- */
+// fetch config
+$config = $config2 = unserialize($_POST["config"]);
 
-// remove config values for whatever reason
-unset($config['allow_doublequote_html']);
+// merge existing configuration with new one
+$config = array_merge($wakkaConfig, $config);
+
+// remove obsolete config settings if present
+unset($config["allow_doublequote_html"]);
+unset($config["header_action"]);
+unset($config["footer_action"]);
+unset($config["external_link_tail"]);
+
+// Parse navlinks, convert to menu configuration files, #891 (since 1.2)
+// Check to see if config is writeable...
+if(!is_writeable('config'))
+{
+	print("<p><span class=\"failed\">WARNING:</span> The <tt>config</tt> directory is not writeable; therefore, conversion of old navigation links to new menu items cannot be performed.  Please give your web server temporary write access to the <tt>config</tt> directory (<tt>chmod 777 config</tt>; don't forget to remove write access later, i.e. <tt>chmod 555 config</tt>). If you are unable to make this directory writeable, you will need to manually edit the menu files in the <tt>config</tt> directory.  You will also need to remove the <tt>navigation_links</tt> and <tt>logged_in_navigation_links</tt> parameters in your <tt>wikka.config.php</tt> file. If you are still having difficulties, please visit <a href=\"http://docs.wikkawiki.org/WikkaInstallation\">WikkaInstallation</a>.</p>\n"); 
+	?>
+	<form action="<?php echo myLocation() ?>?installAction=writeconfig" method="post">
+	<input type="hidden" name="config" value="<?php echo Wakka::hsc_secure(serialize($config2)) ?>" /><?php /*  #427 */ ?>
+	<input type="submit" value="Try again" />
+	</form>	
+	<?php
+	return;	
+}
+$path = 'config'.DIRECTORY_SEPARATOR;
+if(isset($config['navigation_links']))
+{
+	$navlinks = $config['navigation_links'];
+	$links = array();
+	if(FALSE!==preg_match_all('/[A-ZÄÖÜ]+[a-zßäöü]+[A-Z0-9ÄÖÜ][A-Za-z0-9ÄÖÜßäöü]*|\[\[.*?\]\]/', $navlinks, $links))
+	{
+		if(file_exists($path.'main_menu.inc'))
+		{
+			rename($path.'main_menu.inc', $path.'main_menu.orig.inc');
+		}
+		$h = fopen($path.'main_menu.inc', 'w'); 
+		foreach($links[0] as $link)
+		{
+			fwrite($h, $link."\n");
+		}
+		fwrite($h, "{{searchform}}\n");
+		fwrite($h, 'Your hostname is {{whoami}}');
+		fclose($h);
+	}
+	unset($config['navigation_links']);
+}
+if(isset($config['logged_in_navigation_links']))
+{
+    $navlinks = $config['logged_in_navigation_links'];
+	$links = array();
+	if(FALSE!==preg_match_all('/[A-ZÄÖÜ]+[a-zßäöü]+[A-Z0-9ÄÖÜ][A-Za-z0-9ÄÖÜßäöü]*|\[\[.*?\]\]/', $navlinks, $links))
+	{
+		if(file_exists($path.'main_menu.user.inc'))
+		{
+			rename($path.'main_menu.user.inc', $path.'main_menu.user.orig.inc');
+		}
+		$h = fopen($path.'main_menu.user.inc', 'w'); 
+		foreach($links[0] as $link)
+		{
+			fwrite($h, $link."\n");
+		}
+		fwrite($h, "{{searchform}}\n");
+		fwrite($h, 'You are {{whoami}}');
+		fclose($h);
+	}
+    unset($config['logged_in_navigation_links']); // since 1.2
+}
 
 // set version to current version, yay!
-$config['wakka_version'] = WAKKA_VERSION;
-// initialize! Suppose rewrite_mode unavailable.
-if (!isset($config['rewrite_mode']))
-{
-	$config['rewrite_mode'] = 0;
-	if (($_SESSION['server_info']['mod_rewrite']) && (file_exists($htaccessLocation)) && (is_writeable($htaccessLocation)))
-	{
-		$config['rewrite_mode'] = 1;
-	}
-}
+$config["wakka_version"] = WAKKA_VERSION;
 
-if ($wakkaConfig['wakka_version'])
-{
-	echo '<h1>'.__('Wikka Upgrade').' (5/5)</h1>'."\n";
-}
-else
-{
-	echo '<h1>'.__('Wikka Installation').' (5/5)</h1>'."\n";
-}
-
-// Writing .htaccess
-// Flag registering status of attempt to update .htaccess
-$htaccess_updated = 0;
-if ($config['rewrite_mode'] == 1)
-{
-	$htaccess_content = file($htaccessLocation);
-	$new_htaccess_content = '';
-	$on_rewrite_section = 0;
-	foreach ($htaccess_content as $line)
-	{
-		if ((preg_match("/^(\\s*Rewrite(Engine|Base)|#---WIKKA-REWRITING-BEGIN)/i", $line)) && ($on_rewrite_section == 1))
-		{
-			$line = '';
-		}
-		if (preg_match("/^(\\s*)<IfModule\\s+mod_rewrite.c>/i", $line , $m))
-		{
-			$line .= '#---WIKKA-REWRITING-BEGIN'."\r\n";
-			$line .= $m[1].' RewriteEngine On'."\r\n";
-			$line .= $m[1].' RewriteBase '.WIKKA_BASE_URL_PATH."\r\n";
-			$on_rewrite_section = 1;
-		}
-		if (($on_rewrite_section == 1) && (preg_match("/^(\\s*)<\\/IfModule>/i", $line)))
-		{
-			$on_rewrite_section = 2;
-		}
-		$new_htaccess_content .= $line;
-	}
-	print('<h2>'.__('Updating .htaccess').'</h2>'."\n");
-	test(__('Updating rewriting rules').'...', $on_rewrite_section, '', 0);
-	if ($on_rewrite_section)
-	{
-		test(sprintf(__('Writing .htaccess file (%s)'), '<tt>'.$htaccessLocation.'</tt>').'...', $f1 = @fopen($htaccessLocation, "w"), "", 0);
-		if ($f1)
-		{
-			fwrite($f1, $new_htaccess_content);
-			fclose($f1);
-			$htaccess_updated = 1;
-		}
-	}
-}
-$config['rewrite_mode'] = $htaccess_updated;
-// #600: Force reloading of stylesheets. @@@ Do this in StaticHref()
-if (!empty($config['stylesheet']))
-{
-	$config['stylesheet'] = preg_replace('/(&amp;|\\?)(.*)$/', '', $config['stylesheet']); // Needed in case of reinstall
-	$config['stylesheet'] .= strstr($config['stylesheet'], '?') ? '&amp;' : '?';
-	$config['stylesheet'] .= substr(md5(time()),1,5);
-}
-if (!empty($config['comment_stylesheet']))
-{
-	$config['comment_stylesheet'] = preg_replace('/(&amp;|\\?)(.*)$/', '', $config['comment_stylesheet']);
-	$config['comment_stylesheet'] .= strstr($config['comment_stylesheet'], '?') ? '&amp;' : '?';
-	$config['comment_stylesheet'] .= substr(md5(time()),1,5);
-}
 // convert config array into PHP code
 $double_backslash = '\\\\';
 $single_quote = '\'';
 $configCode = "<?php\n/**\n * WikkaWiki configuration file \n * \n * This file was generated by the Wikka installer on ".strftime("%c")."\n * Do not manually change wakka_version if you wish to keep your engine up-to-date.\n * Documentation is available at: http://docs.wikkawiki.org/ConfigurationOptions\n */\n\$wakkaConfig = array(\n";
 foreach ($config as $k => $v)
 {
-	if ($k !== 0)
-	{
-		// @@@ make sure to write strings as strings, numbers as numbers, and booleans as booleans!
-		//     we can use datatypes in the default config for this!
-		$entries[] = "\t'".$k."' => '".preg_replace('/['.$double_backslash.$single_quote.']/', $double_backslash.'$0', $v)."'"; // #5
-	}
+	$entries[] = "\t'".$k."' => '".preg_replace('/['.$double_backslash.$single_quote.']/', $double_backslash.'$0', $v)."'"; // #5
 }
 $configCode .= implode(",\n", $entries).");\n?>";
 
 // try to write configuration file
-print('<h2>'.__('Writing configuration').'</h2>'."\n");
-// (directly) use configured location SITE_CONFIGFILE
-#test(sprintf(__('Writing configuration file %s'), '<tt>'.$wakkaConfigLocation.'</tt>...'), $fp = @fopen($wakkaConfigLocation, "w"), "", 0);
-test(sprintf(__('Writing configuration file %s'), '<tt>'.SITE_CONFIGFILE.'</tt>...'), $fp = @fopen(SITE_CONFIGFILE, "w"), "", 0);
+print("<h2>Writing configuration</h2>\n");
+test("Writing configuration file <tt>".$wakkaConfigLocation."</tt>...", $fp = @fopen($wakkaConfigLocation, "w"), "", 0);
 
 if ($fp)
 {
-	$_SESSION['server_info'] = $_SESSION['sconfig'] = $_SESSION['wikka'] = null;
 	fwrite($fp, $configCode);
 	// write
 	fclose($fp);
-	printf('<p>'.__('That\'s all! You can now %1$sreturn to your WikkaWiki site%2$s'), '<a href="'.WIKKA_BASE_URL.'">', '</a>');
-	echo '. '."\n";
-	printf(__('However, you are advised to remove write access to %s again now that it\'s been written. Leaving the file writable can be a security risk'), '<tt>wikka.config.php</tt>');
-	echo '!</p>';
+	
+	print("<p>That's all! You can now <a href=\"".$config["base_url"]."\">return to your Wikka site</a>. However, you are advised to remove write access to <tt>wikka.config.php</tt> again now that it's been written. Leaving the file writable can be a security risk!</p>");
 }
 else
 {
 	// complain
-	print('<p><span class="failed">'.__('WARNING').':</span> ');
-	printf(__('The file %1$s could not be written. You will need to give your web server temporary write access to either your wikka directory, or a blank file called %1$s'), '<tt>'.SITE_CONFIGFILE.'</tt>');
-	echo ' (<kbd>touch wikka.config.php ; chmod 666 wikka.config.php</kbd>) ; ';
-	printf(__('don\'t forget to remove write access again later, ie %s'), '<kbd>chmod 644 '.SITE_CONFIGFILE.'</kbd>');
-	echo ".\n";
-	printf(__('If, for any reason, you can\'t do this, you\'ll have to copy the text below into a new file and save/upload it as %1$s'), '<tt>'.SITE_CONFIGFILE.'</tt>');
-	printf(__('Once you\'ve done this, your Wikka site should work. If not, please visit %s'), '<a href="http://docs.wikkawiki.org/WikkaInstallation">WikkaInstallation</a>');
-	echo '.</p>'."\n";
+	print("<p><span class=\"failed\">WARNING:</span> The configuration file <tt>".$wakkaConfigLocation."</tt> could not be written. You will need to give your web server temporary write access to either your wakka directory, or a blank file called <tt>wikka.config.php</tt> (<tt>touch wikka.config.php ; chmod 666 wikka.config.php</tt>; don't forget to remove write access again later, ie <tt>chmod 644 wikka.config.php</tt>). If, for any reason, you can't do this, you'll have to copy the text below into a new file and save/upload it as <tt>wikka.config.php</tt> into the Wikka directory. Once you've done this, your Wikka site should work. If not, please visit <a href=\"http://docs.wikkawiki.org/WikkaInstallation\">WikkaInstallation</a>.</p>\n");
 	?>
-	<form action="<?php echo $action_target; ?>" method="post">
-	<input type="hidden" name="installAction" value="writeconfig" />
-	<input type="submit" value="<?php echo _p('Try again'); ?>" />
+	<form action="<?php echo myLocation() ?>?installAction=writeconfig" method="post">
+	<input type="hidden" name="config" value="<?php echo Wakka::hsc_secure(serialize($config2)) ?>" /><?php /*  #427 */ ?>
+	<input type="submit" value="Try again" />
 	</form>	
 	<?php
-	echo '<div><textarea readonly="readonly" style="width: 80%; height: 600px;">'.str_replace(array('&', '<'), array('&amp;', '&lt;'), $configCode)."</textarea></div>\n"; //TODO: make code block downloadable
+	print("<xmp>".$configCode."</xmp>\n"); //TODO: replace xmp and make code block downloadable
 }
 
 ?>

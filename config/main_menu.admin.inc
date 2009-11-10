@@ -4,7 +4,6 @@
 PageIndex
 RecentChanges
 RecentlyCommented
-[[UserSettings Settings]]
+[[UserSettings Change settings/Logout]]
 You are {{whoami}}
 {{searchform}}
-{{logout}}
