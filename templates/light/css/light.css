@@ -49,10 +49,11 @@ body{
 }
 
 #content {
-	border: 1px solid #DDD;
+	border: 1px solid #BBB;
 	text-align: left;
 	background-color: #FFF; 
-	padding: 40px 30px 30px 30px;
+	padding: 30px 30px 30px 30px;
+	clear: both;
 }
 
 #footer {
@@ -131,7 +132,7 @@ div#commentsnav img.icon:hover {
 /* links */
 
 a {
-	color: #933;
+	color: #20557B;
 	text-decoration: none;
 }
 
@@ -148,13 +149,13 @@ a.ext:hover {
 }
 
 #header a, #footer a {
-	color: #369;
-	font-family: Verdana, Arial, Helvetica, sans-serif; 	
+	color: #20557B;
+	font-family: Helvetica, Arial, sans-serif; 	
 }
 
 
 #header h2 a {
-	font: normal 13pt "DejaVu Sans", Arial, Helvetica, sans-serif; 
+	font: normal 13pt "DejaVu Sans", Helvetica, Arial, sans-serif; 
 	color: #AAA;
 }
 
@@ -179,7 +180,7 @@ a.ext:hover {
 	height: auto;
 	line-height: inherit;
 	width: auto;
-	color: #993357;
+	color: #20557B;
 	text-decoration: none;
 /*	background-color: #FFF; */
 }
@@ -192,8 +193,7 @@ a.ext:hover {
 	height: auto;
 	line-height: inherit;
 	width: auto;
-	color: #666666;
-	background-color: #EEE;
+	color: #CC6600;
 	font-weight: inherit;
 }
 
@@ -299,7 +299,7 @@ img.icon {
 	padding: 5px;
 	width: 48%;
 	margin-right: 3%;
-	border: 1px dotted #EBC;
+	border: 1px dotted #CCC;
 }
 
 .floatr {
@@ -309,7 +309,7 @@ img.icon {
 	padding: 5px;
 	width: 48%;
 	margin-left: 3%;
-	border: 1px dotted #EBC;
+	border: 1px dotted #CCC;
 }
 
 /* simply left-float element */
@@ -1225,43 +1225,45 @@ table.acls {
 
 /* menus */
 
-ul#main_menu {
-	float: right;
-	list-style-type: none;
-	padding: 0px;
-	margin-top: 15px;
-}
-
-ul#main_menu li {
-	margin-top: 0;
-    padding: 0;
-    float: left;
-    width: auto;
-    text-align: left;
-    font-size: 70%; 
-    margin-right: 5px;
-}
-
-ul#main_menu li a {
-	color: #935;
-}
-
-ul#main_menu li > a:hover {
-	  background-color: transparent;
-	  color: #333;
-}
-
 ul.menu li form {
     display: inline;
 }
 
 ul.menu li form input {
+    font-family: Verdana, Helvetica, Arial, sans-serif;
     font-size: 1.1em;
     line-height: 1.1em;
     font-weight: bold;
     color: #333;
-    border: none;
-    border-bottom: 1px solid #CCC;
+    border: 1px solid #CCC;
+}
+
+ul#main_menu {
+	float: left;
+	list-style-type: none;
+	padding: 0px;
+	margin-top: 10px;
+}
+
+ul#main_menu li {
+	font-family: Helvetica, Arial, Verdana, sans-serif;
+	margin-left: 0;
+	margin-top: 0;
+	margin-right: 10px;
+	padding: 0;
+	float: left;
+	width: auto;
+	text-align: left;
+	font-size: 90%;
+}
+
+ul#main_menu li a {
+	color: #20557B;
+}
+
+ul#main_menu li > a:hover {
+	  background-color: transparent;
+	  color: #cc6600;
 }
 
 ul#options_menu {
@@ -1277,7 +1279,7 @@ ul#options_menu li {
     float: left;
     width: auto;
     text-align: left;
-    font-size: 70%; 
+    font-size: 0.8em; 
 }
 
 ul.menu form#form_logout input[type=submit] {
