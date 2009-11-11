@@ -32,7 +32,11 @@ if(!defined('PERSISTENT_COOKIE_EXPIRY')) define('PERSISTENT_COOKIE_EXPIRY', 7776
  * Maximum length for displayed hostnames
  */ 
 if (!defined('MAX_HOSTNAME_LENGTH_DISPLAY')) define('MAX_HOSTNAME_LENGTH_DISPLAY', 50);
-
+/**
+ * Length to use for generated part of id attribute.
+ */
+if (!defined('ID_LENGTH')) define('ID_LENGTH',10);		// @@@ maybe make length configurable
+/**#@-*/
 // i18n TODO:move to language file
 if(!defined('CREATE_THIS_PAGE_LINK_TITLE')) define('CREATE_THIS_PAGE_LINK_TITLE', 'Create this page');
 if(!defined('DEFAULT_THEMES_TITLE')) define('DEFAULT_THEMES_TITLE', 'Default themes (%s)'); //%s: number of available themes
@@ -1967,7 +1971,7 @@ class Wakka
 
 		// is this an interwiki link?
 		// before the : should be a WikiName; anything after can be (nearly) anything that's allowed in a URL
-		if (preg_match('/^([A-ZÄÖÜ][A-Za-zÄÖÜßäöü]+)[:](\S*)$/', $tag, $matches))	// @@@ FIXME #34 (inconsistent with Formatter)
+		if (preg_match('/^([A-Zï¿½ï¿½ï¿½][A-Za-zï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½]+)[:](\S*)$/', $tag, $matches))	// @@@ FIXME #34 (inconsistent with Formatter)
 		{
 			$url = $this->GetInterWikiUrl($matches[1], $matches[2]);
 			$class = 'interwiki';
@@ -1987,7 +1991,7 @@ class Wakka
 		// is this a full link? i.e., does it contain something *else* than valid WikiName characters?
 		// FIXME just use (!IsWikiName($tag)) here (then fix the RE there!)
 		// @@@ First move to regex library
-		elseif (preg_match('/[^[:alnum:]ÄÖÜßäöü]/', $tag))		// FIXED #34 - removed commas
+		elseif (preg_match('/[^[:alnum:]ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½]/', $tag))		// FIXED #34 - removed commas
 		{
 			// check for email addresses
 			if (preg_match('/^.+\@.+$/', $tag))
@@ -2103,7 +2107,7 @@ class Wakka
 	 */
 	function IsWikiName($text) 
 	{ 
-		return preg_match("/^[A-Z,ÄÖÜ][a-z,ßäöü]+[A-Z,0-9,ÄÖÜ][A-Z,a-z,0-9,ÄÖÜ,ßäöü]*$/", $text); 
+		return preg_match("/^[A-Z,ï¿½ï¿½ï¿½][a-z,ï¿½ï¿½ï¿½ï¿½]+[A-Z,0-9,ï¿½ï¿½ï¿½][A-Z,a-z,0-9,ï¿½ï¿½ï¿½,ï¿½ï¿½ï¿½ï¿½]*$/", $text); 
 	}
 	
 	/**
@@ -2319,7 +2323,7 @@ class Wakka
 				$core[] = $f;
 			}
 		}
-		$output .= '<select id="select_theme" name="theme">';
+		$output = '<select id="select_theme" name="theme">';
 		$output .= '<option disabled="disabled">'.sprintf(DEFAULT_THEMES_TITLE, count($core)).'</option>';
 		foreach ($core as $c)
 		{		
