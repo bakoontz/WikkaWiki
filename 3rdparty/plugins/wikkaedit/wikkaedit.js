@@ -224,14 +224,26 @@ WikkaEdit.prototype.toolbarButtonClick = function(obj, buttonName, submenuName) 
 		case "table" :		this.addToSelection("|=|header1|=|header2||\n||cell1||cell2||");										// 1.2
 							break;
 		case "rawhtml" :
-			var selectionRange = this.getSelectionRange();
-			if (selectionRange.end - selectionRange.start > 0) this.addToSelection("\"\"","\"\"");
-			else this.addToSelection("\"\"insert-raw-html-here\"\"");
+			//Shift+Click means whole lines
+			var selRange = this.getSelectionRange();
+			if (event.shiftKey) selRange = this.getSelectionRangeWholeLines();
+			if (selRange.end - selRange.start > 0) {
+				this.addToSelection("\"\"","\"\"",null,selRange);
+			} else {
+				var nsr = new SelRange(selRange.start + 2, selRange.start + 22);
+				this.addToSelection("\"\"insert-raw-html-here\"\"","",nsr,selRange);
+			}
 			break;
 		case "sourcecode" :
-			var selectionRange = this.getSelectionRange();
-			if (selectionRange.end - selectionRange.start > 0) this.addToSelection("%%(language-ref)\n", "\n%%");
-			else this.addToSelection("%%(language-ref)\ninsert-source-code-here\n%%");
+			//Shift+Click means whole lines
+			var selRange = this.getSelectionRange();
+			if (event.shiftKey) selRange = this.getSelectionRangeWholeLines();
+			var nsr = new SelRange(selRange.start + 3, selRange.start + 15);
+			if (selRange.end - selRange.start > 0) {
+				this.addToSelection("%%(language-ref)\n", "\n%%", nsr, selRange);
+			} else {
+				this.addToSelection("%%(language-ref)\ninsert-source-code-here\n%%","",nsr,selRange);
+			}
 			break;
 
 		case "find" :		this.showSearchWindow(); break;
