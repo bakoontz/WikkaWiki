@@ -65,8 +65,8 @@ if ($this->UserIsOwner())
 			{
 				$this->SaveACL($this->GetPageTag(), 'read', $this->TrimACLs($posted_read_acl));
 				$this->SaveACL($this->GetPageTag(), 'write', $this->TrimACLs($posted_write_acl));
-				$this->SaveACL($this->GetPageTag(), 'comment', $this->TrimACLs($posted_comment_read_acl));
-				$this->SaveACL($this->GetPageTag(), 'comment', $this->TrimACLs($posted_comment_post_acl));
+				$this->SaveACL($this->GetPageTag(), 'comment_read', $this->TrimACLs($posted_comment_read_acl));
+				$this->SaveACL($this->GetPageTag(), 'comment_post', $this->TrimACLs($posted_comment_post_acl));
 				$message = ACLS_UPDATED;
 			}
 	

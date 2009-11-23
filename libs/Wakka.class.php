@@ -3715,11 +3715,11 @@ class Wakka
 	function SaveACL($tag, $privilege, $list) 
 	{
 		// the $default will be put in the SET statement of the INSERT SQL for default values. It isn't used in UPDATE.
-		$default = "read_acl = '', write_acl = '', comment_read_acl = '', comment_post_acl = '', ";
+		$default = " read_acl = '', write_acl = '', comment_read_acl = '', comment_post_acl = '', ";
 		// we strip the privilege_acl from default, to avoid redundancy
-		$default = str_replace($privilege."_acl = '',", '', $default);
+		$default = str_replace(" ".$privilege."_acl = '',", ' ', $default);
 		if ($this->LoadACL($tag, $privilege, 0)) $this->Query("UPDATE ".$this->config["table_prefix"]."acls SET ".mysql_real_escape_string($privilege)."_acl = '".mysql_real_escape_string(trim(str_replace("\r", "", $list)))."' WHERE page_tag = '".mysql_real_escape_string($tag)."' LIMIT 1");
-		else $this->Query("INSERT INTO ".$this->config["table_prefix"]."acls SET $default page_tag = '".mysql_real_escape_string($tag)."', ".mysql_real_escape_string($privilege)."_acl = '".mysql_real_escape_string(trim(str_replace("\r", "", $list)))."'");
+		else $this->Query("INSERT INTO ".$this->config["table_prefix"]."acls SET".$default." page_tag = '".mysql_real_escape_string($tag)."', ".mysql_real_escape_string($privilege)."_acl = '".mysql_real_escape_string(trim(str_replace("\r", "", $list)))."'");
 	}
 	
 	/**
