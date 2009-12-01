@@ -2714,8 +2714,8 @@ class Wakka
 		$handler = $parts[0];
 #echo 'handler: '.$handler.'<br/>';
 		// now check if a handler by that name exists
-#echo 'checking path: '.$this->GetConfigValue('wikka_handler_path').DIRECTORY_SEPARATOR.'page'.DIRECTORY_SEPARATOR.$handler.'.php'.'<br/>';
-		$exists = $this->BuildFullpathFromMultipath($handler.DIRECTORY_SEPARATOR.$handler.'.php', $this->GetConfigValue('wikka_handler_path')); 
+#echo 'checking path: '.$this->GetConfigValue('handler_path').DIRECTORY_SEPARATOR.'page'.DIRECTORY_SEPARATOR.$handler.'.php'.'<br/>';
+		$exists = $this->BuildFullpathFromMultipath($handler.DIRECTORY_SEPARATOR.$handler.'.php', $this->GetConfigValue('handler_path')); 
 		// return conclusion
 		if(TRUE===empty($exists)) 
 		{ 
@@ -2784,7 +2784,7 @@ class Wakka
 				$this->StopLinkTracking(); 
 		} 
 		$result =
-		$this->IncludeBuffered(strtolower($action_name).DIRECTORY_SEPARATOR.strtolower($action_name).'.php', 'Unknown action "'.$action_name.'"', $vars, $this->config['wikka_action_path']);
+		$this->IncludeBuffered(strtolower($action_name).DIRECTORY_SEPARATOR.strtolower($action_name).'.php', 'Unknown action "'.$action_name.'"', $vars, $this->config['action_path']);
 		if ($link_tracking_state) 
 		{ 
 			$this->StartLinkTracking(); 
@@ -2794,7 +2794,7 @@ class Wakka
 	
 	/**
 	 * @uses	Wakka::IncludeBuffered()
-	 * @uses	Config::$wikka_handler_path
+	 * @uses	Config::$handler_path
 	 * @param $handler
 	 * @return unknown_type
 	 */
@@ -2822,7 +2822,7 @@ class Wakka
 			$handler = strtolower($handler);
 		}
 		$handlerLocation = $handler.DIRECTORY_SEPARATOR.$handler.'.php';	#89
-		return $this->IncludeBuffered($handlerLocation, 'Unknown handler "'.$handlerLocation.'"', '', $this->config['wikka_handler_path']);
+		return $this->IncludeBuffered($handlerLocation, 'Unknown handler "'.$handlerLocation.'"', '', $this->config['handler_path']);
 	}
 	
 	/**
@@ -2860,8 +2860,7 @@ class Wakka
 			$formatter_not_found		= sprintf(FORMATTER_UNKNOWN,$formatter_location_disp);
 			// produce output
 			//$out = $this->IncludeBuffered($formatter_location, $this->GetConfigValue('wikka_formatter_path'), $formatter_not_found, FALSE, compact('text', 'format_option')); // @@@
-			$out = $this->IncludeBuffered($formatter_location,
-			$formatter_not_found, compact('text', 'format_option'), $this->GetConfigValue('wikka_formatter_path'));				
+			$out = $this->IncludeBuffered($formatter_location, $formatter_not_found, compact('text', 'format_option'), $this->GetConfigValue('wikka_formatter_path'));				
 		}
 		return $out;
 	}
