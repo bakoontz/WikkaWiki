@@ -224,9 +224,14 @@ case "0":
 	mysql_query("insert into ".$config['table_prefix']."acls set page_tag = 'AdminPages', read_acl = '!*', write_acl = '!*', comment_read_acl = '!*', comment_post_acl = '!*'", $dblink);
 	mysql_query("insert into ".$config['table_prefix']."acls set page_tag = 'DatabaseInfo', read_acl = '!*', write_acl = '!*', comment_read_acl = '!*', comment_post_acl = '!*'", $dblink);
 
-	//
-	// Auto login wiki admin
-	//
+	// Register admin user
+	$challenge = dechex(crc32(time()));
+	// Delete existing admin user in case installer was run twice
+	@mysql_query('delete from '.$config['table_prefix'].'users where name = \''.$config['admin_users'].'\'', $dblink);
+    test(__('Adding admin user').'...',
+	        @mysql_query("insert into ".$config["table_prefix"]."users set name = '".$config["admin_users"]."', password = md5('".mysql_real_escape_string($_POST['password'])."'), email = '".$config["admin_email"]."', signuptime = now(), challenge='".$challenge."'", $dblink), "Hmm!", 0);
+
+	// Auto-login wiki admin
 	// Set default cookie path
 	test("Setting initial session cookies for auto-login...", 1);
 	$base_url_path = preg_replace('/wikka\.php/', '', $_SERVER['SCRIPT_NAME']);
