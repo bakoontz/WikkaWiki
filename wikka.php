@@ -59,17 +59,10 @@ if (file_exists($default_lang_strings)) require_once($default_lang_strings);
 else die('Language file '.$default_lang_strings.' not found! Please add the file.');
 if(!defined('WIKKA_LANG_PATH')) define('WIKKA_LANG_PATH', $default_lang_path);
 
-/**
- * Defines the current Wikka version. Do not change the version number or you will have problems upgrading.
+/**#@+
+ * Defines current Wikka version.
  */
-if (!defined('WAKKA_VERSION')) define('WAKKA_VERSION', '1.2');
-
-/**
- * Defines the current Wikka patch level. This should be 0 by default, 
- * and does not need to be changed for major/minor releases.
- */
-if(!defined('WIKKA_PATCH_LEVEL')) define('WIKKA_PATCH_LEVEL', '1');
-
+include_once('version.php');
 
 /**#@+
  * Simple constant. May be made a configurable value.
