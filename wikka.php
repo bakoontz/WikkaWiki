@@ -48,11 +48,16 @@ error_reporting (E_ALL ^ E_NOTICE);
 
 /** 
  * Include language file if it exists. 
+ * TODO: Temporary fixes to enable install code.
  * @see /lang/en.inc.php 
  */ 
-$default_lang_path = 'lang'.DIRECTORY_SEPARATOR.'en'.DIRECTORY_SEPARATOR.'en.inc.php';
-if (file_exists($default_lang_path)) require_once($default_lang_path); 
-else die('Language file '.$default_lang_path.' not found! Please add the file.');
+$default_lang = 'en';
+$default_lang_path = 'lang'.DIRECTORY_SEPARATOR.$default_lang;
+$default_lang_strings =
+$default_lang_path.DIRECTORY_SEPARATOR.$default_lang.'.inc.php';
+if (file_exists($default_lang_strings)) require_once($default_lang_strings); 
+else die('Language file '.$default_lang_strings.' not found! Please add the file.');
+if(!defined('WIKKA_LANG_PATH')) define('WIKKA_LANG_PATH', $default_lang_path);
 
 /**
  * Defines the current Wikka version. Do not change the version number or you will have problems upgrading.

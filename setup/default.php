@@ -4,6 +4,8 @@
 session_set_cookie_params(0, '/');
 session_name(md5('WikkaWiki'));
 session_start();
+
+include_once('setup/inc/functions.inc.php');
 	
 // Copy POST params to SESSION in preparation for redirect to install page
 $_SESSION['post'] = array();
