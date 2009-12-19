@@ -236,11 +236,12 @@ case "0":
 	test("Setting initial session cookies for auto-login...", 1);
 	$base_url_path = preg_replace('/wikka\.php/', '', $_SERVER['SCRIPT_NAME']);
 	$wikka_cookie_path = ('/' == $base_url_path) ? '/' : substr($base_url_path,0,-1);
+
 	// Set cookies
-	SetCookie('user_name'.$config['wiki_suffix'], $config['admin_users'], time() + PERSISTENT_COOKIE_EXPIRY, $wikka_cookie_path); 
-	$_COOKIE['user_name'.$config['wiki_suffix']] = $config['admin_users']; 
-	SetCookie('pass'.$config['wiki_suffix'], $pass_val, time() + PERSISTENT_COOKIE_EXPIRY, $wikka_cookie_path); 
-	$_COOKIE['pass'.$config['wiki_suffix']] = $pass_val; 
+	SetCookie('user_name', $config['admin_users'], time() + PERSISTENT_COOKIE_EXPIRY, $wikka_cookie_path); 
+	$_COOKIE['user_name'] = $config['admin_users']; 
+	SetCookie('pass', $pass_val, time() + PERSISTENT_COOKIE_EXPIRY, $wikka_cookie_path); 
+	$_COOKIE['pass'] = $pass_val; 
 
 	break;
 
