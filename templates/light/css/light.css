@@ -104,6 +104,10 @@ body{
 	height: 80px;
 }
 
+textarea#commentbox {
+	height: 80px;
+}
+
 div#commentsnav { 
 /*      border:1px solid #CCC; */ 
 /*      background-color:#EEE; */ 
