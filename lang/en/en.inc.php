@@ -733,6 +733,13 @@ define('RECENTLYCOMMENTED_NONE_ACCESSIBLE', 'There are no recently commented pag
 /**#@-*/
 
 /**#@+
+ * Language constants used by the {@link redirect.php redirect} action
+ */
+if (!defined('PAGE_MOVED_TO')) define('PAGE_MOVED_TO', 'This page has been moved to %s.'); # %s - targe page
+if (!defined('REDIRECTED_FROM')) define('REDIRECTED_FROM', 'Redirected from %s.'); # %s - redirecting page
+if(!defined('INVALID_REDIRECT')) define('INVALID_REDIRECT', 'Invalid redirect. Target must be an existing wiki page.');
+
+/**#@+
  * Language constant used by the {@link revert.php revert} action
  */
 define('ERROR_NO_REVERT_PRIVS', "Sorry, you don't have privileges to revert this page");
