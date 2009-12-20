@@ -777,47 +777,29 @@ define('WIKKA_STATUS_NOT_AVAILABLE', 'n/a');
 /**#@+
  * Language constant shared by the {@link textsearch.php textsearch} and {@link textsearchexpanded.php textsearchexpanded} actions
  */
-// textsearch & textsearchexpanded
-define('SEARCH_FOR', 'Search for');
-define('SEARCH_ZERO_MATCH', 'No matches');
-define('SEARCH_ONE_MATCH', 'One match found');
-define('SEARCH_N_MATCH', '%d matches found'); // %d - number of hits
-define('SEARCH_RESULTS', 'Search results: <strong>%1$s</strong> for <strong>%2$s</strong>'); # %1$s: n matches for | %2$s: search term
-define('SEARCH_NOT_SURE_CHOICE', 'Not sure which page to choose?');
-define('SEARCH_EXPANDED_LINK_DESC', 'Expanded Text Search'); // search link description
-define('SEARCH_TRY_EXPANDED', 'Try the %s which shows surrounding text.'); // %s expanded search link
-/*
-define('SEARCH_TIPS', "<br /><br /><hr /><br /><strong>Search Tips:</strong><br /><br />"
-	."<div class=\"indent\">apple banana</div>"
+if (!defined('SEARCH_FOR')) define('SEARCH_FOR', 'Search for');
+if (!defined('SEARCH_ZERO_MATCH')) define('SEARCH_ZERO_MATCH', 'No matches');
+if (!defined('SEARCH_ONE_MATCH')) define('SEARCH_ONE_MATCH', 'One match found');
+if (!defined('SEARCH_N_MATCH')) define('SEARCH_N_MATCH', 'There was %d matches found');
+if (!defined('SEARCH_RESULTS')) define('SEARCH_RESULTS', 'Search results: <strong>%1$s</strong> for <strong>%2$s</strong>'); #%1$s: n matches for | %2$s: search term
+if (!defined('SEARCH_TRY_EXPANDED')) define('SEARCH_TRY_EXPANDED', '<br />Not sure which page to choose?<br />Try the <a href="$1">Expanded Text Search</a> which shows surrounding text.');
+if (!defined('SEARCH_TIPS')) define('SEARCH_TIPS', "<br /><br /><hr /><br /><strong>Search Tips:</strong><br /><br />"
+	."<div class=\"indent\"><tt>apple banana</tt></div>"
 	."Find pages that contain at least one of the two words. <br />"
 	."<br />"
-	."<div class=\"indent\">+apple +juice</div>"
+	."<div class=\"indent\"><tt>+apple +juice</tt></div>"
 	."Find pages that contain both words. <br />"
 	."<br />"
-	."<div class=\"indent\">+apple -macintosh</div>"
+	."<div class=\"indent\"><tt>+apple -macintosh</tt></div>"
 	."Find pages that contain the word 'apple' but not 'macintosh'. <br />"
 	."<br />"
-	."<div class=\"indent\">apple*</div>"
+	."<div class=\"indent\"><tt>apple*</tt></div>"
 	."Find pages that contain words such as apple, apples, applesauce, or applet. <br />"
 	."<br />"
-	."<div class=\"indent\">\"some words\"</div>"
+	."<div class=\"indent\"><tt>\"some words\"</tt></div>"
 	."Find pages that contain the exact phrase 'some words' (for example, pages that contain 'some words of wisdom' <br />"
 	."but not 'some noise words'). <br />");
-*/
-define('SEARCH_TIPS', 'Search Tips:');
-define('SEARCH_WORD_1', 'apple');
-define('SEARCH_WORD_2', 'banana');
-define('SEARCH_WORD_3', 'juice');
-define('SEARCH_WORD_4', 'macintosh');
-define('SEARCH_WORD_5', 'some');
-define('SEARCH_WORD_6', 'words');
-define('SEARCH_PHRASE',sprintf('%s %s',SEARCH_WORD_5,SEARCH_WORD_6));
-define('SEARCH_TARGET_1', 'Find pages that contain at least one of the two words.');
-define('SEARCH_TARGET_2', 'Find pages that contain both words.');
-define('SEARCH_TARGET_3',sprintf("Find pages that contain the word '%1\$s' but not '%2\$s'.",SEARCH_WORD_1,SEARCH_WORD_4));
-define('SEARCH_TARGET_4',"Find pages that contain words such as 'apple', 'apples', 'applesauce', or 'applet'."); // make sure target words all *start* with SEARCH_WORD_1
-define('SEARCH_TARGET_5',sprintf("Find pages that contain the exact phrase '%1\$s' (for example, pages that contain '%1\$s of wisdom' but not '%2\$s noise %3\$s').",SEARCH_PHRASE,SEARCH_WORD_5,SEARCH_WORD_6));
-define('SEARCH_MAX_SNIPPETS', 3);
+if (!defined('SEARCH_MYSQL_IDENTICAL_CHARS')) define('SEARCH_MYSQL_IDENTICAL_CHARS', 'aàáâã,eèéêë,iìîï,oòóôõ,uùúû,cç,nñ,yý');
 /**#@-*/
 
 /**#@+

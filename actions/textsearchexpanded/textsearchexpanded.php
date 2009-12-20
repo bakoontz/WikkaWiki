@@ -20,7 +20,6 @@
  */
 
  //constants
-	if (!defined('SEARCH_MYSQL_IDENTICAL_CHARS')) define('SEARCH_MYSQL_IDENTICAL_CHARS', 'aабвг,eийкл,iмоп,oтуфх,uщъы,cз,nс,yэ');
 
 // init
 $result_page_list = '';
