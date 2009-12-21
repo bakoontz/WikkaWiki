@@ -12,7 +12,7 @@ if (strlen($currentuser)>0)
 	//user is registered
 	if ($this->GetUser())
 	{
-		echo $this->Link($currentuser);
+		echo $this->FormatUser($currentuser);
 	}
 	//user is anonymous
 	else
