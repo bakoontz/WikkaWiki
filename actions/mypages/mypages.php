@@ -9,7 +9,7 @@
  * @uses	Wakka::htmlspecialchars_ent()
  * @uses	Wakka::IsAdmin()
  * @uses	Wakka::Link()
- * @uses	Wakka::LoadAllPages()
+ * @uses	Wakka::LoadPagesByOwner()
  * 
  */
 
@@ -26,37 +26,30 @@ if (($this->IsAdmin() && !empty($username)) ||
 
 	$my_pages_count = 0;
 
-	if ($pages = $this->LoadAllPages())
+	if ($pages = $this->LoadPagesByOwner($username))
 	{
 		$curChar = '';
 		foreach ($pages as $page)
 		{
-			if ($username == $page["owner"]) {
 				$firstChar = strtoupper($page["tag"][0]);
-				if (!preg_match("/[A-Z,a-z]/", $firstChar)) {
+				if (!preg_match("/[A-Z,a-z]/", $firstChar)) 
+				{
 					$firstChar = "#";
 				}
 	
-				if ($firstChar != $curChar) {
+				if ($firstChar != $curChar) 
+				{
 					if ($curChar != '') echo "<br />\n";
 					echo '<strong>'.$firstChar."</strong><br />\n";
 					$curChar = $firstChar;
 				}
 	
 				echo $this->Link($page["tag"])."<br />\n";
-				
-				$my_pages_count++;
-			}
-		}
-		
-		if ($my_pages_count == 0)
-		{
-			echo '<em class="error">'.MYPAGES_NONE_OWNED.'</em>';
 		}
 	}
 	else
 	{
-		echo '<em class="error">'.MYPAGES_NONE_FOUND.'</em>';
+		echo '<em class="error">'.MYPAGES_NONE_OWNED.'</em>';
 	}
 }
 else

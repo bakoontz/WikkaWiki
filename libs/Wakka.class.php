@@ -1290,14 +1290,26 @@ class Wakka
 	
 	/**
 	 * 
+	 * Load all page titles and owners.
+	 *
 	 * @return unknown_type
-	 * @todo	for 1.3:different in trunk: returns owner, too, to be used instead of LoadAllPages()
 	 */
 	function LoadPageTitles() 
 	{ 
-		return $this->LoadAll("select distinct tag from ".$this->config["table_prefix"]."pages order by tag"); 
+		return $this->LoadAll("select tag, owner from ".$this->config["table_prefix"]."pages where latest='Y' order by tag"); 
 	}
-	
+
+	/**
+	 * 
+	 * Load page titles by owner.
+	 *
+	 * @return unknown_type
+	 */
+	function LoadPagesByOwner($owner) 
+	{ 
+		return $this->LoadAll("select tag from ".$this->config['table_prefix']."pages where latest = 'Y' and owner = '".mysql_real_escape_string($owner)."' order by tag");
+	} 
+ 
 	/**
 	 * Load all pages in the wiki.
 	 * 
