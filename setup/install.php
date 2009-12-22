@@ -486,6 +486,8 @@ case "1.3":
 	@mysql_query("insert into ".$config['table_prefix']."acls set page_tag = 'AdminPages', comment_read_acl = '!*', comment_post_acl = '!*'", $dblink), __('Already done? OK!'), 0);
 	test("Setting default DatabaseInfo ACL...",
 	@mysql_query("insert into ".$config['table_prefix']."acls set page_tag = 'DatabaseInfo', comment_read_acl = '!*', comment_post_acl = '!*'", $dblink), __('Already done? OK!'), 0);
+        test(__('Creating index on owner column').'...', 
+        @mysql_query('alter table '.$config['table_prefix'].'pages add index `idx_owner` (`owner`)', $dblink), __('Already done?  OK!'), 0); 
 }
 
 // #600: Force reloading of stylesheet.
