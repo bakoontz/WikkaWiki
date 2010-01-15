@@ -1229,7 +1229,8 @@ ul.menu form#form_logout input[type=submit] {
 }
 
 ul#dashboard {
-	background-color: #C88;
+	background-color: #633;
+	color: #FFF;
 	float: left;
 	list-style-type: none;
 	padding: 0 0 0 10px;
