@@ -21,7 +21,7 @@
  *
  * @copyright Copyright 2002-2003, Hendrik Mans <hendrik@mans.de>
  * @copyright Copyright 2004-2005, Jason Tourtelotte <wikka-admin@jsnx.com>
- * @copyright Copyright 2006-2009 {@link http://wikkawiki.org/CreditsPage Wikka Development Team}
+ * @copyright Copyright 2006-2010 {@link http://wikkawiki.org/CreditsPage Wikka Development Team}
  */
 
 /**
@@ -1528,7 +1528,7 @@ class Wakka
 		if (file_exists('config/'.$menu_file))
 		{
 			$menu_src = $this->IncludeBuffered($menu_file, '', '', 'config/');
-			$menu_array = explode("\n", $menu_src);
+			$menu_array = explode("\n", trim($menu_src)); #951
 			$menu_output = '<ul class="menu" id="'.$menu.'">'."\n";
 			foreach ($menu_array as $menu_item)
 			{
