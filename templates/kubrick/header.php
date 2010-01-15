@@ -62,10 +62,11 @@ if (isset($message) && strlen($message)>0)
 <!-- BEGIN SIDEBAR -->
 <div id="sidebar">
 <?php
-        //page generation start
-        global $tstart;
-        echo $this->MakeMenu('main_menu');
-        echo $this->MakeMenu('options_menu');
+	//page generation start
+	global $tstart;
+	if ($this->IsAdmin()) echo $this->MakeMenu('dashboard');
+	echo $this->MakeMenu('main_menu');
+	echo $this->MakeMenu('options_menu');
 ?>
 </div>
 <!-- END SIDEBAR -->

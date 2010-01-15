@@ -1218,13 +1218,42 @@ ul.menu li input {
 
 ul.menu form#form_logout input[type=submit] {
     background-color: transparent;
-    border: none; 
+    border: none;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: inherit;
+    padding: inherit;
+    font-weight: inherit;
+    color: #993357;
     text-decoration: none;
     cursor: pointer;
-    color: #339;
 }
 
-ul.menu form#form_logout input[type=submit]:hover {
-    cursor: pointer;
-    color: #933;
+ul#dashboard {
+	background-color: #C88;
+	float: left;
+	list-style-type: none;
+	padding: 0 0 0 10px;
+	margin-top: 0px;
+	clear: both;
+	width: 100%;
+}
+
+ul#dashboard li {
+	float: left;
+	width: auto;
+	text-align: left; 
+	padding: 0 2pt;
+}
+
+ul#dashboard li a {
+	color: #FFF;
+}
+
+ul#dashboard li > a:hover {
+	  background-color: transparent;
+	  color: #ECC;
+}
+
+ul#dashboard li+li:before {
+	content: " :: ";
 }

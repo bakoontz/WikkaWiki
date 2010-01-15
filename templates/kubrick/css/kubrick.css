@@ -1191,6 +1191,41 @@ ul#main_menu li:before {
 	content: "\00BB \0020";
 }
 
+ul#dashboard:before {
+	font-size: 1.2em;
+	line-height: 250%;
+	font-weight: bold;
+	content: "Dashboard";
+}
+
+ul#dashboard {
+	width: 200px;
+	font-size: 10px;
+	text-align: left;
+	font: 1em 'Lucida Grande', Verdana, Arial, Sans-Serif;
+}
+
+ul#dashboard li {
+	line-height: 170%;
+	list-style-type: none;
+	list-style-image: none;
+	margin: 0 10px;
+}
+
+ul#dashboard li form {
+	display:inline;	
+}
+
+ul#dashboard li input {
+	margin-top: 1px;	
+	width: 100px;	
+}
+
+ul#dashboard li:before {
+	content: "\00BB \0020";
+}
+
+
 ul#options_menu:before {
 	font-size: 1.2em;
 	line-height: 250%;

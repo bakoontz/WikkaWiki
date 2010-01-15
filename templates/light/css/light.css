@@ -1288,10 +1288,40 @@ ul#options_menu li {
 
 ul.menu form#form_logout input[type=submit] {
     background-color: transparent;
-    border: none; 
+    border: none;
     font-family: Verdana, Arial, Helvetica, sans-serif;
     font-size: inherit;
+    padding: inherit;
+    font-weight: inherit;
     color: #993357;
     text-decoration: none;
     cursor: pointer;
+}
+
+ul#dashboard {
+	background-color: #C88;
+	float: left;
+	list-style-type: none;
+	padding: 0px;
+	margin-top: 0px;
+	width: 850px;
+}
+
+ul#dashboard li {
+	font-family: Helvetica, Arial, Verdana, sans-serif;
+	margin: 0 0 0 10px;
+	padding: 0;
+	float: left;
+	width: auto;
+	text-align: left;
+	font-size: 90%;
+}
+
+ul#dashboard li a {
+	color: #FFF;
+}
+
+ul#dashboard li > a:hover {
+	  background-color: transparent;
+	  color: #ECC;
 }

@@ -59,4 +59,5 @@ if (isset($message) && strlen($message)>0)
 <h2><a id="homepage_link" href="<?php echo $this->href('', $this->config['root_page'], ''); ?>"><?php echo $this->config['wakka_name'];?></a> : <a href="<?php echo $this->href('backlinks', '', ''); ?>" title="Display a list of pages linking to <?php echo $this->tag ?>"><?php echo $this->GetPageTag(); ?></a></h2>
 <?php echo $this->MakeMenu('main_menu'); ?>
 </div>
+<?php if ($this->IsAdmin()) echo $this->MakeMenu('dashboard'); ?>
 <!-- END PAGE HEADER -->
