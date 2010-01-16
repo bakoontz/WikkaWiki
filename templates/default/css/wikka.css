@@ -465,6 +465,18 @@ fieldset legend {
 	padding:2px;
 }
 
+select {
+	border: 1px solid #CCC;	
+}
+
+select:hover {
+	background-color: #F3F3F3;
+}
+
+select:focus {
+	background-color: #E6E6FF;
+}
+
 /* Usersettings action */
 
 fieldset#account {
