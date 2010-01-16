@@ -960,13 +960,13 @@ table.usersettings tbody tr > td {
 
 fieldset#account {
 	display: block;
-	min-width: 600px;
 	padding: 10px;
 	background-color: #F6F6F6;
 	text-align: left;
 }
 
 fieldset#account span#account_info {
+	font-size: 90%;
 	display: block;
 	width: 230px;
 	float: left;
@@ -982,16 +982,15 @@ fieldset#account input#logout {
 
 fieldset.usersettings {
 	display: block;
-	min-width: 600px;
 	padding: 10px;
 }
 
 fieldset.usersettings fieldset {
 	clear: left;
 	display: block;
-	width: 236px;
 	float: left;
-	margin: 0 0 10px 240px;
+	margin: 0 0 10px 190px;
+	width: 180px;
 }
 
 fieldset.usersettings fieldset legend {
@@ -1018,7 +1017,7 @@ fieldset.usersettings em {
 	clear: left;
 	float: left;
 	display: block;
-	margin: 0 0 0 240px;
+	margin: 0 0 0 200px;
 }
 
 fieldset.usersettings em.usersettings_info {
@@ -1037,23 +1036,24 @@ fieldset.usersettings em.usersettings_info {
 
 fieldset.usersettings label {
 	display: block;
-	width: 230px;
+	width: 180px;
 	float: left;
 	margin-bottom: 10px;
 	text-align: right;
 	padding-right: 10px;
+	font-size: 90%;
 }
 
 fieldset.usersettings select#update_option {
 	display: block;
-	width: 230px;
+	width: 180px;
 	float: left;
 	margin: 0px 10px 10px 0px;
 }
 
 fieldset.usersettings input[type=text], fieldset.usersettings input[type=password] {
 	display: block;
-	width: 250px;
+	width: 200px;
 	float: left;
 	margin-bottom: 10px;
 	border:1px solid #CCC;
@@ -1061,7 +1061,7 @@ fieldset.usersettings input[type=text], fieldset.usersettings input[type=passwor
 
 fieldset.usersettings input[type=submit] {
 	float: left;
-	margin-left: 250px;
+	margin-left: 190px;
 }
 
 fieldset.usersettings br {
