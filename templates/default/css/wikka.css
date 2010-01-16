@@ -1229,14 +1229,14 @@ ul.menu form#form_logout input[type=submit] {
 }
 
 ul#dashboard {
+	position: absolute;
+	top: 0;
+	right: 0;
+	padding: 0 5px 0 5px;
 	background-color: #633;
-	color: #FFF;
-	float: left;
+	color: #ECC;
+	font-size: 85%;
 	list-style-type: none;
-	padding: 0 0 0 10px;
-	margin-top: 0px;
-	clear: both;
-	width: 100%;
 }
 
 ul#dashboard li {
