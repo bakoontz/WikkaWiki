@@ -17,6 +17,10 @@
  * @uses	Wakka::FullCategoryTextSearch()
  * @uses	Wakka::FullTextSearch()
  */
+
+if (!defined('PAGES_BELONGING_TO')) define('PAGES_BELONGING_TO', 'The following %d pages belong to %s');
+if (!defined('ERROR_NO_PAGES')) define('ERROR_NO_PAGES', 'Sorry, no items found for %s.');
+
  
 if ($cattag = $_GET['wakka'])	#312 (only files action uses POST for wakka)
 {
@@ -45,7 +49,7 @@ if ($cattag = $_GET['wakka'])	#312 (only files action uses POST for wakka)
 
 	if ($results)
 	{
-		$str = " pages belong to ".$page.":";
+		$str = ":\n";
 		if (!$compact) $str .= '<br /><br /><table '.$class.' width="100%"><tr>';
 		else $str .= '<div '.$class.'><ul>';
 		
@@ -62,10 +66,10 @@ if ($cattag = $_GET['wakka'])	#312 (only files action uses POST for wakka)
 			$count++;
 			$pagecount++;
 		}
-		$str = 'The following '.$pagecount.$str;
+		$str = sprintf(PAGES_IN_CATEGORY,$pagecount,$page).$str;
 		if (!$compact)  $str .= '</tr></table>'; else $str .= '</ul></div>';
 	}
-	else $str .= 'Sorry, no items found for ' . $page .'.';
+	else $str .= sprintf(NO_PAGES_FOUND_MESSAGE,$page);
 	print($str);
 }
 ?>
