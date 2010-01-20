@@ -8,6 +8,8 @@
  * @filesource
  *
  * @uses	Wakka::getCount()
+ * 
+ * @todo	Add parameter to specify date range #955
  */
 
 echo $this->getCount('users');

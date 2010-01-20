@@ -11,6 +11,7 @@
  * @uses	Wakka::getCount()
  * @uses	Wakka::Link()
  * @todo	print different text if user is not logged in
+ * @todo	Add parameter to specify date range #955
  */
 /*
 $where = "`owner` = '".mysql_real_escape_string($this->GetUserName())."' AND `latest` = 'Y'";
