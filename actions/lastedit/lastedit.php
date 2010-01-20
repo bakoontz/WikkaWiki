@@ -28,12 +28,6 @@
  * @todo		make date/time format system-configurable;
  */
 /**
- * defaults
- */
-define('DEFAULT_SHOW', '3');
-define('DATE_FORMAT', 'D, d M Y'); #TODO make this system-configurable
-define('TIME_FORMAT', 'H:i T'); #TODO make this system-configurable
-/**
  * style
  */
 define('LASTEDIT_BOX', 'lastedit');
