@@ -16,6 +16,21 @@
  * @author		{@link http://wikkawiki.org/DarTar Dario Taraborelli}
  * @since		Wikka 1.1.6.4
  *
+ * @uses Wakka::Action()
+ * @uses Wakka::ExistsPage()
+ * @uses Wakka::FormClose()
+ * @uses Wakka::FormOpen()
+ * @uses Wakka::getCount()
+ * @uses Wakka::GetUser()
+ * @uses Wakka::Href()
+ * @uses Wakka::htmlspecialchars_ent()
+ * @uses Wakka::IsAdmin()
+ * @uses Wakka::Link()
+ * @uses Wakka::LoadAll()
+ * @uses Wakka::Redirect()
+ *
+ * @uses Config::$wikka_action_path
+ * 
  * @input		integer $colcolor  optional: enables color for statistics columns
  *				1: enable colored columns;
  *				0: disable colored columns;
@@ -122,6 +137,7 @@ if ($this->IsAdmin($this->GetUser()))
 	{
 		foreach ($vars as $param => $value)
 		{
+			$value = $this->htmlspecialchars_ent($value);
 			switch ($param)
 			{
 				case 'colcolor':
@@ -136,8 +152,10 @@ if ($this->IsAdmin($this->GetUser()))
 	
 	//perform actions if required
 	$g_action = '';
-	if(isset($_GET['action'])) $g_action = $_GET['action'];
-	
+	if(isset($_GET['action']))
+	{
+		$g_action = $this->GetSafeVar('action', 'get');
+	}
 	if($g_action == 'owned') 
 	{
 		echo $this->Action('mypages');
@@ -160,8 +178,8 @@ if ($this->IsAdmin($this->GetUser()))
 	{
 		if(isset($_GET['user']))
 		{
-			include_once('libs/admin.lib.php');
-			$status = DeleteUser($this, $this->htmlspecialchars_ent($_GET['user']));
+			include_once($this->BuildFullpathFromMultipath('..'.DIRECTORY_SEPARATOR.'libs'.DIRECTORY_SEPARATOR.'admin.lib.php', $this->config['wikka_action_path']));
+			$status = DeleteUser($this, $this->GetSafeVar('user', 'get'));
 			if(false===$status)
 			{
 				$this->Redirect($this->Href(), USERDELETE_MESSAGE_FAILURE);
@@ -175,8 +193,9 @@ if ($this->IsAdmin($this->GetUser()))
 	elseif($g_action == 'massdelete')
 	{
 		$usernames = array();
-		foreach($_GET as $key=>$val)
+		foreach($_GET as $key)
 		{
+			$val = $this->GetSafeVar($key, 'get');
 			if($val == "on")
 			{
 				array_push($usernames, $this->htmlspecialchars_ent($key));
@@ -184,16 +203,14 @@ if ($this->IsAdmin($this->GetUser()))
 		}
 		if(count($usernames) > 0)
 		{
-			echo '<h3>'.ADMINUSERS_DELETE_USERS_HEADING.'</h3><br />';
-			echo '<ul>';
-			
+			echo '<h3>'.ADMINUSERS_DELETE_USERS_HEADING.'</h3><br />'."\n".'<ul>';
 			$errors = 0;
 			foreach($usernames as $username)
 			{
 				if($this->IsAdmin($username))
 				{
 					++$errors;
-					echo '<li><span class="disabled">'.$username."&nbsp;".'</span><em class="error">('.ADMINUSERS_FORM_MASSACTION_DELETE_ERROR.")</em></li>\n";
+					echo '<li><span class="disabled">'.$username.'&nbsp;</span><em class="error">('.ADMINUSERS_FORM_MASSACTION_DELETE_ERROR.")</em></li>\n";
 					continue;
 				}
 				echo "<li>".$username."</li>\n";
@@ -232,8 +249,9 @@ if ($this->IsAdmin($this->GetUser()))
 	else if(isset($_POST['massaction']) && $_POST['massaction'] == 'massdelete')
 	{
 		$usernames = array();
-		foreach($_POST as $key=>$val)
+		foreach($_POST as $key)
 		{
+			$val = $this->GetSafeVar($key, 'post');
 			if($val == "username")
 			{
 				array_push($usernames, $this->htmlspecialchars_ent($key));
@@ -254,7 +272,7 @@ if ($this->IsAdmin($this->GetUser()))
 		}
 		else
 		{
-			$this->Redirect($this->Href());
+			$this->Redirect($this->Href(), USERDELETE_MESSAGE_SUCCESS);
 		}
 	}
 	else 
@@ -262,27 +280,30 @@ if ($this->IsAdmin($this->GetUser()))
 		// process URL variables
 	
 		// number of records per page
-		$l = ADMINUSERS_DEFAULT_RECORDS_LIMIT;
-		if (isset($_POST['l']) && (int)$_POST['l'] > 0)
+		if (isset($_POST['l']))
 		{
-			$l = (int)$_POST['l'];
+			$l = $this->GetSafeVar('l', 'post');
 		}
-		elseif (isset($_GET['l']) && (int)$_GET['l'] > 0)
+		elseif (isset($_GET['l']))
 		{
-			$l = (int)$_GET['l'];
+			$l = $this->GetSafeVar('l', 'get');
+		}
+		else
+		{
+			$l = ADMINUSERS_DEFAULT_RECORDS_LIMIT;
 		}
 
 		// sort field
-		$sort = ADMINUSERS_DEFAULT_SORT_FIELD;
 		$sort_fields = array('name', 'email', 'signuptime');
-		if(isset($_GET['sort']) && in_array($_GET['sort'], $sort_fields)) $sort = $_GET['sort'];
+		$sort = (isset($_GET['sort'])) ? $this->GetSafeVar('sort', 'get') : ADMINUSERS_DEFAULT_SORT_FIELD;
+		if(!in_array($sort, $sort_fields)) $sort = ADMINUSERS_DEFAULT_SORT_FIELD;
 		// sort order
-		$d = ADMINUSERS_DEFAULT_SORT_ORDER;
 		$sort_order = array('asc', 'desc');
-		if(isset($_GET['d']) && in_array($_GET['d'], $sort_order)) $d = $_GET['d'];
+		$d = (isset($_GET['d'])) ? $this->GetSafeVar('d', 'get') : ADMINUSERS_DEFAULT_SORT_ORDER;
+		if(!in_array($d, $sort_order)) $d = ADMINUSERS_DEFAULT_SORT_ORDER;
 		// start record
-		$s = ADMINUSERS_DEFAULT_START;
-		if (isset($_GET['s']) && (int)$_GET['s'] >=0) $s = (int)$_GET['s']; 
+		$s = (isset($_GET['s'])) ? $this->GetSafeVar('s', 'get') : ADMINUSERS_DEFAULT_START;
+		if (!(int)$s >=0) $s = ADMINUSERS_DEFAULT_START;
 	
 		// search string
 		$search = ADMINUSERS_DEFAULT_SEARCH;
@@ -327,7 +348,7 @@ if ($this->IsAdmin($this->GetUser()))
 	
 		// print page header
 		echo '<h3>'.ADMINUSERS_PAGE_TITLE.'</h3>'."\n";
-		
+
 		//non-working message retrieval removed, see #753
 	
 		// build pager form	
@@ -377,7 +398,7 @@ if ($this->IsAdmin($this->GetUser()))
 			$data_table = '<table id="adminusers" summary="'.ADMINUSERS_TABLE_SUMMARY.'" border="1px" class="data">'."\n".
 				'<thead>'."\n".
 	  			'	<tr>'."\n".
-				'		<th> </th>'."\n".
+				'		<th> </th>'."\n".
 				'		<th>'.$nameheader.'</th>'."\n".
 				'		<th>'.$emailheader.'</th>'."\n".
 				'		<th>'.$timeheader.'</th>'."\n".
