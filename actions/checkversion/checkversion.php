@@ -30,7 +30,6 @@
  * @author		{@link http://wikkawiki.org/DarTar Dario Taraborelli}
  *
  * @todo	use core method to generate notes and badges
- * @todo	move GUI strings to lang in 1.3
  * @todo	use error handler for debugging
  */
 
@@ -70,7 +69,7 @@ if($this->IsAdmin() && TRUE == $this->config['enable_version_check'])
 			$elapsed_time = time() - $_SESSION['last_version_check']; 
 			if($debug)
 			{
-				echo '<div class="debug">[elapsed time: '.$elapsed_time.']</div>'."\n";
+				echo '<div class="debug">['.sprintf(DEBUG_TIME_ELAPSED,$elapsed_time).']</div>'."\n";
 			}
 			if($elapsed_time > $scalar)
 			{
@@ -104,7 +103,7 @@ if($this->IsAdmin() && TRUE == $this->config['enable_version_check'])
 		{
 			if($debug)
 			{
-				echo '<div class="debug">['.PHP_OS.' PHP '.PHP_VERSION.' does not support this feature]</div>'."\n";
+				echo '<div class="debug">['.sprintf(DEBUG_PHP_VERSION_UNSUPPORTED,PHP_OS,PHP_VERSION).']</div>'."\n";
 			}
 			return;
 		}
@@ -113,7 +112,7 @@ if($this->IsAdmin() && TRUE == $this->config['enable_version_check'])
 		{
 			if($debug)
 			{
-				echo '<div class="debug">[allow_url_fopen disabled]</div>'."\n";
+				echo '<div class="debug">['.DEBUG_ALLOW_FURL_DISABLED.']</div>'."\n";
 			}
 			return;
 		}
@@ -125,7 +124,7 @@ if($this->IsAdmin() && TRUE == $this->config['enable_version_check'])
 			// Probably no internet connection...
 			if ($debug)
 			{
-				echo '<div class="debug">[Cannot resolve '.$hostname.']</div>'."\n";
+				echo '<div class="debug">[',sprintf(DEBUG_CANNOT_RESOLVE_HOSTNAME,$hostname).']</div>'."\n";
 			}
 			return;
 		}
@@ -135,19 +134,13 @@ if($this->IsAdmin() && TRUE == $this->config['enable_version_check'])
 		{
 			if ($debug)
 			{
-				echo '<div class="debug">[Cannot initiate socket connection]</div>'."\n";
+				echo '<div class="debug">['.DEBUG_CANNOT_CONNECT.']</div>'."\n";
 			}
 			else
 			{
 				// Display warning message
 				$s = "D";
-				echo '<div title="Cannot initiate network connection" style="clear: both; text-align: center; float: left; width: 300px; border: 1px solid '.$c[$s][0].'; background-color: '.$c[$s][1].'; color: '.$c[$s][2].'; margin: 10px 0">'."\n";
-				echo '<div style="padding: 0 3px 0 3px; background-color: '.$c[$s][3].'; font-size: 85%; font-weight: bold">CHECKVERSION FAILED</div>'."\n";
-				echo '<div style="padding: 0 3px 2px 3px; font-size: 85%; line-height: 150%; border-top: 1px solid '.$c[$s][4].';">'."\n";
-				echo 'The network connection with the WikkaWiki server could not be established. To prevent delays in loading this page, please set enable_version_check to 0 in your wikka.config.php file.'."\n";
-				echo '</div>'."\n";
-				echo '</div>'."\n";
-				echo '<div class="clear"></div>'."\n";
+				echo sprintf(MESSAGE_CANNOT_CONNECT, $c[$s][0], $c[$s][1], $c[$s][2], $c[$s][3], $c[$s][4]);
 			}
 			return;
 		}
@@ -173,13 +166,7 @@ if($this->IsAdmin() && TRUE == $this->config['enable_version_check'])
 			else
 			{
 				$s = 'F'; //green badge
-				echo '<div title="A new version of WikkaWiki is available. Please upgrade!" style="clear: both; text-align: center; float: left; width: 300px; border: 1px solid '.$c[$s][0].'; background-color: '.$c[$s][1].'; color: '.$c[$s][2].'; margin: 10px 0">'."\n";
-				echo '<div style="padding: 0 3px 0 3px; background-color: '.$c[$s][3].'; font-size: 85%; font-weight: bold">UPGRADE NOTE</div>'."\n";
-				echo '<div style="padding: 0 3px 2px 3px; font-size: 85%; line-height: 150%; border-top: 1px solid '.$c[$s][4].';">'."\n";
-				echo '<strong>WikkaWiki '.$latest.'</strong> is available for <a href="'.CHECKVERSION_DOWNLOAD_URL.'">download</a>!'."\n";
-				echo '</div>'."\n";
-				echo '</div>'."\n";
-				echo '<div class="clear"></div>'."\n";
+				echo sprintf(MESSAGE_NEW_VERSION_AVAILABLE, $c[$s][0], $c[$s][1], $c[$s][2], $c[$s][3], $c[$s][4], $latest, CHECKVERSION_DOWNLOAD_URL);
 			}
 		}
 	}			
