@@ -1,7 +1,14 @@
 <?php
 /**
  * Print number of registered users.
- */ 
-$userdata = $this->LoadSingle("SELECT count(*) as num FROM ".$this->config["table_prefix"]."users ");
-echo $userdata["num"];
+ *
+ * @package		Actions
+ * @version		$Id: countusers.php 820 2007-11-23 09:21:08Z DotMG $
+ * @license		http://www.gnu.org/copyleft/gpl.html GNU General Public License
+ * @filesource
+ *
+ * @uses	Wakka::getCount()
+ */
+
+echo $this->getCount('users');
 ?>
