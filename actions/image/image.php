@@ -48,7 +48,7 @@ if (is_array($vars))
 		if ($param == 'height' && (int)$vars['height'] > 0) {$height = (int)$vars['height'];}
 	}
 }
-(isset($vars['url'])) $url = $this->StaticHref($this->cleanUrl(trim($this->htmlspecialchars_ent($vars['url']))));
+if (isset($vars['url'])) $url = $this->StaticHref($this->cleanUrl(trim($this->htmlspecialchars_ent($vars['url']))));
 
 // try to determine image size if given none
 if (0 == $width && 0 == $height) #
