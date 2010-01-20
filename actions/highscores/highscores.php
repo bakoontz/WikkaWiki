@@ -25,14 +25,12 @@
  * @uses	Wakka::Link()
  * @uses	Wakka::GetConfigValue()
  * @uses	Wakka::getCount()
+ * @uses	Wakka::FormatUser()
  * 
  * @todo translation strings for 1.1.7
  * @todo add paging functionality #679
  */
 
-//defaults
-$rank = 'pages';
-$limit = HIGHSCORES_DISPLAY_TOP;
 
 //valid options
 $valid_styles = array('complex','simple');
@@ -44,30 +42,38 @@ if (isset($top) && is_numeric($top))
 {
 	$limit = intval($top);
 }
+else
+{
+	$limit = HIGHSCORES_DISPLAY_TOP;
+}
 
 if (!isset($style) || !in_array($style, $valid_styles))
 {
 	$style = HIGHSCORES_DEFAULT_STYLE;
 }
 
+if (!isset($rank) || !in_array($rank, $valid_rank))
+{
+	$rank = HIGHSCORES_DEFAULT_RANK;
+}
 
 switch($rank)
 {
 	case 'edits':	
-	$label= 'edits';
+	$label= HIGHSCORES_LABEL_EDITS;
 	$query = 'SELECT COUNT(*) AS cnt, `name`  FROM '.$this->GetConfigValue('table_prefix').'users, '.$this->GetConfigValue('table_prefix').'pages WHERE `name` = `user` GROUP BY name ORDER BY cnt DESC LIMIT '.$limit;
 	$total = $this->getCount('pages');
 	break;
 		
 	case 'comments':
-	$label= 'comments';	
+	$label= HIGHSCORES_LABEL_COMMENTS;
 	$query = 'SELECT COUNT(*) AS cnt, `name`  FROM '.$this->GetConfigValue('table_prefix').'users, '.$this->GetConfigValue('table_prefix').'comments WHERE `name` = `user` GROUP BY name ORDER BY cnt DESC LIMIT '.$limit;	
 	$total = $this->getCount('comments');
 	break;	
 
 	default:
 	case 'pages': 
-	$label= 'pages owned';
+	$label= HIGHSCORES_LABEL_PAGES;
 	$query = 'SELECT COUNT(*) AS cnt, `name`  FROM '.$this->GetConfigValue('table_prefix').'users, '.$this->GetConfigValue('table_prefix').'pages WHERE `name` = `owner` AND `latest` = "Y" GROUP BY name ORDER BY cnt DESC LIMIT '.$limit;	
 	$total = $this->getCount('pages', "`latest` = 'Y'");
 	break;
@@ -83,27 +89,27 @@ while($row = mysql_fetch_array($rank_query))
 	$i++;
 	$str .= '	<tr '.(($i % 2)? '' : 'class="alt"').'>'."\n";
 	$str .= '		<td>'.$i.'.&nbsp;</td>'."\n";
-	$str .= '		<td>'.$this->Link($row['name']).'</td>'."\n";
+	$str .= '		<td>'.$this->FormatUser($row['name']).'</td>'."\n";
 	$str .= '		<td class="number">'.$row['cnt'].'</td>'."\n";
 	$str .= '		<td class="number">'.round(($row['cnt']/$total)*100, 1).'% </td>'."\n";
 	$str .= '	</tr>'."\n";
 }
 
-$display_items = $i;
+$display_items = ($i > 1)? $i : '';
 
 //output table
-$table = '<table class="data">'."\n";
+$table .= '<table class="data highscores">'."\n";
 
 //display caption and headers for complex style
 if ($style == 'complex')
 {
-	$table .= '	<caption style="white-space: nowrap; padding: 1px 3px;">Top '.$display_items.' contributor(s) by number of '.$label.'</caption>'."\n";
+	$table .= '	<caption>'.sprintf(HIGHSCORES_CAPTION, $display_items, $label).'</caption>'."\n";
 	$table .= '	<thead>'."\n";
 	$table .= '	<tr>'."\n";
-	$table .= '		<th scope="col">rank</th>'."\n";
-	$table .= '		<th scope="col">user</th>'."\n";
+	$table .= '		<th scope="col">'.HIGHSCORES_HEADER_RANK.'</th>'."\n";
+	$table .= '		<th scope="col">'.HIGHSCORES_HEADER_USER.'</th>'."\n";
 	$table .= '		<th scope="col">'.$label.'</th>'."\n";
-	$table .= '		<th scope="col">percentage</th>'."\n";
+	$table .= '		<th scope="col">'.HIGHSCORES_HEADER_PERCENTAGE.'</th>'."\n";
 	$table .= '	</tr>'."\n";
 	$table .= '	</thead>'."\n";
 	$table .= '	<tbody>'."\n";
