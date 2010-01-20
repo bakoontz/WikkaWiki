@@ -13,15 +13,15 @@
  * @author	{@link http://web.archive.org/web/20040616194824/http://www.wakkawiki.com/CarloZottmann Carlo Zottmann}
  * @author	{@link http://wikkawiki.org/NilsLindenberg Nils Lindenberg} (rewrite, i18n)
  *
- * @uses	Wakka::GetConfig()
- * @uses	Wakka::GetPageTag()
- * @uses	Wakka::GetUser() 
+ * @uses	Wakka::existsUser()
+ * @uses	Wakka::GetConfigValue()
  * @uses	Wakka::GetUserName()
+ * @uses	Wakka::GetPageTag()
  * @uses	Wakka::Href()
  * @uses	Wakka::htmlspecialchars_ent()
- * @uses	Wakka::IsAdmin()
  * @uses	Wakka::LoadAll()
  * @uses	Wakka::Link()
+ * @uses	Wakka::IsAdmin()
  * @todo	fix RE (#104 etc.); also lose the comma in there!
  */
 
@@ -37,20 +37,20 @@ $params = '';
 $username = '';
 if(isset($_GET['user']))
 {
-	$username = $this->htmlspecialchars_ent($_GET['user']);
+	$username = $this->GetSafeVar('user', 'get');
 	$params .= "user=$username&";
 }
 
 $action = '';
 if(isset($_GET['action']))
 {
-	$action = $this->htmlspecialchars_ent($_GET['action']);
+	$action = $this->GetSafeVar('action', 'get'); 
 	$params .= "action=$action&";
 }
 $params = substr($params, 0, -1);
 
 if (($this->IsAdmin() && !empty($username)) ||
-	($this->GetUser() &&  $username = $this->GetUserName()))
+	($this->existsUser() &&  $username = $this->GetUserName()))
 {
 	$my_edits_count = 0;
 
@@ -134,7 +134,7 @@ if (($this->IsAdmin() && !empty($username)) ||
 	}
 	else
 	{
-		$output .= '<em class="error">'.sprintf(WIKKA_NO_PAGES_FOUND, $username).'</em>';
+		$output .= '<em class="error">'.sprintf(WIKKA_NO_PAGES_FOUND_FOR, $username).'</em>';
 	}
 }
 else
@@ -144,3 +144,4 @@ else
 
 // *** output section ***
 print $output;
+?>
