@@ -1,6 +1,6 @@
 <?php
 /**
- * Display an image.
+ * Display an image, optionally linked to an URL.
  *
  * @package		Actions
  * @version		$Id$
@@ -18,8 +18,8 @@
  * @input	string	$title	optional: title text displayed when mouse hovers above image
  * @input	string	$class	optional: a class for the image
  * @input	string	$alt	optional: an alt text
- * @input   int     $height optinal: height of the image
- * @input   int     $width optinal: width of the image
+ * @input	int		$height optinal: height of the image
+ * @input	int		$width optinal: width of the image
  * @output	string	img element or image link
  * @todo	make alt required (wasn't there a better version already?)
  */
@@ -44,21 +44,21 @@ if (is_array($vars))
 		if ($param == 'class') {$class = $this->htmlspecialchars_ent($vars['class']);}
 		if ($param == 'alt') {$alt = $this->htmlspecialchars_ent($vars['alt']);}
 		if ($param == 'link') {$link = $this->htmlspecialchars_ent($vars['link']);}
-        if ($param == 'width' && (int)$vars['width'] > 0) {$width = (int)$vars['width'];}
-        if ($param == 'height' && (int)$vars['height'] > 0) {$height = (int)$vars['height'];}
+		if ($param == 'width' && (int)$vars['width'] > 0) {$width = (int)$vars['width'];}
+		if ($param == 'height' && (int)$vars['height'] > 0) {$height = (int)$vars['height'];}
 	}
 }
-$url = $this->StaticHref($this->cleanUrl(trim($this->htmlspecialchars_ent($vars['url']))));
+(isset($vars['url'])) $url = $this->StaticHref($this->cleanUrl(trim($this->htmlspecialchars_ent($vars['url']))));
 
 // try to determine image size if given none
 if (0 == $width && 0 == $height) #
 {
-    if (file_exists($url)) $attr = getimagesize($url);
-    if (is_array($attr))
-    {
-        if (0 < $attr[1]) $height = $attr[1];
-        if (0 < $attr[0]) $width = $attr[0];
-    }
+	if (file_exists($url)) $attr = getimagesize($url);
+	if (is_array($attr))
+	{
+		if (0 < $attr[1]) $height = $attr[1];
+		if (0 < $attr[0]) $width = $attr[0];
+	}
 }
 
 // building output

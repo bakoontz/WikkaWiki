@@ -16,6 +16,7 @@
  * @uses	Wakka::loadUserData()
  * @uses	Wakka::FormOpen()
  * @uses	Wakka::FormClose()
+ * @uses	Wakka::GetConfigValue()
  */
 
 /**
@@ -43,11 +44,11 @@ if (isset($_POST['wikiname'])) // get posted values
 	switch(TRUE)
 	{
 		case ($input == ''): // empty user
-			$output .= '<em class="error">'.WIKKA_ERROR_EMPTY_USERNAME.'</em>'."\n";
+			$output .= '<em class="error">'.WIKKA_ERROR_EMPTY_USERNAME.'</em><br />'."\n";
 			$highlight = INPUT_ERROR_STYLE;
 			break;
 		case ($input != '' && !$user): // non-existing user
-			$output .= '<em class="error">'.ERROR_UNKNOWN_USER.'</em>'."\n";
+			$output .= '<em class="error">'.ERROR_UNKNOWN_USER.'</em><br />'."\n";
 			$highlight = INPUT_ERROR_STYLE;
 			break;
 		case ($input != '' && $user): // user exists, proceed

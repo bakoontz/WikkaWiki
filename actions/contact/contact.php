@@ -8,6 +8,8 @@
  * @filesource
  *
  * @uses	Wakka::GetConfigValue()
+ * 
+ * Note: plain mailto links are a common source of spam.
  */
 
 $email = $this->GetConfigValue("admin_email");
@@ -15,12 +17,12 @@ $email = $this->GetConfigValue("admin_email");
 // print spam-safe mailto link
 $patterns = array("'@'", "'\.'");
 $replace = array("[at]", "[dot]");
-echo '<a href="mailto:'.preg_replace($patterns, $replace, $email).'" title="'.SEND_FEEDBACK_LINK_TITLE.'">'.SEND_FEEDBACK_LINK_TEXT.'</a>';
+echo '<a href="mailto:'.preg_replace($patterns, $replace, $email).'" title="'.CONTACTLINK_TITLE.'">'.CONTACTLINK_TEXT.'</a>';
 
 // print plain mailto link
-//echo '<a href="mailto:'.$email.'" title="'.SEND_FEEDBACK_LINK_TITLE.'">'.SEND_FEEDBACK_LINK_TEXT.'</a>';
+//echo '<a href="mailto:'.$email.'" title="'.CONTACTLINK_TITLE.'">'.CONTACTLINK_TEXT.'</a>';
 
 // print contact link only to registered users
-// echo ($this->GetUser()) ? <a href="mailto:'.$email.'" title="'.SEND_FEEDBACK_LINK_TITLE.'">'.SEND_FEEDBACK_LINK_TEXT.'</a>' : "";
+// echo ($this->GetUser()) ? <a href="mailto:'.$email.'" title="'.CONTACTLINK_TITLE.'">'.CONTACTLINK_TEXT.'</a>' : "";
 
 ?>

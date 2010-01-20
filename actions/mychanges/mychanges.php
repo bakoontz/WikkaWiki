@@ -37,48 +37,28 @@ $tag = $this->GetPageTag();
 $output = '';
 $time_output = '';
 
-$params = ''; 
-$username = ''; 
-if(isset($_GET['user'])) 
-{ 
-	$username = $this->GetSafeVar('user', 'request'); 
-	$params .= "user=$username&"; 
-} 
- 
-$action = ''; 
-if(isset($_GET['action'])) 
-{ 
-	$action = $this->GetSafeVar('action', 'request'); 
-	$params .= "action=$action&"; 
-} 
-$params = substr($params, 0, -1); 
- 
-if (($this->IsAdmin() && !empty($username)) || 
-		($this->existsUser() &&  $username = $this->GetUserName())) 
+$params = '';
+$username = '';
+if(isset($_GET['user']))
+{
+	$username = $this->GetSafeVar('user', 'get');
+	$params .= "user=$username&";
+}
+
+$action = '';
+if(isset($_GET['action']))
+{
+	$action = $this->GetSafeVar('action', 'get'); 
+	$params .= "action=$action&";
+}
+$params = substr($params, 0, -1);
+
+if (($this->IsAdmin() && !empty($username)) ||
+	($this->existsUser() &&  $username = $this->GetUserName()))
 {
 	$my_edits_count = 0;
 
-	// header
-	$output .= '<div class="floatl">';
-	if ($alpha)
-	{
-	$output .= sprintf(MYCHANGES_ALPHA_LIST, $username).' (<a href="'.$this->Href("", $tag, $params).'">'.ORDER_DATE_LINK_DESC;
-	}
-	else
-	{
-		if(!empty($params)) 
-		{ 
-			$params .= "&alphabetically=1"; 
-		} 
-		else 
-		{ 
-			$params = "alphabetically=1"; 
-		} 
-
-		$output .= sprintf(MYCHANGES_DATE_LIST, $username).' (<a href="'.$this->href("", $tag, $params).'">'.ORDER_ALPHA_LINK_DESC; 
-	}
-	$output .= '</a>)</div><div class="clear">&nbsp;</div>'."\n";
-
+	// get the pages
 	$order = ($alpha) ? "tag ASC, time DESC" : "time DESC, tag ASC";
 	$query = "
 		SELECT id, tag, time
@@ -89,6 +69,27 @@ if (($this->IsAdmin() && !empty($username)) ||
 
 	if ($pages = $this->LoadAll($query))
 	{
+		// header
+		$output .= '<div class="floatl">';
+		if ($alpha)
+		{
+			$output .= sprintf(MYCHANGES_ALPHA_LIST, $username).' (<a href="'.$this->Href("", $tag, $params).'">'.ORDER_DATE_LINK_DESC;
+		}
+		else
+		{
+			if(!empty($params))
+			{
+				$params .= "&alphabetically=1";
+			}
+			else
+			{
+				$params = "alphabetically=1";
+			}
+
+			$output .= sprintf(MYCHANGES_DATE_LIST, $username).' (<a href="'.$this->href("", $tag, $params).'">'.ORDER_ALPHA_LINK_DESC;
+		}
+		$output .= '</a>)</div><div class="clear">&nbsp;</div>'."\n";
+
 		$current = '';
 
 		// build the list of pages
@@ -119,12 +120,12 @@ if (($this->IsAdmin() && !empty($username)) ||
 				// day header
 				if ($day != $current)
 				{
-					if ($current) print("<br />\n");
+					if ($current) $output .= "<br />\n";
 					$current = $day;
 					$output .= '<h5>'.date(REVISION_DATE_FORMAT, strtotime($day)).'</h5>'."\n";
 				}
 				$time_output = date(REVISION_TIME_FORMAT, strtotime($time));
-				$output .= '&nbsp;&nbsp;&nbsp;<a class="datetime" href="'.$this->Href('revisions', $page['tag']).'" title="'.PAGE_REVISION_LINK_TITLE.'">'.$time_output.'</a> '.$this->Link($page["tag"], 'revisions', "[".$page['id']."]", 0)." ".$this->Link($page["tag"], "", "", 0)."<br />\n";	
+				$output .= '&nbsp;&nbsp;&nbsp;<a class="datetime" href="'.$this->Href('revisions', $page['tag']).'" title="'.PAGE_REVISION_LINK_TITLE.'">'.$time_output.'</a> '.$this->Link($page["tag"], 'revisions', "[".$page['id']."]", 0)." ".$this->Link($page["tag"], "", "", 0)."<br />\n";
 			}
 			$my_edits_count++;
 		}

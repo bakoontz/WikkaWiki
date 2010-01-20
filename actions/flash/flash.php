@@ -20,17 +20,43 @@
  * @todo	use constants instead of "magic numbers"
  */
 
-if (!$width) $width = 550;
-else $width = (int)$width;
-if ($width>950) $width = 950;
+define('FLASH_DEFAULT_WIDTH',550);
+define('FLASH_DEFAULT_HEIGHT',400);
+define('FLASH_MAX_WIDTH',950);
+define('FLASH_MAX_HEIGHT',950);
 
-if (!$height) $height = 400;
-else $height = (int)$height;
-if ($height>950) $height = 950;
+// setting defaults
+$width = FLASH_DEFAULT_WIDTH;
+$height = FLASH_DEFAULT_HEIGHT;
+$url = '';
+
+// getting params
+if (is_array($vars))
+{
+    foreach ($vars as $param => $value)
+    {
+    	if ($param == 'width') 
+    	{
+    		$width = (int)$vars['width'];
+    		if ($width>FLASH_MAX_WIDTH) $width = FLASH_MAX_WIDTH;
+    	}
+    	if ($param == 'height') 
+    	{
+    		$height = (int)$vars['height'];
+    		if ($height>FLASH_MAX_HEIGHT) $height = FLASH_MAX_HEIGHT;
+    	}
+    	if ($param == 'url')
+    	{
+    		$url = $this->cleanUrl(trim($vars['url']));
+    	}
+    	
+    }
+}
 
 if (!$url) $url = $vars[0];
 $url = $this->StaticHref($this->cleanUrl(trim($this->htmlspecialchars_ent($url))));
 
+// ouput, if any
 if ($url)
   echo '<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,29,0" width="'.$width.'" height="'.$height.'">
 	<param name="movie" value="'.$url.'" />

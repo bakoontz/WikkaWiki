@@ -14,6 +14,7 @@
  * @output	a list of the pages linking to the page
  * @uses	Wakka::Link()
  * @uses	Wakka::LoadPagesLinkingTo()
+ * @uses	Wakka::ListPages()
  */
 
 $pages = $this->LoadPagesLinkingTo($this->GetPageTag());

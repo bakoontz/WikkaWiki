@@ -16,6 +16,7 @@
  * @uses	Wakka::existsUser()
  * @uses	Wakka::LoadPagesByOwner()
  * @uses	Wakka::GetUserName()
+ * @uses	Wakka::IsAdmin()
  * @uses	Wakka::Link()
  * @todo	fix RE (#104 etc.); also lose the comma in there!
  * @todo	actually add the (intended) timestanmp sorting; cf. mychanges action
@@ -24,11 +25,11 @@
 $username = '';
 if(isset($_GET['user']))
 {
-	$username = $this->GetSafeVar('user', 'request'); 
+	$username = $this->GetSafeVar('user', 'get'); 
 }
-if (($this->IsAdmin() && !empty($username)) || 
-		($this->GetUser() && $username = $this->GetUserName())) 
-{ 
+if (($this->IsAdmin() && !empty($username)) ||
+	($this->existsUser() && $username = $this->GetUserName()))
+{
 	printf('<div class="floatl">'.OWNED_PAGES_TXT.'</div><div class="clear">'."&nbsp;</div>\n", $username);
 	$curChar = '';
 
@@ -50,7 +51,7 @@ if (($this->IsAdmin() && !empty($username)) ||
 
 				if ($firstChar != $curChar)
 				{
-					if ($curChar) print("<br />\n");
+					if ($curChar != '') echo "<br />\n";
 					echo '<strong>'.$firstChar."</strong><br />\n";
 					$curChar = $firstChar;
 				}
