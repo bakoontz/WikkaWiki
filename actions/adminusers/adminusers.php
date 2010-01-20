@@ -398,7 +398,7 @@ if ($this->IsAdmin($this->GetUser()))
 			$data_table = '<table id="adminusers" summary="'.ADMINUSERS_TABLE_SUMMARY.'" border="1px" class="data">'."\n".
 				'<thead>'."\n".
 	  			'	<tr>'."\n".
-				'		<th> </th>'."\n".
+				'		<th></th>'."\n".
 				'		<th>'.$nameheader.'</th>'."\n".
 				'		<th>'.$emailheader.'</th>'."\n".
 				'		<th>'.$timeheader.'</th>'."\n".
