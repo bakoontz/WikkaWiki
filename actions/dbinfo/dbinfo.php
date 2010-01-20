@@ -36,10 +36,13 @@
  * @uses	FormClose()
  * @uses	Format()
  * @uses	makeId()
+ * 
+ * @todo 	Prevent multiple calls, #634
  */
 
+//TODO the following check should be performed by the Action() method, see #634
 // escape & placeholder: action allowed only once per page
-if (defined('HD_DBINFO'))
+if (defined('DBINFO_INSTANTIATED'))
 {
 	echo '{{dbinfo}}';
 	return;
@@ -49,32 +52,14 @@ if (defined('HD_DBINFO'))
 
 // constants
 
+//TODO the following check should be performed by the Action() method, see #634
+define('DBINFO_INSTANTIATED', TRUE);
+
 // set defaults
 $bAll		= FALSE;		# one column for columnar layout
 $bPrefix	= TRUE;			# default display type
 
 // UI strings
-define('HD_DBINFO','Database Information');
-define('HD_DBINFO_DB','Database');
-define('HD_DBINFO_TABLES','Tables');
-define('HD_DB_CREATE_DDL','DDL to create database %s:');				# %s will hold database name
-define('HD_TABLE_CREATE_DDL','DDL to create table %s:');				# %s will hold table name
-define('TXT_INFO_1','This utility provides some information about the database(s) and tables in your system.');
-define('TXT_INFO_2',' Depending on permissions for the Wikka database user, not all databases or tables may be visible.');
-define('TXT_INFO_3',' Where creation DDL is given, this reflects everything that would be needed to exactly recreate the same database and table definitions,');
-define('TXT_INFO_4',' including defaults that may not have been specified explicitly.');
-define('FORM_SELDB_LEGEND','Databases');
-define('FORM_SELTABLE_LEGEND','Tables');
-define('FORM_SELDB_OPT_LABEL','Select a database:');
-define('FORM_SELTABLE_OPT_LABEL','Select a table:');
-define('FORM_SUBMIT_SELDB','Select');
-define('FORM_SUBMIT_SELTABLE','Select');
-define('MSG_ONLY_ADMIN','Sorry, only administrators can view database information.');
-define('MSG_SINGLE_DB','Information for the <tt>%s</tt> database.');			# %s will hold database name
-define('MSG_NO_TABLES','No tables found in the <tt>%s</tt> database. Your MySQL user may not have sufficient privileges to access this database.');		# %s will hold database name
-define('MSG_NO_DB_DDL','Creation DDL for <tt>%s</tt> could not be retrieved.');	# %s will hold database name
-define('MSG_NO_TABLE_DDL','Creation DDL for <tt>%s</tt> could not be retrieved.');# %s will hold table name
-
 $hdDbInfo		= HD_DBINFO;
 $hdDatabase		= HD_DBINFO_DB;
 $hdTables		= HD_DBINFO_TABLES;
@@ -97,6 +82,7 @@ if ($isAdmin)
 	{
 		foreach ($vars as $param => $value)
 		{
+			$value = $this->htmlspecialchars_ent($value);
 			switch ($param)
 			{
 				case 'all':
@@ -144,7 +130,7 @@ if ($isAdmin)
 		{
 			if (isset($_POST['seldb']) && in_array($_POST['seldb'],$aDbList))		# valid choice
 			{
-				$seldb = $_POST['seldb'];
+				$seldb = $this->GetSafeVar('seldb', 'post');
 			}
 			else										# ignore invalid choice
 			{
@@ -197,7 +183,7 @@ if ($isAdmin)
 	{
 		if (isset($_POST['seltable']) && in_array($_POST['seltable'],$aTableList))	# valid choice
 		{
-			$seltable = $_POST['seltable'];
+			$seltable = $this->GetSafeVar('seltable', 'post');
 			$query = 'SHOW CREATE TABLE '.$seltable;
 			$tablecreateresult = mysql_query($query);
 			if ($tablecreateresult)
