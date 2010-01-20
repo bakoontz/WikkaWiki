@@ -69,7 +69,7 @@ if($this->IsAdmin() && TRUE == $this->config['enable_version_check'])
 			$elapsed_time = time() - $_SESSION['last_version_check']; 
 			if($debug)
 			{
-				echo '<div class="debug">['.sprintf(DEBUG_TIME_ELAPSED,$elapsed_time).']</div>'."\n";
+				echo '<div class="debug">'.sprintf(DEBUG_TIME_ELAPSED,$elapsed_time).'</div>'."\n";
 			}
 			if($elapsed_time > $scalar)
 			{
@@ -103,7 +103,7 @@ if($this->IsAdmin() && TRUE == $this->config['enable_version_check'])
 		{
 			if($debug)
 			{
-				echo '<div class="debug">['.sprintf(DEBUG_PHP_VERSION_UNSUPPORTED,PHP_OS,PHP_VERSION).']</div>'."\n";
+				echo '<div class="debug">'.sprintf(DEBUG_PHP_VERSION_UNSUPPORTED,PHP_OS,PHP_VERSION).'</div>'."\n";
 			}
 			return;
 		}
@@ -112,7 +112,7 @@ if($this->IsAdmin() && TRUE == $this->config['enable_version_check'])
 		{
 			if($debug)
 			{
-				echo '<div class="debug">['.DEBUG_ALLOW_FURL_DISABLED.']</div>'."\n";
+				echo '<div class="debug">'.DEBUG_ALLOW_FURL_DISABLED.'</div>'."\n";
 			}
 			return;
 		}
@@ -124,7 +124,7 @@ if($this->IsAdmin() && TRUE == $this->config['enable_version_check'])
 			// Probably no internet connection...
 			if ($debug)
 			{
-				echo '<div class="debug">[',sprintf(DEBUG_CANNOT_RESOLVE_HOSTNAME,$hostname).']</div>'."\n";
+				echo '<div class="debug">',sprintf(DEBUG_CANNOT_RESOLVE_HOSTNAME,$hostname).'</div>'."\n";
 			}
 			return;
 		}
@@ -134,13 +134,13 @@ if($this->IsAdmin() && TRUE == $this->config['enable_version_check'])
 		{
 			if ($debug)
 			{
-				echo '<div class="debug">['.DEBUG_CANNOT_CONNECT.']</div>'."\n";
+				echo '<div class="debug">'.DEBUG_CANNOT_CONNECT.'</div>'."\n";
 			}
 			else
 			{
 				// Display warning message
 				$s = "D";
-				echo sprintf(MESSAGE_CANNOT_CONNECT, $c[$s][0], $c[$s][1], $c[$s][2], $c[$s][3], $c[$s][4]);
+				echo sprintf(CHECKVERSION_CANNOT_CONNECT, $c[$s][0], $c[$s][1], $c[$s][2], $c[$s][3], $c[$s][4]);
 			}
 			return;
 		}
@@ -157,7 +157,7 @@ if($this->IsAdmin() && TRUE == $this->config['enable_version_check'])
 		{
 			if($debug)
 			{
-				echo '<div class="debug">['.$latest.' from host '.$ip.']</div>'."\n";	
+				echo '<div class="debug">'.sprintf(DEBUG_NEW_VERSION_AVAILABLE,$latest,$ip).'</div>'."\n";	
 			}
 			if("raw" == $vars['display'])
 			{
@@ -166,7 +166,7 @@ if($this->IsAdmin() && TRUE == $this->config['enable_version_check'])
 			else
 			{
 				$s = 'F'; //green badge
-				echo sprintf(MESSAGE_NEW_VERSION_AVAILABLE, $c[$s][0], $c[$s][1], $c[$s][2], $c[$s][3], $c[$s][4], $latest, CHECKVERSION_DOWNLOAD_URL);
+				echo sprintf(CHECKVERSION_NEW_VERSION_AVAILABLE, $c[$s][0], $c[$s][1], $c[$s][2], $c[$s][3], $c[$s][4], $latest, CHECKVERSION_DOWNLOAD_URL);
 			}
 		}
 	}			
