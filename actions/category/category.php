@@ -17,10 +17,6 @@
  * @uses	Wakka::FullCategoryTextSearch()
  * @uses	Wakka::FullTextSearch()
  */
-
-if (!defined('PAGES_BELONGING_TO')) define('PAGES_BELONGING_TO', 'The following %d pages belong to %s');
-if (!defined('ERROR_NO_PAGES')) define('ERROR_NO_PAGES', 'Sorry, no items found for %s.');
-
  
 if ($cattag = $_GET['wakka'])	#312 (only files action uses POST for wakka)
 {
