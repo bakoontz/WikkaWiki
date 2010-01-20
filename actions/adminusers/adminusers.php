@@ -182,11 +182,11 @@ if ($this->IsAdmin($this->GetUser()))
 			$status = DeleteUser($this, $this->GetSafeVar('user', 'get'));
 			if(false===$status)
 			{
-				$this->Redirect($this->Href(), USERDELETE_MESSAGE_FAILURE);
+				$this->Redirect($this->Href(), ADMINUSERS_USERDELETE_FAILURE);
 			}
 			else
 			{
-				$this->Redirect($this->Href(), USERDELETE_MESSAGE_SUCCESS);
+				$this->Redirect($this->Href(), ADMINUSERS_USERDELETE_SUCCESS);
 			}
 		}
 	}
