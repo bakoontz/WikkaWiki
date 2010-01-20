@@ -7,54 +7,53 @@ $name='';
 $email='';
 $comments='';
 
-if(isset($_POST["name"])) $name = $_POST["name"];
-if(isset($_POST["email"])) $email = $_POST["email"];
-if(isset($_POST["comments"])) $comments = $_POST["comments"];
+if(isset($_POST['name'])) $name = $this->GetSafeVar('name', 'post');
+if(isset($_POST['email'])) $email = $this->GetSafeVar('email', 'post');
+if(isset($_POST['comments'])) $comments = $this->GetSafeVar('comments', 'post');
 
-$form = "<p>Fill in the form below to send us your comments:</p>".
-            $this->FormOpen().
-            "\nName: <input name=\"name\" value=\"".$this->htmlspecialchars_ent($name)."\" type=\"text\" /><br />".
-            "\n<input type=\"hidden\" name=\"mail\" value=\"result\">".
-            "\nEmail: <input name=\"email\" value=\"".$this->htmlspecialchars_ent($email)."\" type=\"text\" /><br />".
-            "\nComments:<br />\n<textarea name=\"comments\" rows=\"15\" cols=\"40\">".$this->htmlspecialchars_ent($comments)."</textarea><br / >".
-            "\n<input type=\"submit\" value=\"Send\" />".
-            $this->FormClose();
+$form = FILL_FORM.
+	$this->FormOpen().
+	'<label for="name">'.FEEDBACK_NAME_LABEL.'</label><input name="name" value="'.$name.'" type="text" /><br />'."\n".
+	'<input type="hidden" name="mail" value="result">'."\n".
+	'<label for="email">'.FEEDBACK_EMAIL_LABEL.'</label><input name="email" value="'.$email.'" type="text" /><br />'."\n".
+	'<label for="comments">'.FEEDBACK_COMMENTS_LABEL.'</label><br />\n<textarea name="comments" rows="15" cols="40">'.$comments.'</textarea><br / >'."\n".
+	'<input type="submit" value="'.FEEDBACK_SEND_BUTTON.'" />'."\n".
+	$this->FormClose();
 
-if (isset($_POST["mail"]) && $_POST["mail"]=="result") 
+if (isset($_POST['mail']) && $_POST['mail']=='result') 
 {
 
 	list($user, $host) = sscanf($email, "%[a-zA-Z0-9._-]@%[a-zA-Z0-9._-]");
 	if (!$name) 
 	{
 		// a valid name must be entered
-		echo "<p class=\"error\">Please enter your name</p>";    
-		echo $form;    
-	} elseif (!$email || !strchr($email, "@") || !$user || !$host)
+		echo ERROR_EMPTY_NAME;
+		echo $form;
+	} elseif (!$email || !strchr($email, '@') || !$user || !$host)
 	{
 		// a valid email address must be entered
-		echo "<p class=\"error\">Please enter a valid email address</p>";    
+		echo ERROR_INVALID_EMAIL;
 		echo $form;
-	} elseif (!$comments) 
+	} elseif (!$comments)
 	{
 		// some text must be entered
-		echo "<p class=\"error\">Please enter some text</p>";    
+		echo ERROR_EMPTY_MESSAGE;    
 		echo $alert;
 		echo $form;
 	} else 
 	{
 		// send email and display message
-		$msg = "Name:\t".$name."\n";
-		$msg .= "Email:\t".$email."\n";
+		$msg = 'Name:\t'.$name."\n";
+		$msg .= 'Email:\t'.$email."\n";
 		$msg .= "\n".$comments."\n";
-		$recipient = $this->GetConfigValue("admin_email");
-		$subject = "Feedback from ".$this->GetConfigValue("wakka_name");
-		$mailheaders = "From:".$email."\n";
-		$mailheaders .= "Reply-To:".$email;
+		$recipient = $this->GetConfigValue('admin_email');
+		$subject = sprintf(FEEDBACK_SUBJECT,$this->GetConfigValue("wakka_name"));
+		$mailheaders = 'From:'.$email."\n";
+		$mailheaders .= 'Reply-To:'.$email;
 		mail($recipient, $subject, $msg, $mailheaders);
-		echo $this->Format("Thanks for your interest! Your feedback has been sent to [[".$recipient."]] ---");
-		echo $this->Format("Return to the [[".$this->GetConfigValue("root_page")." main page]]");
+		echo $this->Format(sprintf(EMAIL_SENT_CONFIRMATION,$recipient, $this->GetConfigValue('root_page'));
 		// optionally displays the feedback text
-		//echo $this->Format("---- **Name:** ".$name."---**Email:** ".$email."---**Comments:** ---".$comments);
+		//echo $this->Format('---- **'.FEEDBACK_NAME_LABEL.'** '.$name.'---**'.FEEDBACK_EMAIL_LABEL.'** '.$email.'---**'.FEEDBACK_COMMENTS_LABEL.'** ---'.$comments');
 	}    
 } else 
 {
