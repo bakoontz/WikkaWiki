@@ -3,7 +3,7 @@
  * Display an image, optionally linked to an URL.
  *
  * @package		Actions
- * @version		$Id$
+ * @version		$Id: image.php 1342 2009-03-03 02:29:51Z BrianKoontz $
  * @license		http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
  *
@@ -11,6 +11,7 @@
  * @uses	Wakka::ReturnSafeHTML()
  * @uses	Wakka::htmlspecialchars_ent()
  * @uses	Wakka::cleanUrl()
+ * @uses	Wakka::StaticHref()
  *
  * @input	string	$url	mandatory: URL of image to be embedded
  * @input	string	$link	optional: target link for image (optional). Supports URL, WikiName links, InterWiki links etc.
@@ -24,29 +25,30 @@
  */
 
 // defaults
-$title = 'WikiImage';
+$title = 'WikiImage';	// @@@ don't use title attribute if no title specified
 $class = $link = '';
-$alt = 'image';
+$alt = 'image';			// @@@ don't generate a meaningless alt text: invalid!
 $url = '';
 $width = 0;
 $height = 0;
-$attr = ''; #
+$attr = '';
 
 // params
 if (is_array($vars))
 {
-    foreach ($vars as $param => $value)
-    {
-    	if ($param == 'src' && $vars['url'] == '') {$vars['url']=$value;}
-    	if ($param == 'title') {$title = $this->htmlspecialchars_ent($vars['title']);}
-    	if ($param == 'class') {$class = $this->htmlspecialchars_ent($vars['class']);}
-    	if ($param == 'alt') {$alt = $this->htmlspecialchars_ent($vars['alt']);}
-    	if ($param == 'link') {$link = $this->htmlspecialchars_ent($vars['link']);}
-    	if ($param == 'width' && (int)$vars['width'] > 0) {$width = (int)$vars['width'];}
-    	if ($param == 'height' && (int)$vars['height'] > 0) {$height = (int)$vars['height'];}
+	foreach ($vars as $param => $value)
+	{
+		$value = $this->htmlspecialchars_ent($value);
+		if ($param == 'src' && $vars['url'] == '') {$vars['url']=$value;}
+		if ($param == 'title') {$title = $this->htmlspecialchars_ent($vars['title']);}
+		if ($param == 'class') {$class = $this->htmlspecialchars_ent($vars['class']);}
+		if ($param == 'alt') {$alt = $this->htmlspecialchars_ent($vars['alt']);}
+		if ($param == 'link') {$link = $this->htmlspecialchars_ent($vars['link']);}
+		if ($param == 'width' && (int)$vars['width'] > 0) {$width = (int)$vars['width'];}
+		if ($param == 'height' && (int)$vars['height'] > 0) {$height = (int)$vars['height'];}
 	}
 }
-if(isset($vars['url'])) $url = $this->cleanUrl(trim($vars['url']));
+(isset($vars['url'])) $url = $this->StaticHref($this->cleanUrl(trim($this->htmlspecialchars_ent($vars['url']))));
 
 // try to determine image size if given none
 if (0 == $width && 0 == $height) #
