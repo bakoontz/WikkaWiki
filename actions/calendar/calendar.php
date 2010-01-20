@@ -30,6 +30,8 @@
  * @version		0.8
  * @since		Wikka 1.1.6.0
  *
+ * @uses		Wakka::Href()
+ * @uses		Wakka::GetSafeVar()
  * @input		integer  $year  optional: 4-digit year of the month to be displayed;
  *				default: current year
  *				the default can be overridden by providing a URL parameter 'year'
@@ -38,8 +40,10 @@
  *				the default can be overridden by providing a URL parameter 'month'
  * @output		data table for specified or current month
  *
- * @todo		- take care we don't go over date limits for PHP with navigation links
- *				- configurable first day of week
+ * @todo		take care we don't go over date limits for PHP with navigation links
+ * @todo		configurable first day of week
+ * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
+ * @filesource
  */
 
 // ***** CONSTANTS section *****
@@ -58,20 +62,21 @@ $month	= CUR_MONTH;
 // 1) overrride defaults with parameters provided in URL (accept only valid values)
 if (isset($_GET['year']))
 {
-	$uYear = (int)$_GET['year'];
+	$uYear = (int)$this->GetSafeVar('year', 'get');
 	if ($uYear >= MIN_YEAR && $uYear <= MAX_YEAR) $year = $uYear;
 }
 if (isset($_GET['month']))
 {
-	$uMonth = (int)$_GET['month'];
+	$uMonth = (int)$this->GetSafeVar('month', 'get');
 	if ($uMonth >= 1 && $uMonth <= 12) $month = $uMonth;
 }
 // 2) override with parameters provided in action itself (accept only valid values)
 $hasActionParams = FALSE;
 if (is_array($vars))
 {
-	foreach ($vars as $param => $value)
+	foreach ($vars as $param)
 	{
+		$value = $this->GetSafeVar($value);
 		switch ($param)
 		{
 			case 'year':
