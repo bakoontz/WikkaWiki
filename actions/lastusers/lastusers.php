@@ -3,13 +3,14 @@
  * Display a table of recently registered users.
  *
  * @package		Actions
- * @version		$Id$
+ * @version		$Id: lastusers.php 1232 2008-09-17 20:46:30Z DarTar $
  * @license		http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
  *
  * @uses	Wakka::LoadAll()
  * @uses	Wakka::getCount()
  * @uses	Wakka::GetConfigValue()
+ * @uses	Wakka::FormatUser()
  *
  * @input		integer  $max  optional: number of rows to be displayed;
  *				default: 10
@@ -19,6 +20,11 @@
  * 
  * @todo	document usage and parameters
  */
+ 
+//defaults
+define('LASTUSERS_DEFAULT_STYLE', 'complex'); # consistent parameter naming with HighScores action
+define('LASTUSERS_MAX_USERS_DISPLAY', 10);
+
 //initialize
 $htmlout = '';
 $style = '';
@@ -61,13 +67,13 @@ foreach($last_users as $user)
 	if ($style == 'complex')
 	{
 		$where = "`owner` = '".mysql_real_escape_string($user['name'])."' AND `latest` = 'Y'";
-		$htmlout .= '    <td>'.$user['name'].'</td>'."\n";
+		$htmlout .= '    <td>'.$this->FormatUser($user['name']).'</td>'."\n";
 		$htmlout .= '    <td class="number">'.$this->getCount('pages', $where).'</td>'."\n";
 		$htmlout .= '    <td class="datetime">('.$user['signuptime'].')</td>'."\n";
 	}
 	else
 	{
-		$htmlout .= '    <td>'.$user['name'].'</td>'."\n";
+		$htmlout .= '    <td>'.$this->FormatUser($user['name']).'</td>'."\n";
 		$htmlout .= '    <td class="datetime">'.$user['signuptime'].'</td>'."\n";
 	}
 	$htmlout .= "  </tr>\n";
