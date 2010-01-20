@@ -12,9 +12,7 @@
  * 
  * @todo	Add parameter to specify date range #955
  */
-
 $where = "`latest` = 'Y'";
 $count = $this->getCount('pages', $where);
 echo $this->Link('PageIndex', '', $count, '', '', INDEX_LINK_TITLE);
-
 ?>
