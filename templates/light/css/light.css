@@ -176,7 +176,7 @@ a.ext:hover {
 	color: #333;
 }
 
-#content A:link, #content A:visited {
+#content a:link, #content a:visited {
 	font-family: inherit;
 	margin: 1pt;
 	font-size: inherit;
@@ -189,7 +189,7 @@ a.ext:hover {
 /*	background-color: #FFF; */
 }
 
-#content A:hover, #content A:active {
+#content a:hover, #content a:active {
 	font-family: inherit;
 	margin: 1pt;
 	font-size: inherit;
@@ -234,6 +234,32 @@ a.ext:hover {
 	color: #666;
 	text-decoration: none;
 	background-color: transparent;
+}
+
+/* link tails */
+
+/* user links or spans */
+.user, .user:hover {
+	background: url(../images/user.gif) left bottom no-repeat;
+	padding-left: 1.1em;
+}
+
+/* external links */
+#content a.ext, a.ext:hover {
+	background: url(../images/ext_simple.gif) right center no-repeat;
+	padding-right: .8em;
+}
+
+/* interwiki links */
+#content a.interwiki, a.interwiki:hover {
+	background: url(../images/ext.gif) right center no-repeat;
+	padding-right: .9em;
+}
+
+/* mailto links */
+#content a.mailto, a.mailto:hover {
+	background: url(../images/mail.gif) right center no-repeat;
+	padding-right: 1em;
 }
 
 /* lists */
