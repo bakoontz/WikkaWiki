@@ -30,6 +30,7 @@
 
 /* ------------------ COMMON ------------------ */
 
+//define('', ''); //
 /**#@+
  * Language constant shared among several Wikka components
  */
@@ -47,8 +48,8 @@ define('WIKKA_ERROR_EMPTY_USERNAME', 'Please fill in your username!');
 define('WIKKA_DIFF_ADDITIONS_HEADER', 'Additions:');
 define('WIKKA_DIFF_DELETIONS_HEADER', 'Deletions:');
 define('WIKKA_DIFF_NO_DIFFERENCES', 'No Differences');
-define('ERROR_USERNAME_UNAVAILABLE', "Sorry, this user name is unavailable.");
-define('ERROR_USER_SUSPENDED', "Sorry, this account has been suspended. Please contact an administrator for further details.");
+define('ERROR_USERNAME_UNAVAILABLE', 'Sorry, this user name is unavailable.');
+define('ERROR_USER_SUSPENDED', 'Sorry, this account has been suspended. Please contact an administrator for further details.');
 define('WIKKA_ERROR_INVALID_PAGE_NAME', 'The page name %s is invalid. Valid page names must start with a capital letter, contain only letters and numbers, and be in CamelCase format.'); // %s - page name
 define('WIKKA_ERROR_PAGE_ALREADY_EXIST', 'Sorry, the target page already exists');
 define('WIKKA_LOGIN_LINK_DESC', 'login');
@@ -65,6 +66,7 @@ define('WIKKA_REVISIONS', 'revisions');
 define('WIKKA_REVISION_NUMBER', 'Revision %s');
 define('WIKKA_REV_WHEN_BY_WHO', '%1$s by %2$s'); // %1$s - timestamp; %2$s - user name
 define('WIKKA_NO_PAGES_FOUND', 'No pages found.');
+define('WIKKA_NO_PAGES_FOUND_FOR', 'No pages found for %s.');
 define('WIKKA_PAGE_OWNER', 'Owner: %s'); // %s - page owner name or link
 define('WIKKA_COMMENT_AUTHOR_DIVIDER', ', comment by '); //TODo check if we can construct a single phrase here
 define('WIKKA_PAGE_EDIT_LINK_DESC', 'edit');
@@ -328,6 +330,8 @@ define('ADMINUSERS_ERROR_NO_MATCHES','Sorry, there are no users matching "%s"');
 define('ADMINUSERS_DELETE_USERS_HEADING', 'Delete these users?');
 define('ADMINUSERS_DELETE_USERS_BUTTON', 'Delete Users');
 define('ADMINUSERS_CANCEL_BUTTON', 'Cancel');
+define('ADMINUSERS_USERDELETE_SUCCESS', 'User has been sucessfully deleted'); //
+define('ADMINUSERS_USERDELETE_FAILURE', 'Sorry, could not delete user. Please check your admin settings'); //
 /**#@-*/
 
 /**#@+
@@ -350,7 +354,7 @@ define('LOC_MON_YEAR', "%B %Y"); # i18n
  */
 // category
 define('ERROR_NO_PAGES', 'Sorry, No items found for %s');	// %s - ???@@@
-define('PAGES_BELONGING_TO', 'The following %1$d page(s) belong to %2$s'); // %1$d number found; %2$s category
+define('PAGES_IN_CATEGORY', 'The following %1$d page(s) belong to %2$s'); // %1$d number found; %2$s category
 /**#@-*/
 
 /**#@+
@@ -360,6 +364,26 @@ define('CHECKVERSION_HOST', 'wikkawiki.org');
 define('CHECKVERSION_RELEASE_FILE', '/downloads/latest_wikka_version.txt');
 define('CHECKVERSION_DOWNLOAD_URL', 'http://docs.wikkawiki.org/WhatsNew');
 define('CHECKVERSION_CONNECTION_TIMEOUT', 5);
+define('DEBUG_TIME_ELAPSED', '[elapsed time: %d]');
+define('DEBUG_PHP_VERSION_UNSUPPORTED', '[%s PHP %s does not support this feature]');
+define('DEBUG_ALLOW_FURL_DISABLED', '[allow_url_fopen disabled]');
+define('DEBUG_CANNOT_RESOLVE_HOSTNAME', '[Cannot resolve %s]');
+define('DEBUG_CANNOT_CONNECT', '[Cannot initiate socket connection]');
+define('DEBUG_NEW_VERSION_AVAILABLE', '[%s from host %s]');
+define('CHECKVERSION_CANNOT_CONNECT', '<div title="Cannot initiate network connection" style="clear: both; text-align: center; float: left; width: 300px; border: 1px solid %s; background-color: %s; color: %s; margin: 10px 0">'."\n"
+	.'<div style="padding: 0 3px 0 3px; background-color: %s; font-size: 85%; font-weight: bold">CHECKVERSION FAILED</div>'."\n"
+	.'<div style="padding: 0 3px 2px 3px; font-size: 85%; line-height: 150%; border-top: 1px solid %s;">'."\n"
+	.'The network connection with the WikkaWiki server could not be established. To prevent delays in loading this page, please set enable_version_check to 0 in your wikka.config.php file.'."\n"
+	.'</div>'."\n"
+	.'</div>'."\n"
+	.'<div class="clear"></div>'."\n");
+define('CHECKVERSION_NEW_VERSION_AVAILABLE', '<div title="A new version of WikkaWiki is available. Please upgrade!" style="clear: both; text-align: center; float: left; width: 300px; border: 1px solid %s; background-color: %s; color: %s; margin: 10px 0">'."\n"
+	.'<div style="padding: 0 3px 0 3px; background-color: %s; font-size: 85%; font-weight: bold">UPGRADE NOTE</div>'."\n"
+	.'<div style="padding: 0 3px 2px 3px; font-size: 85%; line-height: 150%; border-top: 1px solid %s;">'."\n"
+	.'<strong>WikkaWiki %s</strong> is available for <a href="%s">download</a>!'."\n"
+	.'</div>'."\n"
+	.'</div>'."\n"
+	.'<div class="clear"></div>'."\n");
 /**#@-*/
 
 /**#@+
@@ -383,8 +407,8 @@ define('PATTERN_VALID_RGB_COLOR', 'rgb\(\s*\d+((?>\.\d*)?%)?\s*(?>,\s*\d+(?(1)(\
  * Language constant used by the {@link contact.php contact} action
  */
 // contact
-define('SEND_FEEDBACK_LINK_TITLE', 'Send us your feedback');
-define('SEND_FEEDBACK_LINK_TEXT', 'Contact');
+define('CONTACTLINK_TITLE', 'Send us your feedback');
+define('CONTACTLINK_TEXT', 'Contact');
 /**#@-*/
 
 /**#@+
@@ -469,15 +493,23 @@ define('USERSETTINGS_LINK', 'Return to the [[UserSettings login]] screen.');
  * Language constant used by the {@link feedback.php feedback} action
  */
 // feedback
-define('ERROR_EMPTY_NAME', 'Please enter your name');
-define('ERROR_INVALID_EMAIL', 'Please enter a valid email address');
-define('ERROR_EMPTY_MESSAGE', 'Please enter some text');
+define('FILL_FORM', '<p>Fill in the form below to send us your comments:</p>'."\n");
+define('FEEDBACK_FORM_LEGEND', 'Contact %s');
+define('FEEDBACK_NAME_LABEL', 'Name: ');
+define('FEEDBACK_EMAIL_LABEL', 'Email: ');
+define('FEEDBACK_COMMENTS_LABEL', 'Comments:');
+define('FEEDBACK_SEND_BUTTON', 'Send');
+define('ERROR_EMPTY_NAME', '<p class="error">Please enter your name</p>');
+define('ERROR_INVALID_EMAIL', '<p class="error">Please enter a valid email address</p>');
+define('ERROR_EMPTY_MESSAGE', '<p class="error">Please enter some text</p>');
+define('FEEDBACK_SUBJECT', 'Feedback from %s');
+define('SUCCESS_FEEDBACK_SENT', 'Thanks for your interest! Your feedback has been sent to %1$s ---'
+	.'Return to the [[%2$s main page]]');
+
+// currently unused in feedback action:
 define('ERROR_FEEDBACK_MAIL_NOT_SENT', 'Sorry, An error occurred while trying to send your email. Outgoing mail might be disabled. Please try another method to contact %s, for instance by posting a page comment'); // %s - name of the recipient
 define('FEEDBACK_FORM_LEGEND', 'Contact %s'); //%s - wikiname of the recipient
-define('FEEDBACK_NAME_LABEL', 'Your name:');
-define('FEEDBACK_EMAIL_LABEL', 'Your email:');
-define('FEEDBACK_MESSAGE_LABEL', 'Your message:');
-define('FEEDBACK_SEND_BUTTON', 'Send');
+
 define('FEEDBACK_SUBJECT', 'Feedback from %s'); // %s - name of the wiki
 define('SUCCESS_FEEDBACK_SENT', 'Thanks for your feedback, %s! Your message has been sent'); //%s - name of the sender
 /**#@-*/
