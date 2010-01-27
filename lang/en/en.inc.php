@@ -494,24 +494,20 @@ define('USERSETTINGS_LINK', 'Return to the [[UserSettings login]] screen.');
  */
 // feedback
 define('FILL_FORM', '<p>Fill in the form below to send us your comments:</p>'."\n");
-define('FEEDBACK_FORM_LEGEND', 'Contact %s');
+define('FEEDBACK_FORM_LEGEND', 'Contact %s'); //%s - wikiname of the recipient
 define('FEEDBACK_NAME_LABEL', 'Name: ');
 define('FEEDBACK_EMAIL_LABEL', 'Email: ');
 define('FEEDBACK_COMMENTS_LABEL', 'Comments:');
 define('FEEDBACK_SEND_BUTTON', 'Send');
-define('ERROR_EMPTY_NAME', '<p class="error">Please enter your name</p>');
-define('ERROR_INVALID_EMAIL', '<p class="error">Please enter a valid email address</p>');
-define('ERROR_EMPTY_MESSAGE', '<p class="error">Please enter some text</p>');
-define('FEEDBACK_SUBJECT', 'Feedback from %s');
+define('ERROR_EMPTY_NAME', 'Please enter your name');
+define('ERROR_INVALID_EMAIL', 'Please enter a valid email address');
+define('ERROR_EMPTY_MESSAGE', 'Please enter some text');
+define('FEEDBACK_SUBJECT', 'Feedback from %s'); // %s - name of the wiki
 define('SUCCESS_FEEDBACK_SENT', 'Thanks for your interest! Your feedback has been sent to %1$s ---'
 	.'Return to the [[%2$s main page]]');
-
 // currently unused in feedback action:
 define('ERROR_FEEDBACK_MAIL_NOT_SENT', 'Sorry, An error occurred while trying to send your email. Outgoing mail might be disabled. Please try another method to contact %s, for instance by posting a page comment'); // %s - name of the recipient
 define('FEEDBACK_FORM_LEGEND', 'Contact %s'); //%s - wikiname of the recipient
-
-define('FEEDBACK_SUBJECT', 'Feedback from %s'); // %s - name of the wiki
-define('SUCCESS_FEEDBACK_SENT', 'Thanks for your feedback, %s! Your message has been sent'); //%s - name of the sender
 /**#@-*/
 
 /**#@+
@@ -545,11 +541,11 @@ define('FILES_DELETE_FILE', 'Delete this file?');
 define('FILES_DELETE_FILE_BUTTON', 'Delete File');
 define('FILES_CANCEL_BUTTON', 'Cancel');
 define('FILE_DELETED', 'File deleted');
-define ('NO_FILE_UPLOADS', "<em class='error'>File uploads are disallowed on this server</em>");
-define ('NO_FILE_UPLOADED', "<em class='error'>No file uploaded</em>");
-define ('ERROR_DURING_FILE_UPLOAD', "<em class='error'>There was an error uploading your file.  Please try again.</em>");
-define('ERROR_MAX_FILESIZE_EXCEEDED', "<em class='error'>Attempted file upload was too big.  Maximum allowed size is %d MB.</em>"); 
-define('ERROR_FILE_EXISTS', "<em class='error'>There is already a file named <tt>%s</tt>. Please rename before uploading or delete the existing file first.</em>");
+define('ERROR_NO_FILE_UPLOADS', 'File uploads are disallowed on this server');
+define('ERROR_NO_FILE_UPLOADED', 'No file uploaded');
+define('ERROR_DURING_FILE_UPLOAD', 'There was an error uploading your file.  Please try again.');
+define('ERROR_MAX_FILESIZE_EXCEEDED', 'Attempted file upload was too big.  Maximum allowed size is %d MB.'); 
+define('ERROR_FILE_EXISTS', "'There is already a file named <tt>%s</tt>. Please rename before uploading or delete the existing file first.');
 /**#@-*/
 
 /**#@+
@@ -581,7 +577,7 @@ define('HIGHSCORES_DEFAULT_STYLE', 'complex'); //set default layout style
 /**#@-*/
 
 /**#@+
- * Language constants used by the {@link include.php include} action
+ * Language constants used by the {@link historylink.php historylink} action
  */
 define('HISTORYLINK_TEXT', '[History]');
 define('HISTORYLINK_TITLE', 'Click to view recent edits to this page');
@@ -593,7 +589,7 @@ define('HISTORYLINK_TITLE', 'Click to view recent edits to this page');
 // include
 define('ERROR_CIRCULAR_REFERENCE', 'Circular reference detected!');
 define('ERROR_TARGET_ACL', "You aren't allowed to read included page <tt>%s</tt>");
-define('ERROR_CIRCULAR_REF', 'Circular reference detected');
+
 /**#@-*/
 
 /**#@+
@@ -654,13 +650,9 @@ define('MYCHANGES_NOT_LOGGED_IN', "You're not logged in, thus the list of pages 
  * Language constant used by the {@link mypages.php mypages} action
  */
 // mypages
-define('OWNED_PAGES_TXT', "This is the list of pages owned by %s.");
-define('OWNED_NO_PAGES', 'You don\'t own any pages.');
-define('OWNED_NONE_FOUND', 'No pages found.');
-define('OWNED_NOT_LOGGED_IN', "You're not logged in, thus the list of your pages couldn't be retrieved.");
-define('MYPAGES_HEADER', "This is the list of pages owned by %s");
-define ('MYPAGES_NONE_OWNED', "You don't own any pages.");
-define ('MYPAGES_NOT_LOGGED_IN', "You're not logged in, thus the list of your pages couldn't be retrieved.");
+define('MYPAGES_CAPTION', 'This is the list of pages owned by %s');
+define('MYPAGES_NONE_OWNED', 'You don't own any pages.');
+define('MYPAGES_NOT_LOGGED_IN', 'You're not logged in, thus the list of your pages couldn't be retrieved.');
 /**#@-*/
 
 /**#@+
@@ -706,12 +698,6 @@ define('PAGEINDEX_HEADING', 'Page Index');
 define('PAGEINDEX_CAPTION', 'This is an alphabetical list of pages you can read on this server.');
 define('PAGEINDEX_OWNED_PAGES_CAPTION', 'Items marked with a * indicate pages that you own.');
 define('PAGEINDEX_ALL_PAGES', 'All');
-define('PAGE_HEADING',"Page Index");
-define('INDEX_CAPTION',"This is an alphabetical list of pages you can read on this server.");
-define('ALL_PAGES',"All");
-define('PAGE_OWNER'," . . . . Owner: %s");
-define('OWNED_PAGES_CAPTION',"Items marked with a * indicate pages that you own.");
-define('ERROR_NO_PAGES_FOUND', "No pages found.");
 /**#@-*/
 
 /**#@+
@@ -724,34 +710,24 @@ define('HISTORY_LINK_TITLE', 'View edit history of %s'); // %s - page name
 define('WIKIPING_ENABLED', 'WikiPing enabled: Changes on this wiki are broadcast to %s'); // %s - link to wikiping server
 define('RECENTCHANGES_NONE_FOUND', 'There are no recently changed pages.');
 define('RECENTCHANGES_NONE_ACCESSIBLE', 'There are no recently changed pages you have access to.');
-define ('PAGE_EDITOR_DIVIDER', '&#8594;');
-define ('MAX_REVISION_NUMBER', '50');
-define('RECENT_CHANGES_HEADING', '=====Recently changed pages=====');
-define('LABEL_HISTORY', 'history');
-define('TITLE_HISTORY_LINK', 'View edit history of %s');
-define ('NO_RECENTLY_CHANGED_PAGES', 'There are no recently changed pages.');
-define ('NO_READABLE_RECENTLY_CHANGED_PAGES', 'There are no recently changed pages you have access to.');
+define('PAGE_EDITOR_DIVIDER', '&#8594;');
+define('MAX_REVISION_NUMBER', '50');
 /**#@-*/
 
 /**#@+
  * Language constant used by the {@link recentcomments.php recentcomments} action
  */
 // recentcomments
-define('RECENTCOMMENTS_HEADING', 'Recent comments');
 define('RECENTCOMMENTS_TIMESTAMP_CAPTION', '%s'); // %s - timestamp
 define('RECENTCOMMENTS_NONE_FOUND', 'There are no recent comments.');
+define('RECENTCOMMENTS_NONE_FOUND_BY', 'There are no recent comments by %s.');
 define('RECENTCOMMENTS_NONE_ACCESSIBLE', 'There are no recent comments you have access to.');
 define('RECENT_COMMENTS_HEADING', '=====Recent comments=====');
-define ('COMMENT_AUTHOR_DIVIDER', ', comment by ');
-define ('NO_RECENT_COMMENTS', 'There are no recent comments%s');
-define ('NO_READABLE_RECENT_COMMENTS', 'There are no recent comments you can read.');
+define('COMMENT_AUTHOR_DIVIDER', ', comment by ');
 define('COMMENT_DATE_FORMAT', 'D, d M Y');
 define('COMMENT_TIME_FORMAT', 'H:i T');
 define('COMMENT_SNIPPET_LENGTH', 120);
-define('RECENTLY_COMMENTED_HEADING', '=====Recently commented pages=====');
-define('ANONYMOUS_COMMENT_AUTHOR', '(unregistered user)');
-define ('NO_RECENTLY_COMMENTED', 'There are no recently commented pages%s');
-define ('NO_READABLE_RECENTLY_COMMENTED', 'There are no recently commented pages you can read.');
+
 /**#@-*/
 
 /**#@+
@@ -760,6 +736,7 @@ define ('NO_READABLE_RECENTLY_COMMENTED', 'There are no recently commented pages
 // recentlycommented
 define('RECENTLYCOMMENTED_HEADING', 'Recently commented pages');
 define('RECENTLYCOMMENTED_NONE_FOUND', 'There are no recently commented pages.');
+define('RECENTLYCOMMENTED_NONE_FOUND_BY', 'There are no recently by %s commented pages.');
 define('RECENTLYCOMMENTED_NONE_ACCESSIBLE', 'There are no recently commented pages you have access to.');
 /**#@-*/
 
@@ -792,6 +769,12 @@ define('REVISIONFEEDLINK_TITLE', 'Click to display a feed with the latest revisi
 /**#@-*/
 
 /**#@+
+ * Language constant used by the {@link rss.php rss} action
+ */
+define('ERROR_INVALID_RSS_SYNTAX', 'Error: Invalid RSS action syntax. <br /> Proper usage: {{rss http://domain.com/feed.xml}} or {{rss url="http://domain.com/feed.xml"}}');
+/**#@-*/
+
+/**#@+
  * Language constant used by the {@link searchform.php searchform} action
  */
 define('SEARCHFORM_LABEL', 'Search: ');
@@ -802,19 +785,22 @@ define('SEARCHFORM_LABEL', 'Search: ');
  */
 // system
 define('SYSTEM_HOST_CAPTION', '(%s)'); // %s - host name
-define('WIKKA_STATUS_NOT_AVAILABLE', 'n/a');
 /**#@-*/
 
 /**#@+
  * Language constant shared by the {@link textsearch.php textsearch} and {@link textsearchexpanded.php textsearchexpanded} actions
  */
-if (!defined('SEARCH_FOR')) define('SEARCH_FOR', 'Search for');
-if (!defined('SEARCH_ZERO_MATCH')) define('SEARCH_ZERO_MATCH', 'No matches');
-if (!defined('SEARCH_ONE_MATCH')) define('SEARCH_ONE_MATCH', 'One match found');
-if (!defined('SEARCH_N_MATCH')) define('SEARCH_N_MATCH', 'There was %d matches found');
-if (!defined('SEARCH_RESULTS')) define('SEARCH_RESULTS', 'Search results: <strong>%1$s</strong> for <strong>%2$s</strong>'); #%1$s: n matches for | %2$s: search term
-if (!defined('SEARCH_TRY_EXPANDED')) define('SEARCH_TRY_EXPANDED', '<br />Not sure which page to choose?<br />Try the <a href="$1">Expanded Text Search</a> which shows surrounding text.');
-if (!defined('SEARCH_TIPS')) define('SEARCH_TIPS', "<br /><br /><hr /><br /><strong>Search Tips:</strong><br /><br />"
+// textsearch & textsearchexpanded
+define('SEARCH_FOR', 'Search for');
+define('SEARCH_ZERO_MATCH', 'No matches');
+define('SEARCH_ONE_MATCH', 'One match found');
+define('SEARCH_N_MATCH', '%d matches found'); // %d - number of hits
+define('SEARCH_RESULTS', 'Search results: <strong>%1$s</strong> for <strong>%2$s</strong>'); # %1$s: n matches for | %2$s: search term
+define('SEARCH_NOT_SURE_CHOICE', 'Not sure which page to choose?');
+define('SEARCH_EXPANDED_LINK_DESC', 'Expanded Text Search'); // search link description
+define('SEARCH_TRY_EXPANDED', 'Try the %s which shows surrounding text.'); // %s expanded search link
+/*
+define('SEARCH_TIPS', "<br /><br /><hr /><br /><strong>Search Tips:</strong><br /><br />"
 	."<div class=\"indent\"><tt>apple banana</tt></div>"
 	."Find pages that contain at least one of the two words. <br />"
 	."<br />"
@@ -830,7 +816,21 @@ if (!defined('SEARCH_TIPS')) define('SEARCH_TIPS', "<br /><br /><hr /><br /><str
 	."<div class=\"indent\"><tt>\"some words\"</tt></div>"
 	."Find pages that contain the exact phrase 'some words' (for example, pages that contain 'some words of wisdom' <br />"
 	."but not 'some noise words'). <br />");
-if (!defined('SEARCH_MYSQL_IDENTICAL_CHARS')) define('SEARCH_MYSQL_IDENTICAL_CHARS', 'aàáâã,eèéêë,iìîï,oòóôõ,uùúû,cç,nñ,yý');
+*/
+define('SEARCH_MYSQL_IDENTICAL_CHARS', 'aàáâã,eèéêë,iìîï,oòóôõ,uùúû,cç,nñ,yý');
+define('SEARCH_TIPS', 'Search Tips:');
+define('SEARCH_WORD_1', 'apple');
+define('SEARCH_WORD_2', 'banana');
+define('SEARCH_WORD_3', 'juice');
+define('SEARCH_WORD_4', 'macintosh');
+define('SEARCH_WORD_5', 'some');
+define('SEARCH_WORD_6', 'words');
+define('SEARCH_PHRASE',sprintf('%s %s',SEARCH_WORD_5,SEARCH_WORD_6));
+define('SEARCH_TARGET_1', 'Find pages that contain at least one of the two words.');
+define('SEARCH_TARGET_2', 'Find pages that contain both words.');
+define('SEARCH_TARGET_3',sprintf("Find pages that contain the word '%1\$s' but not '%2\$s'.",SEARCH_WORD_1,SEARCH_WORD_4));
+define('SEARCH_TARGET_4',"Find pages that contain words such as 'apple', 'apples', 'applesauce', or 'applet'."); // make sure target words all *start* with SEARCH_WORD_1
+define('SEARCH_TARGET_5',sprintf("Find pages that contain the exact phrase '%1\$s' (for example, pages that contain '%1\$s of wisdom' but not '%2\$s noise %3\$s').",SEARCH_PHRASE,SEARCH_WORD_5,SEARCH_WORD_6));
 /**#@-*/
 
 /**#@+
@@ -910,40 +910,40 @@ define('LOGIN_BUTTON', 'Login');
 define('LOGOUT_BUTTON', 'Logout');
 define('CHANGE_PASSWORD_BUTTON', 'Change password');
 define('REGISTER_BUTTON', 'Register');
-define('PASSWORD_MIN_LENGTH', "5");
-define('VALID_EMAIL_PATTERN', "/^.+?\@.+?\..+$/"); //TODO: Use central regex library
-define('REVISION_DISPLAY_LIMIT_MIN', "0"); // 0 means no limit, 1 is the minimum number of revisions
-define('REVISION_DISPLAY_LIMIT_MAX', "20"); // keep this value within a reasonable limit to avoid an unnecessary long lists
-define('RECENTCHANGES_DISPLAY_LIMIT_MIN', "0"); // 0 means no limit, 1 is the minimum number of changes
-define('RECENTCHANGES_DISPLAY_LIMIT_MAX', "50"); // keep this value within a reasonable limit to avoid an unnecessary long list
-define('USER_SETTINGS_HEADING', "User settings");
-define('USER_LOGGED_OUT', "You have successfully logged out.");
-define('USER_SETTINGS_STORED', "User settings stored!");
-define('ERROR_NO_BLANK', "Sorry, blanks are not permitted in the password.");
-define('PASSWORD_CHANGED', "Password successfully changed!");
-define('ERROR_OLD_PASSWORD_WRONG', "The old password you entered is wrong.");
-define('UPDATE_SETTINGS_INPUT', "Update Settings");
-define('CHANGE_PASSWORD_HEADING', "Change your password:");
-define('CURRENT_PASSWORD_LABEL', "Your current password:");
-define('PASSWORD_REMINDER_LABEL', "Password reminder:");
-define('CHANGE_BUTTON_LABEL', "Change password");
-define('REGISTER_BUTTON_LABEL', "Register");
-define('QUICK_LINKS_HEADING', "Quick links");
-define('QUICK_LINKS', "See a list of pages you own (MyPages) and pages you've edited (MyChanges).");
-define('ERROR_WRONG_PASSWORD', "Sorry, you entered the wrong password.");
-define('ERROR_WRONG_HASH', "Sorry, you entered a wrong password reminder.");
-define('ERROR_NON_EXISTENT_USERNAME', "Sorry, this user name doesn't exist.");
-define('ERROR_USERNAME_EXISTS', "Sorry, this user name already exists.");
-define('ERROR_EMAIL_ADDRESS_REQUIRED', "Please specify an email address.");
-define('REGISTRATION_SUCCEEDED', "You have successfully registered!");
-define('REGISTERED_USER_LOGIN_LABEL', "If you're already a registered user, log in here!");
-define('LOGIN_HEADING', "===Login===");
-define('LOGIN_REGISTER_HEADING', "===Login/Register===");
-define('LOGIN_BUTTON_LABEL', "Login");
-define('LOGOUT_BUTTON_LABEL', "Logout");
-define('NEW_USER_REGISTER_LABEL', "Fields you only need to fill in when you're logging in for the first time (and thus signing up as a new user on this site).");
-define('RETRIEVE_PASSWORD_HEADING', "===Forgot your password?===");
-define('RETRIEVE_PASSWORD_MESSAGE', "If you need a password reminder, click [[PasswordForgotten here]]. --- You can login here using your password reminder.");
+define('PASSWORD_MIN_LENGTH', '5');
+define('VALID_EMAIL_PATTERN', '/^.+?\@.+?\..+$/'); //TODO: Use central regex library
+define('REVISION_DISPLAY_LIMIT_MIN', '0'); // 0 means no limit, 1 is the minimum number of revisions
+define('REVISION_DISPLAY_LIMIT_MAX', '20'); // keep this value within a reasonable limit to avoid an unnecessary long lists
+define('RECENTCHANGES_DISPLAY_LIMIT_MIN', '0'); // 0 means no limit, 1 is the minimum number of changes
+define('RECENTCHANGES_DISPLAY_LIMIT_MAX', '50'); // keep this value within a reasonable limit to avoid an unnecessary long list
+define('USER_SETTINGS_HEADING', 'User settings');
+define('USER_LOGGED_OUT', 'You have successfully logged out.');
+define('USER_SETTINGS_STORED', 'User settings stored!');
+define('ERROR_NO_BLANK', 'Sorry, blanks are not permitted in the password.');
+define('PASSWORD_CHANGED', 'Password successfully changed!');
+define('ERROR_OLD_PASSWORD_WRONG', 'The old password you entered is wrong.');
+define('UPDATE_SETTINGS_INPUT', 'Update Settings');
+define('CHANGE_PASSWORD_HEADING', 'Change your password:');
+define('CURRENT_PASSWORD_LABEL', 'Your current password:');
+define('PASSWORD_REMINDER_LABEL', 'Password reminder:');
+define('CHANGE_BUTTON_LABEL', 'Change password');
+define('REGISTER_BUTTON_LABEL', 'Register');
+define('QUICK_LINKS_HEADING', 'Quick links');
+define('QUICK_LINKS', 'See a list of pages you own (MyPages) and pages you've edited (MyChanges).');
+define('ERROR_WRONG_PASSWORD', 'Sorry, you entered the wrong password.');
+define('ERROR_WRONG_HASH', 'Sorry, you entered a wrong password reminder.');
+define('ERROR_NON_EXISTENT_USERNAME', 'Sorry, this user name doesn't exist.');
+define('ERROR_USERNAME_EXISTS', 'Sorry, this user name already exists.');
+define('ERROR_EMAIL_ADDRESS_REQUIRED', 'Please specify an email address.');
+define('REGISTRATION_SUCCEEDED', 'You have successfully registered!');
+define('REGISTERED_USER_LOGIN_LABEL', 'If you're already a registered user, log in here!');
+define('LOGIN_HEADING', '===Login===');
+define('LOGIN_REGISTER_HEADING', '===Login/Register===');
+define('LOGIN_BUTTON_LABEL', 'Login');
+define('LOGOUT_BUTTON_LABEL', 'Logout');
+define('NEW_USER_REGISTER_LABEL', 'Fields you only need to fill in when you're logging in for the first time (and thus signing up as a new user on this site).');
+define('RETRIEVE_PASSWORD_HEADING', '===Forgot your password?===');
+define('RETRIEVE_PASSWORD_MESSAGE', 'If you need a password reminder, click [[PasswordForgotten here]]. --- You can login here using your password reminder.');
 define('THEME_LABEL', 'Theme:');
 /**#@-*/
 
@@ -956,6 +956,7 @@ define('SORTING_NUMBER_LABEL', 'Sorting #%d:');
 define('SORTING_DESC_LABEL', 'desc');
 define('OK_BUTTON', '   OK   ');
 define('NO_WANTED_PAGES', 'No wanted pages. Good!');
+define('WANTEDPAGES_PAGES_LINKING_TO', 'Pages linking to %s');
 /**#@-*/
 
 /**#@+
@@ -1107,7 +1108,6 @@ define('DIFF_SAMPLE_DELETION', 'deletion');
 define('DIFF_SIMPLE_BUTTON', 'Simple Diff');
 define('DIFF_FULL_BUTTON', 'Full Diff');
 define('HIGHLIGHTING_LEGEND', 'Highlighting Guide:');
-define ('ERROR_DIV_LIBRARY_MISSING', 'The necessary file "libs/diff.lib.php" could not be found. Please make sure the file exists and is placed in the right directory!'); // @TODO: replace with ERROR_DIFF_LIBRARY_MISSING
 define ('ERROR_NO_PAGE_ACCESS', 'You are not authorized to view this page.');
 define ('CONTENT_ADDITIONS_HEADER', 'Additions:');
 define ('CONTENT_DELETIONS_HEADER', 'Deletions:');
