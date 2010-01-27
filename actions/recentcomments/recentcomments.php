@@ -9,6 +9,9 @@
  *
  * @package		Actions
  * @name		RecentComments
+ * @version		$Id:recentcomments.php 369 2007-03-01 14:38:59Z DarTar $
+ * @license		http://www.gnu.org/copyleft/gpl.html GNU General Public License
+ * @filesource
  *
  * @author		{@link http://wikkawiki.org/DarTar Dario Taraborelli} (preliminary code cleanup)
  * @author		{@link http://wikkawiki.org/NickDamoulakis Nick Damoulakis} (ACL check)
@@ -34,7 +37,7 @@ if ($comments = $this->LoadRecentComments(50, $username))
 	{
 		$page_tag = $comment['page_tag'];
 		if ($this->HasAccess('read', $page_tag) &&
-	        $this->HasAccess('comment_read', $page_tag))
+			$this->HasAccess('comment_read', $page_tag))
 		{
 			$readable++;
 			// day header
@@ -42,7 +45,7 @@ if ($comments = $this->LoadRecentComments(50, $username))
 			if ($day != $curday)
 			{
 				$dateformatted = date(COMMENT_DATE_FORMAT, strtotime($day));
-	
+
 				if ($curday)
 				{
 					echo "<br />\n";
@@ -52,7 +55,7 @@ if ($comments = $this->LoadRecentComments(50, $username))
 			}
 
 			$timeformatted = date(COMMENT_TIME_FORMAT, strtotime($comment['time']));
-			$comment_preview = str_replace('<br />', '', $comment['comment']);
+			$comment_preview = str_replace('<br />', '', $comment['comment']);	// @@@ use single space instead of empty string
 			$comment_preview = substr($comment_preview, 0, COMMENT_SNIPPET_LENGTH);
 			if (strlen($comment['comment']) > COMMENT_SNIPPET_LENGTH)
 			{
@@ -60,23 +63,23 @@ if ($comments = $this->LoadRecentComments(50, $username))
 			}
 			// print entry
 			echo
-			sprintf(RECENTCOMMENTS_TIMESTAMP_CAPTION,$timeformatted).' <a href="'.$this->href('', $page_tag, 'show_comments=1').'#comment_'.$comment['id'].'">'.$page_tag.'</a>'.WIKKA_COMMENT_AUTHOR_DIVIDER.$this->FormatUser($comment['user'])."\n<blockquote>".$comment_preview."</blockquote>\n";
+			'<span class="datetime">'.sprintf(RECENTCOMMENTS_TIMESTAMP_CAPTION, $timeformatted).'</span> <a href="'.$this->href('', $page_tag, 'show_comments=1').'#comment_'.$comment['id'].'">'.$page_tag.'</a>'.WIKKA_COMMENT_AUTHOR_DIVIDER.$this->FormatUser($comment['user'])."\n<blockquote>".$comment_preview."</blockquote>\n";
 		}
 	}
 	if ($readable == 0)
 	{
-		echo '<em class="error">'.NO_READABLE_RECENT_COMMENTS.'</em>';
+		echo '<p class="error">'.RECENTCOMMENTS_NONE_ACCESSIBLE.'</p>';
 	}
 }
 else
 {
 	if(!empty($username))
 	{
-		echo '<em class="error">'.sprintf(NO_RECENT_COMMENTS, " by $username.").'</em>';
+		echo '<p class="error">'.sprintf(RECENTCOMMENTS_NONE_FOUND_BY, $username).'</p>';
 	}
 	else
 	{
-		echo '<em class="error">'.sprintf(NO_RECENT_COMMENTS, ".").'</em>';
+		echo '<p class="error">'.RECENTCOMMENTS_NONE_FOUND.'</p>';
 	}
 }
 ?>

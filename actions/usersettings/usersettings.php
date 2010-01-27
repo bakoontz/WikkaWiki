@@ -371,7 +371,7 @@ else
 		// BEGIN *** LOGIN ***
 		// if user name already exists, check password
 		#if (isset($this->GetSafeVar('name', 'post')) && $existingUser = $this->LoadUser($this->GetSafeVar('name', 'post')))
-		if (isset($_POST['name']) && $existingUser = $this->LoadUser($this->GetSafeVar('name', 'post')))
+		if (isset($_POST['name']) && $existingUser = $this->loadUserData($this->GetSafeVar('name', 'post')))
 		{
 			// check password
 			$status = $existingUser['status'];

@@ -11,6 +11,9 @@
  *
  * @package		Actions
  * @name		System
+ * @version		$Id: system.php 1196 2008-07-16 04:25:09Z BrianKoontz $
+ * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
+ * @filesource
  *
  * @author		{@link http://wikkawiki.org/JavaWoman Marjolein Katsma} (first version)
  * @author		{@link http://wikkawiki.org/DarTar Dario Taraborelli} (admin check)
@@ -22,10 +25,10 @@
 
 // defaults
 $show = '';
-$out = '<abbr title="'.WIKKA_ADMIN_ONLY_TITLE.'">'.NOT_AVAILABLE.'</abbr>'."\n";
+$out = '<abbr title="'.WIKKA_ADMIN_ONLY_TITLE.'">'.WIKKA_NOT_AVAILABLE.'</abbr>'."\n";
 
 //check privs
-if ($this->config['public_sysinfo'] == '1' || $this->IsAdmin())
+if ($this->GetConfigValue('public_sysinfo') == '1' || $this->IsAdmin())
 {
 
 	// get param and validation
@@ -34,6 +37,7 @@ if ($this->config['public_sysinfo'] == '1' || $this->IsAdmin())
 	{
 		foreach ($vars as $param => $value)
 		{
+			$value = $this->htmlspecialchars_ent($value);
 			switch ($param)
 			{
 				case 'show':
@@ -55,14 +59,14 @@ if ($this->config['public_sysinfo'] == '1' || $this->IsAdmin())
 	switch ($show)
 	{
 		case '':
-			if (isset($os)) $out .= $os.' ';
+			if (isset($os))      $out .= $os.' ';
 			if (isset($release)) $out .= $release.' ';
 			if (isset($version)) $out .= $version.' ';
 			if (isset($machine)) $out .= $machine.' ';
-			if (isset($host)) $out .= '('.$host.')';
+			if (isset($host))    $out .= sprintf(SYSTEM_HOST_CAPTION,$host);
 			break;
 		case 'os':
-			if (isset($os)) $out .= $os.' ';
+			if (isset($os))      $out .= $os.' ';
 			if (isset($release)) $out .= $release.' ';
 			if (isset($version)) $out .= $version.' ';
 			break;
@@ -70,7 +74,7 @@ if ($this->config['public_sysinfo'] == '1' || $this->IsAdmin())
 			if (isset($machine)) $out .= $machine.' ';
 			break;
 		case 'host':
-			if (isset($host)) $out .= $host.' ';
+			if (isset($host))    $out .= $host.' ';
 			break;
 	}
 }	

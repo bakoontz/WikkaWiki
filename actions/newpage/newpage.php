@@ -11,36 +11,47 @@
  * @author	{@link http://wikkawiki.org/JsnX JsnX} (modified 2005-1-17)
  * @author	{@link http://wikkawiki.org/JavaWoman JavaWoman} (modified 2005-1-17)
  *
+ * @uses	Wakka::Redirect()
+ * @uses	Wakka::FormOpen()
+ * @uses	Wakka::FormClose()
+ * @uses	Wakka::GetSafeVar()
+ * @uses	Wakka::ExistsPage()
+ * @uses	Wakka::Href()
+ * @uses	Wakka::IsWikiName()
  * @filesource
  *
  * @todo user central regex library #34
  */
 
-$pagename = '';
 $showform = TRUE;
 
 if (isset($_POST['pagename']))
 {
-	$pagename = $_POST['pagename'];
+	$pagename = $this->GetSafeVar('pagename', 'post');
 
-	if (!(preg_match("/^[A-ZÄÖÜ]+[a-zßäöü]+[A-Z0-9ÄÖÜ][A-Za-z0-9ÄÖÜßäöü]*$/s", $pagename))) 
+	if (!$this->IsWikiName($pagename)) #34
 	{
-		echo '<em class="error">The page name "'.$pagename.'" is invalid. Valid page names must start with a capital letter, contain only letters and numbers, and be in CamelCase format.</em>';
+		echo '<em class="error">'.sprintf(WIKKA_ERROR_INVALID_PAGE_NAME, $pagename).'</em>';
 	}
-	else 
+	else if ($this->ExistsPage($pagename))
 	{
-		$url = $this->config['base_url'];
-		$this->redirect($url.$pagename.'/edit');
+		echo '<em class="error">'.WIKKA_ERROR_PAGE_ALREADY_EXIST.'</em>';
+	}
+	else
+	{
+		$url = $this->Href('edit', $pagename);
+		$this->Redirect($url);
 		$showform = FALSE;
 	}
 }
 
 if ($showform)
 { ?>
-	<br />
 	<?php echo $this->FormOpen(); ?>
-		<input type="text" name="pagename" size="50" value="<?php echo $pagename; ?>" />  
-		<input type="submit" value="Create and Edit" />
-	<?php echo $this->FormClose(); 
-} 
+		<fieldset class="newpage"><legend><?php echo NEWPAGE_CREATE_LEGEND; ?></legend>
+		<input type="text" name="pagename" size="40" value="<?php echo $pagename; ?>" />
+		<input type="submit" value="<?php echo NEWPAGE_CREATE_BUTTON; ?>" />
+		</fieldset>
+	<?php echo $this->FormClose();
+}
 ?>

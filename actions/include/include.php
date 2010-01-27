@@ -36,18 +36,18 @@ if('' != $page)
 {
 	$orig_page = $page;
 	$page = strtolower($page);
-	if (!isset($this->config["includes"])) $this->config["includes"][] = strtolower($this->tag);
+	if (!isset($this->config['includes'])) $this->config['includes'][] = strtolower($this->tag);
 	
-	if (!in_array($page, $this->config["includes"]) && $page != $this->tag) 
+	if (!in_array($page, $this->config['includes']) && $page != $this->tag) 
 	{
-		if ($this->HasAccess("read", $page)) 
+		if ($this->HasAccess('read', $page)) 
 		{
-	      	$this->config["includes"][] = $page;
+	      	$this->config['includes'][] = $page;
 	        	$page = $this->LoadPage($page);
-			print $this->Format($page["body"]);
+			print $this->Format($page['body']);
 		}
-		else printf("<em class='error'>".ERROR_TARGET_ACL."</em>", $orig_page);
+		else printf('<p class="error">'.ERROR_TARGET_ACL."</p>\n", $orig_page);
 	} 
-	else print "<em class='error'>".ERROR_CIRCULAR_REF."</em>";
+	else print '<p class="error">'.ERROR_CIRCULAR_REFERENCE."</p>\n";
 }
 ?>

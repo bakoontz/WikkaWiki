@@ -148,7 +148,7 @@ elseif ($this->page &&
 	{
 		if(FALSE === mkdir_r($this->config['upload_path']))
 		{
-			echo sprintf(ERROR_UPLOAD_DIRECTORY_NOT_WRITABLE, $this->config['upload_path']);
+			echo '<p class="error">'.sprintf(ERROR_UPLOAD_DIRECTORY_NOT_WRITABLE, $this->config['upload_path'])."</p>\n";
 			return;
 		}
 	}
@@ -159,7 +159,7 @@ elseif ($this->page &&
 	{
 		if(FALSE === mkdir_r($upload_path))
 		{
-			echo sprintf(ERROR_UPLOAD_DIRECTORY_NOT_WRITABLE, $upload_path);
+			echo '<p class="error">'.sprintf(ERROR_UPLOAD_DIRECTORY_NOT_WRITABLE, $upload_path)."</p>\n";
 			return;
 		}
 	}
@@ -174,7 +174,7 @@ elseif ($this->page &&
 					case 0:
 						if ($_FILES["file"]["size"] > $max_upload_size) 
 						{
-							echo sprintf(ERROR_MAX_FILESIZE_EXCEEDED, bytesToHumanReadableUsage($max_upload_size)); 
+							echo '<p class="error">'.sprintf(ERROR_MAX_FILESIZE_EXCEEDED, bytesToHumanReadableUsage($max_upload_size))."</p>\n"; 
 							unlink($uploaded['tmp_name']);
 						} 
 						else 
@@ -188,24 +188,24 @@ elseif ($this->page &&
 							{
 								if (!move_uploaded_file($uploaded['tmp_name'], $destfile))
 								{
-									echo(ERROR_DURING_FILE_UPLOAD . "<br />\n");
+									echo '<p class="error">'.ERROR_DURING_FILE_UPLOAD."</p>\n";
 								}
 							}
 							else
 							{
-								echo sprintf(ERROR_FILE_EXISTS, $strippedname);
+								echo '<p class="error">'.sprintf(ERROR_FILE_EXISTS, $strippedname)."</p>\n";
 							}
 						}
 						break;
 					case 1:
 					case 2: // File was too big.... as reported by the browser, respecting MAX_FILE_SIZE
-						echo sprintf(ERROR_MAX_FILESIZE_EXCEEDED, bytesToHumanReadableUsage($max_upload_size)); 
+						echo '<p class="error">'.sprintf(ERROR_MAX_FILESIZE_EXCEEDED, bytesToHumanReadableUsage($max_upload_size))."</p>\n"; 
 						break;
 					case 3:
-						echo ERROR_DURING_FILE_UPLOAD;
+						echo '<p class="error">'.ERROR_DURING_FILE_UPLOAD."</p>\n";
 						break;
 					case 4:
-						echo NO_FILE_UPLOADED;
+						echo '<p class="error">'.ERROR_NO_FILE_UPLOADED."</p>\n";
 			}	
 		}
 	}
@@ -216,7 +216,7 @@ elseif ($this->page &&
 	if(FALSE === $dir)
 	{
 		// If it can't be opened, it can't be read!
-		echo sprintf(ERROR_UPLOAD_DIRECTORY_NOT_READABLE, $upload_path);
+		echo '<p class="error">'.sprintf(ERROR_UPLOAD_DIRECTORY_NOT_READABLE, $upload_path)."</p>\n";
 		return;
 	}
 	$numfiles = 0;
@@ -308,7 +308,7 @@ elseif ($this->page &&
    {
 		if(!$can_upload_files)
 		{
-			echo NO_FILE_UPLOADS;
+			echo '<p class="error">'.ERROR_NO_FILE_UPLOADS."</p>\n";
 		}
 		else
 		{

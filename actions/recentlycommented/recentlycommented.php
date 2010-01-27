@@ -81,18 +81,18 @@ if ($comments = $this->LoadRecentlyCommented(50, $username))
 	}
 	if ($readable == 0)
 	{
-		echo '<em class="error">'.RECENTLYCOMMENTED_NONE_ACCESSIBLE.'</em>';
+		echo '<p class="error">'.RECENTLYCOMMENTED_NONE_ACCESSIBLE.'</p>';
 	}
 }
 else
 {
 	if(!empty($username))    
 	{        
-		echo '<em class="error">'.sprintf(RECENTLYCOMMENTED_NONE_FOUND, " by $username.").'</em>'; 
+		echo '<p class="error">'.sprintf(RECENTLYCOMMENTED_NONE_FOUND_BY, $username).'</p>'; 
     } 
 	else
 	{
-		echo '<em class="error">'.RECENTLYCOMMENTED_NONE_FOUND.'</em>';
+		echo '<p class="error">'.RECENTLYCOMMENTED_NONE_FOUND.'</p>';
 	}
 }
 ?>

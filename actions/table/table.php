@@ -1,6 +1,19 @@
 <?php
-
-//$vars = array('columns' => '3', 'cellpadding' => '1', 'cells' => '**BIG**;**GREEN**;**FROGS**;yes;yes;no;no;yes;yes');
+/**
+ * Display a data table.
+ *
+ * @package		Actions
+ * @version		$Id: table.php 1196 2008-07-16 04:25:09Z BrianKoontz $
+ * @license		http://www.gnu.org/copyleft/gpl.html GNU General Public License
+ * @filesource
+ *
+ * @input	string $cells mandatory: string with all cells, separated by ';' and '###' for empty cells
+ * @input	integer $cellpadding optional: padding within cells in pixels; default: 1
+ * @input	string $style optional: in-line style for the table.
+ * @input	integer $columns optional: 	number of columns for the table; default: 1
+ * @uses	Wakka::ReturnSafeHTML()
+ * @todo		will be replaced after Wikka 1.1.6.2 by the table formatter
+ */
 
 // Init:
 $delimiter=';';
@@ -16,16 +29,17 @@ if (is_array($vars))
 {
 	foreach ($vars as $param => $value)
 	{
-		if ($param == 'style') {$style=$value;}   
-		if ($param == 'columns') {$columns=$value;}	
+		$value = $this->htmlspecialchars_ent($value);
+		if ($param == 'style') {$style=$value;}
+		if ($param == 'columns') {$columns=$value;}
 		if ($param == 'cellpadding')
 		{
-			$cellpadding=$value;
-			$border=$value;
-		}             
+			$cellpadding = $value;
+			$border = $value;
+		}
 		if ($param == 'cells') $cells = split($delimiter, $value);
 	}
-	$cached_output = "<table class=\"data\" cellpadding='".$cellpadding."' cellspacing='".$cellspacing."' border='".$border."' style='".$style."'>\n";
+	$cached_output = '<table class="data" cellpadding="'.$cellpadding.'" cellspacing="'.$cellspacing.'" border="'.$border.'" style="'.$style."\">\n";
 	foreach ($cells as $cell_item)
 	{
 		if ($row == 1) $cached_output .= "   <tr>\n";
@@ -39,7 +53,7 @@ if (is_array($vars))
 		}
 	}
 	$cached_output .= "</table>";
-	echo $this->ReturnSafeHTML($cached_output);	
+	echo $this->ReturnSafeHTML($cached_output);
 }
 
 ?>

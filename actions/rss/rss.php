@@ -1,10 +1,11 @@
 <?php
 /**
  * Cache and display an RSS feed.
- * 
- * Action usage: {{rss http://domain.com/feed.xml}} 
- * or {{rss url="http://domain.com/feed.xml" cachetime="30"}}.
- * NOTE 1 : in Onyx-RSS default is "debugMode" which results in all errors being printed
+ *
+ * Usage:
+ *		{{rss http://domain.com/feed.xml}} or
+ *		{{rss url="http://domain.com/feed.xml" cachetime="30"}}
+ * NOTE 1: in Onyx-RSS default is "debugMode" which results in all errors being printed
  * this could be suppressed by turning debug mode off, but then we'd never have a
  * clue about the cause of any error.
  * A better (preliminary) approach seems to be to override the raiseError() method
@@ -12,17 +13,18 @@
  * that way normal display will look clean but you can look at the HTML source to
  * find the cause of any problem.
  * NOTE 2: no solution for timeout problems with non-existing feeds yet...
- * 
+ *
  * @package		Actions
  * @version		$Id$
  * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
- * 
- * @input		string $url mandotary: URL of the feed
- * @input		integer $cachetime optional: time in minutes to cach the feed
+ *
+ * @input		string	$url	mandatory: URL of the feed
+ * @input		integer $cachetime	optional: time in minutes to cache the feed
+ * @output		... tbd @@@
  * @uses		Wakka::cleanUrl()
  * @uses		Wakka::ReturnSafeHTML()
- * @todo		should use makeList to generate the list; 
+ * @todo		should use makeList to generate the list;
  * @todo		maybe better convert to using Magpie first;
  */
 
@@ -46,19 +48,26 @@ $rss_cache_file = ""; // initial value, no need to ever change
 
 //Action configuration
 $rss_path = '';
-if (isset($vars['url'])) $rss_path = $vars['url'];
-if ($rss_path == '' && isset($wikka_vars)) $rss_path = $wikka_vars;
+if (isset($vars['url'])) $rss_path = $this->htmlspecialchars_ent($vars['url']);
+if ('' == $rss_path && isset($wikka_vars)) $rss_path = $wikka_vars;
 $rss_path = $this->cleanUrl(trim($rss_path));
 
 // override
 if (preg_match("/^(http|https):\/\/([^\\s\"<>]+)$/i", $rss_path))
 {
+	$onyx_classpath = $this->GetConfigValue('onyx_path').DIRECTORY_SEPARATOR.'onyx-rss.php';
 	/**
-	 * Include 3rdParty plugin
+	 * 3rdParty plugin; implements feed aggregation.
 	 */
-	include_once('3rdparty/plugins/onyx-rss/onyx-rss.php');
+	#include_once('3rdparty'.DIRECTORY_SEPARATOR.'plugins'.DIRECTORY_SEPARATOR.'onyx-rss'.DIRECTORY_SEPARATOR.'onyx-rss.php');
+	include_once $onyx_classpath;
 	if (!class_exists('Wikka_Onyx'))
 	{
+		/**
+		 * Extension to plugin; implements error handling.
+		 *
+		 * @package		Actions
+		 */
 		class Wikka_Onyx extends ONYX_RSS
 		{
 			//private function raiseError($line, $err)
@@ -76,13 +85,15 @@ if (preg_match("/^(http|https):\/\/([^\\s\"<>]+)$/i", $rss_path))
 
 if (preg_match("/^(http|https):\/\/([^\\s\"<>]+)$/i", $rss_path))
 {
-	if ($caching) {
+	if ($caching)
+	{
 		// Create unique cache file name based on URL
 		$rss_cache_file = md5($rss_path).".xml";
 	}
 
 	//Load the RSS Feed: workaround to hide error messages within HTML comments:
-	$rss =& new Wikka_Onyx();
+	#$rss =& new Wikka_Onyx();
+	$rss = instantiate('Wikka_Onyx');
 	$rss->setCachePath($rss_cache_path);
 	$rss->parse($rss_path, $rss_cache_file, $rss_cache_time);
 	$meta = $rss->getData(ONYX_META);
@@ -98,8 +109,10 @@ if (preg_match("/^(http|https):\/\/([^\\s\"<>]+)$/i", $rss_path))
 	}
 	$cached_output .= "</ul>\n";
 	echo $this->ReturnSafeHTML($cached_output);
-} else {
-	echo '<em class="error">Error: Invalid RSS action syntax. <br /> Proper usage: {{rss http://domain.com/feed.xml}} or {{rss url="http://domain.com/feed.xml"}}</em>'; # i18n
+}
+else
+{
+	echo '<p class="error">'.ERROR_INVALID_RSS_SYNTAX.'</p>'."\n"; # i18n
 }
 
 ?>

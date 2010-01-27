@@ -18,7 +18,8 @@
  * @uses	Wakka::GetUserName()
  * @uses	Wakka::IsAdmin()
  * @uses	Wakka::Link()
- * 
+ * @todo	fix RE (#104 etc.); also lose the comma in there!
+ * @todo	actually add the (intended) timestamp sorting; cf. mychanges action
  */
 
 $username = '';
@@ -29,17 +30,21 @@ if(isset($_GET['user']))
 if (($this->IsAdmin() && !empty($username)) ||
 	($this->existsUser() && $username = $this->GetUserName()))
 {
-	printf('<div class="floatl">'.MYPAGES_HEADER.'</div><br/><br/>'."\n", $username);
+	printf('<div class="floatl">'.MYPAGES_CAPTION.'</div><br/><br/>'."\n", $username);
 
 	$my_pages_count = 0;
 
 	if ($pages = $this->LoadPagesByOwner($username))
 	{
+		$my_pages_count = 0;
 		$curChar = '';
 		foreach ($pages as $page)
 		{
+			if($username == $page['owner'])
+			{
+				++$my_pages_count;
 				$firstChar = strtoupper($page["tag"][0]);
-				if (!preg_match("/[A-Z,a-z]/", $firstChar)) 
+				if (!preg_match("/[A-Z,a-z]/", $firstChar)) //TODO: (#104 #340, #34) Internationalization (allow other starting chars, make consistent with Formatter REs)
 				{
 					$firstChar = "#";
 				}
@@ -52,7 +57,14 @@ if (($this->IsAdmin() && !empty($username)) ||
 				}
 
 				echo $this->Link($page['tag'])."<br />\n";
+
+			}
 		}
+		if($my_pages_count == 0)
+		{
+			print("<em class='error'>".MYPAGES_NONE_OWNED."</em>");
+		}
+
 	}
 	else
 	{

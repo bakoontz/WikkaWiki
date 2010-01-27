@@ -15,15 +15,7 @@
  * @uses	Wakka::IsAdmin()
  * 
  * @todo	Use core method to generate tables with alternate rows
- * @todo	Move translation strings to lang file
  */ 
-
-//i18n strings
-if (!defined('WIKKACONFIG_CAPTION')) define('WIKKACONFIG_CAPTION', "Wikka Configuration Settings [%s]"); // %s link to Wikka Config options documentation
-if (!defined('WIKKACONFIG_DOCS_URL')) define('WIKKACONFIG_DOCS_URL', "http://docs.wikkawiki.org/ConfigurationOptions");
-if (!defined('WIKKACONFIG_DOCS_TITLE')) define('WIKKACONFIG_DOCS_TITLE', "Read the documentation on Wikka Configuration Settings");
-if (!defined('WIKKACONFIG_TH_OPTION')) define('WIKKACONFIG_TH_OPTION', "Option");
-if (!defined('WIKKACONFIG_TH_VALUE')) define('WIKKACONFIG_TH_VALUE', "Value");
 
 if ($this->IsAdmin())
 {

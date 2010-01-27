@@ -27,17 +27,17 @@ if (isset($_POST['mail']) && $_POST['mail']=='result')
 	if (!$name) 
 	{
 		// a valid name must be entered
-		echo ERROR_EMPTY_NAME;
+		echo '<p class="error">'.ERROR_EMPTY_NAME.'</p>'."\n";
 		echo $form;
 	} elseif (!$email || !strchr($email, '@') || !$user || !$host)
 	{
 		// a valid email address must be entered
-		echo ERROR_INVALID_EMAIL;
+		echo '<p class="error">'.ERROR_INVALID_EMAIL.'</p>'."\n";
 		echo $form;
 	} elseif (!$comments)
 	{
 		// some text must be entered
-		echo ERROR_EMPTY_MESSAGE;    
+		echo '<p class="error">'.ERROR_EMPTY_MESSAGE.'</p>'."\n";
 		echo $alert;
 		echo $form;
 	} else 
