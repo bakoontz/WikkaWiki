@@ -325,7 +325,7 @@ if(isset($wakkaConfig['wikka_formatter_path']) && preg_match('/plugins\/formatte
 
 $wakkaGlobalConfig = array_merge($wakkaDefaultConfig, $wakkaConfig);	// merge defaults with config from file, #858
 
-// multi site configuration #858
+// multi site configuration #878
 $multiDefaultConfig = array(
     'local_config'            => 'wikka.config' # path to local configs
 );
