@@ -1525,9 +1525,9 @@ class Wakka
 			$menu_file = $menu.'.inc';
 			break;
 		}
-		if (file_exists('config/'.$menu_file))
+		if ($this->BuildFullpathFromMultipath($menu_file,$this->GetConfigValue('menu_config_path'))) #878
 		{
-			$menu_src = $this->IncludeBuffered($menu_file, '', '', 'config/');
+			$menu_src = $this->IncludeBuffered($menu_file, '', '', $this->GetConfigValue('menu_config_path')); #878
 			$menu_array = explode("\n", trim($menu_src)); #951
 			$menu_output = '<ul class="menu" id="'.$menu.'">'."\n";
 			foreach ($menu_array as $menu_item)
