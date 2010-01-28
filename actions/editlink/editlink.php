@@ -1,6 +1,18 @@
 <?php
 /**
  * Edit link menulet
+ *
+ * Displays a link to modify the current page (depending on user privileges).
+ * If the current user has now user privileges, a link to display the page
+ * source is displayed instead.
+ *
+ * Syntax: {{editlink}}
+ *
+ * @package		Actions
+ * @subpackage	Menulets
+ * @name		Edit link
+ *
+ * @author		{@link http://wikkawiki.org/DarTar Dario Taraborelli}
  */
 if ($this->handler == 'edit' || $this->handler == 'showcode')
 {

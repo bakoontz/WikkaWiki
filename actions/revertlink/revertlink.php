@@ -2,6 +2,17 @@
 /**
  * Revert link menulet (admin-only)
  *
+ * Displays a link allowing admins to revert the current page to the previous
+ * version.
+ *
+ * Syntax: {{revertlink}}
+ *
+ * @package		Actions
+ * @subpackage	Menulets
+ * @name		Revert link
+ *
+ * @author		{@link http://wikkawiki.org/DarTar Dario Taraborelli}
+ *
  * @todo	Use a new HasRevisions() method instead of loading admin class
  */
 if ($this->IsAdmin())

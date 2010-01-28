@@ -17,10 +17,10 @@
  */
 
 // defaults
-$out = '<abbr title="'.WIKKA_ADMIN_ONLY_TITLE.'">'.NOT_AVAILABLE.'</abbr>';
+$out = '<abbr title="'.WIKKA_ADMIN_ONLY_TITLE.'">'.WIKKA_NOT_AVAILABLE.'</abbr>';
 
 //check privs
-if ($this->config['public_sysinfo'] == '1' || $this->IsAdmin())
+if ($this->GetConfigValue('public_sysinfo') == '1' || $this->IsAdmin())
 {
 	$out = $this->PATCH_LEVEL;
 }

@@ -1,6 +1,17 @@
 <?php
 /**
  * Ownership menulet
+ *
+ * Displays a link to the page owner's profile (as well as links to change ACL,
+ * depending on user privileges).
+ *
+ * Syntax: {{ownerlink}}
+ *
+ * @package		Actions
+ * @subpackage	Menulets
+ * @name		Owner link
+ *
+ * @author		{@link http://wikkawiki.org/DarTar Dario Taraborelli}
  */
 if ($this->page)
 {
