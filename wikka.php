@@ -33,8 +33,8 @@
  * @todo add phpdoc documentation for configuration array elements;
  */
 
-//error_reporting(E_ALL);
-error_reporting (E_ALL ^ E_NOTICE);
+error_reporting(E_ALL);
+//error_reporting (E_ALL ^ E_NOTICE);
 
 // If you need to use this installation with a configuration file outside the
 // installation directory uncomment the following line and adapt it to reflect
