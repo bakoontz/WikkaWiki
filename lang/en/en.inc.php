@@ -545,7 +545,7 @@ define('ERROR_NO_FILE_UPLOADS', 'File uploads are disallowed on this server');
 define('ERROR_NO_FILE_UPLOADED', 'No file uploaded');
 define('ERROR_DURING_FILE_UPLOAD', 'There was an error uploading your file.  Please try again.');
 define('ERROR_MAX_FILESIZE_EXCEEDED', 'Attempted file upload was too big.  Maximum allowed size is %d MB.'); 
-define('ERROR_FILE_EXISTS', "'There is already a file named <tt>%s</tt>. Please rename before uploading or delete the existing file first.');
+define('ERROR_FILE_EXISTS', 'There is already a file named <tt>%s</tt>. Please rename before uploading or delete the existing file first.');
 /**#@-*/
 
 /**#@+
@@ -651,8 +651,8 @@ define('MYCHANGES_NOT_LOGGED_IN', "You're not logged in, thus the list of pages 
  */
 // mypages
 define('MYPAGES_CAPTION', 'This is the list of pages owned by %s');
-define('MYPAGES_NONE_OWNED', 'You don't own any pages.');
-define('MYPAGES_NOT_LOGGED_IN', 'You're not logged in, thus the list of your pages couldn't be retrieved.');
+define('MYPAGES_NONE_OWNED', 'You don\'t own any pages.');
+define('MYPAGES_NOT_LOGGED_IN', 'You\'re not logged in, thus the list of your pages couldn\'t be retrieved.');
 /**#@-*/
 
 /**#@+
@@ -795,7 +795,7 @@ define('SEARCH_FOR', 'Search for');
 define('SEARCH_ZERO_MATCH', 'No matches');
 define('SEARCH_ONE_MATCH', 'One match found');
 define('SEARCH_N_MATCH', '%d matches found'); // %d - number of hits
-define('SEARCH_RESULTS', 'Search results: <strong>%1$s</strong> for <strong>%2$s</strong>'); # %1$s: n matches for | %2$s: search term
+define('SEARCH_RESULTS', 'Search results: <strong>%1$s</strong> for <strong>%2$s</strong>'); // %1$s: n matches for | %2$s: search term
 define('SEARCH_NOT_SURE_CHOICE', 'Not sure which page to choose?');
 define('SEARCH_EXPANDED_LINK_DESC', 'Expanded Text Search'); // search link description
 define('SEARCH_TRY_EXPANDED', 'Try the %s which shows surrounding text.'); // %s expanded search link
@@ -929,19 +929,19 @@ define('PASSWORD_REMINDER_LABEL', 'Password reminder:');
 define('CHANGE_BUTTON_LABEL', 'Change password');
 define('REGISTER_BUTTON_LABEL', 'Register');
 define('QUICK_LINKS_HEADING', 'Quick links');
-define('QUICK_LINKS', 'See a list of pages you own (MyPages) and pages you've edited (MyChanges).');
+define('QUICK_LINKS', 'See a list of pages you own (MyPages) and pages you\'ve edited (MyChanges).');
 define('ERROR_WRONG_PASSWORD', 'Sorry, you entered the wrong password.');
 define('ERROR_WRONG_HASH', 'Sorry, you entered a wrong password reminder.');
-define('ERROR_NON_EXISTENT_USERNAME', 'Sorry, this user name doesn't exist.');
+define('ERROR_NON_EXISTENT_USERNAME', 'Sorry, this user name doesn\'t exist.');
 define('ERROR_USERNAME_EXISTS', 'Sorry, this user name already exists.');
 define('ERROR_EMAIL_ADDRESS_REQUIRED', 'Please specify an email address.');
 define('REGISTRATION_SUCCEEDED', 'You have successfully registered!');
-define('REGISTERED_USER_LOGIN_LABEL', 'If you're already a registered user, log in here!');
+define('REGISTERED_USER_LOGIN_LABEL', 'If you\'re already a registered user, log in here!');
 define('LOGIN_HEADING', '===Login===');
 define('LOGIN_REGISTER_HEADING', '===Login/Register===');
 define('LOGIN_BUTTON_LABEL', 'Login');
 define('LOGOUT_BUTTON_LABEL', 'Logout');
-define('NEW_USER_REGISTER_LABEL', 'Fields you only need to fill in when you're logging in for the first time (and thus signing up as a new user on this site).');
+define('NEW_USER_REGISTER_LABEL', 'Fields you only need to fill in when you\'re logging in for the first time (and thus signing up as a new user on this site).');
 define('RETRIEVE_PASSWORD_HEADING', '===Forgot your password?===');
 define('RETRIEVE_PASSWORD_MESSAGE', 'If you need a password reminder, click [[PasswordForgotten here]]. --- You can login here using your password reminder.');
 define('THEME_LABEL', 'Theme:');
