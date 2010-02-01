@@ -76,10 +76,10 @@ define('WIKKA_BACKLINKS_LINK_TITLE', 'Display a list of pages linking to %s'); /
 define('WIKKA_JRE_LINK_DESC', 'Java Runtime Environment');
 define('WIKKA_NOTE', 'NOTE:');
 define('WIKKA_JAVA_PLUGIN_NEEDED', 'Java 1.4.1 (or later) Plug-in is needed to run this applet,');
-define('REVISION_DATE_FORMAT', 'D, d M Y'); // @TODO 
-define('REVISION_TIME_FORMAT', 'H:i T'); // @TODO 
+define('REVISION_DATE_FORMAT', 'D, d M Y'); // @TODO
+define('REVISION_TIME_FORMAT', 'H:i T'); // @TODO
 define('TITLE_REVISION_LINK', 'View recent revisions list for %s');  // @TODO
-define('INPUT_ERROR_STYLE', 'class="highlight"'); // @TODO 
+define('INPUT_ERROR_STYLE', 'class="highlight"'); // @TODO
 define('CANCEL_ACL_LABEL', 'Cancel'); // @TODO
 define('UNREGISTERED_USER', 'unregistered user');  // @TODO
 define('NOT_AVAILABLE', 'n/a'); // @TODO replace inside the actions with WIKKA_NOT_AVAILABLE
@@ -100,8 +100,8 @@ define('ERROR_MYSQL_SUPPORT_MISSING', 'PHP can\'t find MySQL support but Wikka r
 define('ERROR_SETUP_FILE_MISSING', 'A file of the installer/ upgrader was not found. Please install Wikka again!');
 define('ERROR_SETUP_HEADER_MISSING', 'The file "setup/header.php" was not found. Please install Wikka again!');
 define('ERROR_SETUP_FOOTER_MISSING', 'The file "setup/footer.php" was not found. Please install Wikka again!');
-define('ERROR_HEADER_MISSING', 'A header template could not be found. Please make sure that a file called <code>header.php</code> exists in the templates directory.'); //TODO Make sure this message matches any filename/folder change 
-define('ERROR_FOOTER_MISSING', 'A footer template could not be found. Please make sure that a file called <code>footer.php</code> exists in the templates directory.'); //TODO Make sure this message matches any filename/folder change 
+define('ERROR_HEADER_MISSING', 'A header template could not be found. Please make sure that a file called <code>header.php</code> exists in the templates directory.'); //TODO Make sure this message matches any filename/folder change
+define('ERROR_FOOTER_MISSING', 'A footer template could not be found. Please make sure that a file called <code>footer.php</code> exists in the templates directory.'); //TODO Make sure this message matches any filename/folder change
 define('ERROR_NO_DB_ACCESS', 'The wiki is currently unavailable. <br /><br />Error: Unable to connect to the MySQL database.');
 define('PAGE_GENERATION_TIME', 'Page was generated in %.4f seconds'); // %.4f - generation time in seconds with 4 digits after the dot
 define('WIKI_UPGRADE_NOTICE', 'This site is currently being upgraded. Please try again later.');
@@ -191,11 +191,11 @@ define('ADMINPAGES_DEFAULT_END_HOUR', 'hh');
 define('ADMINPAGES_DEFAULT_END_MINUTE', 'mm');
 define('ADMINPAGES_DEFAULT_END_SECOND', 'ss');
 define('ADMINPAGES_MAX_EDIT_NOTE_LENGTH', '50');
-define('ADMINPAGES_REVISIONS_ICON', 'images/icons/edit.png'); 
+define('ADMINPAGES_REVISIONS_ICON', 'images/icons/edit.png');
 define('ADMINPAGES_COMMENTS_ICON', 'images/icons/comment.png');
-define('ADMINPAGES_HITS_ICON', 'images/icons/star.png'); 
-define('ADMINPAGES_BACKLINKS_ICON', 'images/icons/link.png'); 
-define('ADMINPAGES_REFERRERS_ICON', 'images/icons/world.png'); 
+define('ADMINPAGES_HITS_ICON', 'images/icons/star.png');
+define('ADMINPAGES_BACKLINKS_ICON', 'images/icons/link.png');
+define('ADMINPAGES_REFERRERS_ICON', 'images/icons/world.png');
 define('ADMINPAGES_PAGE_TITLE','Page Administration');
 define('ADMINPAGES_FORM_LEGEND','Filter view:');
 define('ADMINPAGES_FORM_SEARCH_STRING_LABEL','Search page:');
@@ -275,7 +275,7 @@ define('ADMINPAGES_CANCEL_LABEL', 'Cancel');
  * Language constants used by the {@link adminusers.php adminusers} action
  */
 define('ADMINUSERS_DEFAULT_RECORDS_LIMIT', '10'); # number of records per page
-define('ADMINUSERS_DEFAULT_MIN_RECORDS_DISPLAY', '5'); # min number of records 
+define('ADMINUSERS_DEFAULT_MIN_RECORDS_DISPLAY', '5'); # min number of records
 define('ADMINUSERS_DEFAULT_RECORDS_RANGE',serialize(array('10','50','100','500','1000'))); #range array for records pager
 define('ADMINUSERS_DEFAULT_SORT_FIELD', 'signuptime'); # sort field
 define('ADMINUSERS_DEFAULT_SORT_ORDER', 'desc'); # sort order, ascendant or descendant
@@ -283,9 +283,9 @@ define('ADMINUSERS_DEFAULT_START', '0'); # start record
 define('ADMINUSERS_DEFAULT_SEARCH', ''); # keyword to restrict search
 define('ADMINUSERS_ALTERNATE_ROW_COLOR', '1'); # switch alternate row color
 define('ADMINUSERS_STAT_COLUMN_COLOR', '1'); # switch color for statistics columns
-define('ADMINUSERS_OWNED_ICON', 'images/icons/keyring.png'); 
-define('ADMINUSERS_EDITS_ICON', 'images/icons/edit.png'); 
-define('ADMINUSERS_COMMENTS_ICON', 'images/icons/comment.png'); 
+define('ADMINUSERS_OWNED_ICON', 'images/icons/keyring.png');
+define('ADMINUSERS_EDITS_ICON', 'images/icons/edit.png');
+define('ADMINUSERS_COMMENTS_ICON', 'images/icons/comment.png');
 define('ADMINUSERS_PAGE_TITLE','User Administration');
 define('ADMINUSERS_FORM_LEGEND','Filter view:');
 define('ADMINUSERS_FORM_SEARCH_STRING_LABEL','Search user:');
@@ -494,7 +494,6 @@ define('USERSETTINGS_LINK', 'Return to the [[UserSettings login]] screen.');
  */
 // feedback
 define('FILL_FORM', '<p>Fill in the form below to send us your comments:</p>'."\n");
-define('FEEDBACK_FORM_LEGEND', 'Contact %s'); //%s - wikiname of the recipient
 define('FEEDBACK_NAME_LABEL', 'Name: ');
 define('FEEDBACK_EMAIL_LABEL', 'Email: ');
 define('FEEDBACK_COMMENTS_LABEL', 'Comments:');
@@ -544,7 +543,7 @@ define('FILE_DELETED', 'File deleted');
 define('ERROR_NO_FILE_UPLOADS', 'File uploads are disallowed on this server');
 define('ERROR_NO_FILE_UPLOADED', 'No file uploaded');
 define('ERROR_DURING_FILE_UPLOAD', 'There was an error uploading your file.  Please try again.');
-define('ERROR_MAX_FILESIZE_EXCEEDED', 'Attempted file upload was too big.  Maximum allowed size is %d MB.'); 
+define('ERROR_MAX_FILESIZE_EXCEEDED', 'Attempted file upload was too big.  Maximum allowed size is %d MB.');
 define('ERROR_FILE_EXISTS', 'There is already a file named <tt>%s</tt>. Please rename before uploading or delete the existing file first.');
 /**#@-*/
 
@@ -568,7 +567,7 @@ define('GOOGLE_BUTTON', 'Google');
 define('HIGHSCORES_LABEL_EDITS', 'edits');
 define('HIGHSCORES_LABEL_COMMENTS', 'comments');
 define('HIGHSCORES_LABEL_PAGES', 'pages owned');
-define('HIGHSCORES_CAPTION', 'Top %1$s contributor(s) by number of %2$s'); 
+define('HIGHSCORES_CAPTION', 'Top %1$s contributor(s) by number of %2$s');
 define('HIGHSCORES_HEADER_RANK', 'rank');
 define('HIGHSCORES_HEADER_USER', 'user');
 define('HIGHSCORES_HEADER_PERCENTAGE', 'percentage');
@@ -1308,7 +1307,7 @@ define('SHOW_RE_EDIT_BUTTON', 'Re-edit this old revision');
 define('SHOW_FORMATTED_BUTTON', 'Show formatted');
 define('SHOW_SOURCE_BUTTON', 'Show source');
 define('SHOW_ASK_CREATE_PAGE_CAPTION', 'This page doesn\'t exist yet. Maybe you want to %s it?'); // %s - page create link
-define('SHOW_OLD_REVISION_CAPTION', 'This is an old revision of %1$s made by %2$s on %3$s.'); // %1$s - page link; %2$s - username; %3$s - timestamp; 
+define('SHOW_OLD_REVISION_CAPTION', 'This is an old revision of %1$s made by %2$s on %3$s.'); // %1$s - page link; %2$s - username; %3$s - timestamp;
 define('COMMENTS_CAPTION', 'Comments');
 define('DISPLAY_COMMENTS_LABEL', 'Show comments');
 define('DISPLAY_COMMENT_LINK_DESC', 'Display comment');
