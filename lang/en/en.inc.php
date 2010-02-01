@@ -95,7 +95,7 @@ define('I18N_LANG', 'en-US'); // @TODO
  */
 // wikka
 define('ERROR_WAKKA_LIBRARY_MISSING','The necessary file "libs/Wakka.class.php" could not be found. To run Wikka, please make sure the file exists and is placed in the right directory!');
-define('ERROR_WRONG_PHP_VERSION', 'Wikka requires PHP %s or higher!');  // %s - version numberdefine('MINIMUM_PHP_VERSION', '4.1');
+define('ERROR_WRONG_PHP_VERSION', 'Wikka requires PHP %s or higher!');  // %s - version number
 define('ERROR_MYSQL_SUPPORT_MISSING', 'PHP can\'t find MySQL support but Wikka requires MySQL. Please check the output of <tt>phpinfo()</tt> in a php document for MySQL support: it needs to be compiled into PHP, the module itself needs to be present in the expected location, <strong>and</strong> php.ini needs to have it enabled.<br />Also note that you cannot have <tt>mysqli</tt> and <tt>mysql</tt> support both enabled at the same time.<br />Please double-check all of these things, restart your webserver after any fixes, and then try again!');
 define('ERROR_SETUP_FILE_MISSING', 'A file of the installer/ upgrader was not found. Please install Wikka again!');
 define('ERROR_SETUP_HEADER_MISSING', 'The file "setup/header.php" was not found. Please install Wikka again!');
