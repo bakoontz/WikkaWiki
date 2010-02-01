@@ -27,15 +27,18 @@
  *
  * @copyright Copyright 2002-2003, Hendrik Mans <hendrik@mans.de>
  * @copyright Copyright 2004-2005, Jason Tourtelotte <wikka-admin@jsnx.com>
- * @copyright Copyright 2006-2009, {@link http://wikkawiki.org/CreditsPage Wikka Development Team}
+ * @copyright Copyright 2006-2010, {@link http://wikkawiki.org/CreditsPage Wikka Development Team}
  *
  * @todo use templating class for page generation;
  * @todo add phpdoc documentation for configuration array elements;
  */
 
+// ---------------------- DEBUGGING AND ERROR REPORTING -----------------------
 error_reporting(E_ALL);
 //error_reporting (E_ALL ^ E_NOTICE);
+// -------------------- END DEBUGGING AND ERROR REPORTING ---------------------
 
+// ---------------------------- LANGUAGE DEFAULTS -----------------------------
 // If you need to use this installation with a configuration file outside the
 // installation directory uncomment the following line and adapt it to reflect
 // the (filesystem) path to where your configuration file is located.
@@ -46,24 +49,27 @@ error_reporting(E_ALL);
 // reasons. [SEC]
 #if (!defined('WAKKA_CONFIG')) define('WAKKA_CONFIG','path/to/your/wikka.config.php');
 
-/** 
- * Include language file if it exists. 
+/**
+ * Include language file if it exists.
  * TODO: Temporary fixes to enable install code.
- * @see /lang/en.inc.php 
- */ 
+ * @see /lang/en.inc.php
+ */
 $default_lang = 'en';
 $default_lang_path = 'lang'.DIRECTORY_SEPARATOR.$default_lang;
 $default_lang_strings =
 $default_lang_path.DIRECTORY_SEPARATOR.$default_lang.'.inc.php';
-if (file_exists($default_lang_strings)) require_once($default_lang_strings); 
+if (file_exists($default_lang_strings)) require_once($default_lang_strings);
 else die('Language file '.$default_lang_strings.' not found! Please add the file.');
 if(!defined('WIKKA_LANG_PATH')) define('WIKKA_LANG_PATH', $default_lang_path);
+// ---------------------------- END LANGUAGE DEFAULTS -------------------------
 
+// ---------------------------- VERSIONING ------------------------------------
 /**#@+
  * Defines current Wikka version.
  */
 include_once('version.php');
 
+// ----------------------------- BASIC CONSTANTS -------------------------------
 /**#@+
  * Simple constant. May be made a configurable value.
  */
@@ -79,6 +85,12 @@ define('ID_LENGTH',10);			// @@@ maybe make length configurable
  * Character used for multi-path lists
  */
 if(!defined('PATH_DIVIDER')) define('PATH_DIVIDER', ',');
+/**#@-*/
+/**#@+
+ * Minimum version requirement.
+ */
+if (!defined('MINIMUM_PHP_VERSION'))	define('MINIMUM_PHP_VERSION', '5.0');
+if (!defined('MINIMUM_MYSQL_VERSION'))	define('MINIMUM_MYSQL_VERSION', '4.1');
 /**#@-*/
 
 // Sanity checks - we die if these conditions aren't met
@@ -208,7 +220,7 @@ define('WIKKA_BASE_URL', WIKKA_BASE_DOMAIN_URL.WIKKA_BASE_URL_PATH);
  *
  * @var string
  */
-define('WIKKA_COOKIE_PATH', ('/' == WIKKA_BASE_URL_PATH) ? '/' : substr(WIKKA_BASE_URL_PATH, 0, -1)); 
+define('WIKKA_COOKIE_PATH', ('/' == WIKKA_BASE_URL_PATH) ? '/' : substr(WIKKA_BASE_URL_PATH, 0, -1));
 /**
  * Default number of hours after which a permanent cookie is to expire: corresponds to 90 days.
  */
@@ -315,13 +327,13 @@ if(isset($wakkaConfig['stylesheet']))
 
 // Add plugin paths if they do not already exist
 if(isset($wakkaConfig['action_path']) && preg_match('/plugins\/actions/', $wakkaConfig['action_path']) <= 0)
-	$wakkaConfig['action_path'] = "plugins/actions," .  $wakkaConfig['action_path'];	
+	$wakkaConfig['action_path'] = "plugins/actions," .  $wakkaConfig['action_path'];
 if(isset($wakkaConfig['handler_path']) && preg_match('/plugins\/handlers/', $wakkaConfig['handler_path']) <= 0)
-	$wakkaConfig['handler_path'] = "plugins/handlers," .  $wakkaConfig['handler_path'];	
+	$wakkaConfig['handler_path'] = "plugins/handlers," .  $wakkaConfig['handler_path'];
 if(isset($wakkaConfig['wikka_template_path']) && preg_match('/plugins\/templates/', $wakkaConfig['wikka_template_path']) <= 0)
-	$wakkaConfig['wikka_template_path'] = "plugins/templates," .  $wakkaConfig['wikka_template_path'];	
+	$wakkaConfig['wikka_template_path'] = "plugins/templates," .  $wakkaConfig['wikka_template_path'];
 if(isset($wakkaConfig['wikka_formatter_path']) && preg_match('/plugins\/formatters/', $wakkaConfig['wikka_formatter_path']) <= 0)
-	$wakkaConfig['wikka_formatter_path'] = "plugins/formatters," .  $wakkaConfig['wikka_formatter_path'];	
+	$wakkaConfig['wikka_formatter_path'] = "plugins/formatters," .  $wakkaConfig['wikka_formatter_path'];
 
 $wakkaConfig = array_merge($wakkaDefaultConfig, $wakkaConfig);	// merge defaults with config from file
 
@@ -357,7 +369,7 @@ if (file_exists($multisite_configfile))
  * The $configkey is created as 'protocol_thirdleveldomain_secondleveldomain_topleveldomain'
  * Subdirectories are not supported at the moment, but should be easy to implement.
  * If no designated directory is found in multi.config.php, the script uses the $configkey
- * value and replaces all underscore by dots: 
+ * value and replaces all underscore by dots:
  * protocol.thirdleveldomain.secondleveldomain.topleveldomain e.g.
  * http.www.example.com
 */
@@ -487,7 +499,7 @@ $wakka = $_GET['wakka']; #312
 $wakka = preg_replace("/^\//", "", $wakka);
 
 /**
- * Extract pagename and handler from URL 
+ * Extract pagename and handler from URL
  *
  * Note this splits at the FIRST / so $handler may contain one or more slashes;
  * this is not allowed, and ultimately handled in the Handler() method. [SEC]
@@ -525,7 +537,7 @@ $user = $wakka->GetUser();
 // Only store sessions for real users!
 if(NULL != $user)
 {
-	$res = $wakka->LoadSingle("SELECT * FROM ".$wakka->config['table_prefix']."sessions WHERE sessionid='".session_id()."' AND userid='".$user['name']."'"); 
+	$res = $wakka->LoadSingle("SELECT * FROM ".$wakka->config['table_prefix']."sessions WHERE sessionid='".session_id()."' AND userid='".$user['name']."'");
 	if(isset($res))
 	{
 		// Just update the session_start time
