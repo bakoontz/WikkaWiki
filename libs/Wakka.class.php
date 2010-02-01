@@ -999,11 +999,24 @@ class Wakka
 	 * @param	$name	mandatory: name of a key in the config array
 	 * @return	mixed	the value of the configuration item, or NULL if not found
 	 */
-	function GetConfigValue($name) 
-	{ 
-		return (isset($this->config[$name])) ? $this->config[$name] : NULL; 
+	function GetConfigValue($name)
+	{
+		$val = (isset($this->config[$name])) ? $this->config[$name] : NULL;
+		return $val;
 	}
-	
+	/**
+	 * Set the value of a given item from the wikka config.
+	 *
+	 * @uses	Wakka::$config
+	 *
+	 * @param	$name mandatory: name of a key in the config array
+	 * @param	$value mandatory: the value to set the item at
+	 * 	 */
+	function SetConfigValue($name,$value)
+	{
+		$this->config[$name] = $value;
+	}
+		
 	/**
 	 * Get the name of the Wiki.
 	 *
