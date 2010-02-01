@@ -1996,7 +1996,7 @@ class Wakka
 
 		// is this an interwiki link?
 		// before the : should be a WikiName; anything after can be (nearly) anything that's allowed in a URL
-		if (preg_match('/^([A-Zï¿½ï¿½ï¿½][A-Za-zï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½]+)[:](\S*)$/', $tag, $matches))	// @@@ FIXME #34 (inconsistent with Formatter)
+		if (preg_match('/^([A-ZÄÖÜ][A-Za-zÄÖÜßäöü]+)[:](\S*)$/', $tag, $matches))	// @@@ FIXME #34 (inconsistent with Formatter)
 		{
 			$url = $this->GetInterWikiUrl($matches[1], $matches[2]);
 			$class = 'interwiki';
@@ -2016,7 +2016,7 @@ class Wakka
 		// is this a full link? i.e., does it contain something *else* than valid WikiName characters?
 		// FIXME just use (!IsWikiName($tag)) here (then fix the RE there!)
 		// @@@ First move to regex library
-		elseif (preg_match('/[^[:alnum:]ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½]/', $tag))		// FIXED #34 - removed commas
+		elseif (preg_match('/[^[:alnum:]ÄÖÜßäöü]/', $tag))		// FIXED #34 - removed commas
 		{
 			// check for email addresses
 			if (preg_match('/^.+\@.+$/', $tag))
@@ -2132,7 +2132,8 @@ class Wakka
 	 */
 	function IsWikiName($text) 
 	{ 
-		return preg_match("/^[A-Z,ï¿½ï¿½ï¿½][a-z,ï¿½ï¿½ï¿½ï¿½]+[A-Z,0-9,ï¿½ï¿½ï¿½][A-Z,a-z,0-9,ï¿½ï¿½ï¿½,ï¿½ï¿½ï¿½ï¿½]*$/", $text); 
+		$result = preg_match("/^[A-Z,ÄÖÜ][a-z,ßäöü]+[A-Z,0-9,ÄÖÜ][A-Z,a-z,0-9,ÄÖÜ,ßäöü]*$/", $text); // @@@ FIXME #34 (inconsistent with Formatter!) remove all ',' from RE (comma should not be allowed in WikiNames!)
+		return $result;
 	}
 	
 	/**
