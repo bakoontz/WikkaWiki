@@ -140,7 +140,7 @@ $t_request	= $_SERVER['REQUEST_URI'];
 // append slash if $t_request does not end with either a slash or the string .php
 if (!preg_match('@(\\.php|/)$@i', $t_request))
 {
-	$t_request .= '/';
+//	$t_request .= '/';
 }
 
 if (preg_match('@\.php$@', $t_request) && !preg_match('@wikka\.php$@', $t_request))
@@ -323,13 +323,7 @@ if(isset($wakkaConfig['wikka_template_path']) && preg_match('/plugins\/templates
 if(isset($wakkaConfig['wikka_formatter_path']) && preg_match('/plugins\/formatters/', $wakkaConfig['wikka_formatter_path']) <= 0)
 	$wakkaConfig['wikka_formatter_path'] = "plugins/formatters," .  $wakkaConfig['wikka_formatter_path'];	
 
-$wakkaGlobalConfig = array_merge($wakkaDefaultConfig, $wakkaConfig);	// merge defaults with config from file, #858
-
-// multi site configuration #878
-$multiDefaultConfig = array(
-    'local_config'            => 'wikka.config' # path to local configs
-);
-$multiConfig = array();
+$wakkaConfig = array_merge($wakkaDefaultConfig, $wakkaConfig);	// merge defaults with config from file
 
 /**
  * To activate multisite deployment capabilities, just create an empty file multi.config.php in
@@ -344,6 +338,12 @@ $multiConfig = array();
 $multisite_configfile = 'multi.config.php';
 if (file_exists($multisite_configfile))
 {
+	$wakkaGlobalConfig = $wakkaConfig;	// copy config file, #878
+	$multiDefaultConfig = array(
+		'local_config'            => 'wikka.config' # path to local configs
+	);
+	$multiConfig = array();
+
     include($multisite_configfile);
 
     $multiConfig = array_merge($multiDefaultConfig, $multiConfig);    // merge default multi config with config from file
