@@ -62,16 +62,22 @@ if (!defined('PATTERN_INVALID_ID_CHARS')) define ('PATTERN_INVALID_ID_CHARS', '/
 /**#@-*/
 
 /**
- * The Wikka core.
+ * The Wikka core class.
  *
  * This class contains all the core methods used to run Wikka.
- * @name Wakka
- * @package Wikka
- * @subpackage Libs
+ * @name		Wakka
+ * @package		Wikka
+ * @subpackage	Libs
  *
  */
 class Wakka
 {
+	/**
+	 * Hold the Wikka version.
+	 *
+	 * @var		string
+	 */
+	var $VERSION;
 	/**
 	 * Hold the wikka config.
 	 *
@@ -89,22 +95,6 @@ class Wakka
 	var $dblink;
 
 	/**
-	 * Hold record for the current page.
-	 *
-	 * @access	private
-	 * @var		array
-	 */
-	var $page;
-
-	/**
-	 * Hold the name ("tag) of the current page.
-	 *
-	 * @access	private
-	 * @var		string
-	 */
-	var $tag;
-
-	/**
 	 * Hold a log of queries and the times used for them; used for debugging.
 	 *
 	 * @var		array
@@ -118,13 +108,9 @@ class Wakka
 	 */
 	var $interWiki = array();
 
-	/**
-	 * Hold the Wikka version.
-	 *
-	 * @var		string
+	/**#@+*
+	 * Variable to store data about HTTP headers.
 	 */
-	var $VERSION;
-
 	/**
 	 * Keep track of whether a (at least one) cookie has been sent to the browser.
 	 *
@@ -158,6 +144,26 @@ class Wakka
 	 * @var		array
 	 */
 	var $additional_headers = array();
+	/**#@-*/
+
+	/**#@+*
+	 * Variable to store data about pages.
+	 */
+	/**
+	 * Hold record for the current page.
+	 *
+	 * @access	private
+	 * @var		array
+	 */
+	var $page;
+
+	/**
+	 * Hold the name of the current page.
+	 *
+	 * @access	private
+	 * @var		string
+	 */
+	var $tag;
 
 	/**
 	 * Title of the page to insert in the <title> element.
@@ -167,7 +173,7 @@ class Wakka
 	 */
 	var $page_title = '';
 
-	/**#@+
+	/**#@+*
 	 * Variable to store data about users.
 	 */
 
@@ -220,10 +226,11 @@ class Wakka
 	function Wakka($config)
 	{
 		$this->config = $config;
-		$this->dblink = @mysql_connect($this->config["mysql_host"], $this->config["mysql_user"], $this->config["mysql_password"]);
+
+		$this->dblink = @mysql_connect($this->GetConfigValue('mysql_host'), $this->GetConfigValue('mysql_user'), $this->GetConfigValue('mysql_password'));
 		if ($this->dblink)
 		{
-			if (!@mysql_select_db($this->config["mysql_database"], $this->dblink))
+			if (!@mysql_select_db($this->GetConfigValue('mysql_database'), $this->dblink))
 			{
 				@mysql_close($this->dblink);
 				$this->dblink = FALSE;
@@ -309,7 +316,10 @@ class Wakka
 		$data = array();
 		if ($r = $this->Query($query))
 		{
-			while ($row = mysql_fetch_assoc($r)) $data[] = $row;
+			while ($row = mysql_fetch_assoc($r))
+			{
+				$data[] = $row;
+			}
 			mysql_free_result($r);
 		}
 		return $data;
@@ -352,6 +362,7 @@ class Wakka
 	}
 
 	/**
+	 * Check if the MySQL-Version is higher or equal to a given (minimum) one.
 	 *
 	 * @param $major
 	 * @param $minor
@@ -509,8 +520,8 @@ class Wakka
 	 * unique, it will be remain unchanged (but recorded to ensure uniqueness
 	 * overall).
 	 *
-	 * @author		{@link http://wikka.jsnx.com/JavaWoman JavaWoman}
-	 * @copyright	Copyright (c) 2005, Marjolein Katsma
+	 * @author		{@link http://wikkawiki.org/JavaWoman JavaWoman}
+	 * @copyright	Copyright © 2005, Marjolein Katsma
 	 * @license		http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
 	 * @since		Wikka 1.1.6.4
 	 * @version		1.0
@@ -585,17 +596,21 @@ class Wakka
 	/**
 	 * Strip potentially dangerous tags from embedded HTML.
 	 *
+	 * @uses	Config::$safehtml_path
+	 * @uses	instantiate()
+	 * @uses	SafeHTML::parse()
+	 *
 	 * @param	string $html mandatory: HTML to be secured
 	 * @return	string sanitized HTML
 	 */
 	function ReturnSafeHTML($html)
 	{
-        $safehtml_classpath =
-		$this->GetConfigValue('safehtml_path').DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'safehtml.php';
-        require_once $safehtml_classpath;
+		$safehtml_classpath = $this->GetConfigValue('safehtml_path').DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'safehtml.php';
+		require_once $safehtml_classpath;
 
 		// Instantiate the handler
-		$safehtml =& new safehtml();
+		#$safehtml =& new safehtml();
+		$safehtml = instantiate('safehtml');
 
 		$filtered_output = $safehtml->parse($html);
 
@@ -617,12 +632,13 @@ class Wakka
 	 * See #427.
 	 *
 	 * @author		{@link http://wikkawiki.org/JavaWoman JavaWoman}
-	 * @copyright	Copyright (c) 2004, Marjolein Katsma
+	 * @copyright	Copyright © 2004, Marjolein Katsma
 	 * @license		http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
 	 * @version		1.0
 	 *
 	 * @access		public
 	 * @uses		Wakka::hsc_secure()
+	 *
 	 * @param		string	$url  required: URL to sanitize
 	 * @return		string	sanitzied URL
 	 */
@@ -669,11 +685,12 @@ class Wakka
 	 * version was indeed 1.1, and put this one using hsc_secure() at 1.2 (at
 	 * the same time updating the 'XML' doctype with apos as named entity).
 	 *
-	 * @access	public
 	 * @since	Wikka 1.1.6.0
 	 * @version	1.2
 	 *
+	 * @access	public
 	 * @uses	Wakka::hsc_secure()
+	 *
 	 * @param	string	$text required: text to be converted
 	 * @param	integer	$quote_style optional: quoting style - can be ENT_COMPAT
 	 * 			(default, escape only double quotes), ENT_QUOTES (escape both
@@ -777,12 +794,14 @@ class Wakka
 	 * @author 		{@link http://wikkawiki.org/JavaWoman Marjolein Katsma}
 	 *
 	 * @since		Wikka 1.1.6.3
+	 * @version		1.0
 	 * @license		http://www.gnu.org/copyleft/lgpl.html
 	 * 				GNU Lesser General Public License
 	 * @copyright	Copyright 2007, {@link http://wikkawiki.org/CreditsPage
 	 * 				Wikka Development Team}
 	 *
 	 * @access	public
+	 *
 	 * @param	string	$string	string to be converted
 	 * @param	integer	$quote_style
 	 * 			- ENT_COMPAT:   escapes &, <, > and double quote (default)
@@ -790,8 +809,8 @@ class Wakka
 	 * 			- ENT_QUOTES:   escapes &, <, >, double and single quotes
 	 * @return	string	converted string
 	 */
-	 function hsc_secure($string, $quote_style=ENT_COMPAT)
-	 {
+	function hsc_secure($string, $quote_style=ENT_COMPAT)
+	{
 		// init
 		$aTransSpecchar = array('&' => '&amp;',
 								'"' => '&quot;',
@@ -809,11 +828,15 @@ class Wakka
 
 		// return translated string
 		return strtr($string,$aTransSpecchar);
-	 }
+	}
 
 	/**
 	 * Get a value provided by user (by get, post or cookie) and sanitize it.
 	 * The method is also helpful to disable warning when the value was absent.
+	 *
+	 * @version	1.0
+	 *
+	 * @uses	Wakka::htmlspecialchars_ent()
 	 *
 	 * @access	public
 	 * @since	Wikka 1.3
@@ -824,21 +847,215 @@ class Wakka
 	 */
 	function GetSafeVar($varname, $gpc='get')
 	{
-		$safe_var = null;
+		$safe_var = NULL;
 		if ($gpc == 'post')
 		{
-			$safe_var = isset($_POST[$varname]) ? $_POST[$varname] : null;
+			$safe_var = isset($_POST[$varname]) ? $_POST[$varname] : NULL;
 		}
 		elseif ($gpc == 'get')
 		{
-			$safe_var = isset($_GET[$varname]) ? $_GET[$varname] : null;
+			$safe_var = isset($_GET[$varname]) ? $_GET[$varname] : NULL;
 		}
 		elseif ($gpc == 'cookie')
 		{
-			$safe_var = isset($_COOKIE[$varname]) ? $_COOKIE[$varname] : null;
+			$safe_var = isset($_COOKIE[$varname]) ? $_COOKIE[$varname] : NULL;
 		}
 		return ($this->htmlspecialchars_ent($safe_var));
 	}
+
+	/**
+	 * CODE presentation
+	 */
+
+	/**
+	 * Highlight a code block with GeSHi.
+	 *
+	 * The path to GeSHi and the GeSHi language files must be defined in the configuration.
+	 *
+	 * This implementation fits in with general Wikka behavior; e.g., we use classes and an external
+	 * stylesheet to render hilighting.
+	 *
+	 * Apart from this fixed general behavior, WikiAdmin can configure a few behaviors via the
+	 * configuration file:
+	 * geshi_header			- wrap code in div (default) or pre
+	 * geshi_line_numbers	- disable line numbering, or enable normal or fancy line numbering
+	 * geshi_tab_width		- override tab width (default is 8 but 4 is more commonly used in code)
+	 *
+	 * Limitation: while line numbering is supported, extra GeSHi styling for line numbers is not.
+	 * When line numbering is enabled, the end user can "turn it on" by specifying a starting line
+	 * number together with the language code in a code block, e.g., (php;260); this number is then
+	 * passed as the $start parameter for this method.
+	 *
+	 * @since	wikka 1.1.6.0
+	 *
+	 * @access	public
+	 * @uses	Config::$geshi_path
+	 * @uses	Config::$geshi_languages_path
+	 * @uses	Config::$geshi_header
+	 * @uses	Config::$geshi_line_numbers
+	 * @uses	Config::$geshi_tab_width
+	 * @uses	GeShi
+	 *
+	 * @param	string	$sourcecode	required: source code to be highlighted
+	 * @param	string	$language	required: language spec to select highlighter
+	 * @param	integer	$start		optional: start line number; if supplied and >= 1 line numbering
+	 *			will be turned on if it is enabled in the configuration.
+	 * @return	string	code block with syntax highlighting classes applied
+	 * @todo		support for GeSHi line number styles
+	 * @todo		enable error handling
+	 */
+	function GeSHi_Highlight($sourcecode, $language, $start=0)
+	{
+		// create GeSHi object
+		include_once($this->GetConfigValue('geshi_path').DIRECTORY_SEPARATOR.'geshi.php');
+		$geshi =& new GeSHi($sourcecode, $language, $this->GetConfigValue('geshi_languages_path'));				# create object by reference
+
+		$geshi->enable_classes();								# use classes for hilighting (must be first after creating object)
+		$geshi->set_overall_class('code');						# enables using a single stylesheet for multiple code fragments
+
+		// configure user-defined behavior
+		$geshi->set_header_type(GESHI_HEADER_DIV);				# set default
+		if (NULL !== $this->GetConfigValue('geshi_header'))				# config override
+		{
+			if ('pre' == $this->GetConfigValue('geshi_header'))
+			{
+				$geshi->set_header_type(GESHI_HEADER_PRE);
+			}
+		}
+		$geshi->enable_line_numbers(GESHI_NO_LINE_NUMBERS);		# set default
+		if ($start > 0)											# line number > 0 _enables_ numbering
+		{
+			if (NULL !== $this->GetConfigValue('geshi_line_numbers'))		# effect only if enabled in configuration
+			{
+				if ('1' == $this->GetConfigValue('geshi_line_numbers'))
+				{
+					$geshi->enable_line_numbers(GESHI_NORMAL_LINE_NUMBERS);
+				}
+				elseif ('2' == $this->GetConfigValue('geshi_line_numbers'))
+				{
+					$geshi->enable_line_numbers(GESHI_FANCY_LINE_NUMBERS);
+				}
+				if ($start > 1)
+				{
+					$geshi->start_line_numbers_at($start);
+				}
+			}
+		}
+		if (NULL !== $this->GetConfigValue('geshi_tab_width'))			# GeSHi override (default is 8)
+		{
+			$geshi->set_tab_width($this->GetConfigValue('geshi_tab_width'));
+		}
+
+		// parse and return highlighted code
+		// comments added to make GeSHi-highlighted block visible in code JW/20070220
+		return '<!--start GeSHi-->'."\n".$geshi->parse_code()."\n".'<!--end GeSHi-->'."\n";
+	}
+
+	/**#@-*/
+
+	/**#@+
+	 * @category	Variable-related methods
+	 * @todo	decide if we need (all) these methods!
+	 *			JW: my vote is NOT if all a getter does is return a variable directly;
+	 *			but useful if there's some processing or checking involved -
+	 *			in which case an accompanying "setter" method should be used
+	 *			for creating/updating the variable - if only for consistency.
+	 *
+	 *			JW: GetConfigValue() is one such - so I created its sister
+	 *			SetConfigValue as well.
+	 */
+
+	/**
+	 * Get the name tag of the current page.
+	 *
+	 * @uses	Wakka::$tag
+	 *
+	 * @return	string the name of the page
+	 */
+	function GetPageTag()
+	{
+		return $this->tag;
+	}
+
+	/**
+	 * Get the time the current verion of the current page was saved.
+	 *
+	 * @uses	Wakka::$page
+	 *
+	 * @return	string
+	 */
+	function GetPageTime()
+	{
+		return $this->page['time'];
+	}
+
+	/**
+	 * Get the handler used on the page.
+	 *
+	 * @uses	Wakka::$handler
+	 * @return string name of the handler.
+	 */
+	function GetHandler()
+	{
+		return $this->handler;
+	}
+
+	/**
+	 * Get the value of a given item from the wikka config.
+	 *
+	 * @uses	Wakka::$config
+	 *
+	 * @param	$name	mandatory: name of a key in the config array
+	 * @return	mixed	the value of the configuration item, or NULL if not found
+	 */
+	function GetConfigValue($name)
+	{
+		$val = (isset($this->config[$name])) ? $this->config[$name] : NULL;
+		return $val;
+	}
+	/**
+	 * Set the value of a given item from the wikka config.
+	 *
+	 * @uses	Wakka::$config
+	 *
+	 * @param	$name mandatory: name of a key in the config array
+	 * @param	$value mandatory: the value to set the item at
+	 * 	 */
+	function SetConfigValue($name,$value)
+	{
+		$this->config[$name] = $value;
+	}
+
+	/**
+	 * Get the name of the Wiki.
+	 *
+	 * @uses	Config::$wakka_name
+	 * @return	string the name of the Wiki.
+	 */
+	function GetWakkaName()
+	{
+		return $this->GetConfigValue('wakka_name');
+	}
+
+	/**
+	 * Get the wikka version.
+	 *
+	 * @return	string the wikka version
+	 */
+	function GetWakkaVersion()
+	{
+		return $this->VERSION;
+	}
+
+	/**
+	 *
+	 * @return unknown_type
+	 */
+	function GetWikkaPatchLevel()
+	{
+		return $this->PATCH_LEVEL;
+	}
+
 
 	/**
 	 * Create and store a secret key ("session key").
@@ -953,113 +1170,33 @@ class Wakka
 	/**#@-*/
 
 	/**#@+
-	 * @category	Variable-related methods
-	 */
-
-	/**
-	 * Get the name ("tag") of the current page.
-	 *
-	 * @uses	Wakka::$tag
-	 * @return	string the name of the page
-	 */
-	function GetPageTag()
-	{
-		return $this->tag;
-	}
-
-	/**
-	 * Get the time the current verion of the current page was saved.
-	 *
-	 * @uses	Wakka::$page
-	 * @return	string
-	 */
-	function GetPageTime()
-	{
-		return $this->page["time"];
-	}
-
-	/**
-	 * Get the handler used on the page.
-	 *
-	 * @uses	Wakka::$handler
-	 * @return string name of the handler.
-	 */
-	function GetHandler()
-	{
-		return $this->handler;
-	}
-
-	/**
-	 * Get the value of a given item from the wikka config.
-	 *
-	 * @uses	Wakka::$config
-	 *
-	 * @param	$name	mandatory: name of a key in the config array
-	 * @return	mixed	the value of the configuration item, or NULL if not found
-	 */
-	function GetConfigValue($name)
-	{
-		$val = (isset($this->config[$name])) ? $this->config[$name] : NULL;
-		return $val;
-	}
-	/**
-	 * Set the value of a given item from the wikka config.
-	 *
-	 * @uses	Wakka::$config
-	 *
-	 * @param	$name mandatory: name of a key in the config array
-	 * @param	$value mandatory: the value to set the item at
-	 * 	 */
-	function SetConfigValue($name,$value)
-	{
-		$this->config[$name] = $value;
-	}
-
-	/**
-	 * Get the name of the Wiki.
-	 *
-	 * @uses	Config::$wakka_name
-	 * @return	string the name of the Wiki.
-	 */
-	function GetWakkaName()
-	{
-		return $this->GetConfigValue("wakka_name");
-	}
-
-	/**
-	 * Get the wikka version.
-	 *
-	 * @return	string the wikka version
-	 */
-	function GetWakkaVersion()
-	{
-		return $this->VERSION;
-	}
-
-	/**
-	 *
-	 * @return unknown_type
-	 */
-	function GetWikkaPatchLevel()
-	{
-		return $this->PATCH_LEVEL;
-	}
-
-	/**#@-*/
-
-	/**#@+
 	 * @category	Page
 	 */
 
 	/**
+	 * LoadPage loads the page whose name is $tag.
 	 *
-	 * @param $tag
-	 * @param $time
-	 * @param $cache
-	 * @return unknown_type
+	 * If parameter $time is provided, LoadPage returns the page as it was at that exact time.
+	 * If parameter $time is not provided, it returns the page as its latest state.
+	 * LoadPage and LoadPageById remember the page tag or page id they've queried by caching them,
+	 * so, these methods try first to retrieve data from cache if available.
+	 *
+	 * @access	public
+	 * @uses	Config::$table_prefix
+	 * @uses	Wakka:LoadSingle()
+	 * @uses	Wakka:CachePage()
+	 * @uses	Wakka:CacheNonExistentPage()
+	 * @uses	Wakka:GetCachedPage()
+	 *
+	 * @param	string	$tag	mandatory: name of the page to load
+	 * @param	string	$time	optional: timestamp if a specific revision should be loaded
+	 * @param	boolean	$cache	optional: if TRUE and the latest version was requested,
+	 *					an attempt to retrieve from cache will be made first.
+	 *					default: TRUE
+	 * @return	mixed	array with page structure, or FALSE if not retrieved
 	 * @todo	for 1.3: compare with trunk
 	 */
-	function LoadPage($tag, $time = "", $cache = 1)
+	function LoadPage($tag, $time='', $cache=TRUE)
 	{
 		// retrieve from cache
 		if (!$time && $cache) {
@@ -1078,18 +1215,13 @@ class Wakka
 	}
 
 	/**
+	 * GetCachedPage gets a page from cache whose name is $tag.
 	 *
-	 * @return unknown_type
-	 */
-	function IsLatestPage()
-	{
-		return $this->latest;
-	}
-
-	/**
+	 * @access	public
+	 * @uses	Wakka::$pageCache
 	 *
-	 * @param $tag
-	 * @return unknown_type
+	 * @param	mixed	$tag	the name of the page to retrieve from cache.
+	 * @return	mixed	an array as returned by LoadPage(), or FALSE if absent from cache.
 	 */
 	function GetCachedPage($tag)
 	{
@@ -1097,13 +1229,32 @@ class Wakka
 	}
 
 	/**
+	 * CachePage caches a page to prevent reusing MySQL operations when reloading it.
 	 *
-	 * @param $page
-	 * @return unknown_type
+	 * <p>Cached pages are stored in the array {@link Wakka::pageCache}.</p>
+	 * <p>If this is the latest version of the page, the page name is used as a key for the array. That page name
+	 * may be lowercased if the database doesn't work with case sensitive collation. Lowercasing it enhances the
+	 * power of caching by preventing reloading of a page (with mysql) under another case. But if the database
+	 * needs to work with case sensitive collation (like cp1250_czech_cs), you must set a config value named
+	 * `pagename_case_sensitive' to 1, and this lowercasing will be disabled.</p>
+	 * <p>CachePage also stores the page under a key made of a special marker slash+sharp (/#) concatenated with
+	 * the page id. As example, a page having id=208 will be stored at $this->pageCache['/#208'].This ensures
+	 * that a page previously loaded by its name or by id will be retrieved from cache if the page id match.</p>
+	 * <p>Normally, the type of the value of the array is an array containing the page data, as returned by
+	 * LoadPage. However, If this is the latest version of the page, a link will be made between the page id and
+	 * the page tag. In such case, the value of an entry of $this->pageCache[] will be just a string beginning
+	 * with a slash (/), and to retrieve the data, you have to use this string as a key for the array
+	 * $this->pageCache[] after suppressing the leading slash.</p>
+	 *
+	 * @access	public
+	 * @uses	Wakka::$pageCache
+	 *
+	 * @param	mixed	$page
+	 * @return	void
 	 */
 	function CachePage($page)
 	{
-		$this->pageCache[$page["tag"]] = $page;
+		$this->pageCache[$page['tag']] = $page;
 	}
 
 	/**
@@ -1120,14 +1271,20 @@ class Wakka
 	}
 
 	/**
+	 * Store page data.
 	 *
-	 * @param $page
-	 * @return unknown_type
+	 * @uses	Wakka::$page
+	 * @uses	Wakka::$tag
+	 * @param	string	$page
+	 * @return	void
 	 */
 	function SetPage($page)
 	{
 		$this->page = $page;
-		if ($this->page["tag"]) $this->tag = $this->page["tag"];
+		if ($this->page['tag'])
+		{
+			$this->tag = $this->page['tag'];
+		}
 	}
 
 	/**
@@ -1155,9 +1312,12 @@ class Wakka
 	/**
 	 * LoadPageById loads a page whose id is $id.
 	 *
+	 * @access	public
+	 * @uses	Wakka::GetCachedPageById()
 	 * @uses	Wakka::LoadSingle()
 	 * @uses	Wakka::GetConfigValue()
 	 * @uses	Config::$table_prefix
+	 *
 	 * @param	int		$id		mandatory: Id of the page to load.
 	 * @return	array with page structure identified by $id, or ? if no page could be retrieved
 	 * @todo	for 1.3: compare and add caching ability
@@ -1174,23 +1334,35 @@ class Wakka
 	}
 
 	/**
+	 * LoadRevisions: Load revisions of a page.
 	 *
-	 * @param $page
-	 * @return unknown_type
+	 * @access	public
+	 * @uses	Wakka::GetConfigValue()
+	 * @uses	Wakka::LoadAll()
+	 *
+	 * @param	string	$page Name of the page to view revisions of
+	 * @return	array	This value contains * from page.
 	 */
 	function LoadRevisions($page)
 	{
-		return $this->LoadAll("select * from ".$this->config["table_prefix"]."pages where tag = '".mysql_real_escape_string($page)."' order by id desc");
+		return $this->LoadAll("select * from ".$this->GetConfigValue('table_prefix')."pages where tag = '".mysql_real_escape_string($page)."' order by id desc");
 	}
 
 	/**
 	 * LoadOldestRevision: Load the oldest known revision of a page.
 	 *
 	 * @access	public
+	 * @uses	Config::$pagename_case_sensitive
+	 * @uses	Config::$table_prefix
+	 * @uses	Wakka::GetConfigValue()
+	 * @uses	Wakka::$specialCache
 	 * @uses	Wakka::LoadSingle()
 	 *
 	 * @param	string	$tag	The name of the page to load oldest revision of.
 	 * @return	array
+	 * @todo	review usage of cache - see NOTES above. Also note that revisions
+	 *			are (intentionally or not) stored only if config flag
+	 *			'pagename_case_sensitive' is FALSE
 	 */
 	function LoadOldestRevision($tag)
 	{
@@ -1210,32 +1382,53 @@ class Wakka
 	}
 
 	/**
+	 * Load pages linking to a given page.
 	 *
-	 * @param $tag
-	 * @return unknown_type
+	 * @uses	Config::$table_prefix
+	 * @uses	Wakka::LoadAll()
+	 * @param	string	$tag	mandatory: name of page to find referring links to
+	 * @return	array	one record with a page name for each page found (empty array if none found).
 	 */
-	function LoadPagesLinkingTo($tag)
+	function LoadPagesLinkingTo($tag)	// #410
 	{
-		return $this->LoadAll("select from_tag as tag from ".$this->config["table_prefix"]."links where to_tag = '".mysql_real_escape_string($tag)."' order by tag");
+		return $this->LoadAll("
+			SELECT from_tag AS page_tag
+			FROM ".$this->GetConfigValue('table_prefix')."links
+			WHERE to_tag = '".mysql_real_escape_string($tag)."'
+			ORDER BY page_tag");
 	}
 
 	/**
+	 * Load the last x edited pages on the wiki.
 	 *
-	 * @return unknown_type
+	 * @uses	Config::$table_prefix
+	 * @uses	Wakka::LoadAll()
+	 * @uses	Wakka::CachePage()
+	 *
+	 * @return	array	the last x pages that were changed (empty array if none found)
+	 * @todo	use constant for default limit value (no "magic numbers!")
+	 * @todo	do we need the whole page for each, or only specific fields?
 	 */
 	function LoadRecentlyChanged()
 	{
-		if ($pages = $this->LoadAll("select * from ".$this->config["table_prefix"]."pages where latest = 'Y' order by id desc"))
+		$pages = $this->LoadAll("
+			SELECT *
+			FROM ".$this->GetConfigValue('table_prefix')."pages
+			WHERE latest = 'Y'
+			ORDER BY id DESC
+			);
+		if ($pages)
 		{
 			foreach ($pages as $page)
 			{
 				$this->CachePage($page);
 			}
-			return $pages;
 		}
+		return $pages;
 	}
 
 	/**
+	 * Load pages that need to be created.
 	 *
 	 * @return unknown_type
 	 */
@@ -1554,89 +1747,6 @@ class Wakka
 			$menu_output .= '</ul>'."\n";
 		}
 		return $menu_output;
-	}
-
-	/**
-	 * Highlight a code block with GeSHi.
-	 *
-	 * The path to GeSHi and the GeSHi language files must be defined in the configuration.
-	 *
-	 * This implementation fits in with general Wikka behavior; e.g., we use classes and an external
-	 * stylesheet to render hilighting.
-	 *
-	 * Apart from this fixed general behavior, WikiAdmin can configure a few behaviors via the
-	 * configuration file:
-	 * geshi_header			- wrap code in div (default) or pre
-	 * geshi_line_numbers	- disable line numbering, or enable normal or fancy line numbering
-	 * geshi_tab_width		- override tab width (default is 8 but 4 is more commonly used in code)
-	 *
-	 * Limitation: while line numbering is supported, extra GeSHi styling for line numbers is not.
-	 * When line numbering is enabled, the end user can "turn it on" by specifying a starting line
-	 * number together with the language code in a code block, e.g., (php;260); this number is then
-	 * passed as the $start parameter for this method.
-	 *
-	 * @access	public
-	 * @since	wikka 1.1.6.0
-	 * @uses	Config::$geshi_path
-	 * @uses	Config::$geshi_header
-	 * @uses	Config::geshi_languages_path
-	 * @uses	Config::$geshi_line_numbers
-	 * @uses	Config::$geshi_tab_width
-	 * @uses	GeShi
-	 *
-	 * @param	string	$sourcecode	required: source code to be highlighted
-	 * @param	string	$language	required: language spec to select highlighter
-	 * @param	integer	$start		optional: start line number; if supplied and >= 1 line numbering
-	 * 			will be turned on if it is enabled in the configuration.
-	 * @return	string	code block with syntax highlighting classes applied
-	 * @todo	support for GeSHi line number styles
-	 * @todo	enable error handling
-	 */
-	function GeSHi_Highlight($sourcecode, $language, $start=0)
-	{
-		// create GeSHi object
-		include_once($this->config['geshi_path'].'/geshi.php');
-		$geshi =& new GeSHi($sourcecode, $language, $this->config['geshi_languages_path']);				# create object by reference
-
-		$geshi->enable_classes();								# use classes for hilighting (must be first after creating object)
-		$geshi->set_overall_class('code');						# enables using a single stylesheet for multiple code fragments
-
-		// configure user-defined behavior
-		$geshi->set_header_type(GESHI_HEADER_DIV);				# set default
-		if (isset($this->config['geshi_header']))				# config override
-		{
-			if ('pre' == $this->config['geshi_header'])
-			{
-				$geshi->set_header_type(GESHI_HEADER_PRE);
-			}
-		}
-		$geshi->enable_line_numbers(GESHI_NO_LINE_NUMBERS);		# set default
-		if ($start > 0)											# line number > 0 _enables_ numbering
-		{
-			if (isset($this->config['geshi_line_numbers']))		# effect only if enabled in configuration
-			{
-				if ('1' == $this->config['geshi_line_numbers'])
-				{
-					$geshi->enable_line_numbers(GESHI_NORMAL_LINE_NUMBERS);
-				}
-				elseif ('2' == $this->config['geshi_line_numbers'])
-				{
-					$geshi->enable_line_numbers(GESHI_FANCY_LINE_NUMBERS);
-				}
-				if ($start > 1)
-				{
-					$geshi->start_line_numbers_at($start);
-				}
-			}
-		}
-		if (isset($this->config['geshi_tab_width']))			# GeSHi override (default is 8)
-		{
-			$geshi->set_tab_width($this->config['geshi_tab_width']);
-		}
-
-		// parse and return highlighted code
-		// comments added to make GeSHi-highlighted block visible in code JW/20070220
-		return '<!--start GeSHi-->'."\n".$geshi->parse_code()."\n".'<!--end GeSHi-->'."\n";
 	}
 
 	/**#@-*/
