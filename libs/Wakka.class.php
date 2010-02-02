@@ -4155,7 +4155,7 @@ class Wakka
 	{
 		// set defaults
 		if (!$tag) $tag = $this->GetPageTag();
-		if (!$user) $user = $this->GetUserName();
+		if (!$username) $username = $this->GetUserName();
 
 		// if current user is owner, return true. owner can do anything!
 		if ($this->UserIsOwner($tag)) return TRUE;
