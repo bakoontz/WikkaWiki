@@ -36,16 +36,7 @@
 // ---------------------- DEBUGGING AND ERROR REPORTING -----------------------
 error_reporting(E_ALL);
 //error_reporting (E_ALL ^ E_NOTICE);
-
-// If you need to use this installation with a configuration file outside the
-// installation directory uncomment the following line and adapt it to reflect
-// the (filesystem) path to where your configuration file is located.
-// This would make it possible to store the configuration file outside of the
-// webroot, or to share one configuration file between several Wikka Wiki
-// installations.
-// This replaces the use of the environment variable WAKKA_CONFIG for security
-// reasons. [SEC]
-#if (!defined('WAKKA_CONFIG')) define('WAKKA_CONFIG','path/to/your/wikka.config.php');
+// ---------------------- END DEBUGGING AND ERROR REPORTING -------------------
 
 // ---------------------------- LANGUAGE DEFAULTS -----------------------------
 /**
@@ -96,8 +87,9 @@ if(!defined('PATH_DIVIDER')) define('PATH_DIVIDER', ',');
 if (!defined('MINIMUM_PHP_VERSION'))	define('MINIMUM_PHP_VERSION', '5.0');
 if (!defined('MINIMUM_MYSQL_VERSION'))	define('MINIMUM_MYSQL_VERSION', '4.1');
 /**#@-*/
+// ----------------------------- END BASIC CONSTANTS ---------------------------
 
-// Sanity checks - we die if these conditions aren't met
+// ----------------------------- SANITY CHECKS ---------------------------------
 
 // More intelligent version check, more intelligently placed ;)
 if (!function_exists('version_compare') ||
@@ -128,7 +120,7 @@ else
 	die(ERROR_WAKKA_LIBRARY_MISSING);
 }
 
-// Sanity checks OK - start rolling....
+// ----------------------------- END SANITY CHECKS ----------------------------
 
 ob_start();
 global $tstart;
