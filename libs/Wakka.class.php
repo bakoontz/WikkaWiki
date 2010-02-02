@@ -2237,7 +2237,7 @@ class Wakka
 	function MiniHref($handler='', $tag='')
 	{
 		if (!$tag = trim($tag)) $tag = $this->tag;
-		return $tag.($method ? "/".$method : "");
+		return $tag.($handler ? "/".$handler : "");
 	}
 
 	/**
