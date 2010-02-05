@@ -3911,8 +3911,9 @@ class Wakka
 	 */
 	function UserIsOwner($tag = '')
 	{
+	
 		// if not logged in, user can't be owner!
-		if (!$this->existsUser())
+		if (!$this->GetUser())
 		{
 			return FALSE;
 		}
@@ -3941,7 +3942,6 @@ class Wakka
 	{
 		$adminstring = $this->GetConfigValue('admin_users');
 		$adminarray = explode(',' , $adminstring);
-
 		if(TRUE===empty($user))
 		{
 			$user = $this->GetUserName();
@@ -4156,7 +4156,6 @@ class Wakka
 		// set defaults
 		if (!$tag) $tag = $this->GetPageTag();
 		if (!$username) $username = $this->GetUserName();
-
 		// if current user is owner, return true. owner can do anything!
 		if ($this->UserIsOwner($tag)) return TRUE;
 
@@ -4333,23 +4332,23 @@ class Wakka
 	 * @param $method
 	 * @return unknown_type
 	 */
-	function Run($tag, $method = "")
+	function Run($tag, $method = '')
 	{
 		// Set default cookie path
 		$base_url_path = preg_replace('/wikka\.php/', '', $_SERVER['SCRIPT_NAME']);
 		$this->wikka_cookie_path = ('/' == $base_url_path) ? '/' : substr($base_url_path,0,-1);
 
 		// do our stuff!
-		if (!$this->handler = trim($method)) $this->handler = "show";
-		if (!$this->tag = trim($tag)) $this->Redirect($this->Href("", $this->config["root_page"]));
+		if (!$this->handler = trim($method)) $this->handler = 'show';
+		if (!$this->tag = trim($tag)) $this->Redirect($this->Href('', $this->GetConfigValue('root_page')));
 		if (!$this->GetUser() && ($user = $this->LoadUser($this->GetCookie('user_name'), $this->GetCookie('pass')))) $this->SetUser($user);
-		if ((!$this->GetUser() && isset($_COOKIE["wikka_user_name"])) && ($user = $this->LoadUser($_COOKIE["wikka_user_name"], $_COOKIE["wikka_pass"])))
+		if ((!$this->GetUser() && isset($_COOKIE['wikka_user_name'])) && ($user = $this->LoadUser($_COOKIE['wikka_user_name'], $_COOKIE['wikka_pass'])))
 		{
 			//Old cookies : delete them
-			SetCookie('wikka_user_name', "", 1, $this->wikka_cookie_path);
-			$_COOKIE['wikka_user_name'] = "";
+			SetCookie('wikka_user_name', '', 1, $this->wikka_cookie_path);
+			$_COOKIE['wikka_user_name'] = '';
 			SetCookie('wikka_pass', '', 1, $this->wikka_cookie_path);
-			$_COOKIE['wikka_pass'] = "";
+			$_COOKIE['wikka_pass'] = '';
 			$this->SetUser($user);
 		}
 		$this->SetPage($this->LoadPage($tag, (isset($_GET['time']) ? $_GET['time'] :''))); #312
@@ -4361,17 +4360,17 @@ class Wakka
 
 		if (preg_match('/\.(xml|mm)$/', $this->handler))
 		{
-			header("Content-type: text/xml");
+			header('Content-type: text/xml');
 			print($this->handler($this->handler));
 		}
 		// raw page handler
 		elseif ($this->handler == "raw")
 		{
-			header("Content-type: text/plain");
+			header('Content-type: text/plain');
 			print($this->handler($this->handler));
 		}
 		// grabcode page handler
-		elseif ($this->handler == "grabcode")
+		elseif ($this->handler == 'grabcode')
 		{
 			print($this->handler($this->handler));
 		}
