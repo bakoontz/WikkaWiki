@@ -3426,6 +3426,7 @@ class Wakka
 		$_SESSION['user'] = $user;
 		$this->SetPersistentCookie('user_name', $user['name']);
 		$this->SetPersistentCookie('pass', $user['password']);
+		$this->registered = true;
 	}
 
 	/**
@@ -3452,6 +3453,7 @@ class Wakka
 			DELETE FROM ".$this->GetConfigValue('table_prefix')."sessions
 			WHERE DATE_SUB(NOW(), INTERVAL ".PERSISTENT_COOKIE_EXPIRY." SECOND) > session_start"
 			);
+		$this->registered = false;
 	}
 
 	/**
@@ -4161,10 +4163,10 @@ class Wakka
 		if ($this->UserIsOwner($tag)) return TRUE;
 
 		// see whether user is registered and logged in
-		$registered = FALSE;
+		$this->registered = FALSE;
 		if ($this->GetUser())
 		{
-			$registered = TRUE;
+			$this->registered = TRUE;
 		}
 
 		// load acl
@@ -4205,8 +4207,8 @@ class Wakka
 					return !$negate;
 				// only registered users
 				case "+":
-					// return ($registered) ? !$negate : false;
-					return ($registered) ? !$negate : $negate;
+					// return ($this->registered) ? !$negate : false;
+					return ($this->registered) ? !$negate : $negate;
 				// aha! a user entry.
 				default:
 					if ($line == $user)
