@@ -281,7 +281,7 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 }
 else
 {
-	$message = '<em class="error">'.ERROR_NO_WRITE_ACCESS.'</em><br />'."\n".
+	$message = '<em class="error">'.$this->Format(ERROR_NO_WRITE_ACCESS).'</em><br />'."\n".
 			"<br />\n".
 			'<a href="'.$this->Href('showcode').'" title="'.SHOWCODE_LINK_TITLE.'">'.SHOWCODE_LINK.'</a>'.
 			"<br />\n";
