@@ -14,8 +14,9 @@
  * @uses	Wakka::HasAccess()
  * @uses	Wakka::CheckMySQLVersion()
  * @uses	Wakka::htmlspecialchars_ent()
+ * @uses	Wakka::Link()
  *
- * @todo	[accesibility] make form accessible
+ * @todo	[accessibility] make form accessible
  * @todo	i18n search button text
  */
 
@@ -86,34 +87,6 @@ if ('' !== $phrase)
 #if ($this->CheckMySQLVersion(4,00,01))	// DONE replace with version_compare
 if ($this->CheckMySQLVersion('4.00.01'))
 {
-	// define variables for template
-	$search_tips     = SEARCH_TIPS;
-	$search_word_1   = SEARCH_WORD_1;
-	$search_word_2   = SEARCH_WORD_2;
-	$search_word_3   = SEARCH_WORD_3;
-	$search_word_4   = SEARCH_WORD_4;
-	$search_phrase   = SEARCH_PHRASE;
-	$search_target_1 = SEARCH_TARGET_1;
-	$search_target_2 = SEARCH_TARGET_2;
-	$search_target_3 = SEARCH_TARGET_3;
-	$search_target_4 = SEARCH_TARGET_4;
-	$search_target_5 = SEARCH_TARGET_5;
-	// define template @@@ TODO make more structural markup
-	$tpl_search_tips = <<<TPLSEARCHTIPS
-	<br /><br /><hr /><br />
-	<strong>$search_tips</strong><br /><br />
-	<div class="indent">$search_word_1 $search_word_2</div>
-	$search_target_1<br /><br />
-	<div class="indent">+$search_word_1 +$search_word_3</div>
-	$search_target_2<br /><br />
-	<div class="indent">+$search_word_1 -$search_word_4</div>
-	$search_target_3<br /><br />
-	<div class="indent">$search_word_1*</div>
-	$search_target_4<br /><br />
-	<div class="indent">"$search_phrase"</div>
-	$search_target_5 <br />
-TPLSEARCHTIPS;
-	// print template
-	echo $tpl_search_tips;
+	print(SEARCH_TIPS);
 }
 ?>

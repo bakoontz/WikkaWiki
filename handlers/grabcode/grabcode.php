@@ -11,6 +11,7 @@
  * @filesource
  *
  * @author	{@link http://wikkawiki.org/DarTar Dario Taraborelli}
+ * @version	0.21
  * @since	Wikka 1.1.6.2
  *
  * @uses	Wakka::GetConfigValue()
@@ -23,12 +24,6 @@
  *			see last issue on WikkaBugs (!)
  */
 
-/**
- * defaults
- */
-define('DEFAULT_FILENAME', 'codeblock.txt'); # default name for code blocks
-define('FILE_EXTENSION', '.txt'); # extension appended to code block name for security reasons
-
 // initialize variables
 $code = '';
 $filename = '';
@@ -40,7 +35,7 @@ if (1 == (int) $this->GetConfigValue('grabcode_button'))
 	//get URL parameters
 	$code = urldecode($_POST['code']);
 	// TODO: use central regex library for filename validation
-	$filename = (isset($_POST['filename']) && preg_match('/\w[-.\w]*/', $_POST['filename'])) ? urldecode($_POST['filename']).FILE_EXTENSION : DEFAULT_FILENAME;
+	$filename = (isset($_POST['filename']) && preg_match('/\w[-.\w]*/', $this->GetSafeVar('filename', 'post'))) ? urldecode($this->GetSafeVar('filename', 'post')).FILE_EXTENSION : DEFAULT_FILENAME;
 
 	// @@@ shared download code
 	//set HTTP headers

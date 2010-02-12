@@ -115,7 +115,8 @@ if ($user = $this->GetUser())
 		$default_comment_display = $this->GetSafeVar('default_comment_display', 'post');
 		$revisioncount = (int) $this->GetSafeVar('revisioncount', 'post');
 		$changescount = (int) $this->GetSafeVar('changescount', 'post');
-
+		$usertheme = $this->GetSafeVar('theme', 'post');
+		
 		// validate form input
 		switch (TRUE)
 		{
@@ -144,7 +145,8 @@ if ($user = $this->GetUser())
 						show_comments = '".mysql_real_escape_string($show_comments)."',
 						default_comment_display = '".$default_comment_display."',
 						revisioncount = ".$revisioncount.",
-						changescount = ".$changescount."
+						changescount = ".$changescount.",
+						theme = '".mysql_real_escape_string($usertheme)."'						
 					WHERE name = '".$user['name']."'
 					LIMIT 1"
 					);
@@ -163,6 +165,7 @@ if ($user = $this->GetUser())
 		$default_comment_display = $user['default_comment_display'];
 		$revisioncount = $user['revisioncount'];
 		$changescount = $user['changescount'];
+		$usertheme = ($user['theme']!= '')? $user['theme'] : $this->GetConfigValue('theme');
 	}
 
 	// *** BEGIN LOGOUT/USERSETTINGS
@@ -299,6 +302,9 @@ if ($user = $this->GetUser())
 	<br />
 	<label for="changescount"><?php echo RECENTCHANGES_DISPLAY_LIMIT_LABEL ?></label>
 	<input id="changescount" type="text" <?php echo $changescount_highlight; ?> name="changescount" value="<?php echo $this->htmlspecialchars_ent($changescount) ?>" size="40" />
+	<br />
+	<label for="selecttheme"><?php echo THEME_LABEL ?></label>
+	<?php $this->SelectTheme($usertheme); ?>
 	<br />
 	<input id="updatesettingssubmit" type="submit" value="<?php echo UPDATE_SETTINGS_BUTTON ?>" />
 	<br />

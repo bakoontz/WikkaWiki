@@ -17,7 +17,6 @@
  *
  * @todo	replace numbers by constants: no "magic numbers"!)
  */
-
 header('Content-type: text/xml');
 
 /**
@@ -63,7 +62,7 @@ if ($pages = $this->LoadRecentlyChanged())
 		{
 
 			// day header
-			list($day, $time) = explode(" ", $page['time"']);
+			list($day, $time) = explode(' ', $page['time']);
 			if ($day != $curday)
 			{
 				if ($curday) $xml .= "</node>\n";

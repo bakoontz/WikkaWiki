@@ -47,8 +47,8 @@ define('WIKKA_ERROR_EMPTY_USERNAME', 'Please fill in your username!');
 define('WIKKA_DIFF_ADDITIONS_HEADER', 'Additions:');
 define('WIKKA_DIFF_DELETIONS_HEADER', 'Deletions:');
 define('WIKKA_DIFF_NO_DIFFERENCES', 'No Differences');
-define('ERROR_USERNAME_UNAVAILABLE', "Sorry, this user name is unavailable.");
-define('ERROR_USER_SUSPENDED', "Sorry, this account has been suspended. Please contact an administrator for further details.");
+define('ERROR_USERNAME_UNAVAILABLE', 'Sorry, this user name is unavailable.');
+define('ERROR_USER_SUSPENDED', 'Sorry, this account has been suspended. Please contact an administrator for further details.');
 define('WIKKA_ERROR_INVALID_PAGE_NAME', 'The page name %s is invalid. Valid page names must start with a capital letter, contain only letters and numbers, and be in CamelCase format.'); // %s - page name
 define('WIKKA_ERROR_PAGE_ALREADY_EXIST', 'Sorry, the target page already exists');
 define('WIKKA_LOGIN_LINK_DESC', 'login');
@@ -65,6 +65,7 @@ define('WIKKA_REVISIONS', 'revisions');
 define('WIKKA_REVISION_NUMBER', 'Revision %s');
 define('WIKKA_REV_WHEN_BY_WHO', '%1$s by %2$s'); // %1$s - timestamp; %2$s - user name
 define('WIKKA_NO_PAGES_FOUND', 'No pages found.');
+define('WIKKA_NO_PAGES_FOUND_FOR', 'No pages found for %s.');
 define('WIKKA_PAGE_OWNER', 'Owner: %s'); // %s - page owner name or link
 define('WIKKA_COMMENT_AUTHOR_DIVIDER', ', comment by '); //TODo check if we can construct a single phrase here
 define('WIKKA_PAGE_EDIT_LINK_DESC', 'edit');
@@ -74,8 +75,17 @@ define('WIKKA_BACKLINKS_LINK_TITLE', 'Display a list of pages linking to %s'); /
 define('WIKKA_JRE_LINK_DESC', 'Java Runtime Environment');
 define('WIKKA_NOTE', 'NOTE:');
 define('WIKKA_JAVA_PLUGIN_NEEDED', 'Java 1.4.1 (or later) Plug-in is needed to run this applet,');
+define('REVISION_DATE_FORMAT', 'D, d M Y'); // @TODO 
+define('REVISION_TIME_FORMAT', 'H:i T'); // @TODO 
+define('TITLE_REVISION_LINK', 'View recent revisions list for %s');  // @TODO
+define('INPUT_ERROR_STYLE', 'class="highlight"'); // @TODO 
+define('CANCEL_ACL_LABEL', 'Cancel'); // @TODO
+define('UNREGISTERED_USER', 'unregistered user');  // @TODO
+define('NOT_AVAILABLE', 'n/a'); // @TODO replace inside the actions with WIKKA_NOT_AVAILABLE
+define('WHEN_BY_WHO', '%1$s by %2$s'); // @TODO
+define('ERROR_ACL_READ_INFO', 'You\'re not allowed to access this information.'); // @TODO
+define('I18N_LANG', 'en-US'); // @TODO
 /**#@-*/
-
 
 /*  ------------------ CORE ------------------  */
 
@@ -83,6 +93,24 @@ define('WIKKA_JAVA_PLUGIN_NEEDED', 'Java 1.4.1 (or later) Plug-in is needed to r
  * Language constant for the core {@link wikka.php wikka} program
  */
 // wikka
+define('ERROR_WAKKA_LIBRARY_MISSING','The necessary file "libs/Wakka.class.php" could not be found. To run Wikka, please make sure the file exists and is placed in the right directory!');
+define('ERROR_WRONG_PHP_VERSION', 'Wikka requires PHP %s or higher!');  // %s - version numberdefine('MINIMUM_PHP_VERSION', '4.1');
+define('ERROR_MYSQL_SUPPORT_MISSING', 'PHP can\'t find MySQL support but Wikka requires MySQL. Please check the output of <tt>phpinfo()</tt> in a php document for MySQL support: it needs to be compiled into PHP, the module itself needs to be present in the expected location, <strong>and</strong> php.ini needs to have it enabled.<br />Also note that you cannot have <tt>mysqli</tt> and <tt>mysql</tt> support both enabled at the same time.<br />Please double-check all of these things, restart your webserver after any fixes, and then try again!');
+define('ERROR_SETUP_FILE_MISSING', 'A file of the installer/ upgrader was not found. Please install Wikka again!');
+define('ERROR_SETUP_HEADER_MISSING', 'The file "setup/header.php" was not found. Please install Wikka again!');
+define('ERROR_SETUP_FOOTER_MISSING', 'The file "setup/footer.php" was not found. Please install Wikka again!');
+define('ERROR_HEADER_MISSING', 'A header template could not be found. Please make sure that a file called <code>header.php</code> exists in the templates directory.'); //TODO Make sure this message matches any filename/folder change 
+define('ERROR_FOOTER_MISSING', 'A footer template could not be found. Please make sure that a file called <code>footer.php</code> exists in the templates directory.'); //TODO Make sure this message matches any filename/folder change 
+define('ERROR_NO_DB_ACCESS', 'The wiki is currently unavailable. <br /><br />Error: Unable to connect to the MySQL database.');
+define('PAGE_GENERATION_TIME', 'Page was generated in %.4f seconds'); // %.4f - generation time in seconds with 4 digits after the dot
+define('WIKI_UPGRADE_NOTICE', 'This site is currently being upgraded. Please try again later.');
+/*
+
+NOTE: These defines are the "new" defines ported from trunk to 1.2.
+They will eventually need to be reconciled with updates to wikka.php.
+For now, I've commented them out and have simply copied over the 1.2
+versions.
+
 define('ERROR_WAKKA_LIBRARY_MISSING', 'The necessary file "%s" could not be found. To run Wikka, please make sure the file exists and is placed in the right directory!');	// %s - configured path to core class
 define('ERROR_NO_DB_ACCESS', 'Error: Unable to connect to the database.');
 define('ERROR_RETRIEVAL_MYSQL_VERSION', 'Could not determine MySQL version');
@@ -96,6 +124,7 @@ define('ERROR_FOOTER_MISSING', 'A footer template could not be found. Please mak
 #define('ERROR_WRONG_PHP_VERSION', '$_REQUEST[] not found. Wakka requires PHP 4.1.0 or higher!'); //TODO remove referral to PHP internals; refer only to required version
 #define('ERROR_SETUP_HEADER_MISSING', 'The file "setup/header.php" was not found. Please install Wikka again!');
 #define('ERROR_SETUP_FOOTER_MISSING', 'The file "setup/footer.php" was not found. Please install Wikka again!');
+*/
 /**#@-*/
 
 /*  ------------------ TEMPLATE ------------------  */
@@ -134,11 +163,189 @@ define('SEARCH_LABEL', 'Search:');
 /*  ------------------ ACTIONS  ------------------  */
 
 /**#@+
+ * Language constants used by the {@link adminpages.php adminpages} action
+ */
+define('ADMINPAGES_DEFAULT_RECORDS_LIMIT', '20'); # number of records per page
+define('ADMINPAGES_DEFAULT_MIN_RECORDS_DISPLAY', '5'); # min number of records
+define('ADMINPAGES_DEFAULT_RECORDS_RANGE',serialize(array('10','50','100','500','1000'))); #range array for records pager
+define('ADMINPAGES_DEFAULT_SORT_FIELD', 'time'); # sort field
+define('ADMINPAGES_DEFAULT_SORT_ORDER', 'desc'); # sort order, ascendant or descendant
+define('ADMINPAGES_DEFAULT_START', '0'); # start record
+define('ADMINPAGES_DEFAULT_SEARCH', ''); # keyword to restrict page search
+define('ADMINPAGES_DEFAULT_TAG_LENGTH', '12'); # max. length of displayed pagename
+define('ADMINPAGES_DEFAULT_URL_LENGTH', '15'); # max. length of displayed user host
+define('ADMINPAGES_DEFAULT_TERMINATOR', '&#8230;'); # standard symbol replacing truncated text (ellipsis) JW 2005-07-19
+define('ADMINPAGES_ALTERNATE_ROW_COLOR', '1'); # switch alternate row color
+define('ADMINPAGES_STAT_COLUMN_COLOR', '1'); # switch color for statistics columns
+define('ADMINPAGES_DEFAULT_START_YEAR', 'YYYY');
+define('ADMINPAGES_DEFAULT_START_MONTH', 'MM');
+define('ADMINPAGES_DEFAULT_START_DAY', 'DD');
+define('ADMINPAGES_DEFAULT_START_HOUR', 'hh');
+define('ADMINPAGES_DEFAULT_START_MINUTE', 'mm');
+define('ADMINPAGES_DEFAULT_START_SECOND', 'ss');
+define('ADMINPAGES_DEFAULT_END_YEAR', 'YYYY');
+define('ADMINPAGES_DEFAULT_END_MONTH', 'MM');
+define('ADMINPAGES_DEFAULT_END_DAY', 'DD');
+define('ADMINPAGES_DEFAULT_END_HOUR', 'hh');
+define('ADMINPAGES_DEFAULT_END_MINUTE', 'mm');
+define('ADMINPAGES_DEFAULT_END_SECOND', 'ss');
+define('ADMINPAGES_MAX_EDIT_NOTE_LENGTH', '50');
+define('ADMINPAGES_REVISIONS_ICON', 'images/icons/edit.png'); 
+define('ADMINPAGES_COMMENTS_ICON', 'images/icons/comment.png');
+define('ADMINPAGES_HITS_ICON', 'images/icons/star.png'); 
+define('ADMINPAGES_BACKLINKS_ICON', 'images/icons/link.png'); 
+define('ADMINPAGES_REFERRERS_ICON', 'images/icons/world.png'); 
+define('ADMINPAGES_PAGE_TITLE','Page Administration');
+define('ADMINPAGES_FORM_LEGEND','Filter view:');
+define('ADMINPAGES_FORM_SEARCH_STRING_LABEL','Search page:');
+define('ADMINPAGES_FORM_SEARCH_STRING_TITLE','Enter a search string');
+define('ADMINPAGES_FORM_SEARCH_SUBMIT','Submit');
+define('ADMINPAGES_FORM_DATE_RANGE_STRING_LABEL','Last edit range: Between');
+define('ADMINPAGES_FORM_DATE_RANGE_CONNECTOR_LABEL','and');
+define('ADMINPAGES_FORM_PAGER_LABEL_BEFORE','Show');
+define('ADMINPAGES_FORM_PAGER_TITLE','Select records-per-page limit');
+define('ADMINPAGES_FORM_PAGER_LABEL_AFTER','records per page');
+define('ADMINPAGES_FORM_PAGER_SUBMIT','Apply');
+define('ADMINPAGES_FORM_PAGER_LINK','Show records from %d to %d');
+define('ADMINPAGES_FORM_RESULT_INFO','Records');
+define('ADMINPAGES_FORM_RESULT_SORTED_BY','Sorted by:');
+define('ADMINPAGES_TABLE_HEADING_PAGENAME','Page Name');
+define('ADMINPAGES_TABLE_HEADING_PAGENAME_TITLE','Sort by page name');
+define('ADMINPAGES_TABLE_HEADING_OWNER','Owner');
+define('ADMINPAGES_TABLE_HEADING_OWNER_TITLE','Sort by page owner');
+define('ADMINPAGES_TABLE_HEADING_LASTAUTHOR','Last Author');
+define('ADMINPAGES_TABLE_HEADING_LASTAUTHOR_TITLE','Sort by last author');
+define('ADMINPAGES_TABLE_HEADING_LASTEDIT','Last Edit');
+define('ADMINPAGES_TABLE_HEADING_LASTEDIT_TITLE','Sort by edit time');
+define('ADMINPAGES_TABLE_SUMMARY','List of pages on this server');
+define('ADMINPAGES_TABLE_HEADING_HITS_TITLE','Hits');
+define('ADMINPAGES_TABLE_HEADING_REVISIONS_TITLE','Revisions');
+define('ADMINPAGES_TABLE_HEADING_COMMENTS_TITLE','Comments');
+define('ADMINPAGES_TABLE_HEADING_BACKLINKS_TITLE','Backlinks');
+define('ADMINPAGES_TABLE_HEADING_REFERRERS_TITLE','Referrers');
+define('ADMINPAGES_TABLE_HEADING_HITS_ALT','Hits');
+define('ADMINPAGES_TABLE_HEADING_REVISIONS_ALT','Revisions');
+define('ADMINPAGES_TABLE_HEADING_COMMENTS_ALT','Comments');
+define('ADMINPAGES_TABLE_HEADING_BACKLINKS_ALT','Backlinks');
+define('ADMINPAGES_TABLE_HEADING_REFERRERS_ALT','Referrers');
+define('ADMINPAGES_TABLE_HEADING_ACTIONS','Actions');
+define('ADMINPAGES_ACTION_EDIT_LINK_TITLE','Edit %s');
+define('ADMINPAGES_ACTION_DELETE_LINK_TITLE','Delete %s');
+define('ADMINPAGES_ACTION_CLONE_LINK_TITLE','Clone %s');
+define('ADMINPAGES_ACTION_RENAME_LINK_TITLE','Rename %s (DISABLED)');
+define('ADMINPAGES_ACTION_ACL_LINK_TITLE','Change Access Control List for %s');
+define('ADMINPAGES_ACTION_REVERT_LINK_TITLE','Revert %s to previous version');
+define('ADMINPAGES_ACTION_EDIT_LINK','edit');
+define('ADMINPAGES_ACTION_DELETE_LINK','delete');
+define('ADMINPAGES_ACTION_CLONE_LINK','clone');
+define('ADMINPAGES_ACTION_RENAME_LINK','rename');
+define('ADMINPAGES_ACTION_ACL_LINK','acl');
+define('ADMINPAGES_ACTION_INFO_LINK','info');
+define('ADMINPAGES_ACTION_REVERT_LINK', 'revert');
+define('ADMINPAGES_TAKE_OWNERSHIP_LINK','Take ownership of');
+define('ADMINPAGES_NO_OWNER','(Nobody)');
+define('ADMINPAGES_TABLE_CELL_HITS_TITLE','Hits for %s (%d)');
+define('ADMINPAGES_TABLE_CELL_REVISIONS_TITLE','Display revisions for %s (%d)');
+define('ADMINPAGES_TABLE_CELL_COMMENTS_TITLE','Display comments for %s (%d)');
+define('ADMINPAGES_TABLE_CELL_BACKLINKS_TITLE','Display pages linking to %s (%d)');
+define('ADMINPAGES_TABLE_CELL_REFERRERS_TITLE','Display external sites linking to %s (%d)');
+define('ADMINPAGES_SELECT_RECORD_TITLE','Select %s');
+define('ADMINPAGES_NO_EDIT_NOTE','(No edit note)');
+define('ADMINPAGES_CHECK_ALL_TITLE','Check all records');
+define('ADMINPAGES_CHECK_ALL','Check all');
+define('ADMINPAGES_UNCHECK_ALL_TITLE','Uncheck all records');
+define('ADMINPAGES_UNCHECK_ALL','Uncheck all');
+define('ADMINPAGES_FORM_MASSACTION_LEGEND','Mass-action');
+define('ADMINPAGES_FORM_MASSACTION_LABEL','With selected');
+define('ADMINPAGES_FORM_MASSACTION_SELECT_TITLE','Choose action to apply to selected records (DISABLED)');
+define('ADMINPAGES_FORM_MASSACTION_OPT_DELETE','Delete all');
+define('ADMINPAGES_FORM_MASSACTION_OPT_CLONE','Clone all');
+define('ADMINPAGES_FORM_MASSACTION_OPT_RENAME','Rename all');
+define('ADMINPAGES_FORM_MASSACTION_OPT_ACL','Change Access Control List');
+define('ADMINPAGES_FORM_MASSACTION_OPT_REVERT','Revert to previous page version');
+define('ADMINPAGES_FORM_MASSACTION_REVERT_ERROR','Cannot be reverted');
+define('ADMINPAGES_FORM_MASSACTION_SUBMIT','Submit');
+define('ADMINPAGES_ERROR_NO_MATCHES','Sorry, there are no pages matching "%s"');
+define('ADMINPAGES_LABEL_EDIT_NOTE','Please enter a comment, or leave blank for default');
+define('ADMINPAGES_CANCEL_LABEL', 'Cancel');
+/**#@-*/
+
+/**#@+
+ * Language constants used by the {@link adminusers.php adminusers} action
+ */
+define('ADMINUSERS_DEFAULT_RECORDS_LIMIT', '10'); # number of records per page
+define('ADMINUSERS_DEFAULT_MIN_RECORDS_DISPLAY', '5'); # min number of records 
+define('ADMINUSERS_DEFAULT_RECORDS_RANGE',serialize(array('10','50','100','500','1000'))); #range array for records pager
+define('ADMINUSERS_DEFAULT_SORT_FIELD', 'signuptime'); # sort field
+define('ADMINUSERS_DEFAULT_SORT_ORDER', 'desc'); # sort order, ascendant or descendant
+define('ADMINUSERS_DEFAULT_START', '0'); # start record
+define('ADMINUSERS_DEFAULT_SEARCH', ''); # keyword to restrict search
+define('ADMINUSERS_ALTERNATE_ROW_COLOR', '1'); # switch alternate row color
+define('ADMINUSERS_STAT_COLUMN_COLOR', '1'); # switch color for statistics columns
+define('ADMINUSERS_OWNED_ICON', 'images/icons/keyring.png'); 
+define('ADMINUSERS_EDITS_ICON', 'images/icons/edit.png'); 
+define('ADMINUSERS_COMMENTS_ICON', 'images/icons/comment.png'); 
+define('ADMINUSERS_PAGE_TITLE','User Administration');
+define('ADMINUSERS_FORM_LEGEND','Filter view:');
+define('ADMINUSERS_FORM_SEARCH_STRING_LABEL','Search user:');
+define('ADMINUSERS_FORM_SEARCH_STRING_TITLE','Enter a search string');
+define('ADMINUSERS_FORM_SEARCH_SUBMIT','Submit');
+define('ADMINUSERS_FORM_PAGER_LABEL_BEFORE','Show');
+define('ADMINUSERS_FORM_PAGER_TITLE','Select records-per-page limit');
+define('ADMINUSERS_FORM_PAGER_LABEL_AFTER','records per page');
+define('ADMINUSERS_FORM_PAGER_SUBMIT','Apply');
+define('ADMINUSERS_FORM_PAGER_LINK','Show records from %d to %d');
+define('ADMINUSERS_FORM_RESULT_INFO','Records');
+define('ADMINUSERS_FORM_RESULT_SORTED_BY','Sorted by:');
+define('ADMINUSERS_TABLE_HEADING_USERNAME','User Name');
+define('ADMINUSERS_TABLE_HEADING_USERNAME_TITLE','Sort by user name');
+define('ADMINUSERS_TABLE_HEADING_EMAIL','Email');
+define('ADMINUSERS_TABLE_HEADING_EMAIL_TITLE','Sort by email');
+define('ADMINUSERS_TABLE_HEADING_SIGNUPTIME','Signup Time');
+define('ADMINUSERS_TABLE_HEADING_SIGNUPTIME_TITLE','Sort by signup time');
+define('ADMINUSERS_TABLE_HEADING_SIGNUPIP','Signup IP');
+define('ADMINUSERS_TABLE_HEADING_SIGNUPIP_TITLE','Sort by signup IP');
+define('ADMINUSERS_TABLE_SUMMARY','List of users registered on this server');
+define('ADMINUSERS_TABLE_HEADING_OWNED_TITLE','Owned Pages');
+define('ADMINUSERS_TABLE_HEADING_EDITS_TITLE','Edits');
+define('ADMINUSERS_TABLE_HEADING_COMMENTS_TITLE','Comments');
+define('ADMINUSERS_ACTION_DELETE_LINK_TITLE','Remove user %s');
+define('ADMINUSERS_ACTION_DELETE_LINK','delete');
+define('ADMINUSERS_TABLE_CELL_OWNED_TITLE','Display pages owned by %s (%d)');
+define('ADMINUSERS_TABLE_CELL_EDITS_TITLE','Display page edits by %s (%d)');
+define('ADMINUSERS_TABLE_CELL_COMMENTS_TITLE','Display comments by %s (%d)');
+define('ADMINUSERS_SELECT_RECORD_TITLE','Select %s');
+define('ADMINUSERS_SELECT_ALL_TITLE','Select all records');
+define('ADMINUSERS_SELECT_ALL','Select all');
+define('ADMINUSERS_DESELECT_ALL_TITLE','Deselect all records');
+define('ADMINUSERS_DESELECT_ALL','Deselect all');
+define('ADMINUSERS_FORM_MASSACTION_LEGEND','Mass-action');
+define('ADMINUSERS_FORM_MASSACTION_LABEL','With selected');
+define('ADMINUSERS_FORM_MASSACTION_SELECT_TITLE','Choose an action to apply to the selected records');
+define('ADMINUSERS_FORM_MASSACTION_OPT_DELETE','Delete selected');
+define('ADMINUSERS_FORM_MASSACTION_DELETE_ERROR', 'Cannot delete admins');
+define('ADMINUSERS_FORM_MASSACTION_SUBMIT','Submit');
+define('ADMINUSERS_ERROR_NO_MATCHES','Sorry, there are no users matching "%s"');
+define('ADMINUSERS_DELETE_USERS_HEADING', 'Delete these users?');
+define('ADMINUSERS_DELETE_USERS_BUTTON', 'Delete Users');
+define('ADMINUSERS_CANCEL_BUTTON', 'Cancel');
+define('ADMINUSERS_USERDELETE_SUCCESS', 'User has been sucessfully deleted'); //
+define('ADMINUSERS_USERDELETE_FAILURE', 'Sorry, could not delete user. Please check your admin settings'); //
+/**#@-*/
+
+/**#@+
  * Language constant used by the {@link calendar.php calendar} action
  */
 // calendar
 define('FMT_SUMMARY', 'Calendar for %s');	// %s - ???@@@
 define('TODAY', 'today');
+define('MIN_DATETIME', strtotime('1970-01-01 00:00:00 GMT')); # earliest timestamp PHP can handle (Windows and some others - to be safe)
+define('MAX_DATETIME', strtotime('2038-01-19 03:04:07 GMT')); # latest timestamp PHP can handle
+define('MIN_YEAR', date('Y',MIN_DATETIME));
+define('MAX_YEAR', date('Y',MAX_DATETIME)-1); # don't include partial January 2038
+define('CUR_YEAR', date('Y',mktime()));
+define('CUR_MONTH', date('n',mktime()));
+define('LOC_MON_YEAR', "%B %Y"); # i18n
 /**#@-*/
 
 /**#@+
@@ -150,19 +357,57 @@ define('PAGES_BELONGING_TO', 'The following %1$d page(s) belong to %2$s'); // %1
 /**#@-*/
 
 /**#@+
+ * Language constant used by the {@link checkversion.php checkversion} action
+ */
+define('CHECKVERSION_HOST', 'wikkawiki.org');
+define('CHECKVERSION_RELEASE_FILE', '/downloads/latest_wikka_version.txt');
+define('CHECKVERSION_DOWNLOAD_URL', 'http://docs.wikkawiki.org/WhatsNew');
+define('CHECKVERSION_CONNECTION_TIMEOUT', 5);
+define('DEBUG_TIME_ELAPSED', '[elapsed time: %d]');
+define('DEBUG_PHP_VERSION_UNSUPPORTED', '[%s PHP %s does not support this feature]');
+define('DEBUG_ALLOW_FURL_DISABLED', '[allow_url_fopen disabled]');
+define('DEBUG_CANNOT_RESOLVE_HOSTNAME', '[Cannot resolve %s]');
+define('DEBUG_CANNOT_CONNECT', '[Cannot initiate socket connection]');
+define('DEBUG_NEW_VERSION_AVAILABLE', '[%s from host %s]');
+define('CHECKVERSION_CANNOT_CONNECT', '<div title="Cannot initiate network connection" style="clear: both; text-align: center; float: left; width: 300px; border: 1px solid %s; background-color: %s; color: %s; margin: 10px 0">'."\n"
+	.'<div style="padding: 0 3px 0 3px; background-color: %s; font-size: 85%; font-weight: bold">CHECKVERSION FAILED</div>'."\n"
+	.'<div style="padding: 0 3px 2px 3px; font-size: 85%; line-height: 150%; border-top: 1px solid %s;">'."\n"
+	.'The network connection with the WikkaWiki server could not be established. To prevent delays in loading this page, please set enable_version_check to 0 in your wikka.config.php file.'."\n"
+	.'</div>'."\n"
+	.'</div>'."\n"
+	.'<div class="clear"></div>'."\n");
+define('CHECKVERSION_NEW_VERSION_AVAILABLE', '<div title="A new version of WikkaWiki is available. Please upgrade!" style="clear: both; text-align: center; float: left; width: 300px; border: 1px solid %s; background-color: %s; color: %s; margin: 10px 0">'."\n"
+	.'<div style="padding: 0 3px 0 3px; background-color: %s; font-size: 85%; font-weight: bold">UPGRADE NOTE</div>'."\n"
+	.'<div style="padding: 0 3px 2px 3px; font-size: 85%; line-height: 150%; border-top: 1px solid %s;">'."\n"
+	.'<strong>WikkaWiki %s</strong> is available for <a href="%s">download</a>!'."\n"
+	.'</div>'."\n"
+	.'</div>'."\n"
+	.'<div class="clear"></div>'."\n");
+/**#@-*/
+
+/**#@+
+ * Language constant used by the {@link clonelink.php clonelink} action
+ */
+define('CLONELINK_TEXT', '[Clone]');
+define('CLONELINK_TITLE', 'Duplicate this page');
+/**#@-*/
+
+/**#@+
  * Language constant used by the {@link color.php color} action
  */
 // color
 define('ERROR_NO_TEXT_GIVEN', 'There is no text to highlight!');
 define('ERROR_NO_COLOR_SPECIFIED', 'Sorry, but you did not specify a color for highlighting!');
+define('PATTERN_VALID_HEX_COLOR', '#(?>[\da-f]{3}){1,2}');
+define('PATTERN_VALID_RGB_COLOR', 'rgb\(\s*\d+((?>\.\d*)?%)?\s*(?>,\s*\d+(?(1)(\.\d*)?%)\s*){2}\)');
 /**#@-*/
 
 /**#@+
  * Language constant used by the {@link contact.php contact} action
  */
 // contact
-define('SEND_FEEDBACK_LINK_TITLE', 'Send us your feedback');
-define('SEND_FEEDBACK_LINK_TEXT', 'Contact');
+define('CONTACTLINK_TITLE', 'Send us your feedback');
+define('CONTACTLINK_TEXT', 'Contact');
 /**#@-*/
 
 /**#@+
@@ -206,6 +451,24 @@ define('MSG_NO_TABLE_DDL','Creation DDL for <tt>%s</tt> could not be retrieved.'
 /**#@-*/
 
 /**#@+
+ * Language constant used by the {@link deletelink.php deletelink} action
+ */
+define('DELETELINK_TEXT', '[Delete]');
+define('DELETELINK_TITLE', 'Delete this page (requires confirmation)');
+/**#@-*/
+
+/**#@+
+ * Language constant used by the {@link editlink.php editlink} action
+ */
+define('EDITLINK_TEXT', '[Edit]');
+define('SHOWLINK_TEXT', '[Show]');
+define('SHOWCODELINK_TEXT', '[Source]');
+define('EDITLINK_TITLE', 'Click to edit this page');
+define('SHOWLINK_TITLE', 'Displayed the formatted version of this page');
+define('SHOWCODELINK_TITLE', 'Display the markup for this page');
+/**#@-*/
+
+/**#@+
  * Language constant used by the {@link emailpassword.php emailpassword} action
  */
 // emailpassword
@@ -220,23 +483,28 @@ define('ERROR_UNKNOWN_USER', 'You have entered a non-existent user!');
 define('ERROR_MAIL_NOT_SENT', 'An error occurred while trying to send the password. Outgoing mail might be disabled. Please try to contact your wiki administrator by posting a page comment.');
 define('BUTTON_SEND_PW', 'Send reminder');
 define('USERSETTINGS_REF', 'Return to the %s page.'); // %s - UserSettings link
+define('ERROR_EMPTY_USER', 'Please fill in your username!');
+define('BUTTON_SEND_PW_LABEL', 'Send reminder');
+define('USERSETTINGS_LINK', 'Return to the [[UserSettings login]] screen.');
 /**#@-*/
 
 /**#@+
  * Language constant used by the {@link feedback.php feedback} action
  */
 // feedback
+define('FILL_FORM', '<p>Fill in the form below to send us your comments:</p>'."\n");
+define('FEEDBACK_FORM_LEGEND', 'Contact %s'); //%s - wikiname of the recipient
+define('FEEDBACK_NAME_LABEL', 'Name: ');
+define('FEEDBACK_EMAIL_LABEL', 'Email: ');
+define('FEEDBACK_MESSAGE_LABEL', 'Your message:');
+define('FEEDBACK_SEND_BUTTON', 'Send');
 define('ERROR_EMPTY_NAME', 'Please enter your name');
 define('ERROR_INVALID_EMAIL', 'Please enter a valid email address');
 define('ERROR_EMPTY_MESSAGE', 'Please enter some text');
-define('ERROR_FEEDBACK_MAIL_NOT_SENT', 'Sorry, An error occurred while trying to send your email. Outgoing mail might be disabled. Please try another method to contact %s, for instance by posting a page comment'); // %s - name of the recipient
-define('FEEDBACK_FORM_LEGEND', 'Contact %s'); //%s - wikiname of the recipient
-define('FEEDBACK_NAME_LABEL', 'Your name:');
-define('FEEDBACK_EMAIL_LABEL', 'Your email:');
-define('FEEDBACK_MESSAGE_LABEL', 'Your message:');
-define('FEEDBACK_SEND_BUTTON', 'Send');
 define('FEEDBACK_SUBJECT', 'Feedback from %s'); // %s - name of the wiki
-define('SUCCESS_FEEDBACK_SENT', 'Thanks for your feedback, %s! Your message has been sent'); //%s - name of the sender
+define('SUCCESS_FEEDBACK_SENT', 'Thanks for your interest! Your feedback has been sent to %1$s ---'
+	.'Return to the [[%2$s main page]]');
+define('ERROR_FEEDBACK_MAIL_NOT_SENT', 'Sorry, An error occurred while trying to send your email. Outgoing mail might be disabled. Please try another method to contact %s, for instance by posting a page comment'); // %s - name of the recipient
 /**#@-*/
 
 /**#@+
@@ -290,6 +558,15 @@ define('HIGHSCORES_CAPTION', 'Top %1$s contributor(s) by number of %2$s');
 define('HIGHSCORES_HEADER_RANK', 'rank');
 define('HIGHSCORES_HEADER_USER', 'user');
 define('HIGHSCORES_HEADER_PERCENTAGE', 'percentage');
+define('HIGHSCORES_DISPLAY_TOP', 10); //limit output to top n users
+define('HIGHSCORES_DEFAULT_STYLE', 'complex'); //set default layout style
+/**#@-*/
+
+/**#@+
+ * Language constants used by the {@link historylink.php historylink} action
+ */
+define('HISTORYLINK_TEXT', '[History]');
+define('HISTORYLINK_TITLE', 'Click to view recent edits to this page');
 /**#@-*/
 
 /**#@+
@@ -307,6 +584,14 @@ define('ERROR_TARGET_ACL', "You aren't allowed to read included page <tt>%s</tt>
 // lastedit
 define('LASTEDIT_DESC', 'Last edited by %s'); // %s user name
 define('LASTEDIT_DIFF_LINK_TITLE', 'Show differences from last revision');
+define('DEFAULT_SHOW', '3');
+define('DATE_FORMAT', 'D, d M Y'); #TODO make this system-configurable
+define('TIME_FORMAT', 'H:i T'); #TODO make this system-configurable
+define('LASTEDIT_BOX', 'lastedit');
+define('LASTEDIT_NOTES', 'lastedit_notes');
+define('ANONYMOUS_USER', 'anonymous');
+define('LASTEDIT_MESSAGE', 'Last edited by %s');
+define('DIFF_LINK_TITLE', 'Show differences from last revision');
 /**#@-*/
 
 /**#@+
@@ -318,6 +603,8 @@ define('SIGNUP_DATE_TIME', 'Signup Date/Time');
 define('NAME_TH', 'Username');
 define('OWNED_PAGES_TH', 'Owned pages');
 define('SIGNUP_DATE_TIME_TH', 'Signup date/time');
+define('LASTUSERS_DEFAULT_STYLE', 'complex'); # consistent parameter naming with HighScores action
+define('LASTUSERS_MAX_USERS_DISPLAY', 10);
 /**#@-*/
 
 /**#@+
@@ -330,6 +617,7 @@ define('MM_EDIT', 'Use %s to edit it'); // %s - link to freemind project
 define('MM_FULLSCREEN_LINK_DESC', 'Open fullscreen');
 define('ERROR_INVALID_MM_SYNTAX', 'Error: Invalid MindMap action syntax.');
 define('PROPER_USAGE_MM_SYNTAX', 'Proper usage: %1$s or %2$s'); // %1$s - syntax sample 1; %2$s - syntax sample 2
+define('FREEMIND_PROJECT_URL', 'http://freemind.sourceforge.net/');
 /**#@-*/
 
 /**#@+
@@ -348,10 +636,9 @@ define('MYCHANGES_NOT_LOGGED_IN', "You're not logged in, thus the list of pages 
  * Language constant used by the {@link mypages.php mypages} action
  */
 // mypages
-define('OWNED_PAGES_TXT', "This is the list of pages owned by %s.");
-define('OWNED_NO_PAGES', 'You don\'t own any pages.');
-define('OWNED_NONE_FOUND', 'No pages found.');
-define('OWNED_NOT_LOGGED_IN', "You're not logged in, thus the list of your pages couldn't be retrieved.");
+define('MYPAGES_CAPTION', 'This is the list of pages owned by %s');
+define('MYPAGES_NONE_OWNED', 'You don't own any pages.');
+define('MYPAGES_NOT_LOGGED_IN', 'You're not logged in, thus the list of your pages couldn't be retrieved.');
 /**#@-*/
 
 /**#@+
@@ -377,6 +664,19 @@ define('OWNEDPAGES_PERCENTAGE', 'That means you own %s of the total.'); // %s pe
 /**#@-*/
 
 /**#@+
+ * Language constant used by the {@link ownerlink.php ownerlink} action
+ */
+define('OWNERLINK_PUBLIC_PAGE', 'Public page');
+define('OWNERLINK_NOBODY', 'Nobody');
+define('OWNERLINK_OWNER', 'Owner:');
+define('OWNERLINK_SELF', 'You own this page');
+define('EDITACLLINK_TEXT', '[Edit ACLs]');
+define('EDITACLLINK_TITLE', 'Change the Access Control List for this page');
+define('CLAIMLINK_TEXT', '[Take Ownership]');
+define('CLAIMLINK_TITLE', 'Click to become the owner of this page');
+/**#@-*/
+
+/**#@+
  * Language constant used by the {@link pageindex.php pageindex} action
  */
 // pageindex
@@ -396,16 +696,24 @@ define('HISTORY_LINK_TITLE', 'View edit history of %s'); // %s - page name
 define('WIKIPING_ENABLED', 'WikiPing enabled: Changes on this wiki are broadcast to %s'); // %s - link to wikiping server
 define('RECENTCHANGES_NONE_FOUND', 'There are no recently changed pages.');
 define('RECENTCHANGES_NONE_ACCESSIBLE', 'There are no recently changed pages you have access to.');
+define('PAGE_EDITOR_DIVIDER', '&#8594;');
+define('MAX_REVISION_NUMBER', '50');
 /**#@-*/
 
 /**#@+
  * Language constant used by the {@link recentcomments.php recentcomments} action
  */
 // recentcomments
-define('RECENTCOMMENTS_HEADING', 'Recent comments');
 define('RECENTCOMMENTS_TIMESTAMP_CAPTION', '%s'); // %s - timestamp
 define('RECENTCOMMENTS_NONE_FOUND', 'There are no recent comments.');
+define('RECENTCOMMENTS_NONE_FOUND_BY', 'There are no recent comments by %s.');
 define('RECENTCOMMENTS_NONE_ACCESSIBLE', 'There are no recent comments you have access to.');
+define('RECENT_COMMENTS_HEADING', '=====Recent comments=====');
+define('COMMENT_AUTHOR_DIVIDER', ', comment by ');
+define('COMMENT_DATE_FORMAT', 'D, d M Y');
+define('COMMENT_TIME_FORMAT', 'H:i T');
+define('COMMENT_SNIPPET_LENGTH', 120);
+
 /**#@-*/
 
 /**#@+
@@ -414,7 +722,48 @@ define('RECENTCOMMENTS_NONE_ACCESSIBLE', 'There are no recent comments you have 
 // recentlycommented
 define('RECENTLYCOMMENTED_HEADING', 'Recently commented pages');
 define('RECENTLYCOMMENTED_NONE_FOUND', 'There are no recently commented pages.');
+define('RECENTLYCOMMENTED_NONE_FOUND_BY', 'There are no recently by %s commented pages.');
 define('RECENTLYCOMMENTED_NONE_ACCESSIBLE', 'There are no recently commented pages you have access to.');
+/**#@-*/
+
+/**#@+
+ * Language constants used by the {@link redirect.php redirect} action
+ */
+if (!defined('PAGE_MOVED_TO')) define('PAGE_MOVED_TO', 'This page has been moved to %s.'); # %s - targe page
+if (!defined('REDIRECTED_FROM')) define('REDIRECTED_FROM', 'Redirected from %s.'); # %s - redirecting page
+if(!defined('INVALID_REDIRECT')) define('INVALID_REDIRECT', 'Invalid redirect. Target must be an existing wiki page.');
+
+/**#@+
+ * Language constant used by the {@link revert.php revert} action
+ */
+define('ERROR_NO_REVERT_PRIVS', "Sorry, you don't have privileges to revert this page");
+/**#@-*/
+
+/**#@+
+ * Language constant used by the {@link revertlink.php revertlink} action
+ */
+define('REVERTLINK_TEXT', '[Revert]');
+define('REVERTLINK_TITLE', 'Click to revert this page to the previous revision');
+define('REVERTLINK_OLDEST_TITLE', 'This is the oldest known version for this page');
+/**#@-*/
+
+/**#@+
+ * Language constant used by the {@link revisionlink.php revisionlink} action
+ */
+define('REVISIONLINK_TITLE', 'Click to view recent revisions list for this page');
+define('REVISIONFEEDLINK_TITLE', 'Click to display a feed with the latest revisions to this page');
+/**#@-*/
+
+/**#@+
+ * Language constant used by the {@link rss.php rss} action
+ */
+define('ERROR_INVALID_RSS_SYNTAX', 'Error: Invalid RSS action syntax. <br /> Proper usage: {{rss http://domain.com/feed.xml}} or {{rss url="http://domain.com/feed.xml"}}');
+/**#@-*/
+
+/**#@+
+ * Language constant used by the {@link searchform.php searchform} action
+ */
+define('SEARCHFORM_LABEL', 'Search: ');
 /**#@-*/
 
 /**#@+
@@ -422,7 +771,6 @@ define('RECENTLYCOMMENTED_NONE_ACCESSIBLE', 'There are no recently commented pag
  */
 // system
 define('SYSTEM_HOST_CAPTION', '(%s)'); // %s - host name
-define('WIKKA_STATUS_NOT_AVAILABLE', 'n/a');
 /**#@-*/
 
 /**#@+
@@ -439,22 +787,23 @@ define('SEARCH_EXPANDED_LINK_DESC', 'Expanded Text Search'); // search link desc
 define('SEARCH_TRY_EXPANDED', 'Try the %s which shows surrounding text.'); // %s expanded search link
 /*
 define('SEARCH_TIPS', "<br /><br /><hr /><br /><strong>Search Tips:</strong><br /><br />"
-	."<div class=\"indent\">apple banana</div>"
+	."<div class=\"indent\"><tt>apple banana</tt></div>"
 	."Find pages that contain at least one of the two words. <br />"
 	."<br />"
-	."<div class=\"indent\">+apple +juice</div>"
+	."<div class=\"indent\"><tt>+apple +juice</tt></div>"
 	."Find pages that contain both words. <br />"
 	."<br />"
-	."<div class=\"indent\">+apple -macintosh</div>"
+	."<div class=\"indent\"><tt>+apple -macintosh</tt></div>"
 	."Find pages that contain the word 'apple' but not 'macintosh'. <br />"
 	."<br />"
-	."<div class=\"indent\">apple*</div>"
+	."<div class=\"indent\"><tt>apple*</tt></div>"
 	."Find pages that contain words such as apple, apples, applesauce, or applet. <br />"
 	."<br />"
-	."<div class=\"indent\">\"some words\"</div>"
+	."<div class=\"indent\"><tt>\"some words\"</tt></div>"
 	."Find pages that contain the exact phrase 'some words' (for example, pages that contain 'some words of wisdom' <br />"
 	."but not 'some noise words'). <br />");
 */
+define('SEARCH_MYSQL_IDENTICAL_CHARS', 'aàáâã,eèéêë,iìîï,oòóôõ,uùúû,cç,nñ,yý');
 define('SEARCH_TIPS', 'Search Tips:');
 define('SEARCH_WORD_1', 'apple');
 define('SEARCH_WORD_2', 'banana');
@@ -547,6 +896,41 @@ define('LOGIN_BUTTON', 'Login');
 define('LOGOUT_BUTTON', 'Logout');
 define('CHANGE_PASSWORD_BUTTON', 'Change password');
 define('REGISTER_BUTTON', 'Register');
+define('PASSWORD_MIN_LENGTH', '5');
+define('VALID_EMAIL_PATTERN', '/^.+?\@.+?\..+$/'); //TODO: Use central regex library
+define('REVISION_DISPLAY_LIMIT_MIN', '0'); // 0 means no limit, 1 is the minimum number of revisions
+define('REVISION_DISPLAY_LIMIT_MAX', '20'); // keep this value within a reasonable limit to avoid an unnecessary long lists
+define('RECENTCHANGES_DISPLAY_LIMIT_MIN', '0'); // 0 means no limit, 1 is the minimum number of changes
+define('RECENTCHANGES_DISPLAY_LIMIT_MAX', '50'); // keep this value within a reasonable limit to avoid an unnecessary long list
+define('USER_SETTINGS_HEADING', 'User settings');
+define('USER_LOGGED_OUT', 'You have successfully logged out.');
+define('USER_SETTINGS_STORED', 'User settings stored!');
+define('ERROR_NO_BLANK', 'Sorry, blanks are not permitted in the password.');
+define('PASSWORD_CHANGED', 'Password successfully changed!');
+define('ERROR_OLD_PASSWORD_WRONG', 'The old password you entered is wrong.');
+define('UPDATE_SETTINGS_INPUT', 'Update Settings');
+define('CHANGE_PASSWORD_HEADING', 'Change your password:');
+define('CURRENT_PASSWORD_LABEL', 'Your current password:');
+define('PASSWORD_REMINDER_LABEL', 'Password reminder:');
+define('CHANGE_BUTTON_LABEL', 'Change password');
+define('REGISTER_BUTTON_LABEL', 'Register');
+define('QUICK_LINKS_HEADING', 'Quick links');
+define('QUICK_LINKS', 'See a list of pages you own (MyPages) and pages you've edited (MyChanges).');
+define('ERROR_WRONG_PASSWORD', 'Sorry, you entered the wrong password.');
+define('ERROR_WRONG_HASH', 'Sorry, you entered a wrong password reminder.');
+define('ERROR_NON_EXISTENT_USERNAME', 'Sorry, this user name doesn't exist.');
+define('ERROR_USERNAME_EXISTS', 'Sorry, this user name already exists.');
+define('ERROR_EMAIL_ADDRESS_REQUIRED', 'Please specify an email address.');
+define('REGISTRATION_SUCCEEDED', 'You have successfully registered!');
+define('REGISTERED_USER_LOGIN_LABEL', 'If you're already a registered user, log in here!');
+define('LOGIN_HEADING', '===Login===');
+define('LOGIN_REGISTER_HEADING', '===Login/Register===');
+define('LOGIN_BUTTON_LABEL', 'Login');
+define('LOGOUT_BUTTON_LABEL', 'Logout');
+define('NEW_USER_REGISTER_LABEL', 'Fields you only need to fill in when you're logging in for the first time (and thus signing up as a new user on this site).');
+define('RETRIEVE_PASSWORD_HEADING', '===Forgot your password?===');
+define('RETRIEVE_PASSWORD_MESSAGE', 'If you need a password reminder, click [[PasswordForgotten here]]. --- You can login here using your password reminder.');
+define('THEME_LABEL', 'Theme:');
 /**#@-*/
 
 /**#@+
@@ -680,7 +1064,7 @@ define('PAGE_DELETION_CANCEL_BUTTON', 'Cancel');
  * Language constant used by the {@link diff.php diff} (page) handler
  */
 // diff
-define('ERROR_DIFF_LIBRARY_MISSING', 'The file <tt>'.WIKKA_LIBRARY_PATH.DIRECTORY_SEPARATOR.'diff.lib.php</tt> could not be found. You may want to notify the wiki administrator');
+define('ERROR_DIFF_LIBRARY_MISSING', 'The file <tt>"libs/diff.lib.php"</tt> could not be found. You may want to notify the wiki administrator');
 define('ERROR_BAD_PARAMETERS', 'The parameters you supplied are incorrect, one of the two revisions may have been removed.');
 define('DIFF_COMPARISON_HEADER', 'Comparing %1$s for %2$s'); // %1$s - link to revision list; %2$s - link to page
 define('DIFF_REVISION_LINK_TITLE', 'Display the revision list for %s'); // %s page name
@@ -725,6 +1109,8 @@ if (!defined('ERROR_INVALID_PAGEID')) define('ERROR_INVALID_PAGEID', 'The revisi
  */
 // grabcode
 define('ERROR_NO_CODE', 'Sorry, there is no code to download.');
+define('DEFAULT_FILENAME', 'codeblock.txt'); # default name for code blocks
+define('FILE_EXTENSION', '.txt'); # extension appended to code block name
 /**#@-*/
 
 /**#@+
@@ -775,6 +1161,16 @@ define('FIRST_NODE_LABEL', 'Recent Changes');
  */
 // recentchanges.xml
 define('RECENTCHANGES_DESC', 'Recent changes of %s'); // %s - page name
+define('LABEL_ERROR', 'Error');
+/**#@-*/
+
+/**#@+
+ * Language constant used by the {@link recentchanges.xml.mm.php recentchanges.mm.xml} (page) handler
+ */
+// recentchanges.mm.xml
+define('RECENTCHANGES_REV_TIME_CAPTION', 'Revision time: %s'); // %s timestamp
+define('RECENTCHANGES_VIEW_HISTORY_TITLE', 'View History');
+define('RECENTCHANGES_AUTHOR', 'Author: %s'); // %s author
 /**#@-*/
 
 /**#@+
@@ -810,6 +1206,13 @@ define('REFERRERS_DOMAINS_TO_PAGE', 'Domains/sites linking to %1$s %2$s (%3$s)')
 define('REFERRERS_DOMAINS_LINK_DESC', 'see list of domains');
 define('REFERRERS_URLS_TO_WIKI', 'External pages linking to this wiki (%s)'); // %s - link to referrers_sites handler
 define('REFERRERS_URLS_TO_PAGE', 'External pages linking to %1$s %2$s (%3$s)'); // %1$s - page link; %2$s - purge time; %3$s - link to referrers_sites handler
+/**#@-*/
+
+/**#@+
+ * Language constant used by the {@link revert.php revert} (page) handler
+ */
+// revert
+define ('REVERT_DEFAULT_COMMENT', 'Reverted to previous revision');
 /**#@-*/
 
 /**#@+

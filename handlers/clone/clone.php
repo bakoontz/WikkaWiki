@@ -12,7 +12,7 @@
  * If the "Clone ACL" option is selected, ACL settings are copied to the target
  * page, otherwise default ACL are applied to the new page.
  *
- * @package 	Handlers
+ * @package		Handlers
  * @subpackage	Page
  * @version		$Id:clone.php 407 2007-03-13 05:59:51Z DarTar $
  * @since		Wikka 1.1.6.0

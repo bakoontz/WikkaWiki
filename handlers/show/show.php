@@ -189,7 +189,7 @@ else
 				$commentCount = $this->CountComments($this->tag);
 				$showcomments_text = '';
 
-				// Determin comment ordering preference
+				// Determine comment ordering preference
 				$comment_ordering = NULL;
 				if (isset($user['default_comment_display']))
 				{

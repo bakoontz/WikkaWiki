@@ -1,3 +1,4 @@
+<div id="page">
 <?php
 /**
  * Display the page source, slightly formatted for viewing.
@@ -11,19 +12,19 @@
  *
  * @author		{@link http://wikkawiki.org/JsnX JsnX} (first draft)
  * @author		{@link http://wikkawiki.org/DarTar Dario Taraborelli} (code cleanup, i18n strings and DB check)
- * @version		0.3
+ * @version		0.31
  * @since		Wikka 1.1.6.0
  *
- * @uses		Wakka::ExistsPage()
- * @uses		Wakka::Format()
+ * @uses		Wakka::existsPage()
  * @uses		Wakka::HasAccess()
- * @uses		Wakka::href()
+ * @uses		Wakka::Href()
+ * @uses		Wakka::Link()
  * @uses		Wakka::htmlspecialchars_ent()
+ *
  * @output		Wiki source of current page (if it exists).
+ * @todo		move structural elements to template;
  * @todo		create GeSHi highlighter for Wikka markup; #144
  */
-
-echo '<div class="page">'."\n";
 
 //check if page exists
 if ($this->ExistsPage($this->tag))
@@ -34,7 +35,7 @@ if ($this->ExistsPage($this->tag))
 		// display raw page, slightly formatted for viewing
 		$pagelink = $this->Link($this->tag, '', $this->tag);
 		printf('<h4>'.SOURCE_HEADING.'</h4><br />', $pagelink);
-		echo '<p><a class="keys" href="'.$this->href('raw').'">'.SHOW_RAW_LINK_DESC.'</a></p>';
+		echo '<p><a class="keys" href="'.$this->Href('raw').'">'.SHOW_RAW_LINK_DESC.'</a></p>';
 		echo '<div class="wikisource">'.nl2br($this->htmlspecialchars_ent($this->page["body"], ENT_QUOTES)).'</div>';
 	}
 	else
@@ -47,5 +48,5 @@ else
 	echo '<em class="error">'.sprintf(WIKKA_ERROR_PAGE_NOT_EXIST,$this->tag).'</em>';
 }
 
-echo '</div>';
 ?>
+</div>

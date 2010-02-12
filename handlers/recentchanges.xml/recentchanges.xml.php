@@ -20,6 +20,7 @@
  * @uses	Config::$xml_recent_changes
  * @uses	Wakka::existsUser()
  * @uses	Wakka::GetConfigValue()
+ * @uses	Wakka::GetSafeVar()
  * @uses	Wakka::Href()
  * @uses	Wakka::htmlspecialchars_ent()
  * @uses	Wakka::LoadRecentlyChanged()
@@ -72,11 +73,11 @@ if (!defined('FEED_IMAGE_URL')) define('FEED_IMAGE_URL', $this->StaticHref('imag
 /**#@+
  * i18n string.
  */
-if (!defined('FEED_TITLE_RECENT_CHANGES')) define('FEED_TITLE_RECENT_CHANGES',"%s - recently changed pages");	// %s - name of the wiki
-if (!defined('FEED_DESCRIPTION_RECENT_CHANGES')) define('FEED_DESCRIPTION_RECENT_CHANGES',"New and recently changed pages from %s");	// %s - name of the wiki
-if (!defined('FEED_IMAGE_TITLE')) define('FEED_IMAGE_TITLE',"Wikka logo");
-if (!defined('FEED_IMAGE_DESCRIPTION')) define('FEED_IMAGE_DESCRIPTION',"Feed provided by Wikka");
-if (!defined('FEED_ITEM_DESCRIPTION')) define('FEED_ITEM_DESCRIPTION',"By %s");	// %s - user name
+define('RECENTCHANGES_FEED_TITLE',"%s - recently changed pages");	// %s - name of the wiki
+define('RECENTCHANGES_FEED_DESCRIPTION',"New and recently changed pages from %s");	// %s - name of the wiki
+define('RECENTCHANGES_FEED_IMAGE_TITLE',"Wikka logo");
+define('RECENTCHANGES_FEED_IMAGE_DESCRIPTION',"Feed provided by Wikka");
+define('RECENTCHANGES_FEED_ITEM_DESCRIPTION',"By %s");	// %s - user name
 /**#@-*/
 
 //initialize variables
@@ -92,10 +93,10 @@ $n = ''; #number of items
 //get URL parameters
 $formats = explode(',',FEED_VALID_FORMATS);
 #$f = (in_array($_GET['f'], $formats))? $_GET['f'] : FEED_DEFAULT_OUTPUT_FORMAT;
-$f = (isset($_GET['f']) && in_array($_GET['f'], $formats)) ? $_GET['f'] : FEED_DEFAULT_OUTPUT_FORMAT;
+$f = (isset($_GET['f']) && in_array($this->GetSafeVar('f'), $formats)) ? $this->GetSafeVar('f') : FEED_DEFAULT_OUTPUT_FORMAT;
 
 //create object
-#include_once('3rdparty'.DIRECTORY_SEPARATOR.'core'.DIRECTORY_SEPARATOR.'feedcreator'.DIRECTORY_SEPARATOR.'feedcreator.class.php'); // MAKE THIS CONFIGURABLE
+#include_once('3rdparty'.DIRECTORY_SEPARATOR.'core'.DIRECTORY_SEPARATOR.'feedcreator'.DIRECTORY_SEPARATOR.'feedcreator.class.php'); // TODO: MAKE THIS CONFIGURABLE
 $feedcreator_classpath = $this->GetConfigValue('feedcreator_path').DIRECTORY_SEPARATOR.'feedcreator.class.php';
 /**
  * FeedCreator class file.
@@ -106,8 +107,8 @@ $rss = instantiate('UniversalFeedCreator');
 
 //initialize feed (general settings)
 $rss->useCached(); //TODO: make this configurable
-$rss->title = sprintf(FEED_TITLE_RECENT_CHANGES, $this->GetConfigValue('wakka_name'));
-$rss->description = sprintf(FEED_DESCRIPTION_RECENT_CHANGES, $this->GetConfigValue('wakka_name'));
+$rss->title = sprintf(RECENTCHANGES_FEED_TITLE, $this->GetConfigValue('wakka_name'));
+$rss->description = sprintf(RECENTCHANGES_FEED_DESCRIPTION, $this->GetConfigValue('wakka_name'));
 $rss->cssStyleSheet = $this->StaticHref('css/'.FEED_CSS);
 $rss->descriptionTruncSize = FEED_DESCRIPTION_TRUNCATE_SIZE;
 $rss->descriptionHtmlSyndicated = FEED_DESCRIPTION_HTML;
@@ -117,10 +118,10 @@ $rss->syndicationURL = $this->Href($this->handler,'','f='.$f);
 //create feed image
 #$image = new FeedImage();
 $image = instantiate('FeedImage');
-$image->title = FEED_IMAGE_TITLE;
+$image->title = RECENTCHANGES_FEED_IMAGE_TITLE;
 $image->url = FEED_IMAGE_URL;
 $image->link = $this->Href('', $this->GetConfigValue('root_page'));
-$image->description = FEED_IMAGE_DESCRIPTION;
+$image->description = RECENTCHANGES_FEED_IMAGE_DESCRIPTION;
 $image->descriptionTruncSize = FEED_DESCRIPTION_TRUNCATE_SIZE;
 $image->descriptionHtmlSyndicated = FEED_DESCRIPTION_HTML;
 $rss->image = $image;
@@ -146,7 +147,7 @@ if ($pages = $this->LoadRecentlyChanged())
 			// 2. we should NOT use it on already-escaped links -OR- feed it
 			//    links that that have & not escaped (yet)
 			$item->date = date('r',strtotime($page['time']));	// RFC2822
-			$item->description = sprintf(FEED_ITEM_DESCRIPTION, $page['user']).($page['note'] ? ' ('.$page['note'].')' : '')."\n";
+			$item->description = sprintf(RECENTCHANGES_FEED_ITEM_DESCRIPTION, $page['user']).($page['note'] ? ' ('.$page['note'].')' : '')."\n";
 			#$item->source = $this->GetConfigValue('base_url');
 			#$item->source = $this->base_url;	// home page
 			// @@@ JW: ^ should link to *actual* page not root

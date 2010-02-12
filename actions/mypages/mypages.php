@@ -19,7 +19,7 @@
  * @uses	Wakka::IsAdmin()
  * @uses	Wakka::Link()
  * @todo	fix RE (#104 etc.); also lose the comma in there!
- * @todo	actually add the (intended) timestanmp sorting; cf. mychanges action
+ * @todo	actually add the (intended) timestamp sorting; cf. mychanges action
  */
 
 $username = '';
@@ -30,14 +30,14 @@ if(isset($_GET['user']))
 if (($this->IsAdmin() && !empty($username)) ||
 	($this->existsUser() && $username = $this->GetUserName()))
 {
-	printf('<div class="floatl">'.OWNED_PAGES_TXT.'</div><div class="clear">'."&nbsp;</div>\n", $username);
-	$curChar = '';
+	printf('<div class="floatl">'.MYPAGES_CAPTION.'</div><div class="clear">'."&nbsp;</div>\n", $username);
 
+	$my_pages_count = 0;
 
-	#if ($pages = $this->LoadPagesByOwner($user['name']))
-	if ($pages = $this->LoadPagesByOwner($this->reg_username))
+	if ($pages = $this->LoadPagesByOwner($username))
 	{
 		$my_pages_count = 0;
+		$curChar = '';
 		foreach ($pages as $page)
 		{
 			if($username == $page['owner'])
@@ -68,11 +68,11 @@ if (($this->IsAdmin() && !empty($username)) ||
 	}
 	else
 	{
-		echo '<em class="error">'.OWNED_NO_PAGES.'</em>';
+		echo '<em class="error">'.MYPAGES_NONE_OWNED.'</em>';
 	}
 }
 else
 {
-	echo '<em class="error">'.OWNED_NOT_LOGGED_IN.'</em>';
+	echo '<em class="error">'.MYPAGES_NOT_LOGGED_IN.'</em>';
 }
 ?>

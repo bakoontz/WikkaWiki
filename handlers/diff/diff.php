@@ -25,9 +25,13 @@
  * @uses	Wakka::Redirect()
  * @uses	Diff
  *
- * @todo	- This is a really cheap way to do it. I think it may be more intelligent to write the two pages to temporary files and run /usr/bin/diff over them. Then again, maybe not.
+ * @todo	move main <div> to templating class;
+ * @todo	- This is a really cheap way to do it. I think it may be more intelligent to write the two pages
+ *			to temporary files and run /usr/bin/diff over them. Then again, maybe not.
  * 			JW: that may be nice but won't work on a Windows system ;)
  */
+
+echo '<div id="page">'."\n"; //TODO: move to templating class //TODO move _after_ redirect
 
 $output = '';
 $info = '';
@@ -56,7 +60,7 @@ if ($this->HasAccess('read'))
 	}
 	else
 	{
-		die(ERROR_DIFF_LIBRARY_MISSING);	// NO wrapper div will be produced i this case!
+		die(ERROR_DIFF_LIBRARY_MISSING);	// @@@ ERROR: end div won't be produced here
 	}
 
 	// load pages
@@ -64,7 +68,6 @@ if ($this->HasAccess('read'))
 	$pageB = (isset($_GET['b'])) ? $this->LoadPageById($_GET['b']) : '';	# #312
 	if ('' == $pageA || '' == $pageB)
 	{
-		echo '<div class="page">'."\n";
 		echo '<em class="error">'.ERROR_BAD_PARAMETERS.'</em><br />';
 		echo '</div>'."\n";
 		return;
@@ -79,7 +82,6 @@ if ($this->HasAccess('read'))
 	// If asked, call original diff
 	if (isset($_GET['fastdiff']) && $_GET['fastdiff'])	# #312
 	{
-
 		// prepare bodies
 		$bodyA = explode("\n", $this->htmlspecialchars_ent($pageA['body']));
 		$bodyB = explode("\n", $this->htmlspecialchars_ent($pageB['body']));
@@ -129,10 +131,10 @@ if ($this->HasAccess('read'))
 		$sideA = new Side($textA);
 		$sideB = new Side($textB);
 
-		$bodyA='';
+		$bodyA = '';
 		$sideA->split_file_into_words($bodyA);
 
-		$bodyB='';
+		$bodyB = '';
 		$sideB->split_file_into_words($bodyB);
 
 		// diff on these two file
@@ -143,15 +145,15 @@ if ($this->HasAccess('read'))
 
 		$sideO = new Side($fmt->format($diff));
 
-		$resync_left=0;
-		$resync_right=0;
+		$resync_left = 0;
+		$resync_right = 0;
 
 		$count_total_right=$sideB->getposition() ;
 
 		$sideA->init();
 		$sideB->init();
 
-		$info = '<div class="revisioninfo">'."\n";
+		$info .= '<div class="revisioninfo">'."\n";
 		$info .= '<h3>'.sprintf(DIFF_COMPARISON_HEADER, '<a title="'.sprintf(DIFF_REVISION_LINK_TITLE, $pageA['tag']).'" href="'.$this->Href('revisions').'">'.WIKKA_REVISIONS.'</a>', '<a title="'.DIFF_PAGE_LINK_TITLE.'" href="'.$this->Href().'">'.$pageA['tag'].'</a>').'</h3>'."\n";
 		$info .= '<ul style="margin: 10px 0">'."\n";
 		$info .= '	<li><a href="'.$this->Href('show', '', 'time='.urlencode($pageA['time'])).'">['.$pageA['id'].']</a> '.sprintf(WIKKA_REV_WHEN_BY_WHO, '<a class="datetime" href="'.$this->Href('show','','time='.urlencode($pageA["time"])).'">'.$pageA['time'].'</a>', $pageA_edited_by).' <span class="pagenote smaller">'.$noteA.'</span></li>'."\n";
@@ -165,7 +167,7 @@ if ($this->HasAccess('read'))
 		$info .= $this->FormClose();		
 		$info .= '</div>'."\n";
 		$info .= '<strong>'.HIGHLIGHTING_LEGEND.'</strong> <ins><tt>'.DIFF_SAMPLE_ADDITION.'</tt></ins> <del><tt>'.DIFF_SAMPLE_DELETION.'</tt></del></p>'."\n"; #i18n
-		
+
 		while (1)
 		{
 			$sideO->skip_line();
@@ -194,6 +196,7 @@ if ($this->HasAccess('read'))
 					$resync_right = $argument[2] - 1;
 					break;
 				}
+	
 				$sideA->skip_until_ordinal($resync_left);
 				$sideB->copy_until_ordinal($resync_right,$output);
 
@@ -225,15 +228,12 @@ if ($this->HasAccess('read'))
 	}
 
 	// show output
-	echo '<div class="page">'."\n";
 	echo $info.$output;
-	echo '<div style="clear: both;"></div>'."\n";
-	echo '</div>'."\n";
 }
 else
 {
-	echo '<div class="page">'."\n";
-	echo '<em class="error">'.WIKKA_ERROR_ACL_READ.'</em>';
-	echo '</div>'."\n";
+	echo '<em class="error">'.WIKKA_ERROR_ACL_READ.'</em>'."\n";
 }
+echo '<div style="clear: both"></div>'."\n";
+echo '</div>'."\n";
 ?>

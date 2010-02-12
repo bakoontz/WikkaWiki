@@ -9,6 +9,8 @@
  * To indicate a temporary redirect, use 'temporary=yes' as an action param. 
  * The default type of redirect is 'Moved permanently'.
  * 
+ * @usage		{{redirect target="SandBox"}}
+ * @usage		{{redirect to="CategoryCategory"}}
  * @usage		{{redirect page="HomePage" [temporary="yes"] }}
  * @package		Actions
  * @version		$Id$
@@ -17,7 +19,7 @@
  * @license 	http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
  * 
- * @input		string $page mandatory: target wiki page
+ * @input		string $page mandatory: target wiki page [may substitute "target" or "to" for "page"]
  * @input		bool $temporary	optional: indiacte a temporary redirect
  * 
  * @uses		Wakka::cleanUrl()
@@ -29,11 +31,6 @@
  * @todo		test
  * @todo		move i18n constants to language file
  */
-
-// i18n
-if (!defined('PAGE_MOVED_TO')) define('PAGE_MOVED_TO', 'This page has been moved to %s.'); # %s - targe page
-if (!defined('REDIRECTED_FROM')) define('REDIRECTED_FROM', 'Redirected from %s.'); # %s - redirecting page
-if(!defined('INVALID_REDIRECT')) define('INVALID_REDIRECT', 'Invalid redirect. Target must be an existing wiki page.');
 
 // defaults
 $headercode = "HTTP/1.0 301 Moved Permanently";
@@ -60,9 +57,9 @@ if (is_array($vars))
 {
     foreach ($vars as $param => $value)
     {
-    	if ($param == 'target' || $param == 'to') 
+    	if ($param == 'target' || $param == 'to' || $param == 'page') 
     	{
-    		if ($this->existsPage($value)) $target = $value;
+			if ($this->existsPage($this->htmlspecialchars_ent($value))) $target = $value;
     	}
     	if ($param == 'temporary')
     	{

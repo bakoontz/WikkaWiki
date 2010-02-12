@@ -2,6 +2,11 @@
 /**
  * Display a list of recent comments.
  *
+ * Usage: {{recentcomments}}
+ *
+ * Optionally, setting the "user=" GET param will display recent
+ * comments only for the specified user.
+ *
  * @package		Actions
  * @name		RecentComments
  * @version		$Id:recentcomments.php 369 2007-03-01 14:38:59Z DarTar $
@@ -12,7 +17,8 @@
  * @author		{@link http://wikkawiki.org/NickDamoulakis Nick Damoulakis} (ACL check)
  * @since		Wikka 1.0.0
  *
- * @todo		make datetime format configurable
+ * @input		none
+ * @todo			- make datetime format configurable
  */
 
 /**#@+
@@ -28,10 +34,10 @@ $readable = 0;
 $username = '';
 if(isset($_GET['user']))
 {
-    $username = $this->htmlspecialchars_ent($_GET['user']);
+	$username = $this->htmlspecialchars_ent($_GET['user']);
 }
 
-echo '<h2>'.RECENTCOMMENTS_HEADING.'</h2><br />'."\n";
+echo $this->Format(RECENT_COMMENTS_HEADING.' --- ');
 if ($comments = $this->LoadRecentComments(50, $username))
 {
 	$curday = '';
@@ -70,18 +76,18 @@ if ($comments = $this->LoadRecentComments(50, $username))
 	}
 	if ($readable == 0)
 	{
-		echo '<em class="error">'.RECENTCOMMENTS_NONE_ACCESSIBLE.'</em>';
+		echo '<p class="error">'.RECENTCOMMENTS_NONE_ACCESSIBLE.'</p>';
 	}
 }
 else
 {
-    if(!empty($username))
-    {
-        echo '<em class="error">'.sprintf(RECENTCOMMENTS_NONE_FOUND, " by $username.").'</em>';
-    }
+	if(!empty($username))
+	{
+		echo '<p class="error">'.sprintf(RECENTCOMMENTS_NONE_FOUND_BY, $username).'</p>';
+	}
 	else
 	{
-		echo '<em class="error">'.RECENTCOMMENTS_NONE_FOUND.'</em>';
+		echo '<p class="error">'.RECENTCOMMENTS_NONE_FOUND.'</p>';
 	}
 }
 ?>

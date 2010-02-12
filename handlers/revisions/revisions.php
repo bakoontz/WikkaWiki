@@ -1,3 +1,4 @@
+<div id="page">
 <?php
 /**
  * Show a list of revisions for the page sorted after time.
@@ -112,14 +113,11 @@ if ($this->HasAccess('read'))
 		$output .= '<em>'.REVISIONS_NO_REVISIONS_YET.'</em>'."\n";
 	}
 
-	echo '<div class="page">'."\n";
 	echo $output;
-	echo '</div>'."\n";
 }
 else
 {
-	echo '<div class="page">'."\n";
 	echo '<em class="error">'.WIKKA_ERROR_ACL_READ.'</em>'."\n";
-	echo '</div>'."\n";
 }
 ?>
+</div>

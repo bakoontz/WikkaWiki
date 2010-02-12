@@ -13,7 +13,7 @@
  * @uses	Wakka::GetPageTag()
  * @uses	Wakka::existsUser()
  * @uses	Wakka::Href()
- * @uses	Wakka::SetRedirectMessager()
+ * @uses	Wakka::SetRedirectMessage()
  * @uses	Wakka::Redirect()
  */
 

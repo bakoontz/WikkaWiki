@@ -88,6 +88,7 @@ class Wakka
 	 * @var		array
 	 */
 	var $config = array();
+
 	/**
 	 * Hold the connection-link to the database.
 	 *
@@ -102,6 +103,7 @@ class Wakka
 	 * @var		array
 	 */
 	var $queryLog = array();
+
 	/**
 	 * Hold the interWiki List.
 	 *
@@ -118,6 +120,7 @@ class Wakka
 	 * @var		boolean
 	 */
 	var $cookies_sent = FALSE;
+
 	/**
 	 * If this value is set to TRUE, Anti-caching HTTP headers won't be added.
 	 *
@@ -150,6 +153,7 @@ class Wakka
 	 * @var		array
 	 */
 	var $page;
+
 	/**
 	 * Hold the name of the current page.
 	 *
@@ -157,6 +161,7 @@ class Wakka
 	 * @var		string
 	 */
 	var $tag;
+
 	/**
 	 * Title of the page to insert in the <title> element.
 	 *
@@ -190,6 +195,7 @@ class Wakka
 	/**#@+*
 	 * Variable to store data about users.
 	 */
+
 	/**
 	 * Tracks whether the <b>current</b> user is registered or not.
 	 *
@@ -263,10 +269,12 @@ class Wakka
 			}
 		}
 		$this->VERSION = WAKKA_VERSION;
+		$this->PATCH_LEVEL = WIKKA_PATCH_LEVEL;
 	}
 
-	/**
-	 * DATABASE methods
+	/**#@+
+	 * @category	Database
+	 * @todo	move into a database class.
 	 */
 
 	/**
@@ -281,7 +289,7 @@ class Wakka
 	 *
 	 * @param	string	$query	mandatory: the query to be executed.
 	 * @return	array	the result of the query.
-	 * @todo	move into a database class.
+	 *
 	 */
 	function Query($query)
 	{
@@ -306,6 +314,7 @@ class Wakka
 		}
 		return $result;
 	}
+
 	/**
 	 * Return the first row of a query executed on the database.
 	 *
@@ -350,6 +359,7 @@ class Wakka
 		}
 		return $data;
 	}
+
 	/**
 	 * Generic 'count' query.
 	 *
@@ -358,11 +368,13 @@ class Wakka
 	 *
 	 * @author		{@link http://wikkawiki.org/JavaWoman JavaWoman}
 	 * @license		http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
+	 * @since		Wikka 1.1.6.4
 	 * @version		1.1
 	 *
 	 * @access	public
-	 * @uses	Config::$table_prefix
+	 * @uses	Wakka::GetConfigValue()
 	 * @uses	Wakka::Query()
+	 * @uses	Config::$table_prefix
 	 *
 	 * @param	string	$table	required: (logical) table name to query;
 	 *							prefix will be automatically added
@@ -371,7 +383,7 @@ class Wakka
 	 * @return	integer	number of matches returned by MySQL
 	 * @todo	move into a database class.
 	 */
-	function getCount($table,$where='')							# JW 2005-07-16
+	function getCount($table, $where='')							# JW 2005-07-16
 	{
 		// build query
 		$where = ('' != $where) ? ' WHERE '.$where : '';
@@ -384,6 +396,7 @@ class Wakka
 		$count = (int)mysql_result($this->Query($query),0);
 		return $count;
 	}
+
 	/**
 	 * Check if the MySQL-Version is higher or equal to a given (minimum) one.
 	 *
@@ -635,6 +648,8 @@ class Wakka
 	 * @author		{@link http://wikkawiki.org/JavaWoman JavaWoman}
 	 * @copyright	Copyright © 2005, Marjolein Katsma
 	 * @license		http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
+	 * @since		Wikka 1.1.6.4
+	 * @version		1.0
 	 *
 	 * @access	public
 	 * @uses	ID_LENGTH
@@ -697,6 +712,12 @@ class Wakka
 		return $idOut;
 	}
 
+	/**#@-*/
+
+	/**#@+
+	 * @category	Security methods
+	 */
+
 	/**
 	 * Strip potentially dangerous tags from embedded HTML.
 	 *
@@ -709,7 +730,7 @@ class Wakka
 	 */
 	function ReturnSafeHTML($html)
 	{
-		#require_once('3rdparty'.DIRECTORY_SEPARATOR.'core'.DIRECTORY_SEPARATOR.'safehtml'.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'safehtml.php');
+		//require_once('3rdparty'.DIRECTORY_SEPARATOR.'core'.DIRECTORY_SEPARATOR.'safehtml'.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'safehtml.php');
 		$safehtml_classpath = $this->GetConfigValue('safehtml_path').DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'safehtml.php';
 		require_once $safehtml_classpath;
 
@@ -801,10 +822,6 @@ class Wakka
 		$str .= $compact ? '</ul></div>' : '</tr></table>';
 		return $str;
 	}
-
-	/**
-	 * SECURITY-related methods
-	 */
 
 	/**
 	 * Make sure a (user-provided) URL does use &amp; instead of & and is protected from attacks.
@@ -981,6 +998,7 @@ class Wakka
 	 * Team and finally used by JavaWoman. :)
 	 *
 	 * @author 		{@link http://wikkawiki.org/JavaWoman Marjolein Katsma}
+	 *
 	 * @since		Wikka 1.1.6.3
 	 * @version		1.0
 	 * @license		http://www.gnu.org/copyleft/lgpl.html
@@ -1015,20 +1033,19 @@ class Wakka
 		}
 
 		// return translated string
-		$result = strtr($string,$aTransSpecchar);
-		return $result;
+		return strtr($string,$aTransSpecchar);
 	}
 
 	/**
 	 * Get a value provided by user (by get, post or cookie) and sanitize it.
 	 * The method is also helpful to disable warning when the value was absent.
 	 *
-	 * @since	Wikka 1.1.7.0
 	 * @version	1.0
 	 *
 	 * @uses	Wakka::htmlspecialchars_ent()
 	 *
 	 * @access	public
+	 * @since	Wikka 1.3
 	 *
 	 * @param	string	$varname required: field name on get or post or cookie name
 	 * @param	string	$gpc one of get, post, request and cookie. Optional, defaults to request.
@@ -1049,8 +1066,7 @@ class Wakka
 		{
 			$safe_var = isset($_COOKIE[$varname]) ? $_COOKIE[$varname] : NULL;
 		}
-		$var = $this->htmlspecialchars_ent($safe_var);
-		return $var;
+		return ($this->htmlspecialchars_ent($safe_var));
 	}
 
 	/**
@@ -1138,13 +1154,13 @@ class Wakka
 
 		// parse and return highlighted code
 		// comments added to make GeSHi-highlighted block visible in code JW/20070220
-		$code = '<!--start GeSHi-->'."\n".$geshi->parse_code()."\n".'<!--end GeSHi-->'."\n";
-		return $code;
+		return '<!--start GeSHi-->'."\n".$geshi->parse_code()."\n".'<!--end GeSHi-->'."\n";
 	}
 
-	/**
-	 * VARIABLE-related methods ("getters" and "setters")
-	 *
+	/**#@-*/
+
+	/**#@+
+	 * @category	Variable-related methods
 	 * @todo	decide if we need (all) these methods!
 	 *			JW: my vote is NOT if all a getter does is return a variable directly;
 	 *			but useful if there's some processing or checking involved -
@@ -1166,6 +1182,7 @@ class Wakka
 	{
 		return $this->tag;
 	}
+
 	/**
 	 * Get the time the current verion of the current page was saved.
 	 *
@@ -1177,66 +1194,7 @@ class Wakka
 	{
 		return $this->page['time'];
 	}
-	/**
-	 * Determine if the current version of the page is the latest.
-	 *
-	 * @return boolean TRUE if it is the latest, FALSE otherwise.
-	 * @todo	Remove this method? Never called, and the variable does not seem to be set anywhere...
-	 */
-	function IsLatestPage()
-	{
-		return $this->latest;
-	}
-	/**
-	 * Check whether the page is already assigned a title to set in the <title> tag.
-	 *
-	 * @access	public
-	 * @uses	Wakka::$page_title
-	 *
-	 * @return	boolean
-	 */
-	function HasPageTitle()
-	{
-		return ('' != $this->page_title);
-	}
-	/**
-	 * Store page data.
-	 *
-	 * @uses	Wakka::$page
-	 * @uses	Wakka::$tag
-	 */
-	function SetPage($page)
-	{
-		global $debug;
-if ($debug) echo 'SetPage: ';
-		$this->page = $page;
-		if ($this->page['tag'])
-		{
-			$this->tag = $this->page['tag'];
-		}
-if ($debug) echo 'tag is '.$this->tag."<br/>\n";
-	}
-	/**
-	 * Store the title of a page (as derived by the formatter).
-	 *
-	 * Actually, the title of the page is chosen from the text inside headings
-	 * h1 through h4, that is encountered first.
-	 * (But that process isn't happening in this function! see wakka3callback().)
-	 *
-	 * @access	public
-	 * @uses	Wakka::$page_title
-	 *
-	 * @param	string	$page_title	the new title of the page.
-	 * @return	void
-	 * @todo	probably better to use the already-existing Wakka::$page array to store this?
-	 */
-	function SetPageTitle($page_title)
-	{
-		if (trim($page_title))
-		{
-			$this->page_title = $page_title;
-		}
-	}
+
 	/**
 	 * Get the handler used on the page.
 	 *
@@ -1247,6 +1205,7 @@ if ($debug) echo 'tag is '.$this->tag."<br/>\n";
 	{
 		return $this->handler;
 	}
+
 	/**
 	 * Get the value of a given item from the wikka config.
 	 *
@@ -1272,6 +1231,7 @@ if ($debug) echo 'tag is '.$this->tag."<br/>\n";
 	{
 		$this->config[$name] = $value;
 	}
+
 	/**
 	 * Get the name of the Wiki.
 	 *
@@ -1282,6 +1242,7 @@ if ($debug) echo 'tag is '.$this->tag."<br/>\n";
 	{
 		return $this->GetConfigValue('wakka_name');
 	}
+
 	/**
 	 * Get the wikka version.
 	 *
@@ -1379,6 +1340,7 @@ if ($debug) echo ' not found';
 if ($debug) echo "<br/>\n";
 		return $page;
 	}
+
 	/**
 	 * GetCachedPageById gets a page from cache whose id is $id.
 	 *
@@ -1396,7 +1358,6 @@ if ($debug) echo "<br/>\n";
 	 * GetCachedPage gets a page from cache whose name is $tag.
 	 *
 	 * @access	public
-	 * @see		Wakka::CachePage()
 	 * @uses	Wakka::$pageCache
 	 * @uses	Config::$pagename_case_sensitive
 	 *
@@ -1455,6 +1416,7 @@ if ($debug) echo "<br/>\n";
 			$this->pageCache['/#'.$page['id']] = $page;
 		}
 	}
+
 	/**
 	 * CacheNonExistentPage marks a page name in cache as a non-existent page.
 	 *
@@ -1474,6 +1436,72 @@ if ($debug) echo "<br/>\n";
 		$this->pageCache[$tag] = 'cached_nonexistent_page';
 	}
 	/**
+	 * Determine if the current version of the page is the latest.
+	 *
+	 * @return boolean TRUE if it is the latest, FALSE otherwise.
+	 * @todo	Remove this method? Never called, and the variable does not seem to be set anywhere...
+	 */
+	function IsLatestPage()
+	{
+		return $this->latest;
+	}
+
+	/**
+	 * Check whether the page is already assigned a title to set in the <title> tag.
+	 *
+	 * @access	public
+	 * @uses	Wakka::$page_title
+	 *
+	 * @return	boolean
+	 */
+	function HasPageTitle()
+	{
+		return ('' != $this->page_title);
+	}
+
+	/**
+	 * Store page data.
+	 *
+	 * @uses	Wakka::$page
+	 * @uses	Wakka::$tag
+	 * @param	string	$page
+	 * @return	void
+	 */
+	function SetPage($page)
+	{
+		global $debug;
+if ($debug) echo 'SetPage: ';
+		$this->page = $page;
+		if ($this->page['tag'])
+		{
+			$this->tag = $this->page['tag'];
+		}
+if ($debug) echo 'tag is '.$this->tag."<br/>\n";
+	}
+
+	/**
+	 * Store the title of a page (as derived by the formatter).
+	 *
+	 * Actually, the title of the page is chosen from the text inside headings
+	 * h1 through h4, that is encountered first.
+	 * (But that process isn't happening in this function! see wakka3callback().)
+	 *
+	 * @access	public
+	 * @uses	Wakka::$page_title
+	 *
+	 * @param	string	$page_title	the new title of the page.
+	 * @return	void
+	 * @todo	probably better to use the already-existing Wakka::$page array to store this?
+	 */
+	function SetPageTitle($page_title)
+	{
+		if (trim($page_title))
+		{
+			$this->page_title = $page_title;
+		}
+	}
+
+	/**
 	 * LoadPageById loads a page whose id is $id.
 	 *
 	 * If the parameter $cache is true, it first tries to retrieve it from cache.
@@ -1482,6 +1510,7 @@ if ($debug) echo "<br/>\n";
 	 * @access	public
 	 * @uses	Wakka::GetCachedPageById()
 	 * @uses	Wakka::LoadSingle()
+	 * @uses	Wakka::GetConfigValue()
 	 * @uses	Wakka::CachePage()
 	 * @uses	Wakka::CacheNonExistentPage()
 	 * @uses	Config::$table_prefix
@@ -1524,6 +1553,7 @@ if ($debug) echo "<br/>\n";
 		}
 		return $page;
 	}
+
 	/**
 	 * LoadRevisions: Load revisions of a page.
 	 *
@@ -1544,6 +1574,7 @@ if ($debug) echo "<br/>\n";
 	 *
 	 * @access	public
 	 * @uses	Wakka::GetUser()
+	 * @uses	Wakka::GetConfigValue()
 	 * @uses	Wakka::LoadAll()
 	 * @uses	Config::$default_revisioncount
 	 * @uses	Config::$table_prefix
@@ -1611,6 +1642,7 @@ if ($debug) echo "<br/>\n";
 		}
 		return $revisions;
 	}
+
 	/**
 	 * LoadOldestRevision: Load the oldest known revision of a page.
 	 *
@@ -1622,6 +1654,7 @@ if ($debug) echo "<br/>\n";
 	 * @access	public
 	 * @uses	Config::$pagename_case_sensitive
 	 * @uses	Config::$table_prefix
+	 * @uses	Wakka::GetConfigValue()
 	 * @uses	Wakka::$specialCache
 	 * @uses	Wakka::LoadSingle()
 	 *
@@ -1658,6 +1691,7 @@ if ($debug) echo "<br/>\n";
 		}
 		return $oldest_revision;
 	}
+
 	/**
 	 * Load pages linking to a given page.
 	 *
@@ -1676,6 +1710,7 @@ if ($debug) echo "<br/>\n";
 			);
 		return $pages;
 	}
+
 	/**
 	 * Load the last x edited pages on the wiki.
 	 *
@@ -1712,6 +1747,7 @@ if ($debug) echo "<br/>\n";
 		}
 		return $pages;
 	}
+
 	/**
 	 * Load pages that need to be created.
 	 *

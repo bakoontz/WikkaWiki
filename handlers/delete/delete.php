@@ -1,3 +1,4 @@
+<div id="page">
 <?php
 /**
  * Delete a page if the user is an admin.
@@ -17,6 +18,7 @@
  * @uses	Wakka::Link()
  * @uses	Wakka::Query()
  * @uses	Wakka::Redirect()
+ * @uses	Wakka::Href()
  *
  * @todo	don't show cancel button when JavaScript is not active
  * @todo	avoid layout table (there are not even virtual columns!)
@@ -27,21 +29,21 @@
 #$tag = $this->GetPageTag();
 $tag = $this->tag;
 
+// cancel operation and return to the page
+if (isset($_POST['cancel']) && ($_POST['cancel'] == PAGE_DELETION_CANCEL_BUTTON))
+{
+	$this->Redirect($this->Href());
+}
+
 if ($this->IsAdmin() || ($this->UserIsOwner($tag) && (bool) $this->GetConfigValue('owner_delete_page')))
 {
-
-	if(isset($_POST['cancel']) && ($_POST['cancel'] == PAGE_DELETION_CANCEL_BUTTON))
-	{
-		$this->Redirect($this->Href());
-	}
-
 	if (isset($_POST['delete']) && $_POST['delete'] == PAGE_DELETION_DELETE_BUTTON) // delete button pressed
 	{
-		// delete the page, comments, related "from" links, acls and referrer
+		// delete the page, comments, related "from" links, acls and referrers
 		// @@@ format queries
 		$this->Query("DELETE FROM ".$this->GetConfigValue('table_prefix')."pages WHERE tag = '".mysql_real_escape_string($tag)."'");
 		$this->Query("DELETE FROM ".$this->GetConfigValue('table_prefix')."comments WHERE page_tag = '".mysql_real_escape_string($tag)."'");
-		$this->Query("DELETE FROM ".$this->GetConfigValue('table_prefix')."links WHERE FROM_tag = '".mysql_real_escape_string($tag)."'");
+		$this->Query("DELETE FROM ".$this->GetConfigValue('table_prefix')."links WHERE from_tag = '".mysql_real_escape_string($tag)."'");
 		$this->Query("DELETE FROM ".$this->GetConfigValue('table_prefix')."acls WHERE page_tag = '".mysql_real_escape_string($tag)."'");
 		$this->Query("DELETE FROM ".$this->GetConfigValue('table_prefix')."referrers WHERE page_tag = '".mysql_real_escape_string($tag)."'");
 
@@ -51,8 +53,6 @@ if ($this->IsAdmin() || ($this->UserIsOwner($tag) && (bool) $this->GetConfigValu
 	}
 	else
 	{
-		echo '<div class="page">'."\n";
-
 		// show form
 		?>
 		<h3><?php printf(PAGE_DELETION_HEADER,$this->Link($tag));?></h3>
@@ -72,14 +72,11 @@ if ($this->IsAdmin() || ($this->UserIsOwner($tag) && (bool) $this->GetConfigValu
 		</table>
 		<?php
 		echo $this->FormClose();
-
-		echo '</div>'."\n";
 	}
 }
 else
 {
-	echo '<div class="page">'."\n";
-	echo '<em class="error">'.ERROR_NO_PAGE_DEL_ACCESS.'</em>';
-	echo '</div>'."\n";
+	echo '<em class="error">'.ERROR_NO_PAGE_DEL_ACCESS.'</em>'."\n";
 }
 ?>
+</div>

@@ -14,6 +14,10 @@
  * @uses	Wakka::Redirect()
  * @uses	Wakka::FormOpen()
  * @uses	Wakka::FormClose()
+ * @uses	Wakka::GetSafeVar()
+ * @uses	Wakka::ExistsPage()
+ * @uses	Wakka::Href()
+ * @uses	Wakka::IsWikiName()
  * @filesource
  *
  * @todo user central regex library #34
@@ -25,7 +29,7 @@ if (isset($_POST['pagename']))
 {
 	$pagename = $this->GetSafeVar('pagename', 'post');
 
-	if (!(preg_match("/^[A-ZÄÖÜ]+[a-zßäöü]+[A-Z0-9ÄÖÜ][A-Za-z0-9ÄÖÜßäöü]*$/s", $pagename))) #34 (use !IsWikiName())
+	if (!$this->IsWikiName($pagename)) #34
 	{
 		echo '<em class="error">'.sprintf(WIKKA_ERROR_INVALID_PAGE_NAME, $pagename).'</em>';
 	}

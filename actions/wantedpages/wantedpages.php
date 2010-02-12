@@ -89,7 +89,6 @@ if ($pages = $this->LoadWantedPages($sort))	// @@@ array -> list
 }
 else
 {
-	print '<em class="error">'.NO_WANTED_PAGES.'</em>';
+	print '<p class="error">'.NO_WANTED_PAGES.'</p>';
 }
-
 ?>

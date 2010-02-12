@@ -62,9 +62,10 @@ $note = '';
 $ondblclick = ''; //#123
 $body = '';
 
-if(isset($_POST['cancel']) && ($_POST['cancel'] == EDIT_CANCEL_BUTTON))
-{   
-    $this->Redirect($this->Href());
+// cancel operation and return to page
+if(isset($_POST['cancel']) && ($this->GetSafeVar('cancel', 'post') == EDIT_CANCEL_BUTTON))
+{
+	$this->Redirect($this->Href());
 }
 
 if ($this->GetConfigValue('edit_buttons_position') == 'top' || $this->GetConfigValue('edit_buttons_position') == 'bottom')
@@ -76,7 +77,7 @@ else
 	$buttons_position = DEFAULT_BUTTONS_POSITION;
 }
 
-if (isset($_POST['submit']) && ($_POST['submit'] == EDIT_PREVIEW_BUTTON) && ($user = $this->GetUser()) && ($user['doubleclickedit'] != 'N'))
+if (isset($_POST['submit']) && ($this->GetSafeVar('submit', 'post') == EDIT_PREVIEW_BUTTON) && ($user = $this->GetUser()) && ($user['doubleclickedit'] != 'N'))
 {
 	$ondblclick = ' ondblclick=\'document.getElementById("reedit_id").click();\'';
 }
@@ -89,8 +90,12 @@ if (!(preg_match(VALID_PAGENAME_PATTERN, $this->tag))) { //TODO use central rege
 elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 {
 	$newtag = $output = '';
-	if (isset($_POST['newtag'])) $newtag = $_POST['newtag'];
-	if ($newtag !== '') $this->Redirect($this->Href('edit', $newtag));
+	// rename action
+	if (isset($_POST['newtag']))
+	{
+		$newtag = $_POST['newtag'];
+		if ($newtag !== '') $this->Redirect($this->Href('edit', $newtag));
+	}
 
 	// Process id GET param if present
 	$id = $this->page['id'];
@@ -108,23 +113,28 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 		}
 	}
 
-
 	if (isset($_POST['submit']))
 	{
 		// strip CRLF line endings down to LF to achieve consistency ... plus it saves database space.
-		// Note: these codes must remain enclosed in double-quotes to work!
+		// Note: these codes must remain enclosed in double-quotes to work! -- JsnX
 		$body = str_replace("\r\n", "\n", $_POST['body']);
-
-		$body = preg_replace("/\n[ ]{4}/", "\n\t", $body);	// FIXME: misses first line and multiple sets of four spaces - solution in formatter??
-
-		// we don't need to escape here, we do that just before display (i.e., treat note just like body!)
-		if(isset($_POST['note']))
+		// replace each 4 consecutive spaces at the start of a line with a tab
+		#$body = preg_replace("/\n[ ]{4}/", "\n\t", $body);						# @@@ FIXME: misses first line and multiple sets of four spaces - JW 2005-01-16
+		# JW FIXED 2005-07-12
+		$pattern = '/^(\t*) {4}/m';					# m modifier: match ^ at start of line *and* at start of string;
+		$replace = "$1\t";
+		while (preg_match($pattern,$body))
 		{
-			$note = trim($_POST['note']);
+			$body = preg_replace($pattern,$replace,$body);
+		}
+		// we don't need to escape here, we do that just before display (i.e., treat note just like body!)
+		if (isset($_POST['note']))
+		{
+			$note = trim($this->GetSafeVar('note','post'));
 		}
 
 		// only if saving:
-		if ($_POST['submit'] == EDIT_STORE_BUTTON)
+		if ($this->GetSafeVar('submit', 'post') == EDIT_STORE_BUTTON)
 		{
 			// check for overwriting
 			if ($this->page)
@@ -134,8 +144,8 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 					$error = ERROR_OVERWRITE_ALERT1.'<br />'.ERROR_OVERWRITE_ALERT2;
 				}
 			}
-			// check for edit note
-			if (($this->GetConfigValue('require_edit_note') == 1) && $_POST['note'] == '')
+			// check for edit note if required
+			if (($this->GetConfigValue('require_edit_note') == 1) && $this->GetSafeVar('note', 'post') == '')
 			{
 				$error .= ERROR_MISSING_EDIT_NOTE;
 				$highlight_note = INPUT_ERROR_STYLE;
@@ -180,9 +190,17 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 	$previous = $this->page['id'];
 	if (isset($_POST['previous'])) $previous = $_POST['previous'];
 	if (empty($body)) $body = $this->page['body'];
-	$body = preg_replace("/\n[ ]{4}/", "\n\t", $body);	// FIXME misses first line and multiple sets of four spaces - JW 2005-01-16
+	// replace each 4 consecutive spaces at the start of a line with a tab
+	#$body = preg_replace("/\n[ ]{4}/", "\n\t", $body);						# @@@ FIXME: misses first line and multiple sets of four spaces - JW 2005-01-16
+	# JW FIXED 2005-07-12
+	$pattern = '/^(\t*) {4}/m';					# m modifier: match ^ at start of line *and* at start of string;
+	$replace = "$1\t";
+	while (preg_match($pattern,$body))
+	{
+		$body = preg_replace($pattern,$replace,$body);
+	}
 
-
+	// derive maximum length for a page name from the table structure if possible
 	$maxtaglen = MAX_TAG_LENGTH; #38 - #376
 	if ( ($field = $this->LoadSingle("describe ".$this->GetConfigValue('table_prefix')."pages tag"))
 	   && (preg_match("/varchar\((\d+)\)/", $field['Type'], $matches)) )
@@ -191,7 +209,7 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 	}
 
 	// PREVIEW screen
-	if (isset($_POST['submit']) && $_POST['submit'] == EDIT_PREVIEW_BUTTON)
+	if (isset($_POST['submit']) && $this->GetSafeVar('submit', *post') == EDIT_PREVIEW_BUTTON)
 	{
 		$preview_buttons =	'<fieldset><legend>'.EDIT_STORE_PAGE_LEGEND.'</legend>'."\n".
 							$edit_note_field.
@@ -227,7 +245,9 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 	// RENAME screen
 	elseif (!$this->page && strlen($this->tag) > $maxtaglen)
 	{
-		$this->tag = substr($this->tag, 0, $maxtaglen); // truncate tag to feed a backlinks-handler with the correct value. may be omitted. it only works if the link to a backlinks-handler is built in the footer.
+		// truncate tag to feed a backlinks-handler with the correct value. may be omited. it only works if the link to a backlinks-handler is built in the footer.
+		$this->tag = substr($this->tag, 0, $maxtaglen);
+
 		$output  = '<em class="error">'.sprintf(ERROR_TAG_TOO_LONG, $maxtaglen).'</em><br />'."\n";
 		$output .= sprintf(MESSAGE_AUTO_RESIZE, INPUT_SUBMIT_RENAME).'<br /><br />'."\n";
 		$output .= $this->FormOpen('edit');
@@ -239,7 +259,7 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 	else
 	{
 		// display form
-		if ($error)
+		if (!empty($error))
 		{
 			$output .= '<em class="error">'.$error.'</em>'."\n";
 		}
@@ -247,7 +267,7 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 		// append a comment?
 		// TODO not clear if this is/was intended as a URL parameter (GET), or a check box on the edito form (POST) ....
 		// would be nice as a checkbox, provided it is acted upon only when user is actually submitting - NOT on preview or re-edit
-		if (isset($_POST['appendcomment'])) #312, #449
+		if (isset($this->GetSafeVar('appendcomment', 'post'))) #312, #449
 		{
 			$body = trim($body)."\n\n----\n\n-- ".$this->GetUserName().' '.sprintf(EDIT_COMMENT_TIMESTAMP_CAPTION,strftime("%c")).')';
 		}
@@ -273,7 +293,7 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 		{
 			$output .= $edit_buttons;
 		}
-		$output .=	$this->FormClose();
+		$output .= $this->FormClose();
 
 		if ($this->GetConfigValue('gui_editor') == 1)	// @@@ cast to boolean and compare to TRUE
 		{
@@ -294,5 +314,5 @@ else
 	if ($this->ExistsPage($this->tag)) $message .= '<a href="'.$this->Href('showcode').'" title="'.SHOWCODE_LINK_TITLE.'">'.SHOWCODE_LINK.'</a>'."<br />\n";
 	echo $message;
 }
-echo '</div>'."\n"
 ?>
+</div>

@@ -615,7 +615,7 @@ if ($loggedin)
 }
 else
 {
-	echo '<p><em class="error">'.LOGIN_NOTE.'</em></p>'."\n";
+	echo '<p><em class="error">'.PLEASE_LOGIN_CAPTION.'</em></p>'."\n";
 }
 echo '</div>'."\n";
 echo '</div>'."\n";

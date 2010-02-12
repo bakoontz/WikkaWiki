@@ -44,17 +44,16 @@
  */
 
 //i18n
-if(!defined('DEFAULT_COMMENT')) define ('DEFAULT_COMMENT', 'Reverted to previous revision');
 if(!defined('MESSAGE_SUCCESS')) define ('MESSAGE_SUCCESS', 'Reverted to previous version');
 if(!defined('MESSAGE_FAILED')) define ('MESSAGE_FAILED', 'Reversion to previous version FAILED!');
 
 $message = MESSAGE_FAILED;
-if ($this->IsAdmin())
+if (TRUE===$this->IsAdmin())
 {
-	$comment = DEFAULT_COMMENT;
-	if(isset($_GET['comment']))
+	$comment = REVERT_DEFAULT_COMMENT;
+	if(TRUE===isset($_GET['comment']))
 	{
-		$comment = $this->htmlspecialchars_ent($_GET['comment']);
+		$comment = $this->htmlspecialchars_ent($this->GetSafeVar('comment'));
 	}
 	// If GET params of form "id_#" have been passed, then this
 	// handler was called from the pageadmin handler!

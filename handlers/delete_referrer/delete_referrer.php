@@ -35,5 +35,4 @@ if (isset($spammer) && $spammer)
 // Redirect back to original page/handler
 $redirect = isset($_GET['redirect']) ? $_GET['redirect'] : ''; # #312
 $this->Redirect($this->Href($redirect));
-
 ?>

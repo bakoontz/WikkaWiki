@@ -15,7 +15,7 @@
  * @uses	Wakka::Link()
  * @uses	Wakka::ReturnSafeHtml()
  *
- * @todo	[accesibility] make form accessible 
+ * @todo	[accessibility] make form accessible 
  * @todo	i18n search button text  
  */
 
@@ -23,7 +23,6 @@
  * Default value.
  */
 if (!defined('SEARCH_MAX_SNIPPETS')) define('SEARCH_MAX_SNIPPETS', 3);
-if (!defined('SEARCH_MYSQL_IDENTICAL_CHARS')) define('SEARCH_MYSQL_IDENTICAL_CHARS', 'aàáâã,eèéêë,iìîï,oòóôõ,uùúû,cç,nñ,yý');
 /**#@-*/
 
 // init
@@ -100,8 +99,8 @@ if ('' !== $phrase)
 			 	// display portion of the matching body and highlight the search term */ 
 			 	// Note that FullTextSearch finds a phrase even if it only matches a tag (name or attribute), and not its content
 				if (1==$case) {
-                	preg_match_all("/(.{0,120})($phrase_re)(.{0,120})/s",$page['tag'].' :: '.$page['body'],$matchString);
-                } else {
+					preg_match_all("/(.{0,120})($phrase_re)(.{0,120})/s",$page['tag'].' :: '.$page['body'],$matchString);
+				} else {
 					preg_match_all("/(.{0,120})($phrase_re)(.{0,120})/is",$page['tag'].' :: '.$page['body'],$matchString);
 				}
 				if (count($matchString[0]) > SEARCH_MAX_SNIPPETS)
@@ -116,7 +115,7 @@ if ('' !== $phrase)
 				// We do not use <span>..</span> with preg_replace to ensure that the tag `span' won't be replaced if
 				// $phrase contains `span'.
 				if (1==$case) {
-                	$highlightMatch = preg_replace('/('.$this->htmlspecialchars_ent($phrase_re).')/','<<$1>>',$text,-1); // -1 = no limit (default!)
+					$highlightMatch = preg_replace('/('.$this->htmlspecialchars_ent($phrase_re).')/','<<$1>>',$text,-1); // -1 = no limit (default!)
 				} else {
 					$highlightMatch = preg_replace('/('.$this->htmlspecialchars_ent($phrase_re).')/i','<<$1>>',$text,-1); // -1 = no limit (default!)
 				}

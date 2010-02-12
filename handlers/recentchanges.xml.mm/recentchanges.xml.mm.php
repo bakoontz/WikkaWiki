@@ -27,7 +27,7 @@ if ($pages = $this->LoadRecentlyChanged())
 	$users = array();
 	$curday = '';
 	$max = 20;		// @@@
-	//$max = $this->GetConfigValue("xml_recent_changes");
+	//$max = $this->GetConfigValue('xml_recent_changes');
 	//if ($user = $this->GetUser()) {
 	//	$max = $user["changescount"];
 	//} else {
@@ -57,17 +57,17 @@ if ($pages = $this->LoadRecentlyChanged())
 			$pagelink = $this->wikka_url.urlencode($page['tag']);
 			$xml .= '<node LINK="'.$pagelink.'" TEXT="'.$pagetag.'" FOLDED="true">'."\n";
 			$timeformatted = date('H:i T', strtotime($page['time']));
-			$xml .= '<node LINK="'.$pagelink.'/revisions" TEXT="Revision time: '.$timeformatted.'"/>'."\n";	# i18n
+			$xml .= '<node LINK="'.$pagelink.'/revisions" TEXT="'sprintf(RECENTCHANGES_REV_TIME_CAPTION,$timeformatted).'"/>'."\n";
 			if ($pagenote = $this->htmlspecialchars_ent($page['note'],ENT_COMPAT,'XML'))
 			{
 				$xml .= '<node TEXT="'.$pageuser.': '.$pagenote.'"/>'."\n";
 			}
 			else
 			{
-				$xml .= '<node TEXT="Author: '.$pageuser.'"/>'."\n";	#i18n
+				$xml .= '<node TEXT="'.sprintf(RECENTCHANGES_AUTHOR,$pageuser).'"/>'."\n";	#i18n
 			}
 
-			$xml .= '<node LINK="'.$pagelink.'/history" TEXT="View History"/>'."\n";	# i18n
+			$xml .= '<node LINK="'.$pagelink.'/history" TEXT="'.RECENTCHANGES_VIEW_HISTORY_TITLE.'"/>'."\n";	# i18n
 			$xml .= "</node>\n";
 			// $xml .= "<arrowlink ENDARROW=\"Default\" DESTINATION=\"Freemind_Link_".$page["user"]."\" STARTARROW=\"None\"/>\n";
 			if (isset($users[$pageuser]) && (is_array($users[$pageuser])))

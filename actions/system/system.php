@@ -10,6 +10,7 @@
  *	{{system [show="OS|machine|host"]}}
  *
  * @package		Actions
+ * @name		System
  * @version		$Id$
  * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
@@ -24,7 +25,7 @@
 
 // defaults
 $show = '';
-$out = '<abbr title="'.WIKKA_ADMIN_ONLY_TITLE.'">'.WIKKA_STATUS_NOT_AVAILABLE.'</abbr>'."\n"; 
+$out = '<abbr title="'.WIKKA_ADMIN_ONLY_TITLE.'">'.WIKKA_NOT_AVAILABLE.'</abbr>'."\n";
 
 //check privs
 if ($this->GetConfigValue('public_sysinfo') == '1' || $this->IsAdmin())
