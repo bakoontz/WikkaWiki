@@ -6,7 +6,7 @@
  * is displayed, ordered alphabetically or by date and time (last edit first).
  *
  * @package		Actions
- * @version		$Id$
+ * @version		$Id:mychanges.php 369 2007-03-01 14:38:59Z DarTar $
  * @license		http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
  *
@@ -25,6 +25,10 @@
  * @todo	fix RE (#104 etc.); also lose the comma in there!
  */
 
+if(!defined('REVISION_DATE_FORMAT')) define('REVISION_DATE_FORMAT', 'D, d M Y');
+if(!defined('REVISION_TIME_FORMAT')) define('REVISION_TIME_FORMAT', 'H:i T');
+
+
 // order alphabetically or by time?
 $alpha = FALSE;
 if (isset($_GET["alphabetically"]) && $_GET["alphabetically"] == 1) $alpha = TRUE;
@@ -33,28 +37,50 @@ $tag = $this->GetPageTag();
 $output = '';
 $time_output = '';
 
-$params = '';
-$username = '';
-if(isset($_GET['user']))
-{
-	$username = $this->GetSafeVar('user', 'get');
-	$params .= "user=$username&";
-}
+$params = ''; 
+$username = ''; 
+if(isset($_GET['user'])) 
+{ 
+	$username = $this->GetSafeVar('user', 'get'); 
+	$params .= "user=$username&"; 
+} 
+else
+	$username = $this->GetUserName();
 
-$action = '';
-if(isset($_GET['action']))
-{
+$action = ''; 
+if(isset($_GET['action'])) 
+{ 
 	$action = $this->GetSafeVar('action', 'get'); 
-	$params .= "action=$action&";
-}
-$params = substr($params, 0, -1);
-
+	$params .= "action=$action&"; 
+} 
+$params = substr($params, 0, -1); 
+ 
 if (($this->IsAdmin() && !empty($username)) ||
-	($this->existsUser() &&  $username = $this->GetUserName()))
+		($this->existsUser() &&  $username = $this->GetUserName())) 
 {
 	$my_edits_count = 0;
 
-	// get the pages
+	// header
+	$output .= '<div class="floatl">';
+	if ($alpha)
+	{
+	$output .= sprintf(MYCHANGES_ALPHA_LIST, $username).' (<a href="'.$this->Href("", $tag, $params).'">'.ORDER_DATE_LINK_DESC;
+	}
+	else
+	{
+		if(!empty($params)) 
+		{ 
+			$params .= "&alphabetically=1"; 
+		} 
+		else 
+		{ 
+			$params = "alphabetically=1"; 
+		} 
+
+		$output .= sprintf(MYCHANGES_DATE_LIST, $username).' (<a href="'.$this->href("", $tag, $params).'">'.ORDER_ALPHA_LINK_DESC; 
+	}
+	$output .= '</a>)</div><div class="clear">&nbsp;</div>'."\n";
+
 	$order = ($alpha) ? "tag ASC, time DESC" : "time DESC, tag ASC";
 	$query = "
 		SELECT id, tag, time
@@ -65,27 +91,6 @@ if (($this->IsAdmin() && !empty($username)) ||
 
 	if ($pages = $this->LoadAll($query))
 	{
-		// header
-		$output .= '<div class="floatl">';
-		if ($alpha)
-		{
-			$output .= sprintf(MYCHANGES_ALPHA_LIST, $username).' (<a href="'.$this->Href("", $tag, $params).'">'.ORDER_DATE_LINK_DESC;
-		}
-		else
-		{
-			if(!empty($params))
-			{
-				$params .= "&alphabetically=1";
-			}
-			else
-			{
-				$params = "alphabetically=1";
-			}
-
-			$output .= sprintf(MYCHANGES_DATE_LIST, $username).' (<a href="'.$this->href("", $tag, $params).'">'.ORDER_ALPHA_LINK_DESC;
-		}
-		$output .= '</a>)</div><div class="clear">&nbsp;</div>'."\n";
-
 		$current = '';
 
 		// build the list of pages
@@ -108,7 +113,7 @@ if (($this->IsAdmin() && !empty($username)) ||
 					$current = $firstChar;
 				}
 				$time_output = $page["time"];		
-				$output .= "&nbsp;&nbsp;&nbsp;".$this->Link($page["tag"], "", "", 0)." ".$this->Link($page["tag"], 'revisions', "[".$page['id']."]", 0).' <a class="datetime" href="'.$this->Href('revisions', $page['tag']).'" title="'.sprintf(TITLE_REVISION_LINK, $page['tag']).'">'.$time_output."</a><br />\n";
+				$output .= "&nbsp;&nbsp;&nbsp;".$this->Link($page["tag"], "", "", 0)." ".$this->Link($page["tag"], 'revisions', "[".$page['id']."]", 0).' <a class="datetime" href="'.$this->Href('revisions', $page['tag']).'" title="'.PAGE_REVISION_LINK_TITLE.'">'.$time_output."</a><br />\n";
 			}
 			// order by time
 			else
@@ -116,13 +121,12 @@ if (($this->IsAdmin() && !empty($username)) ||
 				// day header
 				if ($day != $current)
 				{
-					if ($current) $output .= "<br />\n";
+					if ($current) print("<br />\n");
 					$current = $day;
 					$output .= '<h5>'.date(REVISION_DATE_FORMAT, strtotime($day)).'</h5>'."\n";
 				}
 				$time_output = date(REVISION_TIME_FORMAT, strtotime($time));
-				//$time_output = $time;
-				$output .= '&nbsp;&nbsp;&nbsp;<a class="datetime" href="'.$this->Href('revisions', $page['tag']).'" title="'.sprintf(TITLE_REVISION_LINK, $page['tag']).'">'.$time_output.'</a> '.$this->Link($page["tag"], 'revisions', "[".$page['id']."]", 0)." ".$this->Link($page["tag"], "", "", 0)."<br />\n";
+				$output .= '&nbsp;&nbsp;&nbsp;<a class="datetime" href="'.$this->Href('revisions', $page['tag']).'" title="'.PAGE_REVISION_LINK_TITLE.'">'.$time_output.'</a> '.$this->Link($page["tag"], 'revisions', "[".$page['id']."]", 0)." ".$this->Link($page["tag"], "", "", 0)."<br />\n";	
 			}
 			$my_edits_count++;
 		}
@@ -134,7 +138,7 @@ if (($this->IsAdmin() && !empty($username)) ||
 	}
 	else
 	{
-		$output .= '<em class="error">'.sprintf(WIKKA_NO_PAGES_FOUND_FOR, $username).'</em>';
+		$output .= '<em class="error">'.WIKKA_NO_PAGES_FOUND.'</em>';
 	}
 }
 else
