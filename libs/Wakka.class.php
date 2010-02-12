@@ -845,7 +845,8 @@ class Wakka
 	 * @since	Wikka 1.3
 	 *
 	 * @param	string	$varname required: field name on get or post or cookie name
-	 * @param	string	$gpc one of get, post, request and cookie. Optional, defaults to request.
+	 * @param	string	$gpc one of 'get', 'post', or 'cookie'. Optional,
+	 *			defaults to 'get'.
 	 * @return	string	sanitized value of $_GET[$varname] (or $_POST, $_COOKIE, depending on $gpc)
 	 */
 	function GetSafeVar($varname, $gpc='get')
