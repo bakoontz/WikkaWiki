@@ -198,7 +198,7 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 	}
 
 	// PREVIEW screen
-	if (isset($_POST['submit']) && $this->GetSafeVar('submit', *post') == EDIT_PREVIEW_BUTTON)
+	if (isset($_POST['submit']) && $this->GetSafeVar('submit', 'post') == EDIT_PREVIEW_BUTTON)
 	{
 		$preview_buttons =	'<fieldset><legend>'.EDIT_STORE_PAGE_LEGEND.'</legend>'."\n".
 							$edit_note_field.
@@ -248,7 +248,7 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 		// append a comment?
 		// TODO not clear if this is/was intended as a URL parameter (GET), or a check box on the edito form (POST) ....
 		// would be nice as a checkbox, provided it is acted upon only when user is actually submitting - NOT on preview or re-edit
-		if (isset($this->GetSafeVar('appendcomment', 'post'))) #312, #449
+		if (isset($_POST['appendcomment'])) #312, #449
 		{
 			$body = trim($body)."\n\n----\n\n-- ".$this->GetUserName().' '.sprintf(EDIT_COMMENT_TIMESTAMP_CAPTION,strftime("%c")).')';
 		}
