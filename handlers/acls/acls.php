@@ -5,6 +5,10 @@
  * @package		Handlers
  * @name		ACL
  *
+ * @uses		Wakka::GetConfigValue()
+ * @uses		Wakka::getSessionKey()
+ * @uses		Wakka::hasValidSessionKey()
+ * @uses		Wakka::Format()
  * @author		{@link http://wikkawiki.org/MinusF MinusF} (preliminary code cleanup, css selectors)
  * @author		{@link http://wikkawiki.org/DarTar Dario Taraborelli} (further cleanup)
  * @author		{@link http://wikkawiki.org/NilsLindenberg Nils Lindenberg} (i18n)

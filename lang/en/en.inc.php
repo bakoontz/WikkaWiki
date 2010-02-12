@@ -1223,6 +1223,15 @@ define('LABEL_ERROR', 'Error');
 /**#@-*/
 
 /**#@+
+ * Language constant used by the {@link recentchanges.xml.mm.php recentchanges.mm.xml} (page) handler
+ */
+// recentchanges.mm.xml
+define('RECENTCHANGES_REV_TIME_CAPTION', 'Revision time: %s'); // %s timestamp
+define('RECENTCHANGES_VIEW_HISTORY_TITLE', 'View History');
+define('RECENTCHANGES_AUTHOR', 'Author: %s'); // %s author
+/**#@-*/
+
+/**#@+
  * Language constant shared by the {@link referrers_sites.php referrers_sites}, {@link referrers.php referrers} and {@link review_blacklist.php review_blacklist} (page) handlers
  */
 // referrers_sites + referrers + review_blacklist
@@ -1258,12 +1267,21 @@ define('REFERRERS_URLS_TO_PAGE', 'External pages linking to %1$s %2$s (%3$s)'); 
 /**#@-*/
 
 /**#@+
+ * Language constant used by the {@link revert.php revert} (page) handler
+ */
+// revert
+define ('REVERT_DEFAULT_COMMENT', 'Reverted to previous revision');
+/**#@-*/
+
+/**#@+
  * Language constant used by the {@link review_blacklist.php review_blacklist} (page) handler
  */
 // review_blacklist
 define('BLACKLIST_HEADING', 'Referrer Blacklist');
 define('BLACKLIST_REMOVE_LINK_DESC', 'Remove');
 define('STATUS_BLACKLIST_EMPTY', 'Blacklist is empty.');
+define('BLACKLIST_VIEW_GLOBAL_SITES', 'View global referring sites');
+define('BLACKLIST_VIEW_GLOBAL', 'view global referrers');
 /**#@-*/
 
 /**#@+

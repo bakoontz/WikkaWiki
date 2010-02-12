@@ -2,16 +2,26 @@
 /**
  * Download a code block as a file.
  *
- * When called by a grab button, forces the download of the associate code block.
- * 
- * @package	Handlers
- * @name	grabcode
+ * When called by a grab button, forces the download of the associated code block.
+ *
+ * @package		Handlers
+ * @subpackage	Files
+ * @version		$Id: grabcode.php 655 2007-08-04 17:15:23Z JavaWoman $
+ * @license		http://www.gnu.org/copyleft/gpl.html GNU General Public License
+ * @filesource
+ *
  * @author	{@link http://wikkawiki.org/DarTar Dario Taraborelli}
- * @version	0.2
- * @since	1.1.6.2
- * @todo	- add configurable filename max. length;
- 			- use central regex library for filename validation;
- 			- check time format for consistency
+ * @version	0.21
+ * @since	Wikka 1.1.6.2
+ *
+ * @uses	Wakka::GetConfigValue()
+ * @uses	Config::$grabcode_button
+ * @todo	add configurable filename max. length;
+ * @todo	use central regex library for filename validation	#34
+ * @todo	check time format for consistency (& store format in constant!)
+ * @todo	make shared download code for this and files handler
+ * @todo	avoid adding extension when the provided filename already has one -
+ *			see last issue on WikkaBugs (!)
  */
 
 // initialize variables
@@ -19,16 +29,18 @@ $code = '';
 $filename = '';
 
 // check if grabcode is allowed
-if ($this->GetConfigValue('grabcode_button') == 1) {
+if (1 == (int) $this->GetConfigValue('grabcode_button'))
+{
 
 	//get URL parameters
 	$code = urldecode($_POST['code']);
 	// TODO: use central regex library for filename validation
-	$filename = (isset($_POST['filename']) && preg_match('/\w[-.\w]*/', $_POST['filename']))? urldecode($_POST['filename']).FILE_EXTENSION : DEFAULT_FILENAME;
+	$filename = (isset($_POST['filename']) && preg_match('/\w[-.\w]*/', $this->GetSafeVar('filename', 'post'))) ? urldecode($this->GetSafeVar('filename', 'post')).FILE_EXTENSION : DEFAULT_FILENAME;
 
+	// @@@ shared download code
 	//set HTTP headers
 	header('Content-type: text/plain');
-	header('Expires: ' . gmdate('D, d M Y H:i:s') . ' GMT'); //TODO: check for consistency with server time format
+	header('Expires: ' . gmdate('D, d M Y H:i:s') . ' GMT'); // TODO: check for consistency with server time format
 	header('Content-Length: '.strlen($code));
 	header('Content-Description: '.$filename.' Download Data');
 	header('Pragma: no-cache');
@@ -36,7 +48,8 @@ if ($this->GetConfigValue('grabcode_button') == 1) {
 
 	//print code block
 	echo $code;
-} else
+}
+else
 {
 	echo ERROR_NO_CODE;
 }

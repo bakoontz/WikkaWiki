@@ -8,9 +8,9 @@
  * @license		http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
  *
- * @author		{@link http://wikkawiki.org/JsnX Jason Tourtelotte} (original code)
- * @author		{@link http://wikkawiki.org/Dartar Dario Taraborelli} (preliminary code cleanup, i18n)
- * @author		{@link http://wikkawiki.org/DotMG Mahefa Randimbisoa} (bugfixes)
+ * @author	{@link http://wikkawiki.org/JsnX Jason Tourtelotte} (original code)
+ * @author	{@link http://wikkawiki.org/Dartar Dario Taraborelli} (preliminary code cleanup, i18n)
+ * @author	{@link http://wikkawiki.org/DotMG Mahefa Randimbisoa} (bugfixes)
  *
  * @uses	Config::$edit_buttons_position
  * @uses	Config::$require_edit_note
@@ -45,24 +45,26 @@ if (!defined('VALID_PAGENAME_PATTERN')) define ('VALID_PAGENAME_PATTERN', '/^[A-
 //initialization
 $error = '';
 $highlight_note = '';
+$edit_note_field = '';
 $note = '';
 $ondblclick = ''; //#123
+$body = '';
 
 // cancel operation and return to page
-if(isset($_POST['cancel']) && ($_POST['cancel'] == INPUT_BUTTON_CANCEL))
+if(isset($_POST['cancel']) && ($this->GetSafeVar('cancel', 'post') == EDIT_CANCEL_BUTTON))
 {
 	$this->Redirect($this->Href());
 }
 
-if (isset($_POST['submit']) && ($_POST['submit'] == INPUT_SUBMIT_PREVIEW) && ($user = $this->GetUser()) && ($user['doubleclickedit'] != 'N'))
+if (isset($_POST['submit']) && ($this->GetSafeVar('submit', 'post') == EDIT_PREVIEW_BUTTON) && ($user = $this->GetUser()) && ($user['doubleclickedit'] != 'N'))
 {
 	$ondblclick = ' ondblclick=\'document.getElementById("reedit_id").click();\'';
 }
 ?>
 <div id="content"<?php echo $ondblclick;?>>
 <?php
-if (!(preg_match(VALID_PAGENAME_PATTERN, $this->tag))) { //TODO use central regex library
-	echo '<em class="error">'.ERROR_INVALID_PAGENAME.'</em>';
+if (!(preg_match(VALID_PAGENAME_PATTERN, $this->tag))) { //TODO use central regex library or (better!) IsWikiName()
+	echo '<em class="error">'.sprintf(WIKKA_ERROR_INVALID_PAGENAME,$this->tag).'</em>';
 }
 elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 {
@@ -73,7 +75,8 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 		$newtag = $_POST['newtag'];
 		if ($newtag !== '') $this->Redirect($this->Href('edit', $newtag));
 	}
-	$body = '';
+
+	// Process id GET param if present
 	$id = $this->page['id'];
 	if(isset($_GET['id']))
 	{
@@ -88,6 +91,7 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 			$id = $page['id'];
 		}
 	}
+
 	if (isset($_POST['form_id']))
 	{
 		// strip CRLF line endings down to LF to achieve consistency ... plus it saves database space.
@@ -105,10 +109,11 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 		// we don't need to escape here, we do that just before display (i.e., treat note just like body!)
 		if (isset($_POST['note']))
 		{
-			$note = trim($_POST['note']);
+			$note = trim($this->GetSafeVar('note','post'));
 		}
+
 		// only if saving:
-		if (isset($_POST['submit']) && $_POST['submit'] == INPUT_SUBMIT_STORE)
+		if (isset($_POST['submit']) && $this->GetSafeVar('submit', 'post') == EDIT_STORE_BUTTON)
 		{
 			if (FALSE != ($aKey = $this->getSessionKey($_POST['form_id'])))	# check if form key was stored in session
 			{
@@ -123,11 +128,11 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 			{
 				if ($this->page['id'] != $_POST['previous'])
 				{
-					$error = ERROR_OVERWRITE_ALERT;
+					$error = ERROR_OVERWRITE_ALERT1.'<br />'.ERROR_OVERWRITE_ALERT2;
 				}
 			}
 			// check for edit note if required
-			if (($this->config['require_edit_note'] == 1) && $_POST['note'] == '')
+			if (($this->GetConfigValue('require_edit_note') == 1) && $this->GetSafeVar('note', 'post') == '')
 			{
 				$error .= ERROR_MISSING_EDIT_NOTE;
 				$highlight_note = INPUT_ERROR_STYLE;
@@ -142,12 +147,13 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 					$this->SavePage($this->tag, $body, $note);
 
 					// now we render it internally so we can write the updated link table.
+					// if we no longer do link tracking for header and footer why are we creating dummy output?
 					$this->ClearLinkTable();
-					$dummy = $this->Header();
+					$dummy = $this->Header();		// @@@
 					$this->StartLinkTracking();
 					$dummy .= $this->Format($body);
 					$this->StopLinkTracking();
-					$dummy .= $this->Footer();
+					$dummy .= $this->Footer();		// @@@
 					$this->WriteLinkTable();
 					$this->ClearLinkTable();
 				}
@@ -156,6 +162,15 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 				$this->Redirect($this->Href());
 			}
 		}
+	}
+
+	// create edit note field if edit_notes are enabled
+	if ($this->GetConfigValue('require_edit_note') != 2)
+	{
+		// We need to escape ALL entity refs before display so we display them _as_ entities instead of interpreting them
+		// so we use hsc_secure() on the edit note (as on the body)
+		// JW/2007-02-20: why is this? wouldn't it be  easier for the person editing to show actual characters instead of entities?
+		$edit_note_field = '<input id="note" size="'.MAX_EDIT_NOTE_LENGTH.'" maxlength="'.MAX_EDIT_NOTE_LENGTH.'" type="text" name="note" value="'.$this->hsc_secure($note).'" '.$highlight_note.'/> <label for="note">'.EDIT_NOTE_LABEL.'</label><br />'."\n";	#427
 	}
 
 	// fetch fields
@@ -173,7 +188,7 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 	}
 
 	// derive maximum length for a page name from the table structure if possible
-	if ($result = mysql_query("describe ".$this->config['table_prefix']."pages tag")) {
+	if ($result = mysql_query("describe ".$this->GetConfigValue('table_prefix')."pages tag")) {
 		$field = mysql_fetch_assoc($result);
 		if (preg_match("/varchar\((\d+)\)/", $field['Type'], $matches)) $maxtaglen = $matches[1];
 	}
@@ -183,20 +198,16 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 	}
 
 	// PREVIEW screen
-	if (isset($_POST['submit']) && $_POST['submit'] == INPUT_SUBMIT_PREVIEW) # preview output
+	if (isset($_POST['submit']) && $this->GetSafeVar('submit', *post') == EDIT_PREVIEW_BUTTON)
 	{
-		$preview_buttons = '<hr />'."\n";
-		// We need to escape ALL entity refs before display so we display them _as_ entities instead of interpreting them
-		// so we use hsc_secure() on the edit note (as on the body)
-		if ($this->config['require_edit_note'] != 2) //check if edit_notes are enabled
-		{
-			$preview_buttons .= '<input size="'.MAX_EDIT_NOTE_LENGTH.'" maxlength="'.MAX_EDIT_NOTE_LENGTH.'" type="text" name="note" value="'.$this->hsc_secure($note).'" '.$highlight_note.'/>'.LABEL_EDIT_NOTE.'<br />'."\n";
-		}
-		$preview_buttons .= '<input name="submit" type="submit" value="'.INPUT_SUBMIT_STORE.'" accesskey="'.ACCESSKEY_STORE.'" />'."\n".
-			'<input name="submit" type="submit" value="'.INPUT_SUBMIT_REEDIT.'" accesskey="'.ACCESSKEY_REEDIT.'" id="reedit_id" />'."\n".
-			'<input type="submit" value="'.INPUT_BUTTON_CANCEL.'" name="cancel"/>'."\n";
+		$preview_buttons =	'<fieldset><legend>'.EDIT_STORE_PAGE_LEGEND.'</legend>'."\n".
+							$edit_note_field.
+							'<input name="submit" type="submit" value="'.EDIT_STORE_BUTTON.'" accesskey="'.ACCESSKEY_STORE.'" />'."\n".
+							'<input name="submit" type="submit" value="'.EDIT_REEDIT_BUTTON.'" accesskey="'.ACCESSKEY_REEDIT.'" id="reedit_id" />'."\n".
+							'<input type="submit" value="'.EDIT_CANCEL_BUTTON.'" name="cancel" />'."\n".
+							'</fieldset>'."\n";
 
-		$output .= '<div class="previewhead">'.PREVIEW_HEADER.'</div>'."\n";
+		$output .= '<div class="previewhead">'.EDIT_PREVIEW_HEADER.'</div>'."\n";
 
 		$output .= $this->Format($body);
 
@@ -207,7 +218,7 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 			// We need to escape ALL entity refs before display so we display them _as_ entities instead of interpreting them
 			// hence hsc_secure() instead of htmlspecialchars_ent() which UNescapes entities!
 			// JW/2007-02-20: why is this? wouldn't it be  easier for the person editing to show actual characters instead of entities?
-			'<input type="hidden" name="body" value="'.$this->hsc_secure($body).'" />'."\n";	#427
+			'<input type="hidden" name="body" value="'.$this->hsc_secure($body).'" />'."\n";	# #427
 		$output .= '</div>'."\n";	#683
 
 		$output .= "<br />\n".$preview_buttons.$this->FormClose()."\n";
@@ -217,11 +228,12 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 	{
 		// truncate tag to feed a backlinks-handler with the correct value. may be omited. it only works if the link to a backlinks-handler is built in the footer.
 		$this->tag = substr($this->tag, 0, $maxtaglen);
+
 		$output  = '<em class="error">'.sprintf(ERROR_TAG_TOO_LONG, $maxtaglen).'</em><br />'."\n";
 		$output .= sprintf(MESSAGE_AUTO_RESIZE, INPUT_SUBMIT_RENAME).'<br /><br />'."\n";
 		$output .= $this->FormOpen('edit');
 		$output .= '<input name="newtag" size="'.MAX_TAG_LENGTH.'" value="'.$this->htmlspecialchars_ent($this->tag).'" />';
-		$output .= '<input name="submit" type="submit" value="'.INPUT_SUBMIT_RENAME.'" />'."\n";
+		$output .= '<input name="submit" type="submit" value="'.EDIT_RENAME_BUTTON.'" />'."\n";
 		$output .= $this->FormClose();
 	}
 	// EDIT Screen
@@ -236,32 +248,28 @@ elseif ($this->HasAccess("write") && $this->HasAccess("read"))
 		// append a comment?
 		// TODO not clear if this is/was intended as a URL parameter (GET), or a check box on the edito form (POST) ....
 		// would be nice as a checkbox, provided it is acted upon only when user is actually submitting - NOT on preview or re-edit
-		if (isset($_REQUEST['appendcomment'])) #312, #449
+		if (isset($this->GetSafeVar('appendcomment', 'post'))) #312, #449
 		{
-			$body = trim($body)."\n\n----\n\n--".$this->GetUserName().' ('.strftime("%c").')';
+			$body = trim($body)."\n\n----\n\n-- ".$this->GetUserName().' '.sprintf(EDIT_COMMENT_TIMESTAMP_CAPTION,strftime("%c")).')';
 		}
-
-		$output .=
-			$this->FormOpen('edit').
-			'<input type="hidden" name="previous" value="'.$previous.'" />'."\n".
+		$edit_buttons = '<fieldset><legend>'.EDIT_STORE_PAGE_LEGEND.'</legend>'."\n".
+						$edit_note_field.
+						'<input name="submit" type="submit" value="'.EDIT_STORE_BUTTON.'" accesskey="'.ACCESSKEY_STORE.'" />'."\n".
+						'<input name="submit" type="submit" value="'.EDIT_PREVIEW_BUTTON.'" accesskey="'.ACCESSKEY_PREVIEW.'" />'."\n".
+						'<input type="submit" value="'.EDIT_CANCEL_BUTTON.'" name="cancel" />'."\n".
+						'</fieldset>'."\n";
+		$output .= $this->FormOpen('edit');
+		$output .= '<input type="hidden" name="previous" value="'.$previous.'" />'."\n".
 			// We need to escape ALL entity refs before display so we display them _as_ entities instead of interpreting them
 			// hence hsc_secure() instead of htmlspecialchars_ent() which UNescapes entities!
 			// JW/2007-02-20: why is this? wouldn't it be  easier for the person editing to show actual characters instead of entities?
 			'<div id="textarea_container">'."\n".
-			'<textarea id="body" name="body" rows="100" cols="20">'.$this->hsc_secure($body).'</textarea>'."\n".	#427
+			'<textarea id="body" name="body" rows="100" cols="20">'.$this->hsc_secure($body).'</textarea>'."\n".	# #427
 			'</div>'."\n";
-		// add Edit note
-		// We need to escape ALL entity refs before display so we display them _as_ entities instead of interpreting them
-		// so we use hsc_secure on the edit note (as on the body)
-		if ($this->config['require_edit_note'] != 2) //check if edit_notes are enabled
-		{
-			$output .= '<input size="'.MAX_EDIT_NOTE_LENGTH.'" maxlength="'.MAX_EDIT_NOTE_LENGTH.'" type="text" name="note" value="'.$this->hsc_secure($note).'" '.$highlight_note.'/> '.LABEL_EDIT_NOTE.'<br />'."\n";
-		}
-		//finish
-		$output .=	'<input name="submit" type="submit" value="'.INPUT_SUBMIT_STORE.'" accesskey="'.ACCESSKEY_STORE.'" /> <input name="submit" type="submit" value="'.INPUT_SUBMIT_PREVIEW.'" accesskey="'.ACCESSKEY_PREVIEW.'" /> <input type="submit" value="'.INPUT_BUTTON_CANCEL.'" name="cancel" />'."\n".
-			$this->FormClose();
+		$output .= $edit_buttons;
+		$output .= $this->FormClose();
 
-		if ($this->config['gui_editor'] == 1)
+		if ($this->GetConfigValue('gui_editor') == 1)	// @@@ cast to boolean and compare to TRUE
 		{
 			$output .= '<script type="text/javascript" src="3rdparty/plugins/wikkaedit/wikkaedit_data.js"></script>'."\n";
 			$output .= '<script type="text/javascript" src="3rdparty/plugins/wikkaedit/wikkaedit_search.js"></script>'."\n";

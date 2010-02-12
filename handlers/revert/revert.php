@@ -33,13 +33,13 @@
  *
  */
 
-if(TRUE===$this->IsAdmin())
+if (TRUE===$this->IsAdmin())
 {
 	include_once('libs/admin.lib.php');
-	$comment = '';
+	$comment = REVERT_DEFAULT_COMMENT;
 	if(TRUE===isset($_GET['comment']))
 	{
-		$comment = $this->htmlspecialchars_ent($_GET['comment']);
+		$comment = $this->htmlspecialchars_ent($this->GetSafeVar('comment'));
 	}
 	$tag = mysql_real_escape_string($this->GetPageTag());
 	$message = RevertPageToPreviousByTag($this, $tag, $comment);
@@ -47,7 +47,7 @@ if(TRUE===$this->IsAdmin())
 }
 else
 {
-	echo '<em class="error">'.ERROR_NO_REVERT_PRIVS.'</em>'."\n";
+	echo '<p><em class="error">'.ERROR_NO_REVERT_PRIVS.'</em></p>'."\n";
 }
 ?>
 </div>

@@ -47,7 +47,7 @@ switch(TRUE)
 		foreach ($pages as $page) {
 			$tag = $page['tag'];
 			// name change, interface change (active pages only)
-			if ($this->existsPage($tag) && $this->HasAccess("read", $tag))
+			if ($this->existsPage($tag) && $this->HasAccess('read', $tag))
 			{			
 				print $this->Link($page['tag']).'<br />';
 			}

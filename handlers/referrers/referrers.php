@@ -65,12 +65,12 @@ if ($this->GetUser())
 	}
 	else
 	{
-		echo '<em class="error">None</em><br />'."\n";
+		echo '<em class="error">'.NONE_CAPTION.'</em><br />'."\n";
 	}
 }
 else
 {
-	echo '<em class="error">You need to login to see referring sites</em><br />'."\n";
+	echo '<p><em class="error">'.PLEASE_LOGIN_CAPTION.'</em></p>'."\n";
 }
 
 if ($global)

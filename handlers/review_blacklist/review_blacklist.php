@@ -27,14 +27,14 @@ echo '<div id="content">'."\n"; //TODO: move to templating class
 
 if ($IsAdmin && isset($_GET["whitelist"]))
 {
-	$whitelist = $_GET['whitelist'];
-	$this->Query('DELETE FROM '.$this->config['table_prefix'].'referrer_blacklist WHERE spammer = "'.mysql_real_escape_string($whitelist).'"');
+	$whitelist = $this->GetSafeVar('whitelist');
+	$this->Query('DELETE FROM '.$this->GetConfigValue('table_prefix').'referrer_blacklist WHERE spammer = "'.mysql_real_escape_string($whitelist).'"');
 	$this->redirect($this->Href('review_blacklist'));
 }
 else
 {
-	echo '<strong>Referrer Blacklist:</strong><br /><br />'."\n";
-	$blacklist = $this->LoadAll('SELECT * FROM '.$this->config['table_prefix'].'referrer_blacklist');
+	echo '<strong>'.BLACKLIST_HEADING.'</strong><br /><br />'."\n";
+	$blacklist = $this->LoadAll('SELECT * FROM '.$this->GetConfigValue('table_prefix').'referrer_blacklist');
 
 	if ($blacklist)
 	{
@@ -42,18 +42,18 @@ else
 		foreach ($blacklist as $spammer)
 		{
 			echo '<tr>'."\n";
-			echo '<td valign="top">'.$spammer['spammer'].' '.($IsAdmin ? '[<a href="'.$this->Href('review_blacklist', '', 'whitelist=').$this->htmlspecialchars_ent($spammer['spammer']).'">Remove</a>]' : '').'</td>'."\n";
+			echo '<td valign="top">'.$spammer['spammer'].' '.($IsAdmin ? '[<a href="'.$this->Href('review_blacklist', '', 'whitelist=').$this->htmlspecialchars_ent($spammer['spammer']).'">'.BLACKLIST_REMOVE_LINK_DESC.'</a>]' : '').'</td>'."\n";
 			echo '</tr>'."\n";
 		}
 		echo '</table><br />'."\n";
 	}
 	else
 	{
-		echo '<em class="error">Blacklist is empty.</em><br /><br />'."\n";
+		echo '<em class="error">'.STATUS_BLACKLIST_EMPTY.'</em><br /><br />'."\n";
 	}
 }
 
-echo '<br />[<a href="'.$this->Href('referrers_sites', '', 'global=1').'">View global referring sites</a> | <a href="'.$this->Href('referrers', '', 'global=1').'">View global referrers</a>]'."\n";
+echo '<br />[<a href="'.$this->Href('referrers_sites', '', 'global=1').'">'.BLACKLIST_VIEW_GLOBAL_SITES.'</a> | <a href="'.$this->Href('referrers', '', 'global=1').'">'.BLACKLIST_VIEW_GLOBAL.'</a>]'."\n";
 
 echo '</div>'."\n" //TODO: move to templating class
 ?>

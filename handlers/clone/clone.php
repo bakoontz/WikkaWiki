@@ -7,11 +7,10 @@
  * This handler checks the existence of the source page, the validity of the
  * name of the target page to be created, the user's read-access to the source
  * page and write-access to the target page.
- * If the edit option is selected, the user is redirected to the target page for
- * edition immediately after its creation.
+ * If the "Edit after creation" option is selected, the user is redirected to the
+ * target page for editing immediately after its creation.
  *
  * @package		Handlers
- * @subpackage
  * @name		clone
  *
  * @author		{@link http://wikkawiki.org/ChristianBarthelemy Christian Barthelemy} - original idea and code.
