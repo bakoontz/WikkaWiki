@@ -475,7 +475,18 @@ define('SHOWCODELINK_TITLE', 'Display the markup for this page');
 // emailpassword
 define('PW_FORGOTTEN_HEADING', 'Password reminder');
 define('PW_CHK_SENT', 'A password reminder has been sent to %s\'s registered email address.'); // %s - username
-define('PW_FORGOTTEN_MAIL', 'Hello, %1$s\n\n\nSomeone requested that we send to this email address a password reminder to login at %2$s. If you did not request this reminder, disregard this email. -- No action is necessary. -- Your password will stay the same.\n\nYour wikiname: %1$s \nPassword reminder: %3$s \nURL: %4$s \n\nDo not forget to change the password immediately after logging in.'); // %1$s - username; %2$s - wiki name; %3$s - md5 sum of pw; %4$s - login url of the wiki
+define('PW_FORGOTTEN_MAIL', 'Hello, %1$s!
+
+Someone requested that we send to this email address a password reminder to 
+login at %2$s. If you did not request this reminder, disregard this 
+email, no action is necessary. Your password will stay the same.
+
+Your wikiname: %1$s
+Password reminder: %3$s
+URL: %4$s
+
+Do not forget to change the password immediately after logging in.');
+// %1$s - username; %2$s - wiki name; %3$s - md5 sum of pw; %4$s - login url of the wiki
 define('PW_FORGOTTEN_MAIL_REF', 'Password reminder for %s'); // %s - wiki name
 define('PW_FORM_TEXT', 'Enter your WikiName and a password reminder will be sent to your registered email address.');
 define('PW_FORM_FIELDSET_LEGEND', 'Your WikiName:');
