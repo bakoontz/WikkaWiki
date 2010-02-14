@@ -637,7 +637,7 @@ define('MYCHANGES_NOT_LOGGED_IN', "You're not logged in, thus the list of pages 
  */
 // mypages
 define('MYPAGES_CAPTION', 'This is the list of pages owned by %s');
-define('MYPAGES_NONE_OWNED', 'You don't own any pages.');
+define('MYPAGES_NONE_OWNED', 'You don\'t own any pages.');
 define('MYPAGES_NOT_LOGGED_IN', 'You're not logged in, thus the list of your pages couldn't be retrieved.');
 /**#@-*/
 
