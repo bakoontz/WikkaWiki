@@ -226,7 +226,7 @@ if ($user = $this->GetUser())
 				$passerror = ERROR_EMPTY_PASSWORD_OR_HASH;
 				$password_highlight = INPUT_ERROR_STYLE;
 				break;
-			case (($update_option == 'pw') && md5($oldpass) != $user['password']): //wrong old password
+			case (($update_option == 'pw') && md5($user['challenge'].$oldpass) != $user['password']): //wrong old password
 				$passerror = ERROR_INVALID_OLD_PASSWORD;
 				$pw_selected = 'selected="selected"';
 				$password_highlight = INPUT_ERROR_STYLE;
@@ -264,13 +264,14 @@ if ($user = $this->GetUser())
 				$password_confirm_highlight = INPUT_ERROR_STYLE;
 				break;
 			default:
+				$challenge = dechex(crc32(time()));
 				$this->Query("
 					UPDATE ".$this->GetConfigValue('table_prefix')."users
-					SET password = '".md5(mysql_real_escape_string($password))."'
-					WHERE name = '".$user['name']."'"
+					SET password = '".md5($challenge.mysql_real_escape_string($password))."',
+					challenge = '".$challenge."' WHERE name = '".$user['name']."'"
 					);
 				unset($this->specialCache['user'][strtolower($name)]);  //invalidate cache if exists #368
-				$user['password'] = md5($password);
+				$user['password'] = md5($challenge.$password);
 				$this->SetUser($user);
 				$passsuccess = SUCCESS_USER_PASSWORD_CHANGED;
 		}
@@ -385,7 +386,7 @@ else
 					$error = ERROR_EMPTY_PASSWORD;
 					$password_highlight = INPUT_ERROR_STYLE;
 					break;
-				case (md5($this->GetSafeVar('password', 'post')) != $existingUser['password']):
+				case (md5($existingUser['challenge'].$this->GetSafeVar('password', 'post')) != $existingUser['password']):
 					$error = ERROR_INVALID_PASSWORD;
 					$password_highlight = INPUT_ERROR_STYLE;
 					break;
@@ -481,11 +482,13 @@ else
 				$password_confirm_highlight = INPUT_ERROR_STYLE;
 				break;
 			default: //valid input, create user
+				$challenge = dechex(crc32(time()));
 				$this->Query("INSERT INTO ".$this->GetConfigValue('table_prefix')."users SET ".
 					"signuptime = now(), ".
 					"name = '".mysql_real_escape_string($name)."', ".
 					"email = '".mysql_real_escape_string($email)."', ".
-					"password = md5('".mysql_real_escape_string($this->GetSafeVar('password', 'post'))."')");
+					"challenge = '".$challenge."', ".
+					"password = md5('".$challenge.mysql_real_escape_string($this->GetSafeVar('password', 'post'))."')");
 				unset($this->specialCache['user'][strtolower($name)]);	//invalidate cache if exists #368
 
 				// log in

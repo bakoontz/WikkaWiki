@@ -226,10 +226,12 @@ case "0":
 
 	// Register admin user
 	$challenge = dechex(crc32(time()));
+	$pass_val = md5($challenge.(mysql_real_escape_string($_POST['password'])));
 	// Delete existing admin user in case installer was run twice
 	@mysql_query('delete from '.$config['table_prefix'].'users where name = \''.$config['admin_users'].'\'', $dblink);
     test(__('Adding admin user').'...',
-	        @mysql_query("insert into ".$config["table_prefix"]."users set name = '".$config["admin_users"]."', password = md5('".mysql_real_escape_string($_POST['password'])."'), email = '".$config["admin_email"]."', signuptime = now(), challenge='".$challenge."'", $dblink), "Hmm!", 0);
+	        @mysql_query("insert into ".$config["table_prefix"]."users
+			set name = '".$config["admin_users"]."', password = '".$pass_val."', email = '".$config["admin_email"]."', signuptime = now(), challenge='".$challenge."'", $dblink), "Hmm!", 0);
 
 	// Auto-login wiki admin
 	// Set default cookie path
@@ -238,9 +240,9 @@ case "0":
 	$wikka_cookie_path = ('/' == $base_url_path) ? '/' : substr($base_url_path,0,-1);
 
 	// Set cookies
-	SetCookie('user_name', $config['admin_users'], time() + PERSISTENT_COOKIE_EXPIRY, $wikka_cookie_path); 
+	SetCookie('user_name@wikka', $config['admin_users'], time() + PERSISTENT_COOKIE_EXPIRY, $wikka_cookie_path); 
 	$_COOKIE['user_name'] = $config['admin_users']; 
-	SetCookie('pass', $pass_val, time() + PERSISTENT_COOKIE_EXPIRY, $wikka_cookie_path); 
+	SetCookie('pass@wikka', $pass_val, time() + PERSISTENT_COOKIE_EXPIRY, $wikka_cookie_path); 
 	$_COOKIE['pass'] = $pass_val; 
 
 	break;
