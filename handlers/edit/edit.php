@@ -37,10 +37,7 @@
  * @todo	use central regex library for validation;
  * @todo	replace $_REQUEST with either $_GET or $_POST (or both if really
  * 			necessary) - #312 => NOT CLEAR here what to do; see also #449
- * @todo	Move VALID_PAGENAME_PATTERN to lang files
  */
-
-if (!defined('VALID_PAGENAME_PATTERN')) define ('VALID_PAGENAME_PATTERN', '/^[A-Za-zÄÖÜßäöü]+[A-Za-z0-9ÄÖÜßäöü]*$/s'); //TODO use central regex library
 
 //initialization
 $error = '';
@@ -63,10 +60,7 @@ if (isset($_POST['submit']) && ($this->GetSafeVar('submit', 'post') == EDIT_PREV
 ?>
 <div id="content"<?php echo $ondblclick;?>>
 <?php
-if (!(preg_match(VALID_PAGENAME_PATTERN, $this->tag))) { //TODO use central regex library or (better!) IsWikiName()
-	echo '<em class="error">'.sprintf(WIKKA_ERROR_INVALID_PAGENAME,$this->tag).'</em>';
-}
-elseif ($this->HasAccess("write") && $this->HasAccess("read"))
+if ($this->HasAccess("write") && $this->HasAccess("read"))
 {
 	$newtag = $output = '';
 	// rename action

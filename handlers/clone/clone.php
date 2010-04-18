@@ -75,42 +75,33 @@ if (!$this->existsPage($from))		// name change, interface change (allows only ac
 			$to = isset($_POST['to']) && $_POST['to'] ? $_POST['to'] : $to;
 			$note = isset($_POST['note']) && $_POST['note'] ? $_POST['note'] : $note;
 			$editoption = (isset($_POST['editoption'])) ? ' checked="checked"' : '';
-
-			// 3. check target pagename validity
-			if (!preg_match(VALID_PAGENAME_PATTERN, $to))  //TODO use central regex library
+			// 3. Check user's write access
+			if (!$this->HasAccess('write', $to))
 			{
-				// invalid pagename!
-				$box = '<em class="error">'.ERROR_INVALID_PAGENAME.'</em>';
+				$box = '<em class="error">'.sprintf(ERROR_ACL_WRITE, $to).'</em>';
 			} else
 			{
-				// 4. target page name is valid - now check user's write-access
-				if (!$this->HasAccess('write', $to))
+				// 5. check target page existence
+				if ($this->existsPage($to, NULL, NULL, FALSE))	// name change, interface change (checks for non-active page, too) @@@
 				{
-					$box = '<em class="error">'.sprintf(ERROR_ACL_WRITE, $to).'</em>';
+					// page already exists!
+					$box = '<em class="error">'.ERROR_PAGE_ALREADY_EXIST.'</em>';
 				} else
 				{
-					// 5. check target page existence
-					if ($this->existsPage($to, NULL, NULL, FALSE))	// name change, interface change (checks for non-active page, too) @@@
+					// 6. Valid request - proceed to page cloning
+					$thepage = $this->LoadPage($from); # load the source page
+					if ($thepage) $pagecontent = $thepage['body']; # get its content
+					$this->SavePage($to, $pagecontent, $note); #create target page
+					if ($editoption == ' checked="checked"')
 					{
-						// page already exists!
-						$box = '<em class="error">'.ERROR_PAGE_ALREADY_EXIST.'</em>';
+						// quick edit
+						$this->Redirect($this->href('edit', $to));
 					} else
 					{
-						// 6. Valid request - proceed to page cloning
-						$thepage = $this->LoadPage($from); # load the source page
-						if ($thepage) $pagecontent = $thepage['body']; # get its content
-						$this->SavePage($to, $pagecontent, $note); #create target page
-						if ($editoption == ' checked="checked"')
-						{
-							// quick edit
-							$this->Redirect($this->href('edit', $to));
-						} else
-						{
-							//remove target page from cache
-							unset($this->pageCache[$to]);
-							// show confirmation message
-							$box = '<em class="success">'.sprintf(CLONE_SUCCESSFUL, $this->Link($to)).'</em>';
-						}
+						//remove target page from cache
+						unset($this->pageCache[$to]);
+						// show confirmation message
+						$box = '<em class="success">'.sprintf(CLONE_SUCCESSFUL, $this->Link($to)).'</em>';
 					}
 				}
 			}
