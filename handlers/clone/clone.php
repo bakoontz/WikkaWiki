@@ -72,8 +72,8 @@ if (!$this->existsPage($from))		// name change, interface change (allows only ac
 		if (isset($_POST) && $_POST)	// @@@ ??? what are we testing here?
 		{
 			// get parameters
-			$to = isset($_POST['to']) && $_POST['to'] ? $_POST['to'] : $to;
-			$note = isset($_POST['note']) && $_POST['note'] ? $_POST['note'] : $note;
+			$to = isset($_POST['to']) && $_POST['to'] ?  $this->GetSafeVar('to', 'post') : $to;
+			$note = isset($_POST['note']) && $_POST['note'] ?  $this->GetSafeVar('note', 'post') : $note;
 			$editoption = (isset($_POST['editoption'])) ? ' checked="checked"' : '';
 			// 3. Check user's write access
 			if (!$this->HasAccess('write', $to))

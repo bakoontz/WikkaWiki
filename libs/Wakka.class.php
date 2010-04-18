@@ -2323,24 +2323,20 @@ class Wakka
 				$class = 'ext';
 			}
 		}
-		// is this a full link? i.e., does it contain something *else* than valid WikiName characters?
-		// FIXME just use (!IsWikiName($tag)) here (then fix the RE there!)
-		// @@@ First move to regex library
-		elseif (preg_match('/[^[:alnum:]ÄÖÜßäöü]/', $tag))		// FIXED #34 - removed commas
+		// Is this an e-mail address?
+		elseif (preg_match('/^.+\@.+$/', $tag))
 		{
-			// check for email addresses
-			if (preg_match('/^.+\@.+$/', $tag))
-			{
-				$url = 'mailto:'.$tag;
-				$class = 'mailto';
-			}
-			// check for protocol-less URLs
-			elseif (!preg_match('/:/', $tag))
-			{
-				$url = 'http://'.$tag;
-				$class = 'ext';
-			}
+			$url = 'mailto:'.$tag;
+			$class = 'mailto';
 		}
+		/*
+		// check for protocol-less URLs
+		elseif (!preg_match('/:/', $tag))
+		{
+			$url = 'http://'.$tag;
+			$class = 'ext';
+		}
+		*/
 		else
 		{
 			// it's a wiki link
@@ -2348,9 +2344,6 @@ class Wakka
 			{
 				$this->TrackLinkTo($tag);
 			}
-			//$linkedPage = $this->LoadPage($tag);
-			// return ($linkedPage ? '<a class="'.$class.'" href="'.$this->Href($handler, $linkedPage['tag']).'"'.$title_attr.'>'.$text.'</a>' : '<a class="missingpage" href="'.$this->Href("edit", $tag).'" title="'.CREATE_THIS_PAGE_LINK_TITLE.'">'.$text.'</a>'); #i18n
-			// MODIFIED to use existsPage() (more efficient!)
 			if (!$this->existsPage($tag))
 			{
 				$link = '<a class="missingpage" href="'.$this->Href('edit', $tag).'" title="'.CREATE_THIS_PAGE_LINK_TITLE.'">'.$text.'</a>';
