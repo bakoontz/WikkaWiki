@@ -1069,6 +1069,7 @@ define('USER_IS_NOW_OWNER', 'You are now the owner of this page.');
  * Language constant used by the {@link clone.php clone} (page) handler
  */
 // clone
+define ('VALID_PAGENAME_PATTERN', '/^[A-Za-zִײÜßהצü]+[A-Za-z0-9ִײÜßהצü]*$/s');
 define('ERROR_ACL_WRITE', 'Sorry! You don\'t have write-access to %s');
 define('CLONE_VALID_TARGET', 'Please fill in a valid target page name and an (optional) edit note.');
 define('CLONE_LEGEND', 'Clone %s'); // %s source page name
