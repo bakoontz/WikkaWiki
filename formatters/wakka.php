@@ -788,7 +788,7 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 			// Case 2: Deprecated...(first part is a CC string
 			// followed by one or more whitespaces)
 			else if(preg_match("/^(.*?)\s+([^|]+)$/s", $contents, $matches) && 
-			        preg_match(VALID_PAGENAME_PATTERN, $matches[1]))
+					preg_match("/^[A-ZÄÖÜ]+[a-zßäöü]+[A-Z0-9ÄÖÜ][A-Za-z0-9ÄÖÜßäöü]*$/", $matches[1]))
 			{
 				$url = $matches[1]; 
 				$text = $matches[2];
