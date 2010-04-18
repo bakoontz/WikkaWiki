@@ -765,15 +765,53 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 			// output
 			return $output;
 		}
+
 		// forced links
 		// \S : any character that is not a whitespace character
 		// \s : any whitespace character
-		// @@@ regex accepts NO non-whitespace before whitespace, surely not correct? [[  something]]
-		else if (preg_match("/^\[\[(\S*)(\s+(.+))?\]\]$/s", $thing, $matches))		# recognize forced links across lines
+		else if(preg_match("/^\[\[(.*?)\]\]$/s", $thing, $matches))
 		{
-			if (!isset($matches[1])) $matches[1] = ''; #38
-			if (!isset($matches[3])) $matches[3] = ''; #38
-			list (, $url, , $text) = $matches;
+			$contents = $matches[1];
+			if(empty($contents) || !isset($contents))
+				return "";
+
+			// Case 1: Deprecated...(first part is a URL followed by
+			// one or more whitespaces)
+			if (preg_match("/^((http|https|ftp|news|irc|gopher):\/\/([^\|\\s\"<>]+))\s+([^\|]+)$/s", $contents, $matches))		# recognize forced links across lines
+			{
+				if (!isset($matches[1])) $matches[1] = ''; #38
+				if (!isset($matches[4])) $matches[4] = ''; #38
+				$url = $matches[1];
+				$text = $matches[4];
+			}
+
+			// Case 2: Deprecated...(first part is a CC string
+			// followed by one or more whitespaces)
+			else if(preg_match("/^(.*?)\s+([^|]+)$/s", $contents, $matches) && 
+			        preg_match(VALID_PAGENAME_PATTERN, $matches[1]))
+			{
+				$url = $matches[1]; 
+				$text = $matches[2];
+			}
+
+			// Case 3: If no "|" exists in $contents, assume the match
+			// refers to an internal page
+			else if(preg_match("/^([^\|]+)$/s", $contents, $matches))
+			{
+				$url = $matches[1];
+				$text = $matches[1];
+			}
+
+			// Case 4: If a "|" symbol exists, assume two parts, a URL and
+			// text
+			else if(preg_match("/^(.*?)\s*\|\s*(.*?)$/s", $contents, $matches))
+			{
+				if (!isset($matches[1])) $matches[1] = '';
+				if (!isset($matches[2])) $matches[2] = '';
+				$url = $matches[1];
+				$text = $matches[2];
+			}
+
 			if ($url)
 			{
 				//if ($url!=($url=(preg_replace("/@@|&pound;&pound;||\[\[/","",$url))))$result="</span>";
@@ -786,6 +824,7 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 				return "";
 			}
 		}
+
 		// indented text
 		elseif (preg_match("/(^|\n)([\t~]+)(-|&|([0-9a-zA-Z]+)\))?(\n|$)/s", $thing, $matches))
 		{
