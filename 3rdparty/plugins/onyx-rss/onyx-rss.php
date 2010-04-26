@@ -302,7 +302,7 @@ class ONYX_RSS
       }
    }
 
-   function &getData($type)
+   function getData($type)
    {
       if ($type == ONYX_META)
          return !isset($this->RSSData['channel']) ? false :

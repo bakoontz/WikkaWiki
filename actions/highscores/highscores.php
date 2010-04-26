@@ -31,6 +31,8 @@
  * @todo add paging functionality #679
  */
 
+//Initialisation (avoid notices)
+$table = '';
 
 //valid options
 $valid_styles = array('complex','simple');

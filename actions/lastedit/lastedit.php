@@ -27,11 +27,17 @@
  *
  * @todo		make date/time format system-configurable;
  */
+//Initialisation to avoid notices
+$difflink = '';
+$dateformatted = '';
+$timeformatted = '';
+$note = '';
+
 /**
  * style
  */
-define('LASTEDIT_BOX', 'lastedit');
-define('LASTEDIT_NOTES', 'lastedit_notes');
+if (!defined('LASTEDIT_BOX')) define('LASTEDIT_BOX', 'lastedit');
+if (!defined('LASTEDIT_NOTES')) define('LASTEDIT_NOTES', 'lastedit_notes');
 
 if (!isset($show))
 {

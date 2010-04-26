@@ -18,7 +18,7 @@
 
 if ($pages = $this->LoadPagesLinkingTo($this->getPageTag())) {
 	foreach ($pages as $page) {
-		$links[] = $this->Link($page["tag"]);
+		$links[] = $this->Link($page["page_tag"]);
 	}
 	print(implode("<br />\n", $links));
 }

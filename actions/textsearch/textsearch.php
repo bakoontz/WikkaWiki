@@ -34,7 +34,7 @@ $case_disp = $this->htmlspecialchars_ent($case);
 ?>
 <?php echo $this->FormOpen('', '', 'get'); ?>
 <fieldset><legend><?php echo SEARCH_FOR; ?></legend>
-<input name="phrase" size="40" value="<?php echo $phrase_disp ?>" /> <input name="case" type="checkbox" value="1" <?php echo (1==$case?'checked="checked"':'') ?> /><label for="case">Case sensitive</label> <input type="submit" value="Search"/>
+<input name="phrase" size="40" value="<?php echo $phrase_disp ?>" /> <input id="case_sensitive" name="case" type="checkbox" value="1" <?php echo (1==$case?'checked="checked"':'') ?> /><label for="case_sensitive">Case sensitive</label> <input type="submit" value="Search"/>
 </fieldset>
 <?php echo $this->FormClose(); ?>
 
@@ -85,7 +85,7 @@ if ('' !== $phrase)
 
 // display search tips
 #if ($this->CheckMySQLVersion(4,00,01))	// DONE replace with version_compare
-if ($this->CheckMySQLVersion('4.00.01'))
+if ($this->CheckMySQLVersion('4', '00', '01'))
 {
 	print(SEARCH_TIPS);
 }

@@ -59,24 +59,13 @@ $year	= CUR_YEAR;
 $month	= CUR_MONTH;
 
 // get and interpret parameters
-// 1) overrride defaults with parameters provided in URL (accept only valid values)
-if (isset($_GET['year']))
-{
-	$uYear = (int)$this->GetSafeVar('year', 'get');
-	if ($uYear >= MIN_YEAR && $uYear <= MAX_YEAR) $year = $uYear;
-}
-if (isset($_GET['month']))
-{
-	$uMonth = (int)$this->GetSafeVar('month', 'get');
-	if ($uMonth >= 1 && $uMonth <= 12) $month = $uMonth;
-}
+
 // 2) override with parameters provided in action itself (accept only valid values)
 $hasActionParams = FALSE;
 if (is_array($vars))
 {
-	foreach ($vars as $param)
+	foreach ($vars as $param => $value)
 	{
-		$value = $this->GetSafeVar($value);
 		switch ($param)
 		{
 			case 'year':
@@ -98,6 +87,19 @@ if (is_array($vars))
 		}
 	}
 }
+
+// 1) overrride defaults with parameters provided in URL (accept only valid values)
+if (isset($_GET['year']))
+{
+	$uYear = (int)$this->GetSafeVar('year', 'get');
+	if ($uYear >= MIN_YEAR && $uYear <= MAX_YEAR) $year = $uYear;
+}
+if (isset($_GET['month']))
+{
+	$uMonth = (int)$this->GetSafeVar('month', 'get');
+	if ($uMonth >= 1 && $uMonth <= 12) $month = $uMonth;
+}
+
 // ***** (ACTION) PARAMETERS Interface *****
 
 // ***** DERIVED VARIABLES *****

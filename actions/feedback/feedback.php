@@ -16,7 +16,7 @@ $form = FILL_FORM.
 	'<label for="name">'.FEEDBACK_NAME_LABEL.'</label><input name="name" value="'.$name.'" type="text" /><br />'."\n".
 	'<input type="hidden" name="mail" value="result">'."\n".
 	'<label for="email">'.FEEDBACK_EMAIL_LABEL.'</label><input name="email" value="'.$email.'" type="text" /><br />'."\n".
-	'<label for="comments">'.FEEDBACK_COMMENTS_LABEL.'</label><br />\n<textarea name="comments" rows="15" cols="40">'.$comments.'</textarea><br / >'."\n".
+	'<label for="comments">'.FEEDBACK_COMMENTS_LABEL.'</label><br />'."\n".'<textarea name="comments" rows="15" cols="40">'.$comments.'</textarea><br / >'."\n".
 	'<input type="submit" value="'.FEEDBACK_SEND_BUTTON.'" />'."\n".
 	$this->FormClose();
 
@@ -51,7 +51,7 @@ if (isset($_POST['mail']) && $_POST['mail']=='result')
 		$mailheaders = 'From:'.$email."\n";
 		$mailheaders .= 'Reply-To:'.$email;
 		mail($recipient, $subject, $msg, $mailheaders);
-		echo $this->Format(sprintf(EMAIL_SENT_CONFIRMATION,$recipient, $this->GetConfigValue('root_page'));
+		echo $this->Format(sprintf(SUCCESS_FEEDBACK_SENT,$recipient, $this->GetConfigValue('root_page')));
 		// optionally displays the feedback text
 		//echo $this->Format('---- **'.FEEDBACK_NAME_LABEL.'** '.$name.'---**'.FEEDBACK_EMAIL_LABEL.'** '.$email.'---**'.FEEDBACK_COMMENTS_LABEL.'** ---'.$comments');
 	}    

@@ -185,13 +185,6 @@ class Wakka
 	 */
 	var $registered = FALSE;
 	/**
-	 * Name of <b>current</b> user if registered.
-	 *
-	 * @access	public
-	 * @var		string
-	 */
-	var $reg_username = '';
-	/**
 	 * Name of <b>current</b> user if anonymous (effectively either IP address or host name).
 	 *
 	 * @access	public
@@ -1012,9 +1005,9 @@ class Wakka
 	 * @param	$name	mandatory: name of a key in the config array
 	 * @return	mixed	the value of the configuration item, or NULL if not found
 	 */
-	function GetConfigValue($name)
+	function GetConfigValue($name, $default=NULL)
 	{
-		$val = (isset($this->config[$name])) ? $this->config[$name] : NULL;
+		$val = (isset($this->config[$name])) ? $this->config[$name] : $default;
 		return $val;
 	}
 	/**

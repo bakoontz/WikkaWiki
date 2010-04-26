@@ -135,8 +135,8 @@ if (isset($download) && $download <> '')
 } 
 elseif ($this->page && 
 		$this->HasAccess('read') && 
-		($this->method <> 'print.xml') && 
-		($this->method <> 'edit'))
+		($this->handler <> 'print.xml') && 
+		($this->handler <> 'edit'))
 {
 
 	// upload path 
@@ -262,7 +262,6 @@ elseif ($this->page &&
 
 		foreach ($files as $file) 
 		{
-				$num++;
 				if ($this->IsAdmin()) 
 				{
 					$delete_link = "<a href=\"".$this->href('files.xml',$this->GetPageTag(),'action=delete&amp;file='.urlencode($file))."\">x</a>";

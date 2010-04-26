@@ -9,18 +9,15 @@
  *
  * @author	{@link http://web.archive.org/web/20040820215257/http://www.wakkawiki.com/ChrisTessmer Chris Tessmer}
  *
- * @uses	Wakka::reg_username
+ * @uses	Wakka::GetUserName()
  * @uses	Wakka::existsUser()
  * @uses	Wakka::getCount()
  */
 
 $count = 0;
-#if ($user = $this->GetUser())		// check if user is logged in and get data
 if ($this->existsUser())
 {
-	#$whereOwner = "`owner` = '" . $this->GetUserName() . "' AND `latest` = 'Y'";
-	#$whereOwner = "`owner` = '" . $user['name'] . "' AND `latest` = 'Y'";
-	$whereOwner = "`owner` = '" . $this->reg_username . "' AND `latest` = 'Y'";
+	$whereOwner = "`owner` = '" . $this->GetUserName() . "' AND `latest` = 'Y'";
 	$count = $this->getCount('pages',$whereOwner);
 }
 $whereTotal = "`latest` = 'Y'";

@@ -7,7 +7,7 @@
  * @license		http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
  *
- * @uses	Wakka::GetConfigValue()
+ * @uses		Config::$admin_email
  * 
  * Note: plain mailto links are a common source of spam.
  */
@@ -18,11 +18,5 @@ $email = $this->GetConfigValue("admin_email");
 $patterns = array("'@'", "'\.'");
 $replace = array("[at]", "[dot]");
 echo '<a href="mailto:'.preg_replace($patterns, $replace, $email).'" title="'.CONTACTLINK_TITLE.'">'.CONTACTLINK_TEXT.'</a>';
-
-// print plain mailto link
-//echo '<a href="mailto:'.$email.'" title="'.CONTACTLINK_TITLE.'">'.CONTACTLINK_TEXT.'</a>';
-
-// print contact link only to registered users
-// echo ($this->GetUser()) ? <a href="mailto:'.$email.'" title="'.CONTACTLINK_TITLE.'">'.CONTACTLINK_TEXT.'</a>' : "";
 
 ?>

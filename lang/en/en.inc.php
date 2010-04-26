@@ -584,6 +584,7 @@ define('HIGHSCORES_HEADER_USER', 'user');
 define('HIGHSCORES_HEADER_PERCENTAGE', 'percentage');
 define('HIGHSCORES_DISPLAY_TOP', 10); //limit output to top n users
 define('HIGHSCORES_DEFAULT_STYLE', 'complex'); //set default layout style
+define('HIGHSCORES_DEFAULT_RANK', 'pages'); //set default layout style
 /**#@-*/
 
 /**#@+
@@ -828,7 +829,7 @@ define('SEARCH_TIPS', "<br /><br /><hr /><br /><strong>Search Tips:</strong><br 
 	."but not 'some noise words'). <br />");
 */
 define('SEARCH_MYSQL_IDENTICAL_CHARS', 'aàáâã,eèéêë,iìîï,oòóôõ,uùúû,cç,nñ,yý');
-define('SEARCH_TIPS', 'Search Tips:');
+define('SEARCH_TIPS_TITLE', 'Search Tips:');
 define('SEARCH_WORD_1', 'apple');
 define('SEARCH_WORD_2', 'banana');
 define('SEARCH_WORD_3', 'juice');
@@ -839,8 +840,19 @@ define('SEARCH_PHRASE',sprintf('%s %s',SEARCH_WORD_5,SEARCH_WORD_6));
 define('SEARCH_TARGET_1', 'Find pages that contain at least one of the two words.');
 define('SEARCH_TARGET_2', 'Find pages that contain both words.');
 define('SEARCH_TARGET_3',sprintf("Find pages that contain the word '%1\$s' but not '%2\$s'.",SEARCH_WORD_1,SEARCH_WORD_4));
-define('SEARCH_TARGET_4',"Find pages that contain words such as 'apple', 'apples', 'applesauce', or 'applet'."); // make sure target words all *start* with SEARCH_WORD_1
+define('SEARCH_TARGET_4',sprintf('Find pages that contain words starting with "%s"', SEARCH_WORD_1));
 define('SEARCH_TARGET_5',sprintf("Find pages that contain the exact phrase '%1\$s' (for example, pages that contain '%1\$s of wisdom' but not '%2\$s noise %3\$s').",SEARCH_PHRASE,SEARCH_WORD_5,SEARCH_WORD_6));
+define('SEARCH_TIPS', '<br /><br /><hr /><br /><strong>'.SEARCH_TIPS_TITLE.':</strong><br /><br />'
+	.'<div class="indent"><tt>'.SEARCH_WORD_1.' '.SEARCH_WORD_2.'</tt></div>'
+	.SEARCH_TARGET_1.'<br /><br />'
+	.'<div class="indent"><tt>'.'+'.SEARCH_WORD_1.' '.'+'.SEARCH_WORD_3.'</tt></div>'
+	.SEARCH_TARGET_2.'<br /><br />'
+	.'<div class="indent"><tt>'.'+'.SEARCH_WORD_1.' '.'-'.SEARCH_WORD_4.'</tt></div>'
+	.SEARCH_TARGET_3.'<br /><br />'
+	.'<div class="indent"><tt>'.SEARCH_WORD_1.'*'.'</tt></div>'
+	.SEARCH_TARGET_4.'<br /><br />'
+	.'<div class="indent"><tt>'.'"'.SEARCH_WORD_5.' '.SEARCH_WORD_6.'"'.'</tt></div>'
+	.SEARCH_TARGET_5.'<br />');
 /**#@-*/
 
 /**#@+

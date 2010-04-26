@@ -29,7 +29,7 @@ if (isset($_GET["linking_to"]))
 		print(sprintf(WANTEDPAGES_PAGES_LINKING_TO,$this->Link($linking_to)).":<br />\n");
 		foreach ($pages as $page)
 		{
-			print($this->Link($page["tag"])."<br />\n");
+			print($this->Link($page["page_tag"])."<br />\n");
 		}
 	}
 	else

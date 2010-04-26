@@ -213,7 +213,7 @@ class safehtml {
 	}
 
 	// TABLES: cannot open table elements when we are not inside table
-	if ($this->Counter["table"]<=0 && in_array($name, $this->tableTags)) return true;
+	if (isset($this->Counter['table']) && $this->Counter["table"]<=0 && in_array($name, $this->tableTags)) return true;
 
 	// PARAGRAPHS: close paragraph when closeParagraph tags opening
 	if (in_array($name, $this->closeParagraph) && in_array("p", $this->Stack))
