@@ -5,10 +5,28 @@
  * @package		Handlers
  * @name		ACL
  *
- * @uses		Wakka::GetConfigValue()
+ * @uses		Config::$default_comment_post_acl
+ * @uses		Config::$default_comment_read_acl
+ * @uses		Config::$default_read_acl
+ * @uses		Config::$default_write_acl
+ * @uses		Config::$read_acl
+ * @uses		Config::$write_acl
+ * @uses		Wakka::Format()
+ * @uses		Wakka::FormClose()
+ * @uses		Wakka::FormOpen()
+ * @uses		Wakka::GetPageOwner()
+ * @uses		Wakka::GetPageTag()
  * @uses		Wakka::getSessionKey()
  * @uses		Wakka::hasValidSessionKey()
- * @uses		Wakka::Format()
+ * @uses		Wakka::htmlspecialchars_ent()
+ * @uses		Wakka::Href()
+ * @uses		Wakka::LoadSingle()
+ * @uses		Wakka::LoadUsers()
+ * @uses		Wakka::Redirect()
+ * @uses		Wakka::SaveACL()
+ * @uses		Wakka::SetPageOwner()
+ * @uses		Wakka::TrimACLs()
+ * @uses		Wakka::UserIsOwner()
  * @author		{@link http://wikkawiki.org/MinusF MinusF} (preliminary code cleanup, css selectors)
  * @author		{@link http://wikkawiki.org/DarTar Dario Taraborelli} (further cleanup)
  * @author		{@link http://wikkawiki.org/NilsLindenberg Nils Lindenberg} (i18n)
@@ -19,13 +37,14 @@
 
 echo '<div id="content">'."\n"; //TODO: move to templating class
 
+// validate data source 
+$keep_post_data = FALSE; 
+
 if ($this->UserIsOwner())
 {
 	if (isset($_POST['form_id']))
 	{
 
-		// validate data source 
-		$keep_post_data = FALSE; 
 		if (FALSE != ($aKey = $this->getSessionKey($_POST['form_id'])))     # check if page key was stored in session 
 		{ 
 			if (TRUE == ($rc = $this->hasValidSessionKey($aKey)))   # check if correct name,key pair was passed 

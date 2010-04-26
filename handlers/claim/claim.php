@@ -7,13 +7,14 @@
  * @license		http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
  *
- * @uses	Wakka::reg_username()
  * @uses	Wakka::GetPageOwner()
  * @uses	Wakka::GetPageTag()
- * @uses	Wakka::existsUser()
+ * @uses	Wakka::GetUser()
+ * @uses	Wakka::GetUserName()
  * @uses	Wakka::Href()
- * @uses	Wakka::SetRedirectMessage()
  * @uses	Wakka::Redirect()
+ * @uses	Wakka::SetPageOwner()
+ * @uses	Wakka::SetRedirectMessage()
  */
 
 // only claim ownership if current page has no owner, and if user is logged in.

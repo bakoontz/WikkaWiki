@@ -17,6 +17,7 @@
 * @since	Wikka 1.1.6.2
 *
 * @uses		Wakka::LoadPagesLinkingTo()
+* @uses		Wakka::HasAccess()
 * @uses		Wakka::existsPage()
 * @uses		Wakka::Link()
 *
@@ -45,11 +46,11 @@ switch(TRUE)
 	if ($pages = $this->LoadPagesLinkingTo($this->tag))
 	{
 		foreach ($pages as $page) {
-			$tag = $page['tag'];
+			$tag = $page['page_tag'];
 			// name change, interface change (active pages only)
 			if ($this->existsPage($tag) && $this->HasAccess('read', $tag))
 			{			
-				print $this->Link($page['tag']).'<br />';
+				print $this->Link($page['page_tag']).'<br />';
 			}
 		}
 	}

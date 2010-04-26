@@ -1628,7 +1628,7 @@ class Wakka
 				);
 
 			// WikiPing
-			if ($pingdata = $this->GetPingParams($this->GetConfigValue('wikiping_server'), $tag, $username, $note))
+			if ($pingdata = $this->GetPingParams($this->GetConfigValue('wikiping_server'), $tag, $user, $note))
 			{
 				$this->WikiPing($pingdata);
 			}
