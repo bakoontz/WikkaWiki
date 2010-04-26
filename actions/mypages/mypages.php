@@ -32,43 +32,31 @@ if (($this->IsAdmin() && !empty($username)) ||
 {
 	printf('<div class="floatl">'.MYPAGES_CAPTION.'</div><br/><br/>'."\n", $username);
 
-	$my_pages_count = 0;
-
 	if ($pages = $this->LoadPagesByOwner($username))
 	{
-		$my_pages_count = 0;
 		$curChar = '';
 		foreach ($pages as $page)
 		{
-			if($username == $page['owner'])
+			$firstChar = strtoupper($page["tag"][0]);
+			if (!preg_match("/[A-Z,a-z]/", $firstChar)) //TODO: (#104 #340, #34) Internationalization (allow other starting chars, make consistent with Formatter REs)
 			{
-				++$my_pages_count;
-				$firstChar = strtoupper($page["tag"][0]);
-				if (!preg_match("/[A-Z,a-z]/", $firstChar)) //TODO: (#104 #340, #34) Internationalization (allow other starting chars, make consistent with Formatter REs)
-				{
-					$firstChar = "#";
-				}
-
-				if ($firstChar != $curChar)
-				{
-					if ($curChar != '') echo "<br />\n";
-					echo '<strong>'.$firstChar."</strong><br />\n";
-					$curChar = $firstChar;
-				}
-
-				echo $this->Link($page['tag'])."<br />\n";
-
+				$firstChar = "#";
 			}
-		}
-		if($my_pages_count == 0)
-		{
-			print("<em class='error'>".MYPAGES_NONE_OWNED."</em>");
-		}
 
+			if ($firstChar != $curChar)
+			{
+				if ($curChar != '') echo "<br />\n";
+				echo '<strong>'.$firstChar."</strong><br />\n";
+				$curChar = $firstChar;
+			}
+
+			echo $this->Link($page['tag'])."<br />\n";
+
+		}
 	}
 	else
 	{
-		echo '<em class="error">'.MYPAGES_NONE_OWNED.'</em>';
+		echo '<em class="error">'.sprintf(MYPAGES_NONE_OWNED, $username).'</em>';
 	}
 }
 else

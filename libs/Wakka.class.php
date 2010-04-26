@@ -4324,6 +4324,7 @@ class Wakka
 	 * @uses	Wakka::SetCookie()
 	 * @uses	Wakka::SetUser()
 	 * @uses	Wakka::SetPage()
+	 * @uses	Config::$root_page
 	 * @param $tag
 	 * @param $method
 	 * @return unknown_type
@@ -4337,15 +4338,22 @@ class Wakka
 		// do our stuff!
 		if (!$this->handler = trim($method)) $this->handler = 'show';
 		if (!$this->tag = trim($tag)) $this->Redirect($this->Href('', $this->GetConfigValue('root_page')));
-		if (!$this->GetUser() && ($user = $this->LoadUser($this->GetCookie('user_name'), $this->GetCookie('pass')))) $this->SetUser($user);
-		if ((!$this->GetUser() && isset($_COOKIE['wikka_user_name'])) && ($user = $this->LoadUser($_COOKIE['wikka_user_name'], $_COOKIE['wikka_pass'])))
+		if ($this->GetUser())
 		{
-			//Old cookies : delete them
-			SetCookie('wikka_user_name', '', 1, $this->wikka_cookie_path);
-			$_COOKIE['wikka_user_name'] = '';
-			SetCookie('wikka_pass', '', 1, $this->wikka_cookie_path);
-			$_COOKIE['wikka_pass'] = '';
-			$this->SetUser($user);
+			$this->registered = true;
+		}
+		else
+		{
+			if ($user = $this->LoadUser($this->GetCookie('user_name'), $this->GetCookie('pass'))) $this->SetUser($user);
+			if ((isset($_COOKIE['wikka_user_name'])) && ($user = $this->LoadUser($_COOKIE['wikka_user_name'], $_COOKIE['wikka_pass'])))
+			{
+				//Old cookies : delete them
+				SetCookie('wikka_user_name', '', 1, $this->wikka_cookie_path);
+				$_COOKIE['wikka_user_name'] = '';
+				SetCookie('wikka_pass', '', 1, $this->wikka_cookie_path);
+				$_COOKIE['wikka_pass'] = '';
+				$this->SetUser($user);
+			}
 		}
 		$this->SetPage($this->LoadPage($tag, (isset($_GET['time']) ? $_GET['time'] :''))); #312
 
