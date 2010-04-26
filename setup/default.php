@@ -21,6 +21,10 @@ if (isset($_POST['config']))
 		$wakkaConfig[$key] = $value;
 	}
 }
+if (!isset($wakkaConfig['mysql_password']))
+{
+	$wakkaConfig['mysql_password'] = '';
+}
 
 // Validate data
 $error['flag'] = false;

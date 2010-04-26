@@ -22,3 +22,4 @@ deny from env=BadReferrer
 	# turn request into a query for that page name for wikka.php
 	RewriteCond %{QUERY_STRING} !wakka=
 	RewriteRule ^(.*)$ wikka.php?wakka=$1 [QSA,L]
+</IfModule>

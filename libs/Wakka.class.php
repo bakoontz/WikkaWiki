@@ -3050,7 +3050,7 @@ class Wakka
 				/**
 				 * @var boolean holds previous state of LinkTracking before we StopLinkTracking(). It will then be used to test if we should StartLinkTracking() or not.
 				 */
-				$link_tracking_state = $_SESSION['linktracking'];
+				$link_tracking_state = (isset($_SESSION['linktracking'])) ? $_SESSION['linktracking'] : 0;
 				$this->StopLinkTracking();
 		}
 		$result =
