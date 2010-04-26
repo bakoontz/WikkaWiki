@@ -47,6 +47,10 @@
  *			appropriate smaller feed image
  */
 
+// We use ob_start() and ob_end_clean() to mute all possible error messages.
+// If you want to monitor errors, you could uncomment the ob_end_clean() at the end of this script
+//  or add custom handling with ob_get_contents() before it.
+ob_start();
 //defaults
 define('FEED_VALID_FORMATS', "RSS0.91,RSS1.0,RSS2.0,ATOM1.0"); 
 define('FEED_DESCRIPTION_TRUNCATE_SIZE',"200"); #character limit to truncate description
@@ -62,7 +66,8 @@ define('FEED_DEFAULT_ITEMS_LIMIT', 20); #default number of items to display
 
 //stylesheets & images
 define('FEED_CSS','xml.css');
-define('FEED_IMAGE_PATH','/images/wikka_logo.jpg');
+define('FEED_IMAGE_PATH','images/wikka_logo.jpg');
+define('FEED_IMAGE_URL', $this->StaticHref(FEED_IMAGE_PATH));
 
 /**#@+
  * i18n string.
@@ -101,7 +106,7 @@ $rss->cssStyleSheet = $this->StaticHref('css/'.FEED_CSS);
 $rss->descriptionTruncSize = FEED_DESCRIPTION_TRUNCATE_SIZE;
 $rss->descriptionHtmlSyndicated = FEED_DESCRIPTION_HTML;
 $rss->link = $this->Href('', $this->GetConfigValue('root_page'));
-$rss->syndicationURL = $this->Href($this->method,'','f='.$f);
+$rss->syndicationURL = $this->Href($this->handler,'','f='.$f);
 
 //create feed image
 $image = new FeedImage();
@@ -125,12 +130,10 @@ if ($pages = $this->LoadRecentlyChanged())
 		{
 			$item = new FeedItem();
 			$item->title = $page['tag'];
-			$item->link = $this->Href('', $page['tag'], 'time='.urlencode($page['time']));
-			// @@@ ^ uses &amp;amp; in all formats - this is FC escaping the &amp; that Href() outputs
-			// WARNING: the double escape comes from the use of htmlspecialchars()
-			// 1. we need to replace this with our own secure version
-			// 2. we should NOT use it on already-escaped links -OR- feed it
-			//    links that that have & not escaped (yet)
+			$item->link = str_replace('&amp;', '&', $this->Href('', $page['tag'], 'time='.urlencode($page['time'])));
+			// FC will escape $item->link to avoid invalid XML, and since our method $this->Href() generates the string &amp;
+			//  it will be escaped twice and become &amp;amp;
+			// In the case of RecentChanges.xml, we must unescape the url before giving it to FC
 			$item->date = date('r',strtotime($page['time']));	// RFC2822
 			$item->description = sprintf(RECENTCHANGES_FEED_ITEM_DESCRIPTION, $page['user']).($page['note'] ? ' ('.$page['note'].')' : '')."\n";
 			$item->source = $this->GetConfigValue('base_url');
@@ -157,6 +160,7 @@ Element: Source
 	}
 }
 
+ob_end_clean();
 //output feed
 echo $rss->createFeed($f);
 ?>
