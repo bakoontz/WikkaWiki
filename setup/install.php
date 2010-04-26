@@ -101,6 +101,7 @@ case "0":
 			"KEY idx_tag (tag),".
 			"FULLTEXT KEY body (body),".
 			"KEY idx_time (time),".
+			"KEY idx_owner (owner), ".
 			"KEY idx_latest (latest)".
 			") TYPE=MyISAM;", $dblink), "Already exists?", 0);
 	test("Creating ACL table...",
