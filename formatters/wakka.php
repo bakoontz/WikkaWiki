@@ -631,7 +631,7 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 			{
 				// get tags with id attributes
 				# use backref to match both single and double quotes
-				$patTagWithId = '((<[a-z][^>]*)((?<=\\s)id=("|\')(.*?)\\4)(.*?>))';	// @@@ #34
+				$patTagWithId = '((<[a-z][^>]*)((?<=\\s)id=("|\')(.*?)\\4)(.*?>))';	// @@@ #34 The next <?php is just to unbreak syntax highlighting in my editor
 				// with PREG_SET_ORDER we get an array for each match: easy to use with list()!
 				// we do the match case-insensitive so we catch uppercase HTML as well;
 				// SafeHTML will treat this but 'raw' may end up with invalid code!
@@ -668,7 +668,7 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 			return null;
 		}
 		// Elided content (preserves trailing ws)
-		elseif(preg_match("/``(.*?)``/s", $thing, $matches))
+		elseif(preg_match("/^``(.*?)``$/s", $thing, $matches))
 		{
 			return null;
 		}
