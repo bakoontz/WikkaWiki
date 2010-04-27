@@ -103,7 +103,7 @@ if ($this->HasAccess("write") && $this->HasAccess("read"))
 		// we don't need to escape here, we do that just before display (i.e., treat note just like body!)
 		if (isset($_POST['note']))
 		{
-			$note = trim($this->GetSafeVar('note','post'));
+			$note = substr(trim($this->GetSafeVar('note','post')), 0, MAX_EDIT_NOTE_LENGTH);
 		}
 
 		// only if saving:
