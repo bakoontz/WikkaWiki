@@ -25,6 +25,7 @@
  * @uses		Config::$upload_path
  */
 
+if (!isset($_GET['action'])) $_GET['action'] = '';
 // upload path
 if ($this->config['upload_path'] == '') $this->config['upload_path'] = 'files';
 $upload_path = $this->config['upload_path'].DIRECTORY_SEPARATOR.$this->GetPageTag(); #89

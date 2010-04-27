@@ -1,6 +1,7 @@
 <!-- BEGIN PAGE FOOTER -->
 <div id="footer">
 <?php
+	global $tstart;
 	$wikka_patch_level = ($this->GetWikkaPatchLevel() == '0') ? '' : '-p'.$this->GetWikkaPatchLevel();
 ?>
 </div>
