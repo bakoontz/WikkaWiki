@@ -58,8 +58,6 @@ $params = substr($params, 0, -1);
 if (($this->IsAdmin() && !empty($username)) ||
 		($this->existsUser() &&  $username = $this->GetUserName())) 
 {
-	$my_edits_count = 0;
-
 	// header
 	$output .= '<div class="floatl">';
 	if ($alpha)
@@ -128,12 +126,6 @@ if (($this->IsAdmin() && !empty($username)) ||
 				$time_output = date(REVISION_TIME_FORMAT, strtotime($time));
 				$output .= '&nbsp;&nbsp;&nbsp;<a class="datetime" href="'.$this->Href('revisions', $page['tag']).'" title="'.PAGE_REVISION_LINK_TITLE.'">'.$time_output.'</a> '.$this->Link($page["tag"], 'revisions', "[".$page['id']."]", 0)." ".$this->Link($page["tag"], "", "", 0)."<br />\n";	
 			}
-			$my_edits_count++;
-		}
-
-		if ($my_edits_count == 0)
-		{
-			$output .= '<em class="error">'.STATUS_NO_PAGES_EDITED.'</em>';
 		}
 	}
 	else

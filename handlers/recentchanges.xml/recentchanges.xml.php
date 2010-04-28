@@ -55,7 +55,7 @@ ob_start();
 define('FEED_VALID_FORMATS', "RSS0.91,RSS1.0,RSS2.0,ATOM1.0"); 
 define('FEED_DESCRIPTION_TRUNCATE_SIZE',"200"); #character limit to truncate description
 define('FEED_DESCRIPTION_HTML',"TRUE"); #Indicates whether the description field should be rendered in HTML
-define('FEED_DEFAULT_OUTPUT_FORMAT',"RSS2.0"); #any of the valid formats specified in VALID_FORMATS
+define('FEED_DEFAULT_OUTPUT_FORMAT',"RSS2.0"); #any of the valid formats specified in FEED_VALID_FORMATS
 /*
 define('FEED_DEFAULT_OWNER_FILTER', ''); #empty, modifications of pages owned by any user
 define('FEED_DEFAULT_USER_FILTER', ''); #empty, modifications by any user
