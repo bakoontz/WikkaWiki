@@ -201,6 +201,12 @@ define('WIKKA_COOKIE_PATH', ('/' == WIKKA_BASE_URL_PATH) ? '/' : substr(WIKKA_BA
  * Default number of hours after which a permanent cookie is to expire: corresponds to 90 days.
  */
 if (!defined('DEFAULT_COOKIE_EXPIRATION_HOURS')) define('DEFAULT_COOKIE_EXPIRATION_HOURS',90 * 24);
+/**
+ * Path for Wikka libs
+ *
+ * @var string
+ */
+if(!defined('WIKKA_LIBRARY_PATH')) define('WIKKA_LIBRARY_PATH', 'lib');
 
 /**#@-*/
 // ----------------------- END URL DOMAIN / PATH -------------------------------
@@ -221,6 +227,7 @@ $wakkaDefaultConfig = array(
 
 	'action_path'				=> 'plugins/actions'.PATH_DIVIDER.'actions',
 	'handler_path'				=> 'plugins/handlers'.PATH_DIVIDER.'handlers',
+	'lang_path'					=> 'plugins/lang',
 	'gui_editor'				=> '1',
 	'default_comment_display'	=> '1',
 	'theme'						=> 'light',
@@ -311,6 +318,8 @@ if(isset($wakkaConfig['wikka_template_path']) && preg_match('/plugins\/templates
 	$wakkaConfig['wikka_template_path'] = "plugins/templates," .  $wakkaConfig['wikka_template_path'];
 if(isset($wakkaConfig['wikka_formatter_path']) && preg_match('/plugins\/formatters/', $wakkaConfig['wikka_formatter_path']) <= 0)
 	$wakkaConfig['wikka_formatter_path'] = "plugins/formatters," .  $wakkaConfig['wikka_formatter_path'];
+if(isset($wakkaConfig['lang_path']) && preg_match('/plugins\/lang/', $wakkaConfig['lang_path']) <= 0)
+	$wakkaConfig['lang_path'] = "plugins/lang," .  $wakkaConfig['lang_path'];
 
 $wakkaConfig = array_merge($wakkaDefaultConfig, $wakkaConfig);	// merge defaults with config from file
 
@@ -332,10 +341,17 @@ $wakkaConfig = array_merge($wakkaDefaultConfig, $wakkaConfig);	// merge defaults
 $default_lang = $wakkaConfig['default_lang'];
 $fallback_lang = 'en';
 $default_lang_path = 'lang'.DIRECTORY_SEPARATOR.$default_lang;
+$plugin_lang_path = $wakkaConfig['lang_path'].DIRECTORY_SEPARATOR.$default_lang;
 $fallback_lang_path = 'lang'.DIRECTORY_SEPARATOR.$fallback_lang;
 $default_lang_strings = $default_lang_path.DIRECTORY_SEPARATOR.$default_lang.'.inc.php';
+$plugin_lang_strings = $plugin_lang_path.DIRECTORY_SEPARATOR.$default_lang.'.inc.php';
 $fallback_lang_strings = $fallback_lang_path.DIRECTORY_SEPARATOR.$fallback_lang.'.inc.php';
 $lang_packs_found = false;
+if (file_exists($plugin_lang_strings))
+{
+	require_once($plugin_lang_strings);
+	$lang_packs_found = true;
+}
 if (file_exists($default_lang_strings))
 {
 	require_once($default_lang_strings);
