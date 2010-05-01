@@ -1392,6 +1392,8 @@ define('HANDLER_UNKNOWN_SPECCHARS', 'Unknown handler; the handler name must not 
 define('HANDLER_UNKNOWN', 'Sorry, %s is an unknown handler.'); // %s handler name
 define('FORMATTER_UNKNOWN_SPECCHARS', 'Unknown formatter; the formatter name must not contain special characters.');
 define('FORMATTER_UNKNOWN', 'Formatter "%s" not found'); // %s formatter name
+define('DEFAULT_THEMES_TITLE', 'Default themes (%s)'); //%s: number of available themes 
+define('CUSTOM_THEMES_TITLE', 'Custom themes (%s)'); //%s: number of available themes
 /**#@-*/
 
 /* ------------------ SETUP ------------------ */

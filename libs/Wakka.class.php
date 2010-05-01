@@ -37,10 +37,6 @@ if (!defined('MAX_HOSTNAME_LENGTH_DISPLAY')) define('MAX_HOSTNAME_LENGTH_DISPLAY
  */
 if (!defined('ID_LENGTH')) define('ID_LENGTH',10);		// @@@ maybe make length configurable
 /**#@-*/
-// i18n TODO:move to language file
-if(!defined('CREATE_THIS_PAGE_LINK_TITLE')) define('CREATE_THIS_PAGE_LINK_TITLE', 'Create this page');
-if(!defined('DEFAULT_THEMES_TITLE')) define('DEFAULT_THEMES_TITLE', 'Default themes (%s)'); //%s: number of available themes
-if(!defined('CUSTOM_THEMES_TITLE')) define('CUSTOM_THEMES_TITLE', 'Custom themes (%s)'); //%s: number of available themes
 
 /**#@+
  * String constant defining a regular expresion pattern.
