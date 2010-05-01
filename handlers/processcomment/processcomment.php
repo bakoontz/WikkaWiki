@@ -59,6 +59,11 @@ if(($_POST['submit']==COMMENT_REPLY_BUTTON || $_POST['submit']==COMMENT_NEW_BUTT
 
 	//$keyfield = createSessionKeyFieldset($this, createSessionKey($this, $this->tag.'_commentkey'));
 ?>
+	<div id="content">
+	<?php echo $this->Format($this->page['body'], 'wakka', 'page'); ?>
+	<div style="clear: both"></div>
+	</div><!--closing page content-->
+	<div id="comments">		
 	<div class="commentform">
 	<?php echo $this->FormOpen('processcomment'); ?>
 	<input type="hidden" name="comment_id" value="<?php echo $comment_id ?>" />
@@ -74,6 +79,7 @@ if(($_POST['submit']==COMMENT_REPLY_BUTTON || $_POST['submit']==COMMENT_NEW_BUTT
 	/*<?php echo $keyfield; ?>*/
 ?>
 	<?php echo $this->FormClose(); ?>
+	</div>
 	</div>
 <?php
 }
