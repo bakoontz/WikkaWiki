@@ -73,6 +73,7 @@ body{
 
 /* comments */
 
+/* wrapper for the whole comments block, contains the header and the actual comments */
 #comments {
 	margin-top: 20px;	
 	padding: 10px;
@@ -87,17 +88,39 @@ body{
 }
 
 #commentsheader {
+	clear: both;
+	border-top: 1px solid #CCCCCC;
 }
 
-.comment {
-	border-bottom: 2px solid #FFF;
-	margin: 10px 5px;
+/* wrapper for the comment lists */
+.commentscontainer {
+}
+
+/* alternate color for single comments */
+/* set contents of next 2 selectors the same if not alternation desired */
+.comment-layout-1 {
+	background-color: #D0E0F0;
 	padding: 5px;
+	border: 1px solid #CCCCCC;
+	margin: 5px;
 }
 
-.commentinfo {
-	font-size: 90%;
-	color: #666;
+.comment-layout-2 {
+	background-color: #F0F0F0;
+	padding: 5px;
+	border: 1px solid #CCCCCC;
+	margin: 5px;
+}
+
+.commentbody {
+}
+
+.commentaction {
+}
+
+.commentform {
+	background-color: #EEEEEE;
+	padding: 10px;
 }
 
 #commentform textarea {
@@ -108,29 +131,32 @@ textarea#commentbox {
 	height: 80px;
 }
 
+.commentinfo {
+	color: #999999;
+	font-size: 80%;
+	font-family: "Lucida Console", Monaco, monospace;
+}
+
+.commentdeleted {
+	color: #AAAAAA;
+}
+
+.commentauthor {
+	font-size: 1.2em;
+	line-height: 20px;
+	color: #000000;
+	margin: 5px 5px 0 0;
+}
+
+.commentparent {
+	font-size: 1em;
+	line-height: 20px;
+	color: #555555;
+	margin: 5px 5px 5px 5px;
+}
+
 div#commentsnav { 
-/*      border:1px solid #CCC; */ 
-/*      background-color:#EEE; */ 
-        float:right; 
-        padding:3px; 
-} 
- 
-div#commentsnav img.icon { 
-        border: 1px solid #CCC; 
-        padding:3px; 
-        background-color:#EFEFEF; 
-        margin:1px; 
-} 
- 
-div#commentsnav img.icon_on { 
-        border: 1px solid #CCC; 
-        padding:3px; 
-        background-color:#DDD; 
-        margin:1px; 
-} 
- 
-div#commentsnav img.icon:hover { 
-        background-color:#DDD;
+	display: none;
 }
 
 /* links */
@@ -591,7 +617,7 @@ input[type=hidden] {
 input[type=submit], input[type=button] {
 	color: #666;
 	background-color: #EEE;
-	font: normal 95% Verdana, sans-serif;
+	font: normal 90% Helvetica, Arial, Verdana, sans-serif;
 	text-align: center;
 	border-top: 1px solid #FFF;
 	border-left: 1px solid #FFF;
