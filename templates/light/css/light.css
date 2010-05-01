@@ -1272,12 +1272,11 @@ ul.menu li form {
 }
 
 ul.menu li form input {
-    font-family: Verdana, Helvetica, Arial, sans-serif;
-    font-size: 1.1em;
-    line-height: 1.1em;
-    font-weight: bold;
-    color: #333;
-    border: 1px solid #CCC;
+	font-family: "DejaVu Sans", Helvetica, Arial, Verdana, sans-serif;
+	font-size: 1em;
+	line-height: 1.1em;
+	color: #333;
+	border: 1px solid #CCC;
 }
 
 ul#main_menu {
