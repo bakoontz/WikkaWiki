@@ -1360,16 +1360,13 @@ ul.menu form#form_logout input[type=submit] {
 }
 
 ul#dashboard {
-	border-left: 1px solid #BBB;
-	border-right: 1px solid #BBB;
-	border-top: 1px solid #BBB;
-	border-bottom: none;
+	border: none;
 	background-color: #556;
 	float: left;
 	list-style-type: none;
 	padding: 0px;
 	margin-top: 0px;
-	width: 848px;
+	width: 850px;
 }
 
 ul#dashboard li {
