@@ -553,14 +553,16 @@ em.error {
 	color: #A33; 
 	font-style: normal;
 	font-weight: bold;
-	font-size: 95%;
+	font-size: 90%;
+	text-align: left;
 }
 
 em.success {
 	color: #3A3; 
 	font-style: normal;
 	font-weight: bold;
-	font-size: 95%;
+	font-size: 90%;
+	text-align: left;
 }
 
 /* redirection messages */
@@ -971,6 +973,7 @@ table.usersettings tbody tr > td {
 }
 
 fieldset#account {
+	width: 420px;
 	display: block;
 	padding: 10px;
 	background-color: #F6F6F6;
@@ -993,6 +996,7 @@ fieldset#account input#logout {
 }
 
 fieldset.usersettings {
+	width: 420px;
 	display: block;
 	padding: 10px;
 }
@@ -1029,7 +1033,7 @@ fieldset.usersettings em {
 	clear: left;
 	float: left;
 	display: block;
-	margin: 0 0 0 200px;
+	margin: 0 0 0 190px;
 }
 
 fieldset.usersettings em.usersettings_info {
@@ -1037,10 +1041,10 @@ fieldset.usersettings em.usersettings_info {
 	float: left;
 	text-align: center;
 	display: block;
-	width: 246px;
-	margin: 0 0 5px 240px;
+	width: 200px;
+	margin: 0 0 5px 190px;
 	font-style: normal;
-	font-size: 85%;
+	font-size: 75%;
 	color: #666;
 	border: 1px solid #CCC;
 	background-color: #F0F0F0;
