@@ -545,6 +545,7 @@ fieldset.usersettings em {
 fieldset.usersettings em.usersettings_info {
 	clear: left;
 	float: left;
+	text-align: center;
 	display: block;
 	width: 246px;
 	margin: 0 0 5px 240px;
