@@ -829,7 +829,7 @@ if(!defined('SEARCH_TIPS')) define('SEARCH_TIPS', "<br /><br /><hr /><br /><stro
 	."but not 'some noise words'). <br />");
 */
 if(!defined('SEARCH_MYSQL_IDENTICAL_CHARS')) define('SEARCH_MYSQL_IDENTICAL_CHARS', 'aабвг,eийкл,iмоп,oтуфх,uщъы,cз,nс,yэ');
-if(!defined('SEARCH_TIPS_TITLE')) define('SEARCH_TIPS_TITLE', 'Search Tips:');
+if(!defined('SEARCH_TIPS_TITLE')) define('SEARCH_TIPS_TITLE', 'Search Tips');
 if(!defined('SEARCH_WORD_1')) define('SEARCH_WORD_1', 'apple');
 if(!defined('SEARCH_WORD_2')) define('SEARCH_WORD_2', 'banana');
 if(!defined('SEARCH_WORD_3')) define('SEARCH_WORD_3', 'juice');
