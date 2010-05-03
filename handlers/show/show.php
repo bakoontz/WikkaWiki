@@ -254,6 +254,7 @@ else
  */
 function displayComments(&$obj, &$comments, $tag)
 {
+	$logged_in = $obj->GetUser();
 	$current_user = $obj->GetUserName();
 	$is_owner = $obj->UserIsOwner();
 	$prev_level = NULL;
@@ -326,15 +327,16 @@ function displayComments(&$obj, &$comments, $tag)
 ?>
 		<input type="submit" name="submit" value="<?php echo COMMENT_REPLY_BUTTON ?>" />
 <?php
-				/*
-				$user = $obj->GetUser();
-				if (isset($user))
-				{
-					$name = $user['name'];
-				}
-				*/
-				#if ($is_owner || $name == $comment['user'] || ($obj->config['anony_delete_own_comments'] && $current_user == $comment['user']))
-				if ($is_owner || $obj->reg_username == $comment['user'] || ($obj->config['anony_delete_own_comments'] && $current_user == $comment['user']))
+				/* Conditions for which delete button is displayed:
+				 * 1. Current user owns the page the comment is on:
+				 * 2. Current user owns the comment;
+				 * 3. Current non-logged-in user matches IP or
+				 *    hostname of comment
+				 */
+				if ($logged_in & 
+					($is_owner || 
+				     $current_user == $comment['user']) || 
+					$obj->config['anony_delete_own_comments'] && $current_user == $comment['user'])
 				{
 ?>
 		<input type="submit" name="submit" value="<?php echo COMMENT_DELETE_BUTTON ?>" />
