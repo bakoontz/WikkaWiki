@@ -4193,7 +4193,7 @@ class Wakka
 					return ($this->registered) ? !$negate : $negate;
 				// aha! a user entry.
 				default:
-					if ($line == $user)
+					if ($line == $username)
 					{
 						return !$negate;
 					}
