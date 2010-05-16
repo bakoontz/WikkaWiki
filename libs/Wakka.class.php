@@ -2722,7 +2722,7 @@ class Wakka
 	 * @todo	extend to handle a complete (external) URL instead of (handler+)pagename
 	 * @todo	extend to allow extra attributes
 	 */
-	function FormOpen($handler='', $tag='', $formMethod='post', $id='', $class='', $file=FALSE)
+	function FormOpen($handler='', $tag='', $formMethod='post', $id='', $class='', $file=FALSE, $anchor='')
 	{
 		// init
 		$attrMethod = '';									// no method for HTML default 'get'
@@ -2734,6 +2734,7 @@ class Wakka
 		$tag = trim($tag);
 		$id = trim($id);
 		$class = trim($class);
+		$anchor = trim($anchor);
 		// validations
 		#$validHandler = $this->existsHandler($handler);
 		#$validPage = $this->existsPage($tag);
@@ -2756,11 +2757,11 @@ class Wakka
 		{
 			// @@@ add passed extra GET params here by passing them as extra
 			// parameter to Href()
-			$attrAction = ' action="'.$this->Href($handler, $tag).'"';
+			$attrAction = ' action="'.$this->Href($handler, $tag).$anchor.'"';
 		}
 		else
 		{
-			$attrAction = ' action="'.$this->Href($handler, $tag).'"';
+			$attrAction = ' action="'.$this->Href($handler, $tag).$anchor.'"';
 			// #670: This value will short-circuit the value of wakka=... in URL.
 			$hidden['wakka'] = $this->MiniHref($handler, ('' == $tag ? $this->GetPageTag(): $tag));
 			// @@@ add passed extra GET params here by adding them as extra

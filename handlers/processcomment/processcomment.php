@@ -113,7 +113,7 @@ if ($_POST['submit']==COMMENT_ADD_BUTTON)
 		}
 
 		// redirect to page
-		$this->redirect($this->Href(), $redirectmessage);
+		$this->redirect($this->Href()."#comments", $redirectmessage);
 	}
 	else
 	{

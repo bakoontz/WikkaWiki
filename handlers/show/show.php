@@ -163,7 +163,8 @@ else
 			if ($this->HasAccess('comment_post'))
 			{
 ?>
-				<?php echo $this->FormOpen('processcomment') ?>
+				<?php echo
+				$this->FormOpen("processcomment","","post","","",FALSE,"#comments") ?>
 				<input type="submit" name="submit" value="<?php echo COMMENT_NEW_BUTTON ?>" />
 				<?php echo $this->FormClose() ?>
 <?php
@@ -218,7 +219,7 @@ else
 						$comments_message = STATUS_NO_COMMENTS.' ';
 						if ($this->HasAccess('comment_post'))
 						{
-							$showcomments_text  = $this->FormOpen("processcomment");
+							$showcomments_text  = $this->FormOpen("processcomment","","post","","",FALSE,"#comments");
 							$showcomments_text .= '<input type="submit" name="submit" value="'.COMMENT_NEW_BUTTON.'" />';
 							$showcomments_text .= $this->FormClose();
 						}
@@ -320,7 +321,8 @@ function displayComments(&$obj, &$comments, $tag)
 			if ($obj->HasAccess('comment_post'))
 			{
 				echo '<div class="commentaction">';
-				echo $obj->FormOpen("processcomment");
+				echo
+				$obj->FormOpen("processcomment","","post","","",FALSE,"#comments");
 ?>
 		<input type="hidden" name="comment_id" value="<?php echo $comment['id'] ?>" />
 <?php
