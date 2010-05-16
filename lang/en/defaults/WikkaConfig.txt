@@ -1,0 +1,7 @@
+{{checkversion}}
+===== Wikka Configuration =====
+
+{{wikkaconfig}}
+
+----
+CategoryAdmin

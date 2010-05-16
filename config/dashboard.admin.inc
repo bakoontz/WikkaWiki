@@ -1,3 +1,4 @@
 AdminUsers
 AdminPages
 SysInfo
+WikkaConfig

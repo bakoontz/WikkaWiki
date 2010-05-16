@@ -11,7 +11,5 @@
 ~~-Operative System: ##{{system show="os"}}##
 ~~-Machine: ##{{system show="machine"}}##
 
-{{wikkaconfig}}
-
 ----
-CategoryWiki
+CategoryAdmin
