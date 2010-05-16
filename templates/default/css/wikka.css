@@ -49,8 +49,21 @@ body {
 
 /* comments */
 
+/* wrapper for the whole comments block, contains the header and the actual comments */
 #comments {
+	margin: 0px;
+	background-color: #DDD;
+	padding-bottom: 10px;
 	border-bottom: 1px solid #CCC;
+}
+
+#comments form {
+	display: inline;
+}
+
+div#comments form input[type=submit] {
+	font-size: 80%;
+	padding: 1px 2px;
 }
 
 #commentheader {
@@ -62,51 +75,64 @@ body {
 	border-top: none;
 }
 
+/* wrapper for the comment lists */
+.commentscontainer {
+}
+
 #commentlist {}
 
-.comment {
-	background-color: #EFEFEF;
+/* alternate color for single comments */
+.comment-layout-1 {
+	background-color: #DDDDDD;
 	padding: 5px;
 	border: 1px solid #CCCCCC;
 	margin: 10px;
 }
 
+.comment-layout-2 {
+	background-color: #EEEEEE;
+	padding: 5px;
+	border: 1px solid #CCCCCC;
+	margin: 10px;
+}
+
+.commentbody {
+}
+
+.commentaction {
+}
+
+.commentform {
+	background-color: #EEE;
+	padding: 10px;
+}
+
 .commentinfo {
+	color: #999;
+	font-size: 80%;
+	font-family: "Lucida Console", Monaco, monospace;
+}
+
+.commentdeleted {
 	color: #AAA;
 }
 
-#commentform {
-	background-color: #EEE;
-	padding: 10px;
-	border-left: 1px solid #CCC;
-	border-right: 1px solid #CCC;
-	border-top: 1px solid #CCC;
+.commentauthor {
+	font-size: 1.2em;
+	line-height: 20px;
+	color: #000;
+	margin: 5px 5px 0 0;
+}
+
+.commentparent {
+	font-size: 1em;
+	line-height: 20px;
+	margin: 5px;
 }
 
 div#commentsnav { 
-/*      border:1px solid #CCC; */ 
-/*      background-color:#EEE; */ 
-        float:right; 
-        padding:3px; 
+	display: none;
 } 
- 
-div#commentsnav img.icon { 
-        border: 1px solid #CCC; 
-        padding:3px; 
-        background-color:#EEE; 
-        margin:1px; 
-} 
- 
-div#commentsnav img.icon_on { 
-        border: 1px solid #CCC; 
-        padding:3px; 
-        background-color:#DDD; 
-        margin:1px; 
-} 
- 
-div#commentsnav img.icon:hover { 
-        background-color:#DDD;
-}
 
 /* links */
 
@@ -592,10 +618,6 @@ fieldset.usersettings br {
 
 textarea {
 	border: 1px solid #CCC;	
-}
-
-textarea:hover {
-	background-color: #F3F3F3;
 }
 
 textarea:focus {
