@@ -23,13 +23,13 @@
  * @return void
  * @todo avoid recursion: make a single tag into an array of one and then just loop over the tags
  */
-function update_default_page($tag, $dblink, $config, $lang_defaults_path, $lang_defaults_fallback_path)
+function update_default_page($tag, $dblink, $config, $lang_defaults_path, $lang_defaults_fallback_path, $note='')
 {
 	if (is_array($tag))
 	{
 		foreach ($tag as $v)
 		{
-			update_default_page($v, $dblink, $config, $lang_defaults_path, $lang_defaults_fallback_path);
+			update_default_page($v, $dblink, $config, $lang_defaults_path, $lang_defaults_fallback_path, $note);
 		}
 		return;
 	}
@@ -52,7 +52,7 @@ function update_default_page($tag, $dblink, $config, $lang_defaults_path, $lang_
 		$body = implode('', file($txt_filepath));
 		mysql_query('update '.$config['table_prefix'].'pages set latest = "N" where tag = \''.$tag.'\'', $dblink);
 		test (sprintf(__('Adding/Updating default page %s'.'...'), $tag),
-			@mysql_query('insert into '.$config['table_prefix'].'pages set tag=\''.$tag.'\', body = \''.mysql_real_escape_string($body).'\', user=\'WikkaInstaller\', owner = \''.$admin_main_user.'\', time=now(), latest =\'Y\'', $dblink),
+			@mysql_query('insert into '.$config['table_prefix'].'pages set tag=\''.$tag.'\', body = \''.mysql_real_escape_string($body).'\', user=\'WikkaInstaller\', owner = \''.$admin_main_user.'\', time=now(), latest =\'Y\', note = \''.mysql_real_escape_string($note).'\'', $dblink),
 			'',
 			0);
 		// @@@ pick up any page-specific ACL here (look in both $lang_defaults_path and $lang_defaults_fallback_path)
