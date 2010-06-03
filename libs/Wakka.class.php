@@ -2997,7 +2997,7 @@ class Wakka
 		// and thus provides defense against directory traversal or XSS (via action *name*)
 		if (!preg_match('/^\s*([a-zA-Z0-9]+)(\s.+?)?\s*$/', $actionspec, $matches))	# see also #34
 		{
-			return '<em class="error">Unknown action; the action name must not contain special characters.</em>';	# [SEC]
+			return '<em class="error">'.ACTION_UNKNOWN_SPECCHARS.'</em>';	# [SEC]
 		}
 		else
 		{
@@ -3044,7 +3044,7 @@ class Wakka
 				$this->StopLinkTracking();
 		}
 		$result =
-		$this->IncludeBuffered(strtolower($action_name).DIRECTORY_SEPARATOR.strtolower($action_name).'.php', 'Unknown action "'.$action_name.'"', $vars, $this->config['action_path']);
+		$this->IncludeBuffered(strtolower($action_name).DIRECTORY_SEPARATOR.strtolower($action_name).'.php', sprintf(ACTION_UNKNOWN, '"'.$action_name.'"'), $vars, $this->config['action_path']);
 		if ($link_tracking_state)
 		{
 			$this->StartLinkTracking();
@@ -3083,7 +3083,7 @@ class Wakka
 		// @todo move regexp to library
 		if (!preg_match('/^([a-zA-Z0-9_.-]+)$/', $handler)) // allow letters, numbers, underscores, dashes and dots only (for now); see also #34
 		{
-			return '<em class="error">Unknown handler; the handler name must not contain special characters.</em>';	# [SEC]
+			return '<em class="error">'.HANDLER_UNKNOWN_SPECCHARS.'</em>';	# [SEC]
 		}
 		else
 		{
@@ -3091,7 +3091,7 @@ class Wakka
 			$handler = strtolower($handler);
 		}
 		$handlerLocation = $handler.DIRECTORY_SEPARATOR.$handler.'.php';	#89
-		return $this->IncludeBuffered($handlerLocation, 'Unknown handler "'.$handlerLocation.'"', '', $this->config['handler_path']);
+		return $this->IncludeBuffered($handlerLocation, sprintf(HANDLER_UNKNOWN, '"'.$handlerLocation.'"'), '', $this->config['handler_path']);
 	}
 
 	/**
