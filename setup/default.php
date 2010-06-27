@@ -126,7 +126,7 @@ if (!$wakkaConfig["wakka_version"])
 } 
 
 // Only redirect as a result of this page being POSTed!
-if(false === $_SESSION['error_flag'] &&
+if(!isset($_SESSION['error_flag']) || false === $_SESSION['error_flag'] &&
    isset($_POST['submit']))
 {
 	header("Location: ".myLocation()."?installAction=install");
