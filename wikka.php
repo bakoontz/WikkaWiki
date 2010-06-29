@@ -105,7 +105,7 @@ else
 ob_start();
 global $tstart;
 $tstart = getmicrotime();
-set_magic_quotes_runtime(0);
+ini_set('magic_quotes_runtime', 0);
 if (get_magic_quotes_gpc())
 {
 	magicQuotesWorkaround($_POST);
