@@ -119,7 +119,7 @@ if (($this->IsAdmin() && !empty($username)) ||
 				// day header
 				if ($day != $current)
 				{
-					if ($current) print("<br />\n");
+					if ($current) $output .= "<br />\n";
 					$current = $day;
 					$output .= '<h5>'.date(REVISION_DATE_FORMAT, strtotime($day)).'</h5>'."\n";
 				}
