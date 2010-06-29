@@ -1648,6 +1648,10 @@ class Wakka
 	 */
 	function FullTextSearch($phrase, $caseSensitive = 0)
 	{
+		if(empty($phrase))
+		{
+			return NULL;
+		}
 		$id = '';
 		// Should work with any browser/entity conversion scheme
 		$search_phrase = mysql_real_escape_string($phrase);

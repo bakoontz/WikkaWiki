@@ -43,48 +43,41 @@ $case = stripslashes(trim($this->GetSafeVar('case', 'get'))); #312
 // if 'phrase' is empty after trimming and removing slashes, search tips NOT displayed
 
 // process search request
-if ('' !== $phrase)
+$results = $this->FullTextSearch($phrase, $case);
+$total_results = 0;
+if ($results)
 {
-	$results = $this->FullTextSearch($phrase, $case);
-	$total_results = 0;
-	if ($results)
+	foreach ($results as $i => $page)
 	{
-		foreach ($results as $i => $page)
+		if ($this->HasAccess('read',$page['tag']))
 		{
-			if ($this->HasAccess('read',$page['tag']))
-			{
-				$total_results++;
-				$result_page_list .= '<li>'.$this->Link($page['tag']).'</li>'."\n";	// @@@ make new array and let new array2list methods do the formatting
-			}
+			$total_results++;
+			$result_page_list .= '<li>'.$this->Link($page['tag']).'</li>'."\n";	// @@@ make new array and let new array2list methods do the formatting
 		}
 	}
-	switch ($total_results)
-	{
-		case 0:
-			$match_str = SEARCH_ZERO_MATCH;
-			break;
-		case 1:
-			$match_str = SEARCH_ONE_MATCH;
-			break;
-		default:
-			$match_str = sprintf(SEARCH_N_MATCH, $total_results);
-			break;
-	}
-	printf(SEARCH_RESULTS, $match_str, $this->htmlspecialchars_ent($phrase));
-	if ($total_results > 0)
-	{
-		$expsearchurl  = $this->Href('', 'TextSearchExpanded', 'phrase='.urlencode($phrase));
-		$expsearchlink = '<a href="'.$expsearchurl.'">'.SEARCH_EXPANDED_LINK_DESC.'</a>';
+}
+switch ($total_results)
+{
+	case 0:
+		$match_str = SEARCH_ZERO_MATCH;
+		break;
+	case 1:
+		$match_str = SEARCH_ONE_MATCH;
+		break;
+	default:
+		$match_str = sprintf(SEARCH_N_MATCH, $total_results);
+		break;
+}
+printf(SEARCH_RESULTS, $match_str, $this->htmlspecialchars_ent($phrase));
+if ($total_results > 0)
+{
+	$expsearchurl  = $this->Href('', 'TextSearchExpanded', 'phrase='.urlencode($phrase));
+	$expsearchlink = '<a href="'.$expsearchurl.'">'.SEARCH_EXPANDED_LINK_DESC.'</a>';
 
-		echo '<ol>'.$result_page_list.'</ol>'."\n";
-		printf('<br />'.SEARCH_NOT_SURE_CHOICE.'<br />'.SEARCH_TRY_EXPANDED,$expsearchlink);
-	}
+	echo '<ol>'.$result_page_list.'</ol>'."\n";
+	printf('<br />'.SEARCH_NOT_SURE_CHOICE.'<br />'.SEARCH_TRY_EXPANDED,$expsearchlink);
 }
 
 // display search tips
-#if ($this->CheckMySQLVersion(4,00,01))	// DONE replace with version_compare
-if ($this->CheckMySQLVersion('4', '00', '01'))
-{
-	print(SEARCH_TIPS);
-}
+print(SEARCH_TIPS);
 ?>
