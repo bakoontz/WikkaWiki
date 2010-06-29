@@ -142,31 +142,20 @@ else
 				// load comments for this page
 				$comments = $this->LoadComments($this->tag, $_SESSION['show_comments'][$tag]);
 				$display_mode = $_SESSION['show_comments'][$tag];
-				// set up icons
-				$sort_desc_icon_url = $this->StaticHref('images/icons/sort_desc.gif');
-				$sort_asc_icon_url = $this->StaticHref('images/icons/sort_asc.gif');
-				$sort_comment_icon_url = $this->StaticHref('images/icons/comment.gif');
-
-
 				// display comments header
 ?>
 				<!--starting comments header (show)-->
 				<div id="commentheader">
-					<div id="commentsnav">
-						<a href="<?php echo $this->Href('', '', 'show_comments='.COMMENT_ORDER_DATE_DESC.'#comments') ?>"><?php echo '<img class="'.($display_mode==COMMENT_ORDER_DATE_DESC ?  "icon_on" : "icon").'" alt="flat" title="Flat (newest first)" src="'.$sort_desc_icon_url.'" />' ?></a>
-						<a href="<?php echo $this->Href('', '', 'show_comments='.COMMENT_ORDER_DATE_ASC.'#comments') ?>"><?php echo '<img class="'.($display_mode==COMMENT_ORDER_DATE_ASC ?  "icon_on" : "icon").'" alt="flat" title="Flat (oldest first)" src="'.$sort_asc_icon_url.'" />' ?></a>
-						<a href="<?php echo $this->Href('', '', 'show_comments='.COMMENT_ORDER_THREADED.'#comments') ?>"><?php echo '<img class="'.($display_mode==COMMENT_ORDER_THREADED ?  "icon_on" : "icon").'" alt="threaded" title="Threaded" src="'.$sort_comment_icon_url.'" />' ?></a> 
-					</div><!-- closing commentsnav div -->
-				<?php echo COMMENTS_CAPTION ?>
-				[<a href="<?php echo $this->Href('', '', 'show_comments='.COMMENT_NO_DISPLAY) ?>"><?php echo HIDE_COMMENTS_LINK_DESC ?></a>]
-<?php
-			if ($this->HasAccess('comment_post'))
-			{
-?>
-				<?php echo
-				$this->FormOpen("processcomment","","post","","",FALSE,"#comments") ?>
-				<input type="submit" name="submit" value="<?php echo COMMENT_NEW_BUTTON ?>" />
-				<?php echo $this->FormClose() ?>
+					<?php echo COMMENTS_CAPTION ?>
+					[<a href="<?php echo $this->Href('', '', 'show_comments='.COMMENT_NO_DISPLAY) ?>"><?php echo HIDE_COMMENTS_LINK_DESC ?></a>]
+	<?php
+				if ($this->HasAccess('comment_post'))
+				{
+	?>
+					<?php echo
+					$this->FormOpen("processcomment","","post","","",FALSE,"#comments") ?>
+					<input type="submit" name="submit" value="<?php echo COMMENT_NEW_BUTTON ?>" />
+					<?php echo $this->FormClose() ?>
 <?php
 			}
 ?>

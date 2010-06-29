@@ -511,7 +511,7 @@ if(!defined('USERSETTINGS_REDIRECT_AFTER_LOGIN_LABEL')) define('USERSETTINGS_RED
 if(!defined('USER_EMAIL_LABEL')) define('USER_EMAIL_LABEL', 'Your email address:');
 if(!defined('DOUBLECLICK_LABEL')) define('DOUBLECLICK_LABEL', 'Doubleclick editing:');
 if(!defined('SHOW_COMMENTS_LABEL')) define('SHOW_COMMENTS_LABEL', 'Show comments by default:');
-if(!defined('DEFAULT_COMMENT_STYLE_LABEL')) define('DEFAULT_COMMENT_STYLE_LABEL', 'Default comment style');
+if(!defined('COMMENT_STYLE_LABEL')) define('COMMENT_STYLE_LABEL', 'Comment style');
 if(!defined('COMMENT_ASC_LABEL')) define('COMMENT_ASC_LABEL', 'Phẳng (cũ trước)');
 if(!defined('COMMENT_DEC_LABEL')) define('COMMENT_DEC_LABEL', 'Phẳng (mới trước)');
 if(!defined('COMMENT_THREADED_LABEL')) define('COMMENT_THREADED_LABEL', 'Luồng');

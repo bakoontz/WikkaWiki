@@ -499,7 +499,7 @@ if(!defined('USERSETTINGS_REDIRECT_AFTER_LOGIN_LABEL')) define('USERSETTINGS_RED
 if(!defined('USER_EMAIL_LABEL')) define('USER_EMAIL_LABEL', 'Je emailadres:');
 if(!defined('DOUBLECLICK_LABEL')) define('DOUBLECLICK_LABEL', 'Dubbelklik wijzigen:');
 if(!defined('SHOW_COMMENTS_LABEL')) define('SHOW_COMMENTS_LABEL', 'Laat opmerkingen standaard zien:');
-if(!defined('DEFAULT_COMMENT_STYLE_LABEL')) define('DEFAULT_COMMENT_STYLE_LABEL', 'Standaard opmerkingen stijl');
+if(!defined('COMMENT_STYLE_LABEL')) define('COMMENT_STYLE_LABEL', 'Standaard opmerkingen stijl');
 if(!defined('COMMENT_ASC_LABEL')) define('COMMENT_ASC_LABEL', 'Plat (oudste eerst)'); // @@@ TODO MJH: Plat?
 if(!defined('COMMENT_DEC_LABEL')) define('COMMENT_DEC_LABEL', 'Plat (newest first)'); // @@@ TODO MJH: Plat?
 if(!defined('COMMENT_THREADED_LABEL')) define('COMMENT_THREADED_LABEL', 'Threaded'); // @@@ TODO MJH: gethread? vertakt? boomweergave? boomstructuur?

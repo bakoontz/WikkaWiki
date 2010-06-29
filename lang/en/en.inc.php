@@ -903,7 +903,7 @@ if(!defined('USERSETTINGS_REDIRECT_AFTER_LOGIN_LABEL')) define('USERSETTINGS_RED
 if(!defined('USER_EMAIL_LABEL')) define('USER_EMAIL_LABEL', 'Your email address:');
 if(!defined('DOUBLECLICK_LABEL')) define('DOUBLECLICK_LABEL', 'Doubleclick editing:');
 if(!defined('SHOW_COMMENTS_LABEL')) define('SHOW_COMMENTS_LABEL', 'Show comments by default:');
-if(!defined('DEFAULT_COMMENT_STYLE_LABEL')) define('DEFAULT_COMMENT_STYLE_LABEL', 'Default comment style');
+if(!defined('COMMENT_STYLE_LABEL')) define('COMMENT_STYLE_LABEL', 'Comment style');
 if(!defined('COMMENT_ASC_LABEL')) define('COMMENT_ASC_LABEL', 'Flat (oldest first)');
 if(!defined('COMMENT_DEC_LABEL')) define('COMMENT_DEC_LABEL', 'Flat (newest first)');
 if(!defined('COMMENT_THREADED_LABEL')) define('COMMENT_THREADED_LABEL', 'Threaded');
@@ -1203,6 +1203,12 @@ if(!defined('REVISION_NUMBER')) define('REVISION_NUMBER', 'Revision %s');
  * Language constant shared by the {@link processcomment.php processcomment} and {@link show.php show} (page) handlers
  */
 // processcomment & show
+if(!defined('COMMENT_NO_DISPLAY')) define('COMMENT_NO_DISPLAY', 0);
+if(!defined('COMMENT_ORDER_DATE_ASC')) define('COMMENT_ORDER_DATE_ASC', 1);
+if(!defined('COMMENT_ORDER_DATE_DESC')) define('COMMENT_ORDER_DATE_DESC', 2);
+if(!defined('COMMENT_ORDER_THREADED')) define('COMMENT_ORDER_THREADED', 3);
+if(!defined('COMMENT_MAX_TRAVERSAL_DEPTH')) define('COMMENT_MAX_TRAVERSAL_DEPTH', 10);
+
 // - comment buttons
 if(!defined('COMMENT_DELETE_BUTTON')) define('COMMENT_DELETE_BUTTON', 'Delete');
 if(!defined('COMMENT_REPLY_BUTTON')) define('COMMENT_REPLY_BUTTON', 'Reply');
@@ -1211,11 +1217,6 @@ if(!defined('COMMENT_NEW_BUTTON')) define('COMMENT_NEW_BUTTON', 'New Comment');
 if(!defined('DISPLAY_COMMENTS_THREADED')) define('DISPLAY_COMMENTS_THREADED', 'Threaded');
 if(!defined('BUTTON_NEW_COMMENT')) define('BUTTON_NEW_COMMENT', 'New Comment');
 if(!defined('BUTTON_REPLY_COMMENT')) define('BUTTON_REPLY_COMMENT', 'Reply to Comment');
-if(!defined('COMMENT_NO_DISPLAY')) define('COMMENT_NO_DISPLAY', 0);
-if(!defined('COMMENT_ORDER_DATE_ASC')) define('COMMENT_ORDER_DATE_ASC', 1);
-if(!defined('COMMENT_ORDER_DATE_DESC')) define('COMMENT_ORDER_DATE_DESC', 2);
-if(!defined('COMMENT_ORDER_THREADED')) define('COMMENT_ORDER_THREADED', 3);
-if(!defined('COMMENT_MAX_TRAVERSAL_DEPTH')) define('COMMENT_MAX_TRAVERSAL_DEPTH', 10);
 /**#@-*/
 
 /**#@+

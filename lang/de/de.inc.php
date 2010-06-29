@@ -488,7 +488,7 @@ if(!defined('USERSETTINGS_REDIRECT_AFTER_LOGIN_LABEL')) define('USERSETTINGS_RED
 if(!defined('USER_EMAIL_LABEL')) define('USER_EMAIL_LABEL', 'Ihre Emailadresse:');
 if(!defined('DOUBLECLICK_LABEL')) define('DOUBLECLICK_LABEL', 'Editieren mit Doubleclick:');
 if(!defined('SHOW_COMMENTS_LABEL')) define('SHOW_COMMENTS_LABEL', 'Kommentare standardmäßig anzeigen:');
-if(!defined('DEFAULT_COMMENT_STYLE_LABEL')) define('DEFAULT_COMMENT_STYLE_LABEL', 'Default comment style');
+if(!defined('COMMENT_STYLE_LABEL')) define('COMMENT_STYLE_LABEL', 'Comment style');
 if(!defined('COMMENT_ASC_LABEL')) define('COMMENT_ASC_LABEL', 'Flach (älteste zuerst)');
 if(!defined('COMMENT_DEC_LABEL')) define('COMMENT_DEC_LABEL', 'Flach (neue zuerst)');
 if(!defined('COMMENT_THREADED_LABEL')) define('COMMENT_THREADED_LABEL', 'Hierarchisch');

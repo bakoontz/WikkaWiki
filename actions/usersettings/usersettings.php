@@ -292,10 +292,10 @@ if ($user = $this->GetUser())
 	<label for="showcomments"><?php echo SHOW_COMMENTS_LABEL ?></label>
 	<input type="hidden" name="show_comments" value="N" />
 	<input id="showcomments" type="checkbox" name="show_comments" value="Y" <?php echo $show_comments == 'Y' ? 'checked="checked"' : '' ?> />
-	<fieldset><legend><?php echo DEFAULT_COMMENT_STYLE_LABEL ?></legend>
-	<input id="default_comment_flat_asc" type="radio" name="default_comment_display" value="date_asc" <?php echo($default_comment_display=='date_asc') ? 'checked="checked"' : '' ?> /><label for="default_comment_flat_asc"><?php echo COMMENT_ASC_LABEL ?></label><br />
-	<input id="default_comment_flat_desc" type="radio" name="default_comment_display" value="date_desc" <?php echo($default_comment_display=='date_desc') ? 'checked="checked"' : '' ?> /><label for="default_comment_flat_desc"><?php echo COMMENT_DEC_LABEL ?></label><br />
-	<input id="default_comment_threaded" type="radio" name="default_comment_display" value="threaded" <?php echo($default_comment_display=='threaded') ? 'checked="checked"' : '' ?> /><label for="default_comment_threaded"><?php echo COMMENT_THREADED_LABEL ?></label><br /> 
+	<fieldset><legend><?php echo COMMENT_STYLE_LABEL ?></legend>
+	<input id="default_comment_flat_asc" type="radio" name="default_comment_display" value="date_asc" <?php echo($default_comment_display=="date_asc" ?  'checked' : '') ?> /><label for="default_comment_flat_asc"><?php echo COMMENT_ASC_LABEL ?></label><br />
+	<input id="default_comment_flat_desc" type="radio" name="default_comment_display" value="date_desc" <?php echo($default_comment_display=="date_desc" ? 'checked' : '') ?> /><label for="default_comment_flat_desc"><?php echo COMMENT_DEC_LABEL ?></label><br />
+	<input id="default_comment_threaded" type="radio" name="default_comment_display" value="threaded" <?php echo($default_comment_display=="threaded" ?  'checked' : '') ?> /><label for="default_comment_threaded"><?php echo COMMENT_THREADED_LABEL ?></label><br /> 
 	</fieldset>
 	<br />
 	<label for="revisioncount"><?php echo PAGEREVISION_LIST_LIMIT_LABEL ?></label>
@@ -488,6 +488,7 @@ else
 					"name = '".mysql_real_escape_string($name)."', ".
 					"email = '".mysql_real_escape_string($email)."', ".
 					"challenge = '".$challenge."', ".
+					"default_comment_display = '".$this->GetConfigValue('default_comment_display')."', ".
 					"password = md5('".$challenge.mysql_real_escape_string($this->GetSafeVar('password', 'post'))."')");
 				unset($this->specialCache['user'][strtolower($name)]);	//invalidate cache if exists #368
 

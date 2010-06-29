@@ -130,10 +130,6 @@ div#comments form input[type=submit] {
 	margin: 5px;
 }
 
-div#commentsnav { 
-	display: none;
-} 
-
 /* links */
 
 a {
