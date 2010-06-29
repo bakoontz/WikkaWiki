@@ -4,13 +4,13 @@
  *
  * This action checks user read privileges and displays an index of read-accessible pages.
  *
- * Optionally: {{pageindex showpagetitle="1"}}
- *             {{pageindex showjustletters = "PageIndex"}}
+ * Optionally: {{pageindex showpagetitle='1'}}
+ *             {{pageindex showjustletters = 'PageIndex'}}
  *
  * where 
-         showpagetitle="1" displays page titles (or page tag by
+         showpagetitle='1' displays page titles (or page tag by
  *	default if no page title can be generated)
- *       showjustletters="PageIndex" displays only letters, with links pointing 
+ *       showjustletters='PageIndex' displays only letters, with links pointing 
  *  to a page configured to display a full page index
  * @package		Actions
  * @version		$Id:pageindex.php 369 2007-03-01 14:38:59Z DarTar $
