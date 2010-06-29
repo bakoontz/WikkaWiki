@@ -35,7 +35,7 @@
 
 if (TRUE===$this->IsAdmin())
 {
-	include_once('libs/admin.lib.php');
+	include_once($this->BuildFullpathFromMultipath('..'.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'libs'.DIRECTORY_SEPARATOR.'admin.lib.php', $this->GetConfigValue('action_path')));
 	$comment = REVERT_DEFAULT_COMMENT;
 	if(TRUE===isset($_GET['comment']))
 	{
