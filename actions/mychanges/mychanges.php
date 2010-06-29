@@ -31,7 +31,7 @@ if(!defined('REVISION_TIME_FORMAT')) define('REVISION_TIME_FORMAT', 'H:i T');
 
 // order alphabetically or by time?
 $alpha = FALSE;
-if (isset($_GET["alphabetically"]) && $_GET["alphabetically"] == 1) $alpha = TRUE;
+if ($this->GetSafeVar('alphabetically', 'get') == 1) $alpha = TRUE;
 
 $tag = $this->GetPageTag();
 $output = '';

@@ -4345,7 +4345,7 @@ class Wakka
 				$this->SetUser($user);
 			}
 		}
-		$this->SetPage($this->LoadPage($tag, (isset($_GET['time']) ? $_GET['time'] :''))); #312
+		$this->SetPage($this->LoadPage($tag, $this->GetSafeVar('time', 'get'))); #312
 
 		$this->LogReferrer();
 		$this->ACLs = $this->LoadAllACLs($this->tag);

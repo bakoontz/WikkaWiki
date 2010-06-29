@@ -22,12 +22,12 @@
 if(isset($_POST['form_id']) && isset($_POST["comment_id"])) 
 {
 	//select comment
-	$comment_id = intval(trim($_POST["comment_id"]));
+	$comment_id = intval(trim($this->GetSafeVar('comment_id', 'post')));
 	$comment = $this->LoadSingle("select user from ".$this->config["table_prefix"]."comments where id = '".$comment_id."' limit 1");
 	$current_user = $this->GetUserName();	
 	
 	$delete = FALSE;
-    if (FALSE != ($aKey = $this->getSessionKey($_POST['form_id'])))	# check if form key was stored in session
+    if (FALSE != ($aKey = $this->getSessionKey($this->GetSafeVar('form_id', 'post'))))	# check if form key was stored in session
 	{
 		if (TRUE == ($rc = $this->hasValidSessionKey($aKey)))	# check if correct name,key pair was passed
 		{

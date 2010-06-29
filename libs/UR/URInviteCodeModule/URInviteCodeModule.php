@@ -55,8 +55,7 @@
 			{
 				return false;
 			}
-			if(isset($_POST['UR_inviteCode']) &&
-			   $_POST['UR_inviteCode'] === $this->inviteCode)
+			if($this->GetSafeVar('UR_inviteCode', 'post') === $this->inviteCode)
 			{
 				return true;
 			}

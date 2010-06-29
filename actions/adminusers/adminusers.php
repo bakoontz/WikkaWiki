@@ -29,7 +29,7 @@
  * @uses Wakka::LoadAll()
  * @uses Wakka::Redirect()
  *
- * @uses Config::$wikka_action_path
+ * @uses Config::$action_path
  * 
  * @input		integer $colcolor  optional: enables color for statistics columns
  *				1: enable colored columns;
@@ -117,7 +117,7 @@ if(!function_exists('optionRanges'))
 // restrict access to admins
 if ($this->IsAdmin($this->GetUser()))
 {
-	if(isset($_POST['cancel']) && ($_POST['cancel'] == ADMINUSERS_CANCEL_BUTTON))
+	if($this->GetSafeVar('cancel', 'post') == ADMINUSERS_CANCEL_BUTTON)
 	{
 		$this->Redirect($this->Href());
 	}
@@ -178,7 +178,7 @@ if ($this->IsAdmin($this->GetUser()))
 	{
 		if(isset($_GET['user']))
 		{
-			include_once($this->BuildFullpathFromMultipath('..'.DIRECTORY_SEPARATOR.'libs'.DIRECTORY_SEPARATOR.'admin.lib.php', $this->config['wikka_action_path']));
+			include_once($this->BuildFullpathFromMultipath('..'.DIRECTORY_SEPARATOR.'libs'.DIRECTORY_SEPARATOR.'admin.lib.php', $this->config['action_path']));
 			$status = DeleteUser($this, $this->GetSafeVar('user', 'get'));
 			if(false===$status)
 			{
@@ -246,7 +246,7 @@ if ($this->IsAdmin($this->GetUser()))
 			print($this->FormClose());
 		}
 	}	
-	else if(isset($_POST['massaction']) && $_POST['massaction'] == 'massdelete')
+	else if($this->GetSafeVar('massaction', 'post') == 'massdelete')
 	{
 		$usernames = array();
 		foreach($_POST as $key)
@@ -280,11 +280,8 @@ if ($this->IsAdmin($this->GetUser()))
 		// process URL variables
 	
 		// number of records per page
-		if (isset($_POST['l']))
-		{
-			$l = $this->GetSafeVar('l', 'post');
-		}
-		elseif (isset($_GET['l']))
+		$l = $this->GetSafeVar('l', 'post');
+		if (!isset($l))
 		{
 			$l = $this->GetSafeVar('l', 'get');
 		}
@@ -310,15 +307,15 @@ if ($this->IsAdmin($this->GetUser()))
 		$search_disp = ADMINUSERS_DEFAULT_SEARCH;
 		if (isset($_POST['search']))
 		{
-			$search = mysql_real_escape_string($_POST['search']);
-			$search_disp = $this->htmlspecialchars_ent($_POST['search']);
+			$search = mysql_real_escape_string($this->GetSafeVar('search', 'post'));
+			$search_disp = $this->GetSafeVar('search', 'post');
 		}
 		elseif (isset($_GET['search']))
 		{
-			$search = mysql_real_escape_string($_GET['search']);
-			$search_disp = $this->htmlspecialchars_ent($_GET['search']);
+			$search = mysql_real_escape_string($this->GetSafeVar('search', 'get'));
+			$search_disp = $this->GetSafeVar('search', 'get');
 		}
-		elseif(isset($_POST['submit']) && $_POST['submit'] == ADMINUSERS_FORM_SEARCH_SUBMIT)
+		elseif($this->GetSafeVar('submit', 'post') == ADMINUSERS_FORM_SEARCH_SUBMIT)
 		{
 			// Reset num recs per page for empty (reset) search
 			$l = ADMINUSERS_DEFAULT_RECORDS_LIMIT;
@@ -341,7 +338,7 @@ if ($this->IsAdmin($this->GetUser()))
 		// form is being used to process two post requests, so things
 		// (search string, num recs per page) get out of sync, requiring
 		// multiple submissions.
-		if(!isset($_GET['l']) && isset($_POST['submit']) && $_POST['submit'] != ADMINUSERS_FORM_PAGER_SUBMIT)
+		if(!isset($_GET['l']) && $this->GetSafeVar('submit', 'post') != ADMINUSERS_FORM_PAGER_SUBMIT)
 		{
 			$l = ADMINUSERS_DEFAULT_RECORDS_LIMIT;
 		}

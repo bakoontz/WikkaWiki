@@ -25,19 +25,19 @@
  * @uses		Config::$upload_path
  */
 
-if (!isset($_GET['action'])) $_GET['action'] = '';
+$action = $this->GetSafeVar('action', 'get');
 // upload path
 if ($this->config['upload_path'] == '') $this->config['upload_path'] = 'files';
 $upload_path = $this->config['upload_path'].DIRECTORY_SEPARATOR.$this->GetPageTag(); #89
 if (! is_dir($upload_path)) mkdir_r($upload_path);
 
 // do the action
-switch ($_GET['action'])	#312 
+switch ($action)	#312 
 {
     case 'download':
-			$_GET['file'] = basename($_GET['file']); #312
-            if (($this->HasAccess('read')) && (!preg_match('/^\\./', $_GET['file']))) {
-				$path = $upload_path.DIRECTORY_SEPARATOR.$_GET['file'];	#89, #312
+			$file = basename($this->GetSafeVar('file', 'get')); #312
+            if (($this->HasAccess('read')) && (!preg_match('/^\\./', $file))) {
+				$path = $upload_path.DIRECTORY_SEPARATOR.$file;	#89, #312
                 $filename = basename($path);
 		    Header("Content-Length: ".filesize($path));
 		    Header("Content-Type: application/x-download");
@@ -50,7 +50,7 @@ switch ($_GET['action'])	#312
     case 'delete':   
             // if ($this->HasAccess('write')) {
 		if ($this->IsAdmin()) {
-				@unlink($upload_path.DIRECTORY_SEPARATOR.$_GET['file']); #89, #312 // TODO if this is admin-only, why hide any errors?
+				@unlink($upload_path.DIRECTORY_SEPARATOR.$file); #89, #312 // TODO if this is admin-only, why hide any errors?
             }
             print $this->redirect($this->Href());
 }

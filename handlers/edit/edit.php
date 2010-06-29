@@ -48,12 +48,14 @@ $ondblclick = ''; //#123
 $body = '';
 
 // cancel operation and return to page
-if(isset($_POST['cancel']) && ($this->GetSafeVar('cancel', 'post') == EDIT_CANCEL_BUTTON))
+if($this->GetSafeVar('cancel', 'post') == EDIT_CANCEL_BUTTON)
 {
 	$this->Redirect($this->Href());
 }
 
-if (isset($_POST['submit']) && ($this->GetSafeVar('submit', 'post') == EDIT_PREVIEW_BUTTON) && ($user = $this->GetUser()) && ($user['doubleclickedit'] != 'N'))
+if ($this->GetSafeVar('submit', 'post') == EDIT_PREVIEW_BUTTON && 
+	($user = $this->GetUser()) && 
+	($user['doubleclickedit'] != 'N'))
 {
 	$ondblclick = ' ondblclick=\'document.getElementById("reedit_id").click();\'';
 }
@@ -64,17 +66,14 @@ if ($this->HasAccess("write") && $this->HasAccess("read"))
 {
 	$newtag = $output = '';
 	// rename action
-	if (isset($_POST['newtag']))
-	{
-		$newtag = $_POST['newtag'];
-		if ($newtag !== '') $this->Redirect($this->Href('edit', $newtag));
-	}
+	$newtag = $this->GetSafeVar('newtag', 'post');
+	if ($newtag !== '') $this->Redirect($this->Href('edit', $newtag));
 
 	// Process id GET param if present
 	$id = $this->page['id'];
 	if(isset($_GET['id']))
 	{
-		$page = $this->LoadPageById(mysql_real_escape_string($_GET['id']));
+		$page = $this->LoadPageById(mysql_real_escape_string($this->GetSafeVar('id', 'get')));
 		if($page['tag'] != $this->page['tag'])
 		{
 			$this->Redirect($this->Href(), ERROR_INVALID_PAGEID);
@@ -90,7 +89,7 @@ if ($this->HasAccess("write") && $this->HasAccess("read"))
 	{
 		// strip CRLF line endings down to LF to achieve consistency ... plus it saves database space.
 		// Note: these codes must remain enclosed in double-quotes to work! -- JsnX
-		$body = str_replace("\r\n", "\n", $_POST['body']);
+		$body = str_replace("\r\n", "\n", $this->GetSafeVar('body', 'post'));
 		// replace each 4 consecutive spaces at the start of a line with a tab
 		#$body = preg_replace("/\n[ ]{4}/", "\n\t", $body);						# @@@ FIXME: misses first line and multiple sets of four spaces - JW 2005-01-16
 		# JW FIXED 2005-07-12
@@ -107,9 +106,9 @@ if ($this->HasAccess("write") && $this->HasAccess("read"))
 		}
 
 		// only if saving:
-		if (isset($_POST['submit']) && $this->GetSafeVar('submit', 'post') == EDIT_STORE_BUTTON)
+		if ($this->GetSafeVar('submit', 'post') == EDIT_STORE_BUTTON)
 		{
-			if (FALSE != ($aKey = $this->getSessionKey($_POST['form_id'])))	# check if form key was stored in session
+			if (FALSE != ($aKey = $this->getSessionKey($this->GetSafeVar('form_id', 'post'))))	# check if form key was stored in session
 			{
 				if (TRUE != ($rc = $this->hasValidSessionKey($aKey)))	# check if correct name,key pair was passed
 				{
@@ -169,7 +168,7 @@ if ($this->HasAccess("write") && $this->HasAccess("read"))
 
 	// fetch fields
 	$previous = $this->page['id'];
-	if (isset($_POST['previous'])) $previous = $_POST['previous'];
+	if (isset($_POST['previous'])) $previous = $this->GetSafeVar('previous', 'post');
 	if (empty($body)) $body = $this->page['body'];
 	// replace each 4 consecutive spaces at the start of a line with a tab
 	#$body = preg_replace("/\n[ ]{4}/", "\n\t", $body);						# @@@ FIXME: misses first line and multiple sets of four spaces - JW 2005-01-16
@@ -192,7 +191,7 @@ if ($this->HasAccess("write") && $this->HasAccess("read"))
 	}
 
 	// PREVIEW screen
-	if (isset($_POST['submit']) && $this->GetSafeVar('submit', 'post') == EDIT_PREVIEW_BUTTON)
+	if ($this->GetSafeVar('submit', 'post') == EDIT_PREVIEW_BUTTON)
 	{
 		$preview_buttons =	'<fieldset><legend>'.EDIT_STORE_PAGE_LEGEND.'</legend>'."\n".
 							$edit_note_field.

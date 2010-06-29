@@ -45,7 +45,7 @@ if ($this->UserIsOwner())
 	if (isset($_POST['form_id']))
 	{
 
-		if (FALSE != ($aKey = $this->getSessionKey($_POST['form_id'])))     # check if page key was stored in session 
+		if (FALSE != ($aKey = $this->getSessionKey($this->GetSafeVar('form_id', 'post'))))     # check if page key was stored in session 
 		{ 
 			if (TRUE == ($rc = $this->hasValidSessionKey($aKey)))   # check if correct name,key pair was passed 
 			{ 
@@ -61,16 +61,16 @@ if ($this->UserIsOwner())
 		}
 		
 		// change ACL(s) and/or username
-		if (isset($_POST['store']) && ($_POST['store'] == STORE_ACL_LABEL))
+		if ($this->GetSafeVar('store', 'post') == STORE_ACL_LABEL)
 		{
 			$default_read_acl = $this->GetConfigValue('default_read_acl');
 			$default_write_acl = $this->GetConfigValue('default_write_acl');
 			$default_comment_read_acl = $this->GetConfigValue('default_comment_read_acl');
 			$default_comment_post_acl = $this->GetConfigValue('default_comment_post_acl');
-			$posted_read_acl = $_POST['read_acl'];
-			$posted_write_acl = $_POST['write_acl'];
-			$posted_comment_read_acl = $_POST['comment_read_acl'];
-			$posted_comment_post_acl = $_POST['comment_post_acl'];
+			$posted_read_acl = $this->GetSafeVar('read_acl', 'post');
+			$posted_write_acl = $this->GetSafeVar('write_acl', 'post');
+			$posted_comment_read_acl = $this->GetSafeVar('comment_read_acl', 'post');
+			$posted_comment_post_acl = $this->GetSafeVar('comment_post_acl', 'post');
 			$message = '';
 	
 			// store lists only if ACLs have previously been defined,
@@ -94,7 +94,7 @@ if ($this->UserIsOwner())
 			}
 	
 			// change owner?
-			$newowner = $_POST['newowner'];
+			$newowner = $this->GetSafeVar('newowner', 'post');
 	
 			if (($newowner != 'same') &&
 			    ($this->GetPageOwner($this->GetPageTag()) != $newowner))

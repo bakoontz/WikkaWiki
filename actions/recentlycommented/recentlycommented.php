@@ -38,11 +38,7 @@ else
 	$show_comments = $this->GetConfigValue('default_comment_display');
 }
 
-$username = '';
-if(isset($_GET['user']))
-{
-    $username = $this->htmlspecialchars_ent($_GET['user']);
-}
+$username = $this->GetSafeVar('user', 'get');
 
 echo '<h2>'.RECENTLYCOMMENTED_HEADING.'</h2><br />'."\n";
 if ($comments = $this->LoadRecentlyCommented(50, $username))

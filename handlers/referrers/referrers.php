@@ -31,7 +31,7 @@ if (isset($_GET["global"])) #312
 {
 	// referrers to this wiki
 	// prepare UI
-	$global = $_GET["global"]; #312
+	$global = $this->GetSafeVar('global', 'get'); #312
 	$title = "Sites linking to this wiki (<a href=\"".$this->Href("referrers_sites", "", "global=1")."\">see list of domains</a>):";
 	$referrers = $this->LoadReferrers();
 }

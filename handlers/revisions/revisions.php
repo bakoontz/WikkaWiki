@@ -42,7 +42,7 @@ $start = 0;
 if ($this->HasAccess('read'))
 {
 
-    if(isset($_POST['cancel']) && ($_POST['cancel'] == REVISIONS_RETURN_TO_NODE_BUTTON))
+    if($this->GetSafeVar('cancel', 'post') == REVISIONS_RETURN_TO_NODE_BUTTON)
     {
         $this->Redirect($this->Href());
     }

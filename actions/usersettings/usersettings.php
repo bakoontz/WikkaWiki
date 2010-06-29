@@ -95,7 +95,7 @@ $params = ($this->GetConfigValue('rewrite_mode') == 1) ? '?' : '&';
 
 // BEGIN *** LOGOUT ***
 // is user trying to log out?
-if (isset($_POST['logout']) && LOGOUT_BUTTON == $this->GetSafeVar('logout', 'post'))	// replaced with normal form button #353, #312
+if (LOGOUT_BUTTON == $this->GetSafeVar('logout', 'post'))	// replaced with normal form button #353, #312
 {
 	$this->LogoutUser();
 }
@@ -106,7 +106,7 @@ if (isset($_POST['logout']) && LOGOUT_BUTTON == $this->GetSafeVar('logout', 'pos
 if ($user = $this->GetUser())
 {
 	// is user trying to update user settings?
-	if (isset($_POST['action']) && ($this->GetSafeVar('action', 'post') == 'update'))
+	if ($this->GetSafeVar('action', 'post') == 'update')
 	{
 		// get POST parameters
 		$email = $this->GetSafeVar('email', 'post');
@@ -195,7 +195,7 @@ if ($user = $this->GetUser())
 			$success = SUCCESS_USER_REGISTERED;
 			break;
 		//case (isset($_GET['stored']) && $_GET['stored'] == 'true'):
-		case (isset($_POST['action']) && $this->GetSafeVar('action', 'post') == 'update' && !isset($error)):
+		case ($this->GetSafeVar('action', 'post') == 'update' && !isset($error)):
 			$success = SUCCESS_USER_SETTINGS_STORED;
 			break;
 	}
@@ -212,7 +212,7 @@ if ($user = $this->GetUser())
 	}
 
 	// BEGIN *** PASSWORD UPDATE ***
-	if (isset($_POST['action']) && ($this->GetSafeVar('action', 'post') == 'changepass'))
+	if ($this->GetSafeVar('action', 'post') == 'changepass')
 	{
 		// check password
 		$oldpass = $this->GetSafeVar('oldpass', 'post'); //can be current password or hash sent as password reminder
@@ -357,7 +357,7 @@ if ($user = $this->GetUser())
 else
 {
 	// BEGIN *** LOGOUT 2 ***
-	if (isset($_POST['logout']) && $this->GetSafeVar('logout', 'post') == LOGOUT_BUTTON)
+	if ($this->GetSafeVar('logout', 'post') == LOGOUT_BUTTON)
 	{
 		// print confirmation message on successful logout
 		$success = SUCCESS_USER_LOGGED_OUT;
@@ -367,7 +367,7 @@ else
 	// is user trying to log in or register?
 	// BEGIN *** LOGIN/REGISTER ***
 	$register = $this->GetConfigValue('allow_user_registration'); 
-	if (isset($_POST['submit']) && ($this->GetSafeVar('submit', 'post') == LOGIN_BUTTON))
+	if ($this->GetSafeVar('submit', 'post') == LOGIN_BUTTON)
 	{
 		// BEGIN *** LOGIN ***
 		// if user name already exists, check password
@@ -414,7 +414,7 @@ else
 
 	// END *** LOGIN ***
 	// BEGIN *** REGISTER ***
-	if (isset($_POST['submit']) && ($this->GetSafeVar('submit', 'post') == REGISTER_BUTTON) && $register == '1')
+	if ($this->GetSafeVar('submit', 'post') == REGISTER_BUTTON && $register == '1')
 	{
 		$name = trim($this->GetSafeVar('name', 'post'));
 		$email = trim($this->GetSafeVar('email', 'post'));
@@ -509,7 +509,7 @@ else
 	// END *** REGISTER ***
 
 	// BEGIN *** USERSETTINGS PW ***
-	elseif (isset($_POST['action']) && ($this->GetSafeVar('action', 'post') == 'updatepass'))
+	elseif ($this->GetSafeVar('action', 'post') == 'updatepass')
 	{
 			$name = trim($this->GetSafeVar('yourname', 'post'));
 		if (strlen($name) == 0)	// empty username	

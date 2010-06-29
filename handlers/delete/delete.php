@@ -28,7 +28,7 @@
 
 $tag = $this->GetPageTag();
 // cancel operation and return to the page
-if (isset($_POST['cancel']) && ($_POST['cancel'] == PAGE_DELETION_CANCEL_BUTTON))
+if ($this->GetSafeVar('cancel', 'post') == PAGE_DELETION_CANCEL_BUTTON)
 {
 	$this->Redirect($this->Href());
 }
@@ -38,7 +38,7 @@ if ($this->IsAdmin() || ($this->UserIsOwner($tag) && (bool) $this->GetConfigValu
 	if (isset($_POST['form_id']))
     {
 	    $delete = FALSE;
-    	if (FALSE != ($aKey = $this->getSessionKey($_POST['form_id'])))	# check if form key was stored in session
+    	if (FALSE != ($aKey = $this->getSessionKey($this->GetSafeVar('form_id', 'post'))))	# check if form key was stored in session
 		{
 			if (TRUE == ($rc = $this->hasValidSessionKey($aKey)))	# check if correct name,key pair was passed
 			{

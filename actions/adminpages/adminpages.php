@@ -108,7 +108,7 @@ if(!function_exists('optionRanges'))
 // restrict access to admins
 if ($this->IsAdmin($this->GetUser()))
 {
-	if(isset($_POST['cancel']) && ($_POST['cancel'] == ADMINPAGES_CANCEL_LABEL))
+	if($this->GetSafeVar('cancel', 'post') == ADMINPAGES_CANCEL_LABEL)
 	{
 		$this->Redirect($this->Href());
 	}
@@ -247,7 +247,7 @@ if ($this->IsAdmin($this->GetUser()))
 			$this->Redirect($this->Href());
 		}
 	}
-	else if(isset($_POST['massaction']) && $_POST['massaction'] == 'massrevert')
+	else if($this->GetSafeVar('massaction', 'post') == 'massrevert')
 	{
 		$ids = array();
 		foreach($_POST as $key=>$val)
@@ -260,11 +260,7 @@ if ($this->IsAdmin($this->GetUser()))
 		}
 		if(count($ids) > 0)
 		{
-			$comment = '';
-			if(isset($_POST['comment']))
-			{
-				$comment = $_POST['comment'];
-			}
+			$comment = $this->GetSafeVar('comment', 'post');
 			foreach($ids as $id)
 			{
 				RevertPageToPreviousById($this, $id, $comment);
@@ -280,7 +276,7 @@ if ($this->IsAdmin($this->GetUser()))
 		$l = ADMINPAGES_DEFAULT_RECORDS_LIMIT;
 		if (isset($_POST['l']) && (int)$_POST['l'] > 0)
 		{
-			$l = (int)$_POST['l'];
+			$l = (int)$this->GetSafeVar('l', 'post');
 		}
 		elseif (isset($_GET['l']) && (int)$_GET['l'] > 0)
 		{
@@ -288,18 +284,18 @@ if ($this->IsAdmin($this->GetUser()))
 		}
 
 		// last edit date range
-		$start_YY = (isset($_POST['start_YY'])) ? $this->htmlspecialchars_ent($_POST['start_YY']) : ADMINPAGES_DEFAULT_START_YEAR;
-		$start_MM = (isset($_POST['start_MM'])) ? $this->htmlspecialchars_ent($_POST['start_MM']) : ADMINPAGES_DEFAULT_START_MONTH;
-		$start_DD = (isset($_POST['start_DD'])) ? $this->htmlspecialchars_ent($_POST['start_DD']) : ADMINPAGES_DEFAULT_START_DAY;
-		$start_hh = (isset($_POST['start_hh'])) ? $this->htmlspecialchars_ent($_POST['start_hh']) : ADMINPAGES_DEFAULT_START_HOUR;
-		$start_mm = (isset($_POST['start_mm'])) ? $this->htmlspecialchars_ent($_POST['start_mm']) : ADMINPAGES_DEFAULT_START_MINUTE;
-		$start_ss = (isset($_POST['start_ss'])) ? $this->htmlspecialchars_ent($_POST['start_ss']) : ADMINPAGES_DEFAULT_START_SECOND;
-		$end_YY = (isset($_POST['end_YY'])) ? $this->htmlspecialchars_ent($_POST['end_YY']) : ADMINPAGES_DEFAULT_END_YEAR;
-		$end_MM = (isset($_POST['end_MM'])) ? $this->htmlspecialchars_ent($_POST['end_MM']) : ADMINPAGES_DEFAULT_END_MONTH;
-		$end_DD = (isset($_POST['end_DD'])) ? $this->htmlspecialchars_ent($_POST['end_DD']) : ADMINPAGES_DEFAULT_END_DAY;
-		$end_hh = (isset($_POST['end_hh'])) ? $this->htmlspecialchars_ent($_POST['end_hh']) : ADMINPAGES_DEFAULT_END_HOUR;
-		$end_mm = (isset($_POST['end_mm'])) ? $this->htmlspecialchars_ent($_POST['end_mm']) : ADMINPAGES_DEFAULT_END_MINUTE;
-		$end_ss = (isset($_POST['end_ss'])) ? $this->htmlspecialchars_ent($_POST['end_ss']) : ADMINPAGES_DEFAULT_END_SECOND;
+		$start_YY = (isset($_POST['start_YY'])) ?  $this->GetSafeVar('start_YY', 'post') : ADMINPAGES_DEFAULT_START_YEAR;
+		$start_MM = (isset($_POST['start_MM'])) ?  $this->GetSafeVar('start_MM', 'post') : ADMINPAGES_DEFAULT_START_MONTH;
+		$start_DD = (isset($_POST['start_DD'])) ?  $this->GetSafeVar('start_DD', 'post') : ADMINPAGES_DEFAULT_START_DAY;
+		$start_hh = (isset($_POST['start_hh'])) ?  $this->GetSafeVar('start_hh', 'post') : ADMINPAGES_DEFAULT_START_HOUR;
+		$start_mm = (isset($_POST['start_mm'])) ?  $this->GetSafeVar('start_mm', 'post') : ADMINPAGES_DEFAULT_START_MINUTE;
+		$start_ss = (isset($_POST['start_ss'])) ?  $this->GetSafeVar('start_ss', 'post') : ADMINPAGES_DEFAULT_START_SECOND;
+		$end_YY = (isset($_POST['end_YY'])) ?  $this->GetSafeVar('end_YY', 'post') : ADMINPAGES_DEFAULT_END_YEAR;
+		$end_MM = (isset($_POST['end_MM'])) ?  $this->GetSafeVar('end_MM', 'post') : ADMINPAGES_DEFAULT_END_MONTH;
+		$end_DD = (isset($_POST['end_DD'])) ?  $this->GetSafeVar('end_DD', 'post') : ADMINPAGES_DEFAULT_END_DAY;
+		$end_hh = (isset($_POST['end_hh'])) ?  $this->GetSafeVar('end_hh', 'post') : ADMINPAGES_DEFAULT_END_HOUR;
+		$end_mm = (isset($_POST['end_mm'])) ?  $this->GetSafeVar('end_mm', 'post') : ADMINPAGES_DEFAULT_END_MINUTE;
+		$end_ss = (isset($_POST['end_ss'])) ?  $this->GetSafeVar('end_ss', 'post') : ADMINPAGES_DEFAULT_END_SECOND;
 
 		// sort field
 		$sort = ADMINPAGES_DEFAULT_SORT_FIELD;
@@ -320,13 +316,14 @@ if ($this->IsAdmin($this->GetUser()))
 		$search_disp = ADMINPAGES_DEFAULT_SEARCH;
 		if (isset($_POST['search']))
 		{
-			$search = mysql_real_escape_string($_POST['search']);
-			$search_disp = $this->htmlspecialchars_ent($_POST['search']);
+			$search =
+			mysql_real_escape_string($this->GetSafeVar('search', 'post'));
+			$search_disp = $this->GetSafeVar('search', 'post');
 		}
 		elseif (isset($_GET['search']))
 		{
-			$search = mysql_real_escape_string($_GET['search']);
-			$search_disp = $this->htmlspecialchars_ent($_GET['search']);
+			$search = mysql_real_escape_string($this->GetSafeVar('search', 'get'));
+			$search_disp = $this->GetSafeVar('search', 'get');
 		}
 
 		// select all	added JW 2005-07-19

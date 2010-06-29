@@ -10,13 +10,13 @@ $redirectmessage = '';
 
 if (($this->HasAccess('comment') || $this->IsAdmin()) && $this->existsPage($this->tag))
 {
-	$body = (isset($_POST['body'])) ? trim($_POST['body']) : '';
+	$body = trim($this->GetSafeVar('body', 'post'));
 
 	if ('' == $body) #check if comment is non-empty
 	{
 		$redirectmessage = ERROR_EMPTY_COMMENT;
 	}
-	elseif (FALSE === ($aKey = $this->getSessionKey($_POST['form_id'])))	# check if page key was stored in session
+	elseif (FALSE === ($aKey = $this->getSessionKey($this->GetSafeVar('form_id', 'post'))))	# check if page key was stored in session
 	{
 		$redirectmessage = ERROR_COMMENT_NO_KEY;
 	}

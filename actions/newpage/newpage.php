@@ -23,7 +23,7 @@
  */
 
 $showform = TRUE;
-
+$pagename = '';
 if (isset($_POST['pagename']))
 {
 	$pagename = $this->GetSafeVar('pagename', 'post');

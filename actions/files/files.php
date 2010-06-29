@@ -166,7 +166,7 @@ elseif ($this->page &&
 
 	if($this->IsAdmin() && $can_upload_files) { 
 		// upload action
-		if (isset($_POST['action']) && $_POST['action'] == 'upload') 
+		if ($this->GetSafeVar('action', 'post') == 'upload') 
 		{
 			$uploaded = $_FILES['file']; 
 			switch($_FILES['file']['error'])

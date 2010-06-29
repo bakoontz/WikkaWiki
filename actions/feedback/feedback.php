@@ -3,13 +3,9 @@
 // Displays a form to send feedback to the site administrator, as specified in wikka.config.php
 // It first validates the form, then sends it using the mail() function;
 
-$name='';
-$email='';
-$comments='';
-
-if(isset($_POST['name'])) $name = $this->GetSafeVar('name', 'post');
-if(isset($_POST['email'])) $email = $this->GetSafeVar('email', 'post');
-if(isset($_POST['comments'])) $comments = $this->GetSafeVar('comments', 'post');
+$name = $this->GetSafeVar('name', 'post');
+$email = $this->GetSafeVar('email', 'post');
+$comments = $this->GetSafeVar('comments', 'post');
 
 $form = FILL_FORM.
 	$this->FormOpen().
@@ -20,7 +16,7 @@ $form = FILL_FORM.
 	'<input type="submit" value="'.FEEDBACK_SEND_BUTTON.'" />'."\n".
 	$this->FormClose();
 
-if (isset($_POST['mail']) && $_POST['mail']=='result') 
+if ($this->GetSafeVar('mail', 'post')=='result') 
 {
 
 	list($user, $host) = sscanf($email, "%[a-zA-Z0-9._-]@%[a-zA-Z0-9._-]");

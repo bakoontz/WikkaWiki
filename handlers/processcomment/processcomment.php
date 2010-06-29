@@ -26,7 +26,7 @@
 
 // Get comment id
 #$comment_id = (int) trim($_POST['comment_id']);	// causes NOTICE on opening form for first comment
-$comment_id = (isset($_POST['comment_id'])) ? (int) trim($_POST['comment_id']) : NULL;
+$comment_id = (isset($_POST['comment_id'])) ? (int) trim($this->GetSafeVar('comment_id', 'post')) : NULL;
 
 // Delete comment
 if ($_POST['submit']==COMMENT_DELETE_BUTTON && $this->HasAccess('comment_post'))
@@ -87,11 +87,11 @@ if(($_POST['submit']==COMMENT_REPLY_BUTTON || $_POST['submit']==COMMENT_NEW_BUTT
 // Save comment
 if ($_POST['submit']==COMMENT_ADD_BUTTON)
 {
-	$parent_id = (int) trim($_POST['comment_id']);
+	$parent_id = (int) trim($this->GetSafeVar('comment_id', 'post'));
 	if (($this->HasAccess('comment_post') || $this->IsAdmin()) && $this->existsPage($this->tag))
 	{
 		$redirectmessage = '';
-		$body = nl2br($this->htmlspecialchars_ent(trim($_POST['body'])));	// @@@ check for empty before converting
+		$body = nl2br($this->htmlspecialchars_ent(trim($this->GetSafeVar('body', 'post'))));	// @@@ check for empty before converting
 		if (!$body)
 		{
 			$redirectmessage = ERROR_EMPTY_COMMENT;

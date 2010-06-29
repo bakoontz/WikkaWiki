@@ -39,7 +39,7 @@ if (TRUE===$this->IsAdmin())
 	$comment = REVERT_DEFAULT_COMMENT;
 	if(TRUE===isset($_GET['comment']))
 	{
-		$comment = $this->htmlspecialchars_ent($this->GetSafeVar('comment'));
+		$comment = $this->GetSafeVar('comment', 'get');
 	}
 	$tag = mysql_real_escape_string($this->GetPageTag());
 	$message = RevertPageToPreviousByTag($this, $tag, $comment);

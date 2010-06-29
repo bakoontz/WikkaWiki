@@ -55,8 +55,8 @@ if ($this->HasAccess('read'))
 	}
 
 	// load pages
-	$pageA = (isset($_GET['a'])) ? $this->LoadPageById($_GET['a']) : '';	# #312
-	$pageB = (isset($_GET['b'])) ? $this->LoadPageById($_GET['b']) : '';	# #312
+	$pageA = (isset($_GET['a'])) ?  $this->LoadPageById($this->GetSafeVar('a', 'get')) : '';	# #312
+	$pageB = (isset($_GET['b'])) ?  $this->LoadPageById($this->GetSafeVar('b', 'get')) : '';	# #312
 	if ('' == $pageA || '' == $pageB)
 	{
 		echo '<em class="error">'.ERROR_BAD_PARAMETERS.'</em><br />';
@@ -73,7 +73,7 @@ if ($this->HasAccess('read'))
 	if ($pageB['note']) $noteB='['.$this->htmlspecialchars_ent($pageB['note']).']'; else $noteB ='';
 	
 	// If asked, call original diff
-	if (isset($_GET['fastdiff']) && $_GET['fastdiff'])	# #312
+	if ($this->GetSafeVar('fastdiff', 'get'))	# #312
 	{
 		// prepare bodies
 		$bodyA = explode("\n", $this->htmlspecialchars_ent($pageA['body']));
@@ -91,8 +91,8 @@ if ($this->HasAccess('read'))
 		$info .= '</ul>'."\n";
 		$info .= $this->FormOpen('diff', '', 'GET');
 		$info .= '<input type="hidden" name="fastdiff" value="0" />'."\n";
-		$info .= '<input type="hidden" name="a" value="'.$_GET['a'].'" />'."\n";
-		$info .= '<input type="hidden" name="b" value="'.$_GET['b'].'" />'."\n";
+		$info .= '<input type="hidden" name="a" value="'.$this->GetSafeVar('a', 'get').'" />'."\n";
+		$info .= '<input type="hidden" name="b" value="'.$this->GetSafeVar('b', 'get').'" />'."\n";
 		$info .= '<input type="submit" value="'.DIFF_FULL_BUTTON.'" />';
 		$info .= $this->FormClose();		
 		$info .= '</div>'."\n";
@@ -154,8 +154,8 @@ if ($this->HasAccess('read'))
 		$info .= '</ul>'."\n";
 		$info .= $this->FormOpen('diff', '', 'GET');
 		$info .= '<input type="hidden" name="fastdiff" value="1" />'."\n";
-		$info .= '<input type="hidden" name="a" value="'.$_GET['a'].'" />'."\n";
-		$info .= '<input type="hidden" name="b" value="'.$_GET['b'].'" />'."\n";
+		$info .= '<input type="hidden" name="a" value="'.$this->GetSafeVar('a', 'get').'" />'."\n";
+		$info .= '<input type="hidden" name="b" value="'.$this->GetSafeVar('b', 'get').'" />'."\n";
 		$info .= '<input type="submit" value="'.DIFF_SIMPLE_BUTTON.'" />';
 		$info .= $this->FormClose();		
 		$info .= '</div>'."\n";

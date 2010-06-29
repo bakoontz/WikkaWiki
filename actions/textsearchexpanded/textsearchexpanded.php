@@ -29,17 +29,15 @@ if (!defined('SEARCH_MAX_SNIPPETS')) define('SEARCH_MAX_SNIPPETS', 3);
 $result_page_list = '';
 
 // get input
-$phrase = (isset($_GET['phrase'])) ? stripslashes(trim($_GET['phrase'])) : ''; #312
-$case = (isset($_GET['case'])) ? stripslashes(trim($_GET['case'])) : 0;
-$phrase_disp = $this->htmlspecialchars_ent($phrase);
-$case_disp = $this->htmlspecialchars_ent($case);
+$phrase = stripslashes(trim($this->GetSafeVar('phrase', 'get'))); #312
+$case = stripslashes(trim($this->GetSafeVar('case', 'get')));
 
 // display form
 // TODO i18n
 ?>
 <?php echo $this->FormOpen("", "", "get"); ?>
 <fieldset><legend><?php echo SEARCH_FOR; ?></legend>
-<input name="phrase" size="40" value="<?php echo $phrase_disp ?>" /> <input name="case" type="checkbox" value="1" <?php echo (1==$case?'checked="checked"':'') ?> /><label for="case">Case sensitive</label> <input type="submit" value="Search"/>
+<input name="phrase" size="40" value="<?php echo $phrase ?>" /> <input name="case" type="checkbox" value="1" <?php echo (1==$case?'checked="checked"':'') ?> /><label for="case">Case sensitive</label> <input type="submit" value="Search"/>
 </fieldset>
 <?php echo $this->FormClose(); ?>
 

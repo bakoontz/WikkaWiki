@@ -23,11 +23,7 @@
 
 $readable = 0;
 
-$username = '';
-if(isset($_GET['user']))
-{
-	$username = $this->htmlspecialchars_ent($_GET['user']);
-}
+$username = $this->GetSafeVar('user', 'get');
 
 echo $this->Format(RECENT_COMMENTS_HEADING.' --- ');
 if ($comments = $this->LoadRecentComments(50, $username))
