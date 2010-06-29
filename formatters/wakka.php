@@ -1039,12 +1039,15 @@ if (!function_exists('parse_attributes'))
 			list ($key, $value) = explode(':', $attrib, 2);
 			foreach ( $hints as $hint )
 			{
-				$temp = $attributes[$hint];
-				if ($temp) $a = $temp[$key];
-				if ($a) break;
+				if(isset($temp) && isset($temp[$key]))
+				{
+					$temp = $attributes[$hint];
+					if ($temp) $a = $temp[$key];
+					if ($a) break;
+				}
 			}
 	
-			if (!$a)
+			if (!isset($a))
 			{
 				//This attribute isn't allowed here / is wrong.
 				// WARNING: JS vulnerability: two minus signs are not allowed in a comment, so we replace any occurence of them by underscore.
