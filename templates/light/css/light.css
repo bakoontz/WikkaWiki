@@ -174,12 +174,12 @@ a.ext:hover {
 
 #header a, #footer a {
 	color: #20557B;
-	font-family: Helvetica, Arial, sans-serif; 	
+	font-family: Arial, Helvetica, sans-serif; 	
 }
 
 
 #header h2 a {
-	font: normal 13pt "DejaVu Sans", Helvetica, Arial, sans-serif; 
+	font: normal 13pt "DejaVu Sans", Arial, Helvetica, sans-serif; 
 	color: #AAA;
 }
 
@@ -611,7 +611,7 @@ input[type=hidden] {
 input[type=submit], input[type=button] {
 	color: #666;
 	background-color: #EEE;
-	font: normal 90% Helvetica, Arial, Verdana, sans-serif;
+	font: normal 90% Arial, Helvetica, Verdana, sans-serif;
 	text-align: center;
 	border-top: 1px solid #FFF;
 	border-left: 1px solid #FFF;
@@ -1293,7 +1293,7 @@ ul.menu li form {
 }
 
 ul.menu li form input {
-	font-family: "DejaVu Sans", Helvetica, Arial, Verdana, sans-serif;
+	font-family: "DejaVu Sans", Arial, Helvetica, Verdana, sans-serif;
 	font-size: 1em;
 	line-height: 1.1em;
 	color: #333;
@@ -1308,7 +1308,7 @@ ul#main_menu {
 }
 
 ul#main_menu li {
-	font-family: Helvetica, Arial, Verdana, sans-serif;
+	font-family: Arial, Helvetica, Verdana, sans-serif;
 	margin-left: 0;
 	margin-top: 0;
 	margin-right: 10px;
@@ -1367,7 +1367,7 @@ ul#dashboard {
 }
 
 ul#dashboard li {
-	font-family: Helvetica, Arial, Verdana, sans-serif;
+	font-family: Arial, Helvetica, Verdana, sans-serif;
 	margin: 0 0 0 10px;
 	padding: 0;
 	float: left;
