@@ -3340,57 +3340,17 @@ class Wakka
 	{
 		if ($user = $this->GetUser())
 		{
-			$name = $user['name'];
+			return $name = $user['name'];
 		}
-		else
-		{
-			$ip = $_SERVER['REMOTE_ADDR'];
-			if ($this->GetConfigValue('enable_user_host_lookup') == 1)	// #240
-			{
-				$name = gethostbyaddr($ip) ? gethostbyaddr($ip) : $ip;
-			}
-			else
-			{
-				$name = $ip;
-			}
-		}
-		return $name;
-	}
 
-	/**
-	 * Get (and cache) anonymous user "name" for current user.
-	 *
-	 * Depending on configuration settings, the "name" can be either an IP
-	 * address pr a host name found by reverse DNS lookup.
-	 *
-	 * @uses	Wakka::GetConfigValue()
-	 *
-	 * @return	string	name found
-	 * @todo	extend cache if we specify IP *or* hostname
-	 */
-	function getAnonUserName()
-	{
-		if (isset($this->anon_username))
+		$ip = $_SERVER['REMOTE_ADDR'];
+
+		if ($this->GetConfigValue('enable_user_host_lookup') == 1)	// #240
 		{
-			// get name from cache
-			$name = $this->anon_username;
+			$ip = gethostbyaddr($ip) ? gethostbyaddr($ip) : $ip;
 		}
-		else
-		{
-			// lookup name and cache it
-			$ip = $_SERVER['REMOTE_ADDR'];
-			if ((bool) $this->GetConfigValue('enable_user_host_lookup'))
-			{
-				$name = gethostbyaddr($ip) ? gethostbyaddr($ip) : $ip;
-			}
-			else
-			{
-				$name = $ip;
-			}
-			$this->anon_username = $name;
-		}
-		// return name found
-		return $name;
+
+		return $this->anon_username = $ip;
 	}
 
 	/**
