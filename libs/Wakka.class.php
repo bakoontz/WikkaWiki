@@ -2418,18 +2418,19 @@ class Wakka
 	// function PregPageLink($matches) { return $this->Link($matches[1]); }
 
 	/**
-	 * Check if a given string is in CamelCase format.
+	 * Check if a given string contains prohibited characters.
+	 * Currently, these prohibited characters are:
+	 *   | ? = < > ' " &
 	 *
 	 * @param	string $text mandatory:
 	 * @return	integer 1 if $text is a wikiname, 0 otherwise
-	 * @todo	remove the comma's in the RE!		#34
 	 * @todo	move regexps to regexp-library		#34
 	 * @todo	return a boolean
 	 */
 	function IsWikiName($text)
 	{
-		$result = preg_match("/^[A-Z,ÄÖÜ][a-z,ßäöü]+[A-Z,0-9,ÄÖÜ][A-Z,a-z,0-9,ÄÖÜ,ßäöü]*$/", $text); // @@@ FIXME #34 (inconsistent with Formatter!) remove all ',' from RE (comma should not be allowed in WikiNames!)
-		return $result;
+		$result = preg_match("/[\|\?=<>\'\"&]/", $text);
+		return !$result;
 	}
 
 	/**

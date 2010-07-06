@@ -40,7 +40,6 @@ if(!defined('WIKKA_ERROR_ACL_READ_INFO')) define('WIKKA_ERROR_ACL_READ_INFO', 'J
 if(!defined('WIKKA_ERROR_LABEL')) define('WIKKA_ERROR_LABEL', 'Fout');
 if(!defined('WIKKA_ERROR_PAGE_NOT_EXIST')) define('WIKKA_ERROR_PAGE_NOT_EXIST', 'Sorry, pagina %s bestaat niet.'); // %s (source) page name
 if(!defined('WIKKA_ERROR_EMPTY_USERNAME')) define('WIKKA_ERROR_EMPTY_USERNAME', 'Vul je gebruikersnaam in!');
-if(!defined('WIKKA_ERROR_INVALID_PAGE_NAME')) define('WIKKA_ERROR_INVALID_PAGE_NAME', 'De paginanaam %s is ongeldig. Geldige pagina namen moeten beginnen met een hoofdletter, mogen alleen letters and nummers bevatten en moeten in het CamelCase formaat zijn.'); // %s - page name
 if(!defined('WIKKA_ERROR_PAGE_ALREADY_EXIST')) define('WIKKA_ERROR_PAGE_ALREADY_EXIST', 'Sorry, deze pagina bestaat al.');
 if(!defined('WIKKA_LOGIN_LINK_DESC')) define('WIKKA_LOGIN_LINK_DESC', 'login');
 if(!defined('WIKKA_MAINPAGE_LINK_DESC')) define('WIKKA_MAINPAGE_LINK_DESC', 'hoofdpagina');
@@ -630,6 +629,7 @@ if(!defined('CLONE_EDIT_NOTE_LABEL')) define('CLONE_EDIT_NOTE_LABEL', 'Wijzig no
 if(!defined('CLONE_EDIT_OPTION_LABEL')) define('CLONE_EDIT_OPTION_LABEL', ' Wijzig na het maken');
 if(!defined('CLONE_ACL_OPTION_LABEL')) define('CLONE_ACL_OPTION_LABEL', ' Kopieer ACL');
 if(!defined('CLONE_BUTTON')) define('CLONE_BUTTON', 'Kopieer');
+if(!defined('ERROR_INVALID_PAGENAME')) define('ERROR_INVALID_PAGENAME', 'This page name is invalid. Valid page names must not contain the characters | ? = &lt; &gt; \' " or &amp;.');
 /**#@-*/
 
 /**#@+

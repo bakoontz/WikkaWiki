@@ -24,6 +24,7 @@
  * @uses		Wakka::GetUserName()
  * @uses		Wakka::HasAccess()
  * @uses		Wakka::Href()
+ * @uses		Wakka::IsWikiName()
  * @uses		Wakka::htmlspecialchars_ent()
  * @uses		Wakka::LoadComments()
  * @uses		Wakka::LoadPage()
@@ -43,6 +44,11 @@ echo '>'."\n";
 if (!$this->HasAccess('read'))
 {
 	echo '<p><em class="error">'.WIKKA_ERROR_ACL_READ.'</em></p>';
+	echo "\n".'</div><!--closing page content-->'."\n";
+}
+else if(!$this->IsWikiName($this->tag))
+{
+	echo '<p><em class="error">'.ERROR_INVALID_PAGENAME.'</em></p>';
 	echo "\n".'</div><!--closing page content-->'."\n";
 }
 else

@@ -50,7 +50,6 @@ if(!defined('WIKKA_DIFF_DELETIONS_HEADER')) define('WIKKA_DIFF_DELETIONS_HEADER'
 if(!defined('WIKKA_DIFF_NO_DIFFERENCES')) define('WIKKA_DIFF_NO_DIFFERENCES', 'No Differences');
 if(!defined('ERROR_USERNAME_UNAVAILABLE')) define('ERROR_USERNAME_UNAVAILABLE', 'Sorry, this user name is unavailable.');
 if(!defined('ERROR_USER_SUSPENDED')) define('ERROR_USER_SUSPENDED', 'Sorry, this account has been suspended. Please contact an administrator for further details.');
-if(!defined('WIKKA_ERROR_INVALID_PAGE_NAME')) define('WIKKA_ERROR_INVALID_PAGE_NAME', 'The page name %s is invalid. Valid page names must start with a capital letter, contain only letters and numbers, and be in CamelCase format.'); // %s - page name
 if(!defined('WIKKA_ERROR_PAGE_ALREADY_EXIST')) define('WIKKA_ERROR_PAGE_ALREADY_EXIST', 'Sorry, the target page already exists');
 if(!defined('WIKKA_LOGIN_LINK_DESC')) define('WIKKA_LOGIN_LINK_DESC', 'login');
 if(!defined('WIKKA_MAINPAGE_LINK_DESC')) define('WIKKA_MAINPAGE_LINK_DESC', 'main page');
@@ -1078,7 +1077,6 @@ if(!defined('USER_IS_NOW_OWNER')) define('USER_IS_NOW_OWNER', 'You are now the o
  * Language constant used by the {@link clone.php clone} (page) handler
  */
 // clone
-define ('VALID_PAGENAME_PATTERN', '/^[A-Za-zÄÖÜßäöü]+[A-Za-z0-9ÄÖÜßäöü]*$/s');
 if(!defined('ERROR_ACL_WRITE')) define('ERROR_ACL_WRITE', 'Sorry! You don\'t have write-access to %s');
 if(!defined('CLONE_VALID_TARGET')) define('CLONE_VALID_TARGET', 'Please fill in a valid target page name and an (optional) edit note.');
 if(!defined('CLONE_LEGEND')) define('CLONE_LEGEND', 'Clone %s'); // %s source page name
@@ -1094,7 +1092,7 @@ if(!defined('CLONE_SUCCESSFUL')) define('CLONE_SUCCESSFUL', '%s was succesfully 
 if(!defined('CLONE_X_TO')) define('CLONE_X_TO', 'Clone %s to:');
 if(!defined('EDIT_NOTE')) define('EDIT_NOTE', 'Edit note:');
 if(!defined('ERROR_ACL_READ')) define('ERROR_ACL_READ', 'You are not allowed to read the source of this page.');
-if(!defined('ERROR_INVALID_PAGENAME')) define('ERROR_INVALID_PAGENAME', 'This page name is invalid. Valid page names must start with a letter and contain only letters and numbers.');
+if(!defined('ERROR_INVALID_PAGENAME')) define('ERROR_INVALID_PAGENAME', 'This page name is invalid. Valid page names must not contain the characters | ? = &lt; &gt; \' " or &amp;.');
 if(!defined('ERROR_PAGE_ALREADY_EXIST')) define('ERROR_PAGE_ALREADY_EXIST', 'Sorry, the destination page already exists');
 if(!defined('ERROR_PAGE_NOT_EXIST')) define('ERROR_PAGE_NOT_EXIST', ' Sorry, page %s does not exist.');
 if(!defined('LABEL_CLONE')) define('LABEL_CLONE', 'Clone');

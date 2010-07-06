@@ -18,6 +18,7 @@
  * @since		Wikka 1.1.6.0
  *
  * @uses	Wakka::HasAccess()
+ * @uses	Wakka::IsWikiName()
  * @uses	Wakka::existsPage()
  * @uses	Wakka::LoadPage()
  * @uses	Wakka::SavePage()
@@ -79,7 +80,13 @@ if (!$this->existsPage($from))		// name change, interface change (allows only ac
 			if (!$this->HasAccess('write', $to))
 			{
 				$box = '<em class="error">'.sprintf(ERROR_ACL_WRITE, $to).'</em>';
-			} else
+			} 
+			// 3a. Check target pagename validity
+			else if(!$this->IsWikiName($to))
+			{
+				$box = '<em class="error">'.ERROR_INVALID_PAGENAME.'</em>';
+			}
+			else
 			{
 				// 5. check target page existence
 				if ($this->existsPage($to, NULL, NULL, FALSE))	// name change, interface change (checks for non-active page, too) @@@

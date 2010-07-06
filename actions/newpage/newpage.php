@@ -17,6 +17,7 @@
  * @uses	Wakka::GetSafeVar()
  * @uses	Wakka::ExistsPage()
  * @uses	Wakka::Href()
+ * @uses	Wakka::IsWikiName()
  * @filesource
  *
  * @todo user central regex library #34
@@ -28,7 +29,11 @@ if (isset($_POST['pagename']))
 {
 	$pagename = $this->GetSafeVar('pagename', 'post');
 
-	if ($this->ExistsPage($pagename))
+	if(!$this->IsWikiName($pagename))
+	{
+		echo '<em class="error">'.sprintf(ERROR_INVALID_PAGENAME, $pagename).'</em>';
+	}
+	else if ($this->ExistsPage($pagename))
 	{
 		echo '<em class="error">'.WIKKA_ERROR_PAGE_ALREADY_EXIST.'</em>';
 	}

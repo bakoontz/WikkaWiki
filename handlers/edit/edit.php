@@ -27,6 +27,7 @@
  * @uses	Wakka::Href()
  * @uses	Wakka::htmlspecialchars_ent()
  * @uses	Wakka::hsc_secure()
+ * @uses	Wakka::IsWikiName()
  * @uses	Wakka::LoadSingle()
  * @uses	Wakka::Redirect()
  * @uses	Wakka::SavePage()
@@ -62,7 +63,11 @@ if ($this->GetSafeVar('submit', 'post') == EDIT_PREVIEW_BUTTON &&
 ?>
 <div id="content"<?php echo $ondblclick;?>>
 <?php
-if ($this->HasAccess("write") && $this->HasAccess("read"))
+if(!$this->IsWikiName($this->tag))
+{
+	echo '<em class="error">'.sprintf(ERROR_INVALID_PAGENAME, $this->tag).'</em>';
+}
+else if ($this->HasAccess("write") && $this->HasAccess("read"))
 {
 	$newtag = $output = '';
 	// rename action

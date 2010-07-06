@@ -652,6 +652,7 @@ if(!defined('CLONE_EDIT_NOTE_LABEL')) define('CLONE_EDIT_NOTE_LABEL', 'Ghi chú:
 if(!defined('CLONE_EDIT_OPTION_LABEL')) define('CLONE_EDIT_OPTION_LABEL', ' Sửa sau khi nhân bản');
 if(!defined('CLONE_ACL_OPTION_LABEL')) define('CLONE_ACL_OPTION_LABEL', ' Nhân bản ACL');
 if(!defined('CLONE_BUTTON')) define('CLONE_BUTTON', 'Nhân bản');
+if(!defined('ERROR_INVALID_PAGENAME')) define('ERROR_INVALID_PAGENAME', 'This page name is invalid. Valid page names must not contain the characters | ? = &lt; &gt; \' " or &amp;.');
 /**#@-*/
 
 /**#@+
