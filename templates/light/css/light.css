@@ -1235,6 +1235,13 @@ table.wikkaconfig tbody td {
 table.acls {
 }
 
+textarea#acls {
+	margin-right: 0;
+	width: 98%;
+	height: 80px;
+	border: 1px solid #CCC;
+}
+
 /* 3rdparty-code related styling */
 
 /* syntax highlighting code - GeSHi */
