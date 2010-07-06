@@ -4199,7 +4199,7 @@ class Wakka
 					return ($this->registered) ? !$negate : $negate;
 				// aha! a user entry.
 				default:
-					if ($line == $username)
+					if (strtolower($line) == strtolower($username))
 					{
 						return !$negate;
 					}
