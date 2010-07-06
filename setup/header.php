@@ -90,7 +90,7 @@ function SelectTheme($default_theme='light')
 <html>
 <head>
 	<title>Wikka Installation</title>
-	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<meta name="keywords" content="Wikka Wakka Wiki" />
 	<meta name="description" content="A WakkaWiki clone" />
 	<link rel="icon" href="images/favicon.ico" type="image/x-icon" />

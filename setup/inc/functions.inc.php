@@ -79,4 +79,36 @@ function __($s)
 	return (eregi_replace('---<.*$', '', $s));
 }
 
+/**
+ * Facility to echo a <select>...</select> for language packs availables. A simple check is performed on all 
+ * subdirectories of the lang/ folder: if a file called xx.inc.php is found inside it, then, it's a valid
+ * language pack subfolder. (To avoid treating some obscure system dependent special folders).
+ * 
+ * @access public
+ * @return void
+ */
+function Language_selectbox($default_lang)
+{
+	echo '<select name="config[default_lang]">';
+	/** @todo fill the array. */
+	$human_lang = array (
+		'en' => 'English',
+		'fr' => 'Français',
+		'de' => 'Deutsch',
+		'vn' => 'Vietnamese'
+	);
+	// use configured path
+	$hdl = opendir('lang');
+	while ($f = readdir($hdl))
+	{
+		if ($f[0] == '.') continue;
+		if (file_exists('lang'.DIRECTORY_SEPARATOR.$f.DIRECTORY_SEPARATOR.$f.'.inc.php'))
+		{
+			echo "\n ".'<option value="'.$f.'"';
+			if ($f == $default_lang) echo ' selected="selected"';
+			echo '>'.(isset($human_lang[$f]) ? $human_lang[$f] : $f).'</option>';
+		}
+	}
+	echo '</select>';
+}
 ?>

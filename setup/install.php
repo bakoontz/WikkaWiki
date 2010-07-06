@@ -78,9 +78,9 @@ if (!$version = trim($wakkaConfig["wakka_version"])) $version = "0";
 // set upgrade note to be used when overwriting default pages
 $upgrade_note = 'Upgrading from '.$version.' to '.WAKKA_VERSION;
 
-$lang_defaults_path = WIKKA_LANG_PATH.DIRECTORY_SEPARATOR.'defaults'.DIRECTORY_SEPARATOR;
+$lang_defaults_path = 'lang'.DIRECTORY_SEPARATOR.$config['default_lang'].DIRECTORY_SEPARATOR.'defaults'.DIRECTORY_SEPARATOR;
 $lang_defaults_fallback_path = $fallback_lang_path.DIRECTORY_SEPARATOR.'defaults'.DIRECTORY_SEPARATOR;
-test('Checking availability of default pages...', is_dir($lang_defaults_path), 'default pages not found at '.$lang_defaults_path, 1);
+test('Checking availability of default pages...', is_dir($lang_defaults_path), 'default pages not found at '.$lang_defaults_path, 0);
 
 switch ($version)
 {
