@@ -1,0 +1,25 @@
+===Ten system wiki używa prostego lecz bardzo elastycznego systemu kategoryzacji treści.===
+
+{{Category page="/"  col="10"}}
+==Zasady jego działania:==
+~- Główna lista kategorii zawarta jest na stronie **""CategoryCategory""**. Aktualizuje się ona automatycznie, więc nie powinna być edytowana. Odnośnik to listy kategorii znajduje się w głównym menu u góry każdej strony. (Categories).
+~- Każda podkategoria musi mieć nazwę w formie ""CategoryNazwa"", na przykład CategoryWiki.
+~- Każda strona może należeć do więcej niż jednej kategorii. Może także nie należeć do żadnej. Aby przyłączyć stronę do danej kategorii, należy dodać do treści strony nazwę kategorii, np. CategoryWiki. Zwyczajowo umieszcza się ją na końcu strony.
+~- Jeśli chcesz wspomnieć w treści strony nazwę kategorii, lecz bez przypisywania do niej danej strony, obejmij tę nazwę podwójnymi cudzysłowami (w ten sposób przestaje ona być odnośnikiem, lecz staje się zwykłym tekstem). Aby stworzyć odnośnik do kategorii bez przypisywania do niej danej strony, musisz użyć pełnego adresu internetowego: ""[[http://example.com/CategoryWiki CategoryWiki]]"".
+~- System pozwala na budowanie hierarchii kategorii. Wystarczy umieścić nazwę kategorii nadrzędnej w treści podkategorii. Nazwa kategorii podrzędnej automatycznie pojawi się na liście stron należących do kategorii nadrzędnej.
+~- Istnieje specjalna kategoria **""CategoryUsers""**, która obejmuje strony poszczególnych użytkowników. Jeśli więc stworzysz swoją stronę w tym systemie, umieść na końcu odniesienie ""{{CategoryUsers}}"".
+~- Any utworzyć nowe kategorie, wystarczy utworzyć stronę o nazwie ""CategoryNazwa"" (gdzie zamiast //Nazwa// wpisz nazwę swojej kategorii, np. ""CategoryAktualnosci""). Następnie w treści tej nowo utworzonej strony dodaj akcję ""{{Category}}"", co spowoduje wyświetlenie w tym miejscu listy stron, które będą należeć do tworzonej kategorii. Na koniec należy jeszcze dodać odnośnik do kategorii nadrzędnej lub do kategorii głównej **""CategoryCategory""**. Zanim jednak zaczniesz tworzyć kategorie, przemyśl dobrze ich strukturę!
+
+**Zachowaj porządek w tej witrynie, przez umieszczanie nowo tworzonych stron w odpowiednich kategoriach!**
+
+**Zauważ:** 
+~- Nazwy kategorii napisane powyżej pogrubioną czcionką, w kodzie niniejszej strony zostały objęte podwójnymi cudzysłowami, tak aby ta strona nie została niepotrzebnie dodana do wspominanych kategorii. Ta strona powinna należeć tylko do kategorii CategoryWiki (której nazwa w związku z tym nie musi być ujmowana w cudzysłowy).
+~- Aby uniknąć przypadkowego dołączenia strony do kategorii, wszystkie nazwy kategorii, które wspominasz w tekście, ale które nie są związane z edytowaną stroną, należy umieścić w podwójnych cudzysłowach. Wynika to ze sposobu w jaki działa system kategoryzacji: odnośniki do kategorii są wyszukiwane w całym tekście strony, nie tylko w stopkach.
+~- Nie daj się zwieść nazwie tej strony (WikiCategory). Oznacza ona tylko, że opisano tu działanie kategorii w tym systemie wiki, ale sama w sobie nie jest stroną kategorii (lecz jest nią CategoryWiki). Nazwy wszystkich kategorii zaczynają się od słowa ##Category##.
+~- Proponujemy Ci następującą konwencję przypisywania stron do kategorii. Format ten nie jest wymagany, ale przyczyni się do większego uporządkowania Twojej witryny. Poniżej znajduje się kod oraz wynik jego działania.
+
+%%==Kategorie==
+CategoryWiki%%
+
+==Kategorie==
+CategoryWiki
