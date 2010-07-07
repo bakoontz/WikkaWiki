@@ -5,54 +5,91 @@ Once you have read through this, test your formatting skills in the SandBox.
 ----
 ===1. Text Formatting===
 
+<<
 ~##""**I'm bold**""##
 ~**I'm bold **
-
+<<::c::
+<<
 ~##""//I'm italic text!//""##
 ~//I'm italic text!//
-
+<<::c::
+<<
 ~##""And I'm __underlined__!""##
 ~And I'm __underlined__!
-
+<<::c::
+<<
 ~##""##monospace text##""##
 ~##monospace text##
-
+<<::c::
+<<
 ~##""''highlight text''""## (using 2 single-quotes)
 ~''highlight text''
-
+<<::c::
+<<
 ~##""++Strike through text++""##
 ~++Strike through text++
-
+<<::c::
+<<
+~##""&pound;&pound;Text insertion&pound;&pound;""##
+~ &pound;&pound;Text insertion&pound;&pound;
+<<::c::
+<<
+~##""&yen;&yen;Text deletion&yen;&yen;""##
+~ &yen;&yen;Text deletion&yen;&yen;
+<<::c::
+<<
 ~##""Press #%ANY KEY#%""##
 ~Press #%ANY KEY#%
-
+<<::c::
+<<
 ~##""@@Center text@@""##
 ~@@Center text@@
+<<::c::
+<<
+~##""/* Elided content (eliminates trailing ws) */""##
+~/* Elided content (eliminates trailing ws) */
+<--//there was a comment here followed by ws in the markup//
+~Elides (hides) content from displaying.  Eliminates trailing whitespace so there are no unsightly gaps in output. Useful for commenting Wikka markup.
+<<::c::
+<<
+~##""`` Elided content (preserves trailing ws) ``""##
+~`` Elided content (preserves trailing ws) ``
+<--//there was a comment here followed by ws in the markup//
+~Elides (hides) content from displaying.  Preserves trailing whitespace.
+<<::c::
 
 ===2. Headers===
 
 Use between six ##=## (for the biggest header) and two ##=## (for the smallest header) on both sides of a text to render it as a header.
 
+<<
 ~##""====== Really big header ======""##
 ~====== Really big header ======
-  
+<<::c::
+<<
 ~##""===== Rather big header =====""##
 ~===== Rather big header =====
-
+<<::c::
+<<
 ~##""==== Medium header ====""##
 ~==== Medium header ====
-
+<<::c::
+<<
 ~##""=== Not-so-big header ===""##
 ~=== Not-so-big header ===
-
+<<::c::
+<<
 ~##""== Smallish header ==""##
 ~== Smallish header ==
+<<::c::
 
 ===3. Horizontal separator===
+
 ~##""----""##
 ----
 
 ===4. Forced line break===
+
 ~##""---""##
 ---
 
@@ -60,91 +97,113 @@ Use between six ##=## (for the biggest header) and two ##=## (for the smallest h
 
 You can indent text using a **~**, a **tab** or **4 spaces** (which will auto-convert into a tab).
 
+<<
 ##""~This text is indented<br />~~This text is double-indented<br />&nbsp;&nbsp;&nbsp;&nbsp;This text is also indented""##
-
+<<::c::
+<<
 ~This text is indented
 ~~This text is double-indented
-	This text is also indented
+~This text is also indented
+<<::c::
 
 To create bulleted/ordered lists, use the following markup (you can always use 4 spaces instead of a ##**~**##):
 
 **Bulleted lists**
+<<
 ##""~- Line one""##
 ##""~- Line two""##
-
-	- Line one
-	- Line two
+<<::c::
+<<
+~- Line one
+~- Line two
+<<::c::
 
 **Numbered lists**
+<<
 ##""~1) Line one""##
 ##""~1) Line two""##
-
-	1) Line one
-	1) Line two
+<<::c::
+<<
+~1) Line one
+~1) Line two
+<<::c::
 
 **Ordered lists using uppercase characters**
+<<
 ##""~A) Line one""##
 ##""~A) Line two""##
-
-	A) Line one
-	A) Line two
+<<::c::
+<<
+~A) Line one
+~A) Line two
+<<::c::
 
 **Ordered lists using lowercase characters**
+<<
 ##""~a) Line one""##
 ##""~a) Line two""##
-
-	a) Line one
-	a) Line two
+<<::c::
+<<
+~a) Line one
+~a) Line two
+<<::c::
 
 **Ordered lists using roman numerals**
+<<
 ##""~I) Line one""##
 ##""~I) Line two""##
-
-	I) Line one
-	I) Line two
+<<::c::
+<<
+~I) Line one
+~I) Line two
+<<::c::
 
 **Ordered lists using lowercase roman numerals**
+<<
 ##""~i) Line one""##
 ##""~i) Line two""##
-
-	i) Line one
-	i) Line two
+<<::c::
+<<
+~i) Line one
+~i) Line two
+<<::c::
 
 ===6. Inline comments===
 
 To format some text as an inline comment, use an indent ( **~**, a **tab** or **4 spaces**) followed by a **""&amp;""**.
 
-**Example:**
-
+<<
 ##""~&amp; Comment""##
 ##""~~&amp; Subcomment""##
 ##""~~~&amp; Subsubcomment""##
-
+<<::c::
+<<
 ~& Comment
 ~~& Subcomment
 ~~~& Subsubcomment
+<<::c::
 
 ===7. Images===
 
 To place images on a Wiki page, you can use the ##image## action.
 
-**Example:**
-
+<<
 ~##""{{image class="center" alt="DVD logo" title="An Image Link" url="images/dvdvideo.gif" link="RecentChanges"}}""##
 ~{{image class="center" alt="dvd logo" title="An Image Link" url="images/dvdvideo.gif" link="RecentChanges"}}
+<<::c::
 
-Links can be external, or internal Wiki links. You don't need to enter a link at all, and in that case just an image will be inserted. You can use the optional classes ##left## and ##right## to float images left and right. You don't need to use all those attributes, only ##url## is required while ##alt## is recommended for accessibility.
+Image links can be external or internal Wiki links. You don't need to enter a link at all, and in that case just an image will be inserted. You can use the optional classes ##left## and ##right## to float images left and right. You don't need to use all those attributes, only ##url## is required while ##alt## is recommended for accessibility.
 
 ===8. Links===
 
 To create a **link to a wiki page** you can use any of the following options: ---
-~1) type a ##""WikiName""##: --- --- ##""FormattingRules""## --- FormattingRules --- ---
-~1) add a forced link surrounding the page name by ##""[[""## and ##""]]""## (everything after the first space will be shown as description): --- --- ##""[[SandBox Test your formatting skills]]""## --- [[SandBox Test your formatting skills]] --- --- ##""[[SandBox &#27801;&#31665;]]""## --- [[SandBox &#27801;&#31665;]] --- ---
+~1) type a ##""WikiName""## (works only for page names with no whitespace): --- --- ##""FormattingRules""## --- FormattingRules --- ---
+~1) add a forced link surrounding the page name by ##""[[""## and ##""]]""## (everything after the | will be shown as description): --- --- ##""[[SandBox|Test your formatting skills]]""## --- [[SandBox|Test your formatting skills]] --- --- ##""[[SandBox|&#27801;&#31665;]]""## --- [[SandBox|&#27801;&#31665;]] --- ---
 ~1) add an image with a link (see instructions above).
 
 To **link to external pages**, you can do any of the following: ---
-~1) type a URL inside the page: --- --- ##""http://www.example.com""## --- http://www.example.com --- --- 
-~1) add a forced link surrounding the URL by ##""[[""## and ##""]]""## (everything after the first space will be shown as description): --- --- ##""[[http://example.com/jenna/ Jenna's Home Page]]""## --- [[http://example.com/jenna/ Jenna's Home Page]] --- --- ##""[[mail@example.com Write me!]]""## --- [[mail@example.com Write me!]] --- ---
+~1) type a URL inside the page: --- --- ##""http://blog.wikkawiki.org""## --- http://blog.wikkawiki.org --- --- 
+~1) add a forced link surrounding the URL by ##""[[""## and ##""]]""## (everything after the | will be shown as description): --- --- ##""[[http://docs.wikkawiki.org|Wikka documentation]]""## --- [[http://docs.wikkawiki.org|Wikka documentation]] --- --- ##""[[community@wikkawiki.org|Wikka community list]]""## --- [[community@wikkawiki.org|Wikka community list]] --- ---
 ~1) add an image with a link (see instructions above);
 ~1) add an interwiki link (browse the [[InterWiki list of available interwiki tags]]): --- --- ##""WikiPedia:WikkaWiki""## --- WikiPedia:WikkaWiki --- --- ##""Google:CSS""## --- Google:CSS --- --- ##""Thesaurus:Happy""## --- Thesaurus:Happy --- ---
 
@@ -187,28 +246,28 @@ Many additional features are available using table markup. A more comprehensive 
 
 Colored text can be created using the ##color## action:
 
-**Example:**
-
+<<
 ~##""{{color c="blue" text="This is a test."}}""##
 ~{{color c="blue" text="This is a test."}}
+<<::c::
 
 You can also use hex values:
 
-**Example:**
-
+<<
 ~##""{{color hex="#DD0000" text="This is another test."}}""##
 ~{{color hex="#DD0000" text="This is another test."}}
+<<::c::
 
 Alternatively, you can specify a foreground and background color using the ##fg## and ##bg## parameters (they accept both named and hex values):
 
-**Examples:**
-
+<<
 ~##""{{color fg="#FF0000" bg="#000000" text="This is colored text on colored background"}}""##
 ~{{color fg="#FF0000" bg="#000000" text="This is colored text on colored background"}}
-
+<<::c::
+<<
 ~##""{{color fg="yellow" bg="black" text="This is colored text on colored background"}}""##
 ~{{color fg="yellow" bg="black" text="This is colored text on colored background"}}
-
+<<::c::
 
 ===11. Floats===
 
@@ -269,12 +328,44 @@ echo "Hello, World!";
 ?>
 %%
 
-**List of available code formatters:**
-{{table columns="6" cellpadding="1" cells="LANGUAGE;FORMATTER;LANGUAGE;FORMATTER;LANGUAGE;FORMATTER;ABAP;abap;Actionscript;actionscript;ADA;ada;Apache Log;apache;AppleScript; applescript;ASM;asm;ASP;asp;AutoIT;autoit;Axapta/Dynamics Ax X++;xpp;Bash;bash;BlitzBasic;blitzbasic;BNF;bnf;C;c;C for Macs;c_mac;c#;csharp;C++;cpp;C++ (QT extensions);cpp-qt;CAD DCL;caddcl;CadLisp;cadlisp;CFDG;cfdg;ColdFusion;cfm; CSS;css;D;d;Delphi;delphi;Diff-Output;diff;DIV; div;DOS;dos;dot;dot;Eiffel;eiffel;Fortran;fortran;FOURJ's Genero 4GL;genero;FreeBasic;freebasic;GML;gml;Groovy;groovy;Haskell;haskell;HTML;html4strict;INI;ini;IO;io;Inno Script;inno;Java 5;java5;Java;java;Javascript;javascript;LaTeX;latex;Lisp;lisp;Lua;lua;Matlab;matlab;Microchip Assembler;mpasm;Microsoft Registry;reg;mIRC;mirc;Motorola 68000 Assembler;m68k;MySQL;mysql;NSIS;nsis;Objective C;objc;OpenOffice BASIC;oobas;Objective Caml;ocaml;Objective Caml (brief);ocaml-brief;Oracle 8;oracle8;Pascal;pascal;Per (forms);per;Perl;perl;PHP;php;PHP (brief);php-brief;PL/SQL;plsql;Python;phyton;Q(uick)BASIC;qbasic;robots.txt;robots;Ruby;ruby;Ruby on Rails;rails;SAS;sas;Scheme;scheme;sdlBasic;sdlbasic;SmallTalk;smalltalk;Smarty;smarty;SQL;sql;TCL/iTCL;tcl;T-SQL;tsql;Text;text;thinBasic;thinbasic;Unoidl;idl;VB.NET;vbnet;VHDL;vhdl;Visual BASIC;vb;Visual Fox Pro;visualfoxpro;WinBatch;winbatch;XML;xml;ZiLOG Z80;z80;###"}}
+|?|List of available code formatters||
+||
+|=|Language|=|Formatter|=|Language|=|Formatter|=|Language|=|Formatter||
+|#|
+|=|Actionscript||##actionscript##|=|ABAP||##abap##|=|ADA||##ada##||
+|=|Apache Log||##apache##|=|""AppleScript""||##applescript##|=|ASM||##asm##||
+|=|ASP||##asp##|=|""AutoIT""||##autoit##|=|Bash||##bash##||
+|=|""BlitzBasic""||##blitzbasic##|=|""Basic4GL""||##basic4gl##|=|bnf||##bnf##||
+|=|C||##c##|=|C for Macs||##c_mac##|=|C#||##csharp##||
+|=|C""++""||##cpp##|=|C""++"" (+QT)||##cpp-qt##|=|CAD DCL||##caddcl##||
+|=|""CadLisp""||##cadlisp##|=|CFDG||##cfdg##|=|""ColdFusion""||##cfm##||
+|=|CSS||##css##|=|D||##d##|=|Delphi||##delphi##||
+|=|Diff-Output||##diff##|=|DIV||##div##|=|DOS||##dos##||
+|=|Dot||##dot##|=|Eiffel||##eiffel##|=|Fortran||##fortran##||
+|=|""FreeBasic""||##freebasic##|=|FOURJ's Genero 4GL||##genero##|=|GML||##gml##||
+|=|Groovy||##groovy##|=|Haskell||##haskell##|=|HTML||##html4strict##||
+|=|INI||##ini##|=|Inno Script||##inno##|=|Io||##io##||
+|=|Java 5||##java5##|=|Java||##java##|=|Javascript||##javascript##||
+|=|""LaTeX""||##latex##|=|Lisp||##lisp##|=|Lua||##lua##||
+|=|Matlab||##matlab##|=|mIRC Scripting||##mirc##|=|Microchip Assembler||##mpasm##||
+|=|Microsoft Registry||##reg##|=|Motorola 68k Assembler||##m68k##|=|""MySQL""||##mysql##||
+|=|NSIS||##nsis##|=|Objective C||##objc##|=|""OpenOffice"" BASIC||##oobas##||
+|=|Objective Caml||##ocaml##|=|Objective Caml (brief)||##ocaml-brief##|=|Oracle 8||##oracle8##||
+|=|Pascal||##pascal##|=|Per (FOURJ's Genero 4GL)||##per##|=|Perl||##perl##||
+|=|PHP||##php##|=|PHP (brief)||##php-brief##|=|PL/SQL||##plsql##||
+|=|Python||##phyton##|=|Q(uick)BASIC||##qbasic##|=|robots.txt||##robots##||
+|=|Ruby on Rails||##rails##|=|Ruby||##ruby##|=|SAS||##sas##||
+|=|Scheme||##scheme##|=|sdlBasic||##sdlbasic##|=|Smarty||##smarty##||
+|=|SQL||##sql##|=|TCL/iTCL||##tcl##|=|T-SQL||##tsql##||
+|=|Text||##text##|=|thinBasic||##thinbasic##|=|Unoidl||##idl##||
+|=|VB.NET||##vbnet##|=|VHDL||##vhdl##|=|Visual BASIC||##vb##||
+|=|Visual Fox Pro||##visualfoxpro##|=|""WinBatch""||##winbatch##|=|XML||##xml##||
+|=|X""++""||##xpp##|=|""ZiLOG"" Z80 Assembler||##z80##|=| ||
+
 
 ===13. Mindmaps===
 
-Wikka has native support for [[Docs:FreeMind mindmaps]]. There are two options for embedding a mindmap in a wiki page.
+Wikka has native support for [[Wikka:FreeMind mindmaps]]. There are two options for embedding a mindmap in a wiki page.
 
 **Option 1:** Upload a ""FreeMind"" file to a webserver, and then place a link to it on a wikka page:
   ##""http://yourdomain.com/freemind/freemind.mm""##
@@ -291,17 +382,18 @@ You can easily paste HTML in a wiki page by wrapping it into two sets of doubleq
 
 ~##&quot;&quot;[html code]&quot;&quot;##
 
-**Examples:**
-
+<<
 ~##&quot;&quot;y = x<sup>n+1</sup>&quot;&quot;##
 ~""y = x<sup>n+1</sup>""
-
+<<::c::
+<<
 ~##&quot;&quot;<acronym title="Cascade Style Sheet">CSS</acronym>&quot;&quot;##
 ~""<acronym title="Cascade Style Sheet">CSS</acronym>""
+<<::c::
 
-By default, some HTML tags are removed by the ""SafeHTML"" parser to protect against potentially dangerous code.  The list of tags that are stripped can be found on the [[Docs:SafeHTML SafeHTML]] documentation page.
+By default, some HTML tags are removed by the ""SafeHTML"" parser to protect against potentially dangerous code.  The list of tags that are stripped can be found on the Wikka:SafeHTML page.
 
-It is possible to allow //all// HTML tags to be used, see Docs:UsingHTML for more information.
+It is possible to allow //all// HTML tags to be used, see Wikka:UsingHTML for more information.
 
 ----
 CategoryWiki
