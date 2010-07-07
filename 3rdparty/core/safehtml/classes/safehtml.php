@@ -190,6 +190,10 @@ class safehtml {
 	if (in_array($name, $this->DeleteContent))
 	{
 	 array_push($this->dcStack, $name);
+	 if(!isset($this->dcCounter[$name]))
+	 {
+		$this->dcCounter[$name] = 0;
+	 }
 	 $this->dcCounter[$name]++;
 	}
 	if (count($this->dcStack)!=0) return true;
