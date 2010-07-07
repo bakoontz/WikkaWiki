@@ -1,8 +1,28 @@
 ======Wikka Formatting Guide======
 
-<<**Note:** Anything between 2 sets of double-quotes is not formatted.<<::c::
-Once you have read through this, test your formatting skills in the SandBox.
-----
+<<===General Guidelines===
+If a markup sequence is not in these guidelines, then it is not officially supported. Use caution when implementing markup that is not officially supported by this document, as undocumented functionality may change with version updates.
+
+Unless otherwise stated in these guidelines, all markup is line based, that is, a newline character should not intervene. These are identified as 'inline' markup.
+<<::c::
+
+===Escaping Markup===
+
+Anything between 2 sets of double-quotes is not formatted. This is the equivalent of escaping a character(s):
+
+<<
+~##""**two bold &#34&#34**&#34&#34 stars**""##
+~**two bold ""**"" stars**
+<<
+In this case, the second set of ""**"" (escaped) stars will be ignored, //i.e.,// will not terminate the bold markup.
+
+You can also use double-quote escaping to avoid linking of CamelCase words, e.g.
+
+<<
+~##""This &quot;&quot;WikiWord&quot;&quot; is not parsed as a link""##
+~This ""WikiWord"" is not parsed as a link
+<<::c::
+
 ===1. Text Formatting===
 
 <<
