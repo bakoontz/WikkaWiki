@@ -94,7 +94,9 @@ else if ($this->HasAccess("write") && $this->HasAccess("read"))
 	{
 		// strip CRLF line endings down to LF to achieve consistency ... plus it saves database space.
 		// Note: these codes must remain enclosed in double-quotes to work! -- JsnX
-		$body = str_replace("\r\n", "\n", $this->GetSafeVar('body', 'post'));
+		// Note 2: Don't replace this with GetSafeVar()!  The
+		// formatter will take care of sanitizing the output.
+		$body = str_replace("\r\n", "\n", $_POST['body']);
 		// replace each 4 consecutive spaces at the start of a line with a tab
 		#$body = preg_replace("/\n[ ]{4}/", "\n\t", $body);						# @@@ FIXME: misses first line and multiple sets of four spaces - JW 2005-01-16
 		# JW FIXED 2005-07-12
