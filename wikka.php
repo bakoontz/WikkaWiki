@@ -254,12 +254,10 @@ $wakkaDefaultConfig = array(
 	'pages_purge_time'			=> '0',
 	'xml_recent_changes'		=> '10',
 	'hide_comments'				=> '0',
-	'comment_stylesheet'		=> 'boxed-comments.css',
 	'require_edit_note'			=> '0',		# edit note optional (0, default), edit note required (1) edit note disabled (2)
 	'anony_delete_own_comments'	=> '1',
 	'public_sysinfo'			=> '0',		# enable or disable public display of system information in SysInfo
 	'double_doublequote_html'	=> 'safe',
-	'external_link_tail' 		=> '<span class="exttail">&#8734;</span>',
 	'sql_debugging'				=> '0',
 	'admin_users' 				=> '',
 	'admin_email' 				=> '',
