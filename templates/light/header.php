@@ -5,9 +5,9 @@ $user = $this->GetUser();
 $site_base = $this->GetConfigValue("base_url");
 //UniversalEditButton (http://universaleditbutton.org/Universal_Edit_Button) #779
 $ueb = '';
-if ($this->GetHandler() != 'edit' && $this->HasAccess("write", $this->page["tag"])) 
+if ($this->GetHandler() != 'edit' && $this->HasAccess("write", $this->page["tag"]))
 {
-	$ueb .= '	<link rel="alternate" type="application/x-wiki" title="'.sprintf(WIKKA_PAGE_EDIT_LINK_TITLE, $this->page['tag']).'" href="'.$this->Href('edit', $this->page["tag"]).'"/>'."\n"; 
+	$ueb .= '	<link rel="alternate" type="application/x-wiki" title="'.sprintf(WIKKA_PAGE_EDIT_LINK_TITLE, $this->page['tag']).'" href="'.$this->Href('edit', $this->page["tag"]).'"/>'."\n";
 }
 if ( substr_count($site_base, 'wikka.php?wakka=') > 0 ) $site_base = substr($site_base,0,-16);
 ?>
@@ -22,8 +22,7 @@ if ( substr_count($site_base, 'wikka.php?wakka=') > 0 ) $site_base = substr($sit
 	<meta name="keywords" content="<?php echo $this->htmlspecialchars_ent($this->GetConfigValue("meta_keywords")) ?>" />
 	<meta name="description" content="<?php echo $this->htmlspecialchars_ent($this->GetConfigValue("meta_description")) ?>" />
 	<link rel="stylesheet" type="text/css" href="<?php echo $this->GetThemePath('/') ?>/css/light.css?<?php echo $this->htmlspecialchars_ent($this->GetConfigValue('stylesheet_hash')) ?>" />
-	<link rel="stylesheet" type="text/css" href="<?php echo $this->GetThemePath('/') ?>/css/<?php echo $this->GetConfigValue('comment_stylesheet') ?>?<?php echo $this->htmlspecialchars_ent($this->GetConfigValue('stylesheet_hash')) ?>" />
-	<link rel="stylesheet" type="text/css" href="<?php echo $this->GetThemePath('/') ?>/css/print.css" media="print" /> 
+	<link rel="stylesheet" type="text/css" href="<?php echo $this->GetThemePath('/') ?>/css/print.css" media="print" />
 	<link rel="icon" href="<?php echo $this->GetThemePath('/') ?>/images/favicon.ico" type="image/x-icon" />
 	<link rel="shortcut icon" href="<?php echo $this->GetThemePath('/') ?>/images/favicon.ico" type="image/x-icon" />
 <?php
@@ -31,14 +30,14 @@ if ($this->GetHandler() != 'edit')
 {
 	$rsslink  = '	<link rel="alternate" type="application/rss+xml" title="'.$this->GetWakkaName().': revisions for '.$this->tag.' (RSS)" href="'.$this->Href('revisions.xml', $this->tag).'" />'."\n";
 	$rsslink .= '	<link rel="alternate" type="application/rss+xml" title="'.$this->GetWakkaName().': recently edited pages (RSS)" href="'.$this->Href('recentchanges.xml', $this->tag).'" />'."\n";
-	echo $rsslink;	
+	echo $rsslink;
 }
-if (isset($this->additional_headers) && is_array($this->additional_headers) && count($this->additional_headers)) 
-{ 
-		foreach ($this->additional_headers as $additional_headers) 
-		{ 
-				echo $additional_headers; 
-		} 
+if (isset($this->additional_headers) && is_array($this->additional_headers) && count($this->additional_headers))
+{
+		foreach ($this->additional_headers as $additional_headers)
+		{
+				echo $additional_headers;
+		}
 }
 //UniversalEditButton
 echo $ueb;

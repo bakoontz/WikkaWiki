@@ -79,7 +79,7 @@ body{
 	padding: 10px;
 	color: #333;	
 	background-color: #D0E0F0;
-	border: 1px solid #CCE;
+	border: 1px solid #ABC;
 }
 
 #comments a {
@@ -89,7 +89,7 @@ body{
 
 #commentsheader {
 	clear: both;
-	border-top: 1px solid #CCCCCC;
+	border-top: 1px solid #CCC;
 }
 
 /* wrapper for the comment lists */
@@ -101,14 +101,14 @@ body{
 .comment-layout-1 {
 	background-color: #D0E0F0;
 	padding: 5px;
-	border: 1px solid #CCCCCC;
+	border: 1px solid #ABC;
 	margin: 5px;
 }
 
 .comment-layout-2 {
-	background-color: #F0F0F0;
+	background-color: #C0D0E0;
 	padding: 5px;
-	border: 1px solid #CCCCCC;
+	border: 1px solid #ABC;
 	margin: 5px;
 }
 
