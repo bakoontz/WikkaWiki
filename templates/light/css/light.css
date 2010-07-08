@@ -762,6 +762,10 @@ del {
 	text-decoration: none;
 }
 
+ins tt, del tt {
+	background-color: inherit;
+}
+
 .pagenote {color: #888;}
 
 .smaller {font-size: smaller;}
