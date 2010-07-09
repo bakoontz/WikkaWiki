@@ -65,7 +65,6 @@ if(!defined('WIKKA_REVISIONS')) define('WIKKA_REVISIONS', 'revisions');
 if(!defined('WIKKA_REVISION_NUMBER')) define('WIKKA_REVISION_NUMBER', 'Revision %s');
 if(!defined('WIKKA_REV_WHEN_BY_WHO')) define('WIKKA_REV_WHEN_BY_WHO', '%1$s by %2$s'); // %1$s - timestamp; %2$s - user name
 if(!defined('WIKKA_NO_PAGES_FOUND')) define('WIKKA_NO_PAGES_FOUND', 'No pages found.');
-if(!defined('WIKKA_NO_PAGES_FOUND_FOR')) define('WIKKA_NO_PAGES_FOUND_FOR', 'No pages found for %s.');
 if(!defined('WIKKA_PAGE_OWNER')) define('WIKKA_PAGE_OWNER', 'Owner: %s'); // %s - page owner name or link
 if(!defined('WIKKA_COMMENT_AUTHOR_DIVIDER')) define('WIKKA_COMMENT_AUTHOR_DIVIDER', ', comment by '); //TODo check if we can construct a single phrase here
 if(!defined('WIKKA_PAGE_EDIT_LINK_DESC')) define('WIKKA_PAGE_EDIT_LINK_DESC', 'edit');
@@ -77,13 +76,10 @@ if(!defined('WIKKA_NOTE')) define('WIKKA_NOTE', 'NOTE:');
 if(!defined('WIKKA_JAVA_PLUGIN_NEEDED')) define('WIKKA_JAVA_PLUGIN_NEEDED', 'Java 1.4.1 (or later) Plug-in is needed to run this applet,');
 if(!defined('REVISION_DATE_FORMAT')) define('REVISION_DATE_FORMAT', 'D, d M Y'); // @TODO
 if(!defined('REVISION_TIME_FORMAT')) define('REVISION_TIME_FORMAT', 'H:i T'); // @TODO
-if(!defined('TITLE_REVISION_LINK')) define('TITLE_REVISION_LINK', 'View recent revisions list for %s');  // @TODO
 if(!defined('INPUT_ERROR_STYLE')) define('INPUT_ERROR_STYLE', 'class="highlight"'); // @TODO
 if(!defined('CANCEL_ACL_LABEL')) define('CANCEL_ACL_LABEL', 'Cancel'); // @TODO
 if(!defined('UNREGISTERED_USER')) define('UNREGISTERED_USER', 'unregistered user');  // @TODO
-if(!defined('NOT_AVAILABLE')) define('NOT_AVAILABLE', 'n/a'); // @TODO replace inside the actions with WIKKA_NOT_AVAILABLE
 if(!defined('WHEN_BY_WHO')) define('WHEN_BY_WHO', '%1$s by %2$s'); // @TODO
-if(!defined('ERROR_ACL_READ_INFO')) define('ERROR_ACL_READ_INFO', 'You\'re not allowed to access this information.'); // @TODO
 if(!defined('I18N_LANG')) define('I18N_LANG', 'en-US'); // @TODO
 /**#@-*/
 
@@ -335,7 +331,6 @@ if(!defined('ADMINUSERS_USERDELETE_FAILURE')) define('ADMINUSERS_USERDELETE_FAIL
  */
 // calendar
 if(!defined('FMT_SUMMARY')) define('FMT_SUMMARY', 'Calendar for %s');	// %s - ???@@@
-if(!defined('TODAY')) define('TODAY', 'today');
 if(!defined('MIN_DATETIME')) define('MIN_DATETIME', strtotime('1970-01-01 00:00:00 GMT')); # earliest timestamp PHP can handle (Windows and some others - to be safe)
 if(!defined('MAX_DATETIME')) define('MAX_DATETIME', strtotime('2038-01-19 03:04:07 GMT')); # latest timestamp PHP can handle
 if(!defined('MIN_YEAR')) define('MIN_YEAR', date('Y',MIN_DATETIME));
@@ -491,8 +486,6 @@ if(!defined('ERROR_UNKNOWN_USER')) define('ERROR_UNKNOWN_USER', 'You have entere
 if(!defined('ERROR_MAIL_NOT_SENT')) define('ERROR_MAIL_NOT_SENT', 'An error occurred while trying to send the password. Outgoing mail might be disabled. Please try to contact your wiki administrator by posting a page comment.');
 if(!defined('BUTTON_SEND_PW')) define('BUTTON_SEND_PW', 'Send reminder');
 if(!defined('USERSETTINGS_REF')) define('USERSETTINGS_REF', 'Return to the %s page.'); // %s - UserSettings link
-if(!defined('ERROR_EMPTY_USER')) define('ERROR_EMPTY_USER', 'Please fill in your username!');
-if(!defined('BUTTON_SEND_PW_LABEL')) define('BUTTON_SEND_PW_LABEL', 'Send reminder');
 if(!defined('USERSETTINGS_LINK')) define('USERSETTINGS_LINK', 'Return to the [[UserSettings login]] screen.');
 /**#@-*/
 
@@ -547,18 +540,7 @@ if(!defined('FILES_DELETE_FILE')) define('FILES_DELETE_FILE', 'Delete this file?
 if(!defined('FILES_DELETE_FILE_BUTTON')) define('FILES_DELETE_FILE_BUTTON', 'Delete File');
 if(!defined('FILES_CANCEL_BUTTON')) define('FILES_CANCEL_BUTTON', 'Cancel');
 if(!defined('FILE_DELETED')) define('FILE_DELETED', 'File deleted');
-if(!defined('ERROR_NO_FILE_UPLOADS')) define('ERROR_NO_FILE_UPLOADS', 'File uploads are disallowed on this server');
-if(!defined('ERROR_NO_FILE_UPLOADED')) define('ERROR_NO_FILE_UPLOADED', 'No file uploaded');
-if(!defined('ERROR_DURING_FILE_UPLOAD')) define('ERROR_DURING_FILE_UPLOAD', 'There was an error uploading your file.  Please try again.');
-if(!defined('ERROR_MAX_FILESIZE_EXCEEDED')) define('ERROR_MAX_FILESIZE_EXCEEDED', 'Attempted file upload was too big.  Maximum allowed size is %d MB.');
-if(!defined('ERROR_FILE_EXISTS')) define('ERROR_FILE_EXISTS', 'There is already a file named <tt>%s</tt>. Please rename before uploading or delete the existing file first.');
 if(!defined('UPLOAD_DATE_FORMAT')) define('UPLOAD_DATE_FORMAT', 'Y-m-d H:i'); //TODO use general config settings for date format
-/**#@-*/
-
-/**#@+
- * Language constant used by the {@link geshiversion.php geshiversion} action
- */
-if(!defined('NOT_INSTALLED')) define('NOT_INSTALLED', 'not installed');
 /**#@-*/
 
 /**#@+
@@ -611,9 +593,6 @@ if(!defined('DATE_FORMAT')) define('DATE_FORMAT', 'D, d M Y'); #TODO make this s
 if(!defined('TIME_FORMAT')) define('TIME_FORMAT', 'H:i T'); #TODO make this system-configurable
 if(!defined('LASTEDIT_BOX')) define('LASTEDIT_BOX', 'lastedit');
 if(!defined('LASTEDIT_NOTES')) define('LASTEDIT_NOTES', 'lastedit_notes');
-if(!defined('ANONYMOUS_USER')) define('ANONYMOUS_USER', 'anonymous');
-if(!defined('LASTEDIT_MESSAGE')) define('LASTEDIT_MESSAGE', 'Last edited by %s');
-if(!defined('DIFF_LINK_TITLE')) define('DIFF_LINK_TITLE', 'Show differences from last revision');
 /**#@-*/
 
 /**#@+
@@ -639,7 +618,6 @@ if(!defined('MM_EDIT')) define('MM_EDIT', 'Use %s to edit it'); // %s - link to 
 if(!defined('MM_FULLSCREEN_LINK_DESC')) define('MM_FULLSCREEN_LINK_DESC', 'Open fullscreen');
 if(!defined('ERROR_INVALID_MM_SYNTAX')) define('ERROR_INVALID_MM_SYNTAX', 'Error: Invalid MindMap action syntax.');
 if(!defined('PROPER_USAGE_MM_SYNTAX')) define('PROPER_USAGE_MM_SYNTAX', 'Proper usage: %1$s or %2$s'); // %1$s - syntax sample 1; %2$s - syntax sample 2
-if(!defined('FREEMIND_PROJECT_URL')) define('FREEMIND_PROJECT_URL', 'http://freemind.sourceforge.net/');
 /**#@-*/
 
 /**#@+
@@ -731,7 +709,6 @@ if(!defined('RECENTCOMMENTS_NONE_FOUND')) define('RECENTCOMMENTS_NONE_FOUND', 'T
 if(!defined('RECENTCOMMENTS_NONE_FOUND_BY')) define('RECENTCOMMENTS_NONE_FOUND_BY', 'There are no recent comments by %s.');
 if(!defined('RECENTCOMMENTS_NONE_ACCESSIBLE')) define('RECENTCOMMENTS_NONE_ACCESSIBLE', 'There are no recent comments you have access to.');
 if(!defined('RECENT_COMMENTS_HEADING')) define('RECENT_COMMENTS_HEADING', '=====Recent comments=====');
-if(!defined('COMMENT_AUTHOR_DIVIDER')) define('COMMENT_AUTHOR_DIVIDER', ', comment by ');
 if(!defined('COMMENT_DATE_FORMAT')) define('COMMENT_DATE_FORMAT', 'D, d M Y');
 if(!defined('COMMENT_TIME_FORMAT')) define('COMMENT_TIME_FORMAT', 'H:i T');
 if(!defined('COMMENT_SNIPPET_LENGTH')) define('COMMENT_SNIPPET_LENGTH', 120);
@@ -765,7 +742,6 @@ if(!defined('ERROR_NO_REVERT_PRIVS')) define('ERROR_NO_REVERT_PRIVS', "Sorry, yo
  * Language constant used by the {@link revertlink.php revertlink} action
  */
 if(!defined('REVERTLINK_TEXT')) define('REVERTLINK_TEXT', '[Revert]');
-if(!defined('REVERTLINK_TITLE')) define('REVERTLINK_TITLE', 'Click to revert this page to the previous revision');
 if(!defined('REVERTLINK_OLDEST_TITLE')) define('REVERTLINK_OLDEST_TITLE', 'This is the oldest known version for this page');
 /**#@-*/
 
@@ -826,7 +802,6 @@ if(!defined('SEARCH_TIPS')) define('SEARCH_TIPS', "<br /><br /><hr /><br /><stro
 	."but not 'some noise words'). <br />");
 */
 if(!defined('SEARCH_MYSQL_IDENTICAL_CHARS')) define('SEARCH_MYSQL_IDENTICAL_CHARS', 'aàáâã,eèéêë,iìîï,oòóôõ,uùúû,cç,nñ,yý');
-if(!defined('SEARCH_TIPS_TITLE')) define('SEARCH_TIPS_TITLE', 'Search Tips');
 if(!defined('SEARCH_WORD_1')) define('SEARCH_WORD_1', 'apple');
 if(!defined('SEARCH_WORD_2')) define('SEARCH_WORD_2', 'banana');
 if(!defined('SEARCH_WORD_3')) define('SEARCH_WORD_3', 'juice');
@@ -839,6 +814,7 @@ if(!defined('SEARCH_TARGET_2')) define('SEARCH_TARGET_2', 'Find pages that conta
 if(!defined('SEARCH_TARGET_3')) define('SEARCH_TARGET_3',sprintf("Find pages that contain the word '%1\$s' but not '%2\$s'.",SEARCH_WORD_1,SEARCH_WORD_4));
 if(!defined('SEARCH_TARGET_4')) define('SEARCH_TARGET_4',sprintf('Find pages that contain words starting with "%s"', SEARCH_WORD_1));
 if(!defined('SEARCH_TARGET_5')) define('SEARCH_TARGET_5',sprintf("Find pages that contain the exact phrase '%1\$s' (for example, pages that contain '%1\$s of wisdom' but not '%2\$s noise %3\$s').",SEARCH_PHRASE,SEARCH_WORD_5,SEARCH_WORD_6));
+if(!defined('SEARCH_TIPS_TITLE')) define('SEARCH_TIPS_TITLE', 'Search Tips');
 if(!defined('SEARCH_TIPS')) define('SEARCH_TIPS', '<br /><br /><hr /><br /><strong>'.SEARCH_TIPS_TITLE.':</strong><br /><br />'
 	.'<div class="indent"><tt>'.SEARCH_WORD_1.' '.SEARCH_WORD_2.'</tt></div>'
 	.SEARCH_TARGET_1.'<br /><br />'
@@ -935,34 +911,9 @@ if(!defined('REVISION_DISPLAY_LIMIT_MIN')) define('REVISION_DISPLAY_LIMIT_MIN', 
 if(!defined('REVISION_DISPLAY_LIMIT_MAX')) define('REVISION_DISPLAY_LIMIT_MAX', '20'); // keep this value within a reasonable limit to avoid an unnecessary long lists
 if(!defined('RECENTCHANGES_DISPLAY_LIMIT_MIN')) define('RECENTCHANGES_DISPLAY_LIMIT_MIN', '0'); // 0 means no limit, 1 is the minimum number of changes
 if(!defined('RECENTCHANGES_DISPLAY_LIMIT_MAX')) define('RECENTCHANGES_DISPLAY_LIMIT_MAX', '50'); // keep this value within a reasonable limit to avoid an unnecessary long list
-if(!defined('USER_SETTINGS_HEADING')) define('USER_SETTINGS_HEADING', 'User settings');
-if(!defined('USER_LOGGED_OUT')) define('USER_LOGGED_OUT', 'You have successfully logged out.');
-if(!defined('USER_SETTINGS_STORED')) define('USER_SETTINGS_STORED', 'User settings stored!');
 if(!defined('ERROR_NO_BLANK')) define('ERROR_NO_BLANK', 'Sorry, blanks are not permitted in the password.');
-if(!defined('PASSWORD_CHANGED')) define('PASSWORD_CHANGED', 'Password successfully changed!');
-if(!defined('ERROR_OLD_PASSWORD_WRONG')) define('ERROR_OLD_PASSWORD_WRONG', 'The old password you entered is wrong.');
-if(!defined('UPDATE_SETTINGS_INPUT')) define('UPDATE_SETTINGS_INPUT', 'Update Settings');
-if(!defined('CHANGE_PASSWORD_HEADING')) define('CHANGE_PASSWORD_HEADING', 'Change your password:');
-if(!defined('CURRENT_PASSWORD_LABEL')) define('CURRENT_PASSWORD_LABEL', 'Your current password:');
-if(!defined('PASSWORD_REMINDER_LABEL')) define('PASSWORD_REMINDER_LABEL', 'Password reminder:');
-if(!defined('CHANGE_BUTTON_LABEL')) define('CHANGE_BUTTON_LABEL', 'Change password');
-if(!defined('REGISTER_BUTTON_LABEL')) define('REGISTER_BUTTON_LABEL', 'Register');
-if(!defined('QUICK_LINKS_HEADING')) define('QUICK_LINKS_HEADING', 'Quick links');
-if(!defined('QUICK_LINKS')) define('QUICK_LINKS', 'See a list of pages you own (MyPages) and pages you\'ve edited (MyChanges).');
 if(!defined('ERROR_WRONG_PASSWORD')) define('ERROR_WRONG_PASSWORD', 'Sorry, you entered the wrong password.');
-if(!defined('ERROR_WRONG_HASH')) define('ERROR_WRONG_HASH', 'Sorry, you entered a wrong password reminder.');
-if(!defined('ERROR_NON_EXISTENT_USERNAME')) define('ERROR_NON_EXISTENT_USERNAME', 'Sorry, this user name doesn\'t exist.');
-if(!defined('ERROR_USERNAME_EXISTS')) define('ERROR_USERNAME_EXISTS', 'Sorry, this user name already exists.');
 if(!defined('ERROR_EMAIL_ADDRESS_REQUIRED')) define('ERROR_EMAIL_ADDRESS_REQUIRED', 'Please specify an email address.');
-if(!defined('REGISTRATION_SUCCEEDED')) define('REGISTRATION_SUCCEEDED', 'You have successfully registered!');
-if(!defined('REGISTERED_USER_LOGIN_LABEL')) define('REGISTERED_USER_LOGIN_LABEL', 'If you\'re already a registered user, log in here!');
-if(!defined('LOGIN_HEADING')) define('LOGIN_HEADING', '===Login===');
-if(!defined('LOGIN_REGISTER_HEADING')) define('LOGIN_REGISTER_HEADING', '===Login/Register===');
-if(!defined('LOGIN_BUTTON_LABEL')) define('LOGIN_BUTTON_LABEL', 'Login');
-if(!defined('LOGOUT_BUTTON_LABEL')) define('LOGOUT_BUTTON_LABEL', 'Logout');
-if(!defined('NEW_USER_REGISTER_LABEL')) define('NEW_USER_REGISTER_LABEL', 'Fields you only need to fill in when you\'re logging in for the first time (and thus signing up as a new user on this site).');
-if(!defined('RETRIEVE_PASSWORD_HEADING')) define('RETRIEVE_PASSWORD_HEADING', '===Forgot your password?===');
-if(!defined('RETRIEVE_PASSWORD_MESSAGE')) define('RETRIEVE_PASSWORD_MESSAGE', 'If you need a password reminder, click [[PasswordForgotten here]]. --- You can login here using your password reminder.');
 if(!defined('THEME_LABEL')) define('THEME_LABEL', 'Theme:');
 /**#@-*/
 
@@ -1049,7 +1000,6 @@ if(!defined('ACLS_DEFAULT_ACLS')) define('ACLS_DEFAULT_ACLS', 'Any lists that ar
 if(!defined('ACL_HEADING')) define('ACL_HEADING', '====Access Control Lists for %s===='); // %s - name of current page
 if(!defined('READ_ACL_LABEL')) define('READ_ACL_LABEL', 'Read ACL:');
 if(!defined('WRITE_ACL_LABEL')) define('WRITE_ACL_LABEL', 'Write ACL:');
-if(!defined('COMMENT_ACL_LABEL')) define('COMMENT_ACL_LABEL', 'Comment ACL:');
 if(!defined('STORE_ACL_LABEL')) define('STORE_ACL_LABEL', 'Store ACLs');
 if(!defined('SET_OWNER_CURRENT_LABEL')) define('SET_OWNER_CURRENT_LABEL', '(Current Owner)');
 if(!defined('SET_OWNER_PUBLIC_LABEL')) define('SET_OWNER_PUBLIC_LABEL','(Public)');
@@ -1160,13 +1110,7 @@ if(!defined('EDIT_COMMENT_TIMESTAMP_CAPTION')) define('EDIT_COMMENT_TIMESTAMP_CA
 if(!defined('ERROR_INVALID_PAGEID')) define('ERROR_INVALID_PAGEID', 'The revision id does not exist for the requested page');
 define ('MAX_TAG_LENGTH', 75);
 define ('MAX_EDIT_NOTE_LENGTH', 50);
-if(!defined('PREVIEW_HEADER')) define('PREVIEW_HEADER', 'Preview');
-if(!defined('LABEL_EDIT_NOTE')) define('LABEL_EDIT_NOTE', 'Please add a note on your edit');
-if(!defined('ERROR_OVERWRITE_ALERT')) define('ERROR_OVERWRITE_ALERT', 'OVERWRITE ALERT: This page was modified by someone else while you were editing it.<br /> Please copy your changes and re-edit this page.');
 if(!defined('INPUT_SUBMIT_PREVIEW')) define('INPUT_SUBMIT_PREVIEW', 'Preview');
-if(!defined('INPUT_SUBMIT_STORE')) define('INPUT_SUBMIT_STORE', 'Store');
-if(!defined('INPUT_SUBMIT_REEDIT')) define('INPUT_SUBMIT_REEDIT', 'Re-edit');
-if(!defined('INPUT_BUTTON_CANCEL')) define('INPUT_BUTTON_CANCEL', 'Cancel');
 if(!defined('INPUT_SUBMIT_RENAME')) define('INPUT_SUBMIT_RENAME', 'Rename');
 /**#@-*/
 
@@ -1189,10 +1133,7 @@ if(!defined('OLDEST_VERSION_EDITED_ON_BY')) define('OLDEST_VERSION_EDITED_ON_BY'
 if(!defined('MOST_RECENT_EDIT')) define('MOST_RECENT_EDIT', 'Last edited on %1$s by %2$s');
 if(!defined('HISTORY_MORE_LINK_DESC')) define('HISTORY_MORE_LINK_DESC', 'here'); // used for alternative history link in HISTORY_MORE
 if(!defined('HISTORY_MORE')) define('HISTORY_MORE', 'Full history for this page cannot be displayed within a single page, click %s to view more.'); // %s alternative history link # @@@ TODO avoid using 'here' ^
-if(!defined('DIFF_ADDITIONS')) define('DIFF_ADDITIONS', 'Additions:');
-if(!defined('DIFF_DELETIONS')) define('DIFF_DELETIONS', 'Deletions:');
 if(!defined('DIFF_NO_DIFFERENCES')) define('DIFF_NO_DIFFERENCES', 'No differences.');
-if(!defined('REVISION_NUMBER')) define('REVISION_NUMBER', 'Revision %s');
 /**#@-*/
 
 /**#@+
@@ -1210,9 +1151,6 @@ if(!defined('COMMENT_DELETE_BUTTON')) define('COMMENT_DELETE_BUTTON', 'Delete');
 if(!defined('COMMENT_REPLY_BUTTON')) define('COMMENT_REPLY_BUTTON', 'Reply');
 if(!defined('COMMENT_ADD_BUTTON')) define('COMMENT_ADD_BUTTON', 'Add Comment');
 if(!defined('COMMENT_NEW_BUTTON')) define('COMMENT_NEW_BUTTON', 'New Comment');
-if(!defined('DISPLAY_COMMENTS_THREADED')) define('DISPLAY_COMMENTS_THREADED', 'Threaded');
-if(!defined('BUTTON_NEW_COMMENT')) define('BUTTON_NEW_COMMENT', 'New Comment');
-if(!defined('BUTTON_REPLY_COMMENT')) define('BUTTON_REPLY_COMMENT', 'Reply to Comment');
 /**#@-*/
 
 /**#@+
@@ -1240,7 +1178,6 @@ if(!defined('FIRST_NODE_LABEL')) define('FIRST_NODE_LABEL', 'Recent Changes');
  */
 // recentchanges.xml
 if(!defined('RECENTCHANGES_DESC')) define('RECENTCHANGES_DESC', 'Recent changes of %s'); // %s - page name
-if(!defined('LABEL_ERROR')) define('LABEL_ERROR', 'Error');
 if(!defined('RECENTCHANGES_FEED_TITLE')) define('RECENTCHANGES_FEED_TITLE',"%s - recently changed pages");	// %s - name of the wiki
 if(!defined('RECENTCHANGES_FEED_DESCRIPTION')) define('RECENTCHANGES_FEED_DESCRIPTION',"New and recently changed pages from %s");	// %s - name of the wiki
 if(!defined('RECENTCHANGES_FEED_IMAGE_TITLE')) define('RECENTCHANGES_FEED_IMAGE_TITLE',"Wikka logo");
@@ -1329,18 +1266,8 @@ if(!defined('REVISIONS_MORE_BUTTON')) define('REVISIONS_MORE_BUTTON', 'Next...')
 // revisions.xml
 if(!defined('REVISIONS_EDITED_BY')) define('REVISIONS_EDITED_BY', 'Edited by %s'); // %s user name
 if(!defined('HISTORY_REVISIONS_OF')) define('HISTORY_REVISIONS_OF', 'History/revisions of %s'); // %s - page name
-if(!defined('EDITED_BY')) define('EDITED_BY', 'Edited by %s');
 if(!defined('I18N_ENCODING_UTF8')) define('I18N_ENCODING_UTF8', 'UTF-8');
 if(!defined('RSS_REVISIONS_VERSION')) define('RSS_REVISIONS_VERSION','2.0');
-if(!defined('RSS_RECENTCHANGES_VERSION')) define('RSS_RECENTCHANGES_VERSION','0.92');
-/**#@-*/
-
-/**#@+
- * Language constant used by the {@link revisions.php revisions} (page) handler
- */
-if(!defined('BUTTON_RETURN_TO_NODE')) define('BUTTON_RETURN_TO_NODE', 'Return To Node / Cancel');
-if(!defined('BUTTON_SHOW_DIFFERENCES')) define('BUTTON_SHOW_DIFFERENCES', 'Show Differences');
-if(!defined('SIMPLE_DIFF')) define('SIMPLE_DIFF', 'Simple Diff');
 /**#@-*/
 
 /**#@+
@@ -1372,9 +1299,6 @@ if(!defined('SHOW_OLD_REVISION_SOURCE')) define('SHOW_OLD_REVISION_SOURCE', 0); 
 // showcode
 if(!defined('SOURCE_HEADING')) define('SOURCE_HEADING', 'Wiki source for %s'); // %s - page link
 if(!defined('SHOW_RAW_LINK_DESC')) define('SHOW_RAW_LINK_DESC', 'Show raw source');
-if(!defined('RAW_LINK_DESC')) define('RAW_LINK_DESC', 'show source only');
-if(!defined('ERROR_NOT_EXISTING_PAGE')) define('ERROR_NOT_EXISTING_PAGE', 'Sorry, this page doesn\'t exist.');
-if(!defined('ERROR_NO_READ_ACCESS')) define('ERROR_NO_READ_ACCESS', 'Sorry, you aren\'t allowed to read this page.');
 /**#@-*/
 
 /* ------------------ LIBS ------------------*/
