@@ -258,10 +258,15 @@ a.ext:hover {
 
 /* link tails */
 
-/* user links or spans */
+/* user links and spans */
 .user, .user:hover {
 	background: url(../images/user.gif) left bottom no-repeat;
-	padding-left: 1.1em;
+	padding-left: .9em;
+}
+
+#content a.user, #content a.user:hover {
+	background: url(../images/user.gif) left bottom no-repeat;
+	padding-left: .9em;
 }
 
 /* external links */
