@@ -2231,6 +2231,7 @@ class Wakka
 	function MiniHref($handler='', $tag='')
 	{
 		if (!$tag = trim($tag)) $tag = $this->tag;
+		$tag = preg_replace('/\s+/', '_', $tag);
 		return $tag.($handler ? "/".$handler : "");
 	}
 
