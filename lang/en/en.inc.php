@@ -552,6 +552,7 @@ if(!defined('ERROR_NO_FILE_UPLOADED')) define('ERROR_NO_FILE_UPLOADED', 'No file
 if(!defined('ERROR_DURING_FILE_UPLOAD')) define('ERROR_DURING_FILE_UPLOAD', 'There was an error uploading your file.  Please try again.');
 if(!defined('ERROR_MAX_FILESIZE_EXCEEDED')) define('ERROR_MAX_FILESIZE_EXCEEDED', 'Attempted file upload was too big.  Maximum allowed size is %d MB.');
 if(!defined('ERROR_FILE_EXISTS')) define('ERROR_FILE_EXISTS', 'There is already a file named <tt>%s</tt>. Please rename before uploading or delete the existing file first.');
+if(!defined('UPLOAD_DATE_FORMAT')) define('UPLOAD_DATE_FORMAT', 'Y-m-d H:i'); //TODO use general config settings for date format
 /**#@-*/
 
 /**#@+
@@ -1240,6 +1241,11 @@ if(!defined('FIRST_NODE_LABEL')) define('FIRST_NODE_LABEL', 'Recent Changes');
 // recentchanges.xml
 if(!defined('RECENTCHANGES_DESC')) define('RECENTCHANGES_DESC', 'Recent changes of %s'); // %s - page name
 if(!defined('LABEL_ERROR')) define('LABEL_ERROR', 'Error');
+if(!defined('RECENTCHANGES_FEED_TITLE')) define('RECENTCHANGES_FEED_TITLE',"%s - recently changed pages");	// %s - name of the wiki
+if(!defined('RECENTCHANGES_FEED_DESCRIPTION')) define('RECENTCHANGES_FEED_DESCRIPTION',"New and recently changed pages from %s");	// %s - name of the wiki
+if(!defined('RECENTCHANGES_FEED_IMAGE_TITLE')) define('RECENTCHANGES_FEED_IMAGE_TITLE',"Wikka logo");
+if(!defined('RECENTCHANGES_FEED_IMAGE_DESCRIPTION')) define('RECENTCHANGES_FEED_IMAGE_DESCRIPTION',"Feed provided by Wikka");
+if(!defined('RECENTCHANGES_FEED_ITEM_DESCRIPTION')) define('RECENTCHANGES_FEED_ITEM_DESCRIPTION',"By %s");	// %s - user name
 /**#@-*/
 
 /**#@+
@@ -1290,7 +1296,7 @@ if(!defined('REFERRERS_URLS_TO_PAGE')) define('REFERRERS_URLS_TO_PAGE', 'Externa
  * Language constant used by the {@link revert.php revert} (page) handler
  */
 // revert
-define ('REVERT_DEFAULT_COMMENT', 'Reverted to previous revision');
+if(!defined('REVERT_DEFAULT_COMMENT')) define ('REVERT_DEFAULT_COMMENT', 'Reverted to previous revision');
 /**#@-*/
 
 /**#@+
@@ -1390,6 +1396,21 @@ if(!defined('FORMATTER_UNKNOWN_SPECCHARS')) define('FORMATTER_UNKNOWN_SPECCHARS'
 if(!defined('FORMATTER_UNKNOWN')) define('FORMATTER_UNKNOWN', 'Formatter "%s" not found'); // %s formatter name
 if(!defined('DEFAULT_THEMES_TITLE')) define('DEFAULT_THEMES_TITLE', 'Default themes (%s)'); //%s: number of available themes 
 if(!defined('CUSTOM_THEMES_TITLE')) define('CUSTOM_THEMES_TITLE', 'Custom themes (%s)'); //%s: number of available themes
+/**#@-*/
+
+/**#@+
+ * Language constant used by the {@link admin.lib.php admin class}
+ * (the admin core containing most admin-related methods)
+ */
+// admin.lib
+// Reversion routine strings
+if(!defined('REVERT_DEFAULT_COMMENT')) define ('REVERT_DEFAULT_COMMENT', 'Reverting last edit by %s [%d] to previous version [%d]');
+if(!defined('REVERT_MESSAGE_SUCCESS')) define ('REVERT_MESSAGE_SUCCESS', 'Reverted to previous version');
+if(!defined('REVERT_MESSAGE_FAILURE')) define ('REVERT_MESSAGE_FAILURE', 'Reversion to previous version FAILED!');
+
+// User deletion strings
+if(!defined('USERDELETE_MESSAGE_SUCCESS')) define('USERDELETE_MESSAGE_SUCCESS', 'User deletion successful');
+if(!defined('USERDELETE_MESSAGE_FAILURE')) define('USERDELETE_MESSAGE_FAILURE', 'User deletion error');
 /**#@-*/
 
 /* ------------------ SETUP ------------------ */

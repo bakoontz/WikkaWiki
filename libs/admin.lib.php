@@ -17,16 +17,6 @@
  *
  */
 
-//i18n
-// Reversion routine strings
-if(!defined('REVERT_DEFAULT_COMMENT')) define ('REVERT_DEFAULT_COMMENT', 'Reverting last edit by %s [%d] to previous version [%d]');
-if(!defined('REVERT_MESSAGE_SUCCESS')) define ('REVERT_MESSAGE_SUCCESS', 'Reverted to previous version');
-if(!defined('REVERT_MESSAGE_FAILURE')) define ('REVERT_MESSAGE_FAILURE', 'Reversion to previous version FAILED!');
-
-// User deletion strings
-if(!defined('USERDELETE_MESSAGE_SUCCESS')) define('USERDELETE_MESSAGE_SUCCESS', 'User deletion successful');
-if(!defined('USERDELETE_MESSAGE_FAILURE')) define('USERDELETE_MESSAGE_FAILURE', 'User deletion error');
-
 /**
  * LoadLastTwoPagesByTag
  *

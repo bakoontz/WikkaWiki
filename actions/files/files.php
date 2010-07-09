@@ -58,8 +58,6 @@ if(!defined('INTRANET_MODE')) define('INTRANET_MODE', 0);
 if(!defined('MAX_UPLOAD_SIZE')) define('MAX_UPLOAD_SIZE', 2097152);
 /** Pipe-separated list of allowed file extensions */
 if(!defined('ALLOWED_FILE_EXTENSIONS')) define('ALLOWED_FILE_EXTENSIONS', 'gif|jpeg|jpg|jpe|png|doc|xls|csv|ppt|ppz|pps|pot|pdf|asc|txt|zip|gtar|gz|bz2|tar|rar|vpp|mpp|vsd|mm|htm|html'); # #34
-/** Displayed date format */
-if(!defined('UPLOAD_DATE_FORMAT')) define('UPLOAD_DATE_FORMAT', 'Y-m-d H:i'); //TODO use general config settings for date format
 /** Sort routines */
 if(!defined('SORT_BY_FILENAME')) define('SORT_BY_FILENAME', 'filename');
 if(!defined('SORT_BY_DATE')) define('SORT_BY_DATE', 'date');

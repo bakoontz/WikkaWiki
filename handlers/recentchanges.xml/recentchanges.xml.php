@@ -69,16 +69,6 @@ define('FEED_CSS','xml.css');
 define('FEED_IMAGE_PATH','images/wikka_logo.jpg');
 define('FEED_IMAGE_URL', $this->StaticHref(FEED_IMAGE_PATH));
 
-/**#@+
- * i18n string.
- */
-define('RECENTCHANGES_FEED_TITLE',"%s - recently changed pages");	// %s - name of the wiki
-define('RECENTCHANGES_FEED_DESCRIPTION',"New and recently changed pages from %s");	// %s - name of the wiki
-define('RECENTCHANGES_FEED_IMAGE_TITLE',"Wikka logo");
-define('RECENTCHANGES_FEED_IMAGE_DESCRIPTION',"Feed provided by Wikka");
-define('RECENTCHANGES_FEED_ITEM_DESCRIPTION',"By %s");	// %s - user name
-/**#@-*/
-
 //initialize variables
 $f = ''; #feed format	empty string will force default format
 /*
