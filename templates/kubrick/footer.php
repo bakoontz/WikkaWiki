@@ -9,12 +9,14 @@
 <!-- BEGIN SYSTEM INFO -->
 <div id="smallprint">
 <?php
-echo $this->Link('http://validator.w3.org/check/referer', '', 'Valid XHTML 1.0 Transitional');
+echo $this->Link('http://validator.w3.org/check/referer', '', VALID_XHTML_LINK_DESC);
 ?> ::
 <?php
-echo $this->Link('http://jigsaw.w3.org/css-validator/check/referer', '', 'Valid CSS');
+echo $this->Link('http://jigsaw.w3.org/css-validator/check/referer', '', VALID_CSS_LINK_DESC);
 ?> ::
-Powered by <?php echo $this->Link('http://wikkawiki.org/', '', 'WikkaWiki ' . ($this->IsAdmin() ? $this->GetWakkaVersion() . $wikka_patch_level : "")); ?>
+<?php
+echo $this->Link('http://wikkawiki.org/', '', sprintf(POWERED_BY_WIKKA_LINK_DESC, 'WikkaWiki' .($this->IsAdmin() ? ' '.$this->GetWakkaVersion() . $wikka_patch_level : '')));
+?>
 </div>
 <!-- END SYSTEM INFO -->
 <?php

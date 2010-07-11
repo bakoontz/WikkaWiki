@@ -150,6 +150,9 @@ if(!defined('REFERRERS_LINK_TITLE')) define('REFERRERS_LINK_TITLE', 'Click to vi
 if(!defined('REFERRERS_LINK_DESC')) define('REFERRERS_LINK_DESC', 'Referrers');
 if(!defined('QUERY_LOG')) define('QUERY_LOG', 'Query log:');
 if(!defined('SEARCH_LABEL')) define('SEARCH_LABEL', 'Search:');
+if(!defined('VALID_XHTML_LINK_DESC')) define('VALID_XHTML_LINK_DESC', 'Valid XHTML');
+if(!defined('VALID_CSS_LINK_DESC')) define('VALID_CSS_LINK_DESC', 'Valid CSS:');
+if(!defined('POWERED_BY_WIKKA_LINK_DESC')) define('POWERED_BY_WIKKA_LINK_DESC', 'Powered by %s'); // %s - engine and version
 /**#@-*/
 
 
@@ -468,8 +471,8 @@ if(!defined('PW_FORGOTTEN_HEADING')) define('PW_FORGOTTEN_HEADING', 'Password re
 if(!defined('PW_CHK_SENT')) define('PW_CHK_SENT', 'A password reminder has been sent to %s\'s registered email address.'); // %s - username
 if(!defined('PW_FORGOTTEN_MAIL')) define('PW_FORGOTTEN_MAIL', 'Hello, %1$s!
 
-Someone requested that we send to this email address a password reminder to 
-login at %2$s. If you did not request this reminder, disregard this 
+Someone requested that we send to this email address a password reminder to
+login at %2$s. If you did not request this reminder, disregard this
 email, no action is necessary. Your password will stay the same.
 
 Your wikiname: %1$s
@@ -731,6 +734,13 @@ if(!defined('RECENTLYCOMMENTED_NONE_ACCESSIBLE')) define('RECENTLYCOMMENTED_NONE
 if (!defined('PAGE_MOVED_TO')) if(!defined('PAGE_MOVED_TO')) define('PAGE_MOVED_TO', 'This page has been moved to %s.'); # %s - targe page
 if (!defined('REDIRECTED_FROM')) if(!defined('REDIRECTED_FROM')) define('REDIRECTED_FROM', 'Redirected from %s.'); # %s - redirecting page
 if(!defined('INVALID_REDIRECT')) if(!defined('INVALID_REDIRECT')) define('INVALID_REDIRECT', 'Invalid redirect. Target must be an existing wiki page.');
+
+/**#@+
+ * Language constant used by the {@link referrerslink.php referrerslink} action
+ */
+if (!defined('REFERRERSLINK_TEXT')) define('REFERRERSLINK_TEXT', '[Referrers]');
+if (!defined('REFERRERSLINK_TITLE')) define('REFERRERSLINK_TITLE', 'Click to view a list of URLs referring to this page.');
+/**#@-*/
 
 /**#@+
  * Language constant used by the {@link revert.php revert} action
@@ -1318,7 +1328,7 @@ if(!defined('HANDLER_UNKNOWN_SPECCHARS')) define('HANDLER_UNKNOWN_SPECCHARS', 'U
 if(!defined('HANDLER_UNKNOWN')) define('HANDLER_UNKNOWN', 'Sorry, %s is an unknown handler.'); // %s handler name
 if(!defined('FORMATTER_UNKNOWN_SPECCHARS')) define('FORMATTER_UNKNOWN_SPECCHARS', 'Unknown formatter; the formatter name must not contain special characters.');
 if(!defined('FORMATTER_UNKNOWN')) define('FORMATTER_UNKNOWN', 'Formatter "%s" not found'); // %s formatter name
-if(!defined('DEFAULT_THEMES_TITLE')) define('DEFAULT_THEMES_TITLE', 'Default themes (%s)'); //%s: number of available themes 
+if(!defined('DEFAULT_THEMES_TITLE')) define('DEFAULT_THEMES_TITLE', 'Default themes (%s)'); //%s: number of available themes
 if(!defined('CUSTOM_THEMES_TITLE')) define('CUSTOM_THEMES_TITLE', 'Custom themes (%s)'); //%s: number of available themes
 /**#@-*/
 
