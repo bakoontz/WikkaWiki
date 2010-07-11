@@ -84,7 +84,7 @@ if (isset($_SERVER['HTTP_REFERER']) && preg_match($regex_referrer, $_SERVER['HTT
 	if (strcasecmp($this->tag, $match[1]))
 	{
 		$_SESSION['go_back'] = $_SERVER['HTTP_REFERER'];
-		//We save the tag of the referring page, this tag is to be shown in label <Go back to ...>. We must use a session here because if the user 
+		//We save the tag of the referring page, this tag is to be shown in label <Go back to ...>. We must use a session here because if the user
 		//Refresh the page by hitting <Enter> on the address bar, the value would be lost.
 		$_SESSION['go_back_tag'] = $match[1];
 	}
@@ -116,7 +116,7 @@ if ($user = $this->GetUser())
 		$revisioncount = (int) $this->GetSafeVar('revisioncount', 'post');
 		$changescount = (int) $this->GetSafeVar('changescount', 'post');
 		$usertheme = $this->GetSafeVar('theme', 'post');
-		
+
 		// validate form input
 		switch (TRUE)
 		{
@@ -146,7 +146,7 @@ if ($user = $this->GetUser())
 						default_comment_display = '".$default_comment_display."',
 						revisioncount = ".$revisioncount.",
 						changescount = ".$changescount.",
-						theme = '".mysql_real_escape_string($usertheme)."'						
+						theme = '".mysql_real_escape_string($usertheme)."'
 					WHERE name = '".$user['name']."'
 					LIMIT 1"
 					);
@@ -219,7 +219,7 @@ if ($user = $this->GetUser())
 		$password = $this->GetSafeVar('password', 'post');
 		$password_confirm = $this->GetSafeVar('password_confirm', 'post');
 		$update_option = $this->GetSafeVar('update_option', 'post');
-		
+
 		switch (TRUE)
 		{
 			case (strlen($oldpass) == 0):
@@ -295,7 +295,7 @@ if ($user = $this->GetUser())
 	<fieldset><legend><?php echo COMMENT_STYLE_LABEL ?></legend>
 	<input id="default_comment_flat_asc" type="radio" name="default_comment_display" value="date_asc" <?php echo($default_comment_display=="date_asc" ?  'checked' : '') ?> /><label for="default_comment_flat_asc"><?php echo COMMENT_ASC_LABEL ?></label><br />
 	<input id="default_comment_flat_desc" type="radio" name="default_comment_display" value="date_desc" <?php echo($default_comment_display=="date_desc" ? 'checked' : '') ?> /><label for="default_comment_flat_desc"><?php echo COMMENT_DEC_LABEL ?></label><br />
-	<input id="default_comment_threaded" type="radio" name="default_comment_display" value="threaded" <?php echo($default_comment_display=="threaded" ?  'checked' : '') ?> /><label for="default_comment_threaded"><?php echo COMMENT_THREADED_LABEL ?></label><br /> 
+	<input id="default_comment_threaded" type="radio" name="default_comment_display" value="threaded" <?php echo($default_comment_display=="threaded" ?  'checked' : '') ?> /><label for="default_comment_threaded"><?php echo COMMENT_THREADED_LABEL ?></label><br />
 	</fieldset>
 	<br />
 	<label for="revisioncount"><?php echo PAGEREVISION_LIST_LIMIT_LABEL ?></label>
@@ -366,7 +366,7 @@ else
 
 	// is user trying to log in or register?
 	// BEGIN *** LOGIN/REGISTER ***
-	$register = $this->GetConfigValue('allow_user_registration'); 
+	$register = $this->GetConfigValue('allow_user_registration');
 	if ($this->GetSafeVar('submit', 'post') == LOGIN_BUTTON)
 	{
 		// BEGIN *** LOGIN ***
@@ -512,12 +512,12 @@ else
 	elseif ($this->GetSafeVar('action', 'post') == 'updatepass')
 	{
 			$name = trim($this->GetSafeVar('yourname', 'post'));
-		if (strlen($name) == 0)	// empty username	
+		if (strlen($name) == 0)	// empty username
 		{
 			$newerror = WIKKA_ERROR_EMPTY_USERNAME;
 			$username_temp_highlight = INPUT_ERROR_STYLE;
 		}
-		elseif (!$this->IsWikiName($name))	// check if name is WikiName style	
+		elseif (!$this->IsWikiName($name))	// check if name is WikiName style
 		{
 			$newerror = ERROR_WIKINAME;
 			$username_temp_highlight = INPUT_ERROR_STYLE;
@@ -576,7 +576,7 @@ else
 	{
 		// FIXME @@@ label for a checkbox should come AFTER it, not before
 	?>
-	<label for="do_redirect"><?php printf(USERSETTINGS_REDIRECT_AFTER_LOGIN_LABEL, $_SESSION['go_back_tag']); ?></label>
+	<label for="do_redirect"><?php printf(USERSETTINGS_REDIRECT_AFTER_LOGIN_LABEL, urldecode($_SESSION['go_back_tag'])); ?></label>
 	<input type="checkbox" name="do_redirect" id="do_redirect"<?php if (isset($_POST['do_redirect']) || empty($_POST)) echo ' checked="checked"';?> />
 	<br />
 <?php
