@@ -553,7 +553,7 @@ if ((strtolower($page) == $page) && (isset($_SERVER['REQUEST_URI']))) #38
 		$page = $match_url[1];
 	}
 }
-$page = preg_replace('/_/', ' ', $page);
+//$page = preg_replace('/_/', ' ', $page);
 
 /**
  * Create Wakka object

@@ -967,7 +967,7 @@ class Wakka
 	 */
 	function GetPageTag()
 	{
-		return $this->tag;
+		return preg_replace('/_+/', ' ', $this->tag);
 	}
 
 	/**
@@ -1191,6 +1191,8 @@ class Wakka
 	 */
 	function LoadPage($tag, $time='', $cache=TRUE)
 	{
+		// Always replace '_' with ws
+		$tag = preg_replace('/_+/', ' ', $tag);
 		// retrieve from cache
 		if (!$time && $cache) {
 			$page = isset($this->pageCache[$tag]) ? $this->pageCache[$tag] : null;
@@ -1579,6 +1581,8 @@ class Wakka
 	 */
 	function SavePage($tag, $body, $note, $owner=null)
 	{
+		// Always replace '_' with ws
+		$tag = preg_replace('/_+/', ' ', $tag);
 		// get name of current user
 		$user = $this->GetUserName();
 
@@ -4287,6 +4291,7 @@ class Wakka
 	 */
 	function Run($tag, $method = '')
 	{
+		$newtag = '';
 		// Set default cookie path
 		$base_url_path = preg_replace('/wikka\.php/', '', $_SERVER['SCRIPT_NAME']);
 		$this->wikka_cookie_path = ('/' == $base_url_path) ? '/' : substr($base_url_path,0,-1);
@@ -4341,6 +4346,11 @@ class Wakka
 		elseif (preg_match('/\.css$/', $this->handler))					# should not be necessary
 		{
 			header('Location: css/' . $this->handler);
+		}
+		elseif(0 !== strcmp($newtag = preg_replace('/\s+/', '_', $tag), $tag))
+		{
+			//echo "|$tag|$newtag|"; exit;
+			header("Location: ".$this->Href('', $newtag));
 		}
 		else
 		{
