@@ -4349,7 +4349,6 @@ class Wakka
 		}
 		elseif(0 !== strcmp($newtag = preg_replace('/\s+/', '_', $tag), $tag))
 		{
-			//echo "|$tag|$newtag|"; exit;
 			header("Location: ".$this->Href('', $newtag));
 		}
 		else
