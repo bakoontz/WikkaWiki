@@ -1039,11 +1039,11 @@ if (!function_exists('parse_attributes'))
 			list ($key, $value) = explode(':', $attrib, 2);
 			foreach ( $hints as $hint )
 			{
+				$temp = $attributes[$hint];
 				if(isset($temp) && isset($temp[$key]))
 				{
-					$temp = $attributes[$hint];
-					if ($temp) $a = $temp[$key];
-					if ($a) break;
+					$a = $temp[$key];
+					break;
 				}
 			}
 	
