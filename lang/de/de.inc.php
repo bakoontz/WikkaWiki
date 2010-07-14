@@ -619,7 +619,7 @@ if(!defined('CLONE_EDIT_NOTE_LABEL')) define('CLONE_EDIT_NOTE_LABEL', 'Bearbeitu
 if(!defined('CLONE_EDIT_OPTION_LABEL')) define('CLONE_EDIT_OPTION_LABEL', ' Nach dem Klonen bearbeiten');
 if(!defined('CLONE_ACL_OPTION_LABEL')) define('CLONE_ACL_OPTION_LABEL', ' Rechte klonen');
 if(!defined('CLONE_BUTTON')) define('CLONE_BUTTON', 'Klonen');
-if(!defined('ERROR_INVALID_PAGENAME')) define('ERROR_INVALID_PAGENAME', 'This page name is invalid. Valid page names must not contain the characters | ? = &lt; &gt; / \' " or &amp;.');
+if(!defined('ERROR_INVALID_PAGENAME')) define('ERROR_INVALID_PAGENAME', 'This page name is invalid. Valid page names must not contain the characters | ? = &lt; &gt; / \' " % or &amp;.');
 /**#@-*/
 
 /**#@+

@@ -1053,7 +1053,7 @@ if(!defined('CLONE_SUCCESSFUL')) define('CLONE_SUCCESSFUL', '%s was succesfully 
 if(!defined('CLONE_X_TO')) define('CLONE_X_TO', 'Clone %s to:');
 if(!defined('EDIT_NOTE')) define('EDIT_NOTE', 'Edit note:');
 if(!defined('ERROR_ACL_READ')) define('ERROR_ACL_READ', 'You are not allowed to read the source of this page.');
-if(!defined('ERROR_INVALID_PAGENAME')) define('ERROR_INVALID_PAGENAME', 'This page name is invalid. Valid page names must not contain the characters | ? = &lt; &gt; / \' " or &amp;.');
+if(!defined('ERROR_INVALID_PAGENAME')) define('ERROR_INVALID_PAGENAME', 'This page name is invalid. Valid page names must not contain the characters | ? = &lt; &gt; / \' " % or &amp;.');
 if(!defined('ERROR_PAGE_ALREADY_EXIST')) define('ERROR_PAGE_ALREADY_EXIST', 'Sorry, the destination page already exists');
 if(!defined('ERROR_PAGE_NOT_EXIST')) define('ERROR_PAGE_NOT_EXIST', ' Sorry, page %s does not exist.');
 if(!defined('LABEL_CLONE')) define('LABEL_CLONE', 'Clone');

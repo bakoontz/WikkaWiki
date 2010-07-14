@@ -2434,7 +2434,7 @@ class Wakka
 	 */
 	function IsWikiName($text)
 	{
-		$result = preg_match("/[\|\?=<>\'\"&\/]/", $text);
+		$result = preg_match("/[\|\?=<>\'\"&\/%]/", $text);
 		return !$result;
 	}
 
