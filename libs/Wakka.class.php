@@ -959,23 +959,6 @@ class Wakka
 	 */
 
 	/**
-	 * Get the name tag of the current page, formatted for display.
-	 * (Do NOT use this for creating URLs!)
-	 *
-	 * @uses	Wakka::$tag
-	 *
-	 * @return	string the name of the page
-	 */
-	function GetPageDisplayTag($tag = NULL)
-	{
-		if(NULL === $tag)
-		{
-			$tag = $this->tag;
-		}
-		return preg_replace('/_+/', ' ', $tag);
-	}
-
-	/**
 	 * Get the name tag of the current page.
 	 *
 	 * @uses	Wakka::$tag
@@ -984,7 +967,7 @@ class Wakka
 	 */
 	function GetPageTag()
 	{
-		return $this->tag;
+		return preg_replace('/_+/', ' ', $this->tag);
 	}
 
 	/**
@@ -1208,6 +1191,8 @@ class Wakka
 	 */
 	function LoadPage($tag, $time='', $cache=TRUE)
 	{
+		// Always replace '_' with ws
+		$tag = preg_replace('/_+/', ' ', $tag);
 		// retrieve from cache
 		if (!$time && $cache) {
 			$page = isset($this->pageCache[$tag]) ? $this->pageCache[$tag] : null;
@@ -1596,8 +1581,8 @@ class Wakka
 	 */
 	function SavePage($tag, $body, $note, $owner=null)
 	{
-		// Always replace ws with '_' 
-		$tag = preg_replace('/\s+/', '_', $tag);
+		// Always replace '_' with ws
+		$tag = preg_replace('/_+/', ' ', $tag);
 		// get name of current user
 		$user = $this->GetUserName();
 
@@ -1826,7 +1811,7 @@ class Wakka
 			$title = str_replace($formatting_tags, "", $title[2]);
 		}
 		if ($title) return strip_tags($this->Format($title));				# fix for forced links in heading
-		else return $this->GetPageDisplayTag();
+		else return $this->GetPageTag();
 	}
 
 	/**
@@ -2249,7 +2234,6 @@ class Wakka
 	 */
 	function MiniHref($handler='', $tag='')
 	{
-		$tag = $this->GetPageDisplayTag($tag);
 		if (!$tag = trim($tag)) $tag = $this->tag;
 		$tag = preg_replace('/\s+/', '_', $tag);
 		return $tag.($handler ? "/".$handler : "");
@@ -2306,7 +2290,7 @@ class Wakka
 		// init
 		if (!$text)
 		{
-			$text = $this->GetPageDisplayTag($tag);
+			$text = $tag;
 		}
 		if ($escapeText)	// escape text?
 		{
@@ -2320,7 +2304,7 @@ class Wakka
 
 		// is this an interwiki link?
 		// before the : should be a WikiName; anything after can be (nearly) anything that's allowed in a URL
-		if (preg_match('/^(\S+)[:](\S*)$/', $tag, $matches) && $this->IsWikiName($matches[1]))	// @@@ FIXME #34 (inconsistent with Formatter)
+		if (preg_match('/^([A-ZÄÖÜ][A-Za-zÄÖÜßäöü]+)[:](\S*)$/', $tag, $matches))	// @@@ FIXME #34 (inconsistent with Formatter)
 		{
 			$url = $this->GetInterWikiUrl($matches[1], $matches[2]);
 			$class = 'interwiki';

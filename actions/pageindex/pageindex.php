@@ -105,8 +105,7 @@ else
                 // Output page title if $showpagetitle set to 1
                 if (TRUE === $showpagetitle)
                 {
-                    $index_output .= "<span
-					class=\"pagetitle\">[".$this->PageTitle($this->GetPageDisplayTag($page['tag']))."]</span>";
+                    $index_output .= "<span class=\"pagetitle\">[".$this->PageTitle($page['tag'])."]</span>";
                 }
                 if ($cached_username == $page_owner)
                 {

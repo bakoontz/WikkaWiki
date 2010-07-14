@@ -1,6 +1,5 @@
 <?php
 //init
-$displayTag = $this->GetPageDisplayTag();
 $message = $this->GetRedirectMessage();
 $user = $this->GetUser();
 $site_base = $this->GetConfigValue("base_url");
@@ -8,7 +7,7 @@ $site_base = $this->GetConfigValue("base_url");
 $ueb = '';
 if ($this->GetHandler() != 'edit' && $this->HasAccess("write", $this->page["tag"]))
 {
-	$ueb .= '	<link rel="alternate" type="application/x-wiki" title="'.sprintf(WIKKA_PAGE_EDIT_LINK_TITLE, $displayTag).'" href="'.$this->Href('edit', $this->page["tag"]).'"/>'."\n";
+	$ueb .= '	<link rel="alternate" type="application/x-wiki" title="'.sprintf(WIKKA_PAGE_EDIT_LINK_TITLE, $this->page['tag']).'" href="'.$this->Href('edit', $this->page["tag"]).'"/>'."\n";
 }
 if ( substr_count($site_base, 'wikka.php?wakka=') > 0 ) $site_base = substr($site_base,0,-16);
 ?>
@@ -29,8 +28,7 @@ if ( substr_count($site_base, 'wikka.php?wakka=') > 0 ) $site_base = substr($sit
 <?php
 if ($this->GetHandler() != 'edit')
 {
-	$rsslink  = '	<link rel="alternate" type="application/rss+xml"
-	title="'.$this->GetWakkaName().': revisions for '.$displayTag.' (RSS)" href="'.$this->Href('revisions.xml', $this->tag).'" />'."\n";
+	$rsslink  = '	<link rel="alternate" type="application/rss+xml" title="'.$this->GetWakkaName().': revisions for '.$this->tag.' (RSS)" href="'.$this->Href('revisions.xml', $this->tag).'" />'."\n";
 	$rsslink .= '	<link rel="alternate" type="application/rss+xml" title="'.$this->GetWakkaName().': recently edited pages (RSS)" href="'.$this->Href('recentchanges.xml', $this->tag).'" />'."\n";
 	echo $rsslink;
 }
@@ -57,11 +55,7 @@ if (isset($message) && strlen($message)>0)
 ?>
 <!-- BEGIN PAGE HEADER -->
 <div id="header">
-<h2><a id="homepage_link" href="<?php echo $this->href('',
-$this->config['root_page'], ''); ?>"><?php echo
-$this->config['wakka_name'];?></a> : <a href="<?php echo
-$this->href('backlinks', '', ''); ?>" title="Display a list of pages
-linking to <?php echo $displayTag ?>"><?php echo $displayTag; ?></a></h2>
+<h2><a id="homepage_link" href="<?php echo $this->href('', $this->config['root_page'], ''); ?>"><?php echo $this->config['wakka_name'];?></a> : <a href="<?php echo $this->href('backlinks', '', ''); ?>" title="Display a list of pages linking to <?php echo $this->tag ?>"><?php echo $this->GetPageTag(); ?></a></h2>
 <?php echo $this->MakeMenu('main_menu'); ?>
 </div>
 <?php if ($this->IsAdmin()) echo $this->MakeMenu('dashboard'); ?>
