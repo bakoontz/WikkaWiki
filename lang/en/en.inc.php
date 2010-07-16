@@ -104,7 +104,6 @@ They will eventually need to be reconciled with updates to wikka.php.
 For now, I've commented them out and have simply copied over the 1.2
 versions.
 
-if(!defined('ERROR_WAKKA_LIBRARY_MISSING')) define('ERROR_WAKKA_LIBRARY_MISSING', 'The necessary file "%s" could not be found. To run Wikka, please make sure the file exists and is placed in the right directory!');	// %s - configured path to core class
 if(!defined('ERROR_NO_DB_ACCESS')) define('ERROR_NO_DB_ACCESS', 'Error: Unable to connect to the database.');
 if(!defined('ERROR_RETRIEVAL_MYSQL_VERSION')) define('ERROR_RETRIEVAL_MYSQL_VERSION', 'Could not determine MySQL version');
 if(!defined('ERROR_WRONG_MYSQL_VERSION')) define('ERROR_WRONG_MYSQL_VERSION', 'Wikka requires MySQL %s or higher!');	// %s - version number
@@ -114,7 +113,6 @@ if(!defined('PAGE_GENERATION_TIME')) define('PAGE_GENERATION_TIME', 'Page was ge
 if(!defined('ERROR_HEADER_MISSING')) define('ERROR_HEADER_MISSING', 'A header template could not be found. Please make sure that a file called <code>header.php</code> exists in the templates directory.'); //TODO Make sure this message matches any filename/folder change
 if(!defined('ERROR_FOOTER_MISSING')) define('ERROR_FOOTER_MISSING', 'A footer template could not be found. Please make sure that a file called <code>footer.php</code> exists in the templates directory.'); //TODO Make sure this message matches any filename/folder change
 
-#if(!defined('ERROR_WRONG_PHP_VERSION')) define('ERROR_WRONG_PHP_VERSION', '$_REQUEST[] not found. Wakka requires PHP 4.1.0 or higher!'); //TODO remove referral to PHP internals; refer only to required version
 #if(!defined('ERROR_SETUP_HEADER_MISSING')) define('ERROR_SETUP_HEADER_MISSING', 'The file "setup/header.php" was not found. Please install Wikka again!');
 #if(!defined('ERROR_SETUP_FOOTER_MISSING')) define('ERROR_SETUP_FOOTER_MISSING', 'The file "setup/footer.php" was not found. Please install Wikka again!');
 */

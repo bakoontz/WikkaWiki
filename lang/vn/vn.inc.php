@@ -77,7 +77,6 @@ if(!defined('WIKKA_JAVA_PLUGIN_NEEDED')) define('WIKKA_JAVA_PLUGIN_NEEDED', 'Đ�
  * Language constant for the core {@link wikka.php wikka} program
  */
 // wikka
-if(!defined('ERROR_WAKKA_LIBRARY_MISSING')) define('ERROR_WAKKA_LIBRARY_MISSING', 'Không tìm thấy tập tin cần thiết "%s". Để dùng Wikka, phải chắc rằng tập tin này tồn tại và ở đúng thư mục!');	// %s - configured path to core class
 if(!defined('ERROR_NO_DB_ACCESS')) define('ERROR_NO_DB_ACCESS', 'Lỗi: không thể kết nối vào hệ thống dữ liệu.');
 if(!defined('ERROR_RETRIEVAL_MYSQL_VERSION')) define('ERROR_RETRIEVAL_MYSQL_VERSION', 'Không thể xác định được phiên bản của MySQL');
 if(!defined('ERROR_WRONG_MYSQL_VERSION')) define('ERROR_WRONG_MYSQL_VERSION', 'Wikka cần MySQL phiên bản %s hoặc cao hơn!');	// %s - version number
@@ -87,7 +86,6 @@ if(!defined('PAGE_GENERATION_TIME')) define('PAGE_GENERATION_TIME', 'Trang đư�
 if(!defined('ERROR_HEADER_MISSING')) define('ERROR_HEADER_MISSING', 'Không tìm ra mẫu cho đầu trang. Hãy chắc rằng tập tin <code>header.php</code> có trong thư mục các mẫu.'); //TODO Make sure this message matches any filename/folder change
 if(!defined('ERROR_FOOTER_MISSING')) define('ERROR_FOOTER_MISSING', 'Không tìm thấy mẫu cho chân trang. Hãy chắc rằng tập tin <code>footer.php</code> có trong thư mục các mẫu.'); //TODO Make sure this message matches any filename/folder change
 
-#if(!defined('ERROR_WRONG_PHP_VERSION')) define('ERROR_WRONG_PHP_VERSION', 'Không tìm thấy biến $_REQUEST[]. Wakka cần PHP phiên bản 4.1.0 hoặc cao hơn!'); //TODO remove referral to PHP internals; refer only to required version
 #if(!defined('ERROR_SETUP_HEADER_MISSING')) define('ERROR_SETUP_HEADER_MISSING', 'Tập tin "setup/header.php" ở đâu rồi! Hãy cài Wikka lại nhé!');
 #if(!defined('ERROR_SETUP_FOOTER_MISSING')) define('ERROR_SETUP_FOOTER_MISSING', 'Tập tin "setup/footer.php" ở đâu rồi! Hãy cài lại Wikka nhé!');
 /**#@-*/

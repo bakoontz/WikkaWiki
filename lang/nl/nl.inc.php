@@ -72,7 +72,6 @@ if(!defined('WIKKA_JAVA_PLUGIN_NEEDED')) define('WIKKA_JAVA_PLUGIN_NEEDED', 'Jav
  * Language constant for the core {@link wikka.php wikka} program
  */
 // wikka
-if(!defined('ERROR_WAKKA_LIBRARY_MISSING')) define('ERROR_WAKKA_LIBRARY_MISSING', 'Het benodigde bestand "%s" kon niet gevonden worden. Om Wikka te gebruiken, zorg dathet bestand bestaat en in de juiste directory staat!');	// %s - configured path to core class
 if(!defined('ERROR_NO_DB_ACCESS')) define('ERROR_NO_DB_ACCESS', 'Fout: Kon niet verbinden met de database.');
 if(!defined('ERROR_RETRIEVAL_MYSQL_VERSION')) define('ERROR_RETRIEVAL_MYSQL_VERSION', 'Kon MySQL versie niet bepalen');
 if(!defined('ERROR_WRONG_MYSQL_VERSION')) define('ERROR_WRONG_MYSQL_VERSION', 'Wikka heeft MySQL %s of hoger nodig!');	// %s - version number
@@ -82,7 +81,6 @@ if(!defined('PAGE_GENERATION_TIME')) define('PAGE_GENERATION_TIME', 'Pagina is g
 if(!defined('ERROR_HEADER_MISSING')) define('ERROR_HEADER_MISSING', 'Een header template kon niet gevonden worden. Zorg dat een bestand genaamd <code>header.php</code> in de templates directory staat.'); //TODO Make sure this message matches any filename/folder change
 if(!defined('ERROR_FOOTER_MISSING')) define('ERROR_FOOTER_MISSING', 'Een footer template kon niet gevonden worden. Zorg dat een bestand genaamd <code>footer.php</code> in the templates directory staat.'); //TODO Make sure this message matches any filename/folder change
 
-#if(!defined('ERROR_WRONG_PHP_VERSION')) define('ERROR_WRONG_PHP_VERSION', '$_REQUEST[] not found. Wakka requires PHP 4.1.0 or higher!'); //TODO remove referral to PHP internals; refer only to required version
 #if(!defined('ERROR_SETUP_HEADER_MISSING')) define('ERROR_SETUP_HEADER_MISSING', 'The file "setup/header.php" was not found. Please install Wikka again!');
 #if(!defined('ERROR_SETUP_FOOTER_MISSING')) define('ERROR_SETUP_FOOTER_MISSING', 'The file "setup/footer.php" was not found. Please install Wikka again!');
 /**#@-*/

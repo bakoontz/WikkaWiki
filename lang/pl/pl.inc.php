@@ -89,7 +89,6 @@ define('WIKKA_JAVA_PLUGIN_NEEDED', 'do uruchomienia tego programu wymagana jest 
  * Language constant for the core {@link wikka.php wikka} program
  */
 // wikka
-define('ERROR_WAKKA_LIBRARY_MISSING', 'Nie znaleziono pliku „%s”. Aby uruchomić WikkaWiki, upewnij się, że plik istnieje i jest umieszczony we właściwym katalogu!');	// %s configured path to core class
 define('ERROR_NO_DB_ACCESS', 'Błąd: Nie można połączyć się z bazą danych.');
 define('ERROR_RETRIEVAL_MYSQL_VERSION', 'Nie można określić wersji MySQL.');
 define('ERROR_WRONG_MYSQL_VERSION', 'WikkaWiki wymaga MySQL w wersji %s lub wyższej!');	// %s version number
@@ -99,7 +98,6 @@ define('PAGE_GENERATION_TIME', 'Czas generowania strony w sekundach: %.4f.'); //
 define('ERROR_HEADER_MISSING', 'Nie znaleziono szablonu nagłówka. Upewnij się, że plik <code>header.php</code> istnieje w katalogu <code>templates</code>.'); //TODO Make sure this message matches any filename/folder change
 define('ERROR_FOOTER_MISSING', 'Nie znaleziono szablonu stopki. Upewnij się, że plik <code>footer.php</code> istnieje w katalogu <code>templates</code>.'); //TODO Make sure this message matches any filename/folder change
 
-#define('ERROR_WRONG_PHP_VERSION', '$_REQUEST[] not found. Wakka requires PHP 4.1.0 or higher!'); //TODO remove referral to PHP internals; refer only to required version
 #define('ERROR_SETUP_HEADER_MISSING', 'The file "setup/header.php" was not found. Please install Wikka again!');
 #define('ERROR_SETUP_FOOTER_MISSING', 'The file "setup/footer.php" was not found. Please install Wikka again!');
 /**#@-*/

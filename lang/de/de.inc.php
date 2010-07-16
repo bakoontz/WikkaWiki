@@ -75,7 +75,6 @@ if(!defined('WIKKA_JAVA_PLUGIN_NEEDED')) define('WIKKA_JAVA_PLUGIN_NEEDED', 'Das
  * Language constant for the core {@link wikka.php wikka} program
  */
 // wikka
-if(!defined('ERROR_WAKKA_LIBRARY_MISSING')) define('ERROR_WAKKA_LIBRARY_MISSING', 'Die notwendige Datei "%s" konnte nicht gefunden werden. Damit Wikka läuft, vergewissern Sie sich bitte, dass die Datei existiert und im richtigen Verzeichnis platziert ist!');	// %s - configured path to core class
 if(!defined('ERROR_NO_DB_ACCESS')) define('ERROR_NO_DB_ACCESS', 'Fehler: Es konnte keine Verbindung zur Datenbank hergestellt werden.');
 if(!defined('ERROR_RETRIEVAL_MYSQL_VERSION')) define('ERROR_RETRIEVAL_MYSQL_VERSION', 'Konnte MySQL-Version nicht ermitteln');
 if(!defined('ERROR_WRONG_MYSQL_VERSION')) define('ERROR_WRONG_MYSQL_VERSION', 'Wikka setzt MySQL %s oder besser vorraus!');	// %s - version number
@@ -85,7 +84,6 @@ if(!defined('PAGE_GENERATION_TIME')) define('PAGE_GENERATION_TIME', 'Die Seite w
 if(!defined('ERROR_HEADER_MISSING')) define('ERROR_HEADER_MISSING', 'Es wurde kein header-Template gefunden. Bitte stellen Sie sicher, dass sich eine Datei namens <code>header.php</code> im templates Verzeichnis befindet.'); //TODO Make sure this message matches any filename/folder change
 if(!defined('ERROR_FOOTER_MISSING')) define('ERROR_FOOTER_MISSING', 'Es wurde kein footer-Template gefunden. Bitte stellen Sie sicher, dass sich eine Datei namens <code>footer.php</code> im templates Verzeichnis befindet.'); //TODO Make sure this message matches any filename/folder change
 
-#if(!defined('ERROR_WRONG_PHP_VERSION')) define('ERROR_WRONG_PHP_VERSION', '$_REQUEST[] not found. Wakka requires PHP 4.1.0 or higher!'); //TODO remove referral to PHP internals; refer only to required version
 #if(!defined('ERROR_SETUP_HEADER_MISSING')) define('ERROR_SETUP_HEADER_MISSING', 'The file "setup/header.php" was not found. Please install Wikka again!');
 #if(!defined('ERROR_SETUP_FOOTER_MISSING')) define('ERROR_SETUP_FOOTER_MISSING', 'The file "setup/footer.php" was not found. Please install Wikka again!');
 /**#@-*/
