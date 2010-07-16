@@ -281,11 +281,11 @@ if ($this->IsAdmin($this->GetUser()))
 	
 		// number of records per page
 		$l = $this->GetSafeVar('l', 'post');
-		if (!isset($l))
+		if (!$l)
 		{
 			$l = $this->GetSafeVar('l', 'get');
 		}
-		else
+		if (!$l)
 		{
 			$l = ADMINUSERS_DEFAULT_RECORDS_LIMIT;
 		}
