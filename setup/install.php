@@ -87,6 +87,8 @@ switch ($version)
 // new installation
 case "0":
 	print("<h2>Installing Stuff</h2>");
+	test("Setting up database for UTF-8...", true);
+	@mysql_query( "ALTER DATABASE ".$config['mysql_database']." DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;", $dblink);
 	test("Creating page table...",
 		@mysql_query(
 			"CREATE TABLE ".$config['table_prefix']."pages (".
@@ -104,7 +106,7 @@ case "0":
 			"KEY idx_time (time),".
 			"KEY idx_owner (owner), ".
 			"KEY idx_latest (latest)".
-			") TYPE=MyISAM;", $dblink), "Already exists?", 0);
+			") TYPE=MyISAM CHARACTER SET utf8 COLLATE utf8_unicode_ci", $dblink), "Already exists?", 0);
 	test("Creating ACL table...",
 		@mysql_query(
 			"CREATE TABLE ".$config['table_prefix']."acls (".
@@ -114,7 +116,7 @@ case "0":
 			"comment_read_acl text NOT NULL,".
 			"comment_post_acl text NOT NULL,".
 			"PRIMARY KEY  (page_tag)".
-			") TYPE=MyISAM", $dblink), "Already exists?", 0);
+			") TYPE=MyISAM CHARACTER SET utf8 COLLATE utf8_unicode_ci", $dblink), "Already exists?", 0);
 	test("Creating link tracking table...",
 		@mysql_query(
 			"CREATE TABLE ".$config['table_prefix']."links (".
@@ -122,7 +124,7 @@ case "0":
 			"to_tag varchar(75) NOT NULL default '',".
 			"UNIQUE KEY from_tag (from_tag,to_tag),".
 			"KEY idx_to (to_tag)".
-			") TYPE=MyISAM", $dblink), "Already exists?", 0);
+			") TYPE=MyISAM CHARACTER SET utf8 COLLATE utf8_unicode_ci", $dblink), "Already exists?", 0);
 	test("Creating referrer table...",
 		@mysql_query(
 			"CREATE TABLE ".$config['table_prefix']."referrers (".
@@ -131,13 +133,13 @@ case "0":
 			"time datetime NOT NULL default '0000-00-00 00:00:00',".
 			"KEY idx_page_tag (page_tag),".
 			"KEY idx_time (time)".
-			") TYPE=MyISAM", $dblink), "Already exists?", 0);
+			") TYPE=MyISAM CHARACTER SET utf8 COLLATE utf8_unicode_ci", $dblink), "Already exists?", 0);
 	test("Creating referrer blacklist table...",
 		@mysql_query(
 			"CREATE TABLE ".$config['table_prefix']."referrer_blacklist (".
 			"spammer varchar(300) NOT NULL default '',".
 			"KEY idx_spammer (spammer)".
-			") TYPE=MyISAM", $dblink), "Already exists?", 0);
+			") TYPE=MyISAM CHARACTER SET utf8 COLLATE utf8_unicode_ci", $dblink), "Already exists?", 0);
 	test("Creating user table...",
 		@mysql_query(
 			"CREATE TABLE ".$config['table_prefix']."users (".
@@ -155,7 +157,7 @@ case "0":
 			"challenge varchar(8) default '00000000',".
 			"PRIMARY KEY  (name),".
 			"KEY idx_signuptime (signuptime)".
-			") TYPE=MyISAM", $dblink), "Already exists?", 0);
+			") TYPE=MyISAM CHARACTER SET utf8 COLLATE utf8_unicode_ci", $dblink), "Already exists?", 0);
 	test("Creating comment table...",
 		@mysql_query(
 			"CREATE TABLE ".$config['table_prefix']."comments (".
@@ -170,7 +172,7 @@ case "0":
 			"PRIMARY KEY  (id),".
 			"KEY idx_page_tag (page_tag),".
 			"KEY idx_time (time)".
-			") TYPE=MyISAM;", $dblink), "Already exists?", 0);
+			") TYPE=MyISAM CHARACTER SET utf8 COLLATE utf8_unicode_ci", $dblink), "Already exists?", 0);
 	test("Creating session tracking table...",
 		@mysql_query(
 			"CREATE TABLE ".$config['table_prefix']."sessions (".
@@ -178,7 +180,7 @@ case "0":
 			"userid varchar(75) NOT NULL,".
 			"PRIMARY KEY (sessionid, userid),".
 			"session_start datetime NOT NULL".
-			") TYPE=MyISAM", $dblink), "Already exists?", 0);
+			") TYPE=MyISAM CHARACTER SET utf8 COLLATE utf8_unicode_ci", $dblink), "Already exists?", 0);
 
 	update_default_page(array(
 	'_rootpage', 
@@ -453,6 +455,66 @@ case "1.2":
 		'TableMarkupReference', 
 		'WikkaConfig'), $dblink, $config, $lang_defaults_path, $lang_defaults_fallback_path, $upgrade_note);
 case "1.3":
+	// Converting DB UTF-8 (but data remains
+	// unchanged -- this is handled by a standalone script)	
+	test("Setting up database for UTF-8...", true);
+	@mysql_query("ALTER DATABASE ".$config['mysql_database']." DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci", $dblink);
+	// Converting pages table and fields to UTF-8
+	test("Setting up pages table and fields for UTF-8...", true);
+	@mysql_query("ALTER TABLE ".$config['table_prefix']."pages DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci", $dblink);
+	@mysql_query("ALTER TABLE ".$config['table_prefix']."pages CHANGE `tag` `tag` VARCHAR( 75 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL default ''", $dblink);
+	@mysql_query("ALTER TABLE ".$config['table_prefix']."pages CHANGE `body` `body` MEDIUMTEXT CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL", $dblink);
+	@mysql_query("ALTER TABLE ".$config['table_prefix']."pages CHANGE `owner` `owner` VARCHAR( 75 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL default ''", $dblink);
+	@mysql_query("ALTER TABLE ".$config['table_prefix']."pages CHANGE `user` `user` VARCHAR( 75 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL default ''", $dblink);
+	@mysql_query("ALTER TABLE ".$config['table_prefix']."pages CHANGE `latest` `latest` ENUM( 'Y','N' ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL default 'N'", $dblink);
+	@mysql_query("ALTER TABLE ".$config['table_prefix']."pages CHANGE `note` `note` ENUM( 'Y','N' ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL default 'N'", $dblink);
+	// Converting acls table and fields to UTF-8
+	test("Setting up acls table and fields for UTF-8...", true);
+	@mysql_query("ALTER TABLE ".$config['table_prefix']."acls DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci", $dblink);
+	@mysql_query("ALTER TABLE ".$config['table_prefix']."acls CHANGE `page_tag` `page_tag` VARCHAR( 75 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL default ''", $dblink);
+	@mysql_query("ALTER TABLE ".$config['table_prefix']."acls CHANGE `read_acl` `read_acl` TEXT CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL", $dblink);
+	@mysql_query("ALTER TABLE ".$config['table_prefix']."acls CHANGE `write_acl` `write_acl` TEXT CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL", $dblink);
+	@mysql_query("ALTER TABLE ".$config['table_prefix']."acls CHANGE `comment_read_acl` `comment_read_acl` TEXT CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL", $dblink);
+	@mysql_query("ALTER TABLE ".$config['table_prefix']."acls CHANGE `comment_post_acl` `comment_post_acl` TEXT CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL", $dblink);
+	test("Setting up links table and fields for UTF-8...", true);
+	@mysql_query("ALTER TABLE ".$config['table_prefix']."links DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci", $dblink);
+	@mysql_query("ALTER TABLE ".$config['table_prefix']."links CHANGE `from_tag` `from_tag` VARCHAR( 75 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL default ''", $dblink);
+	@mysql_query("ALTER TABLE ".$config['table_prefix']."links CHANGE `to_tag` `to_tag` VARCHAR( 75 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL default ''", $dblink);
+	// Converting referrers table and fields to UTF-8
+	test("Setting up referrers table and fields for UTF-8...", true);
+	@mysql_query("ALTER TABLE ".$config['table_prefix']."referrers DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci", $dblink);
+	@mysql_query("ALTER TABLE ".$config['table_prefix']."referrers CHANGE `page_tag` `page_tag` VARCHAR( 75 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL default ''", $dblink);
+	@mysql_query("ALTER TABLE ".$config['table_prefix']."referrers CHANGE `referrer` `referrer` VARCHAR( 300 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL default ''", $dblink);
+	// Converting referrer_blacklist table and fields to UTF-8
+	test("Setting up referrer_blacklist table and fields for UTF-8...", true);
+	@mysql_query("ALTER TABLE ".$config['table_prefix']."referrer_blacklist DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci", $dblink);
+	@mysql_query("ALTER TABLE ".$config['table_prefix']."referrer_blacklist CHANGE `spammer` `spammer` VARCHAR( 300 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL default ''", $dblink);
+	// Converting users table and fields to UTF-8
+	test("Setting up users table and fields for UTF-8...", true);
+	@mysql_query("ALTER TABLE ".$config['table_prefix']."users DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci", $dblink);
+	@mysql_query("ALTER TABLE ".$config['table_prefix']."users CHANGE `name` `name` VARCHAR( 75 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL default ''", $dblink);
+	@mysql_query("ALTER TABLE ".$config['table_prefix']."users CHANGE `password` `password` VARCHAR( 32 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL default ''", $dblink);
+	@mysql_query("ALTER TABLE ".$config['table_prefix']."users CHANGE `email` `email` VARCHAR( 50 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL default ''", $dblink);
+	@mysql_query("ALTER TABLE ".$config['table_prefix']."users CHANGE `doubleclickedit` `doubleclickedit` ENUM( 'Y','N' ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL default 'Y'", $dblink);
+	@mysql_query("ALTER TABLE ".$config['table_prefix']."users CHANGE `show_comments` `show_comments` ENUM( 'Y','N' ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL default 'N'", $dblink);
+	@mysql_query("ALTER TABLE ".$config['table_prefix']."users CHANGE `default_comment_display` `default_comment_display` ENUM( 'date_asc','date_desc','threaded' ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL default 'threaded'", $dblink);
+	@mysql_query("ALTER TABLE ".$config['table_prefix']."users CHANGE `status` `status` ENUM( 'invited','signed-up','pending','active','suspended','banned','deleted') CHARACTER SET utf8 COLLATE utf8_unicode_ci", $dblink);
+	@mysql_query("ALTER TABLE ".$config['table_prefix']."users CHANGE `theme` `theme` VARCHAR( 50 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL default ''", $dblink);
+	@mysql_query("ALTER TABLE ".$config['table_prefix']."users CHANGE `challenge` `challenge` VARCHAR( 8 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL default '00000000'", $dblink);
+	// Converting comments table and fields to UTF-8
+	test("Setting up comments table and fields for UTF-8...", true);
+	@mysql_query("ALTER TABLE ".$config['table_prefix']."comments DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci", $dblink);
+	@mysql_query("ALTER TABLE ".$config['table_prefix']."comments CHANGE `page_tag` `page_tag` VARCHAR( 75 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL default ''", $dblink);
+	@mysql_query("ALTER TABLE ".$config['table_prefix']."comments CHANGE `comment` `comment` TEXT CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL", $dblink);
+	@mysql_query("ALTER TABLE ".$config['table_prefix']."comments CHANGE `user` `user` VARCHAR( 75 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL default ''", $dblink);
+	@mysql_query("ALTER TABLE ".$config['table_prefix']."comments CHANGE `status` `status` ENUM( 'deleted' ) CHARACTER SET utf8 COLLATE utf8_unicode_ci default NULL", $dblink);
+	@mysql_query("ALTER TABLE ".$config['table_prefix']."comments CHANGE `deleted` `deleted` CHAR( 1 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci default NULL", $dblink);
+	// Converting sessions table and fields to UTF-8
+	test("Setting up sessions table and fields for UTF-8...", true);
+	@mysql_query("ALTER TABLE ".$config['table_prefix']."sessions DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci", $dblink);
+	@mysql_query("ALTER TABLE ".$config['table_prefix']."sessions CHANGE `sessionid` `sessionid` VARCHAR( 32 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL", $dblink);
+	@mysql_query("ALTER TABLE ".$config['table_prefix']."sessions CHANGE `userid` `userid` VARCHAR( 75 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL", $dblink);
+
 	// Dropping obsolete "handler" field from pages table, refs #452
 	test('Removing handler field from the pages table...',
 	@mysql_query("ALTER TABLE ".$config["table_prefix"]."pages DROP handler", $dblink), __('Already done? Hmm!'), 0);
