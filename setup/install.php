@@ -539,6 +539,13 @@ case "1.3":
 		@mysql_query("ALTER TABLE ".$config['table_prefix']."referrers MODIFY referrer varchar(300) NOT NULL default ''", $dblink), "Failed. ?", 1);
 	test(__('Altering referrer blacklist table structure').'...',
 		@mysql_query("ALTER TABLE ".$config['table_prefix']."referrer_blacklist MODIFY spammer varchar(300) NOT NULL default ''", $dblink), "Failed. ?", 1);
+	update_default_page(array(
+		'FormattingRules',
+		'SysInfo', 
+		'WikkaReleaseNotes',
+		'TableMarkup', 
+		'TableMarkupReference', 
+		'WikkaConfig'), $dblink, $config, $lang_defaults_path, $lang_defaults_fallback_path, $upgrade_note);
 }
 
 // #600: Force reloading of stylesheet.
