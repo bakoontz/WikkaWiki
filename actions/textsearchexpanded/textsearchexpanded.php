@@ -27,6 +27,9 @@ if (!defined('SEARCH_MAX_SNIPPETS')) define('SEARCH_MAX_SNIPPETS', 3);
 
 // init
 $result_page_list = '';
+$utf8Compatible = 0;
+if(1==$this->config['utf8_compat_search'])
+	$utf8Compatible = 1;
 
 // get input
 $phrase = stripslashes(trim($this->GetSafeVar('phrase', 'get'))); #312
@@ -37,7 +40,12 @@ $case = stripslashes(trim($this->GetSafeVar('case', 'get')));
 ?>
 <?php echo $this->FormOpen("", "", "get"); ?>
 <fieldset><legend><?php echo SEARCH_FOR; ?></legend>
-<input name="phrase" size="40" value="<?php echo $phrase ?>" /> <input name="case" type="checkbox" value="1" <?php echo (1==$case?'checked="checked"':'') ?> /><label for="case">Case sensitive</label> <input type="submit" value="Search"/>
+<input name="phrase" size="40" value="<?php echo $phrase ?>" /> 
+<?php if(0==$utf8Compatible) { ?>
+<input name="case" type="checkbox" value="1" <?php echo (1==$case?'checked="checked"':'') ?> />
+<label for="case">Case sensitive</label> 
+<?php } ?>
+<input type="submit" value="Search"/>
 </fieldset>
 <?php echo $this->FormClose(); ?>
 
@@ -45,7 +53,7 @@ $case = stripslashes(trim($this->GetSafeVar('case', 'get')));
 // TODO see remarks in textsearch.php
 
 // process search request  
-$results = $this->FullTextSearch($phrase, $case);
+$results = $this->FullTextSearch($phrase, $case, $utf8Compatible);
 $total_results = 0;
 if ($results)
 {

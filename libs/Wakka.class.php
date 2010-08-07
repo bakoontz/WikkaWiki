@@ -1648,27 +1648,35 @@ class Wakka
 	 *
 	 * @param	string	$phrase	the text to be searched for 
      * @param   string  $caseSensitive	optional: 0 for case-insensitive search (default), 1 for case-sensitive search
+	 * @param   string $utf8Compatible optional: 0 for legacy search (case sensitive, wildcards, but incompatible with some character codings), 1 for UTF-8 compatible searches (non-case-sensitive, no wildcards) 
 	 * @return	string  Search results	
 	 */
-	function FullTextSearch($phrase, $caseSensitive = 0)
+	function FullTextSearch($phrase, $caseSensitive=0, $utf8Compatible=0)
 	{
 		if(empty($phrase))
 		{
 			return NULL;
 		}
-		$id = '';
-		// Should work with any browser/entity conversion scheme
-		$search_phrase = mysql_real_escape_string($phrase);
-		if ( 1 == $caseSensitive ) $id = ', id';
-		$sql  = 'select * from '.$this->config['table_prefix'].'pages';
-		$sql .= ' where latest = '.  "'Y'"  .' and match(tag, body'.$id.')';
-		$sql .= ' against('.  "'$search_phrase'"  .' IN BOOLEAN MODE)';
-		$sql .= ' order by time DESC';
-
+		$sql = '';
+		if(0 == $utf8Compatible)
+		{
+			$id = '';
+			// Should work with any browser/entity conversion scheme
+			$search_phrase = mysql_real_escape_string($phrase);
+			if ( 1 == $caseSensitive ) $id = ', id';
+			$sql  = "select * from ".$this->config['table_prefix']."pages where latest = ".  "'Y'" ." and match(tag, body".$id.") against(". "'$search_phrase'" ." IN BOOLEAN MODE) order by time DESC";
+		}
+		else
+		{
+			$search_phrase = mysql_real_escape_string($phrase);
+			$sql  = "select * from ".$this->config['table_prefix']."pages WHERE latest = ". "'Y'";
+			foreach( explode(' ', $search_phrase) as $term ) 
+				$sql .= " AND ((`tag` LIKE '%{$term}%') OR (body LIKE '%{$term}%'))";
+		}
 		$data = $this->LoadAll($sql);
-
 		return $data;
 	}
+
 
 	/**
 	 *

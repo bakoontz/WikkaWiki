@@ -791,24 +791,6 @@ if(!defined('SEARCH_RESULTS')) define('SEARCH_RESULTS', 'Search results: <strong
 if(!defined('SEARCH_NOT_SURE_CHOICE')) define('SEARCH_NOT_SURE_CHOICE', 'Not sure which page to choose?');
 if(!defined('SEARCH_EXPANDED_LINK_DESC')) define('SEARCH_EXPANDED_LINK_DESC', 'Expanded Text Search'); // search link description
 if(!defined('SEARCH_TRY_EXPANDED')) define('SEARCH_TRY_EXPANDED', 'Try the %s which shows surrounding text.'); // %s expanded search link
-/*
-if(!defined('SEARCH_TIPS')) define('SEARCH_TIPS', "<br /><br /><hr /><br /><strong>Search Tips:</strong><br /><br />"
-	."<div class=\"indent\"><tt>apple banana</tt></div>"
-	."Find pages that contain at least one of the two words. <br />"
-	."<br />"
-	."<div class=\"indent\"><tt>+apple +juice</tt></div>"
-	."Find pages that contain both words. <br />"
-	."<br />"
-	."<div class=\"indent\"><tt>+apple -macintosh</tt></div>"
-	."Find pages that contain the word 'apple' but not 'macintosh'. <br />"
-	."<br />"
-	."<div class=\"indent\"><tt>apple*</tt></div>"
-	."Find pages that contain words such as apple, apples, applesauce, or applet. <br />"
-	."<br />"
-	."<div class=\"indent\"><tt>\"some words\"</tt></div>"
-	."Find pages that contain the exact phrase 'some words' (for example, pages that contain 'some words of wisdom' <br />"
-	."but not 'some noise words'). <br />");
-*/
 if(!defined('SEARCH_MYSQL_IDENTICAL_CHARS')) define('SEARCH_MYSQL_IDENTICAL_CHARS', 'aàáâã,eèéêë,iìîï,oòóôõ,uùúû,cç,nñ,yý');
 if(!defined('SEARCH_WORD_1')) define('SEARCH_WORD_1', 'apple');
 if(!defined('SEARCH_WORD_2')) define('SEARCH_WORD_2', 'banana');
@@ -823,6 +805,7 @@ if(!defined('SEARCH_TARGET_3')) define('SEARCH_TARGET_3',sprintf("Find pages tha
 if(!defined('SEARCH_TARGET_4')) define('SEARCH_TARGET_4',sprintf('Find pages that contain words starting with "%s"', SEARCH_WORD_1));
 if(!defined('SEARCH_TARGET_5')) define('SEARCH_TARGET_5',sprintf("Find pages that contain the exact phrase '%1\$s' (for example, pages that contain '%1\$s of wisdom' but not '%2\$s noise %3\$s').",SEARCH_PHRASE,SEARCH_WORD_5,SEARCH_WORD_6));
 if(!defined('SEARCH_TIPS_TITLE')) define('SEARCH_TIPS_TITLE', 'Search Tips');
+if(!defined('SEARCH_TIPS_UTF8_COMPAT_TITLE')) define('SEARCH_TIPS_UTF8_COMPAT_TITLE', 'Search Tips');
 if(!defined('SEARCH_TIPS')) define('SEARCH_TIPS', '<br /><br /><hr /><br /><strong>'.SEARCH_TIPS_TITLE.':</strong><br /><br />'
 	.'<div class="indent"><tt>'.SEARCH_WORD_1.' '.SEARCH_WORD_2.'</tt></div>'
 	.SEARCH_TARGET_1.'<br /><br />'
@@ -834,6 +817,10 @@ if(!defined('SEARCH_TIPS')) define('SEARCH_TIPS', '<br /><br /><hr /><br /><stro
 	.SEARCH_TARGET_4.'<br /><br />'
 	.'<div class="indent"><tt>'.'"'.SEARCH_WORD_5.' '.SEARCH_WORD_6.'"'.'</tt></div>'
 	.SEARCH_TARGET_5.'<br />');
+if(!defined('SEARCH_TIPS_UTF8_COMPAT'))
+define('SEARCH_TIPS_UTF8_COMPAT', '<br /><br /><hr /><br /><strong>'.SEARCH_TIPS_UTF8_COMPAT_TITLE.':</strong><br /><br />'
+	.'<div class="indent"><tt>'.SEARCH_WORD_1.' '.SEARCH_WORD_2.'</tt></div>'
+	.SEARCH_TARGET_1.'<br /><br />');
 /**#@-*/
 
 /**#@+

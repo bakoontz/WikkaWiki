@@ -22,6 +22,9 @@
 
 // init
 $result_page_list = '';
+$utf8Compatible = 0;
+if(1 == $this->config['utf8_compat_search'])
+	$utf8Compatible = 1;
 
 // get input
 $phrase = stripslashes(trim($this->GetSafeVar('phrase', 'get'))); #312
@@ -32,7 +35,12 @@ $case = stripslashes(trim($this->GetSafeVar('case', 'get'))); #312
 ?>
 <?php echo $this->FormOpen('', '', 'get'); ?>
 <fieldset><legend><?php echo SEARCH_FOR; ?></legend>
-<input name="phrase" size="40" value="<?php echo $phrase ?>" /> <input id="case_sensitive" name="case" type="checkbox" value="1" <?php echo (1==$case?'checked="checked"':'') ?> /><label for="case_sensitive">Case sensitive</label> <input type="submit" value="Search"/>
+<input name="phrase" size="40" value="<?php echo $phrase ?>" /> 
+<?php if(0==$utf8Compatible) { ?>
+<input id="case_sensitive" name="case" type="checkbox" value="1" <?php echo (1==$case?'checked="checked"':'') ?> />
+<label for="case_sensitive">Case sensitive</label> 
+<?php } ?>
+<input type="submit" value="Search"/>
 </fieldset>
 <?php echo $this->FormClose(); ?>
 
@@ -43,7 +51,7 @@ $case = stripslashes(trim($this->GetSafeVar('case', 'get'))); #312
 // if 'phrase' is empty after trimming and removing slashes, search tips NOT displayed
 
 // process search request
-$results = $this->FullTextSearch($phrase, $case);
+$results = $this->FullTextSearch($phrase, $case, $utf8Compatible);
 $total_results = 0;
 if ($results)
 {
@@ -79,5 +87,8 @@ if ($total_results > 0)
 }
 
 // display search tips
-print(SEARCH_TIPS);
+if(0==$utf8Compatible)
+	print(SEARCH_TIPS);
+else
+	print(SEARCH_TIPS_UTF8_COMPAT);
 ?>

@@ -428,24 +428,6 @@ if(!defined('SEARCH_RESULTS')) define('SEARCH_RESULTS', 'Search results: <strong
 if(!defined('SEARCH_NOT_SURE_CHOICE')) define('SEARCH_NOT_SURE_CHOICE', 'Not sure which page to choose?');
 if(!defined('SEARCH_EXPANDED_LINK_DESC')) define('SEARCH_EXPANDED_LINK_DESC', 'Expanded Text Search'); // search link description
 if(!defined('SEARCH_TRY_EXPANDED')) define('SEARCH_TRY_EXPANDED', 'Try the %s which shows surrounding text.'); // %s expanded search link
-/*
-if(!defined('SEARCH_TIPS')) define('SEARCH_TIPS', "<br /><br /><hr /><br /><strong>Search Tips:</strong><br /><br />"
-	."<div class=\"indent\">apple banana</div>"
-	."Find pages that contain at least one of the two words. <br />"
-	."<br />"
-	."<div class=\"indent\">+apple +juice</div>"
-	."Find pages that contain both words. <br />"
-	."<br />"
-	."<div class=\"indent\">+apple -macintosh</div>"
-	."Find pages that contain the word 'apple' but not 'macintosh'. <br />"
-	."<br />"
-	."<div class=\"indent\">apple*</div>"
-	."Find pages that contain words such as apple, apples, applesauce, or applet. <br />"
-	."<br />"
-	."<div class=\"indent\">\"some words\"</div>"
-	."Find pages that contain the exact phrase 'some words' (for example, pages that contain 'some words of wisdom' <br />"
-	."but not 'some noise words'). <br />");
-*/
 if(!defined('SEARCH_TIPS')) define('SEARCH_TIPS', 'Mẹo tìm kiếm:');
 if(!defined('SEARCH_WORD_1')) define('SEARCH_WORD_1', 'táo');
 if(!defined('SEARCH_WORD_2')) define('SEARCH_WORD_2', 'chuối');
