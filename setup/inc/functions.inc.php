@@ -9,6 +9,27 @@
  */
 
 /**
+ * Brute force copy routine for those sites that have copy() disabled
+ *
+ * @param string $file1	source file
+ * @param string $file2	destination file
+ * @return boolean true if successful, false if not
+ * @link {http://www.php.net/manual/en/function.copy.php}
+ */
+function brute_copy($src, $dest)
+{
+	$context = @file_get_contents($src);
+	$newfile = fopen($dest, "w");
+	fwrite($newfile, $context);
+	fclose($newfile);
+	if(FALSE === $context)
+		$status = false;
+	else
+		$status = true;
+	return $status;
+}
+
+/**
  * Update content of a default page.
  * 
  * If $tag parameter is an array, it just passes elements of this array one by one to itself.

@@ -546,6 +546,25 @@ case "1.3":
 		'TableMarkup', 
 		'TableMarkupReference', 
 		'WikkaConfig'), $dblink, $config, $lang_defaults_path, $lang_defaults_fallback_path, $upgrade_note);
+	// Backup config/ files
+	if(file_exists("config/main_menu.admin.inc"))
+		brute_copy("config/main_menu.admin.inc", 
+			 "config/main_menu.admin.inc.prev");	
+	if(file_exists("config/main_menu.inc"))
+		brute_copy("config/main_menu.inc", 
+			 "config/main_menu.inc.prev");	
+	if(file_exists("config/main_menu.user.inc"))
+		brute_copy("config/main_menu.user.inc", 
+			 "config/main_menu.user.inc.prev");	
+	if(file_exists("config/options_menu.admin.inc"))
+		brute_copy("config/options_menu.admin.inc", 
+			 "config/options_menu.admin.inc.prev");	
+	if(file_exists("config/options_menu.inc"))
+		brute_copy("config/options_menu.inc", 
+			 "config/options_menu.inc.prev");	
+	if(file_exists("config/options_menu.user.inc"))
+		brute_copy("config/options_menu.user.inc", 
+			 "config/options_menu.user.inc.prev");
 }
 
 // #600: Force reloading of stylesheet.
