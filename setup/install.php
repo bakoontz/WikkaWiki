@@ -129,7 +129,7 @@ case "0":
 		@mysql_query(
 			"CREATE TABLE ".$config['table_prefix']."referrers (".
 			"page_tag varchar(75) NOT NULL default '',".
-			"referrer varchar(300) NOT NULL default '',".
+			"referrer varchar(255) NOT NULL default '',".
 			"time datetime NOT NULL default '0000-00-00 00:00:00',".
 			"KEY idx_page_tag (page_tag),".
 			"KEY idx_time (time)".
@@ -137,7 +137,7 @@ case "0":
 	test("Creating referrer blacklist table...",
 		@mysql_query(
 			"CREATE TABLE ".$config['table_prefix']."referrer_blacklist (".
-			"spammer varchar(300) NOT NULL default '',".
+			"spammer varchar(255) NOT NULL default '',".
 			"KEY idx_spammer (spammer)".
 			") TYPE=MyISAM CHARACTER SET utf8 COLLATE utf8_unicode_ci", $dblink), "Already exists?", 0);
 	test("Creating user table...",
@@ -536,9 +536,9 @@ case "1.3":
 	test(__('Creating index on owner column').'...', 
 	@mysql_query('alter table '.$config['table_prefix'].'pages add index `idx_owner` (`owner`)', $dblink), __('Already done?  OK!'), 0); 
   	test(__('Altering referrers table structure').'...',
-		@mysql_query("ALTER TABLE ".$config['table_prefix']."referrers MODIFY referrer varchar(300) NOT NULL default ''", $dblink), "Failed. ?", 1);
+		@mysql_query("ALTER TABLE ".$config['table_prefix']."referrers MODIFY referrer varchar(255) NOT NULL default ''", $dblink), "Failed. ?", 1);
 	test(__('Altering referrer blacklist table structure').'...',
-		@mysql_query("ALTER TABLE ".$config['table_prefix']."referrer_blacklist MODIFY spammer varchar(300) NOT NULL default ''", $dblink), "Failed. ?", 1);
+		@mysql_query("ALTER TABLE ".$config['table_prefix']."referrer_blacklist MODIFY spammer varchar(255) NOT NULL default ''", $dblink), "Failed. ?", 1);
 	update_default_page(array(
 		'FormattingRules',
 		'SysInfo', 
