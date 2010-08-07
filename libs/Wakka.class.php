@@ -217,6 +217,7 @@ class Wakka
 		$this->config = $config;
 
 		$this->dblink = @mysql_connect($this->GetConfigValue('mysql_host'), $this->GetConfigValue('mysql_user'), $this->GetConfigValue('mysql_password'));
+		mysql_query("SET NAMES 'utf8'", $this->dblink);
 		if ($this->dblink)
 		{
 			if (!@mysql_select_db($this->GetConfigValue('mysql_database'), $this->dblink))
