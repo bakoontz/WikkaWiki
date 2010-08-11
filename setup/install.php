@@ -484,11 +484,11 @@ case "1.3":
 	test("Setting up referrers table and fields for UTF-8...", true);
 	@mysql_query("ALTER TABLE ".$config['table_prefix']."referrers DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci", $dblink);
 	@mysql_query("ALTER TABLE ".$config['table_prefix']."referrers CHANGE `page_tag` `page_tag` VARCHAR( 75 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL default ''", $dblink);
-	@mysql_query("ALTER TABLE ".$config['table_prefix']."referrers CHANGE `referrer` `referrer` VARCHAR( 300 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL default ''", $dblink);
+	@mysql_query("ALTER TABLE ".$config['table_prefix']."referrers CHANGE `referrer` `referrer` VARCHAR(250) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL default ''", $dblink);
 	// Converting referrer_blacklist table and fields to UTF-8
 	test("Setting up referrer_blacklist table and fields for UTF-8...", true);
 	@mysql_query("ALTER TABLE ".$config['table_prefix']."referrer_blacklist DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci", $dblink);
-	@mysql_query("ALTER TABLE ".$config['table_prefix']."referrer_blacklist CHANGE `spammer` `spammer` VARCHAR( 300 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL default ''", $dblink);
+	@mysql_query("ALTER TABLE ".$config['table_prefix']."referrer_blacklist CHANGE `spammer` `spammer` VARCHAR(250) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL default ''", $dblink);
 	// Converting users table and fields to UTF-8
 	test("Setting up users table and fields for UTF-8...", true);
 	@mysql_query("ALTER TABLE ".$config['table_prefix']."users DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci", $dblink);
