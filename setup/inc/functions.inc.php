@@ -116,7 +116,8 @@ function Language_selectbox($default_lang)
 		'en' => 'English',
 		'fr' => 'Français',
 		'de' => 'Deutsch',
-		'vn' => 'Vietnamese'
+		'vn' => 'Vietnamese',
+		'pl' => 'Polski'
 	);
 	// use configured path
 	$hdl = opendir('lang');
