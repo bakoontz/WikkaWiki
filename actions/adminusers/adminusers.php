@@ -193,7 +193,7 @@ if ($this->IsAdmin($this->GetUser()))
 	elseif($g_action == 'massdelete')
 	{
 		$usernames = array();
-		foreach($_GET as $key)
+		foreach($_GET as $key => $val)
 		{
 			$val = $this->GetSafeVar($key, 'get');
 			if($val == "on")
@@ -249,7 +249,7 @@ if ($this->IsAdmin($this->GetUser()))
 	else if($this->GetSafeVar('massaction', 'post') == 'massdelete')
 	{
 		$usernames = array();
-		foreach($_POST as $key)
+		foreach($_POST as $key => $val)
 		{
 			$val = $this->GetSafeVar($key, 'post');
 			if($val == "username")
@@ -403,7 +403,7 @@ if ($this->IsAdmin($this->GetUser()))
 				'		<th'.(($c_color == 1)? ' class="c1"' : '').' title="'.ADMINUSERS_TABLE_HEADING_OWNED_TITLE.'"><img src="'.ADMINUSERS_OWNED_ICON.'" class="icon" alt="O"/></th>'."\n".
 				'		<th'.(($c_color == 1)? ' class="c2"' : '').' title="'.ADMINUSERS_TABLE_HEADING_EDITS_TITLE.'"><img src="'.ADMINUSERS_EDITS_ICON.'" class="icon" alt="E"/></th>'."\n".
 				'		<th'.(($c_color == 1)? ' class="c3"' : '').' title="'.ADMINUSERS_TABLE_HEADING_COMMENTS_TITLE.'"><img src="'.ADMINUSERS_COMMENTS_ICON.'" class="icon" alt="C"/></th>'."\n".
-				'		<th>Actions</th>'."\n".
+				'		<th>'.ADMINUSERS_TABLE_HEADING_ACTIONS.'</th>'."\n".
 	 		 	'	</tr>'."\n".
 	 		 	'</thead>'."\n";
 	
