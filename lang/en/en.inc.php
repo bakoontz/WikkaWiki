@@ -363,15 +363,15 @@ if(!defined('DEBUG_CANNOT_RESOLVE_HOSTNAME')) define('DEBUG_CANNOT_RESOLVE_HOSTN
 if(!defined('DEBUG_CANNOT_CONNECT')) define('DEBUG_CANNOT_CONNECT', '[Cannot initiate socket connection]');
 if(!defined('DEBUG_NEW_VERSION_AVAILABLE')) define('DEBUG_NEW_VERSION_AVAILABLE', '[%s from host %s]');
 if(!defined('CHECKVERSION_CANNOT_CONNECT')) define('CHECKVERSION_CANNOT_CONNECT', '<div title="Cannot initiate network connection" style="clear: both; text-align: center; float: left; width: 300px; border: 1px solid %s; background-color: %s; color: %s; margin: 10px 0">'."\n"
-	.'<div style="padding: 0 3px 0 3px; background-color: %s; font-size: 85%; font-weight: bold">CHECKVERSION FAILED</div>'."\n"
-	.'<div style="padding: 0 3px 2px 3px; font-size: 85%; line-height: 150%; border-top: 1px solid %s;">'."\n"
+	.'<div style="padding: 0 3px 0 3px; background-color: %s; font-size: 85%%; font-weight: bold">CHECKVERSION FAILED</div>'."\n"
+	.'<div style="padding: 0 3px 2px 3px; font-size: 85%%; line-height: 150%%; border-top: 1px solid %s;">'."\n"
 	.'The network connection with the WikkaWiki server could not be established. To prevent delays in loading this page, please set enable_version_check to 0 in your wikka.config.php file.'."\n"
 	.'</div>'."\n"
 	.'</div>'."\n"
 	.'<div class="clear"></div>'."\n");
 if(!defined('CHECKVERSION_NEW_VERSION_AVAILABLE')) define('CHECKVERSION_NEW_VERSION_AVAILABLE', '<div title="A new version of WikkaWiki is available. Please upgrade!" style="clear: both; text-align: center; float: left; width: 300px; border: 1px solid %s; background-color: %s; color: %s; margin: 10px 0">'."\n"
-	.'<div style="padding: 0 3px 0 3px; background-color: %s; font-size: 85%; font-weight: bold">UPGRADE NOTE</div>'."\n"
-	.'<div style="padding: 0 3px 2px 3px; font-size: 85%; line-height: 150%; border-top: 1px solid %s;">'."\n"
+	.'<div style="padding: 0 3px 0 3px; background-color: %s; font-size: 85%%; font-weight: bold">UPGRADE NOTE</div>'."\n"
+	.'<div style="padding: 0 3px 2px 3px; font-size: 85%%; line-height: 150%%; border-top: 1px solid %s;">'."\n"
 	.'<strong>WikkaWiki %s</strong> is available for <a href="%s">download</a>!'."\n"
 	.'</div>'."\n"
 	.'</div>'."\n"
@@ -580,7 +580,6 @@ if(!defined('HISTORYLINK_TITLE')) define('HISTORYLINK_TITLE', 'Click to view rec
 // include
 if(!defined('ERROR_CIRCULAR_REFERENCE')) define('ERROR_CIRCULAR_REFERENCE', 'Circular reference detected!');
 if(!defined('ERROR_TARGET_ACL')) define('ERROR_TARGET_ACL', "You aren't allowed to read included page <tt>%s</tt>");
-
 /**#@-*/
 
 /**#@+
@@ -713,7 +712,6 @@ if(!defined('RECENT_COMMENTS_HEADING')) define('RECENT_COMMENTS_HEADING', '=====
 if(!defined('COMMENT_DATE_FORMAT')) define('COMMENT_DATE_FORMAT', 'D, d M Y');
 if(!defined('COMMENT_TIME_FORMAT')) define('COMMENT_TIME_FORMAT', 'H:i T');
 if(!defined('COMMENT_SNIPPET_LENGTH')) define('COMMENT_SNIPPET_LENGTH', 120);
-
 /**#@-*/
 
 /**#@+
@@ -729,15 +727,16 @@ if(!defined('RECENTLYCOMMENTED_NONE_ACCESSIBLE')) define('RECENTLYCOMMENTED_NONE
 /**#@+
  * Language constants used by the {@link redirect.php redirect} action
  */
-if (!defined('PAGE_MOVED_TO')) if(!defined('PAGE_MOVED_TO')) define('PAGE_MOVED_TO', 'This page has been moved to %s.'); # %s - targe page
-if (!defined('REDIRECTED_FROM')) if(!defined('REDIRECTED_FROM')) define('REDIRECTED_FROM', 'Redirected from %s.'); # %s - redirecting page
-if(!defined('INVALID_REDIRECT')) if(!defined('INVALID_REDIRECT')) define('INVALID_REDIRECT', 'Invalid redirect. Target must be an existing wiki page.');
+if(!defined('PAGE_MOVED_TO')) define('PAGE_MOVED_TO', 'This page has been moved to %s.'); # %s - targe page
+if(!defined('REDIRECTED_FROM')) define('REDIRECTED_FROM', 'Redirected from %s.'); # %s - redirecting page
+if(!defined('INVALID_REDIRECT')) define('INVALID_REDIRECT', 'Invalid redirect. Target must be an existing wiki page.');
+/**#@-*/
 
 /**#@+
  * Language constant used by the {@link referrerslink.php referrerslink} action
  */
-if (!defined('REFERRERSLINK_TEXT')) define('REFERRERSLINK_TEXT', '[Referrers]');
-if (!defined('REFERRERSLINK_TITLE')) define('REFERRERSLINK_TITLE', 'Click to view a list of URLs referring to this page.');
+if(!defined('REFERRERSLINK_TEXT')) define('REFERRERSLINK_TEXT', '[Referrers]');
+if(!defined('REFERRERSLINK_TITLE')) define('REFERRERSLINK_TITLE', 'Click to view a list of URLs referring to this page.');
 /**#@-*/
 
 /**#@+
@@ -817,8 +816,7 @@ if(!defined('SEARCH_TIPS')) define('SEARCH_TIPS', '<br /><br /><hr /><br /><stro
 	.SEARCH_TARGET_4.'<br /><br />'
 	.'<div class="indent"><tt>'.'"'.SEARCH_WORD_5.' '.SEARCH_WORD_6.'"'.'</tt></div>'
 	.SEARCH_TARGET_5.'<br />');
-if(!defined('SEARCH_TIPS_UTF8_COMPAT'))
-define('SEARCH_TIPS_UTF8_COMPAT', '<br /><br /><hr /><br /><strong>'.SEARCH_TIPS_UTF8_COMPAT_TITLE.':</strong><br /><br />'
+if(!defined('SEARCH_TIPS_UTF8_COMPAT')) define('SEARCH_TIPS_UTF8_COMPAT', '<br /><br /><hr /><br /><strong>'.SEARCH_TIPS_UTF8_COMPAT_TITLE.':</strong><br /><br />'
 	.'<div class="indent"><tt>'.SEARCH_WORD_1.' '.SEARCH_WORD_2.'</tt></div>'
 	.SEARCH_TARGET_1.'<br /><br />');
 /**#@-*/
@@ -847,7 +845,7 @@ if(!defined('ERROR_PASSWORD_NO_BLANK')) define('ERROR_PASSWORD_NO_BLANK', 'Sorry
 if(!defined('ERROR_PASSWORD_TOO_SHORT')) define('ERROR_PASSWORD_TOO_SHORT', 'Sorry, the password must contain at least %d characters.'); // %d - minimum password length
 if(!defined('ERROR_INVALID_REVISION_DISPLAY_LIMIT')) define('ERROR_INVALID_REVISION_DISPLAY_LIMIT', 'The number of page revisions should not exceed %d.'); // %d - maximum revisions to view
 if(!defined('ERROR_INVALID_RECENTCHANGES_DISPLAY_LIMIT')) define('ERROR_INVALID_RECENTCHANGES_DISPLAY_LIMIT', 'The number of recently changed pages should not exceed %d.'); // %d - maximum changed pages to view
-if(!defined('ERROR_VALIDATION_FAILED')) if(!defined('ERROR_VALIDATION_FAILED')) define('ERROR_VALIDATION_FAILED', "Registration validation failed, please try again!");
+if(!defined('ERROR_VALIDATION_FAILED')) define('ERROR_VALIDATION_FAILED', "Registration validation failed, please try again!");
 // - success messages
 if(!defined('SUCCESS_USER_LOGGED_OUT')) define('SUCCESS_USER_LOGGED_OUT', 'You have successfully logged out.');
 if(!defined('SUCCESS_USER_REGISTERED')) define('SUCCESS_USER_REGISTERED', 'You have successfully registered!');
@@ -1072,10 +1070,10 @@ if(!defined('DIFF_SAMPLE_DELETION')) define('DIFF_SAMPLE_DELETION', 'deletion');
 if(!defined('DIFF_SIMPLE_BUTTON')) define('DIFF_SIMPLE_BUTTON', 'Simple Diff');
 if(!defined('DIFF_FULL_BUTTON')) define('DIFF_FULL_BUTTON', 'Full Diff');
 if(!defined('HIGHLIGHTING_LEGEND')) define('HIGHLIGHTING_LEGEND', 'Highlighting Guide:');
-define ('ERROR_NO_PAGE_ACCESS', 'You are not authorized to view this page.');
-define ('CONTENT_ADDITIONS_HEADER', 'Additions:');
-define ('CONTENT_DELETIONS_HEADER', 'Deletions:');
-define ('CONTENT_NO_DIFFERENCES', 'No Differences');
+if(!defined('ERROR_NO_PAGE_ACCESS')) define('ERROR_NO_PAGE_ACCESS', 'You are not authorized to view this page.');
+if(!defined('CONTENT_ADDITIONS_HEADER')) define('CONTENT_ADDITIONS_HEADER', 'Additions:');
+if(!defined('CONTENT_DELETIONS_HEADER')) define('CONTENT_DELETIONS_HEADER', 'Deletions:');
+if(!defined('CONTENT_NO_DIFFERENCES')) define('CONTENT_NO_DIFFERENCES', 'No Differences');
 /**#@-*/
 
 /**#@+
@@ -1103,8 +1101,8 @@ if(!defined('SHOWCODE_LINK')) define('SHOWCODE_LINK', 'View formatting code for 
 if(!defined('SHOWCODE_LINK_TITLE')) define('SHOWCODE_LINK_TITLE', 'Click to view page formatting code'); // @@@ TODO 'View page formatting code'
 if(!defined('EDIT_COMMENT_TIMESTAMP_CAPTION')) define('EDIT_COMMENT_TIMESTAMP_CAPTION', '(%s)'); // %s timestamp
 if(!defined('ERROR_INVALID_PAGEID')) define('ERROR_INVALID_PAGEID', 'The revision id does not exist for the requested page');
-define ('MAX_TAG_LENGTH', 75);
-define ('MAX_EDIT_NOTE_LENGTH', 50);
+if(!defined('MAX_TAG_LENGTH')) define('MAX_TAG_LENGTH', 75);
+if(!defined('MAX_EDIT_NOTE_LENGTH')) define('MAX_EDIT_NOTE_LENGTH', 50);
 if(!defined('INPUT_SUBMIT_PREVIEW')) define('INPUT_SUBMIT_PREVIEW', 'Preview');
 if(!defined('INPUT_SUBMIT_RENAME')) define('INPUT_SUBMIT_RENAME', 'Rename');
 /**#@-*/
@@ -1228,7 +1226,7 @@ if(!defined('REFERRERS_URLS_TO_PAGE')) define('REFERRERS_URLS_TO_PAGE', 'Externa
  * Language constant used by the {@link revert.php revert} (page) handler
  */
 // revert
-if(!defined('REVERT_DEFAULT_COMMENT')) define ('REVERT_DEFAULT_COMMENT', 'Reverted to previous revision');
+if(!defined('REVERT_DEFAULT_COMMENT')) define('REVERT_DEFAULT_COMMENT', 'Reverted to previous revision');
 /**#@-*/
 
 /**#@+
@@ -1323,9 +1321,9 @@ if(!defined('CUSTOM_THEMES_TITLE')) define('CUSTOM_THEMES_TITLE', 'Custom themes
  */
 // admin.lib
 // Reversion routine strings
-if(!defined('REVERT_DEFAULT_COMMENT')) define ('REVERT_DEFAULT_COMMENT', 'Reverting last edit by %s [%d] to previous version [%d]');
-if(!defined('REVERT_MESSAGE_SUCCESS')) define ('REVERT_MESSAGE_SUCCESS', 'Reverted to previous version');
-if(!defined('REVERT_MESSAGE_FAILURE')) define ('REVERT_MESSAGE_FAILURE', 'Reversion to previous version FAILED!');
+if(!defined('REVERT_DEFAULT_COMMENT')) define('REVERT_DEFAULT_COMMENT', 'Reverting last edit by %s [%d] to previous version [%d]');
+if(!defined('REVERT_MESSAGE_SUCCESS')) define('REVERT_MESSAGE_SUCCESS', 'Reverted to previous version');
+if(!defined('REVERT_MESSAGE_FAILURE')) define('REVERT_MESSAGE_FAILURE', 'Reversion to previous version FAILED!');
 
 // User deletion strings
 if(!defined('USERDELETE_MESSAGE_SUCCESS')) define('USERDELETE_MESSAGE_SUCCESS', 'User deletion successful');
