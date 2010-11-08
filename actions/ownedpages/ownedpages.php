@@ -29,7 +29,7 @@ $percent = round( ($count/$total )*100, 2 ) ;
 $disp_count = '<strong>'.$count.'</strong>';
 $disp_total = '<strong>'.$total.'</strong>';
 $disp_percent = '<strong>'.$percent.'%</strong>';
-echo sprintf(OWNEDPAGES_COUNTS,$disp_count,$disp_total);
+echo sprintf(T_("You own %s pages out of the %s pages on this Wiki."),$disp_count,$disp_total);
 echo '<br />';
-echo sprintf(OWNEDPAGES_PERCENTAGE,$disp_percent);
+echo sprintf(T_("That means you own %s of the total."),$disp_percent);
 ?>

@@ -7,7 +7,7 @@ $site_base = $this->GetConfigValue("base_url");
 $ueb = '';
 if ($this->GetHandler() != 'edit' && $this->HasAccess("write", $this->page["tag"]))
 {
-	$ueb .= '	<link rel="alternate" type="application/x-wiki" title="'.sprintf(WIKKA_PAGE_EDIT_LINK_TITLE, $this->page["tag"]).'" href="'.$this->Href('edit', $this->page["tag"]).'"/>'."\n";
+	$ueb .= '	<link rel="alternate" type="application/x-wiki" title="'.sprintf(T_("Click to edit %s"), $this->page["tag"]).'" href="'.$this->Href('edit', $this->page["tag"]).'"/>'."\n";
 }
 if ( substr_count($site_base, 'wikka.php?wakka=') > 0 ) $site_base = substr($site_base,0,-16);
 ?>

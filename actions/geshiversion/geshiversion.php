@@ -21,7 +21,7 @@
  */
 
 // defaults
-$out = '<abbr title="'.WIKKA_ADMIN_ONLY_TITLE.'">'.WIKKA_NOT_AVAILABLE.'</abbr>'."\n"; 
+$out = '<abbr title="'.T_("Sorry, only wiki administrators can display this information").'">'.T_("n/a").'</abbr>'."\n"; 
 
 //check privs
 if ($this->config['public_sysinfo'] == '1' || $this->IsAdmin())
@@ -38,12 +38,12 @@ if ($this->config['public_sysinfo'] == '1' || $this->IsAdmin())
 		}
 		else
 		{
-			$out = WIKKA_NOT_AVAILABLE;
+			$out = T_("n/a");
 		}
 	}
 	else
 	{
-			$out = WIKKA_NOT_INSTALLED;
+			$out = T_("not installed");
 	}
 }
 echo $out;

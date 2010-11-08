@@ -21,8 +21,6 @@
 /**#@+
  * Default value.
  */
-if (!defined('COMMENT_DATE_FORMAT'))    define('COMMENT_DATE_FORMAT', 'D, d M Y');	// @@@ make configurable
-if (!defined('COMMENT_TIME_FORMAT'))    define('COMMENT_TIME_FORMAT', 'H:i T');	// @@@ make configurable
 if (!defined('COMMENT_SNIPPET_LENGTH')) define('COMMENT_SNIPPET_LENGTH', 120);
 /**#@-*/
 
@@ -40,7 +38,7 @@ else
 
 $username = $this->GetSafeVar('user', 'get');
 
-echo '<h2>'.RECENTLYCOMMENTED_HEADING.'</h2><br />'."\n";
+echo '<h2>'.T_("Recently commented pages").'</h2><br />'."\n";
 if ($comments = $this->LoadRecentlyCommented(50, $username))
 {
 	$curday = '';
@@ -55,7 +53,7 @@ if ($comments = $this->LoadRecentlyCommented(50, $username))
 			list($day, $time) = explode(' ', $comment['time']);
 			if ($day != $curday)
 			{
-				$dateformatted = date(COMMENT_DATE_FORMAT, strtotime($day));
+				$dateformatted = date(T_("D, d M Y"), strtotime($day));
 
 				if ($curday)
 				{
@@ -64,7 +62,7 @@ if ($comments = $this->LoadRecentlyCommented(50, $username))
 				echo '<strong>'.$dateformatted.':</strong><br />'."\n";
 				$curday = $day;
 			}
-			$timeformatted = date(COMMENT_TIME_FORMAT, strtotime($comment['time']));
+			$timeformatted = date(T_("H:i T"), strtotime($comment['time']));
 			$comment_preview = str_replace('<br />', '', $comment['comment']);	// @@@ use single space instead of empty string
 			if (strlen($comment_preview) > COMMENT_SNIPPET_LENGTH)
 			{
@@ -72,23 +70,23 @@ if ($comments = $this->LoadRecentlyCommented(50, $username))
 				$comment_preview = substr($comment_preview, 0, COMMENT_SNIPPET_LENGTH).$comment_spillover_link;
 			}
 			$commentlink = '<a href="'.$this->Href('', $page_tag, 'show_comments='.$show_comments).'#comment_'.$comment['id'].'" title="View comment">'.$page_tag.'</a>'; # i18n
-			echo $commentlink.WIKKA_COMMENT_AUTHOR_DIVIDER.$this->FormatUser($comment['user']).'<blockquote>'.$comment_preview.'</blockquote>'."\n";
+			echo $commentlink.T_(", comment by ").$this->FormatUser($comment['user']).'<blockquote>'.$comment_preview.'</blockquote>'."\n";
 		}
 	}
 	if ($readable == 0)
 	{
-		echo '<p class="error">'.RECENTLYCOMMENTED_NONE_ACCESSIBLE.'</p>';
+		echo '<p class="error">'.T_("There are no recently commented pages you have access to.").'</p>';
 	}
 }
 else
 {
 	if(!empty($username))    
 	{        
-		echo '<p class="error">'.sprintf(RECENTLYCOMMENTED_NONE_FOUND_BY, $username).'</p>'; 
+		echo '<p class="error">'.sprintf(T_("There are no recently by %s commented pages."), $username).'</p>'; 
     } 
 	else
 	{
-		echo '<p class="error">'.RECENTLYCOMMENTED_NONE_FOUND.'</p>';
+		echo '<p class="error">'.T_("There are no recently commented pages.").'</p>';
 	}
 }
 ?>

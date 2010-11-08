@@ -26,7 +26,7 @@ $user = FALSE;
 $mailsent = FALSE;
 
 // print heading
-$output .= '<h3>'.PW_FORGOTTEN_HEADING.'</h3>';
+$output .= '<h3>'.T_("Password reminder").'</h3>';
 
 // process input
 if (isset($_POST['wikiname'])) // get posted values
@@ -37,27 +37,28 @@ if (isset($_POST['wikiname'])) // get posted values
 	switch(TRUE)
 	{
 		case ($input == ''): // empty user
-			$output .= '<em class="error">'.WIKKA_ERROR_EMPTY_USERNAME.'</em><br />'."\n";
-			$highlight = INPUT_ERROR_STYLE;
+			$output .= '<em class="error">'.T_("Please fill in your username!").'</em><br />'."\n";
+			$highlight = 'class="highlight"';
 			break;
 		case ($input != '' && !$user): // non-existing user
-			$output .= '<em class="error">'.ERROR_UNKNOWN_USER.'</em><br />'."\n";
-			$highlight = INPUT_ERROR_STYLE;
+			$output .= '<em class="error">'.T_("You have entered a non-existent user!").'</em><br />'."\n";
+			$highlight = 'class="highlight"';
 			break;
 		case ($input != '' && $user): // user exists, proceed
 			$header = "From: ".$this->GetConfigValue('wakka_name')." <".$this->GetConfigValue('admin_email').">";
 			$header .= "\r\nContent-Type: text/plain; charset=UTF-8";
-			$reference = sprintf(PW_FORGOTTEN_MAIL_REF, $user['name']);
-			$mail = sprintf(PW_FORGOTTEN_MAIL, $user['name'], $this->GetConfigValue('wakka_name'), $user['password'], $this->Href('', 'UserSettings'))."\n";
+			$reference = sprintf(T_("Password reminder for %s"), $user['name']);
+			$mail = sprintf(T_('Hello, %s!  Someone requested that we send to this email address a password reminder to login at %s. If you did not request this reminder, disregard this email, no action is necessary. Your password will stay the same.  Your wikiname: %s Password reminder: %s URL: %s Do not forget to change the password immediately after logging in.'), $user['name'], $this->GetConfigValue('wakka_name'), $user['name'], $user['password'], $this->Href('', 'UserSettings'))."\n";
 			if (mail($user['email'], $reference, $mail, $header))
 			{
 				$mailsent = TRUE;
-				$output .= '<br /><em class="success">'.sprintf(PW_CHK_SENT, $user['name']).'</em><br />'."\n";
-				$output .= $this->Format(USERSETTINGS_LINK);
+				$output .= '<br /><em
+				class="success">'.sprintf(T_("A password reminder has been sent to %s's registered email address."), $user['name']).'</em><br />'."\n";
+				$output .= $this->Format(T_("Return to the [[UserSettings login]] screen."));
 			}
 			else
 			{
-				$output .= '<em class="error">'.ERROR_MAIL_NOT_SENT.'</em><br />'."\n";
+				$output .= '<em class="error">'.T_("An error occurred while trying to send the password. Outgoing mail might be disabled. Please try to contact your wiki administrator by posting a page comment.").'</em><br />'."\n";
 			}
 			break;
 	}
@@ -66,12 +67,12 @@ if (isset($_POST['wikiname'])) // get posted values
 // display input form
 if (!$mailsent)
 {
-	$output .= '<p>'.PW_FORM_TEXT.'</p>'."\n";
+	$output .= '<p>'.T_("Enter your WikiName and a password reminder will be sent to your registered email address.").'</p>'."\n";
 	$output .= $this->FormOpen();
 	$output .= '<fieldset>'."\n";
-	$output .= '<legend>'.PW_FORM_FIELDSET_LEGEND.'</legend>'."\n";
+	$output .= '<legend>'.T_("Your WikiName:").'</legend>'."\n";
 	$output .= '<input '.$highlight.' type="text" name="wikiname" value="" />'."\n";
-	$output .= '<input type="submit" value="'.BUTTON_SEND_PW.'" />'."\n";
+	$output .= '<input type="submit" value="'.T_("Send reminder").'" />'."\n";
 	$output .= '</fieldset>'."\n";
 	$output .= $this->FormClose();
 }

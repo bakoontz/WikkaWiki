@@ -330,6 +330,12 @@ if(isset($wakkaConfig['lang_path']) && preg_match('/plugins\/lang/', $wakkaConfi
 $wakkaConfig = array_merge($wakkaDefaultConfig, $wakkaConfig);	// merge defaults with config from file
 
 // ---------------------------- LANGUAGE DEFAULTS -----------------------------
+
+/**
+  * php-gettext
+  */
+  include_once('localization.php');
+
 /**
  * Include language file(s) if it/they exist(s).
  * @see /lang/en.inc.php
@@ -486,7 +492,7 @@ if (file_exists('locked'))
 	if ($ask) {
 		header("WWW-Authenticate: Basic realm=\"".$wakkaConfig["wakka_name"]." Install/Upgrade Interface\"");
 		header("HTTP/1.0 401 Unauthorized");
-		print WIKI_UPGRADE_NOTICE;
+		print T_("This site is currently being upgraded. Please try again later.");
 		exit;
 	}
 }
@@ -566,7 +572,7 @@ $wakka = instantiate('Wakka',$wakkaConfig);
  */
 if (!$wakka->dblink)
 {
-	echo '<em class="error">'.ERROR_NO_DB_ACCESS.'</em>';
+	echo '<em class="error">'.T_("Error: Unable to connect to the database.").'</em>';
 	exit;
 }
 

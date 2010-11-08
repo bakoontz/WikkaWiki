@@ -14,15 +14,15 @@ if (($this->HasAccess('comment') || $this->IsAdmin()) && $this->existsPage($this
 
 	if ('' == $body) #check if comment is non-empty
 	{
-		$redirectmessage = ERROR_EMPTY_COMMENT;
+		$redirectmessage = T_("Comment body was empty -- not saved!");
 	}
 	elseif (FALSE === ($aKey = $this->getSessionKey($this->GetSafeVar('form_id', 'post'))))	# check if page key was stored in session
 	{
-		$redirectmessage = ERROR_COMMENT_NO_KEY;
+		$redirectmessage = T_("Your comment cannot be saved. Please contact the wiki administrator.");
 	}
 	elseif (TRUE !== ($rc = $this->hasValidSessionKey($aKey)))	# check if correct name,key pair was passed
 	{
-		$redirectmessage = ERROR_COMMENT_INVALID_KEY;
+		$redirectmessage = T_("Your comment cannot be saved. Please contact the wiki administrator.");
 	}
 	// all is kosher: store new comment
 	else
@@ -36,6 +36,6 @@ if (($this->HasAccess('comment') || $this->IsAdmin()) && $this->existsPage($this
 }
 else
 {
-	echo '<div id="content"><em class="error">'.ERROR_NO_COMMENT_WRITE_ACCESS.'</em></div>'."\n";
+	echo '<div id="content"><em class="error">'.T_("Sorry, you're not allowed to post comments to this page'").'</em></div>'."\n";
 }
 ?>

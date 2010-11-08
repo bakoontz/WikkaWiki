@@ -65,8 +65,8 @@ else
         $cached_username = $this->GetUserName();
         $user_owns_pages = FALSE;
         $link = $this->href('', '', 'letter=');
-        $alpha_bar = '<a href="'.$link.'">'.PAGEINDEX_ALL_PAGES.'</a>&nbsp;'."\n";
-        $index_caption = PAGEINDEX_CAPTION;
+        $alpha_bar = '<a href="'.$link.'">'.T_("All").'</a>&nbsp;'."\n";
+        $index_caption = T_("This is an alphabetical list of pages you can read on this server.");
         $index_output = '';
         $current_character = '';
         $character_changed = FALSE;
@@ -114,7 +114,7 @@ else
                 }
                 elseif ($page_owner != '(Public)' && $page_owner != '')
                 {
-                    $index_output .= sprintf(' . . . . '.WIKKA_PAGE_OWNER, $this->FormatUser($page_owner));
+                    $index_output .= sprintf(' . . . . '.T_("Owner: %s"), $this->FormatUser($page_owner));
                 }
                 $index_output .= "<br />\n";
             }
@@ -123,15 +123,15 @@ else
         // @@@ don't use Format() - generate HTML!
         if ($user_owns_pages)
         {
-            $index_caption .= '---'.PAGEINDEX_OWNED_PAGES_CAPTION;
+            $index_caption .= '---'.T_("Items marked with a * indicate pages that you own.");
         }
-        echo $this->Format('===='.PAGEINDEX_HEADING.'==== --- <<'.$index_caption.'<< ::c:: ---');
+        echo $this->Format('===='.T_("Page Index").'==== --- <<'.$index_caption.'<< ::c:: ---');
         echo "\n<strong>".$alpha_bar."</strong><br />\n";
         echo $index_output;
     }
     else
     {
-        echo WIKKA_NO_PAGES_FOUND;
+        echo T_("No pages found.");
     }
 }
 
@@ -141,7 +141,7 @@ function generateAlphaBar(&$wakka, $newpage)
     {
         // get things started
         $link = $wakka->href('', $newpage, 'letter=');
-        $alpha_bar = '<a href="'.$link.'"><strong>'.PAGEINDEX_ALL_PAGES.'</strong></a>&nbsp;'."\n";
+        $alpha_bar = '<a href="'.$link.'"><strong>'.T_("All").'</strong></a>&nbsp;'."\n";
         $current_character = '';
         $character_changed = FALSE;
 

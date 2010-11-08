@@ -2353,7 +2353,7 @@ class Wakka
 			}
 			if (!$this->existsPage($tag))
 			{
-				$link = '<a class="missingpage" href="'.$this->Href('edit', $tag).'" title="'.CREATE_THIS_PAGE_LINK_TITLE.'">'.$text.'</a>';
+				$link = '<a class="missingpage" href="'.$this->Href('edit', $tag).'" title="'.T_("Create this page").'">'.$text.'</a>';
 			}
 			else
 			{
@@ -2572,7 +2572,7 @@ class Wakka
 	{
 		$filename = 'header.php';
 		$path = $this->GetThemePath();
-		$header = $this->IncludeBuffered($filename, ERROR_HEADER_MISSING, '', $path);
+		$header = $this->IncludeBuffered($filename, T_("A header template could not be found. Please make sure that a file called <code>header.php</code> exists in the templates directory."), '', $path);
 		return $header;
 	}
 
@@ -2587,7 +2587,7 @@ class Wakka
 	{
 		$filename = 'footer.php';
 		$path = $this->GetThemePath();
-		$footer = $this->IncludeBuffered($filename, ERROR_FOOTER_MISSING, '', $path);
+		$footer = $this->IncludeBuffered($filename, T_("A footer template could not be found. Please make sure that a file called <code>footer.php</code> exists in the templates directory."), '', $path);
 		return $footer;
 	}
 
@@ -2673,7 +2673,7 @@ class Wakka
 			}
 		}
 		$output = '<select id="select_theme" name="theme">';
-		$output .= '<option disabled="disabled">'.sprintf(DEFAULT_THEMES_TITLE, count($core)).'</option>';
+		$output .= '<option disabled="disabled">'.sprintf(T_("Default themes (%s)"), count($core)).'</option>';
 		foreach ($core as $c)
 		{
 			$output .= "\n ".'<option value="'.$c.'"';
@@ -2683,7 +2683,7 @@ class Wakka
 		//display custom themes if any
 		if (count($plugin)>0)
 		{
-			$output .= '<option disabled="disabled">'.sprintf(CUSTOM_THEMES_TITLE, count($plugin)).'</option>';
+			$output .= '<option disabled="disabled">'.sprintf(T_("Custom themes (%s)"), count($plugin)).'</option>';
 			foreach ($plugin as $p)
 			{
 				$output .= "\n ".'<option value="'.$p.'"';
@@ -3016,7 +3016,7 @@ class Wakka
 		// and thus provides defense against directory traversal or XSS (via action *name*)
 		if (!preg_match('/^\s*([a-zA-Z0-9]+)(\s.+?)?\s*$/', $actionspec, $matches))	# see also #34
 		{
-			return '<em class="error">'.ACTION_UNKNOWN_SPECCHARS.'</em>';	# [SEC]
+			return '<em class="error">'.T_("Unknown action; the action name must not contain special characters.").'</em>';	# [SEC]
 		}
 		else
 		{
@@ -3063,7 +3063,8 @@ class Wakka
 				$this->StopLinkTracking();
 		}
 		$result =
-		$this->IncludeBuffered(strtolower($action_name).DIRECTORY_SEPARATOR.strtolower($action_name).'.php', sprintf(ACTION_UNKNOWN, '"'.$action_name.'"'), $vars, $this->config['action_path']);
+		$this->IncludeBuffered(strtolower($action_name).DIRECTORY_SEPARATOR.strtolower($action_name).'.php',
+		sprintf(T_("Unknown action \"%s\""), '"'.$action_name.'"'), $vars, $this->config['action_path']);
 		if ($link_tracking_state)
 		{
 			$this->StartLinkTracking();
@@ -3102,7 +3103,7 @@ class Wakka
 		// @todo move regexp to library
 		if (!preg_match('/^([a-zA-Z0-9_.-]+)$/', $handler)) // allow letters, numbers, underscores, dashes and dots only (for now); see also #34
 		{
-			return '<em class="error">'.HANDLER_UNKNOWN_SPECCHARS.'</em>';	# [SEC]
+			return '<em class="error">'.T_("Unknown handler; the handler name must not contain special characters.").'</em>';	# [SEC]
 		}
 		else
 		{
@@ -3110,7 +3111,7 @@ class Wakka
 			$handler = strtolower($handler);
 		}
 		$handlerLocation = $handler.DIRECTORY_SEPARATOR.$handler.'.php';	#89
-		return $this->IncludeBuffered($handlerLocation, sprintf(HANDLER_UNKNOWN, '"'.$handlerLocation.'"'), '', $this->config['handler_path']);
+		return $this->IncludeBuffered($handlerLocation, sprintf(T_("Sorry, %s is an unknown handler."), '"'.$handlerLocation.'"'), '', $this->config['handler_path']);
 	}
 
 	/**
@@ -3168,7 +3169,7 @@ class Wakka
 		// directory traversal or XSS (via handler *name*)
 		if (!preg_match('/^([a-zA-Z0-9_.-]+)$/', $formatter)) # see also #34
 		{
-			$out = '<em class="error">'.FORMATTER_UNKNOWN_SPECCHARS.'</em>';	# [SEC]
+			$out = '<em class="error">'.T_("Unknown formatter; the formatter name must not contain special characters.").'</em>';	# [SEC]
 		}
 		else
 		{
@@ -3177,7 +3178,7 @@ class Wakka
 			// prepare variables
 			$formatter_location			= $formatter.'.php';
 			$formatter_location_disp	= '<code>'.$this->htmlspecialchars_ent($formatter_location).'</code>';	// [SEC] make error (including (part of) request) safe to display
-			$formatter_not_found		= sprintf(FORMATTER_UNKNOWN,$formatter_location_disp);
+			$formatter_not_found		= sprintf(T_("Formatter \"%s\" not found"),$formatter_location_disp);
 			// produce output
 			//$out = $this->IncludeBuffered($formatter_location, $this->GetConfigValue('wikka_formatter_path'), $formatter_not_found, FALSE, compact('text', 'format_option')); // @@@
 			$out = $this->IncludeBuffered($formatter_location, $formatter_not_found, compact('text', 'format_option'), $this->GetConfigValue('wikka_formatter_path'));
@@ -3508,7 +3509,7 @@ class Wakka
 		else
 		{
 			// no user (page has empty user field)
-			$formatted_user = 'anonymous'; // @@@ #i18n WIKKA_ANONYMOUS_AUTHOR_CAPTION or WIKKA_ANONYMOUS_USER
+			$formatted_user = 'anonymous'; // @@@ #i18n T_("(.T_("unregistered user").'") or T_("anonymous")
 		}
 		return $formatted_user;
 	}

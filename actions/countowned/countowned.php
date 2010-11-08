@@ -24,6 +24,6 @@ if ($username = $this->GetUserName())		// no param: get name of logged in user o
 	$count = $this->getCount('pages',$where);
 }
 
-echo $this->Link('MyPages', '', $count,'','', DISPLAY_MYPAGES_LINK_TITLE);
+echo $this->Link('MyPages', '', $count,'','', T_("Display a list of the pages you currently own"));
 
 ?>

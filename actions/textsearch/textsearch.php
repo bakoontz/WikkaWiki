@@ -34,7 +34,7 @@ $case = stripslashes(trim($this->GetSafeVar('case', 'get'))); #312
 // TODO i18n
 ?>
 <?php echo $this->FormOpen('', '', 'get'); ?>
-<fieldset><legend><?php echo SEARCH_FOR; ?></legend>
+<fieldset><legend><?php echo T_("Search for"); ?></legend>
 <input name="phrase" size="40" value="<?php echo $phrase ?>" /> 
 <?php if(0==$utf8Compatible) { ?>
 <input id="case_sensitive" name="case" type="checkbox" value="1" <?php echo (1==$case?'checked="checked"':'') ?> />
@@ -67,23 +67,23 @@ if ($results)
 switch ($total_results)
 {
 	case 0:
-		$match_str = SEARCH_ZERO_MATCH;
+		$match_str = T_("No matches");
 		break;
 	case 1:
-		$match_str = SEARCH_ONE_MATCH;
+		$match_str = T_("One match found");
 		break;
 	default:
-		$match_str = sprintf(SEARCH_N_MATCH, $total_results);
+		$match_str = sprintf(T_("%d matches found"), $total_results);
 		break;
 }
-printf(SEARCH_RESULTS, $match_str, $this->htmlspecialchars_ent($phrase));
+printf(T_("Search results: <strong>%s</strong> for <strong>%s</strong>"), $match_str, $this->htmlspecialchars_ent($phrase));
 if ($total_results > 0)
 {
 	$expsearchurl  = $this->Href('', 'TextSearchExpanded', 'phrase='.urlencode($phrase));
-	$expsearchlink = '<a href="'.$expsearchurl.'">'.SEARCH_EXPANDED_LINK_DESC.'</a>';
+	$expsearchlink = '<a href="'.$expsearchurl.'">'.T_("Expanded Text Search").'</a>';
 
 	echo '<ol>'.$result_page_list.'</ol>'."\n";
-	printf('<br />'.SEARCH_NOT_SURE_CHOICE.'<br />'.SEARCH_TRY_EXPANDED,$expsearchlink);
+	printf('<br />'.T_("Not sure which page to choose?").'<br />'.T_("Try the %s which shows surrounding text."),$expsearchlink);
 }
 
 // display search tips

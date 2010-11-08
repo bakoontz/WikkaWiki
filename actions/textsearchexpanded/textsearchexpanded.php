@@ -23,6 +23,7 @@
  * Default value.
  */
 if (!defined('SEARCH_MAX_SNIPPETS')) define('SEARCH_MAX_SNIPPETS', 3);
+if(!defined('SEARCH_MYSQL_IDENTICAL_CHARS')) define('SEARCH_MYSQL_IDENTICAL_CHARS', 'aàáâã,eèéêë,iìîï,oòóôõ,uùúû,cç,nñ,yý');
 /**#@-*/
 
 // init
@@ -39,7 +40,7 @@ $case = stripslashes(trim($this->GetSafeVar('case', 'get')));
 // TODO i18n
 ?>
 <?php echo $this->FormOpen("", "", "get"); ?>
-<fieldset><legend><?php echo SEARCH_FOR; ?></legend>
+<fieldset><legend><?php echo T_("Search for"); ?></legend>
 <input name="phrase" size="40" value="<?php echo $phrase ?>" /> 
 <?php if(0==$utf8Compatible) { ?>
 <input name="case" type="checkbox" value="1" <?php echo (1==$case?'checked="checked"':'') ?> />
@@ -133,16 +134,16 @@ if ($results)
 switch ($total_results)
 {
 	case 0:
-		$match_str = SEARCH_ZERO_MATCH;
+		$match_str = T_("No matches");
 		break;
 	case 1:
-		$match_str = SEARCH_ONE_MATCH;
+		$match_str = T_("One match found");
 		break;
 	default:
-		$match_str = sprintf(SEARCH_N_MATCH, $total_results);
+		$match_str = sprintf(T_("%d matches found"), $total_results);
 		break;
 }
-printf(SEARCH_RESULTS, $match_str, $this->htmlspecialchars_ent($phrase));
+printf(T_("Search results: <strong>%s</strong> for <strong>%s</strong>"), $match_str, $this->htmlspecialchars_ent($phrase));
 $result_page_list = $this->ReturnSafeHtml($result_page_list);
 if ($total_results) 
 {

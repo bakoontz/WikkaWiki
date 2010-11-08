@@ -47,6 +47,13 @@
  */
 
 // ***** CONSTANTS section *****
+if(!defined('CUR_YEAR')) define('CUR_YEAR', date('Y',mktime()));
+if(!defined('CUR_MONTH')) define('CUR_MONTH', date('n',mktime()));
+if(!defined('LOC_MON_YEAR')) define('LOC_MON_YEAR', "%B %Y"); # i18n
+if(!defined('MIN_DATETIME')) define('MIN_DATETIME', strtotime('1970-01-01 00:00:00 GMT')); # earliest timestamp PHP can handle (Windows and some others - to be safe)
+if(!defined('MAX_DATETIME')) define('MAX_DATETIME', strtotime('2038-01-19 03:04:07 GMT')); # latest timestamp PHP can handle
+if(!defined('MIN_YEAR')) define('MIN_YEAR', date('Y',MIN_DATETIME));
+if(!defined('MAX_YEAR')) define('MAX_YEAR', date('Y',MAX_DATETIME)-1); # don't include partial January 2038
 // not-quite-constants
 $daysInMonth = array(31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31);
 // format string for locale-specific month (%B) + 4-digit year (%Y) used for caption and title attributes
@@ -109,7 +116,7 @@ $firstwday = strftime('%w',strtotime($datemonthfirst));												# i18n
 
 // derive (locale-specific) caption text
 $monthYear	= strftime(LOC_MON_YEAR,strtotime($datemonthfirst));									# i18n
-$summary	= sprintf(FMT_SUMMARY, $monthYear);														# i18n
+$summary	= sprintf(T_("Calendar for %s"), $monthYear);														# i18n
 
 // derive last day of month
 $lastmday = $daysInMonth[$month - 1];
@@ -140,7 +147,7 @@ if (!$hasActionParams)
 	$yearNext	= ($month+1 > 12) ? $year+1 : $year;
 	$parNext	= "month=$monthNext&amp;year=$yearNext";
 	$urlNext	= $this->Href('', '', $parNext);
-	$titleNext	= strftime(LOC_MON_YEAR,strtotime(sprintf('%4d-%02d-%02d',$yearNext,$monthNext,1)));# i18n
+	$titleNext	= strftime(T_("%B %Y"),strtotime(sprintf('%4d-%02d-%02d',$yearNext,$monthNext,1)));# i18n
 }
 
 // build array with names of weekdays (locale-specific)

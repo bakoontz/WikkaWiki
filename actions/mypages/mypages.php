@@ -30,7 +30,7 @@ if(isset($_GET['user']))
 if (($this->IsAdmin() && !empty($username)) ||
 	($this->existsUser() && $username = $this->GetUserName()))
 {
-	printf('<div class="floatl">'.MYPAGES_CAPTION.'</div><br/><br/>'."\n", $username);
+	printf('<div class="floatl">'.T_("This is the list of pages owned by %s").'</div><br/><br/>'."\n", $username);
 
 	if ($pages = $this->LoadPagesByOwner($username))
 	{
@@ -56,11 +56,11 @@ if (($this->IsAdmin() && !empty($username)) ||
 	}
 	else
 	{
-		echo '<em class="error">'.sprintf(MYPAGES_NONE_OWNED, $username).'</em>';
+		echo '<em class="error">'.sprintf(T_("%s doesn't own any pages.'"), $username).'</em>';
 	}
 }
 else
 {
-	echo '<em class="error">'.MYPAGES_NOT_LOGGED_IN.'</em>';
+	echo '<em class="error">'.T_("You're not logged in, thus the list of your pages could not be retrieved.'").'</em>';
 }
 ?>

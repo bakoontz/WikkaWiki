@@ -19,13 +19,13 @@
 if ($this->GetUser())
 {
 	echo $this->FormOpen('', 'UserSettings', 'post', 'logout', 'logout');
-	echo '<input name="logout" type="submit" value="'.LOGOUT_BUTTON.'" />';
+	echo '<input name="logout" type="submit" value="'.T_("Logout").'" />';
 	echo $this->FormClose();
 }
 else
 {
 	echo $this->FormOpen('', 'UserSettings', 'login', 'login');
-	echo '<input name="login" type="submit" value="'.LOGIN_BUTTON.'" />';
+	echo '<input name="login" type="submit" value="'.T_("Login").'" />';
 	echo $this->FormClose();
 }
 ?>

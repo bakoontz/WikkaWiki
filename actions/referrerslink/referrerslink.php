@@ -12,5 +12,5 @@
  *
  * @author		{@link http://wikkawiki.org/EmeraldIsland EmeraldIsland}
  */
-echo '<a href="'.$this->Href('referrers').'" title="'.REFERRERSLINK_TITLE.'">'.REFERRERSLINK_TEXT.'</a>';
+echo '<a href="'.$this->Href('referrers').'" title="'.T_("Click to view a list of URLs referring to this page.").'">'.T_("[Referrers]").'</a>';
 ?>

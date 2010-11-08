@@ -31,11 +31,11 @@ if (isset($_POST['pagename']))
 
 	if(!$this->IsWikiName($pagename))
 	{
-		echo '<em class="error">'.sprintf(ERROR_INVALID_PAGENAME, $pagename).'</em>';
+		echo '<em class="error">'.sprintf(T_("This page name is invalid. Valid page names must not contain the characters | ?  = &lt; &gt; / \ \" % or &amp;.'"), $pagename).'</em>';
 	}
 	else if ($this->ExistsPage($pagename))
 	{
-		echo '<em class="error">'.WIKKA_ERROR_PAGE_ALREADY_EXIST.'</em>';
+		echo '<em class="error">'.T_("Sorry, the target page already exists").'</em>';
 	}
 	else
 	{
@@ -48,9 +48,9 @@ if (isset($_POST['pagename']))
 if ($showform)
 { ?>
 	<?php echo $this->FormOpen(); ?>
-		<fieldset class="newpage"><legend><?php echo NEWPAGE_CREATE_LEGEND; ?></legend>
+		<fieldset class="newpage"><legend><?php echo T_("Create a new page"); ?></legend>
 		<input type="text" name="pagename" size="40" value="<?php echo $pagename; ?>" />
-		<input type="submit" value="<?php echo NEWPAGE_CREATE_BUTTON; ?>" />
+		<input type="submit" value="<?php echo T_("Create"); ?>" />
 		</fieldset>
 	<?php echo $this->FormClose();
 }

@@ -22,7 +22,6 @@
  */
  
 //defaults
-if (!defined('LASTUSERS_DEFAULT_STYLE')) define('LASTUSERS_DEFAULT_STYLE', 'complex'); # consistent parameter naming with HighScores action
 if (!defined('LASTUSERS_MAX_USERS_DISPLAY')) define('LASTUSERS_MAX_USERS_DISPLAY', 10);
 
 //initialize
@@ -37,7 +36,7 @@ if (isset($vars['style']) && in_array($vars['style'], array('complex','simple'))
 }
 else
 {
-	$style = LASTUSERS_DEFAULT_STYLE;	
+	$style = T_("complex");	
 }
 if (isset($vars['max']) && $vars['max'] > 0)
 {
@@ -54,11 +53,11 @@ $last_users = $this->LoadAll("SELECT name, signuptime FROM ".$this->GetConfigVal
 $htmlout .= '<table class="data lastusers">'."\n";
 if ($style == 'complex')
 {
-	$htmlout .= '<caption>'.LASTUSERS_CAPTION.'</caption>'."\n";
+	$htmlout .= '<caption>'.T_("Recently registered users").'</caption>'."\n";
 	$htmlout .= '  <tr>'."\n";
-	$htmlout .= '    <th>'.NAME_TH.'</th>'."\n";
-	$htmlout .= '    <th>'.OWNED_PAGES_TH.'</th>'."\n";
-	$htmlout .= '    <th>'.SIGNUP_DATE_TIME_TH.'</th>'."\n";
+	$htmlout .= '    <th>'.T_("Username").'</th>'."\n";
+	$htmlout .= '    <th>'.T_("Owned pages").'</th>'."\n";
+	$htmlout .= '    <th>'.T_("Signup date/time").'</th>'."\n";
 	$htmlout .= '  </tr>'."\n";
 }
 foreach($last_users as $user)

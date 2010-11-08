@@ -19,28 +19,28 @@ if ($this->page)
 	{
 		if ($owner == '(Public)')
 		{
-			echo OWNERLINK_PUBLIC_PAGE." ".($this->IsAdmin() ? '<a title="'.EDITACLLINK_TITLE.'" href="'.$this->Href('acls').'">'.EDITACLLINK_TEXT.'</a>'."\n" : "\n");
+			echo T_("Public page")." ".($this->IsAdmin() ? '<a title="'.T_("Change the Access Control List for this page").'" href="'.$this->Href('acls').'">'.T_("[Edit ACLs]").'</a>'."\n" : "\n");
 		}
 		// if owner is current user
 		elseif ($this->UserIsOwner())
 		{
        		if ($this->IsAdmin())
        		{
-				echo OWNERLINK_OWNER.' '.$this->Link($owner, '', '', 0).' <a title="'.EDITACLLINK_TITLE.'" href="'.$this->Href('acls').'">'.EDITACLLINK_TEXT.'</a>'."\n";
+				echo T_("Owner:").' '.$this->Link($owner, '', '', 0).' <a title="'.T_("Change the Access Control List for this page").'" href="'.$this->Href('acls').'">'.T_("[Edit ACLs]").'</a>'."\n";
 			} 
 			else
  				{
-				echo OWNERLINK_SELF.' <a title="'.EDITACLLINK_TITLE.'" href="'.$this->Href('acls').'">'.EDITACLLINK_TEXT.'</a>'."\n";
+				echo T_("You own this page").' <a title="'.T_("Change the Access Control List for this page").'" href="'.$this->Href('acls').'">'.T_("[Edit ACLs]").'</a>'."\n";
 			}
 		}
 		else
 		{
-			echo OWNERLINK_OWNER.' '.$this->Link($owner, '', '', 0)."\n";
+			echo T_("Owner:").' '.$this->Link($owner, '', '', 0)."\n";
 		}
 	}
 	else
 	{
-		echo OWNERLINK_NOBODY.($this->GetUser()? ' <a title="'.CLAIMLINK_TITLE.'" href="'.$this->Href('claim').'">'.CLAIMLINK_TEXT.'</a>'."\n" : "\n");
+		echo T_("Nobody").($this->GetUser()? ' <a title="'.T_("Click to become the owner of this page").'" href="'.$this->Href('claim').'">'.T_("[Take Ownership]").'</a>'."\n" : "\n");
 	}
 }
 ?>
