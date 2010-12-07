@@ -22,6 +22,8 @@
  * Default value.
  */
 if (!defined('COMMENT_SNIPPET_LENGTH')) define('COMMENT_SNIPPET_LENGTH', 120);
+if (!defined('DATE_FORMAT')) define('DATE_FORMAT', 'D, d M Y'); #TODO make this system-configurable
+if (!defined('TIME_FORMAT')) define('TIME_FORMAT', 'H:i T'); #TODO make this system-configurable
 /**#@-*/
 
 $readable = 0;
@@ -53,7 +55,7 @@ if ($comments = $this->LoadRecentlyCommented(50, $username))
 			list($day, $time) = explode(' ', $comment['time']);
 			if ($day != $curday)
 			{
-				$dateformatted = date(T_("D, d M Y"), strtotime($day));
+				$dateformatted = date(DATE_FORMAT, strtotime($day));
 
 				if ($curday)
 				{
@@ -62,7 +64,7 @@ if ($comments = $this->LoadRecentlyCommented(50, $username))
 				echo '<strong>'.$dateformatted.':</strong><br />'."\n";
 				$curday = $day;
 			}
-			$timeformatted = date(T_("H:i T"), strtotime($comment['time']));
+			$timeformatted = date(TIME_FORMAT, strtotime($comment['time']));
 			$comment_preview = str_replace('<br />', '', $comment['comment']);	// @@@ use single space instead of empty string
 			if (strlen($comment_preview) > COMMENT_SNIPPET_LENGTH)
 			{

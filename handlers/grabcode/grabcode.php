@@ -35,7 +35,7 @@ if (1 == (int) $this->GetConfigValue('grabcode_button'))
 	//get URL parameters
 	$code = urldecode($this->GetSafeVar('code', 'post'));
 	// TODO: use central regex library for filename validation
-	$filename = (preg_match('/\w[-.\w]*/', $this->GetSafeVar('filename', 'post'))) ? urldecode($this->GetSafeVar('filename', 'post')).T_(".txt") : T_("codeblock.txt");
+	$filename = (preg_match('/\w[-.\w]*/', $this->GetSafeVar('filename', 'post'))) ?  urldecode($this->GetSafeVar('filename', 'post')).".txt" : T_("codeblock").".txt");
 
 	// @@@ shared download code
 	//set HTTP headers

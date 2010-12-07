@@ -42,12 +42,14 @@
  * @todo	Decide whether it's allowed to "re-create" a page of which only non-active versions exist
  *
  */
+if (!defined('CLONE_INVALID_CHARS')) define('CLONE_INVALID_CHARS', '| ? = &lt; &gt; / \ " % &amp;'); 
+
 // initialization
 $from = $this->tag;
 $to = $this->tag;
 $note = sprintf(T_("Cloned from %s"), $from);
 $editoption = '';
-$box = T_("'Please fill in a valid target <tt>PageName</tt> and an (optional");
+$box = T_("Please fill in a valid target <tt>PageName</tt> and an (optional) edit note");
 
 echo '<div id="content">'."\n";
 
@@ -84,7 +86,7 @@ if (!$this->existsPage($from))		// name change, interface change (allows only ac
 			// 3a. Check target pagename validity
 			else if(!$this->IsWikiName($to))
 			{
-				$box = '<em class="error">'.T_("This page name is invalid. Valid page names must not contain the characters | ? = &lt; &gt; / \ \" % or &amp;.").'</em>';
+				$box = '<em class="error">'.sprintf(T_("This page name is invalid. Valid page names must not contain the characters %s."), CLONE_INVALID_CHARS).'</em>';
 			}
 			else
 			{

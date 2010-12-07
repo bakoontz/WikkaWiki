@@ -52,9 +52,8 @@ if (isset($_POST['wikiname'])) // get posted values
 			if (mail($user['email'], $reference, $mail, $header))
 			{
 				$mailsent = TRUE;
-				$output .= '<br /><em
-				class="success">'.sprintf(T_("A password reminder has been sent to %s's registered email address."), $user['name']).'</em><br />'."\n";
-				$output .= $this->Format(T_("Return to the [[UserSettings login]] screen."));
+				$output .= '<br /><em class="success">'.sprintf(T_("A password reminder has been sent to %s's registered email address."), $user['name']).'</em><br />'."\n";
+				$output .= sprintf(T_("Return to the <a href=\"%s\">login</a> screen."), $this->Href('', 'UserSettings'));
 			}
 			else
 			{

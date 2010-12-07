@@ -122,7 +122,7 @@ if($this->IsAdmin() && TRUE == $this->config['enable_version_check'])
 			return;
 		}
 
-		$hostname = T_("wikkawiki.org");
+		$hostname = CHECKVERSION_HOST;
 		$ip = gethostbyname($hostname);
 		if($ip == $hostname)
 		{
@@ -158,8 +158,8 @@ if($this->IsAdmin() && TRUE == $this->config['enable_version_check'])
 			return;
 		}
 
-		fwrite($fp, "GET ".T_("/downloads/latest_wikka_version.txt")." HTTP/1.0\r\n");
-		fwrite($fp, "Host: ".T_("wikkawiki.org")."\r\n");
+		fwrite($fp, "GET " . CHECKVERSION_RELEASE_FILE . " HTTP/1.0\r\n");
+		fwrite($fp, "Host: " . CHECKVERSION_HOST . "\r\n");
 		fwrite($fp, "Connection: Close\r\n\r\n");
 		stream_set_timeout($fp, $timeout);
 		$data = fread($fp, 4096);
@@ -187,7 +187,7 @@ if($this->IsAdmin() && TRUE == $this->config['enable_version_check'])
 		.'</div>'."\n"
 		.'</div>'."\n"
 		.'<div class="clear"></div>'."\n"
-				, $c[$s][0], $c[$s][1], $c[$s][2], $c[$s][3], $c[$s][4], $latest, T_("http://docs.wikkawiki.org/WhatsNew"));
+				, $c[$s][0], $c[$s][1], $c[$s][2], $c[$s][3], $c[$s][4], $latest, CHECKVERSION_DOWNLOAD_URL);
 			}
 		}
 	}			

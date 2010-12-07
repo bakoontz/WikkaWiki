@@ -63,7 +63,7 @@ if ($this->GetConfigValue('public_sysinfo') == '1' || $this->IsAdmin())
 			if (isset($release)) $out .= $release.' ';
 			if (isset($version)) $out .= $version.' ';
 			if (isset($machine)) $out .= $machine.' ';
-			if (isset($host))    $out .= sprintf(T_("(%s)"),$host);
+			if (isset($host))    $out .= sprintf("(%s)",$host);
 			break;
 		case 'os':
 			if (isset($os))      $out .= $os.' ';

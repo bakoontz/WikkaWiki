@@ -62,7 +62,7 @@ $revisioncount_highlight = '';
 $changescount_highlight = '';
 $invitation_code_highlight = '';
 
-$wikiname_expanded = '<abbr title="'.T_("A WikiName is formed by two or more capitalized words without space, e.g. John Doe").'">'.T_("WikiName").'</abbr>';
+$wikiname_expanded = '<abbr title="'.T_("A WikiName is formed by two or more capitalized words without space, e.g. JohnDoe").'">'.T_("WikiName").'</abbr>';
 
 // Create URAuth object
 include_once('libs/userregistration.class.php');
@@ -120,7 +120,7 @@ if ($user = $this->GetUser())
 				$error = T_("Please specify an email address.");
 				$email_highlight = 'class="highlight"';
 				break;
-			case (!preg_match(T_("/^.+?\@.+?\..+$/"), $email)): //invalid email
+			case (!preg_match(VALID_EMAIL_PATTERN, $email)): //invalid email
 				$error = T_("That doesn't quite look like an email address.");
 				$email_highlight = 'class="highlight"';
 				break;
@@ -254,7 +254,7 @@ if ($user = $this->GetUser())
 				$password_confirm_highlight = 'class="highlight"';
 				break;
 			case ($password_confirm != $password):
-				$passerror = T_("Passwords don\t match.'");
+				$passerror = T_("Passwords don't match.");
 				$password_highlight = 'class="highlight"';
 				$password_new_highlight = 'class="highlight"';
 				$password_confirm_highlight = 'class="highlight"';
@@ -403,7 +403,7 @@ else
 		}
 		else
 		{
-			$error = T_("Sorry, this user name doesn\t exist.'");
+			$error = T_("Sorry, this user name doesn't exist.");
 			$username_highlight = 'class="highlight"';
 		}
 	}
@@ -461,7 +461,7 @@ else
 				$password_confirm_highlight = 'class="highlight"';
 				break;
 			case ($confpassword != $password):
-				$error = T_("Passwords don\t match.'");
+				$error = T_("Passwords don't match.");
 				$password_highlight = 'class="highlight"';
 				$password_confirm_highlight = 'class="highlight"';
 				break;
@@ -471,8 +471,8 @@ else
 				$password_highlight = 'class="highlight"';
 				$password_confirm_highlight = 'class="highlight"';
 				break;
-			case (!preg_match(T_("/^.+?\@.+?\..+$/"), $email)):
-				$error = T_("That doesn't quite look like an email address.'");
+			case (!preg_match(VALID_EMAIL_PATTERN, $email)):
+				$error = T_("That doesn't quite look like an email address.");
 				$email_highlight = 'class="highlight"';
 				$password_highlight = 'class="highlight"';
 				$password_confirm_highlight = 'class="highlight"';
@@ -521,7 +521,7 @@ else
 		#elseif (!($this->LoadUser($this->GetSafeVar('yourname', 'post'))))	//check if user exists
 		elseif (!($this->existsUser($this->GetSafeVar('yourname', 'post'))))	//check if user exists
 		{
-			$newerror = T_("Sorry, this user name doesn\t exist.'");
+			$newerror = T_("Sorry, this user name doesn't exist.");
 			$username_temp_highlight = 'class="highlight"';
 		}
 		#elseif ($existingUser = $this->LoadUser($this->GetSafeVar('yourname', 'post')))	// if user name already exists, check password
@@ -617,7 +617,7 @@ else
 		echo '<em class="error">'.$newerror.'</em><br />'."\n";
 	}
 	$retrieve_password_link = 'PasswordForgotten';
-	$retrieve_password_caption = $this->Format(sprintf(T_("Log in with your [[%s password reminder]]:"),$retrieve_password_link));
+	$retrieve_password_caption = sprintf(T_("Log in with your <a href=\"%s\">password reminder</a>:"),$this->Href('', $retrieve_password_link));
 ?>
 	<em class="usersettings_info"><?php echo $retrieve_password_caption ?></em>
 	<br />

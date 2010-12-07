@@ -41,6 +41,7 @@ if(!defined('COMMENT_ORDER_DATE_ASC')) define('COMMENT_ORDER_DATE_ASC', 1);
 if(!defined('COMMENT_ORDER_DATE_DESC')) define('COMMENT_ORDER_DATE_DESC', 2);
 if(!defined('COMMENT_ORDER_THREADED')) define('COMMENT_ORDER_THREADED', 3);
 if(!defined('COMMENT_MAX_TRAVERSAL_DEPTH')) define('COMMENT_MAX_TRAVERSAL_DEPTH', 10);
+if (!defined('SHOW_INVALID_CHARS')) define('SHOW_INVALID_CHARS', '| ? = &lt; &gt; / \ " % &amp;');
 
 //validate URL parameters
 $raw = (!empty($_GET['raw']))? (int) $this->GetSafeVar('raw', 'get') : SHOW_OLD_REVISION_SOURCE;
@@ -57,8 +58,7 @@ if (!$this->HasAccess('read'))
 }
 else if(!$this->IsWikiName($this->tag))
 {
-	echo '<p><em class="error">'.T_("This page name is invalid. Valid
-	page names must not contain the characters | ? = &lt; &gt; / \ \" % or &amp;.").'</em></p>';
+	echo '<p><em class="error">'.sprintf(T_("This page name is invalid. Valid page names must not contain the characters %s."), SHOW_INVALID_CHARS).'</em></p>';
 	echo "\n".'</div><!--closing page content-->'."\n";
 }
 else
@@ -66,7 +66,7 @@ else
 	if (!$this->page)
 	{
 		$createlink = '<a href="'.$this->Href('edit').'">'.T_("create").'</a>';
-		echo '<p>'.sprintf(T_("This page doesn\t exist yet. Maybe you want to %s it?'"),$createlink).'</p>'."\n";
+		echo '<p>'.sprintf(T_("This page doesn't exist yet. Maybe you want to %s it?"),$createlink).'</p>'."\n";
 		echo '</div><!--closing page content-->'."\n";
 	}
 	else
@@ -163,7 +163,7 @@ else
 				<!--starting comments header (show)-->
 				<div id="commentheader">
 					<?php echo T_("Comments") ?>
-					[<a href="<?php echo $this->Href('', '', 'show_comments='.T_("0")) ?>"><?php echo T_("Hide comments") ?></a>]
+					[<a href="<?php echo $this->Href('', '', 'show_comments=0') ?>"><?php echo T_("Hide comments") ?></a>]
 	<?php
 				if ($this->HasAccess('comment_post'))
 				{
@@ -312,7 +312,7 @@ function displayComments(&$obj, &$comments, $tag)
 			# Some stats
 			//$comment_author = $obj->LoadUser($comment['user'])? $obj->Format($comment['user']) : $comment['user'];
 			$comment_author = $obj->FormatUser($comment['user']);
-			$comment_ts = sprintf(T_("%s"),$comment['time']);
+			$comment_ts = sprintf("%s", $comment['time']);
 ?>
 	<div id="comment_<?php echo $comment['id'] ?>" class="<?php echo $comment_class ?>" >
 		<div class="commentheader">

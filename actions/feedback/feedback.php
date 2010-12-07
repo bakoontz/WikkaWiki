@@ -47,7 +47,7 @@ if ($this->GetSafeVar('mail', 'post')=='result')
 		$mailheaders = 'From:'.$email."\n";
 		$mailheaders .= 'Reply-To:'.$email;
 		mail($recipient, $subject, $msg, $mailheaders);
-		echo $this->Format(sprintf(T_('Thanks for your interest! Your feedback has been sent to %s. Return to the [[%s main page]]'),$recipient, $this->GetConfigValue('root_page')));
+		echo sprintf(T_('Thanks for your interest! Your feedback has been sent to %s. Return to the <a href=\"%s\">main page</a>'),$recipient, $this->Href('', $this->GetConfigValue('root_page')));
 		// optionally displays the feedback text
 		//echo $this->Format('---- **'.T_("Name: ").'** '.$name.'---**'.T_("Email: ").'** '.$email.'---**'.T_("Comments:").'** ---'.$comments');
 	}    

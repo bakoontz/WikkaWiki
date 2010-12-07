@@ -62,6 +62,7 @@ if(!defined('ALLOWED_FILE_EXTENSIONS')) define('ALLOWED_FILE_EXTENSIONS', 'gif|j
 if(!defined('SORT_BY_FILENAME')) define('SORT_BY_FILENAME', 'filename');
 if(!defined('SORT_BY_DATE')) define('SORT_BY_DATE', 'date');
 if(!defined('SORT_BY_SIZE')) define('SORT_BY_SIZE', 'size');
+if(!defined('UPLOAD_DATE_FORMAT')) define('UPLOAD_DATE_FORMAT', 'Y-m-d H:i');
 
 // ---- Error code constants ----
 if (!defined('UPLOAD_ERR_OK')) define('UPLOAD_ERR_OK', 0);
@@ -388,7 +389,7 @@ if (is_readable($upload_path))
 		$download_link = '<a href="' .$this->Href('files.xml',$this->tag,'action=download&amp;file='.rawurlencode($file))
 			.'" title="'.sprintf(T_("Download %s"), $file).'">'.urldecode($file).'</a>';
 		$size = bytesToHumanReadableUsage($filesize); # #89
-		$date = date(T_("Y-m-d H:i"), $filedate); # #89
+		$date = date(UPLOAD_DATE_FORMAT, $filedate); # #89
 
 		$output_files .= '<tr>'."\n";
 		if (userCanUpload())

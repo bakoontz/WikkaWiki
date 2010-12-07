@@ -30,6 +30,9 @@
  */
 if (!defined('PAGE_EDITOR_DIVIDER'))  define('PAGE_EDITOR_DIVIDER', '&#8594;');
 if (!defined('MAX_REVISION_NUMBER'))  define('MAX_REVISION_NUMBER', '50');
+if (!defined('DATE_FORMAT')) define('DATE_FORMAT', 'D, d M Y'); #TODO make this system-configurable
+if (!defined('TIME_FORMAT')) define('TIME_FORMAT', 'H:i T'); #TODO make this system-configurable
+
 /**#@-*/
 
 //initialization
@@ -66,13 +69,13 @@ if ($pages = $this->LoadRecentlyChanged())
 				{
 					echo '</ul>'."\n";
 				}
-				$dateformatted = date(T_("D, d M Y"), strtotime($day));
+				$dateformatted = date(DATE_FORMAT, strtotime($day));
 				echo '<strong>'.$dateformatted.':</strong><br />'."\n";
 				echo '<ul class="recentchanges">'."\n";
 				$curday = $day;
 			}
 
-			$timeformatted = date(T_("H:i T"), strtotime($page["time"]));
+			$timeformatted = date(TIME_FORMAT, strtotime($page["time"]));
 			/*
 			$page_edited_by = $page['user'];
 			if (!$this->LoadUser($page_edited_by))

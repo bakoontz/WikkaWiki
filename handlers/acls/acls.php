@@ -101,7 +101,7 @@ if ($this->UserIsOwner())
 			{
 				if ($newowner == '')
 				{
-					$newowner = T_("'(Nobody");
+					$newowner = T_("(Nobody)");
 				}
 	
 				$this->SetPageOwner($this->GetPageTag(), $newowner);
@@ -114,7 +114,7 @@ if ($this->UserIsOwner())
 	}
 	else	// show form
 	{
-	echo $this->Format(sprintf(T_("====Access Control Lists for %s===="), '[['.$this->tag.']]').' --- ');
+	echo sprintf(T_("<h3>Access Control Lists for <a href=\"%s\">%s</a></h3><br/>"), $this->Href('', $this->tag), $this->tag);
 ?>
 <?php echo $this->FormOpen('acls') ?>
 <table class="acls">
@@ -169,7 +169,7 @@ if ($this->UserIsOwner())
 </table>
 
 <br />
-<?php echo $this->Format(T_("'===Syntax:=== ---##*## = Everyone ---##+## = Registered users ---##\"JohnDoe\"## = the user called \"JohnDoe\", enter as many users as you want, one per line --- --- Any of these items can be negated with a ##!##: ---##!*## = No one (except admins")); ?>
+<?php echo T_("<h4>Syntax:</h4><br/><tt>*</tt> = Everyone<br/><tt>+</tt> = Registered users<br/><tt>JohnDoe</tt> = the user called \"JohnDoe\", enter as many users as you want, one per line<br/><br/>Any of these items can be negated with a <tt>!</tt>:<br/><tt>!*</tt> = No one (except admins)<br/><tt>!+</tt> = Anonymous users only<br/><tt>!JohnDoe</tt> = \"JohnDoe\" will be denied access<br/><br/><i>ACLs are tested in the order they are specified:</i><br/>So be sure to specify <tt>*</tt> on a separate line <i>after</i> negating any users, not before.<br/><br/>Any lists that are left empty will be set to the defaults as specified in <tt>wikka.config.php</tt>."); ?>
 <?php
 		print($this->FormClose());
 	}

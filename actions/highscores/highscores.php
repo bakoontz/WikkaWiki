@@ -107,7 +107,7 @@ $table .= '<table class="data highscores">'."\n";
 //display caption and headers for complex style
 if ($style == 'complex')
 {
-	$table .= '	<caption>'.sprintf(T_("'Top %s contributor(s"), $display_items, $label).'</caption>'."\n";
+	$table .= '	<caption>'.sprintf(T_("Top %s contributor(s)"), $display_items, $label).'</caption>'."\n";
 	$table .= '	<thead>'."\n";
 	$table .= '	<tr>'."\n";
 	$table .= '		<th scope="col">'.T_("rank").'</th>'."\n";

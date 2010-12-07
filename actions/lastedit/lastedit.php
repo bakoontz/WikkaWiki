@@ -27,6 +27,10 @@
  *
  * @todo		make date/time format system-configurable;
  */
+if (!defined('DEFAULT_SHOW')) define('DEFAULT_SHOW', '3');
+if (!defined('DATE_FORMAT')) define('DATE_FORMAT', 'D, d M Y'); #TODO make this system-configurable
+if (!defined('TIME_FORMAT')) define('TIME_FORMAT', 'H:i T'); #TODO make this system-configurable
+
 //Initialisation to avoid notices
 $difflink = '';
 $dateformatted = '';
@@ -54,8 +58,8 @@ if ($this->handler == 'show')
 
 		case 2:
 		list($day, $time) = explode(' ', $page['time']);
-		$dateformatted = date(T_("D, d M Y"), strtotime($day));
-		$timeformatted = date(T_("H:i T"), strtotime($page['time']));
+		$dateformatted = date(DATE_FORMAT, strtotime($day));
+		$timeformatted = date(TIME_FORMAT, strtotime($page['time']));
 
 		case 1:
 		$note = ($page['note']) ? ':<br/><span class="'.T_("lastedit_notes").'">'.

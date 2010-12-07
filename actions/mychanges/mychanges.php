@@ -24,6 +24,8 @@
  * @uses	Wakka::IsAdmin()
  * @todo	fix RE (#104 etc.); also lose the comma in there!
  */
+if (!defined('DATE_FORMAT')) define('DATE_FORMAT', 'D, d M Y'); #TODO make this system-configurable
+if (!defined('TIME_FORMAT')) define('TIME_FORMAT', 'H:i T'); #TODO make this system-configurable
 
 // order alphabetically or by time?
 $alpha = FALSE;
@@ -117,9 +119,9 @@ if (($this->IsAdmin() && !empty($username)) ||
 				{
 					if ($current) $output .= "<br />\n";
 					$current = $day;
-					$output .= '<h5>'.date(T_("D, d M Y"), strtotime($day)).'</h5>'."\n";
+					$output .= '<h5>'.date(DATE_FORMAT, strtotime($day)).'</h5>'."\n";
 				}
-				$time_output = date(T_("H:i T"), strtotime($time));
+				$time_output = date(TIME_FORMAT, strtotime($time));
 				$output .= '&nbsp;&nbsp;&nbsp;<a class="datetime" href="'.$this->Href('revisions', $page['tag']).'" title="'.T_("Click to view recent revisions list for this page").'">'.$time_output.'</a> '.$this->Link($page["tag"], 'revisions', "[".$page['id']."]", 0)." ".$this->Link($page["tag"], "", "", 0)."<br />\n";	
 			}
 		}
@@ -131,7 +133,7 @@ if (($this->IsAdmin() && !empty($username)) ||
 }
 else
 {
-	$output .= '<em class="error">'.T_("You're not logged in, thus the list of pages youve edited couldn't be retrieved.").'</em>';
+	$output .= '<em class="error">'.T_("You're not logged in, thus the list of pages you've edited couldn't be retrieved.").'</em>';
 }
 
 // *** output section ***

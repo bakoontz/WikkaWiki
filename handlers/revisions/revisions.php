@@ -99,7 +99,7 @@ if ($this->HasAccess('read'))
 		if ($oldest_revision['id'] != $page['id'])
 		{
 			$output .= '<input type="hidden" name="start" value="'.($start + $c).'" />'."\n";
-			$output .= '<br />'.sprintf(T_("There are more revisions that were not shown here, click the button labelled %s below to view these entries"), T_("Next..."));
+			$output .= '<br />'.sprintf(T_("There are more revisions that were not shown here, click the button labeled %s below to view these entries"), T_("Next..."));
 			$output .= "\n".'<br /><input type="submit" name="more_revisions" value="'.T_("Next...").'" onclick="this.form.action=\''.$this->Href('revisions').'\'; return true;" />';	// @@@
 		}
 		$output .= $this->FormClose()."\n";

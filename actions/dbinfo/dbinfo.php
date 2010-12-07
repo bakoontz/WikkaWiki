@@ -63,7 +63,7 @@ $bPrefix	= TRUE;			# default display type
 $hdDbInfo		= T_("Database Information");
 $hdDatabase		= T_("Database");
 $hdTables		= T_("Tables");
-$txtActionInfo	= T_("This utility provides some information about the database(s).").T_(" Depending on permissions for the Wikka database user, not all databases or tables may be visible.").T_(" Where creation DDL is given, this reflects everything that would be needed to exactly recreate the same database and table definitions, ").T_(" including defaults that may not have been specified explicitly.");
+$txtActionInfo	= T_("This utility provides some information about the database(s). Depending on permissions for the Wikka database user, not all databases or tables may be visible. Where creation DDL is given, this reflects everything that would be needed to exactly recreate the same database and table definitions, including defaults that may not have been specified explicitly.");
 $msgOnlyAdmin	= T_("Sorry, only administrators can view database information.");
 
 // variables

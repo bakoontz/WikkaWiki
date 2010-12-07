@@ -22,6 +22,7 @@
  *
  * @todo user central regex library #34
  */
+if (!defined('NEWPAGE_INVALID_CHARS')) define('NEWPAGE_INVALID_CHARS', '| ? = &lt; &gt; / \ " % &amp;');
 
 $showform = TRUE;
 $pagename = '';
@@ -31,7 +32,7 @@ if (isset($_POST['pagename']))
 
 	if(!$this->IsWikiName($pagename))
 	{
-		echo '<em class="error">'.sprintf(T_("This page name is invalid. Valid page names must not contain the characters | ?  = &lt; &gt; / \ \" % or &amp;.'"), $pagename).'</em>';
+		echo '<em class="error">'.sprintf(T_("This page name is invalid. Valid page names must not contain the characters %s."), NEWPAGE_INVALID_CHARS).'</em>';
 	}
 	else if ($this->ExistsPage($pagename))
 	{

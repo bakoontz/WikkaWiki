@@ -41,6 +41,7 @@
  */
 
 if(!defined('MAX_EDIT_NOTE_LENGTH')) define('MAX_EDIT_NOTE_LENGTH', 50);
+if (!defined('EDIT_INVALID_CHARS')) define('EDIT_INVALID_CHARS', '| ? = &lt; &gt; / \ " % &amp;');
 
 //initialization
 $error = '';
@@ -67,7 +68,7 @@ if ($this->GetSafeVar('submit', 'post') == T_("Preview") &&
 <?php
 if(!$this->IsWikiName($this->tag))
 {
-	echo '<em class="error">'.sprintf(T_("This page name is invalid.  Valid page names must not contain the characters | ? = &lt; &gt; / \ \" % or &amp;."), $this->tag).'</em>';
+	echo '<em class="error">'.sprintf(T_("This page name is invalid.  Valid page names must not contain the characters %s."), EDIT_INVALID_CHARS).'</em>';
 }
 else if ($this->HasAccess("write") && $this->HasAccess("read"))
 {
@@ -172,7 +173,7 @@ else if ($this->HasAccess("write") && $this->HasAccess("read"))
 		// We need to escape ALL entity refs before display so we display them _as_ entities instead of interpreting them
 		// so we use hsc_secure() on the edit note (as on the body)
 		// JW/2007-02-20: why is this? wouldn't it be  easier for the person editing to show actual characters instead of entities?
-		$edit_note_field = '<input id="note" size="'.T_("50").'" maxlength="'.T_("50").'" type="text" name="note" value="'.$this->hsc_secure($note).'" '.$highlight_note.'/> <label for="note">'.T_("Please add a note on your edit").'</label><br />'."\n";	#427
+		$edit_note_field = '<input id="note" size="'.MAX_EDIT_NOTE_LENGTH.'" maxlength="'.MAX_EDIT_NOTE_LENGTH.'" type="text" name="note" value="'.$this->hsc_secure($note).'" '.$highlight_note.'/> <label for="note">'.T_("Please add a note on your edit").'</label><br />'."\n";	#427
 	}
 
 	// fetch fields
@@ -204,8 +205,8 @@ else if ($this->HasAccess("write") && $this->HasAccess("read"))
 	{
 		$preview_buttons =	'<fieldset><legend>'.T_("Store page").'</legend>'."\n".
 							$edit_note_field.
-							'<input name="submit" type="submit" value="'.T_("Store").'" accesskey="'.T_("s").'" />'."\n".
-							'<input name="submit" type="submit" value="'.T_("Re-edit").'" accesskey="'.T_("r").'" id="reedit_id" />'."\n".
+							'<input name="submit" type="submit" value="'.T_("Store").'" accesskey="'."s".'" />'."\n".
+							'<input name="submit" type="submit" value="'.T_("Re-edit").'" accesskey="'."r".'" id="reedit_id" />'."\n".
 							'<input type="submit" value="'.T_("Cancel").'" name="cancel" />'."\n".
 							'</fieldset>'."\n";
 
@@ -252,12 +253,12 @@ else if ($this->HasAccess("write") && $this->HasAccess("read"))
 		// would be nice as a checkbox, provided it is acted upon only when user is actually submitting - NOT on preview or re-edit
 		if (isset($_POST['appendcomment'])) #312, #449
 		{
-			$body = trim($body)."\n\n----\n\n-- ".$this->GetUserName().' '.sprintf(T_("(%s)"),strftime("%c")).')';
+			$body = trim($body)."\n\n----\n\n-- ".$this->GetUserName().' '.sprintf("(%s)",strftime("%c")).')';
 		}
 		$edit_buttons = '<fieldset><legend>'.T_("Store page").'</legend>'."\n".
 						$edit_note_field.
-						'<input name="submit" type="submit" value="'.T_("Store").'" accesskey="'.T_("s").'" />'."\n".
-						'<input name="submit" type="submit" value="'.T_("Preview").'" accesskey="'.T_("p").'" />'."\n".
+						'<input name="submit" type="submit" value="'.T_("Store").'" accesskey="'."s".'" />'."\n".
+						'<input name="submit" type="submit" value="'.T_("Preview").'" accesskey="'."p".'" />'."\n".
 						'<input type="submit" value="'.T_("Cancel").'" name="cancel" />'."\n".
 						'</fieldset>'."\n";
 		$output .= $this->FormOpen('edit');
@@ -283,7 +284,7 @@ else if ($this->HasAccess("write") && $this->HasAccess("read"))
 }
 else
 {
-	$message = '<em class="error">'.$this->Format(T_("You don't have write access to this page. You might need to [[UserSettings login]] or [[UserSettings register an account]] to be able to edit this page.")).'</em><br />'."\n".
+	$message = '<em class="error">'.sprintf(T_("You don't have write access to this page. You might need to <a href=\"%s\">login</a> or <a href=\"%s\">register an account</a> to be able to edit this page.", $this->Href('', 'UserSettings'), $this->Href('', 'UserSettings'))).'</em><br />'."\n".
 			"<br />\n".
 			'<a href="'.$this->Href('showcode').'" title="'.T_("Click to view page formatting code").'">'.T_("View formatting code for this page").'</a>'.
 			"<br />\n";

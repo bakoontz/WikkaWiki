@@ -299,12 +299,12 @@ if ($this->IsAdmin($this->GetUser()))
 
 		// sort field
 		$sort_fields = array('name', 'email', 'signuptime');
-		$sort = (isset($_GET['sort'])) ? $this->GetSafeVar('sort', 'get') : T_("signuptime");
-		if(!in_array($sort, $sort_fields)) $sort = T_("signuptime");
+		$sort = (isset($_GET['sort'])) ? $this->GetSafeVar('sort', 'get') : "signuptime";
+		if(!in_array($sort, $sort_fields)) $sort = "signuptime";
 		// sort order
 		$sort_order = array('asc', 'desc');
-		$d = (isset($_GET['d'])) ? $this->GetSafeVar('d', 'get') : T_("desc");
-		if(!in_array($d, $sort_order)) $d = T_("desc");
+		$d = (isset($_GET['d'])) ? $this->GetSafeVar('d', 'get') : "desc";
+		if(!in_array($d, $sort_order)) $d = "desc";
 		// start record
 		$s = (isset($_GET['s'])) ? $this->GetSafeVar('s', 'get') : ADMINUSERS_DEFAULT_START;
 		if (!(int)$s >=0) $s = ADMINUSERS_DEFAULT_START;
@@ -407,9 +407,9 @@ if ($this->IsAdmin($this->GetUser()))
 				'		<th>'.$emailheader.'</th>'."\n".
 				'		<th>'.$timeheader.'</th>'."\n".
 				/* '		<th>'.$ipheader.'</th>'."\n". # installed as beta feature at wikkawiki.org */
-				'		<th'.(($c_color == 1)? ' class="c1"' : '').' title="'.T_("Owned Pages").'"><img src="'.T_("images/icons/keyring.png").'" class="icon" alt="O"/></th>'."\n".
-				'		<th'.(($c_color == 1)? ' class="c2"' : '').' title="'.T_("Edits").'"><img src="'.T_("images/icons/edit.png").'" class="icon" alt="E"/></th>'."\n".
-				'		<th'.(($c_color == 1)? ' class="c3"' : '').' title="'.T_("Comments").'"><img src="'.T_("images/icons/comment.png").'" class="icon" alt="C"/></th>'."\n".
+				'		<th'.(($c_color == 1)? ' class="c1"' : '').' title="'.T_("Owned Pages").'"><img src="images/icons/keyring.png" class="icon" alt="O"/></th>'."\n".
+				'		<th'.(($c_color == 1)? ' class="c2"' : '').' title="'.T_("Edits").'"><img src="images/icons/edit.png" class="icon" alt="E"/></th>'."\n".
+				'		<th'.(($c_color == 1)? ' class="c3"' : '').' title="'.T_("Comments").'"><img src="images/icons/comment.png" class="icon" alt="C"/></th>'."\n".
 				'		<th>'.T_("Actions").'</th>'."\n".
 	 		 	'	</tr>'."\n".
 	 		 	'</thead>'."\n";

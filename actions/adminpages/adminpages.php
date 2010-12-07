@@ -56,6 +56,18 @@ if(!defined('ADMINPAGES_DEFAULT_TERMINATOR')) define('ADMINPAGES_DEFAULT_TERMINA
 if(!defined('ADMINPAGES_ALTERNATE_ROW_COLOR')) define('ADMINPAGES_ALTERNATE_ROW_COLOR', '1'); # switch alternate row color
 if(!defined('ADMINPAGES_STAT_COLUMN_COLOR')) define('ADMINPAGES_STAT_COLUMN_COLOR', '1'); # switch color for statistics columns
 if(!defined('ADMINPAGES_MAX_EDIT_NOTE_LENGTH')) define('ADMINPAGES_MAX_EDIT_NOTE_LENGTH', '50');
+if(!defined('ADMINPAGES_DEFAULT_START_YEAR')) define('ADMINPAGES_DEFAULT_START_YEAR', 'YYYY');
+if(!defined('ADMINPAGES_DEFAULT_START_MONTH')) define('ADMINPAGES_DEFAULT_START_MONTH', 'MM');
+if(!defined('ADMINPAGES_DEFAULT_START_DAY')) define('ADMINPAGES_DEFAULT_START_DAY', 'DD');   
+if(!defined('ADMINPAGES_DEFAULT_START_HOUR')) define('ADMINPAGES_DEFAULT_START_HOUR', 'hh'); 
+if(!defined('ADMINPAGES_DEFAULT_START_MINUTE')) define('ADMINPAGES_DEFAULT_START_MINUTE', 'mm');
+if(!defined('ADMINPAGES_DEFAULT_START_SECOND')) define('ADMINPAGES_DEFAULT_START_SECOND', 'ss');
+if(!defined('ADMINPAGES_DEFAULT_END_YEAR')) define('ADMINPAGES_DEFAULT_END_YEAR', 'YYYY');   
+if(!defined('ADMINPAGES_DEFAULT_END_MONTH')) define('ADMINPAGES_DEFAULT_END_MONTH', 'MM');
+if(!defined('ADMINPAGES_DEFAULT_END_DAY')) define('ADMINPAGES_DEFAULT_END_DAY', 'DD');
+if(!defined('ADMINPAGES_DEFAULT_END_HOUR')) define('ADMINPAGES_DEFAULT_END_HOUR', 'hh');
+if(!defined('ADMINPAGES_DEFAULT_END_MINUTE')) define('ADMINPAGES_DEFAULT_END_MINUTE', 'mm');
+if(!defined('ADMINPAGES_DEFAULT_END_SECOND')) define('ADMINPAGES_DEFAULT_END_SECOND', 'ss');
 
 include_once($this->BuildFullpathFromMultipath('..'.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'libs'.DIRECTORY_SEPARATOR.'admin.lib.php', $this->GetConfigValue('action_path')));
 
@@ -297,26 +309,26 @@ if ($this->IsAdmin($this->GetUser()))
 		}
 
 		// last edit date range
-		$start_YY = (isset($_POST['start_YY'])) ?  $this->GetSafeVar('start_YY', 'post') : T_("YYYY");
-		$start_MM = (isset($_POST['start_MM'])) ?  $this->GetSafeVar('start_MM', 'post') : T_("MM");
-		$start_DD = (isset($_POST['start_DD'])) ?  $this->GetSafeVar('start_DD', 'post') : T_("DD");
-		$start_hh = (isset($_POST['start_hh'])) ?  $this->GetSafeVar('start_hh', 'post') : T_("hh");
-		$start_mm = (isset($_POST['start_mm'])) ?  $this->GetSafeVar('start_mm', 'post') : T_("mm");
-		$start_ss = (isset($_POST['start_ss'])) ?  $this->GetSafeVar('start_ss', 'post') : T_("ss");
-		$end_YY = (isset($_POST['end_YY'])) ?  $this->GetSafeVar('end_YY', 'post') : T_("YYYY");
-		$end_MM = (isset($_POST['end_MM'])) ?  $this->GetSafeVar('end_MM', 'post') : T_("MM");
-		$end_DD = (isset($_POST['end_DD'])) ?  $this->GetSafeVar('end_DD', 'post') : T_("DD");
-		$end_hh = (isset($_POST['end_hh'])) ?  $this->GetSafeVar('end_hh', 'post') : T_("hh");
-		$end_mm = (isset($_POST['end_mm'])) ?  $this->GetSafeVar('end_mm', 'post') : T_("mm");
-		$end_ss = (isset($_POST['end_ss'])) ?  $this->GetSafeVar('end_ss', 'post') : T_("ss");
+        $start_YY = (isset($_POST['start_YY'])) ?  $this->GetSafeVar('start_YY', 'post') : ADMINPAGES_DEFAULT_START_YEAR;
+        $start_MM = (isset($_POST['start_MM'])) ?  $this->GetSafeVar('start_MM', 'post') : ADMINPAGES_DEFAULT_START_MONTH;
+        $start_DD = (isset($_POST['start_DD'])) ?  $this->GetSafeVar('start_DD', 'post') : ADMINPAGES_DEFAULT_START_DAY;
+        $start_hh = (isset($_POST['start_hh'])) ?  $this->GetSafeVar('start_hh', 'post') : ADMINPAGES_DEFAULT_START_HOUR;
+        $start_mm = (isset($_POST['start_mm'])) ?  $this->GetSafeVar('start_mm', 'post') : ADMINPAGES_DEFAULT_START_MINUTE;
+        $start_ss = (isset($_POST['start_ss'])) ?  $this->GetSafeVar('start_ss', 'post') : ADMINPAGES_DEFAULT_START_SECOND;
+        $end_YY = (isset($_POST['end_YY'])) ? $this->GetSafeVar('end_YY', 'post') : ADMINPAGES_DEFAULT_END_YEAR;
+        $end_MM = (isset($_POST['end_MM'])) ? $this->GetSafeVar('end_MM', 'post') : ADMINPAGES_DEFAULT_END_MONTH;
+        $end_DD = (isset($_POST['end_DD'])) ? $this->GetSafeVar('end_DD', 'post') : ADMINPAGES_DEFAULT_END_DAY;
+        $end_hh = (isset($_POST['end_hh'])) ? $this->GetSafeVar('end_hh', 'post') : ADMINPAGES_DEFAULT_END_HOUR;
+        $end_mm = (isset($_POST['end_mm'])) ? $this->GetSafeVar('end_mm', 'post') : ADMINPAGES_DEFAULT_END_MINUTE;
+        $end_ss = (isset($_POST['end_ss'])) ? $this->GetSafeVar('end_ss', 'post') : ADMINPAGES_DEFAULT_END_SECOND;
 
 		// sort field
-		$sort = T_("time");
+		$sort = "time";
 		$sort_fields = array('owner', 'tag', 'user', 'time');
 		if(isset($_GET['sort']) && in_array($_GET['sort'], $sort_fields)) $sort = $_GET['sort'];
 
 		// sort order
-		$d = T_("desc");
+		$d = "desc";
 		$sort_order = array('asc', 'desc');
 		if(isset($_GET['d']) && in_array($_GET['d'], $sort_order)) $d = $_GET['d'];
 		// start record
@@ -511,11 +523,11 @@ if ($this->IsAdmin($this->GetUser()))
 			'		<th>'.$ownerheader.'</th>'."\n".
 			'		<th>'.$userheader.'</th>'."\n".
 			'		<th>'.$lasteditheader.'</th>'."\n".
-			'		<th'.(($c_color == 1)? ' class="c1"' : '').' title="'.T_("Hits").'"><img src="'.T_("images/icons/star.png").'" alt="'.T_("Hits").'" /></th>'."\n".
-			'		<th'.(($c_color == 1)? ' class="c2"' : '').' title="'.T_("Revisions").'"><img src="'.T_("images/icons/edit.png").'" alt="'.T_("Revisions").'" /></th>'."\n".
-			'		<th'.(($c_color == 1)? ' class="c3"' : '').' title="'.T_("Comments").'"><img src="'.T_("images/icons/comment.png").'" alt="'.T_("Comments").'" /></th>'."\n".
-			'		<th'.(($c_color == 1)? ' class="c4"' : '').' title="'.T_("Backlinks").'"><img src="'.T_("images/icons/link.png").'" alt="'.T_("Backlinks").'" /></th>'."\n".
-			'		<th'.(($c_color == 1)? ' class="c5"' : '').' title="'.T_("Referrers").'"><img src="'.T_("images/icons/world.png").'" alt="'.T_("Referrers").'" /></th>'."\n".
+			'		<th'.(($c_color == 1)? ' class="c1"' : '').' title="'.T_("Hits").'"><img src="images/icons/star.png" alt="'.T_("Hits").'" /></th>'."\n".
+			'		<th'.(($c_color == 1)? ' class="c2"' : '').' title="'.T_("Revisions").'"><img src="images/icons/edit.png" alt="'.T_("Revisions").'" /></th>'."\n".
+			'		<th'.(($c_color == 1)? ' class="c3"' : '').' title="'.T_("Comments").'"><img src="images/icons/comment.png" alt="'.T_("Comments").'" /></th>'."\n".
+			'		<th'.(($c_color == 1)? ' class="c4"' : '').' title="'.T_("Backlinks").'"><img src="images/icons/link.png" alt="'.T_("Backlinks").'" /></th>'."\n".
+			'		<th'.(($c_color == 1)? ' class="c5"' : '').' title="'.T_("Referrers").'"><img src="images/icons/world.png" alt="'.T_("Referrers").'" /></th>'."\n".
 			'		<th>'.T_("Actions").'</th>'."\n".
 			'	</tr>'."\n".
 			'</thead>'."\n";
@@ -524,7 +536,7 @@ if ($this->IsAdmin($this->GetUser()))
 			foreach($pagedata as $page)
 			{
 				// truncate long page names
-				$pagename = (strlen($page['tag']) > T_("12")) ? substr($page['tag'], 0, T_("12")).T_("&#8230;") : $page['tag'];
+				$pagename = (strlen($page['tag']) > ADMINPAGES_DEFAULT_TAG_LENGTH) ? substr($page['tag'], 0, ADMINPAGES_DEFAULT_TAG_LENGTH).ADMINPAGES_DEFAULT_TERMINATOR : $page['tag'];
 
 				// build handler links
 				$lastedit = '<a class="datetime" href="'.$this->Href('revisions', $page['tag'], '').'">'.$page['time'].'</a>';
@@ -598,7 +610,7 @@ if ($this->IsAdmin($this->GetUser()))
 					else
 					{
 						// truncate long host names
-						$user = (strlen($page['user']) > T_("15")) ? substr($page['user'], 0, T_("15")).T_("&#8230;") : $page['user'];
+						$user = (strlen($page['user']) > ADMINPAGES_DEFAULT_URL_LENGTH) ?  substr($page['user'], 0, ADMINPAGES_DEFAULT_URL_LENGTH).ADMINPAGES_DEFAULT_TERMINATOR : $page['user'];
 						# added  JW 2005-07-19
 						if ($user != $page['user'])
 						{
