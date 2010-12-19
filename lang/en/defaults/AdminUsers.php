@@ -1,7 +1,10 @@
 <?php
-printf('{{checkversion}}---');
-printf('{{adminusers}}---');
-printf('---');
-printf('----');
-printf('CategoryAdmin');
+$str = <<<EOD
+{{checkversion}}
+{{adminusers}}
+
+----
+CategoryAdmin
+EOD;
+echo($str);
 ?>

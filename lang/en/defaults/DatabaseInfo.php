@@ -5,5 +5,5 @@ $str = <<<EOD
 ----
 CategoryAdmin
 EOD;
-print $str;
+echo($str);
 ?>
