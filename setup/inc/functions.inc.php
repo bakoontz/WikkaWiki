@@ -63,14 +63,19 @@ function update_default_page($tag, $dblink, $config, $lang_defaults_path, $lang_
 	}
 	$admin_users = explode(',', $config['admin_users']);
 	$admin_main_user = trim($admin_users[0]);
-	$txt_filepath = $lang_defaults_path.$filename.'.txt';
-	if (!file_exists($txt_filepath) || !is_readable($txt_filepath))
+	//$txt_filepath = $lang_defaults_path.$filename.'.txt';
+	$php_filepath = $lang_defaults_path.$filename.'.php';
+	if (!file_exists($php_filepath) || !is_readable($php_filepath))
 	{
-		$txt_filepath = $lang_defaults_fallback_path.$filename.'.txt';
+		$php_filepath = $lang_defaults_fallback_path.$filename.'.php';
 	}
-	if (file_exists($txt_filepath) && is_readable($txt_filepath))
+	if (file_exists($php_filepath) && is_readable($php_filepath))
 	{
-		$body = implode('', file($txt_filepath));
+		ob_start();
+		include_once($php_filepath);
+		$body = ob_get_contents();
+		ob_end_clean();
+		//$body = implode('', file($txt_filepath));
 		mysql_query('update '.$config['table_prefix'].'pages set latest = "N" where tag = \''.$tag.'\'', $dblink);
 		test (sprintf(__('Adding/Updating default page %s'.'...'), $tag),
 			@mysql_query('insert into '.$config['table_prefix'].'pages set tag=\''.$tag.'\', body = \''.mysql_real_escape_string($body).'\', user=\'WikkaInstaller\', owner = \''.$admin_main_user.'\', time=now(), latest =\'Y\', note = \''.mysql_real_escape_string($note).'\'', $dblink),
@@ -80,7 +85,7 @@ function update_default_page($tag, $dblink, $config, $lang_defaults_path, $lang_
 	}
 	else
 	{
-		test (sprintf(__('Adding/Updating default page %s'.'...'), $tag), false, sprintf(__('Default page not found or file not readable (%s, %s, %s)'), $tag, $txt_filepath, $lang_defaults_path), 0);
+		test (sprintf(__('Adding/Updating default page %s'.'...'), $tag), false, sprintf(__('Default page not found or file not readable (%s, %s, %s)'), $tag, $php_filepath, $lang_defaults_path), 0);
 	}
 }
 
