@@ -2309,7 +2309,7 @@ class Wakka
 		$handler = $this->htmlspecialchars_ent($handler);
 		$title_attr = $title ? ' title="'.$this->htmlspecialchars_ent($title).'"' : '';
 		$url = '';
-		$wikilink = '';
+		$link = '';
 
 		// is this an interwiki link?
 		// before the : should be a WikiName; anything after can be (nearly) anything that's allowed in a URL
