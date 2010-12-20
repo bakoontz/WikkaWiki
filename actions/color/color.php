@@ -64,8 +64,7 @@ if (!function_exists('color_syntax_is_valid'))
 		{
 			return($syntax);
 		}
-		if
-		(preg_match('/^(?>'.PATTERN_VALID_HEX_COLOR.'|'.PATTERN_VALID_RGB_COLOR))
+		if( preg_match('/^(?>'.PATTERN_VALID_HEX_COLOR.'|'.PATTERN_VALID_RGB_COLOR.')/', $syntax, $match) )
 		{
 			return($match[0]);
 		}
