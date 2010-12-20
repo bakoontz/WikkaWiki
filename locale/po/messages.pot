@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-12-06 21:46-0600\n"
+"POT-Creation-Date: 2010-12-20 10:11-0600\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -76,6 +76,8 @@ msgid "Last edit range: Between"
 msgstr ""
 
 #: actions/adminpages/adminpages.php:369
+#: lang/en/defaults/FormattingRules.php:362
+#: lang/en/defaults/FormattingRules.php:378
 msgid "and"
 msgstr ""
 
@@ -492,11 +494,11 @@ msgstr ""
 msgid "[Clone]"
 msgstr ""
 
-#: actions/color/color.php:114
+#: actions/color/color.php:113
 msgid "There is no text to highlight!"
 msgstr ""
 
-#: actions/color/color.php:118
+#: actions/color/color.php:117
 msgid "Sorry, but you did not specify a color for highlighting!"
 msgstr ""
 
@@ -2127,6 +2129,951 @@ msgstr ""
 
 #: handlers/showcode/showcode.php:38
 msgid "Show raw source"
+msgstr ""
+
+#: lang/en/defaults/CategoryAdmin.php:2
+msgid "Wiki Administration Category"
+msgstr ""
+
+#: lang/en/defaults/CategoryAdmin.php:3
+msgid "This category links to pages for wiki administration."
+msgstr ""
+
+#: lang/en/defaults/CategoryAdmin.php:7 lang/en/defaults/CategoryWiki.php:7
+msgid "List of all categories"
+msgstr ""
+
+#: lang/en/defaults/CategoryCategory.php:2
+msgid "List of All Categories"
+msgstr ""
+
+#: lang/en/defaults/CategoryCategory.php:3
+msgid ""
+"Below is the list of all Categories existing on this Wiki, granted that "
+"users did things right when they created their pages or new Categories. See "
+"WikiCategory for how the system works."
+msgstr ""
+
+#: lang/en/defaults/CategoryWiki.php:2
+msgid "Wiki Related Category"
+msgstr ""
+
+#: lang/en/defaults/CategoryWiki.php:3
+msgid ""
+"This Category will contain links to pages talking about Wikis and Wikis "
+"specific topics. When creating such pages, be sure to include CategoryWiki "
+"at the bottom of each page, so that page shows listed."
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:2
+msgid "Wikka Formatting Guide"
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:4
+msgid "General Guidelines"
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:5
+msgid ""
+"If a markup sequence is not in these guidelines, then it is not officially "
+"supported. Use caution when implementing markup that is not officially "
+"supported by this document, as undocumented functionality may change with "
+"version updates."
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:7
+msgid ""
+"Unless otherwise stated in these guidelines, all markup is line based, that "
+"is, a newline character should not intervene. These are identified as "
+"'inline' markup."
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:10
+msgid "Escaping Markup"
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:12
+msgid ""
+"Anything between 2 sets of double-quotes is not formatted.\n"
+"This is the equivalent of escaping a character(s):"
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:18
+#: lang/en/defaults/FormattingRules.php:21
+msgid "two bold"
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:18
+#: lang/en/defaults/FormattingRules.php:21
+msgid "stars"
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:23
+#, php-format
+msgid ""
+"In this case, the second set of %s (escaped) stars will be ignored, %si.e.,%"
+"s will not terminate the bold markup."
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:25
+#, php-format
+msgid ""
+"You can also use double-quote escaping to avoid linking of %s words, e.g."
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:30
+#: lang/en/defaults/FormattingRules.php:33
+msgid "is not parsed as a link"
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:35
+msgid "1. Text Formatting"
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:40
+#: lang/en/defaults/FormattingRules.php:43
+msgid "I'm bold"
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:48
+#: lang/en/defaults/FormattingRules.php:51
+msgid "I'm italic text!"
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:56
+#: lang/en/defaults/FormattingRules.php:59
+msgid "And I'm underlined!"
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:64
+#: lang/en/defaults/FormattingRules.php:67
+msgid "Monospace text"
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:72
+#: lang/en/defaults/FormattingRules.php:75
+msgid "Highlighted text"
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:72
+msgid "using 2 single quotes"
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:80
+#: lang/en/defaults/FormattingRules.php:83
+msgid "Strike through text"
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:88
+#: lang/en/defaults/FormattingRules.php:91
+msgid "Text insertion"
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:96
+#: lang/en/defaults/FormattingRules.php:99
+msgid "Text deletion"
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:104
+#: lang/en/defaults/FormattingRules.php:107
+msgid "Press any key"
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:112
+#: lang/en/defaults/FormattingRules.php:115
+msgid "Center text"
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:117
+msgid ""
+"Elides (hides) content from displaying.  Eliminates trailing whitespace so "
+"there are no unsightly gaps in output. Useful for commenting Wikka markup."
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:122
+#: lang/en/defaults/FormattingRules.php:125
+msgid "Elided content (eliminates trailing whitespace)"
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:128
+msgid "there was a comment here followed by whitespace in the markup"
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:130
+msgid ""
+"Elides (hides) content from displaying.  Preserves trailing\n"
+"whitespace (note the gap)."
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:136
+#: lang/en/defaults/FormattingRules.php:139
+msgid "Elided content (preserves trailing whitespace)"
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:142
+msgid "there was a comment here followed by ws in the markup"
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:145
+msgid "2. Headers"
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:147
+#, php-format
+msgid ""
+"Use between six %s (for the biggest header) and two %s (for the smallest "
+"header) on both sides of a text to render it as a header."
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:152
+#: lang/en/defaults/FormattingRules.php:155
+msgid "Really big header"
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:160
+#: lang/en/defaults/FormattingRules.php:163
+msgid "Rather big header"
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:168
+#: lang/en/defaults/FormattingRules.php:171
+msgid "Medium header"
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:176
+#: lang/en/defaults/FormattingRules.php:179
+msgid "Not-so-big header"
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:184
+#: lang/en/defaults/FormattingRules.php:187
+msgid "Smallish header"
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:190
+msgid "3. Horizontal separator"
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:198
+msgid "4. Forced line break"
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:202
+#: lang/en/defaults/FormattingRules.php:205
+msgid "Line 1"
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:202
+#: lang/en/defaults/FormattingRules.php:205
+msgid "Line 2"
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:207
+msgid "5. Lists and indents"
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:209
+msgid ""
+"You can indent text using a tilde (~), a tab, or four spaces (which will "
+"auto-convert into a tab)."
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:213
+#: lang/en/defaults/FormattingRules.php:220
+msgid "This text is indented"
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:213
+#: lang/en/defaults/FormattingRules.php:220
+msgid "This text is double-indented"
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:213
+#: lang/en/defaults/FormattingRules.php:220
+msgid "This text is also indented"
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:223
+msgid ""
+"To create bulleted/ordered lists, use the following markup (you can always "
+"use 4 spaces instead of a tilde):"
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:225
+msgid "Bulleted lists"
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:231
+#: lang/en/defaults/FormattingRules.php:237
+#: lang/en/defaults/FormattingRules.php:246
+#: lang/en/defaults/FormattingRules.php:252
+#: lang/en/defaults/FormattingRules.php:261
+#: lang/en/defaults/FormattingRules.php:267
+#: lang/en/defaults/FormattingRules.php:276
+#: lang/en/defaults/FormattingRules.php:282
+#: lang/en/defaults/FormattingRules.php:291
+#: lang/en/defaults/FormattingRules.php:297
+#: lang/en/defaults/FormattingRules.php:306
+#: lang/en/defaults/FormattingRules.php:312
+msgid "Line one"
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:231
+#: lang/en/defaults/FormattingRules.php:237
+#: lang/en/defaults/FormattingRules.php:246
+#: lang/en/defaults/FormattingRules.php:252
+#: lang/en/defaults/FormattingRules.php:261
+#: lang/en/defaults/FormattingRules.php:267
+#: lang/en/defaults/FormattingRules.php:276
+#: lang/en/defaults/FormattingRules.php:282
+#: lang/en/defaults/FormattingRules.php:291
+#: lang/en/defaults/FormattingRules.php:297
+#: lang/en/defaults/FormattingRules.php:306
+#: lang/en/defaults/FormattingRules.php:312
+msgid "Line two"
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:240
+msgid "Numbered lists"
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:255
+msgid "Ordered lists using uppercase characters"
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:270
+msgid "Ordered lists using lowercase characters"
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:285
+msgid "Ordered lists using uppercase Roman numerals"
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:300
+msgid "Ordered lists using lowercase Roman numerals"
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:315
+msgid "6. Inline comments"
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:317
+#, php-format
+msgid ""
+"To format some text as an inline comment, use an indent (tilde, tab, or four "
+"spaces) followed by a %s."
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:324
+#: lang/en/defaults/FormattingRules.php:331
+msgid "Comment"
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:324
+#: lang/en/defaults/FormattingRules.php:331
+msgid "Subcomment"
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:324
+#: lang/en/defaults/FormattingRules.php:331
+msgid "Subsubcomment"
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:334
+msgid "7. Images"
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:336
+#, php-format
+msgid "To place images on a Wiki page, you can use the %s action."
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:338
+#, php-format
+msgid ""
+"Image links can be external or internal Wiki links. You don't need to enter "
+"a link at all, and in that case just an image will be inserted. You can use "
+"the optional classes %s and %s to float images left and right. You don't "
+"need to use all those attributes, only %s is required while %s is "
+"recommended for\n"
+"accessibility."
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:344
+#: lang/en/defaults/FormattingRules.php:348
+msgid "DVD logo"
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:344
+#: lang/en/defaults/FormattingRules.php:348
+msgid "An image link"
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:351
+msgid "8. Links"
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:353
+#, php-format
+msgid ""
+"To create a %s link to a wiki page %s you can use any of the\n"
+"following options:"
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:358
+msgid "Type a"
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:358
+msgid "works only for page names with no whitespace"
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:362
+msgid "Add a forced link surrounding the page name by"
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:363
+#: lang/en/defaults/FormattingRules.php:378
+msgid "everything after the | will be shown as description"
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:363
+msgid ""
+"Test\n"
+"your formatting skills"
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:364
+msgid "Test your formatting skills"
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:368
+#: lang/en/defaults/FormattingRules.php:382
+msgid "Add an image with a link (see instructions above)"
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:370
+#, php-format
+msgid "To %s link to external pages %s, you can do any of the following:"
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:374
+msgid "Type a URL inside the page"
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:378
+msgid "Add a forced link surrounding the URL by"
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:378
+msgid "documentation"
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:378
+msgid "community list"
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:386
+msgid "Add an interwiki link"
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:386
+msgid "browse the list of available interwiki tags"
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:386
+msgid "Happy"
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:388
+msgid "9. Tables"
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:391
+#, php-format
+msgid ""
+"The %s action has been deprecated as of Wikka version 1.2 and has been "
+"replaced with the syntax that follows. Please visit the [[Docs:"
+"TableActionInfo|Wikka %s]] for information about the older %s action."
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:391
+msgid "documentation server"
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:394
+#, php-format
+msgid ""
+"Tables can be created using two pipe (%s) symbols.  Everything in a single "
+"line is rendered as a table row."
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:396
+#: lang/en/defaults/FormattingRules.php:406
+#: lang/en/defaults/FormattingRules.php:417
+#: lang/en/defaults/FormattingRules.php:470
+#: lang/en/defaults/FormattingRules.php:482
+msgid "Example:"
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:404
+msgid ""
+"Header cells can be rendered by placing an equals sign between the pipes."
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:415
+#, php-format
+msgid ""
+"Row and column spans are specified with %s and %s in parentheses just after "
+"the pipes."
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:429
+msgid ""
+"Many additional features are available using table markup.  A more "
+"comprehensive table markup guide is available on this server's TableMarkup "
+"page. A complete syntax reference is available on this server's "
+"TableMarkupReference page."
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:431
+msgid "10. Colored Text"
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:433
+#, php-format
+msgid "Colored text can be created using the %s action:"
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:439
+msgid "This is a test"
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:442
+msgid "You can also use hex values:"
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:448
+msgid "This is another test"
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:451
+#, php-format
+msgid ""
+"Alternatively, you can specify a foreground and background color using the %"
+"s and %s parameters (they accept both named and hex values):"
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:457
+#: lang/en/defaults/FormattingRules.php:463
+msgid "This is colored text on colored background"
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:466
+msgid "11. Floats"
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:468
+#, php-format
+msgid ""
+"To create a %s left floated box %s, use two %s characters before and after "
+"the block."
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:473
+#, php-format
+msgid ""
+"%s Some text in a left-floated box hanging around. %s Some more text as a "
+"filler. Some more text as a filler. Some more text as a filler.  Some more "
+"text as a filler. Some more text as a filler. Some more text as a filler. "
+"Some more text as a filler. Some more text as a filler.%s"
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:476
+#, php-format
+msgid ""
+"%s Some text in a left-floated box hanging around. %s Some more text as a "
+"filler. Some more text as a filler. Some more text as a filler.  Some more "
+"text as a filler. Some more text as a filler. Some more text as a filler. "
+"Some more text as a filler. Some more text as a filler."
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:480
+#, php-format
+msgid ""
+"To create a %s right floated box %s, use two %s characters before and after "
+"the block."
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:485
+#, php-format
+msgid ""
+"%s Some text in a right-floated box hanging around. %s Some more text as a "
+"filler. Some more text as a filler. Some more text as a filler. Some more "
+"text as a filler. Some more text as a filler. Some more text as a filler. "
+"Some more text as a filler. Some more text as a filler.%s"
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:487
+#, php-format
+msgid ""
+"%s Some text in a right-floated box hanging around. %s Some more text as a "
+"filler. Some more text as a filler. Some more text as a filler. Some more "
+"text as a filler. Some more text as a filler. Some more text as a filler. "
+"Some more text as a filler. Some more text as a filler."
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:491
+#, php-format
+msgid "%s Note: Use %s to clear floated blocks. %s"
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:493
+msgid "12. Code formatters"
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:495
+#, php-format
+msgid ""
+"You can easily embed code blocks in a wiki page using a simple markup. "
+"Anything within a code block is displayed literally.  To create a %s generic "
+"code block %s you can use the following markup:"
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:499
+msgid "This is a code block"
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:504
+#, php-format
+msgid ""
+"To create a %s code block with syntax highlighting %s, you need to specify a "
+"%s code formatter %s (see below for a list of available code formatters)."
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:508
+#: lang/en/defaults/FormattingRules.php:516
+#: lang/en/defaults/FormattingRules.php:522
+#: lang/en/defaults/FormattingRules.php:530
+#: lang/en/defaults/FormattingRules.php:536
+#: lang/en/defaults/FormattingRules.php:544
+msgid "Hello, World!"
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:518
+#, php-format
+msgid "You can also specify an optional %s starting line %s number."
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:532
+#, php-format
+msgid ""
+"If you specify a %s filename %s, this will be used for downloading the code."
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:580
+msgid "List of available code formatters"
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:580
+msgid "Language"
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:580
+msgid "Formatter"
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:582
+msgid "13. Mindmaps"
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:584
+#, php-format
+msgid ""
+"Wikka has native support for %smindmaps%s.  There are two options for "
+"embedding a mindmap in a wiki page."
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:586
+#, php-format
+msgid ""
+" %sOption 1:%s Upload a %s file to a webserver, and then place a link to it "
+"on a wikka page: %s No special formatting is necessary.  "
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:588
+#, php-format
+msgid "%sOption 2:%s Paste the %s data directly into a wikka page:\n"
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:591
+#, php-format
+msgid "Open a %s file with a text editor."
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:592
+msgid "Select all, and copy the data."
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:593
+msgid "Browse to your Wikka site and paste the Freemind data into a page."
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:598
+msgid "14. Embedded HTML"
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:600
+msgid ""
+"You can easily paste HTML in a wiki page by wrapping it into two sets of "
+"doublequotes."
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:618
+#, php-format
+msgid ""
+"By default, some HTML tags are removed by the %s parser to protect against "
+"potentially dangerous code.  The list of tags that are stripped can be found "
+"on the %s page."
+msgstr ""
+
+#: lang/en/defaults/FormattingRules.php:620
+#, php-format
+msgid ""
+"It is possible to allow %s all %s HTML tags to be used, see %s for more "
+"information."
+msgstr ""
+
+#: lang/en/defaults/HomePage.php:2
+msgid "Welcome to your Wikka site"
+msgstr ""
+
+#: lang/en/defaults/HomePage.php:4
+#, php-format
+msgid ""
+"Thanks for installing Wikka! This wiki runs on version %s, patch level %s. "
+"You may want to read the %s to learn what's new in this release.---"
+msgstr ""
+
+#: lang/en/defaults/HomePage.php:4
+msgid "release notes"
+msgstr ""
+
+#: lang/en/defaults/HomePage.php:6
+msgid "Keep up-to-date"
+msgstr ""
+
+#: lang/en/defaults/HomePage.php:7
+#, php-format
+msgid ""
+"To receive the latest news from the Wikka Development Team, you can sign up "
+"to one of our %s, subscribe to our %s or join us for a chat on %s.---"
+msgstr ""
+
+#: lang/en/defaults/HomePage.php:7
+msgid "mailing lists"
+msgstr ""
+
+#: lang/en/defaults/HomePage.php:8
+msgid "Getting started"
+msgstr ""
+
+#: lang/en/defaults/HomePage.php:9
+#, php-format
+msgid ""
+"Double-click on this page or click on the %s link in the page footer to get "
+"started. If you are not sure how a wiki works, you can check out the %s and "
+"play in the SandBox.---"
+msgstr ""
+
+#: lang/en/defaults/HomePage.php:9
+msgid "Edit"
+msgstr ""
+
+#: lang/en/defaults/HomePage.php:9 lang/en/defaults/HomePage.php:19
+msgid "Wikka formatting guide"
+msgstr ""
+
+#: lang/en/defaults/HomePage.php:11
+msgid "Need more help?"
+msgstr ""
+
+#: lang/en/defaults/HomePage.php:12
+#, php-format
+msgid "Don't forget to visit the %s!"
+msgstr ""
+
+#: lang/en/defaults/HomePage.php:12
+msgid "WikkaWiki website"
+msgstr ""
+
+#: lang/en/defaults/HomePage.php:13
+msgid "Some useful pages"
+msgstr ""
+
+#: lang/en/defaults/HomePage.php:19
+msgid "Documentation"
+msgstr ""
+
+#: lang/en/defaults/HomePage.php:19
+msgid "Recently modified pages"
+msgstr ""
+
+#: lang/en/defaults/HomePage.php:19 lang/en/defaults/SysInfo.php:17
+msgid "System Information"
+msgstr ""
+
+#: lang/en/defaults/HomePage.php:21
+#, php-format
+msgid "You will find more useful pages in the %s or in the %s.---"
+msgstr ""
+
+#: lang/en/defaults/HomePage.php:21
+msgid "Wiki category"
+msgstr ""
+
+#: lang/en/defaults/OrphanedPages.php:2
+msgid "Orphaned Pages"
+msgstr ""
+
+#: lang/en/defaults/OrphanedPages.php:4
+msgid ""
+"The following list shows those pages held in the Wiki that\n"
+"are not linked to on any other pages."
+msgstr ""
+
+#: lang/en/defaults/OwnedPages.php:2
+msgid "Pages You Own"
+msgstr ""
+
+#: lang/en/defaults/OwnedPages.php:5
+msgid ""
+"These numbers merely reflect how many pages you have created, not how much "
+"content you have contributed or the quality of your contributions. To see "
+"how you rank with other members, you may be interested in checking out the "
+"HighScores."
+msgstr ""
+
+#: lang/en/defaults/SandBox.php:2
+msgid "Test your formatting skills here."
+msgstr ""
+
+#: lang/en/defaults/SysInfo.php:17
+msgid "version:"
+msgstr ""
+
+#: lang/en/defaults/SysInfo.php:17
+msgid "patch level:"
+msgstr ""
+
+#: lang/en/defaults/SysInfo.php:17
+msgid "Server:"
+msgstr ""
+
+#: lang/en/defaults/SysInfo.php:17
+msgid "Host:"
+msgstr ""
+
+#: lang/en/defaults/SysInfo.php:17
+msgid "Operating System:"
+msgstr ""
+
+#: lang/en/defaults/SysInfo.php:17
+msgid "Machine:"
+msgstr ""
+
+#: lang/en/defaults/WikiCategory.php:2
+msgid "How To Use Categories"
+msgstr ""
+
+#: lang/en/defaults/WikiCategory.php:3
+msgid ""
+"This wiki is using a very flexible but simple categorizing system to keep "
+"everything properly organized."
+msgstr ""
+
+#: lang/en/defaults/WikiCategory.php:5
+msgid "Adding a page to an existing category"
+msgstr ""
+
+#: lang/en/defaults/WikiCategory.php:6
+#, php-format
+msgid ""
+"To ''add a page to an existing category'' simply add a link to the relevant "
+"category page. For example, to mark page %s as a child of category %s, just "
+"add a link to %s from %s. This will automatically add %s to the list of "
+"pages belonging to that category. Category links are put by convention at "
+"the end of the page, but the position of these links does not affect their "
+"behavior."
+msgstr ""
+
+#: lang/en/defaults/WikiCategory.php:8
+msgid "Adding a subcategory to an existing category"
+msgstr ""
+
+#: lang/en/defaults/WikiCategory.php:9
+#, php-format
+msgid ""
+"To ''create a hierarchy of categories'', you can follow the same "
+"instructions to add pages to categories. For example, to mark category %s as "
+"a child (or subcategory) of another category %s just add a link to %s in %s. "
+"This will automatically add %s to the list of %s's children."
+msgstr ""
+
+#: lang/en/defaults/WikiCategory.php:11
+msgid "Creating new categories"
+msgstr ""
+
+#: lang/en/defaults/WikiCategory.php:12
+#, php-format
+msgid ""
+"To ''start a new category'' just create a page containing %s. This will mark "
+"the page as a special %s and will output a list of pages belonging to the "
+"category. Category page names start by convention with the word %s but you "
+"can also create categories without following this convention. To add a new "
+"category to the master list of categories just add a link from it to %s."
+msgstr ""
+
+#: lang/en/defaults/WikiCategory.php:14
+msgid "Browsing categories"
+msgstr ""
+
+#: lang/en/defaults/WikiCategory.php:15
+#, php-format
+msgid ""
+"To ''browse the categories'' available on your wiki you can start from %s. "
+"If all pages and subcategories are properly linked as described above, you "
+"will be able to browse the whole hierarchy of categories starting from this "
+"page."
+msgstr ""
+
+#: lang/en/defaults/WikkaDocumentation.php:2
+msgid "Wikka Documentation"
+msgstr ""
+
+#: lang/en/defaults/WikkaDocumentation.php:4
+#, php-format
+msgid ""
+"Comprehensive and up-to-date documentation on Wikka Wiki can be found on the "
+"%s %s %s."
+msgstr ""
+
+#: lang/en/defaults/WikkaDocumentation.php:4
+msgid "Wikka Documentation server"
+msgstr ""
+
+#: lang/en/defaults/WikkaReleaseNotes.php:2
+msgid "Wikka Release Notes"
+msgstr ""
+
+#: lang/en/defaults/WikkaReleaseNotes.php:4
+#, php-format
+msgid "This server is running %s version %s."
+msgstr ""
+
+#: lang/en/defaults/WikkaReleaseNotes.php:6
+#, php-format
+msgid "For detailed release notes please check the %s Wikka website%s."
 msgstr ""
 
 #: libs/admin.lib.php:57 libs/admin.lib.php:80 libs/admin.lib.php:100
