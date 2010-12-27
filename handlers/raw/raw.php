@@ -13,7 +13,9 @@
 
 if ($this->HasAccess('read') && $this->page)
 {
-	// display raw page
+	// display raw page.
+	// Send page as UTF-8 in cases where webserver is set up for different char set.
+	header('Content-Type: text/plain, charset=utf-8');
 	print($this->page['body']);
 }
 ?>
