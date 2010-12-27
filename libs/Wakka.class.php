@@ -3077,6 +3077,7 @@ class Wakka
 	 *
 	 * @uses	Wakka::GetConfigValue()
 	 * @uses	Wakka::IncludeBuffered()
+         * @uses        Wakka::wrapHandlerError()
 	 * @uses	Config::$handler_path
 	 *
 	 * @param	string	$handler	mandatory: name of handler to execute
@@ -3103,7 +3104,7 @@ class Wakka
 		// @todo move regexp to library
 		if (!preg_match('/^([a-zA-Z0-9_.-]+)$/', $handler)) // allow letters, numbers, underscores, dashes and dots only (for now); see also #34
 		{
-			return '<em class="error">'.T_("Unknown handler; the handler name must not contain special characters.").'</em>';	# [SEC]
+			return wrapHandlerError(T_("Unknown handler; the handler name must not contain special characters."));	# [SEC]
 		}
 		else
 		{
@@ -3111,8 +3112,31 @@ class Wakka
 			$handler = strtolower($handler);
 		}
 		$handlerLocation = $handler.DIRECTORY_SEPARATOR.$handler.'.php';	#89
-		return $this->IncludeBuffered($handlerLocation, sprintf(T_("Sorry, %s is an unknown handler."), '"'.$handlerLocation.'"'), '', $this->config['handler_path']);
+                $tempOutput = $this->IncludeBuffered($handlerLocation, '', '', $this->config['handler_path']);
+                if (FALSE===$tempOutput)
+                {
+                        return $this->wrapHandlerError(sprintf(T_("Sorry, %s is an unknown handler."), '"'.$handlerLocation.'"'));
+                }
+                return $tempOutput;
 	}
+
+        /**
+         * Wrap a error message in a content div and an em tag, to avoid breaking the layout on handler errors.
+         *
+         * @author              {@link http://wikkawiki.org/TormodHaugen Tormod Haugen} (created 2010)
+         *
+         * @uses        Wakka::htmlspecialchars_ent
+         *
+         * @param       string $errorMessage    Localized error message to be wrapped to avoid breaking layout
+         * @return      string The wrapped error message
+         */
+        function wrapHandlerError($errorMessage)
+        {
+                $errorMessage = $this->htmlspecialchars_ent(trim($errorMessage));
+                $errorMessage = '<div id="content"><em class="error">'.$errorMessage.'</em></div>';
+
+                return $errorMessage;
+        }
 
 	/**
 	 * Check if a handler (specified after page name) really exists.
