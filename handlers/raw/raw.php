@@ -14,6 +14,7 @@
 if ($this->HasAccess('read') && $this->page)
 {
 	// display raw page
+	header('Content-Type: text/plain, charset=utf-8');
 	print($this->page['body']);
 }
 ?>
