@@ -121,22 +121,22 @@ if ($this->UserIsOwner())
 <tr>
 	<td>
 	<strong><?php echo T_("Read ACL:"); ?></strong><br />
-	<textarea id="acls" name="read_acl" rows="4" cols="20"><?php echo $this->ACLs['read_acl'] ?></textarea>
+	<textarea class="acls" name="read_acl" rows="4" cols="20"><?php echo $this->ACLs['read_acl'] ?></textarea>
 	</td>
 
 	<td>
 	<strong><?php echo T_("Write ACL:"); ?></strong><br />
-	<textarea id="acls" name="write_acl" rows="4" cols="20"><?php echo $this->ACLs['write_acl'] ?></textarea>
+	<textarea class="acls" name="write_acl" rows="4" cols="20"><?php echo $this->ACLs['write_acl'] ?></textarea>
 	</td>
 
 	<td>
 	<strong><?php echo T_("Comment Read ACL:"); ?></strong><br />
-	<textarea id="acls" name="comment_read_acl" rows="4" cols="20"><?php echo $this->ACLs['comment_read_acl'] ?></textarea>
+	<textarea class="acls" name="comment_read_acl" rows="4" cols="20"><?php echo $this->ACLs['comment_read_acl'] ?></textarea>
 	</td>
 
 	<td>
 	<strong><?php echo T_("Comment Post ACL:"); ?></strong><br />
-	<textarea id="acls" name="comment_post_acl" rows="4" cols="20"><?php echo $this->ACLs['comment_post_acl'] ?></textarea>
+	<textarea class="acls" name="comment_post_acl" rows="4" cols="20"><?php echo $this->ACLs['comment_post_acl'] ?></textarea>
 	</td>
 
 </tr>
