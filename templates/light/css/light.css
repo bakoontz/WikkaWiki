@@ -1244,7 +1244,7 @@ table.wikkaconfig tbody td {
 table.acls {
 }
 
-textarea#acls {
+textarea.acls {
 	margin-right: 0;
 	width: 98%;
 	height: 80px;
