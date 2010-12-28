@@ -3104,7 +3104,7 @@ class Wakka
 		// @todo move regexp to library
 		if (!preg_match('/^([a-zA-Z0-9_.-]+)$/', $handler)) // allow letters, numbers, underscores, dashes and dots only (for now); see also #34
 		{
-			return wrapHandlerError(T_("Unknown handler; the handler name must not contain special characters."));	# [SEC]
+			return $this->wrapHandlerError(T_("Unknown handler; the handler name must not contain special characters."));	# [SEC]
 		}
 		else
 		{
