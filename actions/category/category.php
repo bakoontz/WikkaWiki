@@ -65,7 +65,7 @@ if ($cattag = $_GET['wakka'])	#312 (only files action uses POST for wakka)
 			$count++;
 			$pagecount++;
 		}
-		$str = sprintf(T_("The following %d page(s)"),$pagecount,$page).$str;
+		$str = sprintf(T_("The following %d page(s)"),$pagecount).$str;
 		if (!$compact)  $str .= '</tr></table>'; else $str .= '</ul></div>';
 	}
 	else $str .= sprintf(T_("Sorry, No items found for %s"),$page);
