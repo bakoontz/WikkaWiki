@@ -46,8 +46,8 @@ if('' != $page)
 	        	$page = $this->LoadPage($page);
 			print $this->Format($page['body']);
 		}
-		else printf('<p class="error">'.ERROR_TARGET_ACL."</p>\n", $orig_page);
+		else printf('<p class="error">'.T_("You aren't allowed to read included page <tt>%s</tt>")."</p>\n", $orig_page);
 	} 
-	else print '<p class="error">'.ERROR_CIRCULAR_REFERENCE."</p>\n";
+	else print '<p class="error">'.T_("Circular reference detected!")."</p>\n";
 }
 ?>

@@ -12,5 +12,5 @@
  *
  * @author		{@link http://wikkawiki.org/DarTar Dario Taraborelli}
  */
-echo '<a href="'.$this->Href('clone').'" title="'.CLONELINK_TITLE.'">'.CLONELINK_TEXT.'</a>'."\n";
+echo '<a href="'.$this->Href('clone').'" title="'.T_("Duplicate this page").'">'.T_("[Clone]").'</a>'."\n";
 ?>

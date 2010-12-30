@@ -19,7 +19,7 @@
 header("Content-type: text/xml");
 
 $xml  = '<map version="0.7.1">'."\n";
-$xml .= '<node TEXT="'.FIRST_NODE_LABEL.'">'."\n";
+$xml .= '<node TEXT="'.T_("Recent Changes").'">'."\n";
 $xml .= '<node TEXT="Date" POSITION="right">'."\n";
 
 if ($pages = $this->LoadRecentlyChanged())
@@ -56,17 +56,17 @@ if ($pages = $this->LoadRecentlyChanged())
 			$pagelink = $this->GetConfigValue('base_url').urlencode($page['tag']);
 			$xml .= '<node LINK="'.$pagelink.'" TEXT="'.$pagetag.'" FOLDED="true">'."\n";
 			$timeformatted = date('H:i T', strtotime($page['time']));
-			$xml .= '<node LINK="'.$pagelink.'/revisions" TEXT="'sprintf(RECENTCHANGES_REV_TIME_CAPTION,$timeformatted).'"/>'."\n";
+			$xml .= '<node LINK="'.$pagelink.'/revisions" TEXT="'.sprintf(T_("Revision time: %s"),$timeformatted).'"/>'."\n";
 			if ($pagenote = $this->htmlspecialchars_ent($page['note'],ENT_COMPAT,'XML'))
 			{
 				$xml .= '<node TEXT="'.$pageuser.': '.$pagenote.'"/>'."\n";
 			}
 			else
 			{
-				$xml .= '<node TEXT="'.sprintf(RECENTCHANGES_AUTHOR,$pageuser).'"/>'."\n";	#i18n
+				$xml .= '<node TEXT="'.sprintf(T_("Author: %s"),$pageuser).'"/>'."\n";	#i18n
 			}
 
-			$xml .= '<node LINK="'.$pagelink.'/history" TEXT="'.RECENTCHANGES_VIEW_HISTORY_TITLE.'"/>'."\n";	# i18n
+			$xml .= '<node LINK="'.$pagelink.'/history" TEXT="'.T_("View History").'"/>'."\n";	# i18n
 			$xml .= "</node>\n";
 			// $xml .= "<arrowlink ENDARROW=\"Default\" DESTINATION=\"Freemind_Link_".$page["user"]."\" STARTARROW=\"None\"/>\n";
 			if (isset($users[$pageuser]) && (is_array($users[$pageuser])))
@@ -107,9 +107,9 @@ if ($pages = $this->LoadRecentlyChanged())
 else
 {
 	$xml .= "<item>\n";
-	$xml .= '<title>'.WIKKA_ERROR_CAPTION."</title>\n";
+	$xml .= '<title>'.T_("Error")."</title>\n";
 	$xml .= '<link>'.$this->Href()."</link>\n";
-	$xml .= '<description>'.WIKKA_ERROR_ACL_READ_INFO."</description>\n";
+	$xml .= '<description>'.T_("You are not allowed to access this information.")."</description>\n";
 	$xml .= "</item>\n";
 }
 

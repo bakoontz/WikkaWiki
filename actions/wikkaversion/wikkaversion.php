@@ -22,7 +22,7 @@
  */
 
 // defaults
-$out = '<abbr title="'.WIKKA_ADMIN_ONLY_TITLE.'">'.WIKKA_NOT_AVAILABLE.'</abbr>';
+$out = '<abbr title="'.T_("Sorry, only wiki administrators can display this information").'">'.T_("n/a").'</abbr>';
 
 //check privs
 if ($this->config['public_sysinfo'] == '1' || $this->IsAdmin())

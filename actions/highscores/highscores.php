@@ -31,6 +31,8 @@
  * @todo add paging functionality #679
  */
 
+if(!defined('HIGHSCORES_DISPLAY_TOP')) define('HIGHSCORES_DISPLAY_TOP', 10); //limit output to top n users
+
 //Initialisation (avoid notices)
 $table = '';
 
@@ -51,31 +53,31 @@ else
 
 if (!isset($style) || !in_array($style, $valid_styles))
 {
-	$style = HIGHSCORES_DEFAULT_STYLE;
+	$style = T_("complex");
 }
 
 if (!isset($rank) || !in_array($rank, $valid_rank))
 {
-	$rank = HIGHSCORES_DEFAULT_RANK;
+	$rank = T_("pages");
 }
 
 switch($rank)
 {
 	case 'edits':	
-	$label= HIGHSCORES_LABEL_EDITS;
+	$label= T_("edits");
 	$query = 'SELECT COUNT(*) AS cnt, `name`  FROM '.$this->GetConfigValue('table_prefix').'users, '.$this->GetConfigValue('table_prefix').'pages WHERE `name` = `user` GROUP BY name ORDER BY cnt DESC LIMIT '.$limit;
 	$total = $this->getCount('pages');
 	break;
 		
 	case 'comments':
-	$label= HIGHSCORES_LABEL_COMMENTS;
+	$label= T_("comments");
 	$query = 'SELECT COUNT(*) AS cnt, `name`  FROM '.$this->GetConfigValue('table_prefix').'users, '.$this->GetConfigValue('table_prefix').'comments WHERE `name` = `user` GROUP BY name ORDER BY cnt DESC LIMIT '.$limit;	
 	$total = $this->getCount('comments');
 	break;	
 
 	default:
 	case 'pages': 
-	$label= HIGHSCORES_LABEL_PAGES;
+	$label= T_("pages owned");
 	$query = 'SELECT COUNT(*) AS cnt, `name`  FROM '.$this->GetConfigValue('table_prefix').'users, '.$this->GetConfigValue('table_prefix').'pages WHERE `name` = `owner` AND `latest` = "Y" GROUP BY name ORDER BY cnt DESC LIMIT '.$limit;	
 	$total = $this->getCount('pages', "`latest` = 'Y'");
 	break;
@@ -105,13 +107,13 @@ $table .= '<table class="data highscores">'."\n";
 //display caption and headers for complex style
 if ($style == 'complex')
 {
-	$table .= '	<caption>'.sprintf(HIGHSCORES_CAPTION, $display_items, $label).'</caption>'."\n";
+	$table .= '	<caption>'.sprintf(T_("Top %s contributor(s)"), $display_items, $label).'</caption>'."\n";
 	$table .= '	<thead>'."\n";
 	$table .= '	<tr>'."\n";
-	$table .= '		<th scope="col">'.HIGHSCORES_HEADER_RANK.'</th>'."\n";
-	$table .= '		<th scope="col">'.HIGHSCORES_HEADER_USER.'</th>'."\n";
+	$table .= '		<th scope="col">'.T_("rank").'</th>'."\n";
+	$table .= '		<th scope="col">'.T_("user").'</th>'."\n";
 	$table .= '		<th scope="col">'.$label.'</th>'."\n";
-	$table .= '		<th scope="col">'.HIGHSCORES_HEADER_PERCENTAGE.'</th>'."\n";
+	$table .= '		<th scope="col">'.T_("percentage").'</th>'."\n";
 	$table .= '	</tr>'."\n";
 	$table .= '	</thead>'."\n";
 	$table .= '	<tbody>'."\n";

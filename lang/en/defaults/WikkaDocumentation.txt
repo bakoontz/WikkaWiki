@@ -1,3 +1,0 @@
-=====Wikka Documentation=====
-
-Comprehensive and up-to-date documentation on Wikka Wiki can be found on the [[http://docs.wikkawiki.org/WikkaDocumentation Wikka Documentation server]].

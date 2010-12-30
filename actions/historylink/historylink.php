@@ -12,5 +12,5 @@
  *
  * @author		{@link http://wikkawiki.org/DarTar Dario Taraborelli}
  */
-echo '<a href="'.$this->Href('history').'" title="'.HISTORYLINK_TITLE.'">'.HISTORYLINK_TEXT.'</a>'."\n";
+echo '<a href="'.$this->Href('history').'" title="'.T_("Click to view recent edits to this page").'">'.T_("[History]").'</a>'."\n";
 ?>

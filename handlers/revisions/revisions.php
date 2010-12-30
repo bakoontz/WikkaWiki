@@ -42,7 +42,7 @@ $start = 0;
 if ($this->HasAccess('read'))
 {
 
-    if($this->GetSafeVar('cancel', 'post') == REVISIONS_RETURN_TO_NODE_BUTTON)
+    if($this->GetSafeVar('cancel', 'post') == T_("Return To Node / Cancel"))
     {
         $this->Redirect($this->Href());
     }
@@ -66,11 +66,11 @@ if ($this->HasAccess('read'))
 	{
 		$output  = $this->FormOpen('diff', '', 'get');
 		$output .= "<fieldset>\n";
-		$output .= "<legend>".sprintf(REVISIONS_CAPTION, $this->Link($this->tag))."</legend>"."\n";
+		$output .= "<legend>".sprintf(T_("Revisions for %s"), $this->Link($this->tag))."</legend>"."\n";
 		$output .= '<table border="0" cellspacing="0" cellpadding="1">'."\n";
 		$output .= "<tr>\n";
-		$output .= '<td><input type="submit" value="'.REVISIONS_SHOW_DIFFERENCES_BUTTON.'" /></td>';
-		$output .= '<td><input value="1" type="checkbox" checked="checked" name="fastdiff" id="fastdiff" /><label for="fastdiff">'.REVISIONS_SIMPLE_DIFF.'</label></td>';
+		$output .= '<td><input type="submit" value="'.T_("Show Differences").'" /></td>';
+		$output .= '<td><input value="1" type="checkbox" checked="checked" name="fastdiff" id="fastdiff" /><label for="fastdiff">'.T_("Simple Diff").'</label></td>';
 		$output .= "</tr>\n";
 		$output .= "</table>\n";
 		$output .= '<table border="0" cellspacing="0" cellpadding="1">'."\n";
@@ -90,7 +90,7 @@ if ($this->HasAccess('read'))
 			$output .= '<tr>';
 			$output .= '<td><input type="radio" name="a" value="'.$page['id'].'" '.($c == 1 ? 'checked="checked"' : '').' /></td>';
 			$output .= '<td><input type="radio" name="b" value="'.$page['id'].'" '.($c == 2 ? 'checked="checked"' : '').' /></td>';
-			$output .= '<td><a href="'.$this->Href('show','','time='.urlencode($page["time"])).'">['.$page["id"].']</a> '.sprintf(WIKKA_REV_WHEN_BY_WHO, '<a class="datetime" href="'.$this->Href('show','','time='.urlencode($page['time'])).'">'.$page['time'].'</a>', $this->FormatUser($page['user'])).((strlen($note)>0)? ' <span class="pagenote smaller">'.$note.'</span>' : '').'</td>';
+			$output .= '<td><a href="'.$this->Href('show','','time='.urlencode($page["time"])).'">['.$page["id"].']</a> '.sprintf(T_("%s by %s"), '<a class="datetime" href="'.$this->Href('show','','time='.urlencode($page['time'])).'">'.$page['time'].'</a>', $this->FormatUser($page['user'])).((strlen($note)>0)? ' <span class="pagenote smaller">'.$note.'</span>' : '').'</td>';
 			$output .= "</tr>\n";
 		}
 		$output .= "</table>\n";
@@ -99,25 +99,25 @@ if ($this->HasAccess('read'))
 		if ($oldest_revision['id'] != $page['id'])
 		{
 			$output .= '<input type="hidden" name="start" value="'.($start + $c).'" />'."\n";
-			$output .= '<br />'.sprintf(REVISIONS_MORE_CAPTION, REVISIONS_MORE_BUTTON);
-			$output .= "\n".'<br /><input type="submit" name="more_revisions" value="'.REVISIONS_MORE_BUTTON.'" onclick="this.form.action=\''.$this->Href('revisions').'\'; return true;" />';	// @@@
+			$output .= '<br />'.sprintf(T_("There are more revisions that were not shown here, click the button labeled %s below to view these entries"), T_("Next..."));
+			$output .= "\n".'<br /><input type="submit" name="more_revisions" value="'.T_("Next...").'" onclick="this.form.action=\''.$this->Href('revisions').'\'; return true;" />';	// @@@
 		}
 		$output .= $this->FormClose()."\n";
         $output .= $this->FormOpen("revisions", "", "post")."\n";
-        $output .= '<input type="submit" value="'.REVISIONS_RETURN_TO_NODE_BUTTON.'" name="cancel"/>'."\n";
+        $output .= '<input type="submit" value="'.T_("Return To Node / Cancel").'" name="cancel"/>'."\n";
         $output .= $this->FormClose()."\n";
 	}
 	else
 	{
-		$output  = '<h3>'.sprintf(REVISIONS_CAPTION, $this->Link($this->tag))."</h3>\n";
-		$output .= '<em>'.REVISIONS_NO_REVISIONS_YET.'</em>'."\n";
+		$output  = '<h3>'.sprintf(T_("Revisions for %s"), $this->Link($this->tag))."</h3>\n";
+		$output .= '<em>'.T_("There are no revisions for this page yet").'</em>'."\n";
 	}
 
 	echo $output;
 }
 else
 {
-	echo '<em class="error">'.WIKKA_ERROR_ACL_READ.'</em>'."\n";
+	echo '<em class="error">'.T_("You are not allowed to read this page.").'</em>'."\n";
 }
 ?>
 </div>

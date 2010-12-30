@@ -28,17 +28,18 @@
 /**#@+
  * Default value.
  */
-if (!defined('REVISION_DATE_FORMAT')) define('REVISION_DATE_FORMAT', 'D, d M Y');	// @@@ make configurable
-if (!defined('REVISION_TIME_FORMAT')) define('REVISION_TIME_FORMAT', 'H:i T');		// @@@ make configurable
 if (!defined('PAGE_EDITOR_DIVIDER'))  define('PAGE_EDITOR_DIVIDER', '&#8594;');
 if (!defined('MAX_REVISION_NUMBER'))  define('MAX_REVISION_NUMBER', '50');
+if (!defined('DATE_FORMAT')) define('DATE_FORMAT', 'D, d M Y'); #TODO make this system-configurable
+if (!defined('TIME_FORMAT')) define('TIME_FORMAT', 'H:i T'); #TODO make this system-configurable
+
 /**#@-*/
 
 //initialization
 $max = 0;
 $readable = 0;
 
-echo '<h2>'.RECENTCHANGES_HEADING.'</h2>'."\n";
+echo '<h2>'.T_("Recently changed pages").'</h2>'."\n";
 if ($pages = $this->LoadRecentlyChanged())
 {
 	$curday = '';
@@ -68,13 +69,13 @@ if ($pages = $this->LoadRecentlyChanged())
 				{
 					echo '</ul>'."\n";
 				}
-				$dateformatted = date(REVISION_DATE_FORMAT, strtotime($day));
+				$dateformatted = date(DATE_FORMAT, strtotime($day));
 				echo '<strong>'.$dateformatted.':</strong><br />'."\n";
 				echo '<ul class="recentchanges">'."\n";
 				$curday = $day;
 			}
 
-			$timeformatted = date(REVISION_TIME_FORMAT, strtotime($page["time"]));
+			$timeformatted = date(TIME_FORMAT, strtotime($page["time"]));
 			/*
 			$page_edited_by = $page['user'];
 			if (!$this->LoadUser($page_edited_by))
@@ -85,7 +86,7 @@ if ($pages = $this->LoadRecentlyChanged())
 			//		do we handle that?
 			//		#368, #452
 			{
-				$page_edited_by .= ' '.WIKKA_ANONYMOUS_AUTHOR_CAPTION; // @@@ or WIKKA_ANONYMOUS_USER
+				$page_edited_by .= ' '.T_("(.T_("unregistered user").'"); // @@@ or T_("anonymous")
 			}
 			// @@@ instead of all this ^ just use FormatUser() with $page['user'] as input!! vv
 			*/
@@ -100,18 +101,10 @@ if ($pages = $this->LoadRecentlyChanged())
 				$note = '';
 			}
 
-			// print entry
-			#echo '&nbsp;&nbsp;&nbsp;&nbsp;('.$this->Link($page['tag'], 'revisions', $timeformatted, 0, 1, sprintf(REVISIONS_LINK_TITLE, $page['tag'])).') ['.$this->Link($page['tag'], 'history', WIKKA_HISTORY, 0, 1, sprintf(HISTORY_LINK_TITLE, $page['tag'])).'] - &nbsp;'.$this->Link($page['tag'], '', '', 0).' '.PAGE_EDITOR_DIVIDER.' '.$this->FormatUser($page_edited_by).' '.$note.'<br />'."\n";
-			#echo '&nbsp;&nbsp;&nbsp;&nbsp;('.$this->Link($page['tag'], 'revisions', $timeformatted, 0, 1, sprintf(REVISIONS_LINK_TITLE, $page['tag'])).') ['.$this->Link($page['tag'], 'history', WIKKA_HISTORY, 0, 1, sprintf(HISTORY_LINK_TITLE, $page['tag'])).'] - &nbsp;'.$this->Link($page['tag'], '', '', 0).' '.PAGE_EDITOR_DIVIDER.' '.$this->FormatUser($page['user']).' '.$note.'<br />'."\n";
-			#$revision_link = $this->Link($page['tag'], 'revisions', $timeformatted, 0, 1, sprintf(REVISIONS_LINK_TITLE, $page['tag']));
-			#$history_link  = $this->Link($page['tag'], 'history', WIKKA_HISTORY, 0, 1, sprintf(HISTORY_LINK_TITLE, $page['tag']));
-			#$page_link     = $this->Link($page['tag'], '', '', 0);
-			//		shortcut to avoid calling Link() three times for the same page;
-			//		we're not escaping link texts here but that doesn't seem necessary!
 			$page_url = $this->Href('', $page['tag']);
-			$revision_number_link = '<a href="'.$this->Href('revisions', $page['tag']).'" title="'.sprintf(REVISIONS_LINK_TITLE, $page['tag']).'">['.$page['id'].']</a> ';
-			$revision_time_link = '<a class="datetime" href="'.$page_url.'/revisions" title="'.sprintf(REVISIONS_LINK_TITLE, $page['tag']).'">'.$timeformatted.'</a>';
-			$history_link  = '<a href="'.$page_url.'/history" title="'.sprintf(HISTORY_LINK_TITLE, $page['tag']).'">'.WIKKA_HISTORY.'</a>';
+			$revision_number_link = '<a href="'.$this->Href('revisions', $page['tag']).'" title="'.sprintf(T_("View recent revisions list for %s"), $page['tag']).'">['.$page['id'].']</a> ';
+			$revision_time_link = '<a class="datetime" href="'.$page_url.'/revisions" title="'.sprintf(T_("View recent revisions list for %s"), $page['tag']).'">'.$timeformatted.'</a>';
+			$history_link  = '<a href="'.$page_url.'/history" title="'.sprintf(T_("View edit history of %s"), $page['tag']).'">'.T_("history").'</a>';
 			$page_link     = '<a href="'.$page_url.'">'.$page['tag'].'</a>';
 			$editor        = $this->FormatUser($page['user']);
 			echo '<li>'.$revision_time_link.' '.$revision_number_link.' ['.$history_link.'] - &nbsp;'.$page_link.' '.PAGE_EDITOR_DIVIDER.' '.$editor.' '.$note.'</li>'."\n";
@@ -119,7 +112,7 @@ if ($pages = $this->LoadRecentlyChanged())
 	}
 	if ($readable == 0)
 	{
-		echo '<em class="error">'.RECENTCHANGES_NONE_ACCESSIBLE.'</em>';
+		echo '<em class="error">'.T_("There are no recently changed pages you have access to.").'</em>';
 	}
 	echo '</ul>'."\n";
 
@@ -130,11 +123,11 @@ if ($pages = $this->LoadRecentlyChanged())
 		$wikipingserver_url_parsed = parse_url($wikipingserver);
 		$wikipingserver_host = $wikipingserver_url_parsed['host'];
 		$wikiping_link = '<a href="http://'.$wikipingserver_host.'">http://'.$wikipingserver_host.'</a>';
-		printf('<p>['.WIKIPING_ENABLED.']</p>',$wikiping_link);
+		printf('<p>['.T_("WikiPing enabled: Changes on this wiki are broadcast to %s").']</p>',$wikiping_link);
 	}
 }
 else
 {
-	echo '<em class="error">'.RECENTCHANGES_NONE_FOUND.'</em>';
+	echo '<em class="error">'.T_("There are no recently changed pages.").'</em>';
 }
 ?>

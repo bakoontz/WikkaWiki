@@ -40,6 +40,9 @@
  * 			necessary) - #312 => NOT CLEAR here what to do; see also #449
  */
 
+if(!defined('MAX_EDIT_NOTE_LENGTH')) define('MAX_EDIT_NOTE_LENGTH', 50);
+if (!defined('EDIT_INVALID_CHARS')) define('EDIT_INVALID_CHARS', '| ? = &lt; &gt; / \ " % &amp;');
+
 //initialization
 $error = '';
 $highlight_note = '';
@@ -49,12 +52,12 @@ $ondblclick = ''; //#123
 $body = '';
 
 // cancel operation and return to page
-if($this->GetSafeVar('cancel', 'post') == EDIT_CANCEL_BUTTON)
+if($this->GetSafeVar('cancel', 'post') == T_("Cancel"))
 {
 	$this->Redirect($this->Href());
 }
 
-if ($this->GetSafeVar('submit', 'post') == EDIT_PREVIEW_BUTTON && 
+if ($this->GetSafeVar('submit', 'post') == T_("Preview") && 
 	($user = $this->GetUser()) && 
 	($user['doubleclickedit'] != 'N'))
 {
@@ -65,7 +68,7 @@ if ($this->GetSafeVar('submit', 'post') == EDIT_PREVIEW_BUTTON &&
 <?php
 if(!$this->IsWikiName($this->tag))
 {
-	echo '<em class="error">'.sprintf(ERROR_INVALID_PAGENAME, $this->tag).'</em>';
+	echo '<em class="error">'.sprintf(T_("This page name is invalid.  Valid page names must not contain the characters %s."), EDIT_INVALID_CHARS).'</em>';
 }
 else if ($this->HasAccess("write") && $this->HasAccess("read"))
 {
@@ -81,7 +84,7 @@ else if ($this->HasAccess("write") && $this->HasAccess("read"))
 		$page = $this->LoadPageById(mysql_real_escape_string($this->GetSafeVar('id', 'get')));
 		if($page['tag'] != $this->page['tag'])
 		{
-			$this->Redirect($this->Href(), ERROR_INVALID_PAGEID);
+			$this->Redirect($this->Href(), T_("The revision id does not exist for the requested page"));
 		}
 		else
 		{
@@ -113,7 +116,7 @@ else if ($this->HasAccess("write") && $this->HasAccess("read"))
 		}
 
 		// only if saving:
-		if ($this->GetSafeVar('submit', 'post') == EDIT_STORE_BUTTON)
+		if ($this->GetSafeVar('submit', 'post') == T_("Store"))
 		{
 			if (FALSE != ($aKey = $this->getSessionKey($this->GetSafeVar('form_id', 'post'))))	# check if form key was stored in session
 			{
@@ -128,14 +131,14 @@ else if ($this->HasAccess("write") && $this->HasAccess("read"))
 			{
 				if ($this->page['id'] != $_POST['previous'])
 				{
-					$error = ERROR_OVERWRITE_ALERT1.'<br />'.ERROR_OVERWRITE_ALERT2;
+					$error = T_("OVERWRITE ALERT: This page was modified by someone else while you were editing it.").'<br />'.T_("Please copy your changes and re-edit this page.");
 				}
 			}
 			// check for edit note if required
 			if (($this->GetConfigValue('require_edit_note') == 1) && $this->GetSafeVar('note', 'post') == '')
 			{
-				$error .= ERROR_MISSING_EDIT_NOTE;
-				$highlight_note = INPUT_ERROR_STYLE;
+				$error .= T_("MISSING EDIT NOTE: Please fill in an edit note!");
+				$highlight_note = 'class="highlight"';
 			}
 			// store
 			if (!$error)
@@ -170,7 +173,7 @@ else if ($this->HasAccess("write") && $this->HasAccess("read"))
 		// We need to escape ALL entity refs before display so we display them _as_ entities instead of interpreting them
 		// so we use hsc_secure() on the edit note (as on the body)
 		// JW/2007-02-20: why is this? wouldn't it be  easier for the person editing to show actual characters instead of entities?
-		$edit_note_field = '<input id="note" size="'.MAX_EDIT_NOTE_LENGTH.'" maxlength="'.MAX_EDIT_NOTE_LENGTH.'" type="text" name="note" value="'.$this->hsc_secure($note).'" '.$highlight_note.'/> <label for="note">'.EDIT_NOTE_LABEL.'</label><br />'."\n";	#427
+		$edit_note_field = '<input id="note" size="'.MAX_EDIT_NOTE_LENGTH.'" maxlength="'.MAX_EDIT_NOTE_LENGTH.'" type="text" name="note" value="'.$this->hsc_secure($note).'" '.$highlight_note.'/> <label for="note">'.T_("Please add a note on your edit").'</label><br />'."\n";	#427
 	}
 
 	// fetch fields
@@ -198,16 +201,16 @@ else if ($this->HasAccess("write") && $this->HasAccess("read"))
 	}
 
 	// PREVIEW screen
-	if ($this->GetSafeVar('submit', 'post') == EDIT_PREVIEW_BUTTON)
+	if ($this->GetSafeVar('submit', 'post') == T_("Preview"))
 	{
-		$preview_buttons =	'<fieldset><legend>'.EDIT_STORE_PAGE_LEGEND.'</legend>'."\n".
+		$preview_buttons =	'<fieldset><legend>'.T_("Store page").'</legend>'."\n".
 							$edit_note_field.
-							'<input name="submit" type="submit" value="'.EDIT_STORE_BUTTON.'" accesskey="'.ACCESSKEY_STORE.'" />'."\n".
-							'<input name="submit" type="submit" value="'.EDIT_REEDIT_BUTTON.'" accesskey="'.ACCESSKEY_REEDIT.'" id="reedit_id" />'."\n".
-							'<input type="submit" value="'.EDIT_CANCEL_BUTTON.'" name="cancel" />'."\n".
+							'<input name="submit" type="submit" value="'.T_("Store").'" accesskey="'."s".'" />'."\n".
+							'<input name="submit" type="submit" value="'.T_("Re-edit").'" accesskey="'."r".'" id="reedit_id" />'."\n".
+							'<input type="submit" value="'.T_("Cancel").'" name="cancel" />'."\n".
 							'</fieldset>'."\n";
 
-		$output .= '<div class="previewhead">'.EDIT_PREVIEW_HEADER.'</div>'."\n";
+		$output .= '<div class="previewhead">'.T_("Preview").'</div>'."\n";
 
 		$output .= $this->Format($body);
 
@@ -229,11 +232,11 @@ else if ($this->HasAccess("write") && $this->HasAccess("read"))
 		// truncate tag to feed a backlinks-handler with the correct value. may be omited. it only works if the link to a backlinks-handler is built in the footer.
 		$this->tag = substr($this->tag, 0, $maxtaglen);
 
-		$output  = '<em class="error">'.sprintf(ERROR_TAG_TOO_LONG, $maxtaglen).'</em><br />'."\n";
-		$output .= sprintf(MESSAGE_AUTO_RESIZE, INPUT_SUBMIT_RENAME).'<br /><br />'."\n";
+		$output  = '<em class="error">'.sprintf(T_("Page name too long! %d characters max."), $maxtaglen).'</em><br />'."\n";
+		$output .= sprintf(T_("Clicking on %s will automatically truncate the page name to the correct size"), T_("Rename")).'<br /><br />'."\n";
 		$output .= $this->FormOpen('edit');
 		$output .= '<input name="newtag" size="'.MAX_TAG_LENGTH.'" value="'.$this->htmlspecialchars_ent($this->tag).'" />';
-		$output .= '<input name="submit" type="submit" value="'.EDIT_RENAME_BUTTON.'" />'."\n";
+		$output .= '<input name="submit" type="submit" value="'.T_("Rename").'" />'."\n";
 		$output .= $this->FormClose();
 	}
 	// EDIT Screen
@@ -250,13 +253,13 @@ else if ($this->HasAccess("write") && $this->HasAccess("read"))
 		// would be nice as a checkbox, provided it is acted upon only when user is actually submitting - NOT on preview or re-edit
 		if (isset($_POST['appendcomment'])) #312, #449
 		{
-			$body = trim($body)."\n\n----\n\n-- ".$this->GetUserName().' '.sprintf(EDIT_COMMENT_TIMESTAMP_CAPTION,strftime("%c")).')';
+			$body = trim($body)."\n\n----\n\n-- ".$this->GetUserName().' '.sprintf("(%s)",strftime("%c")).')';
 		}
-		$edit_buttons = '<fieldset><legend>'.EDIT_STORE_PAGE_LEGEND.'</legend>'."\n".
+		$edit_buttons = '<fieldset><legend>'.T_("Store page").'</legend>'."\n".
 						$edit_note_field.
-						'<input name="submit" type="submit" value="'.EDIT_STORE_BUTTON.'" accesskey="'.ACCESSKEY_STORE.'" />'."\n".
-						'<input name="submit" type="submit" value="'.EDIT_PREVIEW_BUTTON.'" accesskey="'.ACCESSKEY_PREVIEW.'" />'."\n".
-						'<input type="submit" value="'.EDIT_CANCEL_BUTTON.'" name="cancel" />'."\n".
+						'<input name="submit" type="submit" value="'.T_("Store").'" accesskey="'."s".'" />'."\n".
+						'<input name="submit" type="submit" value="'.T_("Preview").'" accesskey="'."p".'" />'."\n".
+						'<input type="submit" value="'.T_("Cancel").'" name="cancel" />'."\n".
 						'</fieldset>'."\n";
 		$output .= $this->FormOpen('edit');
 		$output .= '<input type="hidden" name="previous" value="'.$previous.'" />'."\n".
@@ -281,9 +284,9 @@ else if ($this->HasAccess("write") && $this->HasAccess("read"))
 }
 else
 {
-	$message = '<em class="error">'.$this->Format(ERROR_NO_WRITE_ACCESS).'</em><br />'."\n".
+	$message = '<em class="error">'.sprintf(T_("You don't have write access to this page. You might need to <a href=\"%s\">login</a> or <a href=\"%s\">register an account</a> to be able to edit this page.", $this->Href('', 'UserSettings'), $this->Href('', 'UserSettings'))).'</em><br />'."\n".
 			"<br />\n".
-			'<a href="'.$this->Href('showcode').'" title="'.SHOWCODE_LINK_TITLE.'">'.SHOWCODE_LINK.'</a>'.
+			'<a href="'.$this->Href('showcode').'" title="'.T_("Click to view page formatting code").'">'.T_("View formatting code for this page").'</a>'.
 			"<br />\n";
 	echo $message;
 }

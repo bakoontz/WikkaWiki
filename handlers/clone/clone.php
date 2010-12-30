@@ -42,31 +42,33 @@
  * @todo	Decide whether it's allowed to "re-create" a page of which only non-active versions exist
  *
  */
+if (!defined('CLONE_INVALID_CHARS')) define('CLONE_INVALID_CHARS', '| ? = &lt; &gt; / \ " % &amp;'); 
+
 // initialization
 $from = $this->tag;
 $to = $this->tag;
-$note = sprintf(CLONED_FROM, $from);
+$note = sprintf(T_("Cloned from %s"), $from);
 $editoption = '';
-$box = PLEASE_FILL_VALID_TARGET;
+$box = T_("Please fill in a valid target <tt>PageName</tt> and an (optional) edit note");
 
 echo '<div id="content">'."\n";
 
 // print header
-#echo $this->Format(CLONE_HEADER);
-echo '<h3>'.CLONE_HEADER.'</h3>'."\n";
+#echo $this->Format(T_("Clone current page"));
+echo '<h3>'.T_("Clone current page").'</h3>'."\n";
 
 // 1. check source page existence
 if (!$this->existsPage($from))		// name change, interface change (allows only active page (if not, LoadPage() will fail!))
 {
 	// source page does not exist!
-	$box = '<em class="error">'.sprintf(ERROR_PAGE_NOT_EXIST, $from).'</em>';
+	$box = '<em class="error">'.sprintf(T_(" Sorry, page %s does not exist."), $from).'</em>';
 } else
 {
 	// 2. page exists - now check user's read-access to the source page
 	if (!$this->HasAccess('read', $from))
 	{
 		// user can't read source page!
-		$box = '<em class="error">'.ERROR_ACL_READ.'</em>';
+		$box = '<em class="error">'.T_("You are not allowed to read the source of this page.").'</em>';
 	} else
 	{
 		// page exists and user has read-access to the source - proceed
@@ -79,12 +81,12 @@ if (!$this->existsPage($from))		// name change, interface change (allows only ac
 			// 3. Check user's write access
 			if (!$this->HasAccess('write', $to))
 			{
-				$box = '<em class="error">'.sprintf(ERROR_ACL_WRITE, $to).'</em>';
+				$box = '<em class="error">'.sprintf(T_("Sorry! You don\t have write-access to %s'"), $to).'</em>';
 			} 
 			// 3a. Check target pagename validity
 			else if(!$this->IsWikiName($to))
 			{
-				$box = '<em class="error">'.ERROR_INVALID_PAGENAME.'</em>';
+				$box = '<em class="error">'.sprintf(T_("This page name is invalid. Valid page names must not contain the characters %s."), CLONE_INVALID_CHARS).'</em>';
 			}
 			else
 			{
@@ -92,7 +94,7 @@ if (!$this->existsPage($from))		// name change, interface change (allows only ac
 				if ($this->existsPage($to, NULL, NULL, FALSE))	// name change, interface change (checks for non-active page, too) @@@
 				{
 					// page already exists!
-					$box = '<em class="error">'.ERROR_PAGE_ALREADY_EXIST.'</em>';
+					$box = '<em class="error">'.T_("Sorry, the destination page already exists").'</em>';
 				} else
 				{
 					// 6. Valid request - proceed to page cloning
@@ -108,7 +110,7 @@ if (!$this->existsPage($from))		// name change, interface change (allows only ac
 						//remove target page from cache
 						unset($this->pageCache[$to]);
 						// show confirmation message
-						$box = '<em class="success">'.sprintf(CLONE_SUCCESSFUL, $this->Link($to)).'</em>';
+						$box = '<em class="success">'.sprintf(T_("%s was succesfully created!"), $this->Link($to)).'</em>';
 					}
 				}
 			}
@@ -117,18 +119,18 @@ if (!$this->existsPage($from))		// name change, interface change (allows only ac
 		$form = $this->FormOpen('clone');
 		$form .= '<table class="clone">'."\n".
 			'<tr>'."\n".
-			'<td>'.sprintf(CLONE_X_TO, $this->Link($this->GetPageTag())).'</td>'."\n".
+			'<td>'.sprintf(T_("Clone %s to:"), $this->Link($this->GetPageTag())).'</td>'."\n".
 			'<td><input type="text" name="to" value="'.$to.'" size="37" maxlength="75" /></td>'."\n".
 			'</tr>'."\n".
 			'<tr>'."\n".
-			'<td>'.EDIT_NOTE.'</td>'.
+			'<td>'.T_("Edit note:").'</td>'.
 			'<td><input type="text" name="note" value="'.$note.'" size="37" maxlength="75" /></td>'."\n".
 			'</tr>'."\n".
 			'<tr>'."\n".
 			'<td></td>'."\n".
 			'<td>'."\n".
-			'<input type="checkbox" name="editoption"'.$editoption.' id="editoption" /><label for="editoption">'.LABEL_EDIT_OPTION.'</label>'."\n".
-			'<input type="submit" name="create" value="'.LABEL_CLONE.'" />'."\n".
+			'<input type="checkbox" name="editoption"'.$editoption.' id="editoption" /><label for="editoption">'.T_(" Edit after creation ").'</label>'."\n".
+			'<input type="submit" name="create" value="'.T_("Clone").'" />'."\n".
 			'</td>'."\n".
 			'</tr>'."\n".
 			'</table>'."\n";

@@ -112,7 +112,7 @@ if (preg_match("/^(http|https):\/\/([^\\s\"<>]+)$/i", $rss_path))
 }
 else
 {
-	echo '<p class="error">'.ERROR_INVALID_RSS_SYNTAX.'</p>'."\n"; # i18n
+	echo '<p class="error">'.T_("Error: Invalid RSS action syntax. <br /> Proper usage: {{rss http://domain.com/feed.xml}} or {{rss url=\"http://domain.com/feed.xml\"}}").'</p>'."\n"; # i18n
 }
 
 ?>

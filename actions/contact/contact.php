@@ -17,6 +17,6 @@ $email = $this->GetConfigValue("admin_email");
 // print spam-safe mailto link
 $patterns = array("'@'", "'\.'");
 $replace = array("[at]", "[dot]");
-echo '<a href="mailto:'.preg_replace($patterns, $replace, $email).'" title="'.CONTACTLINK_TITLE.'">'.CONTACTLINK_TEXT.'</a>';
+echo '<a href="mailto:'.preg_replace($patterns, $replace, $email).'" title="'.T_("Send us your feedback").'">'.T_("Contact").'</a>';
 
 ?>

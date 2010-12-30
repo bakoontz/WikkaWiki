@@ -30,16 +30,16 @@
 echo '<div id="content">'."\n";
 
 // build backlinks list
-echo '<h3>'.sprintf(PAGE_TITLE,$this->tag).'</h3><br />'."\n";
+echo '<h3>'.sprintf(T_("Pages linking to %s"),$this->tag).'</h3><br />'."\n";
 
 switch(TRUE) 
 {
 	case (!$this->existsPage($this->tag)):
-	echo '<em class="error">'.sprintf(MESSAGE_MISSING_PAGE,$this->tag).'</em>'."\n";
+	echo '<em class="error">'.sprintf(T_("Sorry, page %s does not exist."),$this->tag).'</em>'."\n";
 	break;
 
 	case (!$this->HasAccess('read')):
-	echo '<em class="error">'.MESSAGE_PAGE_INACCESSIBLE.'</em>'."\n";
+	echo '<em class="error">'.T_("You are not allowed to read this page").'</em>'."\n";
 	break;
 	
 	default:	
@@ -56,7 +56,7 @@ switch(TRUE)
 	}
 	else
 	{
-		echo MESSAGE_NO_BACKLINKS;
+		echo T_("There are no backlinks to this page.");
 	}
 }
 echo '</div>'."\n";

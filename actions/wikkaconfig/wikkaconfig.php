@@ -25,10 +25,10 @@ if ($this->IsAdmin())
 	$hide_options = array('mysql_host', 'mysql_user', 'mysql_password');
 
 	$wc_output = '<table class="data wikkaconfig">'."\n";
-	$wc_output .= '	<caption>'.sprintf(WIKKACONFIG_CAPTION, '<a href="'.WIKKACONFIG_DOCS_URL.'" target="_blank" title="'.WIKKACONFIG_DOCS_TITLE.'">?</a>').'</caption>'."\n";
+	$wc_output .= '	<caption>'.sprintf(T_("Wikka Configuration Settings [%s]"), '<a href="http://docs.wikkawiki.org/ConfigurationOptions" target="_blank" title="'.T_("Read the documentation on Wikka Configuration Settings").'">?</a>').'</caption>'."\n";
 	$wc_output .= '	<thead>'."\n";
 	$wc_output .= '		<tr>'."\n";
-	$wc_output .= '			<th scope="col">'.WIKKACONFIG_TH_OPTION.'</th><th scope="col">'.WIKKACONFIG_TH_VALUE.'</th>'."\n";
+	$wc_output .= '			<th scope="col">'.T_("Option").'</th><th scope="col">'.T_("Value").'</th>'."\n";
 	$wc_output .= '		</tr>'."\n";
 	$wc_output .= '	</thead>'."\n";
 	$wc_output .= '	<tbody>'."\n";

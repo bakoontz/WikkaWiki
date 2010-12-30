@@ -36,7 +36,7 @@
 if (TRUE===$this->IsAdmin())
 {
 	include_once($this->BuildFullpathFromMultipath('..'.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'libs'.DIRECTORY_SEPARATOR.'admin.lib.php', $this->GetConfigValue('action_path')));
-	$comment = REVERT_DEFAULT_COMMENT;
+	$comment = T_("Reverted to previous revision");
 	if(TRUE===isset($_GET['comment']))
 	{
 		$comment = $this->GetSafeVar('comment', 'get');
@@ -47,7 +47,7 @@ if (TRUE===$this->IsAdmin())
 }
 else
 {
-	echo '<p><em class="error">'.ERROR_NO_REVERT_PRIVS.'</em></p>'."\n";
+	echo '<p><em class="error">'.T_("Sorry, you don't have privileges to revert this page").'</em></p>'."\n";
 }
 ?>
 </div>

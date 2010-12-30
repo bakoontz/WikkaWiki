@@ -34,18 +34,18 @@ if ($this->ExistsPage($this->tag))
 	{
 		// display raw page, slightly formatted for viewing
 		$pagelink = $this->Link($this->tag, '', $this->tag);
-		printf('<h4>'.SOURCE_HEADING.'</h4><br />', $pagelink);
-		echo '<p><a class="keys" href="'.$this->Href('raw').'">'.SHOW_RAW_LINK_DESC.'</a></p>';
+		printf('<h4>'.T_("Wiki source for %s").'</h4><br />', $pagelink);
+		echo '<p><a class="keys" href="'.$this->Href('raw').'">'.T_("Show raw source").'</a></p>';
 		echo '<div class="wikisource">'.nl2br($this->htmlspecialchars_ent($this->page["body"], ENT_QUOTES)).'</div>';
 	}
 	else
 	{
-		echo '<em class="error">'.WIKKA_ERROR_ACL_READ_SOURCE.'</em>';
+		echo '<em class="error">'.T_("You are not allowed to read the source of this page.").'</em>';
 	}
 }
 else
 {
-	echo '<em class="error">'.sprintf(WIKKA_ERROR_PAGE_NOT_EXIST,$this->tag).'</em>';
+	echo '<em class="error">'.sprintf(T_("Sorry, page %s does not exist."),$this->tag).'</em>';
 }
 
 ?>

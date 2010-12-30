@@ -12,5 +12,5 @@
  *
  * @author		{@link http://wikkawiki.org/DarTar Dario Taraborelli}
  */
-echo '<a href="'.$this->Href('delete').'" title="'.DELETELINK_TITLE.'">'.DELETELINK_TEXT.'</a>'."\n";
+echo '<a href="'.$this->Href('delete').'" title="'.T_("Delete this page (requires confirmation)").'">'.T_("[Delete]").'</a>'."\n";
 ?>

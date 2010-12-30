@@ -24,10 +24,8 @@
  * @uses	Wakka::IsAdmin()
  * @todo	fix RE (#104 etc.); also lose the comma in there!
  */
-
-if(!defined('REVISION_DATE_FORMAT')) define('REVISION_DATE_FORMAT', 'D, d M Y');
-if(!defined('REVISION_TIME_FORMAT')) define('REVISION_TIME_FORMAT', 'H:i T');
-
+if (!defined('DATE_FORMAT')) define('DATE_FORMAT', 'D, d M Y'); #TODO make this system-configurable
+if (!defined('TIME_FORMAT')) define('TIME_FORMAT', 'H:i T'); #TODO make this system-configurable
 
 // order alphabetically or by time?
 $alpha = FALSE;
@@ -62,7 +60,7 @@ if (($this->IsAdmin() && !empty($username)) ||
 	$output .= '<div class="floatl">';
 	if ($alpha)
 	{
-	$output .= sprintf(MYCHANGES_ALPHA_LIST, $username).' (<a href="'.$this->Href("", $tag, $params).'">'.ORDER_DATE_LINK_DESC;
+	$output .= sprintf(T_("This is a list of pages edited by %s, along with the time of the last change."), $username).' (<a href="'.$this->Href("", $tag, $params).'">'.T_("order by date");
 	}
 	else
 	{
@@ -75,7 +73,7 @@ if (($this->IsAdmin() && !empty($username)) ||
 			$params = "alphabetically=1"; 
 		} 
 
-		$output .= sprintf(MYCHANGES_DATE_LIST, $username).' (<a href="'.$this->href("", $tag, $params).'">'.ORDER_ALPHA_LINK_DESC; 
+		$output .= sprintf(T_("This is a list of pages edited by %s, ordered by the time of the last change."), $username).' (<a href="'.$this->href("", $tag, $params).'">'.T_("order alphabetically"); 
 	}
 	$output .= '</a>)</div><div class="clear">&nbsp;</div>'."\n";
 
@@ -111,7 +109,7 @@ if (($this->IsAdmin() && !empty($username)) ||
 					$current = $firstChar;
 				}
 				$time_output = $page["time"];		
-				$output .= "&nbsp;&nbsp;&nbsp;".$this->Link($page["tag"], "", "", 0)." ".$this->Link($page["tag"], 'revisions', "[".$page['id']."]", 0).' <a class="datetime" href="'.$this->Href('revisions', $page['tag']).'" title="'.PAGE_REVISION_LINK_TITLE.'">'.$time_output."</a><br />\n";
+				$output .= "&nbsp;&nbsp;&nbsp;".$this->Link($page["tag"], "", "", 0)." ".$this->Link($page["tag"], 'revisions', "[".$page['id']."]", 0).' <a class="datetime" href="'.$this->Href('revisions', $page['tag']).'" title="'.T_("Click to view recent revisions list for this page").'">'.$time_output."</a><br />\n";
 			}
 			// order by time
 			else
@@ -121,21 +119,21 @@ if (($this->IsAdmin() && !empty($username)) ||
 				{
 					if ($current) $output .= "<br />\n";
 					$current = $day;
-					$output .= '<h5>'.date(REVISION_DATE_FORMAT, strtotime($day)).'</h5>'."\n";
+					$output .= '<h5>'.date(DATE_FORMAT, strtotime($day)).'</h5>'."\n";
 				}
-				$time_output = date(REVISION_TIME_FORMAT, strtotime($time));
-				$output .= '&nbsp;&nbsp;&nbsp;<a class="datetime" href="'.$this->Href('revisions', $page['tag']).'" title="'.PAGE_REVISION_LINK_TITLE.'">'.$time_output.'</a> '.$this->Link($page["tag"], 'revisions', "[".$page['id']."]", 0)." ".$this->Link($page["tag"], "", "", 0)."<br />\n";	
+				$time_output = date(TIME_FORMAT, strtotime($time));
+				$output .= '&nbsp;&nbsp;&nbsp;<a class="datetime" href="'.$this->Href('revisions', $page['tag']).'" title="'.T_("Click to view recent revisions list for this page").'">'.$time_output.'</a> '.$this->Link($page["tag"], 'revisions', "[".$page['id']."]", 0)." ".$this->Link($page["tag"], "", "", 0)."<br />\n";	
 			}
 		}
 	}
 	else
 	{
-		$output .= '<em class="error">'.WIKKA_NO_PAGES_FOUND.'</em>';
+		$output .= '<em class="error">'.T_("No pages found.").'</em>';
 	}
 }
 else
 {
-	$output .= '<em class="error">'.MYCHANGES_NOT_LOGGED_IN.'</em>';
+	$output .= '<em class="error">'.T_("You're not logged in, thus the list of pages you've edited couldn't be retrieved.").'</em>';
 }
 
 // *** output section ***

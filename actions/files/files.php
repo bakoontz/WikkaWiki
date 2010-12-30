@@ -62,6 +62,7 @@ if(!defined('ALLOWED_FILE_EXTENSIONS')) define('ALLOWED_FILE_EXTENSIONS', 'gif|j
 if(!defined('SORT_BY_FILENAME')) define('SORT_BY_FILENAME', 'filename');
 if(!defined('SORT_BY_DATE')) define('SORT_BY_DATE', 'date');
 if(!defined('SORT_BY_SIZE')) define('SORT_BY_SIZE', 'size');
+if(!defined('UPLOAD_DATE_FORMAT')) define('UPLOAD_DATE_FORMAT', 'Y-m-d H:i');
 
 // ---- Error code constants ----
 if (!defined('UPLOAD_ERR_OK')) define('UPLOAD_ERR_OK', 0);
@@ -179,7 +180,7 @@ $upload_path = $this->GetConfigValue('upload_path').DIRECTORY_SEPARATOR.$this->t
 // 1. check if main upload path is writable
 if (!is_writable($this->GetConfigValue('upload_path')))
 {
-	echo '<div class="alertbox">'.sprintf(ERROR_UPLOAD_DIRECTORY_NOT_WRITABLE, '<tt>'.$this->GetConfigValue('upload_path').'</tt>').'</div>'; #89
+	echo '<div class="alertbox">'.sprintf(T_("Please make sure that the server has write access to a folder named %s."), '<tt>'.$this->GetConfigValue('upload_path').'</tt>').'</div>'; #89
 }
 else
 {
@@ -193,7 +194,7 @@ $file_to_delete = $this->GetSafeVar('file_to_delete', 'post');
 // 1a. User has requested a file to be deleted
 if(FALSE===empty($action) && FALSE===empty($file) && TRUE===userCanUpload())
 {
-	echo '<h3>'.FILES_DELETE_FILE.'</h3><br /><ul>'."\n";
+	echo '<h3>'.T_("Delete this file?").'</h3><br /><ul>'."\n";
 	echo "<li>$file</li></ul><br />\n";
 
 	echo $this->FormOpen(); 
@@ -204,9 +205,9 @@ if(FALSE===empty($action) && FALSE===empty($file) && TRUE===userCanUpload())
 				<!-- nonsense input so form submission works with rewrite mode -->
 				<input type="hidden" value="" name="null"/>
 				<input type="hidden" name="file_to_delete" value="<?php echo rawurlencode($file); ?>"/>
-				<input type="submit" value="<?php echo FILES_DELETE_FILE_BUTTON;?>"  style="width: 120px"   />
-<!--				<input type="button" value="<?php echo FILES_CANCEL_BUTTON;?>" onclick="history.back();" style="width: 120px" /> -->
-					<input type="submit" value="<?php echo FILES_CANCEL_BUTTON;?>" style="width: 120px" name="cancel"/>
+				<input type="submit" value="<?php echo T_("Delete File");?>"  style="width: 120px"   />
+<!--				<input type="button" value="<?php echo T_("Cancel");?>" onclick="history.back();" style="width: 120px" /> -->
+					<input type="submit" value="<?php echo T_("Cancel");?>" style="width: 120px" name="cancel"/>
 
 			</td>
 		</tr>
@@ -218,7 +219,7 @@ if(FALSE===empty($action) && FALSE===empty($file) && TRUE===userCanUpload())
 // 1b. User has confirmed file deletion
 elseif(FALSE===empty($file_to_delete) && TRUE===userCanUpload())
 {
-	$this->Redirect($this->Href('files.xml',$this->tag,'action=delete&file='.rawurlencode($file_to_delete)), FILE_DELETED);
+	$this->Redirect($this->Href('files.xml',$this->tag,'action=delete&file='.rawurlencode($file_to_delete)), T_("File deleted"));
 }
 
 // 2. print a simple download link for the specified file, if it exists
@@ -237,13 +238,13 @@ elseif (isset($vars['download']))
 		//Although $output is passed to ReturnSafeHTML, it's better to sanitize $text here. At least it can avoid invalid XHTML.
 		$output .=  '<a href="'
 			. $this->Href('files.xml', $this->tag, 'action=download&amp;file='.rawurlencode($this->htmlspecialchars_ent($vars['download'])))
-			. '" title="'.sprintf(DOWNLOAD_LINK_TITLE, $text).'">'
+			. '" title="'.sprintf(T_("Download %s"), $text).'">'
 			. urldecode($text)
 			. '</a>';
 	}
 	else
 	{
-		echo '<em class="error">'.sprintf(ERROR_NONEXISTENT_FILE, '<tt>'.$this->htmlspecialchars_ent($vars['download']).'</tt>').'</em>';
+		echo '<em class="error">'.sprintf(T_("Sorry, a file named %s does not exist."), '<tt>'.$this->htmlspecialchars_ent($vars['download']).'</tt>').'</em>';
 	}
 	$output .= '</div>';
 	$output = $this->ReturnSafeHTML($output);
@@ -269,7 +270,7 @@ elseif ($this->page && $this->HasAccess('read') && $this->handler == 'show' && $
 			case UPLOAD_ERR_OK:
 				if ($_FILES['file']['size'] > MAX_UPLOAD_SIZE)
 				{
-					$error_msg = sprintf(ERROR_FILE_TOO_BIG, bytesToHumanReadableUsage($max_upload_size));
+					$error_msg = sprintf(T_("Attempted file upload was too big. Maximum allowed size is %s."), bytesToHumanReadableUsage($max_upload_size));
 					unlink($_FILES['file']['tmp_name']);
 				}
 				elseif (preg_match('/.+\.('.$allowed_extensions.')$/i', $_FILES['file']['name']))
@@ -283,36 +284,36 @@ elseif ($this->page && $this->HasAccess('read') && $this->handler == 'show' && $
 					{
 						if (move_uploaded_file($_FILES['file']['tmp_name'], $destfile))
 						{
-							$notification_msg = SUCCESS_FILE_UPLOADED;
+							$notification_msg = T_("File was successfully uploaded.");
 						}
 						else
 						{
-							$error_msg = ERROR_UPLOADING_FILE;
+							$error_msg = T_("There was an error uploading your file");
 						}
 					}
 					else
 					{
-						$error_msg = sprintf(ERROR_FILE_ALREADY_EXISTS, '<tt>'.$strippedname.'</tt>');
+						$error_msg = sprintf(T_("Sorry, a file named %s already exists."), '<tt>'.$strippedname.'</tt>');
 					}
 				}
 				else
 				{
-					$error_msg = ERROR_EXTENSION_NOT_ALLOWED;
+					$error_msg = T_("Sorry, files with this extension are not allowed.");
 					unlink($_FILES['file']['tmp_name']);
 				}
 				break;
 			case UPLOAD_ERR_INI_SIZE:
 			case UPLOAD_ERR_FORM_SIZE:
-				$error_msg = sprintf(ERROR_FILE_TOO_BIG, bytesToHumanReadableUsage($max_upload_size));
+				$error_msg = sprintf(T_("Attempted file upload was too big. Maximum allowed size is %s."), bytesToHumanReadableUsage($max_upload_size));
 				break;
 			case UPLOAD_ERR_PARTIAL:
-				$error_msg = ERROR_FILE_UPLOAD_INCOMPLETE;
+				$error_msg = T_("File upload incomplete! Please try again.");
 				break;
 			case UPLOAD_ERR_NO_FILE:
-				$error_msg = ERROR_NO_FILE_SELECTED;
+				$error_msg = T_("No file selected.");
 				break;
 			case UPLOAD_ERR_NO_TMP_DIR:
-				$error_msg = ERROR_FILE_UPLOAD_IMPOSSIBLE;
+				$error_msg = T_("File upload impossible due to misconfigured server.");
 				break;
 	}
 	if ($error_msg != '')
@@ -383,10 +384,10 @@ if (is_readable($upload_path))
 			// TODO #72
 			$delete_link = '<a class="keys" href="'
 			.$this->Href('', '', 'action=delete&amp;file='.rawurlencode($file))	// @@@ should be POST form button, not link
-			.'" title="'.sprintf(DELETE_LINK_TITLE, $file).'">x</a>';
+			.'" title="'.sprintf(T_("Remove %s"), $file).'">x</a>';
 		}
 		$download_link = '<a href="' .$this->Href('files.xml',$this->tag,'action=download&amp;file='.rawurlencode($file))
-			.'" title="'.sprintf(DOWNLOAD_LINK_TITLE, $file).'">'.urldecode($file).'</a>';
+			.'" title="'.sprintf(T_("Download %s"), $file).'">'.urldecode($file).'</a>';
 		$size = bytesToHumanReadableUsage($filesize); # #89
 		$date = date(UPLOAD_DATE_FORMAT, $filedate); # #89
 
@@ -406,16 +407,16 @@ if (is_readable($upload_path))
 		$output .= '<div class="files">'."\n";
 		// display uploaded files
 		$output .= '<table class="files">'."\n"
-			.'<caption>'.FILE_TABLE_CAPTION.'</caption>'."\n"
+			.'<caption>'.T_("Attachments").'</caption>'."\n"
 			.'<thead>'."\n"
 			.'<tr>'."\n";
 		if (userCanUpload())
 		{
 			$output .= '<th>&nbsp;</th>'."\n"; //For the delete link. Only needed when user has file upload privs.
 		}
-		$output .= '<th><a href="'.$this->Href('', $this->tag, 'sortby=filename').'">'.FILE_TABLE_HEADER_NAME.'</a></th>'."\n"
-		.'<th><a href="'.$this->Href('', $this->tag, 'sortby=date').'">'.FILE_TABLE_HEADER_DATE.'</a></th>'."\n"
-		.'<th><a href="'.$this->Href('', $this->tag, 'sortby=size').'">'.FILE_TABLE_HEADER_SIZE.'</a></th>'."\n"
+		$output .= '<th><a href="'.$this->Href('', $this->tag, 'sortby=filename').'">'.T_("File").'</a></th>'."\n"
+		.'<th><a href="'.$this->Href('', $this->tag, 'sortby=date').'">'.T_("Last modified").'</a></th>'."\n"
+		.'<th><a href="'.$this->Href('', $this->tag, 'sortby=size').'">'.T_("Size").'</a></th>'."\n"
 			.'</tr>'."\n"
 			.'</thead>'."\n"
 			.'<tbody>'."\n";
@@ -427,14 +428,14 @@ if (is_readable($upload_path))
 // cannot read the folder contents
 else
 {
-	echo '<div class="alertbox">'.sprintf(ERROR_UPLOAD_DIRECTORY_NOT_READABLE, '<tt>'.$upload_path.'</tt>').'</div>'; # #89
+	echo '<div class="alertbox">'.sprintf(T_("Please make sure that the server has read access to a folder named %s."), '<tt>'.$upload_path.'</tt>').'</div>'; # #89
 
 }
 
 // print message if no files are available
 if ($is_readable && $n < 1)
 {
-	$output .= '<em>'.NO_ATTACHMENTS.'</em>'."\n"; //
+	$output .= '<em>'.T_("This page contains no attachment.").'</em>'."\n"; //
 }
 
 // 5. display upload form
@@ -455,7 +456,7 @@ if ($is_writable && userCanUpload())
 	$output .=	'<form action="'.$href.'" method="post" enctype="multipart/form-data">'."\n"
 		.$input_for_rewrite_mode."\n"
 		.'<input type="hidden" name="action" value="upload" />'."\n"
-		.'<fieldset><legend>'.FILE_UPLOAD_FORM_LABEL.'</legend>'."\n"
+		.'<fieldset><legend>'.T_("File:").'</legend>'."\n"
 		.'<input type="file" name="file" /><br />'."\n"
 		.'<input type="submit" value="Upload" />'."\n"		#i18n
 		.'</fieldset>'."\n"
@@ -464,9 +465,9 @@ if ($is_writable && userCanUpload())
 	// build form
 	$form = '';
 	$form .= $this->FormOpen('', '', 'post', '', '', TRUE); // post form for current page with file upload
-	$form .= '<fieldset><legend>'.FILE_UPLOAD_FORM_LEGEND.'</legend>'."\n";
-	$form .= '<label for="fileupload">'.FILE_UPLOAD_FORM_LABEL.'</label> <input id="fileupload" type="file" name="file" /><br />'."\n";
-	$form .= '<input name = "upload" type="submit" value="'.FILE_UPLOAD_FORM_BUTTON.'" />'."\n";
+	$form .= '<fieldset><legend>'.T_("Add new attachment:").'</legend>'."\n";
+	$form .= '<label for="fileupload">'.T_("File:").'</label> <input id="fileupload" type="file" name="file" /><br />'."\n";
+	$form .= '<input name = "upload" type="submit" value="'.T_("Upload").'" />'."\n";
 	$form .= '</fieldset>'."\n";
 	$form .= $this->FormClose();
 	// add to output

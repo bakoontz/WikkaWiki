@@ -78,6 +78,13 @@
  * @todo	move to core
  */
 
+if(!defined('ADMINUSERS_DEFAULT_RECORDS_LIMIT')) define('ADMINUSERS_DEFAULT_RECORDS_LIMIT', '10'); # number of records per page
+if(!defined('ADMINUSERS_DEFAULT_MIN_RECORDS_DISPLAY')) define('ADMINUSERS_DEFAULT_MIN_RECORDS_DISPLAY', '5'); # min number of records
+if(!defined('ADMINUSERS_DEFAULT_RECORDS_RANGE')) define('ADMINUSERS_DEFAULT_RECORDS_RANGE',serialize(array('10','50','100','500','1000'))); #range array for records pager
+if(!defined('ADMINUSERS_DEFAULT_START')) define('ADMINUSERS_DEFAULT_START', '0'); # start record
+if(!defined('ADMINUSERS_DEFAULT_SEARCH')) define('ADMINUSERS_DEFAULT_SEARCH', ''); # keyword to restrict search
+if(!defined('ADMINUSERS_ALTERNATE_ROW_COLOR')) define('ADMINUSERS_ALTERNATE_ROW_COLOR', '1'); # switch alternate row color
+if(!defined('ADMINUSERS_STAT_COLUMN_COLOR')) define('ADMINUSERS_STAT_COLUMN_COLOR', '1'); # switch color for statistics columns
 if(!function_exists('optionRanges'))
 {
 	function optionRanges($limits, $max, $firstinc = 1)
@@ -117,7 +124,7 @@ if(!function_exists('optionRanges'))
 // restrict access to admins
 if ($this->IsAdmin($this->GetUser()))
 {
-	if($this->GetSafeVar('cancel', 'post') == ADMINUSERS_CANCEL_BUTTON)
+	if($this->GetSafeVar('cancel', 'post') == T_("Cancel"))
 	{
 		$this->Redirect($this->Href());
 	}
@@ -182,11 +189,11 @@ if ($this->IsAdmin($this->GetUser()))
 			$status = DeleteUser($this, $this->GetSafeVar('user', 'get'));
 			if(false===$status)
 			{
-				$this->Redirect($this->Href(), ADMINUSERS_USERDELETE_FAILURE);
+				$this->Redirect($this->Href(), T_("Sorry, could not delete user. Please check your admin settings"));
 			}
 			else
 			{
-				$this->Redirect($this->Href(), ADMINUSERS_USERDELETE_SUCCESS);
+				$this->Redirect($this->Href(), T_("User has been sucessfully deleted"));
 			}
 		}
 	}
@@ -203,14 +210,14 @@ if ($this->IsAdmin($this->GetUser()))
 		}
 		if(count($usernames) > 0)
 		{
-			echo '<h3>'.ADMINUSERS_DELETE_USERS_HEADING.'</h3><br />'."\n".'<ul>';
+			echo '<h3>'.T_("Delete these users?").'</h3><br />'."\n".'<ul>';
 			$errors = 0;
 			foreach($usernames as $username)
 			{
 				if($this->IsAdmin($username))
 				{
 					++$errors;
-					echo '<li><span class="disabled">'.$username.'&nbsp;</span><em class="error">('.ADMINUSERS_FORM_MASSACTION_DELETE_ERROR.")</em></li>\n";
+					echo '<li><span class="disabled">'.$username.'&nbsp;</span><em class="error">('.T_("Cannot delete admins").")</em></li>\n";
 					continue;
 				}
 				echo "<li>".$username."</li>\n";
@@ -236,9 +243,9 @@ if ($this->IsAdmin($this->GetUser()))
 						?>
 						<input type="hidden" name="massaction" value="massdelete"/>
 						<?php if($errors < count($usernames)) { ?>
-						<input type="submit" value="<?php echo ADMINUSERS_DELETE_USERS_BUTTON;?>"  style="width: 120px"   />
+						<input type="submit" value="<?php echo T_("Delete Users");?>"  style="width: 120px"   />
 						<?php } ?>
-						<input type="submit" value="<?php echo ADMINUSERS_CANCEL_BUTTON;?>" name="cancel" style="width: 120px" />
+						<input type="submit" value="<?php echo T_("Cancel");?>" name="cancel" style="width: 120px" />
 					</td>
 				</tr>
 			</table>
@@ -268,11 +275,11 @@ if ($this->IsAdmin($this->GetUser()))
 		}
 		if(false === $status)
 		{
-			$this->Redirect($this->Href(), ADMINUSERS_USERDELETE_FAILURE);
+			$this->Redirect($this->Href(), T_("Sorry, could not delete user. Please check your admin settings"));
 		}
 		else
 		{
-			$this->Redirect($this->Href(), ADMINUSERS_USERDELETE_SUCCESS);
+			$this->Redirect($this->Href(), T_("User has been sucessfully deleted"));
 		}
 	}
 	else 
@@ -292,18 +299,18 @@ if ($this->IsAdmin($this->GetUser()))
 
 		// sort field
 		$sort_fields = array('name', 'email', 'signuptime');
-		$sort = (isset($_GET['sort'])) ? $this->GetSafeVar('sort', 'get') : ADMINUSERS_DEFAULT_SORT_FIELD;
-		if(!in_array($sort, $sort_fields)) $sort = ADMINUSERS_DEFAULT_SORT_FIELD;
+		$sort = (isset($_GET['sort'])) ? $this->GetSafeVar('sort', 'get') : "signuptime";
+		if(!in_array($sort, $sort_fields)) $sort = "signuptime";
 		// sort order
 		$sort_order = array('asc', 'desc');
-		$d = (isset($_GET['d'])) ? $this->GetSafeVar('d', 'get') : ADMINUSERS_DEFAULT_SORT_ORDER;
-		if(!in_array($d, $sort_order)) $d = ADMINUSERS_DEFAULT_SORT_ORDER;
+		$d = (isset($_GET['d'])) ? $this->GetSafeVar('d', 'get') : "desc";
+		if(!in_array($d, $sort_order)) $d = "desc";
 		// start record
 		$s = (isset($_GET['s'])) ? $this->GetSafeVar('s', 'get') : ADMINUSERS_DEFAULT_START;
 		if (!(int)$s >=0) $s = ADMINUSERS_DEFAULT_START;
 	
 		// search string
-		$search = ADMINUSERS_DEFAULT_SEARCH;
+		$search = ADMINUSERS_DEFAULT_SEARCH; 
 		$search_disp = ADMINUSERS_DEFAULT_SEARCH;
 		if (isset($_POST['search']))
 		{
@@ -315,7 +322,7 @@ if ($this->IsAdmin($this->GetUser()))
 			$search = mysql_real_escape_string($this->GetSafeVar('search', 'get'));
 			$search_disp = $this->GetSafeVar('search', 'get');
 		}
-		elseif($this->GetSafeVar('submit', 'post') == ADMINUSERS_FORM_SEARCH_SUBMIT)
+		elseif($this->GetSafeVar('submit', 'post') == T_("Submit"))
 		{
 			// Reset num recs per page for empty (reset) search
 			$l = ADMINUSERS_DEFAULT_RECORDS_LIMIT;
@@ -338,45 +345,45 @@ if ($this->IsAdmin($this->GetUser()))
 		// form is being used to process two post requests, so things
 		// (search string, num recs per page) get out of sync, requiring
 		// multiple submissions.
-		if(!isset($_GET['l']) && $this->GetSafeVar('submit', 'post') != ADMINUSERS_FORM_PAGER_SUBMIT)
+		if(!isset($_GET['l']) && $this->GetSafeVar('submit', 'post') != T_("Apply"))
 		{
 			$l = ADMINUSERS_DEFAULT_RECORDS_LIMIT;
 		}
 	
 		// print page header
-		echo '<h3>'.ADMINUSERS_PAGE_TITLE.'</h3>'."\n";
+		echo '<h3>'.T_("User Administration").'</h3>'."\n";
 
 		//non-working message retrieval removed, see #753
 	
 		// build pager form	
 		$form_filter = $this->FormOpen('','','post','user_admin_panel');
-		$form_filter .= '<fieldset><legend>'.ADMINUSERS_FORM_LEGEND.'</legend>'."\n";
-		$form_filter .= '<label for="search">'.ADMINUSERS_FORM_SEARCH_STRING_LABEL.'</label> <input type ="text" id="search" name="search" title="'.ADMINUSERS_FORM_SEARCH_STRING_TITLE.'" size="20" maxlength="50" value="'.$search_disp.'"/> <input name="submit" type="submit" value="'.ADMINUSERS_FORM_SEARCH_SUBMIT.'" /><br />'."\n";
+		$form_filter .= '<fieldset><legend>'.T_("Filter view:").'</legend>'."\n";
+		$form_filter .= '<label for="search">'.T_("Search user:").'</label> <input type ="text" id="search" name="search" title="'.T_("Enter a search string").'" size="20" maxlength="50" value="'.$search_disp.'"/> <input name="submit" type="submit" value="'.T_("Submit").'" /><br />'."\n";
 		// get values range for drop-down
 		$users_opts = optionRanges($user_limits,$numusers, ADMINUSERS_DEFAULT_MIN_RECORDS_DISPLAY);
-		$form_filter .= '<label for="l">'.ADMINUSERS_FORM_PAGER_LABEL_BEFORE.'</label> '."\n";
-		$form_filter .= '<select name="l" id="l" title="'.ADMINUSERS_FORM_PAGER_TITLE.'">'."\n";
+		$form_filter .= '<label for="l">'.T_("Show").'</label> '."\n";
+		$form_filter .= '<select name="l" id="l" title="'.T_("Select records-per-page limit").'">'."\n";
 		// build drop-down
 		foreach ($users_opts as $opt)
 		{
 			$selected = ($opt == $l) ? ' selected="selected"' : '';
 			$form_filter .= '<option value="'.$opt.'"'.$selected.'>'.$opt.'</option>'."\n";
 		}
-		$form_filter .=  '</select> <label for="l">'.ADMINUSERS_FORM_PAGER_LABEL_AFTER.'</label> <input name="submit" type="submit" value="'.ADMINUSERS_FORM_PAGER_SUBMIT.'" /><br />'."\n";
+		$form_filter .=  '</select> <label for="l">'.T_("records per page").'</label> <input name="submit" type="submit" value="'.T_("Apply").'" /><br />'."\n";
 	
 		// build pager links
 		$ll = $s+$l+1;
 		$ul = ($s+2*$l) > $numusers ? $numusers : ($s+2*$l);
 		if ($s > 0)
 		{
-			$prev = '<a href="'.$this->Href('','','l='.$l.'&amp;sort='.$sort.'&amp;d='.$d.'&amp;s='.($s-$l)).  '&amp;search='.urlencode($search).  '&amp;start_ts='.urlencode($start_ts).  '&amp;end_ts='.urlencode($end_ts).  '" title="'.sprintf(ADMINUSERS_FORM_PAGER_LINK, ($s-$l+1), $s).'">'.($s-$l+1).'-'.$s.'</a> |  '."\n";
+			$prev = '<a href="'.$this->Href('','','l='.$l.'&amp;sort='.$sort.'&amp;d='.$d.'&amp;s='.($s-$l)).  '&amp;search='.urlencode($search).  '&amp;start_ts='.urlencode($start_ts).  '&amp;end_ts='.urlencode($end_ts).  '" title="'.sprintf(T_("Show records from %d to %d"), ($s-$l+1), $s).'">'.($s-$l+1).'-'.$s.'</a> |  '."\n";
 		}
 		if ($numusers > ($s + $l))
 		{
-			$next = ' | <a href="'.$this->Href('','','l='.$l.'&amp;sort='.$sort.'&amp;d='.$d.'&amp;s='.($s+$l)).'&amp;search='.urlencode($search).'&amp;start_ts='.urlencode($start_ts).'&amp;end_ts='.urlencode($end_ts).'" title="'.sprintf(ADMINUSERS_FORM_PAGER_LINK, $ll, $ul).'">'.$ll.(($ll==$ul)?'':('-'.$ul)).'</a>'."\n";
+			$next = ' | <a href="'.$this->Href('','','l='.$l.'&amp;sort='.$sort.'&amp;d='.$d.'&amp;s='.($s+$l)).'&amp;search='.urlencode($search).'&amp;start_ts='.urlencode($start_ts).'&amp;end_ts='.urlencode($end_ts).'" title="'.sprintf(T_("Show records from %d to %d"), $ll, $ul).'">'.$ll.(($ll==$ul)?'':('-'.$ul)).'</a>'."\n";
 		}
-		$form_filter .= ADMINUSERS_FORM_RESULT_INFO.' ('.$numusers.'): '.$prev.(($s+$l)>$numusers?($s+1).'-'.$numusers:($s+1).'-'.($s+$l)).$next.'<br />'."\n";
-		$form_filter .= '<span class="sortorder">'.ADMINUSERS_FORM_RESULT_SORTED_BY.' <tt>'.$sort.', '.$d.'</tt></span>'."\n";
+		$form_filter .= T_("Records").' ('.$numusers.'): '.$prev.(($s+$l)>$numusers?($s+1).'-'.$numusers:($s+1).'-'.($s+$l)).$next.'<br />'."\n";
+		$form_filter .= '<span class="sortorder">'.T_("Sorted by:").' <tt>'.$sort.', '.$d.'</tt></span>'."\n";
 		$form_filter .= '</fieldset>'.$this->FormClose()."\n";
 
 		// get user list
@@ -385,14 +392,14 @@ if ($this->IsAdmin($this->GetUser()))
 		if ($userdata)
 		{
 			// build header links
-			$nameheader = '<a href="'.$this->Href('','', (($sort == 'name' && $d == 'asc')? 'l='.$l.'&amp;sort=name&amp;d=desc' : 'l='.$l.'&amp;sort=name&amp;d=asc')).'" title="'.ADMINUSERS_TABLE_HEADING_USERNAME_TITLE.'">'.ADMINUSERS_TABLE_HEADING_USERNAME.'</a>';
-			$emailheader = '<a href="'.$this->Href('','', (($sort == 'email' && $d == 'asc')? 'l='.$l.'&amp;sort=email&amp;d=desc' : 'l='.$l.'&amp;sort=email&amp;d=asc')).'" title="'.ADMINUSERS_TABLE_HEADING_EMAIL_TITLE.'">'.ADMINUSERS_TABLE_HEADING_EMAIL.'</a>';
-			$timeheader = '<a href="'.$this->Href('','', (($sort == 'signuptime' && $d == 'desc')? 'l='.$l.'&amp;sort=signuptime&amp;d=asc' : 'l='.$l.'')).'" title="'.ADMINUSERS_TABLE_HEADING_SIGNUPTIME_TITLE.'">'.ADMINUSERS_TABLE_HEADING_SIGNUPTIME.'</a>';
+			$nameheader = '<a href="'.$this->Href('','', (($sort == 'name' && $d == 'asc')? 'l='.$l.'&amp;sort=name&amp;d=desc' : 'l='.$l.'&amp;sort=name&amp;d=asc')).'" title="'.T_("Sort by user name").'">'.T_("User Name").'</a>';
+			$emailheader = '<a href="'.$this->Href('','', (($sort == 'email' && $d == 'asc')? 'l='.$l.'&amp;sort=email&amp;d=desc' : 'l='.$l.'&amp;sort=email&amp;d=asc')).'" title="'.T_("Sort by email").'">'.T_("Email").'</a>';
+			$timeheader = '<a href="'.$this->Href('','', (($sort == 'signuptime' && $d == 'desc')? 'l='.$l.'&amp;sort=signuptime&amp;d=asc' : 'l='.$l.'')).'" title="'.T_("Sort by signup time").'">'.T_("Signup Time").'</a>';
 
 			/*$ipheader = '<a href="'.$this->Href('','', (($sort == 'ipaddress' && $d == 'desc')? 'l='.$l.'&amp;sort=ipaddress&amp;d=asc' : 'l='.$l.'&amp;sort=ipaddress&amp;d=desc')).'" title="'.TABLE_HEADING_SIGNUPIP_TITLE.'">'.TABLE_HEADING_SIGNUPIP.'</a>'; # installed as beta feature at wikka.jsnx.com  */
 	
 			// build table headers
-			$data_table = '<table id="adminusers" summary="'.ADMINUSERS_TABLE_SUMMARY.'" border="1px" class="data">'."\n".
+			$data_table = '<table id="adminusers" summary="'.T_("List of users registered on this server").'" border="1px" class="data">'."\n".
 				'<thead>'."\n".
 	  			'	<tr>'."\n".
 				'		<th></th>'."\n".
@@ -400,10 +407,10 @@ if ($this->IsAdmin($this->GetUser()))
 				'		<th>'.$emailheader.'</th>'."\n".
 				'		<th>'.$timeheader.'</th>'."\n".
 				/* '		<th>'.$ipheader.'</th>'."\n". # installed as beta feature at wikkawiki.org */
-				'		<th'.(($c_color == 1)? ' class="c1"' : '').' title="'.ADMINUSERS_TABLE_HEADING_OWNED_TITLE.'"><img src="'.ADMINUSERS_OWNED_ICON.'" class="icon" alt="O"/></th>'."\n".
-				'		<th'.(($c_color == 1)? ' class="c2"' : '').' title="'.ADMINUSERS_TABLE_HEADING_EDITS_TITLE.'"><img src="'.ADMINUSERS_EDITS_ICON.'" class="icon" alt="E"/></th>'."\n".
-				'		<th'.(($c_color == 1)? ' class="c3"' : '').' title="'.ADMINUSERS_TABLE_HEADING_COMMENTS_TITLE.'"><img src="'.ADMINUSERS_COMMENTS_ICON.'" class="icon" alt="C"/></th>'."\n".
-				'		<th>'.ADMINUSERS_TABLE_HEADING_ACTIONS.'</th>'."\n".
+				'		<th'.(($c_color == 1)? ' class="c1"' : '').' title="'.T_("Owned Pages").'"><img src="images/icons/keyring.png" class="icon" alt="O"/></th>'."\n".
+				'		<th'.(($c_color == 1)? ' class="c2"' : '').' title="'.T_("Edits").'"><img src="images/icons/edit.png" class="icon" alt="E"/></th>'."\n".
+				'		<th'.(($c_color == 1)? ' class="c3"' : '').' title="'.T_("Comments").'"><img src="images/icons/comment.png" class="icon" alt="C"/></th>'."\n".
+				'		<th>'.T_("Actions").'</th>'."\n".
 	 		 	'	</tr>'."\n".
 	 		 	'</thead>'."\n";
 	
@@ -419,20 +426,20 @@ if ($this->IsAdmin($this->GetUser()))
 				$numcomments = $this->getCount('comments', $where_comments);
 		
 				// build statistics links if needed
-				$ownedlink = ($numowned > 0)? '<a title="'.sprintf(ADMINUSERS_TABLE_CELL_OWNED_TITLE,$user['name'],$numowned).'" href="'.$this->Href('','','user='.$user['name'].'&amp;action=owned').'">'.$numowned.'</a>' : '0';
-				$changeslink = ($numchanges > 0)? '<a title="'.sprintf(ADMINUSERS_TABLE_CELL_EDITS_TITLE,$user['name'],$numchanges).'" href="'.$this->Href('','','user='.$user['name'].'&amp;action=changes').'">'.$numchanges.'</a>' : '0';
-				$commentslink = ($numcomments > 0)? '<a title="'.sprintf(ADMINUSERS_TABLE_CELL_COMMENTS_TITLE,$user['name'],$numcomments).'" href="'.$this->Href('','','user='.$user['name'].'&amp;action=comments').'">'.$numcomments.'</a>' : '0';
+				$ownedlink = ($numowned > 0)? '<a title="'.sprintf(T_("Display pages owned by %s (%d)"),$user['name'],$numowned).'" href="'.$this->Href('','','user='.$user['name'].'&amp;action=owned').'">'.$numowned.'</a>' : '0';
+				$changeslink = ($numchanges > 0)? '<a title="'.sprintf(T_("Display page edits by %s (%d)"),$user['name'],$numchanges).'" href="'.$this->Href('','','user='.$user['name'].'&amp;action=changes').'">'.$numchanges.'</a>' : '0';
+				$commentslink = ($numcomments > 0)? '<a title="'.sprintf(T_("Display comments by %s (%d)"),$user['name'],$numcomments).'" href="'.$this->Href('','','user='.$user['name'].'&amp;action=comments').'">'.$numcomments.'</a>' : '0';
 
 				// build handler links
 				// Disable delete link if user is admin
 				$deleteuser = '';
 				if($this->IsAdmin($user['name']))
 				{
-					$deleteuser = "<span class='disabled'>".ADMINUSERS_ACTION_DELETE_LINK."</span>";
+					$deleteuser = "<span class='disabled'>".T_("delete")."</span>";
 				}
 				else
 				{
-					$deleteuser = '<a title="'.sprintf(ADMINUSERS_ACTION_DELETE_LINK_TITLE, $user['name']).'" href="'.$this->Href('','','user='.$user['name'].'&amp;action=delete').'">'.ADMINUSERS_ACTION_DELETE_LINK.'</a>';
+					$deleteuser = '<a title="'.sprintf(T_("Remove user %s"), $user['name']).'" href="'.$this->Href('','','user='.$user['name'].'&amp;action=delete').'">'.T_("delete").'</a>';
 				}
 				//$feedbackuser = '<a title="'.sprintf(ADMINUSERS_ACTION_FEEDBACK_LINK_TITLE, $user['name']).'" href="'.$this->Href('','','user='.$user['name'].'&amp;action=feedback').'">'.ADMINUSERS_ACTION_FEEDBACK_LINK.'</a>'; #to be added in 1.1.7, see #608
 	
@@ -446,7 +453,7 @@ if ($this->IsAdmin($this->GetUser()))
 				{
 					$data_table .= '	<tr>'."\n"; #disable alternate row color
 				}
-				$data_table .= '		<td><input type="checkbox" name="'.$user['name'].'"'.$checked.' title="'.sprintf(ADMINUSERS_SELECT_RECORD_TITLE,$user['name']).'"/></td>'."\n".	
+				$data_table .= '		<td><input type="checkbox" name="'.$user['name'].'"'.$checked.' title="'.sprintf(T_("Select %s"),$user['name']).'"/></td>'."\n".	
 	 				'		<td>'.(($this->ExistsPage($user['name']))? $this->Link($user['name']) : $user['name']).'</td>'."\n". #check if userpage exists
 			 		'		<td>'.$user['email'].'</td>'."\n".
 					'		<td class="datetime">'.$user['signuptime'].'</td>'."\n".
@@ -470,14 +477,14 @@ if ($this->IsAdmin($this->GetUser()))
 			$form_mass = $this->FormOpen('','','get');
 			$form_mass .= $data_table;			
 			$form_mass .= '<fieldset>'."\n".
-				'	<legend>'.ADMINUSERS_FORM_MASSACTION_LEGEND.'</legend>'."\n".
-				'	[<a href="'.$this->Href('','','l='.$l.'&amp;sort='.$sort.'&amp;d='.$d.'&amp;s='.$s.'&amp;search='.urlencode($search).'&amp;selectall=1').'" title="'.ADMINUSERS_SELECT_ALL_TITLE.'">'.ADMINUSERS_SELECT_ALL.'</a> | <a href="'.$this->Href('','','l='.$l.'&amp;sort='.$sort.'&amp;d='.$d.'&amp;s='.$s.'&amp;search='.urlencode($search).'&amp;selectall=0').'" title="'.ADMINUSERS_DESELECT_ALL_TITLE.'">'.ADMINUSERS_DESELECT_ALL.'</a>]<br />'."\n".
-				'	<label for="action" >'.ADMINUSERS_FORM_MASSACTION_LABEL.'</label>'."\n".
-				'	<select title="'.ADMINUSERS_FORM_MASSACTION_SELECT_TITLE.'" id="action" name="action">'."\n".
+				'	<legend>'.T_("Mass-action").'</legend>'."\n".
+				'	[<a href="'.$this->Href('','','l='.$l.'&amp;sort='.$sort.'&amp;d='.$d.'&amp;s='.$s.'&amp;search='.urlencode($search).'&amp;selectall=1').'" title="'.T_("Select all records").'">'.T_("Select all").'</a> | <a href="'.$this->Href('','','l='.$l.'&amp;sort='.$sort.'&amp;d='.$d.'&amp;s='.$s.'&amp;search='.urlencode($search).'&amp;selectall=0').'" title="'.T_("Deselect all records").'">'.T_("Deselect all").'</a>]<br />'."\n".
+				'	<label for="action" >'.T_("With selected").'</label>'."\n".
+				'	<select title="'.T_("Choose an action to apply to the selected records").'" id="action" name="action">'."\n".
 				'		<option value="" selected="selected">---</option>'."\n".
-				'		<option value="massdelete">'.ADMINUSERS_FORM_MASSACTION_OPT_DELETE.'</option>'."\n".
+				'		<option value="massdelete">'.T_("Delete selected").'</option>'."\n".
 				//'		<option value="massfeedback">'.ADMINUSERS_FORM_MASSACTION_OPT_FEEDBACK.'</option>'."\n". #to be added in 1.1.7, see #608
-				'	</select> <input type="submit" value="'.ADMINUSERS_FORM_MASSACTION_SUBMIT.'" />'."\n".
+				'	</select> <input type="submit" value="'.T_("Submit").'" />'."\n".
 				'</fieldset>';
 			$form_mass .= $this->FormClose();
 
@@ -488,7 +495,7 @@ if ($this->IsAdmin($this->GetUser()))
 		else
 		{
 			// no records matching the search string: print error message
-			echo '<p><em class="error">'.sprintf(ADMINUSERS_ERROR_NO_MATCHES, $search_disp).'</em></p>';
+			echo '<p><em class="error">'.sprintf(T_("Sorry, there are no users matching \"%s\""), $search_disp).'</em></p>';
 		}
 	}
 }

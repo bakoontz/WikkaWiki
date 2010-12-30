@@ -48,13 +48,13 @@ function LoadLastTwoPagesByTag($wakka, $tag)
  *
  * @param object $wakka Wakka class instantiation
  * @param string $tag Page tag
- * @param string $comment Page comment (defaults to REVERT_DEFAULT_COMMENT)
- * @return string REVERT_MESSAGE_SUCCESS or REVERT_MESSAGE_FAILURE
+ * @param string $comment Page comment (defaults to T_("Reverting last edit by %s [%d] to previous version [%d]"))
+ * @return string T_("Reverted to previous version") or T_("Reversion to previous version FAILED!")
  * 
  */
 function RevertPageToPreviousByTag($wakka, $tag, $comment='')
 {
-	$message = REVERT_MESSAGE_FAILURE;
+	$message = T_("Reversion to previous version FAILED!");
 	$tag = mysql_real_escape_string($tag);
 	$comment = mysql_real_escape_string($comment);
 	if(TRUE===$wakka->IsAdmin())
@@ -68,16 +68,16 @@ function RevertPageToPreviousByTag($wakka, $tag, $comment='')
 			// Set default comment
 			if(TRUE===empty($comment))
 			{
-				$comment = sprintf(REVERT_DEFAULT_COMMENT, $res[0]['user'], $res[0]['id'], $res[1]['id']);
+				$comment = sprintf(T_("Reverting last edit by %s [%d] to previous version [%d]"), $res[0]['user'], $res[0]['id'], $res[1]['id']);
 			}
 
 			// Save reverted page
 			$wakka->SavePage($tag, $res[1]['body'], $comment, $res[1]['owner']);
-			$message = REVERT_MESSAGE_SUCCESS;
+			$message = T_("Reverted to previous version");
 		}
 		else
 		{
-			$message = REVERT_MESSAGE_FAILURE;
+			$message = T_("Reversion to previous version FAILED!");
 		}
 	}
 	return $message;
@@ -91,13 +91,13 @@ function RevertPageToPreviousByTag($wakka, $tag, $comment='')
  *
  * @param object $wakka Wakka class instantiation
  * @param string $id Page id (converted to page tag) 
- * @param string $comment Page comment (defaults to REVERT_DEFAULT_COMMENT)
- * @return string REVERT_MESSAGE_SUCCESS or REVERT_MESSAGE_FAILURE
+ * @param string $comment Page comment (defaults to T_("Reverting last edit by %s [%d] to previous version [%d]"))
+ * @return string T_("Reverted to previous version") or T_("Reversion to previous version FAILED!")
  * 
  */
 function RevertPageToPreviousById($wakka, $id, $comment='')
 {
-	$message = REVERT_MESSAGE_FAILURE;
+	$message = T_("Reversion to previous version FAILED!");
 	$id = mysql_real_escape_string($id);
 	if(TRUE===$wakka->IsAdmin())
 	{
@@ -122,7 +122,7 @@ function RevertPageToPreviousById($wakka, $id, $comment='')
  *
  * @param object $wakka Wakka class instantiation
  * @param string $user User name
- * @return string USERDELETE_MESSAGE_SUCCESS or * USERDELETE_MESSAGE_FAILURE
+ * @return string T_("User deletion successful") or * T_("User deletion error")
  *
  */
 function DeleteUser($wakka, $user)

@@ -82,36 +82,36 @@ if ($this->HasAccess("read")) {
 					}
 
 					$output .= '<div class="revisioninfo">'."\n";					
-					$output .= '<h4 class="clear">'.sprintf(WIKKA_REVISION_NUMBER, '<a href="'.$this->Href('', '', 'time='.urlencode($pageA['time'])).'">['.$pageA['id'].']</a>').'</h4>'."\n";
+					$output .= '<h4 class="clear">'.sprintf(T_("Revision %s"), '<a href="'.$this->Href('', '', 'time='.urlencode($pageA['time'])).'">['.$pageA['id'].']</a>').'</h4>'."\n";
 					
 					if ($c == 2)
 					{
-						$output .= sprintf(MOST_RECENT_EDIT, '<a class="datetime" href="'.$this->Href('', '', 'time='.urlencode($pageA['time'])).'">'.$pageA['time'].'</a>', $EditedByUser).' <span class="pagenote smaller">'.$note."</span>\n";
+						$output .= sprintf(T_("Last edited on %s by %s"), '<a class="datetime" href="'.$this->Href('', '', 'time='.urlencode($pageA['time'])).'">'.$pageA['time'].'</a>', $EditedByUser).' <span class="pagenote smaller">'.$note."</span>\n";
 					}
 					else
 					{
-						$output .= sprintf(EDITED_ON, '<a class="datetime" href="'.$this->Href('', '', 'time='.urlencode($pageA['time'])).'">'.$pageA['time'].'</a>', $EditedByUser).' <span class="pagenote smaller">'.$note."</span>\n";
+						$output .= sprintf(T_("Edited on %s by %s"), '<a class="datetime" href="'.$this->Href('', '', 'time='.urlencode($pageA['time'])).'">'.$pageA['time'].'</a>', $EditedByUser).' <span class="pagenote smaller">'.$note."</span>\n";
 					}
 					$output .= '</div>'."\n";
 					
 					if ($added)
 					{
 						// remove blank lines
-						$output .= "\n".'<h5 class="clear">'.WIKKA_DIFF_ADDITIONS_HEADER.'</h5>'."\n";
+						$output .= "\n".'<h5 class="clear">'.T_("Additions:").'</h5>'."\n";
 						//$output .= '<ins>'.$this->Format(implode("\n", $added)).'</ins>';
 						$output .= '<div class="wikisource"><ins>'.nl2br(implode("\n", $added)).'</ins></div>';
 					}
 
 					if ($deleted)
 					{
-						$output .= "\n".'<h5 class="clear">'.WIKKA_DIFF_DELETIONS_HEADER.'</h5>'."\n";
+						$output .= "\n".'<h5 class="clear">'.T_("Deletions:").'</h5>'."\n";
 						//$output .= '<del>'.$this->Format(implode("\n", $deleted)).'</del>';
 						$output .= '<div class="wikisource"><del>'.nl2br(implode("\n", $deleted)).'</del></div>';
 					}
 
 					if (!$added && !$deleted)
 					{
-						$output .= "<br />\n".WIKKA_DIFF_NO_DIFFERENCES;
+						$output .= "<br />\n".T_("No Differences");
 					}
 					$output .= '<br /><hr class="clear" />'."\n";
 				}
@@ -134,15 +134,14 @@ if ($this->HasAccess("read")) {
 		}		
 		if ($oldest_revision['id'] != $pageB['id'])
 		{
-			$history_more_link = '<a href="'.$this->Href('history', '', 'start='.($c > 1 ? $c+$start-1 : $c+$start)).'">'.HISTORY_MORE_LINK_DESC.'</a>';
-			$additional_output .= "\n".'<br /><div class="history_revisioninfo">'.sprintf(HISTORY_MORE,$history_more_link).'</div><br class="clear" />'."\n";
-			//$output .= '<div class="history_revisioninfo"><a href="'.$this->Href('', '', 'time='.urlencode($pageB['time'])).'">['.$pageB['id'].']</a> '.sprintf(EDITED_ON, '<a class="datetime" href="'.$this->href('', '', 'time='.urlencode($pageB['time'])).'">'.$pageB['time'].'</a>', $this->FormatUser($pageB['user'])).$note_oldest.'</div><br class="clear" />'."\n";
+			$history_more_link = '<a href="'.$this->Href('history', '', 'start='.($c > 1 ? $c+$start-1 : $c+$start)).'">'.T_("here").'</a>';
+			$additional_output .= "\n".'<br /><div class="history_revisioninfo">'.sprintf(T_("Full history for this page cannot be displayed within a single page, click %s to view more."),$history_more_link).'</div><br class="clear" />'."\n";
 		}
 		else
 		{
 			$output .= '<div class="revisioninfo">'."\n";
-			$output .= '<h4 class="clear">'.sprintf(WIKKA_REVISION_NUMBER, '<a href="'.$this->Href('', '', 'time='.urlencode($pageB['time'])).'">['.$pageB['id'].']</a>').'</h4>'."\n";
-			$output .= sprintf(OLDEST_VERSION_EDITED_ON_BY, '<a class="datetime" href="'.$this->href('', '', 'time='.urlencode($pageB['time'])).'">'.$pageB['time'].'</a>', $EditedByUser).' <span class="pagenote smaller">'.$note."</span>\n";
+			$output .= '<h4 class="clear">'.sprintf(T_("Revision %s"), '<a href="'.$this->Href('', '', 'time='.urlencode($pageB['time'])).'">['.$pageB['id'].']</a>').'</h4>'."\n";
+			$output .= sprintf(T_("The oldest known version of this page was created on %s by %s"), '<a class="datetime" href="'.$this->href('', '', 'time='.urlencode($pageB['time'])).'">'.$pageB['time'].'</a>', $EditedByUser).' <span class="pagenote smaller">'.$note."</span>\n";
 			$output .= '</div>'."\n";		
 		}
 		echo $output.$additional_output;
@@ -150,7 +149,7 @@ if ($this->HasAccess("read")) {
 }
 else
 {
-	echo '<em class="error">'.WIKKA_ERROR_ACL_READ.'</em>';
+	echo '<em class="error">'.T_("You are not allowed to read this page.").'</em>';
 }
 echo '</div>'."\n";
 ?>

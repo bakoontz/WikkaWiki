@@ -16,17 +16,17 @@
  */
 if ($this->handler == 'edit' || $this->handler == 'showcode')
 {
-	echo '<a href="'.$this->Href().'" title="'.SHOWLINK_TITLE.'">'.SHOWLINK_TEXT.'</a>';
+	echo '<a href="'.$this->Href().'" title="'.T_("Displayed the formatted version of this page").'">'.T_("[Show]").'</a>';
 }
 else
 {
 	if ($this->HasAccess('write'))
 	{
-		echo '<a href="'.$this->Href('edit').'" title="'.EDITLINK_TITLE.'">'.EDITLINK_TEXT.'</a>';
+		echo '<a href="'.$this->Href('edit').'" title="'.T_("Click to edit this page").'">'.T_("[Edit]").'</a>';
 	}
 	else
 	{
-		echo '<a href="'.$this->Href('showcode').'" title="'.SHOWCODELINK_TITLE.'">'.SHOWCODELINK_TEXT.'</a>';
+		echo '<a href="'.$this->Href('showcode').'" title="'.T_("Display the markup for this page").'">'.T_("[Source]").'</a>';
 	}
 }
 ?>

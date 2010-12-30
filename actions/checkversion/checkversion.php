@@ -33,6 +33,11 @@
  * @todo	use error handler for debugging
  */
 
+if(!defined('CHECKVERSION_HOST')) define('CHECKVERSION_HOST', 'wikkawiki.org');
+if(!defined('CHECKVERSION_RELEASE_FILE')) define('CHECKVERSION_RELEASE_FILE', '/downloads/latest_wikka_version.txt');
+if(!defined('CHECKVERSION_DOWNLOAD_URL')) define('CHECKVERSION_DOWNLOAD_URL', 'http://docs.wikkawiki.org/WhatsNew');
+if(!defined('CHECKVERSION_CONNECTION_TIMEOUT')) define('CHECKVERSION_CONNECTION_TIMEOUT', 5);
+
 if($this->IsAdmin() && TRUE == $this->config['enable_version_check'])
 {
 	
@@ -69,7 +74,7 @@ if($this->IsAdmin() && TRUE == $this->config['enable_version_check'])
 			$elapsed_time = time() - $_SESSION['last_version_check']; 
 			if($debug)
 			{
-				echo '<div class="debug">'.sprintf(DEBUG_TIME_ELAPSED,$elapsed_time).'</div>'."\n";
+				echo '<div class="debug">'.sprintf(T_("[elapsed time: %d]"),$elapsed_time).'</div>'."\n";
 			}
 			if($elapsed_time > $scalar)
 			{
@@ -103,7 +108,7 @@ if($this->IsAdmin() && TRUE == $this->config['enable_version_check'])
 		{
 			if($debug)
 			{
-				echo '<div class="debug">'.sprintf(DEBUG_PHP_VERSION_UNSUPPORTED,PHP_OS,PHP_VERSION).'</div>'."\n";
+				echo '<div class="debug">'.sprintf(T_("[%s PHP %s does not support this feature]"),PHP_OS,PHP_VERSION).'</div>'."\n";
 			}
 			return;
 		}
@@ -112,7 +117,7 @@ if($this->IsAdmin() && TRUE == $this->config['enable_version_check'])
 		{
 			if($debug)
 			{
-				echo '<div class="debug">'.DEBUG_ALLOW_FURL_DISABLED.'</div>'."\n";
+				echo '<div class="debug">'.T_("[allow_url_fopen disabled]").'</div>'."\n";
 			}
 			return;
 		}
@@ -124,7 +129,7 @@ if($this->IsAdmin() && TRUE == $this->config['enable_version_check'])
 			// Probably no internet connection...
 			if ($debug)
 			{
-				echo '<div class="debug">',sprintf(DEBUG_CANNOT_RESOLVE_HOSTNAME,$hostname).'</div>'."\n";
+				echo '<div class="debug">',sprintf(T_("[Cannot resolve %s]"),$hostname).'</div>'."\n";
 			}
 			return;
 		}
@@ -134,19 +139,27 @@ if($this->IsAdmin() && TRUE == $this->config['enable_version_check'])
 		{
 			if ($debug)
 			{
-				echo '<div class="debug">'.DEBUG_CANNOT_CONNECT.'</div>'."\n";
+				echo '<div class="debug">'.T_("[Cannot initiate socket connection]").'</div>'."\n";
 			}
 			else
 			{
 				// Display warning message
 				$s = "D";
-				echo sprintf(CHECKVERSION_CANNOT_CONNECT, $c[$s][0], $c[$s][1], $c[$s][2], $c[$s][3], $c[$s][4]);
+				echo sprintf(
+					T_('<div title="Cannot initiate network connection" style="clear: both; text-align: center; float: left; width: 300px; border: 1px solid %s; background-color: %s; color: %s; margin: 10px 0">'."\n"
+    .'<div style="padding: 0 3px 0 3px; background-color: %s; font-size: 85%%; font-weight: bold">CHECKVERSION FAILED</div>'."\n"
+    .'<div style="padding: 0 3px 2px 3px; font-size: 85%%; line-height: 150%%; border-top: 1px solid %s;">'."\n"
+    .'The network connection with the WikkaWiki server could not be established. To prevent delays in loading this page, please set enable_version_check to 0 in your wikka.config.php file.'."\n"
+    .'</div>'."\n"
+    .'</div>'."\n"
+    .'<div class="clear"></div>'."\n"),
+					$c[$s][0], $c[$s][1], $c[$s][2], $c[$s][3], $c[$s][4]);
 			}
 			return;
 		}
 
-		fwrite($fp, "GET ".CHECKVERSION_RELEASE_FILE." HTTP/1.0\r\n");
-		fwrite($fp, "Host: ".CHECKVERSION_HOST."\r\n");
+		fwrite($fp, "GET " . CHECKVERSION_RELEASE_FILE . " HTTP/1.0\r\n");
+		fwrite($fp, "Host: " . CHECKVERSION_HOST . "\r\n");
 		fwrite($fp, "Connection: Close\r\n\r\n");
 		stream_set_timeout($fp, $timeout);
 		$data = fread($fp, 4096);
@@ -157,7 +170,7 @@ if($this->IsAdmin() && TRUE == $this->config['enable_version_check'])
 		{
 			if($debug)
 			{
-				echo '<div class="debug">'.sprintf(DEBUG_NEW_VERSION_AVAILABLE,$latest,$ip).'</div>'."\n";	
+				echo '<div class="debug">'.sprintf(T_("[%s from host %s]"),$latest,$ip).'</div>'."\n";	
 			}
 			if("raw" == $vars['display'])
 			{
@@ -166,7 +179,15 @@ if($this->IsAdmin() && TRUE == $this->config['enable_version_check'])
 			else
 			{
 				$s = 'F'; //green badge
-				echo sprintf(CHECKVERSION_NEW_VERSION_AVAILABLE, $c[$s][0], $c[$s][1], $c[$s][2], $c[$s][3], $c[$s][4], $latest, CHECKVERSION_DOWNLOAD_URL);
+				echo sprintf(
+	'<div title='.T_("A new version of WikkaWiki is available. Please upgrade!").' style="clear: both; text-align: center; float: left; width: 300px; border: 1px solid %s; background-color: %s; color: %s; margin: 10px 0">'."\n"
+		.'<div style="padding: 0 3px 0 3px; background-color: %s; font-size: 85%%; font-weight: bold">'.T_("UPGRADE NOTE").'</div>'."\n"
+		.'<div style="padding: 0 3px 2px 3px; font-size: 85%%; line-height: 150%%; border-top: 1px solid %s;">'."\n"
+		.T_('<strong>WikkaWiki %s</strong> is available for <a href="%s">download</a>!')."\n"
+		.'</div>'."\n"
+		.'</div>'."\n"
+		.'<div class="clear"></div>'."\n"
+				, $c[$s][0], $c[$s][1], $c[$s][2], $c[$s][3], $c[$s][4], $latest, CHECKVERSION_DOWNLOAD_URL);
 			}
 		}
 	}			

@@ -27,17 +27,15 @@
  *
  * @todo		make date/time format system-configurable;
  */
+if (!defined('DEFAULT_SHOW')) define('DEFAULT_SHOW', '3');
+if (!defined('DATE_FORMAT')) define('DATE_FORMAT', 'D, d M Y'); #TODO make this system-configurable
+if (!defined('TIME_FORMAT')) define('TIME_FORMAT', 'H:i T'); #TODO make this system-configurable
+
 //Initialisation to avoid notices
 $difflink = '';
 $dateformatted = '';
 $timeformatted = '';
 $note = '';
-
-/**
- * style
- */
-if (!defined('LASTEDIT_BOX')) define('LASTEDIT_BOX', 'lastedit');
-if (!defined('LASTEDIT_NOTES')) define('LASTEDIT_NOTES', 'lastedit_notes');
 
 if (!isset($show))
 {
@@ -56,7 +54,7 @@ if ($this->handler == 'show')
 		$oldpage = $this->LoadSingle("SELECT * FROM ".$this->GetConfigValue('table_prefix')."pages WHERE tag='".$this->GetPageTag()."' AND latest = 'N' ORDER BY time desc LIMIT 1");
 		$newid = $page['id'];
 		$oldid = $oldpage['id'];
-		$difflink = ' [<a title="'.LASTEDIT_DIFF_LINK_TITLE.'" href="'.$this->Href('diff', $pagetag, 'a='.$page['id'].'&amp;b='.$oldpage['id'].'&amp;fastdiff=1').'">diff</a>]';
+		$difflink = ' [<a title="'.T_("Show differences from last revision").'" href="'.$this->Href('diff', $pagetag, 'a='.$page['id'].'&amp;b='.$oldpage['id'].'&amp;fastdiff=1').'">diff</a>]';
 
 		case 2:
 		list($day, $time) = explode(' ', $page['time']);
@@ -64,11 +62,11 @@ if ($this->handler == 'show')
 		$timeformatted = date(TIME_FORMAT, strtotime($page['time']));
 
 		case 1:
-		$note = ($page['note']) ? ':<br/><span class="'.LASTEDIT_NOTES.'">'.
+		$note = ($page['note']) ? ':<br/><span class="'.T_("lastedit_notes").'">'.
 		$this->htmlspecialchars_ent($page['note']).'</span>' : '';
 
 		default:
 	}
-	echo '<div class="'.LASTEDIT_BOX.'">'.sprintf(LASTEDIT_DESC, $user).$note.'<br /> '.$dateformatted.' '.$timeformatted.$difflink.'</div>';
+	echo '<div class="'.T_("lastedit").'">'.sprintf(T_("Last edited by %s"), $user).$note.'<br /> '.$dateformatted.' '.$timeformatted.$difflink.'</div>';
 }
 ?>

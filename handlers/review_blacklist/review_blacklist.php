@@ -33,7 +33,7 @@ if ($IsAdmin && isset($_GET["whitelist"]))
 }
 else
 {
-	echo '<strong>'.BLACKLIST_HEADING.'</strong><br /><br />'."\n";
+	echo '<strong>'.T_("Referrer Blacklist").'</strong><br /><br />'."\n";
 	$blacklist = $this->LoadAll('SELECT * FROM '.$this->GetConfigValue('table_prefix').'referrer_blacklist');
 
 	if ($blacklist)
@@ -42,18 +42,18 @@ else
 		foreach ($blacklist as $spammer)
 		{
 			echo '<tr>'."\n";
-			echo '<td valign="top">'.$spammer['spammer'].' '.($IsAdmin ? '[<a href="'.$this->Href('review_blacklist', '', 'whitelist=').$this->htmlspecialchars_ent($spammer['spammer']).'">'.BLACKLIST_REMOVE_LINK_DESC.'</a>]' : '').'</td>'."\n";
+			echo '<td valign="top">'.$spammer['spammer'].' '.($IsAdmin ? '[<a href="'.$this->Href('review_blacklist', '', 'whitelist=').$this->htmlspecialchars_ent($spammer['spammer']).'">'.T_("Remove").'</a>]' : '').'</td>'."\n";
 			echo '</tr>'."\n";
 		}
 		echo '</table><br />'."\n";
 	}
 	else
 	{
-		echo '<em class="error">'.STATUS_BLACKLIST_EMPTY.'</em><br /><br />'."\n";
+		echo '<em class="error">'.T_("Blacklist is empty.").'</em><br /><br />'."\n";
 	}
 }
 
-echo '<br />[<a href="'.$this->Href('referrers_sites', '', 'global=1').'">'.BLACKLIST_VIEW_GLOBAL_SITES.'</a> | <a href="'.$this->Href('referrers', '', 'global=1').'">'.BLACKLIST_VIEW_GLOBAL.'</a>]'."\n";
+echo '<br />[<a href="'.$this->Href('referrers_sites', '', 'global=1').'">'.T_("View global referring sites").'</a> | <a href="'.$this->Href('referrers', '', 'global=1').'">'.T_("view global referrers").'</a>]'."\n";
 
 echo '</div>'."\n" //TODO: move to templating class
 ?>

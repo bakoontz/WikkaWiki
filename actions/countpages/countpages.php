@@ -14,5 +14,5 @@
  */
 $where = "`latest` = 'Y'";
 $count = $this->getCount('pages', $where);
-echo $this->Link('PageIndex', '', $count, '', '', INDEX_LINK_TITLE);
+echo $this->Link('PageIndex', '', $count, '', '', T_("Display an alphabetical page index"));
 ?>

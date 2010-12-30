@@ -60,11 +60,11 @@ $bAll		= FALSE;		# one column for columnar layout
 $bPrefix	= TRUE;			# default display type
 
 // UI strings
-$hdDbInfo		= HD_DBINFO;
-$hdDatabase		= HD_DBINFO_DB;
-$hdTables		= HD_DBINFO_TABLES;
-$txtActionInfo	= TXT_INFO_1.TXT_INFO_2.TXT_INFO_3.TXT_INFO_4;
-$msgOnlyAdmin	= MSG_ONLY_ADMIN;
+$hdDbInfo		= T_("Database Information");
+$hdDatabase		= T_("Database");
+$hdTables		= T_("Tables");
+$txtActionInfo	= T_("This utility provides some information about the database(s). Depending on permissions for the Wikka database user, not all databases or tables may be visible. Where creation DDL is given, this reflects everything that would be needed to exactly recreate the same database and table definitions, including defaults that may not have been specified explicitly.");
+$msgOnlyAdmin	= T_("Sorry, only administrators can view database information.");
 
 // variables
 
@@ -204,8 +204,8 @@ if ($isAdmin)
 	{
 		$dbselform  = $this->FormOpen('','','POST','dbsel');
 		$dbselform .= '<fieldset>'."\n";
-		$dbselform .= '	<legend>'.FORM_SELDB_LEGEND.'</legend>'."\n";
-		$dbselform .= '	<label for="seldb" class="mainlabel">'.FORM_SELDB_OPT_LABEL.'</label> '."\n";
+		$dbselform .= '	<legend>'.T_("Databases").'</legend>'."\n";
+		$dbselform .= '	<label for="seldb" class="mainlabel">'.T_("Select a database:").'</label> '."\n";
 		$dbselform .= '	<select name="seldb" id="seldb">'."\n";
 		foreach ($aDbList as $db)
 		{
@@ -219,13 +219,13 @@ if ($isAdmin)
 			}
 		}
 		$dbselform .= '	</select>'."\n";
-		$dbselform .= '	<input type="submit" name="dbselect" value="'.FORM_SUBMIT_SELDB.'" />'."\n";
+		$dbselform .= '	<input type="submit" name="dbselect" value="'.T_("Select").'" />'."\n";
 		$dbselform .= '</fieldset>'."\n";
 		$dbselform .= $this->FormClose();
 	}
 	else
 	{
-		$dbselmsg = '<p>'.sprintf(MSG_SINGLE_DB,$aDbList[0]).'</p>'."\n";
+		$dbselmsg = '<p>'.sprintf(T_("Information for the <tt>%s</tt> database."),$aDbList[0]).'</p>'."\n";
 	}
 
 	// build table selection form
@@ -238,8 +238,8 @@ if ($isAdmin)
 			$tableselform .= '	<input type="hidden" name="seldb" value="'.$seldb.'" />'."\n";
 			$tableselform .= '</fieldset>'."\n";
 			$tableselform .= '<fieldset>'."\n";
-			$tableselform .= '	<legend>'.FORM_SELTABLE_LEGEND.'</legend>'."\n";
-			$tableselform .= '	<label for="seltable" class="mainlabel">'.FORM_SELTABLE_OPT_LABEL.'</label> '."\n";
+			$tableselform .= '	<legend>'.T_("Tables").'</legend>'."\n";
+			$tableselform .= '	<label for="seltable" class="mainlabel">'.T_("Select a table:").'</label> '."\n";
 			$tableselform .= '	<select name="seltable" id="seltable">'."\n";
 			foreach ($aTableList as $table)
 			{
@@ -253,38 +253,38 @@ if ($isAdmin)
 				}
 			}
 			$tableselform .= '	</select>'."\n";
-			$tableselform .= '	<input type="submit" name="tableselect" value="'.FORM_SUBMIT_SELTABLE.'" />'."\n";
+			$tableselform .= '	<input type="submit" name="tableselect" value="'.T_("Select").'" />'."\n";
 			$tableselform .= '</fieldset>'."\n";
 			$tableselform .= $this->FormClose();
 		}
 		else
 		{
-			$tableselmsg = '<p>'.sprintf(MSG_NO_TABLES,$seldb)."</p>\n";
+			$tableselmsg = '<p>'.sprintf(T_("No tables found in the <tt>%s</tt> database. Your MySQL user may not have sufficient privileges to access this database."),$seldb)."</p>\n";
 		}
 	}
 
 	// build results
 	if (isset($seldb))
 	{
-		$hdDbDdl = sprintf(HD_DB_CREATE_DDL,$seldb);
+		$hdDbDdl = sprintf(T_("DDL to create database %s:"),$seldb);
 		if (isset($dbcreate))
 		{
 			$dbresult = $this->Format('%%(sql)'.$dbcreate.'%%');
 		}
 		else
 		{
-			$dbresult = '<p>'.sprintf(MSG_NO_DB_DDL,$seldb).'</p>'."\n";
+			$dbresult = '<p>'.sprintf(T_("Creation DDL for <tt>%s</tt> could not be retrieved."),$seldb).'</p>'."\n";
 		}
 		if (isset($seltable))
 		{
-			$hdTableDdl = sprintf(HD_TABLE_CREATE_DDL,$seltable);
+			$hdTableDdl = sprintf(T_("DDL to create table %s:"),$seltable);
 			if (isset($tablecreate))
 			{
 				$tableresult = $this->Format('%%(sql)'.$tablecreate.'%%');
 			}
 			else
 			{
-				$tableresult = '<p>'.sprintf(MSG_NO_TABLE_DDL,$seltable).'</p>'."\n";
+				$tableresult = '<p>'.sprintf(T_("Creation DDL for <tt>%s</tt> could not be retrieved."),$seltable).'</p>'."\n";
 			}
 		}
 	}

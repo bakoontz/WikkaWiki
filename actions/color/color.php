@@ -36,6 +36,9 @@
 *			note that most of the color names are not valid in CSS!
 */
 
+if(!defined('PATTERN_VALID_HEX_COLOR')) define('PATTERN_VALID_HEX_COLOR', '#(?>[\da-f]{3}){1,2}');
+if(!defined('PATTERN_VALID_RGB_COLOR')) define('PATTERN_VALID_RGB_COLOR', 'rgb\(\s*\d+((?>\.\d*)?%)?\s*(?>,\s*\d+(?(1)(\.\d*)?%)\s*){2}\)');
+
 // ***Internal function to test if syntax is valid
 if (!function_exists('color_syntax_is_valid'))
 {
@@ -61,7 +64,7 @@ if (!function_exists('color_syntax_is_valid'))
 		{
 			return($syntax);
 		}
-		if (preg_match('/^(?>'.PATTERN_VALID_HEX_COLOR.'|'.PATTERN_VALID_RGB_COLOR.')$/i', $syntax, $match))
+		if( preg_match('/^(?>'.PATTERN_VALID_HEX_COLOR.'|'.PATTERN_VALID_RGB_COLOR.')/', $syntax, $match) )
 		{
 			return($match[0]);
 		}
@@ -107,11 +110,11 @@ if (is_array($vars))
 	}
 	elseif (!$mytext)
 	{
-		$output .= '<em class="error">'.ERROR_NO_TEXT_GIVEN.'</em>';
+		$output .= '<em class="error">'.T_("There is no text to highlight!").'</em>';
 	}
 	elseif (!$style)
 	{
-		$output .= '<em class="error">'.ERROR_NO_COLOR_SPECIFIED.'</em>';
+		$output .= '<em class="error">'.T_("Sorry, but you did not specify a color for highlighting!").'</em>';
 	}
 	// *** Output section ***
 	print ($output);

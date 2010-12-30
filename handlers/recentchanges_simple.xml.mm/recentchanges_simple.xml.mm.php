@@ -39,7 +39,7 @@ function in_iarray($item, $array)
 }
 
 $xml  = '<map version="0.7.1">'."\n";
-$xml .= '<node TEXT="'.FIRST_NODE_LABEL.'">'."\n";
+$xml .= '<node TEXT="'.T_("Recent Changes").'">'."\n";
 $xml .= '<node TEXT="Date" POSITION="right">'."\n";
 
 if ($pages = $this->LoadRecentlyChanged())
@@ -118,9 +118,9 @@ if ($pages = $this->LoadRecentlyChanged())
 else
 {
 	$xml .= "<item>\n";
-	$xml .= '<title>'.WIKKA_ERROR_CAPTION."</title>\n";
+	$xml .= '<title>'.T_("Error")."</title>\n";
 	$xml .= '<link>'.$this->Href()."</link>\n";
-	$xml .= '<description>'.WIKKA_ERROR_ACL_READ_INFO."</description>\n";
+	$xml .= '<description>'.T_("You are not allowed to access this information.")."</description>\n";
 	$xml .= "</item>\n";
 }
 

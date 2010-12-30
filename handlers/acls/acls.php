@@ -55,13 +55,13 @@ if ($this->UserIsOwner())
         if(!$keep_post_data) unset($_POST); 
 		
 		// cancel action and return to the page
-		if (isset($_POST['cancel']) && ($_POST['cancel'] == CANCEL_ACL_LABEL))
+		if (isset($_POST['cancel']) && ($_POST['cancel'] == T_("Cancel")))
 		{
 			$this->Redirect($this->Href());
 		}
 		
 		// change ACL(s) and/or username
-		if ($this->GetSafeVar('store', 'post') == STORE_ACL_LABEL)
+		if ($this->GetSafeVar('store', 'post') == T_("Store ACLs"))
 		{
 			$default_read_acl = $this->GetConfigValue('default_read_acl');
 			$default_write_acl = $this->GetConfigValue('default_write_acl');
@@ -90,7 +90,7 @@ if ($this->UserIsOwner())
 				$this->SaveACL($this->GetPageTag(), 'write', $this->TrimACLs($posted_write_acl));
 				$this->SaveACL($this->GetPageTag(), 'comment_read', $this->TrimACLs($posted_comment_read_acl));
 				$this->SaveACL($this->GetPageTag(), 'comment_post', $this->TrimACLs($posted_comment_post_acl));
-				$message = ACLS_UPDATED;
+				$message = T_("Access control lists updated.");
 			}
 	
 			// change owner?
@@ -101,11 +101,11 @@ if ($this->UserIsOwner())
 			{
 				if ($newowner == '')
 				{
-					$newowner = NO_PAGE_OWNER;
+					$newowner = T_("(Nobody)");
 				}
 	
 				$this->SetPageOwner($this->GetPageTag(), $newowner);
-				$message .= sprintf(PAGE_OWNERSHIP_CHANGED, $newowner);
+				$message .= sprintf(T_("Ownership changed to %s"), $newowner);
 			}
 	
 			// redirect back to page
@@ -114,28 +114,28 @@ if ($this->UserIsOwner())
 	}
 	else	// show form
 	{
-	echo $this->Format(sprintf(ACL_HEADING, '[['.$this->tag.']]').' --- ');
+	echo sprintf(T_("<h3>Access Control Lists for <a href=\"%s\">%s</a></h3><br/>"), $this->Href('', $this->tag), $this->tag);
 ?>
 <?php echo $this->FormOpen('acls') ?>
 <table class="acls">
 <tr>
 	<td>
-	<strong><?php echo READ_ACL_LABEL; ?></strong><br />
+	<strong><?php echo T_("Read ACL:"); ?></strong><br />
 	<textarea class="acls" name="read_acl" rows="4" cols="20"><?php echo $this->ACLs['read_acl'] ?></textarea>
 	</td>
 
 	<td>
-	<strong><?php echo WRITE_ACL_LABEL; ?></strong><br />
+	<strong><?php echo T_("Write ACL:"); ?></strong><br />
 	<textarea class="acls" name="write_acl" rows="4" cols="20"><?php echo $this->ACLs['write_acl'] ?></textarea>
 	</td>
 
 	<td>
-	<strong><?php echo ACLS_COMMENT_READ_LABEL; ?></strong><br />
+	<strong><?php echo T_("Comment Read ACL:"); ?></strong><br />
 	<textarea class="acls" name="comment_read_acl" rows="4" cols="20"><?php echo $this->ACLs['comment_read_acl'] ?></textarea>
 	</td>
 
 	<td>
-	<strong><?php echo ACLS_COMMENT_POST_LABEL; ?></strong><br />
+	<strong><?php echo T_("Comment Post ACL:"); ?></strong><br />
 	<textarea class="acls" name="comment_post_acl" rows="4" cols="20"><?php echo $this->ACLs['comment_post_acl'] ?></textarea>
 	</td>
 
@@ -144,16 +144,16 @@ if ($this->UserIsOwner())
 <tr>
 	<td colspan="2">
 	<br />
-	<input type="submit" value="<?php echo STORE_ACL_LABEL?>" name="store" />
-	<input type="submit" value="<?php echo CANCEL_ACL_LABEL?>" name="cancel" />
+	<input type="submit" value="<?php echo T_("Store ACLs")?>" name="store" />
+	<input type="submit" value="<?php echo T_("Cancel")?>" name="cancel" />
 	</td>
 
 	<td>
-	<strong><?php echo SET_OWNER_LABEL; ?></strong><br />
+	<strong><?php echo T_("Set Page Owner:"); ?></strong><br />
 	<select name="newowner">
-	<option value="same"><?php echo $this->GetPageOwner().' '.SET_OWNER_CURRENT_LABEL ?></option>
-	<option value="(Public)"><?php echo SET_OWNER_PUBLIC_LABEL; ?></option>
-	<option value=""><?php echo SET_NO_OWNER_LABEL; ?></option>
+	<option value="same"><?php echo $this->GetPageOwner().' '.T_("(Current Owner)") ?></option>
+	<option value="(Public)"><?php echo T_("(Public)"); ?></option>
+	<option value=""><?php echo T_("(Nobody - Set free)"); ?></option>
 <?php
 		if ($users = $this->LoadUsers())
 		{
@@ -169,14 +169,14 @@ if ($this->UserIsOwner())
 </table>
 
 <br />
-<?php echo $this->Format(ACL_SYNTAX_HELP); ?>
+<?php echo T_("<h4>Syntax:</h4><br/><tt>*</tt> = Everyone<br/><tt>+</tt> = Registered users<br/><tt>JohnDoe</tt> = the user called \"JohnDoe\", enter as many users as you want, one per line<br/><br/>Any of these items can be negated with a <tt>!</tt>:<br/><tt>!*</tt> = No one (except admins)<br/><tt>!+</tt> = Anonymous users only<br/><tt>!JohnDoe</tt> = \"JohnDoe\" will be denied access<br/><br/><i>ACLs are tested in the order they are specified:</i><br/>So be sure to specify <tt>*</tt> on a separate line <i>after</i> negating any users, not before.<br/><br/>Any lists that are left empty will be set to the defaults as specified in <tt>wikka.config.php</tt>."); ?>
 <?php
 		print($this->FormClose());
 	}
 }
 else
 {
-	echo '<em class="error">'.NOT_PAGE_OWNER.'</em>'."\n";
+	echo '<em class="error">'.T_("You are not the owner of this page.").'</em>'."\n";
 }
 echo '</div>'."\n" //TODO: move to templating class
 ?>

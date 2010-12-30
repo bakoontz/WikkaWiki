@@ -21,11 +21,15 @@
  * @todo			- make datetime format configurable
  */
 
+if(!defined('COMMENT_SNIPPET_LENGTH')) define('COMMENT_SNIPPET_LENGTH', 120);
+if (!defined('DATE_FORMAT')) define('DATE_FORMAT', 'D, d M Y'); #TODO make this system-configurable
+if (!defined('TIME_FORMAT')) define('TIME_FORMAT', 'H:i T'); #TODO make this system-configurable
+
 $readable = 0;
 
 $username = $this->GetSafeVar('user', 'get');
 
-echo $this->Format(RECENT_COMMENTS_HEADING.' --- ');
+echo T_("<h2>Recent comments</h2><br/>");
 if ($comments = $this->LoadRecentComments(50, $username))
 {
 	$curday = '';
@@ -40,7 +44,7 @@ if ($comments = $this->LoadRecentComments(50, $username))
 			list($day, $time) = explode(' ', $comment['time']);
 			if ($day != $curday)
 			{
-				$dateformatted = date(COMMENT_DATE_FORMAT, strtotime($day));
+				$dateformatted = date(DATE_FORMAT, strtotime($day));
 
 				if ($curday)
 				{
@@ -50,7 +54,7 @@ if ($comments = $this->LoadRecentComments(50, $username))
 				$curday = $day;
 			}
 
-			$timeformatted = date(COMMENT_TIME_FORMAT, strtotime($comment['time']));
+			$timeformatted = date(TIME_FORMAT, strtotime($comment['time']));
 			$comment_preview = str_replace('<br />', '', $comment['comment']);	// @@@ use single space instead of empty string
 			$comment_preview = substr($comment_preview, 0, COMMENT_SNIPPET_LENGTH);
 			if (strlen($comment['comment']) > COMMENT_SNIPPET_LENGTH)
@@ -59,23 +63,23 @@ if ($comments = $this->LoadRecentComments(50, $username))
 			}
 			// print entry
 			echo
-			'<span class="datetime">'.sprintf(RECENTCOMMENTS_TIMESTAMP_CAPTION, $timeformatted).'</span> <a href="'.$this->href('', $page_tag, 'show_comments=1').'#comment_'.$comment['id'].'">'.$page_tag.'</a>'.WIKKA_COMMENT_AUTHOR_DIVIDER.$this->FormatUser($comment['user'])."\n<blockquote>".$comment_preview."</blockquote>\n";
+			'<span class="datetime">'.sprintf("%s", $timeformatted).'</span> <a href="'.$this->href('', $page_tag, 'show_comments=1').'#comment_'.$comment['id'].'">'.$page_tag.'</a>'.T_(", comment by ").$this->FormatUser($comment['user'])."\n<blockquote>".$comment_preview."</blockquote>\n";
 		}
 	}
 	if ($readable == 0)
 	{
-		echo '<p class="error">'.RECENTCOMMENTS_NONE_ACCESSIBLE.'</p>';
+		echo '<p class="error">'.T_("There are no recent comments you have access to.").'</p>';
 	}
 }
 else
 {
 	if(!empty($username))
 	{
-		echo '<p class="error">'.sprintf(RECENTCOMMENTS_NONE_FOUND_BY, $username).'</p>';
+		echo '<p class="error">'.sprintf(T_("There are no recent comments by %s."), $username).'</p>';
 	}
 	else
 	{
-		echo '<p class="error">'.RECENTCOMMENTS_NONE_FOUND.'</p>';
+		echo '<p class="error">'.T_("There are no recent comments.").'</p>';
 	}
 }
 ?>

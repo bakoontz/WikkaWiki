@@ -51,7 +51,7 @@ if ($this->HasAccess('read'))
 	}
 	else
 	{
-		die(ERROR_DIFF_LIBRARY_MISSING);	// @@@ ERROR: end div won't be produced here
+		die(T_("The file <tt>libs/diff.lib.php</tt> could not be found. You may want to notify the wiki administrator"));	// @@@ ERROR: end div won't be produced here
 	}
 
 	// load pages
@@ -59,17 +59,17 @@ if ($this->HasAccess('read'))
 	$pageB = (isset($_GET['b'])) ?  $this->LoadPageById($this->GetSafeVar('b', 'get')) : '';	# #312
 	if ('' == $pageA || '' == $pageB)
 	{
-		echo '<em class="error">'.ERROR_BAD_PARAMETERS.'</em><br />';
+		echo '<em class="error">'.T_("The parameters you supplied are incorrect, one of the two revisions may have been removed.").'</em><br />';
 		echo '</div>'."\n";
 		return;
 	}
 
-	$pageA_edited_by = $this->existsUser($pageA['user']) ? $this->FormatUser($pageA['user']) : $pageA['user'].' '.WIKKA_ANONYMOUS_AUTHOR_CAPTION;
-//	if (!$this->LoadUser($pageA_edited_by)) $pageA_edited_by .= ' ('.UNREGISTERED_USER.')';
+	$pageA_edited_by = $this->existsUser($pageA['user']) ?  $this->FormatUser($pageA['user']) : $pageA['user'].' '.T_("(unregistered user)");
+//	if (!$this->LoadUser($pageA_edited_by)) $pageA_edited_by .= ' ('.T_("unregistered user").')';
 	if ($pageA['note']) $noteA='['.$this->htmlspecialchars_ent($pageA['note']).']'; else $noteA ='';
 
-	$pageB_edited_by = $this->existsUser($pageB['user']) ? $this->FormatUser($pageB['user']) : $pageB['user'].' '.WIKKA_ANONYMOUS_AUTHOR_CAPTION;
-//	if (!$this->LoadUser($pageB_edited_by)) $pageB_edited_by .= ' ('.UNREGISTERED_USER.')';
+	$pageB_edited_by = $this->existsUser($pageB['user']) ?  $this->FormatUser($pageB['user']) : $pageB['user'].' '.T_("(unregistered user)");
+//	if (!$this->LoadUser($pageB_edited_by)) $pageB_edited_by .= ' ('.T_("unregistered user").')';
 	if ($pageB['note']) $noteB='['.$this->htmlspecialchars_ent($pageB['note']).']'; else $noteB ='';
 	
 	// If asked, call original diff
@@ -84,35 +84,35 @@ if ($this->HasAccess('read'))
 
 		//infobox
 		$info .= '<div class="revisioninfo">'."\n";
-		$info .= '<h3>'.sprintf(DIFF_COMPARISON_HEADER, '<a title="'.sprintf(DIFF_REVISION_LINK_TITLE, $pageA['tag']).'" href="'.$this->Href('revisions').'">'.WIKKA_REVISIONS.'</a>', '<a title="'.DIFF_PAGE_LINK_TITLE.'" href="'.$this->Href().'">'.$pageA['tag'].'</a>').'</h3>'."\n";
+		$info .= '<h3>'.sprintf(T_("Comparing %s for %s"), '<a title="'.sprintf(T_("Display the revision list for %s"), $pageA['tag']).'" href="'.$this->Href('revisions').'">'.T_("revisions").'</a>', '<a title="'.T_("Return to the latest version of this page").'" href="'.$this->Href().'">'.$pageA['tag'].'</a>').'</h3>'."\n";
 		$info .= '<ul style="margin: 10px 0;">'."\n";
-		$info .= '	<li><a href="'.$this->Href('show', '', 'time='.urlencode($pageA['time'])).'">['.$pageA['id'].']</a> '.sprintf(WIKKA_REV_WHEN_BY_WHO, '<a class="datetime" href="'.$this->Href('show','','time='.urlencode($pageA["time"])).'">'.$pageA['time'].'</a>', $pageA_edited_by).' <span class="pagenote smaller">'.$noteA.'</span></li>'."\n";
-		$info .= '	<li><a href="'.$this->Href('show', '', 'time='.urlencode($pageB['time'])).'">['.$pageB['id'].']</a> '.sprintf(WIKKA_REV_WHEN_BY_WHO, '<a class="datetime" href="'.$this->Href('show','','time='.urlencode($pageB["time"])).'">'.$pageB['time'].'</a>', $pageB_edited_by).' <span class="pagenote smaller">'.$noteB.'</span></li>'."\n";
+		$info .= '	<li><a href="'.$this->Href('show', '', 'time='.urlencode($pageA['time'])).'">['.$pageA['id'].']</a> '.sprintf(T_("%s by %s"), '<a class="datetime" href="'.$this->Href('show','','time='.urlencode($pageA["time"])).'">'.$pageA['time'].'</a>', $pageA_edited_by).' <span class="pagenote smaller">'.$noteA.'</span></li>'."\n";
+		$info .= '	<li><a href="'.$this->Href('show', '', 'time='.urlencode($pageB['time'])).'">['.$pageB['id'].']</a> '.sprintf(T_("%s by %s"), '<a class="datetime" href="'.$this->Href('show','','time='.urlencode($pageB["time"])).'">'.$pageB['time'].'</a>', $pageB_edited_by).' <span class="pagenote smaller">'.$noteB.'</span></li>'."\n";
 		$info .= '</ul>'."\n";
 		$info .= $this->FormOpen('diff', '', 'GET');
 		$info .= '<input type="hidden" name="fastdiff" value="0" />'."\n";
 		$info .= '<input type="hidden" name="a" value="'.$this->GetSafeVar('a', 'get').'" />'."\n";
 		$info .= '<input type="hidden" name="b" value="'.$this->GetSafeVar('b', 'get').'" />'."\n";
-		$info .= '<input type="submit" value="'.DIFF_FULL_BUTTON.'" />';
+		$info .= '<input type="submit" value="'.T_("Full Diff").'" />';
 		$info .= $this->FormClose();		
 		$info .= '</div>'."\n";
 		
 		if ($added)
 		{
 			// remove blank lines
-			$output .= "\n".'<h5 class="clear">'.WIKKA_DIFF_ADDITIONS_HEADER.'</h5>'."\n";
+			$output .= "\n".'<h5 class="clear">'.T_("Additions:").'</h5>'."\n";
 			$output .= '<div class="wikisource"><ins>'.nl2br(implode("\n", $added)).'</ins></div>'."\n";
 		}
 
 		if ($deleted)
 		{
-			$output .= "\n".'<h5 class="clear">'.WIKKA_DIFF_DELETIONS_HEADER.'</h5>'."\n";
+			$output .= "\n".'<h5 class="clear">'.T_("Deletions:").'</h5>'."\n";
 			$output .= '<div class="wikisource"><del>'.nl2br(implode("\n", $deleted)).'</del></div>'."\n";
 		}
 
 		if (!$added && !$deleted)
 		{
-			$output .= "<br />\n".WIKKA_DIFF_NO_DIFFERENCES;
+			$output .= "<br />\n".T_("No Differences");
 		}
 	}
 	else
@@ -147,19 +147,19 @@ if ($this->HasAccess('read'))
 		$sideB->init();
 
 		$info .= '<div class="revisioninfo">'."\n";
-		$info .= '<h3>'.sprintf(DIFF_COMPARISON_HEADER, '<a title="'.sprintf(DIFF_REVISION_LINK_TITLE, $pageA['tag']).'" href="'.$this->Href('revisions').'">'.WIKKA_REVISIONS.'</a>', '<a title="'.DIFF_PAGE_LINK_TITLE.'" href="'.$this->Href().'">'.$pageA['tag'].'</a>').'</h3>'."\n";
+		$info .= '<h3>'.sprintf(T_("Comparing %s for %s"), '<a title="'.sprintf(T_("Display the revision list for %s"), $pageA['tag']).'" href="'.$this->Href('revisions').'">'.T_("revisions").'</a>', '<a title="'.T_("Return to the latest version of this page").'" href="'.$this->Href().'">'.$pageA['tag'].'</a>').'</h3>'."\n";
 		$info .= '<ul style="margin: 10px 0">'."\n";
-		$info .= '	<li><a href="'.$this->Href('show', '', 'time='.urlencode($pageA['time'])).'">['.$pageA['id'].']</a> '.sprintf(WIKKA_REV_WHEN_BY_WHO, '<a class="datetime" href="'.$this->Href('show','','time='.urlencode($pageA["time"])).'">'.$pageA['time'].'</a>', $pageA_edited_by).' <span class="pagenote smaller">'.$noteA.'</span></li>'."\n";
-		$info .= '	<li><a href="'.$this->Href('show', '', 'time='.urlencode($pageB['time'])).'">['.$pageB['id'].']</a> '.sprintf(WIKKA_REV_WHEN_BY_WHO, '<a class="datetime" href="'.$this->Href('show','','time='.urlencode($pageB["time"])).'">'.$pageB['time'].'</a>', $pageB_edited_by).' <span class="pagenote smaller">'.$noteB.'</span></li>'."\n";
+		$info .= '	<li><a href="'.$this->Href('show', '', 'time='.urlencode($pageA['time'])).'">['.$pageA['id'].']</a> '.sprintf(T_("%s by %s"), '<a class="datetime" href="'.$this->Href('show','','time='.urlencode($pageA["time"])).'">'.$pageA['time'].'</a>', $pageA_edited_by).' <span class="pagenote smaller">'.$noteA.'</span></li>'."\n";
+		$info .= '	<li><a href="'.$this->Href('show', '', 'time='.urlencode($pageB['time'])).'">['.$pageB['id'].']</a> '.sprintf(T_("%s by %s"), '<a class="datetime" href="'.$this->Href('show','','time='.urlencode($pageB["time"])).'">'.$pageB['time'].'</a>', $pageB_edited_by).' <span class="pagenote smaller">'.$noteB.'</span></li>'."\n";
 		$info .= '</ul>'."\n";
 		$info .= $this->FormOpen('diff', '', 'GET');
 		$info .= '<input type="hidden" name="fastdiff" value="1" />'."\n";
 		$info .= '<input type="hidden" name="a" value="'.$this->GetSafeVar('a', 'get').'" />'."\n";
 		$info .= '<input type="hidden" name="b" value="'.$this->GetSafeVar('b', 'get').'" />'."\n";
-		$info .= '<input type="submit" value="'.DIFF_SIMPLE_BUTTON.'" />';
+		$info .= '<input type="submit" value="'.T_("Simple Diff").'" />';
 		$info .= $this->FormClose();		
 		$info .= '</div>'."\n";
-		$info .= '<strong>'.HIGHLIGHTING_LEGEND.'</strong> <ins><tt>'.DIFF_SAMPLE_ADDITION.'</tt></ins> <del><tt>'.DIFF_SAMPLE_DELETION.'</tt></del></p>'."\n"; #i18n
+		$info .= '<strong>'.T_("Highlighting Guide:").'</strong> <ins><tt>'.T_("addition").'</tt></ins> <del><tt>'.T_("deletion").'</tt></del></p>'."\n"; #i18n
 
 		while (1)
 		{
@@ -225,7 +225,7 @@ if ($this->HasAccess('read'))
 }
 else
 {
-	echo '<em class="error">'.WIKKA_ERROR_ACL_READ.'</em>'."\n";
+	echo '<em class="error">'.T_("You are not allowed to read this page.").'</em>'."\n";
 }
 echo '<div style="clear: both"></div>'."\n";
 echo '</div>'."\n";

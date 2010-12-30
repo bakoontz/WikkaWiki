@@ -44,6 +44,30 @@
  * 			- move icons to buddy file or action folder in 1.1.7;
  */
 
+if(!defined('ADMINPAGES_DEFAULT_RECORDS_LIMIT')) define('ADMINPAGES_DEFAULT_RECORDS_LIMIT', '20'); # number of records per page
+if(!defined('ADMINPAGES_DEFAULT_MIN_RECORDS_DISPLAY')) define('ADMINPAGES_DEFAULT_MIN_RECORDS_DISPLAY', '5'); # min number of records
+if(!defined('ADMINPAGES_DEFAULT_SEARCH')) define('ADMINPAGES_DEFAULT_SEARCH', ''); # keyword to restrict page search
+if(!defined('ADMINPAGES_DEFAULT_RECORDS_RANGE')) define('ADMINPAGES_DEFAULT_RECORDS_RANGE',serialize(array('10','50','100','500','1000'))); #range array for records pager
+if(!defined('ADMINPAGES_DEFAULT_START')) define('ADMINPAGES_DEFAULT_START', '0'); # start record
+if(!defined('ADMINPAGES_DEFAULT_SEARCH')) define('ADMINPAGES_DEFAULT_SEARCH', ''); # keyword to restrict page search
+if(!defined('ADMINPAGES_DEFAULT_TAG_LENGTH')) define('ADMINPAGES_DEFAULT_TAG_LENGTH', '12'); # max. length of displayed pagename
+if(!defined('ADMINPAGES_DEFAULT_URL_LENGTH')) define('ADMINPAGES_DEFAULT_URL_LENGTH', '15'); # max. length of displayed user host
+if(!defined('ADMINPAGES_DEFAULT_TERMINATOR')) define('ADMINPAGES_DEFAULT_TERMINATOR', '&#8230;'); # standard symbol replacing truncated text (ellipsis) JW 2005-07-19
+if(!defined('ADMINPAGES_ALTERNATE_ROW_COLOR')) define('ADMINPAGES_ALTERNATE_ROW_COLOR', '1'); # switch alternate row color
+if(!defined('ADMINPAGES_STAT_COLUMN_COLOR')) define('ADMINPAGES_STAT_COLUMN_COLOR', '1'); # switch color for statistics columns
+if(!defined('ADMINPAGES_MAX_EDIT_NOTE_LENGTH')) define('ADMINPAGES_MAX_EDIT_NOTE_LENGTH', '50');
+if(!defined('ADMINPAGES_DEFAULT_START_YEAR')) define('ADMINPAGES_DEFAULT_START_YEAR', 'YYYY');
+if(!defined('ADMINPAGES_DEFAULT_START_MONTH')) define('ADMINPAGES_DEFAULT_START_MONTH', 'MM');
+if(!defined('ADMINPAGES_DEFAULT_START_DAY')) define('ADMINPAGES_DEFAULT_START_DAY', 'DD');   
+if(!defined('ADMINPAGES_DEFAULT_START_HOUR')) define('ADMINPAGES_DEFAULT_START_HOUR', 'hh'); 
+if(!defined('ADMINPAGES_DEFAULT_START_MINUTE')) define('ADMINPAGES_DEFAULT_START_MINUTE', 'mm');
+if(!defined('ADMINPAGES_DEFAULT_START_SECOND')) define('ADMINPAGES_DEFAULT_START_SECOND', 'ss');
+if(!defined('ADMINPAGES_DEFAULT_END_YEAR')) define('ADMINPAGES_DEFAULT_END_YEAR', 'YYYY');   
+if(!defined('ADMINPAGES_DEFAULT_END_MONTH')) define('ADMINPAGES_DEFAULT_END_MONTH', 'MM');
+if(!defined('ADMINPAGES_DEFAULT_END_DAY')) define('ADMINPAGES_DEFAULT_END_DAY', 'DD');
+if(!defined('ADMINPAGES_DEFAULT_END_HOUR')) define('ADMINPAGES_DEFAULT_END_HOUR', 'hh');
+if(!defined('ADMINPAGES_DEFAULT_END_MINUTE')) define('ADMINPAGES_DEFAULT_END_MINUTE', 'mm');
+if(!defined('ADMINPAGES_DEFAULT_END_SECOND')) define('ADMINPAGES_DEFAULT_END_SECOND', 'ss');
 
 include_once($this->BuildFullpathFromMultipath('..'.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'libs'.DIRECTORY_SEPARATOR.'admin.lib.php', $this->GetConfigValue('action_path')));
 
@@ -108,7 +132,7 @@ if(!function_exists('optionRanges'))
 // restrict access to admins
 if ($this->IsAdmin($this->GetUser()))
 {
-	if($this->GetSafeVar('cancel', 'post') == ADMINPAGES_CANCEL_LABEL)
+	if($this->GetSafeVar('cancel', 'post') == T_("Cancel"))
 	{
 		$this->Redirect($this->Href());
 	}
@@ -187,16 +211,17 @@ if ($this->IsAdmin($this->GetUser()))
 					if(null===$res)
 					{
 						++$errors;
-						echo "<li><span class='disabled'>".$tag."</span><ul><li><em class='error'>(".ADMINPAGES_FORM_MASSACTION_REVERT_ERROR.")</em></li></ul></li>\n";
+						echo "<li><span class='disabled'>".$tag."</span><ul><li><em class='error'>(".T_("Cannot be reverted").")</em></li></ul></li>\n";
 						continue;
 					}
 					$params = "fastdiff=1&amp;a=".$res[0]['id']."&amp;b=".$res[1]['id'];
 					echo '<li>'.$this->Link($tag)."\n";
 					echo '<ul>'."\n";
 					echo '<li>'."\n";
-					echo '<a href="'.$this->Href('show', '', 'time='.urlencode($res[0]['time'])).'">['.$res[0]['id'].']</a> '.sprintf(WHEN_BY_WHO, '<a class="datetime" href="'.$this->Href('show','','time='.urlencode($res[0]['time'])).'">'.$res[0]['time'].'</a>', $res[0]['user'])."\n";
+					echo '<a href="'.$this->Href('show', '',
+					'time='.urlencode($res[0]['time'])).'">['.$res[0]['id'].']</a> '.sprintf(T_("%s by %s"), '<a class="datetime" href="'.$this->Href('show','','time='.urlencode($res[0]['time'])).'">'.$res[0]['time'].'</a>', $res[0]['user'])."\n";
 					echo ' &#8594; '."\n";
-					echo '<a href="'.$this->Href('show', '', 'time='.urlencode($res[1]['time'])).'">['.$res[1]['id'].']</a> '.sprintf(WHEN_BY_WHO, '<a class="datetime" href="'.$this->Href('show','','time='.urlencode($res[1]['time'])).'">'.$res[1]['time'].'</a>', $res[1]['user'])."\n";
+					echo '<a href="'.$this->Href('show', '', 'time='.urlencode($res[1]['time'])).'">['.$res[1]['id'].']</a> '.sprintf(T_("%s by %s"), '<a class="datetime" href="'.$this->Href('show','','time='.urlencode($res[1]['time'])).'">'.$res[1]['time'].'</a>', $res[1]['user'])."\n";
 					echo ' (<a href="'.$this->Href('diff', $tag, $params).'">diff</a>)'."\n";
 					echo '</li>'."\n";
 					echo '</ul>'."\n";
@@ -210,7 +235,7 @@ if ($this->IsAdmin($this->GetUser()))
 				<?php if($errors < count($tags)) { ?>
 					<tr>
 						<td>
-							<input type="text" name="comment" value="" size="<?php echo ADMINPAGES_MAX_EDIT_NOTE_LENGTH; ?>" /> <?php echo ADMINPAGES_LABEL_EDIT_NOTE; ?> <br/><br/>
+							<input type="text" name="comment" value="" size="<?php echo ADMINPAGES_MAX_EDIT_NOTE_LENGTH; ?>" /> <?php echo T_("Please enter a comment, or leave blank for default"); ?> <br/><br/>
 						</td>
 					</tr>
 				<?php } ?>
@@ -230,7 +255,7 @@ if ($this->IsAdmin($this->GetUser()))
 							<?php if($errors < count($tags)) { ?>
 							<input type="submit" value="Revert Pages"  style="width: 120px"   />
 							<?php } ?>
-							<input type="submit" value="<?php echo ADMINPAGES_CANCEL_LABEL?>" name="cancel" style="width: 120px" />
+							<input type="submit" value="<?php echo T_("Cancel")?>" name="cancel" style="width: 120px" />
 						</td>
 					</tr>
 				</table>
@@ -284,26 +309,26 @@ if ($this->IsAdmin($this->GetUser()))
 		}
 
 		// last edit date range
-		$start_YY = (isset($_POST['start_YY'])) ?  $this->GetSafeVar('start_YY', 'post') : ADMINPAGES_DEFAULT_START_YEAR;
-		$start_MM = (isset($_POST['start_MM'])) ?  $this->GetSafeVar('start_MM', 'post') : ADMINPAGES_DEFAULT_START_MONTH;
-		$start_DD = (isset($_POST['start_DD'])) ?  $this->GetSafeVar('start_DD', 'post') : ADMINPAGES_DEFAULT_START_DAY;
-		$start_hh = (isset($_POST['start_hh'])) ?  $this->GetSafeVar('start_hh', 'post') : ADMINPAGES_DEFAULT_START_HOUR;
-		$start_mm = (isset($_POST['start_mm'])) ?  $this->GetSafeVar('start_mm', 'post') : ADMINPAGES_DEFAULT_START_MINUTE;
-		$start_ss = (isset($_POST['start_ss'])) ?  $this->GetSafeVar('start_ss', 'post') : ADMINPAGES_DEFAULT_START_SECOND;
-		$end_YY = (isset($_POST['end_YY'])) ?  $this->GetSafeVar('end_YY', 'post') : ADMINPAGES_DEFAULT_END_YEAR;
-		$end_MM = (isset($_POST['end_MM'])) ?  $this->GetSafeVar('end_MM', 'post') : ADMINPAGES_DEFAULT_END_MONTH;
-		$end_DD = (isset($_POST['end_DD'])) ?  $this->GetSafeVar('end_DD', 'post') : ADMINPAGES_DEFAULT_END_DAY;
-		$end_hh = (isset($_POST['end_hh'])) ?  $this->GetSafeVar('end_hh', 'post') : ADMINPAGES_DEFAULT_END_HOUR;
-		$end_mm = (isset($_POST['end_mm'])) ?  $this->GetSafeVar('end_mm', 'post') : ADMINPAGES_DEFAULT_END_MINUTE;
-		$end_ss = (isset($_POST['end_ss'])) ?  $this->GetSafeVar('end_ss', 'post') : ADMINPAGES_DEFAULT_END_SECOND;
+        $start_YY = (isset($_POST['start_YY'])) ?  $this->GetSafeVar('start_YY', 'post') : ADMINPAGES_DEFAULT_START_YEAR;
+        $start_MM = (isset($_POST['start_MM'])) ?  $this->GetSafeVar('start_MM', 'post') : ADMINPAGES_DEFAULT_START_MONTH;
+        $start_DD = (isset($_POST['start_DD'])) ?  $this->GetSafeVar('start_DD', 'post') : ADMINPAGES_DEFAULT_START_DAY;
+        $start_hh = (isset($_POST['start_hh'])) ?  $this->GetSafeVar('start_hh', 'post') : ADMINPAGES_DEFAULT_START_HOUR;
+        $start_mm = (isset($_POST['start_mm'])) ?  $this->GetSafeVar('start_mm', 'post') : ADMINPAGES_DEFAULT_START_MINUTE;
+        $start_ss = (isset($_POST['start_ss'])) ?  $this->GetSafeVar('start_ss', 'post') : ADMINPAGES_DEFAULT_START_SECOND;
+        $end_YY = (isset($_POST['end_YY'])) ? $this->GetSafeVar('end_YY', 'post') : ADMINPAGES_DEFAULT_END_YEAR;
+        $end_MM = (isset($_POST['end_MM'])) ? $this->GetSafeVar('end_MM', 'post') : ADMINPAGES_DEFAULT_END_MONTH;
+        $end_DD = (isset($_POST['end_DD'])) ? $this->GetSafeVar('end_DD', 'post') : ADMINPAGES_DEFAULT_END_DAY;
+        $end_hh = (isset($_POST['end_hh'])) ? $this->GetSafeVar('end_hh', 'post') : ADMINPAGES_DEFAULT_END_HOUR;
+        $end_mm = (isset($_POST['end_mm'])) ? $this->GetSafeVar('end_mm', 'post') : ADMINPAGES_DEFAULT_END_MINUTE;
+        $end_ss = (isset($_POST['end_ss'])) ? $this->GetSafeVar('end_ss', 'post') : ADMINPAGES_DEFAULT_END_SECOND;
 
 		// sort field
-		$sort = ADMINPAGES_DEFAULT_SORT_FIELD;
+		$sort = "time";
 		$sort_fields = array('owner', 'tag', 'user', 'time');
 		if(isset($_GET['sort']) && in_array($_GET['sort'], $sort_fields)) $sort = $_GET['sort'];
 
 		// sort order
-		$d = ADMINPAGES_DEFAULT_SORT_ORDER;
+		$d = "desc";
 		$sort_order = array('asc', 'desc');
 		if(isset($_GET['d']) && in_array($_GET['d'], $sort_order)) $d = $_GET['d'];
 		// start record
@@ -334,14 +359,14 @@ if ($this->IsAdmin($this->GetUser()))
 		}
 
 		// print page header
-		echo '<h3>'.ADMINPAGES_PAGE_TITLE.'</h3>'."\n";
+		echo '<h3>'.T_("Page Administration").'</h3>'."\n";
 
 		// build pager form	
 		$form_filter = $this->FormOpen('','','post','page_admin_panel');
-		$form_filter .= '<fieldset><legend>'.ADMINPAGES_FORM_LEGEND.'</legend>'."\n";
-		$form_filter .= '<label for="search">'.ADMINPAGES_FORM_SEARCH_STRING_LABEL.'</label> <input type ="text" id="search" name="search" title="'.ADMINPAGES_FORM_SEARCH_STRING_TITLE.'" size="20" maxlength="50" value="'.$search_disp.'"/> <input type="submit" value="'.ADMINPAGES_FORM_SEARCH_SUBMIT.'" /><br />'."\n";
+		$form_filter .= '<fieldset><legend>'.T_("Filter view:").'</legend>'."\n";
+		$form_filter .= '<label for="search">'.T_("Search page:").'</label> <input type ="text" id="search" name="search" title="'.T_("Enter a search string").'" size="20" maxlength="50" value="'.$search_disp.'"/> <input type="submit" value="'.T_("Submit").'" /><br />'."\n";
 		// build date range fields
-		$form_filter .= '<label>'.ADMINPAGES_FORM_DATE_RANGE_STRING_LABEL.'</label>&nbsp;<input class="datetime" type="text" name="start_YY" size="4" maxlength="4" value="'.$start_YY.'"/>-<input class="datetime" type="text" name="start_MM" size="2" maxlength="2" value="'.$start_MM.'"/>-<input class="datetime" type="text" name="start_DD" size="2" maxlength="2" value="'.$start_DD.'"/>&nbsp;<input class="datetime" type="text" name="start_hh" size="2" maxlength="2" value="'.$start_hh.'"/>:<input class="datetime" type="text" name="start_mm" size="2" maxlength="2" value="'.$start_mm.'"/>:<input class="datetime" type="text" name="start_ss" size="2" maxlength="2" value="'.$start_ss.'"/>&nbsp;'.ADMINPAGES_FORM_DATE_RANGE_CONNECTOR_LABEL.'&nbsp;<input class="datetime" type="text" name="end_YY" size="4" maxlength="4" value="'.$end_YY.'"/>-<input class="datetime" type="text" name="end_MM" size="2" maxlength="2" value="'.$end_MM.'"/>-<input class="datetime" type="text" name="end_DD" size="2" maxlength="2" value="'.$end_DD.'"/>&nbsp;<input class="datetime" type="text" name="end_hh" size="2" maxlength="2" value="'.$end_hh.'"/>:<input class="datetime" type="text" name="end_mm" size="2" maxlength="2" value="'.$end_mm.'"/>:<input class="datetime" type="text" name="end_ss" size="2" maxlength="2" value="'.$end_ss.'"/><br />'."\n";
+		$form_filter .= '<label>'.T_("Last edit range: Between").'</label>&nbsp;<input class="datetime" type="text" name="start_YY" size="4" maxlength="4" value="'.$start_YY.'"/>-<input class="datetime" type="text" name="start_MM" size="2" maxlength="2" value="'.$start_MM.'"/>-<input class="datetime" type="text" name="start_DD" size="2" maxlength="2" value="'.$start_DD.'"/>&nbsp;<input class="datetime" type="text" name="start_hh" size="2" maxlength="2" value="'.$start_hh.'"/>:<input class="datetime" type="text" name="start_mm" size="2" maxlength="2" value="'.$start_mm.'"/>:<input class="datetime" type="text" name="start_ss" size="2" maxlength="2" value="'.$start_ss.'"/>&nbsp;'.T_("and").'&nbsp;<input class="datetime" type="text" name="end_YY" size="4" maxlength="4" value="'.$end_YY.'"/>-<input class="datetime" type="text" name="end_MM" size="2" maxlength="2" value="'.$end_MM.'"/>-<input class="datetime" type="text" name="end_DD" size="2" maxlength="2" value="'.$end_DD.'"/>&nbsp;<input class="datetime" type="text" name="end_hh" size="2" maxlength="2" value="'.$end_hh.'"/>:<input class="datetime" type="text" name="end_mm" size="2" maxlength="2" value="'.$end_mm.'"/>:<input class="datetime" type="text" name="end_ss" size="2" maxlength="2" value="'.$end_ss.'"/><br />'."\n";
 
 		// check for/validate last date edit range
 		$start_ts = '';
@@ -427,29 +452,29 @@ if ($this->IsAdmin($this->GetUser()))
 
 		// ranged drop-down
 		$pages_opts = optionRanges($page_limits,$numpages, ADMINPAGES_DEFAULT_MIN_RECORDS_DISPLAY);
-		$form_filter .= '<label for="l">'.ADMINPAGES_FORM_PAGER_LABEL_BEFORE.'</label> '."\n";
-		$form_filter .= '<select name="l" id="l" title="'.ADMINPAGES_FORM_PAGER_TITLE.'">'."\n";
+		$form_filter .= '<label for="l">'.T_("Show").'</label> '."\n";
+		$form_filter .= '<select name="l" id="l" title="'.T_("Select records-per-page limit").'">'."\n";
 		// build drop-down
 		foreach ($pages_opts as $opt)
 		{
 			$selected = ($opt == $l) ? ' selected="selected"' : '';
 			$form_filter .= '<option value="'.$opt.'"'.$selected.'>'.$opt.'</option>'."\n";
 		}
-		$form_filter .=  '</select> <label for="l">'.ADMINPAGES_FORM_PAGER_LABEL_AFTER.'</label> <input type="submit" value="'.ADMINPAGES_FORM_PAGER_SUBMIT.'" /><br />'."\n";
+		$form_filter .=  '</select> <label for="l">'.T_("records per page").'</label> <input type="submit" value="'.T_("Apply").'" /><br />'."\n";
 
 		// build pager links
 		$ll = $s+$l+1;
 		$ul = ($s+2*$l) > $numpages ? $numpages : ($s+2*$l);
 		if ($s > 0)
 		{
-			$prev = '<a href="'.$this->Href('','','l='.$l.'&amp;sort='.$sort.'&amp;d='.$d.'&amp;s='.($s-$l)).  '&amp;search='.urlencode($search).  '&amp;start_ts='.urlencode($start_ts).  '&amp;end_ts='.urlencode($end_ts).  '" title="'.sprintf(ADMINPAGES_FORM_PAGER_LINK, ($s-$l+1), $s).'">'.($s-$l+1).'-'.$s.'</a> |  '."\n";
+			$prev = '<a href="'.$this->Href('','','l='.$l.'&amp;sort='.$sort.'&amp;d='.$d.'&amp;s='.($s-$l)).  '&amp;search='.urlencode($search).  '&amp;start_ts='.urlencode($start_ts).  '&amp;end_ts='.urlencode($end_ts).  '" title="'.sprintf(T_("Show records from %d to %d"), ($s-$l+1), $s).'">'.($s-$l+1).'-'.$s.'</a> |  '."\n";
 		}
 		if ($numpages > ($s + $l))
 		{
-			$next = ' | <a href="'.$this->Href('','','l='.$l.'&amp;sort='.$sort.'&amp;d='.$d.'&amp;s='.($s+$l)).'&amp;search='.urlencode($search).'&amp;start_ts='.urlencode($start_ts).'&amp;end_ts='.urlencode($end_ts).'" title="'.sprintf(ADMINPAGES_FORM_PAGER_LINK, $ll, $ul).'">'.$ll.(($ll==$ul)?'':('-'.$ul)).'</a>'."\n";
+			$next = ' | <a href="'.$this->Href('','','l='.$l.'&amp;sort='.$sort.'&amp;d='.$d.'&amp;s='.($s+$l)).'&amp;search='.urlencode($search).'&amp;start_ts='.urlencode($start_ts).'&amp;end_ts='.urlencode($end_ts).'" title="'.sprintf(T_("Show records from %d to %d"), $ll, $ul).'">'.$ll.(($ll==$ul)?'':('-'.$ul)).'</a>'."\n";
 		}
-		$form_filter .= ADMINPAGES_FORM_RESULT_INFO.' ('.$numpages.'): '.$prev.(($s+$l)>$numpages?($s+1).'-'.$numpages:($s+1).'-'.($s+$l)).$next.'<br />'."\n";
-		$form_filter .= '<span class="sortorder">'.ADMINPAGES_FORM_RESULT_SORTED_BY.' <tt>'.$sort.', '.$d.'</tt></span>'."\n";
+		$form_filter .= T_("Records").' ('.$numpages.'): '.$prev.(($s+$l)>$numpages?($s+1).'-'.$numpages:($s+1).'-'.($s+$l)).$next.'<br />'."\n";
+		$form_filter .= '<span class="sortorder">'.T_("Sorted by:").' <tt>'.$sort.', '.$d.'</tt></span>'."\n";
 		$form_filter .= '</fieldset>'.$this->FormClose()."\n";
 
 		// sort by counted values
@@ -484,13 +509,13 @@ if ($this->IsAdmin($this->GetUser()))
 		if ($pagedata)
 		{
 			// build table headers
-			$tagheader = '<a href="'.$this->Href('','', (($sort == 'tag' && $d == 'asc')? 'l='.$l.'&amp;sort=tag&amp;d=desc&amp;search='.urlencode($search).'&amp;start_ts='.urlencode($start_ts).'&amp;end_ts='.urlencode($end_ts) : 'l='.$l.'&amp;sort=tag&amp;d=asc&amp;search='.urlencode($search).'&amp;start_ts='.urlencode($start_ts).'&amp;end_ts='.urlencode($end_ts))).'" title="'.ADMINPAGES_TABLE_HEADING_PAGENAME_TITLE.'">'.ADMINPAGES_TABLE_HEADING_PAGENAME.'</a>';
-			$ownerheader = '<a href="'.$this->Href('','', (($sort == 'owner' && $d == 'asc')? 'l='.$l.'&amp;sort=owner&amp;d=desc&amp;search='.urlencode($search).'&amp;start_ts='.urlencode($start_ts).'&amp;end_ts='.urlencode($end_ts) : 'l='.$l.'&amp;sort=owner&amp;d=asc&amp;search='.urlencode($search).'&amp;start_ts='.urlencode($start_ts).'&amp;end_ts='.urlencode($end_ts))).'" title="'.ADMINPAGES_TABLE_HEADING_OWNER_TITLE.'">'.ADMINPAGES_TABLE_HEADING_OWNER.'</a>';
-			$userheader = '<a href="'.$this->Href('','', (($sort == 'user' && $d == 'asc')? 'l='.$l.'&amp;sort=user&amp;d=desc&amp;search='.urlencode($search).'&amp;start_ts='.urlencode($start_ts).'&amp;end_ts='.urlencode($end_ts) : 'l='.$l.'&amp;sort=user&amp;d=asc&amp;search='.urlencode($search).'&amp;start_ts='.urlencode($start_ts).'&amp;end_ts='.urlencode($end_ts))).'" title="'.ADMINPAGES_TABLE_HEADING_LASTAUTHOR_TITLE.'">'.ADMINPAGES_TABLE_HEADING_LASTAUTHOR.'</a>';
-			$lasteditheader = '<a href="'.$this->Href('','', (($sort == 'time' && $d == 'desc')? 'l='.$l.'&amp;sort=time&amp;d=asc&amp;search='.urlencode($search).'&amp;start_ts='.urlencode($start_ts).'&amp;end_ts='.urlencode($end_ts) : 'l='.$l.'&amp;sort=time&amp;d=desc&amp;search='.urlencode($search).'&amp;start_ts='.urlencode($start_ts).'&amp;end_ts='.urlencode($end_ts))).'" title="'.ADMINPAGES_TABLE_HEADING_LASTEDIT_TITLE.'">'.ADMINPAGES_TABLE_HEADING_LASTEDIT.'</a>';
-			/* $revisionsheader = '<a href="'.$this->Href('','', (($sort == 'edits' && $d == 'desc')? 'l='.$l.'&amp;sort=edits&amp;d=asc&amp;search='.urlencode($search).'&amp;start_ts='.urlencode($start_ts).'&amp;end_ts='.urlencode($end_ts) : 'l='.$l.'&amp;sort=edits&amp;d=desc&amp;search='.urlencode($search).'&amp;start_ts='.urlencode($start_ts).'&amp;end_ts='.urlencode($end_ts))).'" title="'.ADMINPAGES_TABLE_HEADING_REVISIONS_TITLE.'"><img src="'.ADMINPAGES_REVISIONS_ICON.'" alt="'.ADMINPAGES_TABLE_HEADING_REVISIONS_ALT.'"/></a>'; */ #not implemented
+			$tagheader = '<a href="'.$this->Href('','', (($sort == 'tag' && $d == 'asc')? 'l='.$l.'&amp;sort=tag&amp;d=desc&amp;search='.urlencode($search).'&amp;start_ts='.urlencode($start_ts).'&amp;end_ts='.urlencode($end_ts) : 'l='.$l.'&amp;sort=tag&amp;d=asc&amp;search='.urlencode($search).'&amp;start_ts='.urlencode($start_ts).'&amp;end_ts='.urlencode($end_ts))).'" title="'.T_("Sort by page name").'">'.T_("Page Name").'</a>';
+			$ownerheader = '<a href="'.$this->Href('','', (($sort == 'owner' && $d == 'asc')? 'l='.$l.'&amp;sort=owner&amp;d=desc&amp;search='.urlencode($search).'&amp;start_ts='.urlencode($start_ts).'&amp;end_ts='.urlencode($end_ts) : 'l='.$l.'&amp;sort=owner&amp;d=asc&amp;search='.urlencode($search).'&amp;start_ts='.urlencode($start_ts).'&amp;end_ts='.urlencode($end_ts))).'" title="'.T_("Sort by page owner").'">'.T_("Owner").'</a>';
+			$userheader = '<a href="'.$this->Href('','', (($sort == 'user' && $d == 'asc')? 'l='.$l.'&amp;sort=user&amp;d=desc&amp;search='.urlencode($search).'&amp;start_ts='.urlencode($start_ts).'&amp;end_ts='.urlencode($end_ts) : 'l='.$l.'&amp;sort=user&amp;d=asc&amp;search='.urlencode($search).'&amp;start_ts='.urlencode($start_ts).'&amp;end_ts='.urlencode($end_ts))).'" title="'.T_("Sort by last author").'">'.T_("Last Author").'</a>';
+			$lasteditheader = '<a href="'.$this->Href('','', (($sort == 'time' && $d == 'desc')? 'l='.$l.'&amp;sort=time&amp;d=asc&amp;search='.urlencode($search).'&amp;start_ts='.urlencode($start_ts).'&amp;end_ts='.urlencode($end_ts) : 'l='.$l.'&amp;sort=time&amp;d=desc&amp;search='.urlencode($search).'&amp;start_ts='.urlencode($start_ts).'&amp;end_ts='.urlencode($end_ts))).'" title="'.T_("Sort by edit time").'">'.T_("Last Edit").'</a>';
+			/* $revisionsheader = '<a href="'.$this->Href('','', (($sort == 'edits' && $d == 'desc')? 'l='.$l.'&amp;sort=edits&amp;d=asc&amp;search='.urlencode($search).'&amp;start_ts='.urlencode($start_ts).'&amp;end_ts='.urlencode($end_ts) : 'l='.$l.'&amp;sort=edits&amp;d=desc&amp;search='.urlencode($search).'&amp;start_ts='.urlencode($start_ts).'&amp;end_ts='.urlencode($end_ts))).'" title="'.T_("Revisions").'"><img src="'.T_("images/icons/edit.png").'" alt="'.T_("Revisions").'"/></a>'; */ #not implemented
 
-			$data_table = '<table id="adminpages" summary="'.ADMINPAGES_TABLE_SUMMARY.'" border="1px" class="data">'."\n".
+			$data_table = '<table id="adminpages" summary="'.T_("List of pages on this server").'" border="1px" class="data">'."\n".
 			'<thead>'."\n".
 			'	<tr>'."\n".
 			'		<th> </th>'."\n".
@@ -498,12 +523,12 @@ if ($this->IsAdmin($this->GetUser()))
 			'		<th>'.$ownerheader.'</th>'."\n".
 			'		<th>'.$userheader.'</th>'."\n".
 			'		<th>'.$lasteditheader.'</th>'."\n".
-			'		<th'.(($c_color == 1)? ' class="c1"' : '').' title="'.ADMINPAGES_TABLE_HEADING_HITS_TITLE.'"><img src="'.ADMINPAGES_HITS_ICON.'" alt="'.ADMINPAGES_TABLE_HEADING_HITS_ALT.'" /></th>'."\n".
-			'		<th'.(($c_color == 1)? ' class="c2"' : '').' title="'.ADMINPAGES_TABLE_HEADING_REVISIONS_TITLE.'"><img src="'.ADMINPAGES_REVISIONS_ICON.'" alt="'.ADMINPAGES_TABLE_HEADING_REVISIONS_ALT.'" /></th>'."\n".
-			'		<th'.(($c_color == 1)? ' class="c3"' : '').' title="'.ADMINPAGES_TABLE_HEADING_COMMENTS_TITLE.'"><img src="'.ADMINPAGES_COMMENTS_ICON.'" alt="'.ADMINPAGES_TABLE_HEADING_COMMENTS_ALT.'" /></th>'."\n".
-			'		<th'.(($c_color == 1)? ' class="c4"' : '').' title="'.ADMINPAGES_TABLE_HEADING_BACKLINKS_TITLE.'"><img src="'.ADMINPAGES_BACKLINKS_ICON.'" alt="'.ADMINPAGES_TABLE_HEADING_BACKLINKS_ALT.'" /></th>'."\n".
-			'		<th'.(($c_color == 1)? ' class="c5"' : '').' title="'.ADMINPAGES_TABLE_HEADING_REFERRERS_TITLE.'"><img src="'.ADMINPAGES_REFERRERS_ICON.'" alt="'.ADMINPAGES_TABLE_HEADING_REFERRERS_ALT.'" /></th>'."\n".
-			'		<th>'.ADMINPAGES_TABLE_HEADING_ACTIONS.'</th>'."\n".
+			'		<th'.(($c_color == 1)? ' class="c1"' : '').' title="'.T_("Hits").'"><img src="images/icons/star.png" alt="'.T_("Hits").'" /></th>'."\n".
+			'		<th'.(($c_color == 1)? ' class="c2"' : '').' title="'.T_("Revisions").'"><img src="images/icons/edit.png" alt="'.T_("Revisions").'" /></th>'."\n".
+			'		<th'.(($c_color == 1)? ' class="c3"' : '').' title="'.T_("Comments").'"><img src="images/icons/comment.png" alt="'.T_("Comments").'" /></th>'."\n".
+			'		<th'.(($c_color == 1)? ' class="c4"' : '').' title="'.T_("Backlinks").'"><img src="images/icons/link.png" alt="'.T_("Backlinks").'" /></th>'."\n".
+			'		<th'.(($c_color == 1)? ' class="c5"' : '').' title="'.T_("Referrers").'"><img src="images/icons/world.png" alt="'.T_("Referrers").'" /></th>'."\n".
+			'		<th>'.T_("Actions").'</th>'."\n".
 			'	</tr>'."\n".
 			'</thead>'."\n";
 
@@ -529,18 +554,16 @@ if ($this->IsAdmin($this->GetUser()))
 				$res = LoadLastTwoPagesByTag($this, $page['tag']);
 				if(null===$res)
 				{
-					$revertpage = "<span class='disabled'>".ADMINPAGES_ACTION_REVERT_LINK."</span>";
+					$revertpage = "<span class='disabled'>".T_("revert")."</span>";
 				}
 				else
 				{
-					$revertpage = '<a href="'.$this->Href('revert',$page['tag'], '').'" title="'.sprintf(ADMINPAGES_ACTION_REVERT_LINK_TITLE, $page['tag']).'">'.ADMINPAGES_ACTION_REVERT_LINK.'</a>';
+					$revertpage = '<a href="'.$this->Href('revert',$page['tag'], '').'" title="'.sprintf(T_("Revert %s to previous version"), $page['tag']).'">'.T_("revert").'</a>';
 				}
-				$editpage = '<a href="'.$this->Href('edit',$page['tag'], '').'" title="'.sprintf(ADMINPAGES_ACTION_EDIT_LINK_TITLE, $page['tag']).'">'.ADMINPAGES_ACTION_EDIT_LINK.'</a>';
-				$deletepage = '<a href="'.$this->Href('delete',$page['tag'], '').'" title="'.sprintf(ADMINPAGES_ACTION_DELETE_LINK_TITLE, $page['tag']).'">'.ADMINPAGES_ACTION_DELETE_LINK.'</a>';
-				$clonepage = '<a href="'.$this->Href('clone',$page['tag'], '').'" title="'.sprintf(ADMINPAGES_ACTION_CLONE_LINK_TITLE, $page['tag']).'">'.ADMINPAGES_ACTION_CLONE_LINK.'</a>';
-				/* $renamepage = '<a href="'.$this->Href('rename',$page['tag'], '').'" title="'.sprintf(ADMINPAGES_ACTION_RENAME_LINK_TITLE, $page['tag']).'">'.ADMINPAGES_ACTION_RENAME_LINK.'</a>'; */ #to be implemented
-				$aclpage = '<a href="'.$this->Href('acls',$page['tag'], '').'" title="'.sprintf(ADMINPAGES_ACTION_ACL_LINK_TITLE, $page['tag']).'">'.ADMINPAGES_ACTION_ACL_LINK.'</a>';
-				/* $infopage = '<a href="'.$this->Href('info',$page['tag'], '').'" title="'.sprintf(ADMINPAGES_ACTION_INFO_LINK_TITLE, $page['tag']).'">'.ADMINPAGES_ACTION_INFO_LINK.'</a>'; */ #to be implemented
+				$editpage = '<a href="'.$this->Href('edit',$page['tag'], '').'" title="'.sprintf(T_("Edit %s"), $page['tag']).'">'.T_("edit").'</a>';
+				$deletepage = '<a href="'.$this->Href('delete',$page['tag'], '').'" title="'.sprintf(T_("Delete %s"), $page['tag']).'">'.T_("delete").'</a>';
+				$clonepage = '<a href="'.$this->Href('clone',$page['tag'], '').'" title="'.sprintf(T_("Clone %s"), $page['tag']).'">'.T_("clone").'</a>';
+				$aclpage = '<a href="'.$this->Href('acls',$page['tag'], '').'" title="'.sprintf(T_("Change Access Control List for %s"), $page['tag']).'">'.T_("acl").'</a>';
 
 				// get page owner
 				if ($page['owner'])
@@ -566,7 +589,7 @@ if ($this->IsAdmin($this->GetUser()))
 				else
 				{
 					// page has empty owner field: print claim link
-					$owner = $this->Link($page['tag'], 'claim','(Nobody)','','',ADMINPAGES_TAKE_OWNERSHIP_LINK.' '.$page['tag']);
+					$owner = $this->Link($page['tag'], 'claim','(Nobody)','','',T_("Take ownership of").' '.$page['tag']);
 				}
 				// get last author
 				if ($page['user'])
@@ -587,7 +610,7 @@ if ($this->IsAdmin($this->GetUser()))
 					else
 					{
 						// truncate long host names
-						$user = (strlen($page['user']) > ADMINPAGES_DEFAULT_URL_LENGTH) ? substr($page['user'], 0, ADMINPAGES_DEFAULT_URL_LENGTH).ADMINPAGES_DEFAULT_TERMINATOR : $page['user'];
+						$user = (strlen($page['user']) > ADMINPAGES_DEFAULT_URL_LENGTH) ?  substr($page['user'], 0, ADMINPAGES_DEFAULT_URL_LENGTH).ADMINPAGES_DEFAULT_TERMINATOR : $page['user'];
 						# added  JW 2005-07-19
 						if ($user != $page['user'])
 						{
@@ -598,7 +621,7 @@ if ($this->IsAdmin($this->GetUser()))
 				else
 				{
 					// page has empty user field
-					$user = ADMINPAGES_NO_OWNER;
+					$user = T_("(Nobody)");
 				}
 
 				// get counts	- JW 2005-07-19
@@ -612,19 +635,20 @@ if ($this->IsAdmin($this->GetUser()))
 				$rn = $this->getCount('referrers',$wherePageTag);
 
 				// get page hits (forthcoming)
-				$hitspage = ($hn > 0) ? '<a href="'.$this->Href('hits',$page['tag'], '').'" title="'.sprintf(ADMINPAGES_TABLE_CELL_HITS_TITLE, $page['tag'], $hn).'">'.$hn.'</a>' : '0';
+				$hitspage = ($hn > 0) ? '<a
+				href="'.$this->Href('hits',$page['tag'], '').'" title="'.sprintf(T_("Hits for %s (%d)"), $page['tag'], $hn).'">'.$hn.'</a>' : '0';
 
 				// get page revisions and create revision link if needed
-				$revpage = ($rv > 0) ? '<a href="'.$this->Href('revisions',$page['tag'], '').'" title="'.sprintf(ADMINPAGES_TABLE_CELL_REVISIONS_TITLE, $page['tag'], $rv).'">'.$rv.'</a>' : '0';
+				$revpage = ($rv > 0) ? '<a href="'.$this->Href('revisions',$page['tag'], '').'" title="'.sprintf(T_("Display revisions for %s (%d)"), $page['tag'], $rv).'">'.$rv.'</a>' : '0';
 
 				// get page comments and create comments link if needed
-				$commentspage = ($cn > 0) ? '<a href="'.$this->Href('',$page['tag'], 'show_comments=1#comments').'" title="'.sprintf(ADMINPAGES_TABLE_CELL_COMMENTS_TITLE, $page['tag'], $cn).'">'.$cn.'</a>' : '0';
+				$commentspage = ($cn > 0) ? '<a href="'.$this->Href('',$page['tag'], 'show_comments=1#comments').'" title="'.sprintf(T_("Display comments for %s (%d)"), $page['tag'], $cn).'">'.$cn.'</a>' : '0';
 
 				// get page backlinks and create backlinks link
-				$backlinkpage = ($bn > 0) ? '<a href="'.$this->Href('backlinks',$page['tag'], '').'" title="'.sprintf(ADMINPAGES_TABLE_CELL_BACKLINKS_TITLE, $page['tag'], $bn).'">'.$bn.'</a>' : '0';
+				$backlinkpage = ($bn > 0) ? '<a href="'.$this->Href('backlinks',$page['tag'], '').'" title="'.sprintf(T_("Display pages linking to %s (%d)"), $page['tag'], $bn).'">'.$bn.'</a>' : '0';
 
 				// get page referrers and create referrer link
-				$refpage = ($rn > 0) ? '<a href="'.$this->Href('referrers',$page['tag'], '').'" title="'.sprintf(ADMINPAGES_TABLE_CELL_REFERRERS_TITLE, $page['tag'], $rn).'">'.$rn.'</a>' : '0';
+				$refpage = ($rn > 0) ? '<a href="'.$this->Href('referrers',$page['tag'], '').'" title="'.sprintf(T_("Display external sites linking to %s (%d)"), $page['tag'], $rn).'">'.$rn.'</a>' : '0';
 
 				// build table body
 				$data_table .= '<tbody>'."\n";
@@ -636,11 +660,11 @@ if ($this->IsAdmin($this->GetUser()))
 				{
 					$data_table .= '<tr>'."\n"; #disable alternate row color
 				}
-				$data_table .= '		<td><input type="checkbox" name="id_'.$page['id'].'"'.$checked.' title="'.sprintf(ADMINPAGES_SELECT_RECORD_TITLE, $page['tag']).'" /></td>'."\n".	# modified JW 2005-07-19
+				$data_table .= '		<td><input type="checkbox" name="id_'.$page['id'].'"'.$checked.' title="'.sprintf(T_("Select %s"), $page['tag']).'" /></td>'."\n".	# modified JW 2005-07-19
 				'		<td>'.$showpage.'</td>'."\n".
 				'		<td>'.$owner.'</td>'."\n".
 				'		<td>'.$user.'</td>'."\n".
-				'		<td '.((strlen($page['note'])>0)? 'class="help" title="('.$page['note'].')"' : 'title="'.ADMINPAGES_NO_EDIT_NOTE.'"').'>'.$lastedit.'</td>'."\n".
+				'		<td '.((strlen($page['note'])>0)?  'class="help" title="('.$page['note'].')"' : 'title="'.T_("(No edit note)").'"').'>'.$lastedit.'</td>'."\n".
 				'		<td class="number'.(($c_color == 1)? ' c1' : '').'">'.$hitspage.'</td>'."\n".
 				'		<td class="number'.(($c_color == 1)? ' c2' : '').'">'.$revpage.'</td>'."\n".
 				'		<td class="number'.(($c_color == 1)? ' c3' : '').'">'.$commentspage.'</td>'."\n".
@@ -662,9 +686,9 @@ if ($this->IsAdmin($this->GetUser()))
 			$form_mass .= $data_table;
 
 			// multiple-page operations (forthcoming)		JW 2005-07-19 accesskey removed (causes more problems than it solves)
-			$form_mass .= '<fieldset><legend>'.ADMINPAGES_FORM_MASSACTION_LEGEND.'</legend>';
-			$form_mass .= '[<a href="'.$this->Href('','','l='.$l.'&amp;sort='.$sort.'&amp;d='.$d.'&amp;s='.$s.'&amp;search='.urlencode($search).'&amp;start_ts='.urlencode($start_ts).'&amp;end_ts='.urlencode($end_ts).'&amp;selectall=1').'" title="'.ADMINPAGES_CHECK_ALL_TITLE.'">'.ADMINPAGES_CHECK_ALL.'</a> | <a href="'.$this->Href('','','l='.$l.'&amp;sort='.$sort.'&amp;d='.$d.'&amp;s='.$s.'&amp;search='.urlencode($search).'&amp;start_ts='.urlencode($start_ts).'&amp;end_ts='.urlencode($end_ts).'&amp;selectall=0').'" title="'.ADMINPAGES_UNCHECK_ALL_TITLE.'">'.ADMINPAGES_UNCHECK_ALL.'</a>]<br />';
-			$form_mass .= '<label for="action" >'.ADMINPAGES_FORM_MASSACTION_LABEL.'</label> <select title="'.ADMINPAGES_FORM_MASSACTION_SELECT_TITLE.'" id="action" name="action">';
+			$form_mass .= '<fieldset><legend>'.T_("Mass-action").'</legend>';
+			$form_mass .= '[<a href="'.$this->Href('','','l='.$l.'&amp;sort='.$sort.'&amp;d='.$d.'&amp;s='.$s.'&amp;search='.urlencode($search).'&amp;start_ts='.urlencode($start_ts).'&amp;end_ts='.urlencode($end_ts).'&amp;selectall=1').'" title="'.T_("Check all records").'">'.T_("Check all").'</a> | <a href="'.$this->Href('','','l='.$l.'&amp;sort='.$sort.'&amp;d='.$d.'&amp;s='.$s.'&amp;search='.urlencode($search).'&amp;start_ts='.urlencode($start_ts).'&amp;end_ts='.urlencode($end_ts).'&amp;selectall=0').'" title="'.T_("Uncheck all records").'">'.T_("Uncheck all").'</a>]<br />';
+			$form_mass .= '<label for="action" >'.T_("With selected").'</label> <select title="'.T_("Choose action to apply to selected records (DISABLED)").'" id="action" name="action">';
 			$form_mass .= '<option value="" selected="selected">---</option>';
 			// Temporarily disabling all but massrevert
 			/*
@@ -673,8 +697,8 @@ if ($this->IsAdmin($this->GetUser()))
 			echo '<option value="massrename">'.FORM_MASSACTION_OPT_RENAME.'</option>';
 			echo '<option value="massacls">'.FORM_MASSACTION_OPT_ACL.'</option>';
 			*/
-			$form_mass .= '<option value="massrevert">'.ADMINPAGES_FORM_MASSACTION_OPT_REVERT.'</option>';
-			$form_mass .= '</select> <input type="submit" value="'.ADMINPAGES_FORM_MASSACTION_SUBMIT.'" />';
+			$form_mass .= '<option value="massrevert">'.T_("Revert to previous page version").'</option>';
+			$form_mass .= '</select> <input type="submit" value="'.T_("Submit").'" />';
 			$form_mass .= '</fieldset>';
 			$form_mass .= $this->FormClose();
 			
@@ -686,7 +710,7 @@ if ($this->IsAdmin($this->GetUser()))
 		else
 		{
 			// no records matching the search string: print error message
-			echo '<p><em class="error">'.sprintf(ADMINPAGES_ERROR_NO_MATCHES, $search_disp).'</em></p>';
+			echo '<p><em class="error">'.sprintf(T_("Sorry, there are no pages matching \"%s\""), $search_disp).'</em></p>';
 		}
 	}
 }

@@ -21,11 +21,11 @@ if ($this->IsAdmin())
 	$res = LoadLastTwoPagesByTag($this, $this->tag);
 	if(null !== $res)
 	{
-		echo '<a href="'.$this->Href('revert').'" title="Click to revert this page to the previous revision">'.REVERTLINK_TEXT.'</a>';
+		echo '<a href="'.$this->Href('revert').'" title="Click to revert this page to the previous revision">'.T_("[Revert]").'</a>';
 	}
 	else
 	{
-		echo '<span class="disabled" title="'.REVERTLINK_OLDEST_TITLE.'">'.REVERTLINK_TEXT.'</span>';
+		echo '<span class="disabled" title="'.T_("This is the oldest known version for this page").'">'.T_("[Revert]").'</span>';
 	}
 }
 ?>

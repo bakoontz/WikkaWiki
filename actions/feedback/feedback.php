@@ -7,13 +7,13 @@ $name = $this->GetSafeVar('name', 'post');
 $email = $this->GetSafeVar('email', 'post');
 $comments = $this->GetSafeVar('comments', 'post');
 
-$form = FILL_FORM.
+$form = T_("<p>Fill in the form below to send us your comments:</p>\n").
 	$this->FormOpen().
-	'<label for="name">'.FEEDBACK_NAME_LABEL.'</label><input name="name" value="'.$name.'" type="text" /><br />'."\n".
+	'<label for="name">'.T_("Name: ").'</label><input name="name" value="'.$name.'" type="text" /><br />'."\n".
 	'<input type="hidden" name="mail" value="result">'."\n".
-	'<label for="email">'.FEEDBACK_EMAIL_LABEL.'</label><input name="email" value="'.$email.'" type="text" /><br />'."\n".
-	'<label for="comments">'.FEEDBACK_COMMENTS_LABEL.'</label><br />'."\n".'<textarea name="comments" rows="15" cols="40">'.$comments.'</textarea><br / >'."\n".
-	'<input type="submit" value="'.FEEDBACK_SEND_BUTTON.'" />'."\n".
+	'<label for="email">'.T_("Email: ").'</label><input name="email" value="'.$email.'" type="text" /><br />'."\n".
+	'<label for="comments">'.T_("Comments:").'</label><br />'."\n".'<textarea name="comments" rows="15" cols="40">'.$comments.'</textarea><br / >'."\n".
+	'<input type="submit" value="'.T_("Send").'" />'."\n".
 	$this->FormClose();
 
 if ($this->GetSafeVar('mail', 'post')=='result') 
@@ -23,17 +23,17 @@ if ($this->GetSafeVar('mail', 'post')=='result')
 	if (!$name) 
 	{
 		// a valid name must be entered
-		echo '<p class="error">'.ERROR_EMPTY_NAME.'</p>'."\n";
+		echo '<p class="error">'.T_("Please enter your name").'</p>'."\n";
 		echo $form;
 	} elseif (!$email || !strchr($email, '@') || !$user || !$host)
 	{
 		// a valid email address must be entered
-		echo '<p class="error">'.ERROR_INVALID_EMAIL.'</p>'."\n";
+		echo '<p class="error">'.T_("Please enter a valid email address").'</p>'."\n";
 		echo $form;
 	} elseif (!$comments)
 	{
 		// some text must be entered
-		echo '<p class="error">'.ERROR_EMPTY_MESSAGE.'</p>'."\n";
+		echo '<p class="error">'.T_("Please enter some text").'</p>'."\n";
 		echo $alert;
 		echo $form;
 	} else 
@@ -43,13 +43,13 @@ if ($this->GetSafeVar('mail', 'post')=='result')
 		$msg .= 'Email:\t'.$email."\n";
 		$msg .= "\n".$comments."\n";
 		$recipient = $this->GetConfigValue('admin_email');
-		$subject = sprintf(FEEDBACK_SUBJECT,$this->GetConfigValue("wakka_name"));
+		$subject = sprintf(T_("Feedback from %s"),$this->GetConfigValue("wakka_name"));
 		$mailheaders = 'From:'.$email."\n";
 		$mailheaders .= 'Reply-To:'.$email;
 		mail($recipient, $subject, $msg, $mailheaders);
-		echo $this->Format(sprintf(SUCCESS_FEEDBACK_SENT,$recipient, $this->GetConfigValue('root_page')));
+		echo sprintf(T_('Thanks for your interest! Your feedback has been sent to %s. Return to the <a href=\"%s\">main page</a>'),$recipient, $this->Href('', $this->GetConfigValue('root_page')));
 		// optionally displays the feedback text
-		//echo $this->Format('---- **'.FEEDBACK_NAME_LABEL.'** '.$name.'---**'.FEEDBACK_EMAIL_LABEL.'** '.$email.'---**'.FEEDBACK_COMMENTS_LABEL.'** ---'.$comments');
+		//echo $this->Format('---- **'.T_("Name: ").'** '.$name.'---**'.T_("Email: ").'** '.$email.'---**'.T_("Comments:").'** ---'.$comments');
 	}    
 } else 
 {
