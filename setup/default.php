@@ -201,8 +201,8 @@ if(isset($_SESSION['error_flag']) && false === $_SESSION['error_flag'] && isset(
 	<tr><td align="right" nowrap="nowrap">Meta Keywords:</td><td><input type="text" size="50" name="config[meta_keywords]" value="<?php if(isset($wakkaConfig["meta_keywords"])) echo $wakkaConfig["meta_keywords"] ?>" /></td></tr>
 	<tr><td align="right" nowrap="nowrap">Meta Description:</td><td><input type="text" size="50" name="config[meta_description]" value="<?php if(isset($wakkaConfig["meta_description"])) echo $wakkaConfig["meta_description"] ?>" /></td></tr>
 	<tr><td></td><td>Choose the <em>look and feel</em> of your wiki (you'll be able to change this later).</td></tr>
-	<tr><td align="right" nowrap="nowrap">Theme:</td><td><?php SelectTheme(); ?></td></tr>
-	<tr><td align="right" nowrap="nowrap">Language pack:</td><td><?php Language_selectbox('en'); ?></td></tr>
+	<tr><td align="right" nowrap="nowrap">Theme:</td><td><?php SelectTheme($wakkaConfig["theme"]); /* refs #1025 */ ?></td></tr>
+	<tr><td align="right" nowrap="nowrap">Language pack:</td><td><?php Language_selectbox($wakkaConfig["default_lang"]); /* refs #1025 */ ?></td></tr>
 
 	<?php
 	 $curversion_num = ($wakkaConfig['wakka_version']) ? str_replace('.','',$wakkaConfig['wakka_version']) : 0;

@@ -70,6 +70,7 @@ exit;
 print("<h2>Testing Configuration</h2>\n");
 test("Testing MySQL connection settings...", $dblink = @mysql_connect($config["mysql_host"], $config["mysql_user"], $config["mysql_password"]));
 test("Looking for database...", @mysql_select_db($config["mysql_database"], $dblink), "The database you configured was not found. Remember, it needs to exist before you can install/upgrade Wakka!\n\nPress the Back button and reconfigure the settings.");
+@mysql_query("SET NAMES 'utf8'", $dblink); // refs #1024 
 print("<br />\n");
 
 // do installation stuff
