@@ -151,10 +151,10 @@ case "0":
 			"doubleclickedit enum('Y','N') NOT NULL default 'Y',".
 			"signuptime datetime NOT NULL default '0000-00-00 00:00:00',".
 			"show_comments enum('Y','N') NOT NULL default 'N',".
-			"default_comment_display enum ('date_asc', 'date_desc', 'threaded') NOT NULL default 'threaded',".
 			"status enum('invited','signed-up','pending','active','suspended','banned','deleted'),".
 			"theme varchar(50) default '',".
-			"challenge varchar(8) default '00000000',".
+			"default_comment_display enum ('date_asc', 'date_desc', 'threaded') NOT NULL default 'threaded',".
+			"challenge varchar(8) default '',". // refs #1023
 			"PRIMARY KEY  (name),".
 			"KEY idx_signuptime (signuptime)".
 			") TYPE=MyISAM CHARACTER SET utf8 COLLATE utf8_unicode_ci", $dblink), "Already exists?", 0);
@@ -467,7 +467,7 @@ case "1.3":
 	@mysql_query("ALTER TABLE ".$config['table_prefix']."pages CHANGE `owner` `owner` VARCHAR( 75 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL default ''", $dblink);
 	@mysql_query("ALTER TABLE ".$config['table_prefix']."pages CHANGE `user` `user` VARCHAR( 75 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL default ''", $dblink);
 	@mysql_query("ALTER TABLE ".$config['table_prefix']."pages CHANGE `latest` `latest` ENUM( 'Y','N' ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL default 'N'", $dblink);
-	@mysql_query("ALTER TABLE ".$config['table_prefix']."pages CHANGE `note` `note` ENUM( 'Y','N' ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL default 'N'", $dblink);
+	@mysql_query("ALTER TABLE ".$config['table_prefix']."pages CHANGE `note` `note` varchar(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL default ''", $dblink); // refs #1021
 	// Converting acls table and fields to UTF-8
 	test("Setting up acls table and fields for UTF-8...", true);
 	@mysql_query("ALTER TABLE ".$config['table_prefix']."acls DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci", $dblink);
@@ -499,8 +499,8 @@ case "1.3":
 	@mysql_query("ALTER TABLE ".$config['table_prefix']."users CHANGE `show_comments` `show_comments` ENUM( 'Y','N' ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL default 'N'", $dblink);
 	@mysql_query("ALTER TABLE ".$config['table_prefix']."users CHANGE `default_comment_display` `default_comment_display` ENUM( 'date_asc','date_desc','threaded' ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL default 'threaded'", $dblink);
 	@mysql_query("ALTER TABLE ".$config['table_prefix']."users CHANGE `status` `status` ENUM( 'invited','signed-up','pending','active','suspended','banned','deleted') CHARACTER SET utf8 COLLATE utf8_unicode_ci", $dblink);
-	@mysql_query("ALTER TABLE ".$config['table_prefix']."users CHANGE `theme` `theme` VARCHAR( 50 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL default ''", $dblink);
-	@mysql_query("ALTER TABLE ".$config['table_prefix']."users CHANGE `challenge` `challenge` VARCHAR( 8 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL default '00000000'", $dblink);
+	@mysql_query("ALTER TABLE ".$config['table_prefix']."users CHANGE `theme` `theme` VARCHAR( 50 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci default ''", $dblink); // refs #1022
+	@mysql_query("ALTER TABLE ".$config['table_prefix']."users CHANGE `challenge` `challenge` VARCHAR( 8 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL default ''", $dblink); // refs #1023
 	// Converting comments table and fields to UTF-8
 	test("Setting up comments table and fields for UTF-8...", true);
 	@mysql_query("ALTER TABLE ".$config['table_prefix']."comments DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci", $dblink);
@@ -512,7 +512,7 @@ case "1.3":
 	// Converting sessions table and fields to UTF-8
 	test("Setting up sessions table and fields for UTF-8...", true);
 	@mysql_query("ALTER TABLE ".$config['table_prefix']."sessions DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci", $dblink);
-	@mysql_query("ALTER TABLE ".$config['table_prefix']."sessions CHANGE `sessionid` `sessionid` VARCHAR( 32 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL", $dblink);
+	@mysql_query("ALTER TABLE ".$config['table_prefix']."sessions CHANGE `sessionid` `sessionid` CHAR( 32 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL", $dblink); // refs #1022
 	@mysql_query("ALTER TABLE ".$config['table_prefix']."sessions CHANGE `userid` `userid` VARCHAR( 75 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL", $dblink);
 
 	// Dropping obsolete "handler" field from pages table, refs #452
@@ -525,6 +525,10 @@ case "1.3":
 	mysql_query("alter table ".$config["table_prefix"]."users add default_comment_display enum('date_asc', 'date_desc', 'threaded') NOT NULL default 'threaded'", $dblink), "Already done? OK!", 0);
 	test("Adding fields to comments table to enable threading...",  
 	mysql_query("alter table ".$config["table_prefix"]."comments add status enum('deleted') default NULL", $dblink), "Already done? OK!", 0);
+	// Adding challenge, refs #1023
+	test("Adding challenge field to users table to improve security...",  
+	mysql_query("alter table ".$config["table_prefix"]."users add challenge varchar(8) COLLATE utf8_unicode_ci DEFAULT ''", $dblink), "Already done? OK!", 0);
+	@mysql_query("UPDATE ".$config['table_prefix']."users SET challenge='' WHERE challenge='00000000'", $dblink);
 	// Create new fields for comment_read_acl and comment_post_acl, 
 	// and copy existing comment_acl values to these new fields 
 	test('Creating new comment_read_acl field...', 
