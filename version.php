@@ -19,17 +19,20 @@
 
 // ---------------------------- VERSIONING ------------------------------------
 /**
- * Used to generate WAKKA_VERSION value. Changes here might be
- * modified during SVN checkin.  Note to end users: Changing this
- * version number might result in problems upgrading...please use
- * caution.
+ * Defines the current Wikka version.
+ * Leave null except for release versions!
  */
-$svn_version = '1.3';
-if (!defined('WAKKA_VERSION')) define('WAKKA_VERSION', $svn_version);
+$svn_version = '';
 
 /**
- * Defines the current Wikka patch level. This should be 0 by default, 
- * and does not need to be changed for major/minor releases.
+ * Used to generate WAKKA_VERSION value. Changes here might be
+ * modified during SVN checkin.
  */
-if(!defined('WIKKA_PATCH_LEVEL')) define('WIKKA_PATCH_LEVEL', '0');
+$svn_revision = '$Rev$';
+if(empty($svn_version))
+{
+	list($t1, $svn_version, $t2) = explode(' ', $svn_revision);
+	$svn_version = 'trunk-'.trim($svn_version);
+}
+if (!defined('WAKKA_VERSION')) define('WAKKA_VERSION', $svn_version);
 ?>
