@@ -1,4 +1,4 @@
-<div class="page">
+<div id="content">
 <?php
 
 /**
@@ -9,16 +9,7 @@
  * re-created as the new version for auditing purposes. An optional GET 
  * parameter, "comment", is permitted:
  *
- * .../SomePage/revert?comment="Replaces spammed page"
- *
- * This handler can also be called via IncludeBuffered(). Pages to be
- * reverted must be passed in via the IncludeBuffered() $vars
- * argument. Each key of the array is formatted "id_#",
- * where "#" is the page to be reverted. (This strange format is due
- * to the way the PageAdmin mass action formats multiple pages, and
- * will need to be modified here if/when mass actions are updated in
- * PageAdmin.)
- *
+ * .../SomePage/revert?comment=Replaces%20spammed%20page
  *
  * @name	    Revert	
  *
@@ -34,72 +25,29 @@
  * Based upon the Delete handler written by DarTar, NilsLindenberg,
  * and MinusF
  *
- * @uses Wakka::Query()
- * @uses Wakka::LoadAll()
  * @uses Wakka::IsAdmin()
  * @uses Wakka::htmlspecialchars_ent()
+ * @uses RevertPageToPreviousByTag()
  * @uses Wakka::GetPageTag()
  * @uses Wakka::Redirect()
  *
  */
 
-//i18n
-if(!defined('MESSAGE_SUCCESS')) define ('MESSAGE_SUCCESS', 'Reverted to previous version');
-if(!defined('MESSAGE_FAILED')) define ('MESSAGE_FAILED', 'Reversion to previous version FAILED!');
-
-$message = MESSAGE_FAILED;
 if (TRUE===$this->IsAdmin())
 {
-	$comment = REVERT_DEFAULT_COMMENT;
+	include_once($this->BuildFullpathFromMultipath('..'.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'libs'.DIRECTORY_SEPARATOR.'admin.lib.php', $this->GetConfigValue('action_path')));
+	$comment = T_("Reverted to previous revision");
 	if(TRUE===isset($_GET['comment']))
 	{
-		$comment = $this->htmlspecialchars_ent($this->GetSafeVar('comment'));
+		$comment = $this->GetSafeVar('comment', 'get');
 	}
-	// If GET params of form "id_#" have been passed, then this
-	// handler was called from the pageadmin handler!
-	$tags = array();
-	foreach($_GET as $key=>$val)
-	{
-		if(FALSE !== strpos($key, "id_"))
-		{
-			$id = substr($key, strpos($key,'_')+1);
-			$res = $this->LoadPageById($id);
-			array_push($tags, $res['tag']);
-		}
-	}
-	if(count($tags)==0)
-	{
-		array_push($tags, mysql_real_escape_string($this->GetPageTag()));
-	}
-
-	foreach($tags as $tag)
-	{
-		// Select current version of this page and version immediately preceding
-		$res = $this->LoadAll("SELECT * FROM ".$this->config['table_prefix']."pages WHERE tag='".$tag."' ORDER BY time DESC LIMIT 2");
-		if($res && 2===count($res))
-		{
-			// $res[0] is current page, $res[1] is page we're reverting to
-			$time = strftime("%F %H:%M:%S");
-			$body = $res[1]['body'];
-			$owner = $res[1]['owner'];
-			$user = $res[1]['user'];
-			$latest = 'Y';
-			$this->Query("INSERT INTO ".$this->config['table_prefix']."pages (tag, time, body, owner, user, latest, note) VALUES ('$tag', '$time', '$body', '$owner', '$user', '$latest', '$comment')");
-			// Reset 'latest' flag on older version to 'N'
-			$this->Query("UPDATE ".$this->config['table_prefix']."pages SET latest='N' where id=".$res[0]['id']);
-			$message = MESSAGE_SUCCESS;
-		}
-	}
-	// Redirect to page
-	if(count($tags)==1)
-	{
-		$this->Redirect($this->Href(), $message);
-	}
-	else
-	{
-		$this->Redirect($this->Href());
-	}
+	$tag = mysql_real_escape_string($this->GetPageTag());
+	$message = RevertPageToPreviousByTag($this, $tag, $comment);
+	$this->Redirect($this->Href(), $message);
 }
-
+else
+{
+	echo '<p><em class="error">'.T_("Sorry, you don't have privileges to revert this page").'</em></p>'."\n";
+}
 ?>
 </div>

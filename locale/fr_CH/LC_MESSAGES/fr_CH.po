@@ -1,0 +1,2457 @@
+# French translations for PACKAGE package
+# Traductions françaises du paquet PACKAGE.
+# Copyright (C) 2010 THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# U-magnetite\brian <brian@wikkawiki.org>, 2010.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2010-11-07 22:12-0600\n"
+"PO-Revision-Date: 2010-11-07 22:28-0600\n"
+"Last-Translator: U-magnetite\\brian <brian@wikkawiki.org>\n"
+"Language-Team: French\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CP1252\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: 3rdparty/core/php-gettext/examples/pigs_dropin.php:77
+#: 3rdparty/core/php-gettext/examples/pigs_fallback.php:76
+msgid ""
+"This is how the story goes.\n"
+"\n"
+msgstr ""
+
+#: actions/adminpages/adminpages.php:123 actions/adminpages/adminpages.php:246
+#: actions/adminusers/adminusers.php:127 actions/adminusers/adminusers.php:248
+#: actions/files/files.php:208 actions/files/files.php:209
+#: handlers/acls/acls.php:58 handlers/acls/acls.php:148
+#: handlers/delete/delete.php:31 handlers/delete/delete.php:78
+#: handlers/edit/edit.php:54 handlers/edit/edit.php:209
+#: handlers/edit/edit.php:261
+msgid "Cancel"
+msgstr ""
+
+#: actions/adminpages/adminpages.php:202
+msgid "Cannot be reverted"
+msgstr ""
+
+#: actions/adminpages/adminpages.php:210 actions/adminpages/adminpages.php:212
+#: handlers/diff/diff.php:89 handlers/diff/diff.php:90
+#: handlers/diff/diff.php:152 handlers/diff/diff.php:153
+#: handlers/revisions/revisions.php:93
+#, php-format
+msgid "%s by %s"
+msgstr ""
+
+#: actions/adminpages/adminpages.php:226
+msgid "Please enter a comment, or leave blank for default"
+msgstr ""
+
+#: actions/adminpages/adminpages.php:300 actions/adminpages/adminpages.php:306
+msgid "YYYY"
+msgstr ""
+
+#: actions/adminpages/adminpages.php:301 actions/adminpages/adminpages.php:307
+msgid "MM"
+msgstr ""
+
+#: actions/adminpages/adminpages.php:302 actions/adminpages/adminpages.php:308
+msgid "DD"
+msgstr ""
+
+#: actions/adminpages/adminpages.php:303 actions/adminpages/adminpages.php:309
+msgid "hh"
+msgstr ""
+
+#: actions/adminpages/adminpages.php:304 actions/adminpages/adminpages.php:310
+msgid "mm"
+msgstr ""
+
+#: actions/adminpages/adminpages.php:305 actions/adminpages/adminpages.php:311
+msgid "ss"
+msgstr ""
+
+#: actions/adminpages/adminpages.php:314
+msgid "time"
+msgstr ""
+
+#: actions/adminpages/adminpages.php:319 actions/adminusers/adminusers.php:306
+#: actions/adminusers/adminusers.php:307
+msgid "desc"
+msgstr ""
+
+#: actions/adminpages/adminpages.php:350
+msgid "Page Administration"
+msgstr ""
+
+#: actions/adminpages/adminpages.php:354 actions/adminusers/adminusers.php:360
+msgid "Filter view:"
+msgstr ""
+
+#: actions/adminpages/adminpages.php:355
+msgid "Search page:"
+msgstr ""
+
+#: actions/adminpages/adminpages.php:355 actions/adminusers/adminusers.php:361
+msgid "Enter a search string"
+msgstr ""
+
+#: actions/adminpages/adminpages.php:355 actions/adminpages/adminpages.php:689
+#: actions/adminusers/adminusers.php:325 actions/adminusers/adminusers.php:361
+#: actions/adminusers/adminusers.php:487
+msgid "Submit"
+msgstr ""
+
+#: actions/adminpages/adminpages.php:357
+msgid "Last edit range: Between"
+msgstr ""
+
+#: actions/adminpages/adminpages.php:357
+msgid "and"
+msgstr ""
+
+#: actions/adminpages/adminpages.php:443 actions/adminusers/adminusers.php:364
+msgid "Show"
+msgstr ""
+
+#: actions/adminpages/adminpages.php:444 actions/adminusers/adminusers.php:365
+msgid "Select records-per-page limit"
+msgstr ""
+
+#: actions/adminpages/adminpages.php:451 actions/adminusers/adminusers.php:372
+msgid "records per page"
+msgstr ""
+
+#: actions/adminpages/adminpages.php:451 actions/adminusers/adminusers.php:348
+#: actions/adminusers/adminusers.php:372
+msgid "Apply"
+msgstr ""
+
+#: actions/adminpages/adminpages.php:458 actions/adminpages/adminpages.php:462
+#: actions/adminusers/adminusers.php:379 actions/adminusers/adminusers.php:383
+#, php-format
+msgid "Show records from %d to %d"
+msgstr ""
+
+#: actions/adminpages/adminpages.php:464 actions/adminusers/adminusers.php:385
+msgid "Records"
+msgstr ""
+
+#: actions/adminpages/adminpages.php:465 actions/adminusers/adminusers.php:386
+msgid "Sorted by:"
+msgstr ""
+
+#: actions/adminpages/adminpages.php:500
+msgid "Sort by page name"
+msgstr ""
+
+#: actions/adminpages/adminpages.php:500
+msgid "Page Name"
+msgstr ""
+
+#: actions/adminpages/adminpages.php:501
+msgid "Sort by page owner"
+msgstr ""
+
+#: actions/adminpages/adminpages.php:501
+msgid "Owner"
+msgstr ""
+
+#: actions/adminpages/adminpages.php:502
+msgid "Sort by last author"
+msgstr ""
+
+#: actions/adminpages/adminpages.php:502
+msgid "Last Author"
+msgstr ""
+
+#: actions/adminpages/adminpages.php:503
+msgid "Sort by edit time"
+msgstr ""
+
+#: actions/adminpages/adminpages.php:503
+msgid "Last Edit"
+msgstr ""
+
+#: actions/adminpages/adminpages.php:506
+msgid "List of pages on this server"
+msgstr ""
+
+#: actions/adminpages/adminpages.php:514
+msgid "Hits"
+msgstr ""
+
+#: actions/adminpages/adminpages.php:514
+msgid "images/icons/star.png"
+msgstr ""
+
+#: actions/adminpages/adminpages.php:515
+msgid "Revisions"
+msgstr ""
+
+#: actions/adminpages/adminpages.php:515 actions/adminusers/adminusers.php:411
+msgid "images/icons/edit.png"
+msgstr ""
+
+#: actions/adminpages/adminpages.php:516 actions/adminusers/adminusers.php:412
+#: handlers/show/show.php:165
+msgid "Comments"
+msgstr ""
+
+#: actions/adminpages/adminpages.php:516 actions/adminusers/adminusers.php:412
+msgid "images/icons/comment.png"
+msgstr ""
+
+#: actions/adminpages/adminpages.php:517
+msgid "Backlinks"
+msgstr ""
+
+#: actions/adminpages/adminpages.php:517
+msgid "images/icons/link.png"
+msgstr ""
+
+#: actions/adminpages/adminpages.php:518
+msgid "Referrers"
+msgstr ""
+
+#: actions/adminpages/adminpages.php:518
+msgid "images/icons/world.png"
+msgstr ""
+
+#: actions/adminpages/adminpages.php:519 actions/adminusers/adminusers.php:413
+msgid "Actions"
+msgstr ""
+
+#: actions/adminpages/adminpages.php:527
+msgid "12"
+msgstr ""
+
+#: actions/adminpages/adminpages.php:527 actions/adminpages/adminpages.php:601
+msgid "&#8230;"
+msgstr ""
+
+#: actions/adminpages/adminpages.php:545 actions/adminpages/adminpages.php:549
+msgid "revert"
+msgstr ""
+
+#: actions/adminpages/adminpages.php:549
+#, php-format
+msgid "Revert %s to previous version"
+msgstr ""
+
+#: actions/adminpages/adminpages.php:551
+#, php-format
+msgid "Edit %s"
+msgstr ""
+
+#: actions/adminpages/adminpages.php:551
+msgid "edit"
+msgstr ""
+
+#: actions/adminpages/adminpages.php:552 handlers/delete/delete.php:65
+#, php-format
+msgid "Delete %s"
+msgstr ""
+
+#: actions/adminpages/adminpages.php:552 actions/adminusers/adminusers.php:438
+#: actions/adminusers/adminusers.php:442
+msgid "delete"
+msgstr ""
+
+#: actions/adminpages/adminpages.php:553
+#, php-format
+msgid "Clone %s"
+msgstr ""
+
+#: actions/adminpages/adminpages.php:553
+msgid "clone"
+msgstr ""
+
+#: actions/adminpages/adminpages.php:554
+#, php-format
+msgid "Change Access Control List for %s"
+msgstr ""
+
+#: actions/adminpages/adminpages.php:554
+msgid "acl"
+msgstr ""
+
+#: actions/adminpages/adminpages.php:580
+msgid "Take ownership of"
+msgstr ""
+
+#: actions/adminpages/adminpages.php:601
+msgid "15"
+msgstr ""
+
+#: actions/adminpages/adminpages.php:612
+msgid "(Nobody)"
+msgstr ""
+
+#: actions/adminpages/adminpages.php:627
+#, php-format
+msgid "Hits for %s (%d)"
+msgstr ""
+
+#: actions/adminpages/adminpages.php:630
+#, php-format
+msgid "Display revisions for %s (%d)"
+msgstr ""
+
+#: actions/adminpages/adminpages.php:633
+#, php-format
+msgid "Display comments for %s (%d)"
+msgstr ""
+
+#: actions/adminpages/adminpages.php:636
+#, php-format
+msgid "Display pages linking to %s (%d)"
+msgstr ""
+
+#: actions/adminpages/adminpages.php:639
+#, php-format
+msgid "Display external sites linking to %s (%d)"
+msgstr ""
+
+#: actions/adminpages/adminpages.php:651 actions/adminusers/adminusers.php:456
+#, php-format
+msgid "Select %s"
+msgstr ""
+
+#: actions/adminpages/adminpages.php:655
+msgid "(No edit note)"
+msgstr ""
+
+#: actions/adminpages/adminpages.php:677 actions/adminusers/adminusers.php:480
+msgid "Mass-action"
+msgstr ""
+
+#: actions/adminpages/adminpages.php:678
+msgid "Check all records"
+msgstr ""
+
+#: actions/adminpages/adminpages.php:678
+msgid "Check all"
+msgstr ""
+
+#: actions/adminpages/adminpages.php:678
+msgid "Uncheck all records"
+msgstr ""
+
+#: actions/adminpages/adminpages.php:678
+msgid "Uncheck all"
+msgstr ""
+
+#: actions/adminpages/adminpages.php:679 actions/adminusers/adminusers.php:482
+msgid "With selected"
+msgstr ""
+
+#: actions/adminpages/adminpages.php:679
+msgid "Choose action to apply to selected records (DISABLED)"
+msgstr ""
+
+#: actions/adminpages/adminpages.php:688
+msgid "Revert to previous page version"
+msgstr ""
+
+#: actions/adminpages/adminpages.php:701
+#, php-format
+msgid "Sorry, there are no pages matching \"%s\""
+msgstr ""
+
+#: actions/adminusers/adminusers.php:192 actions/adminusers/adminusers.php:278
+msgid "Sorry, could not delete user. Please check your admin settings"
+msgstr ""
+
+#: actions/adminusers/adminusers.php:196 actions/adminusers/adminusers.php:282
+msgid "User has been sucessfully deleted"
+msgstr ""
+
+#: actions/adminusers/adminusers.php:213
+msgid "Delete these users?"
+msgstr ""
+
+#: actions/adminusers/adminusers.php:220
+msgid "Cannot delete admins"
+msgstr ""
+
+#: actions/adminusers/adminusers.php:246
+msgid "Delete Users"
+msgstr ""
+
+#: actions/adminusers/adminusers.php:302 actions/adminusers/adminusers.php:303
+msgid "signuptime"
+msgstr ""
+
+#: actions/adminusers/adminusers.php:354
+msgid "User Administration"
+msgstr ""
+
+#: actions/adminusers/adminusers.php:361
+msgid "Search user:"
+msgstr ""
+
+#: actions/adminusers/adminusers.php:395
+msgid "Sort by user name"
+msgstr ""
+
+#: actions/adminusers/adminusers.php:395
+msgid "User Name"
+msgstr ""
+
+#: actions/adminusers/adminusers.php:396
+msgid "Sort by email"
+msgstr ""
+
+#: actions/adminusers/adminusers.php:396
+msgid "Email"
+msgstr ""
+
+#: actions/adminusers/adminusers.php:397
+msgid "Sort by signup time"
+msgstr ""
+
+#: actions/adminusers/adminusers.php:397
+msgid "Signup Time"
+msgstr ""
+
+#: actions/adminusers/adminusers.php:402
+msgid "List of users registered on this server"
+msgstr ""
+
+#: actions/adminusers/adminusers.php:410
+msgid "Owned Pages"
+msgstr ""
+
+#: actions/adminusers/adminusers.php:410
+msgid "images/icons/keyring.png"
+msgstr ""
+
+#: actions/adminusers/adminusers.php:411
+msgid "Edits"
+msgstr ""
+
+#: actions/adminusers/adminusers.php:429
+#, php-format
+msgid "Display pages owned by %s (%d)"
+msgstr ""
+
+#: actions/adminusers/adminusers.php:430
+#, php-format
+msgid "Display page edits by %s (%d)"
+msgstr ""
+
+#: actions/adminusers/adminusers.php:431
+#, php-format
+msgid "Display comments by %s (%d)"
+msgstr ""
+
+#: actions/adminusers/adminusers.php:442
+#, php-format
+msgid "Remove user %s"
+msgstr ""
+
+#: actions/adminusers/adminusers.php:481
+msgid "Select all records"
+msgstr ""
+
+#: actions/adminusers/adminusers.php:481
+msgid "Select all"
+msgstr ""
+
+#: actions/adminusers/adminusers.php:481
+msgid "Deselect all records"
+msgstr ""
+
+#: actions/adminusers/adminusers.php:481
+msgid "Deselect all"
+msgstr ""
+
+#: actions/adminusers/adminusers.php:483
+msgid "Choose an action to apply to the selected records"
+msgstr ""
+
+#: actions/adminusers/adminusers.php:485
+msgid "Delete selected"
+msgstr ""
+
+#: actions/adminusers/adminusers.php:498
+#, php-format
+msgid "Sorry, there are no users matching \"%s\""
+msgstr ""
+
+#: actions/calendar/calendar.php:119
+#, php-format
+msgid "Calendar for %s"
+msgstr ""
+
+#: actions/calendar/calendar.php:150
+msgid "%B %Y"
+msgstr ""
+
+#: actions/category/category.php:68
+#, php-format
+msgid "The following %d page(s)"
+msgstr ""
+
+#: actions/category/category.php:71
+#, php-format
+msgid "Sorry, No items found for %s"
+msgstr ""
+
+#: actions/checkversion/checkversion.php:77
+#, php-format
+msgid "[elapsed time: %d]"
+msgstr ""
+
+#: actions/checkversion/checkversion.php:111
+#, php-format
+msgid "[%s PHP %s does not support this feature]"
+msgstr ""
+
+#: actions/checkversion/checkversion.php:120
+msgid "[allow_url_fopen disabled]"
+msgstr ""
+
+#: actions/checkversion/checkversion.php:125
+#: actions/checkversion/checkversion.php:162
+msgid "wikkawiki.org"
+msgstr ""
+
+#: actions/checkversion/checkversion.php:132
+#, php-format
+msgid "[Cannot resolve %s]"
+msgstr ""
+
+#: actions/checkversion/checkversion.php:142
+msgid "[Cannot initiate socket connection]"
+msgstr ""
+
+#: actions/checkversion/checkversion.php:149
+#, php-format
+msgid ""
+"<div title=\"Cannot initiate network connection\" style=\"clear: both; text-"
+"align: center; float: left; width: 300px; border: 1px solid %s; background-"
+"color: %s; color: %s; margin: 10px 0\">\n"
+"<div style=\"padding: 0 3px 0 3px; background-color: %s; font-size: 85%%; "
+"font-weight: bold\">CHECKVERSION FAILED</div>\n"
+"<div style=\"padding: 0 3px 2px 3px; font-size: 85%%; line-height: 150%%; "
+"border-top: 1px solid %s;\">\n"
+"The network connection with the WikkaWiki server could not be established. "
+"To prevent delays in loading this page, please set enable_version_check to 0 "
+"in your wikka.config.php file.\n"
+"</div>\n"
+"</div>\n"
+"<div class=\"clear\"></div>\n"
+msgstr ""
+
+#: actions/checkversion/checkversion.php:161
+msgid "/downloads/latest_wikka_version.txt"
+msgstr ""
+
+#: actions/checkversion/checkversion.php:173
+#, php-format
+msgid "[%s from host %s]"
+msgstr ""
+
+#: actions/checkversion/checkversion.php:183
+msgid "A new version of WikkaWiki is available. Please upgrade!"
+msgstr ""
+
+#: actions/checkversion/checkversion.php:184
+msgid "UPGRADE NOTE"
+msgstr ""
+
+#: actions/checkversion/checkversion.php:186
+#, php-format
+msgid ""
+"<strong>WikkaWiki %s</strong> is available for <a href=\"%s\">download</a>!"
+msgstr ""
+
+#: actions/checkversion/checkversion.php:190
+msgid "http://docs.wikkawiki.org/WhatsNew"
+msgstr ""
+
+#: actions/clonelink/clonelink.php:15
+msgid "Duplicate this page"
+msgstr ""
+
+#: actions/clonelink/clonelink.php:15
+msgid "[Clone]"
+msgstr ""
+
+#: actions/color/color.php:114
+msgid "There is no text to highlight!"
+msgstr ""
+
+#: actions/color/color.php:118
+msgid "Sorry, but you did not specify a color for highlighting!"
+msgstr ""
+
+#: actions/contact/contact.php:20
+msgid "Send us your feedback"
+msgstr ""
+
+#: actions/contact/contact.php:20
+msgid "Contact"
+msgstr ""
+
+#: actions/countowned/countowned.php:27
+msgid "Display a list of the pages you currently own"
+msgstr ""
+
+#: actions/countpages/countpages.php:17
+msgid "Display an alphabetical page index"
+msgstr ""
+
+#: actions/dbinfo/dbinfo.php:63
+msgid "Database Information"
+msgstr ""
+
+#: actions/dbinfo/dbinfo.php:64
+msgid "Database"
+msgstr ""
+
+#: actions/dbinfo/dbinfo.php:65 actions/dbinfo/dbinfo.php:241
+msgid "Tables"
+msgstr ""
+
+#: actions/dbinfo/dbinfo.php:66
+msgid "This utility provides some information about the database(s)."
+msgstr ""
+
+#: actions/dbinfo/dbinfo.php:66
+msgid ""
+" Depending on permissions for the Wikka database user, not all databases or "
+"tables may be visible."
+msgstr ""
+
+#: actions/dbinfo/dbinfo.php:66
+msgid ""
+" Where creation DDL is given, this reflects everything that would be needed "
+"to exactly recreate the same database and table definitions, "
+msgstr ""
+
+#: actions/dbinfo/dbinfo.php:66
+msgid " including defaults that may not have been specified explicitly."
+msgstr ""
+
+#: actions/dbinfo/dbinfo.php:67
+msgid "Sorry, only administrators can view database information."
+msgstr ""
+
+#: actions/dbinfo/dbinfo.php:207
+msgid "Databases"
+msgstr ""
+
+#: actions/dbinfo/dbinfo.php:208
+msgid "Select a database:"
+msgstr ""
+
+#: actions/dbinfo/dbinfo.php:222 actions/dbinfo/dbinfo.php:256
+msgid "Select"
+msgstr ""
+
+#: actions/dbinfo/dbinfo.php:228
+#, php-format
+msgid "Information for the <tt>%s</tt> database."
+msgstr ""
+
+#: actions/dbinfo/dbinfo.php:242
+msgid "Select a table:"
+msgstr ""
+
+#: actions/dbinfo/dbinfo.php:262
+#, php-format
+msgid ""
+"No tables found in the <tt>%s</tt> database. Your MySQL user may not have "
+"sufficient privileges to access this database."
+msgstr ""
+
+#: actions/dbinfo/dbinfo.php:269
+#, php-format
+msgid "DDL to create database %s:"
+msgstr ""
+
+#: actions/dbinfo/dbinfo.php:276 actions/dbinfo/dbinfo.php:287
+#, php-format
+msgid "Creation DDL for <tt>%s</tt> could not be retrieved."
+msgstr ""
+
+#: actions/dbinfo/dbinfo.php:280
+#, php-format
+msgid "DDL to create table %s:"
+msgstr ""
+
+#: actions/deletelink/deletelink.php:15
+msgid "'Delete this page (requires confirmation"
+msgstr ""
+
+#: actions/deletelink/deletelink.php:15
+msgid "[Delete]"
+msgstr ""
+
+#: actions/editlink/editlink.php:19
+msgid "Displayed the formatted version of this page"
+msgstr ""
+
+#: actions/editlink/editlink.php:19
+msgid "[Show]"
+msgstr ""
+
+#: actions/editlink/editlink.php:25
+msgid "Click to edit this page"
+msgstr ""
+
+#: actions/editlink/editlink.php:25
+msgid "[Edit]"
+msgstr ""
+
+#: actions/editlink/editlink.php:29
+msgid "Display the markup for this page"
+msgstr ""
+
+#: actions/editlink/editlink.php:29
+msgid "[Source]"
+msgstr ""
+
+#: actions/emailpassword/emailpassword.php:29
+#: actions/usersettings/usersettings.php:332
+msgid "Password reminder"
+msgstr ""
+
+#: actions/emailpassword/emailpassword.php:40
+#: actions/usersettings/usersettings.php:513
+msgid "Please fill in your username!"
+msgstr ""
+
+#: actions/emailpassword/emailpassword.php:44
+msgid "You have entered a non-existent user!"
+msgstr ""
+
+#: actions/emailpassword/emailpassword.php:50
+#, php-format
+msgid "Password reminder for %s"
+msgstr ""
+
+#: actions/emailpassword/emailpassword.php:51
+#, php-format
+msgid ""
+"Hello, %s!  Someone requested that we send to this email address a password "
+"reminder to login at %s. If you did not request this reminder, disregard "
+"this email, no action is necessary. Your password will stay the same.  Your "
+"wikiname: %s Password reminder: %s URL: %s Do not forget to change the "
+"password immediately after logging in."
+msgstr ""
+
+#: actions/emailpassword/emailpassword.php:56
+#, php-format
+msgid "A password reminder has been sent to %s's registered email address."
+msgstr ""
+
+#: actions/emailpassword/emailpassword.php:57
+msgid "Return to the [[UserSettings login]] screen."
+msgstr ""
+
+#: actions/emailpassword/emailpassword.php:61
+msgid ""
+"An error occurred while trying to send the password. Outgoing mail might be "
+"disabled. Please try to contact your wiki administrator by posting a page "
+"comment."
+msgstr ""
+
+#: actions/emailpassword/emailpassword.php:70
+msgid ""
+"Enter your WikiName and a password reminder will be sent to your registered "
+"email address."
+msgstr ""
+
+#: actions/emailpassword/emailpassword.php:73
+msgid "Your WikiName:"
+msgstr ""
+
+#: actions/emailpassword/emailpassword.php:75
+msgid "Send reminder"
+msgstr ""
+
+#: actions/feedback/feedback.php:10
+msgid "<p>Fill in the form below to send us your comments:</p>\n"
+msgstr ""
+
+#: actions/feedback/feedback.php:12
+msgid "Name: "
+msgstr ""
+
+#: actions/feedback/feedback.php:14
+msgid "Email: "
+msgstr ""
+
+#: actions/feedback/feedback.php:15
+msgid "Comments:"
+msgstr ""
+
+#: actions/feedback/feedback.php:16
+msgid "Send"
+msgstr ""
+
+#: actions/feedback/feedback.php:26
+msgid "Please enter your name"
+msgstr ""
+
+#: actions/feedback/feedback.php:31
+msgid "Please enter a valid email address"
+msgstr ""
+
+#: actions/feedback/feedback.php:36
+msgid "Please enter some text"
+msgstr ""
+
+#: actions/feedback/feedback.php:46
+#, php-format
+msgid "Feedback from %s"
+msgstr ""
+
+#: actions/feedback/feedback.php:50
+#, php-format
+msgid ""
+"Thanks for your interest! Your feedback has been sent to %s. Return to the "
+"[[%s main page]]"
+msgstr ""
+
+#: actions/files/files.php:182
+#, php-format
+msgid "Please make sure that the server has write access to a folder named %s."
+msgstr ""
+
+#: actions/files/files.php:196
+msgid "Delete this file?"
+msgstr ""
+
+#: actions/files/files.php:207
+msgid "Delete File"
+msgstr ""
+
+#: actions/files/files.php:221 handlers/files.xml/files.xml.php:110
+msgid "File deleted"
+msgstr ""
+
+#: actions/files/files.php:240 actions/files/files.php:389
+#: formatters/wakka.php:760
+#, php-format
+msgid "Download %s"
+msgstr ""
+
+#: actions/files/files.php:246 handlers/files.xml/files.xml.php:73
+#, php-format
+msgid "Sorry, a file named %s does not exist."
+msgstr ""
+
+#: actions/files/files.php:272 actions/files/files.php:306
+#, php-format
+msgid "Attempted file upload was too big. Maximum allowed size is %s."
+msgstr ""
+
+#: actions/files/files.php:286
+msgid "File was successfully uploaded."
+msgstr ""
+
+#: actions/files/files.php:290
+msgid "There was an error uploading your file"
+msgstr ""
+
+#: actions/files/files.php:295
+#, php-format
+msgid "Sorry, a file named %s already exists."
+msgstr ""
+
+#: actions/files/files.php:300
+msgid "Sorry, files with this extension are not allowed."
+msgstr ""
+
+#: actions/files/files.php:309
+msgid "File upload incomplete! Please try again."
+msgstr ""
+
+#: actions/files/files.php:312
+msgid "No file selected."
+msgstr ""
+
+#: actions/files/files.php:315
+msgid "File upload impossible due to misconfigured server."
+msgstr ""
+
+#: actions/files/files.php:386
+#, php-format
+msgid "Remove %s"
+msgstr ""
+
+#: actions/files/files.php:391
+msgid "Y-m-d H:i"
+msgstr ""
+
+#: actions/files/files.php:409
+msgid "Attachments"
+msgstr ""
+
+#: actions/files/files.php:416
+msgid "File"
+msgstr ""
+
+#: actions/files/files.php:417
+msgid "Last modified"
+msgstr ""
+
+#: actions/files/files.php:418
+msgid "Size"
+msgstr ""
+
+#: actions/files/files.php:430
+#, php-format
+msgid "Please make sure that the server has read access to a folder named %s."
+msgstr ""
+
+#: actions/files/files.php:437
+msgid "This page contains no attachment."
+msgstr ""
+
+#: actions/files/files.php:467
+msgid "Add new attachment:"
+msgstr ""
+
+#: actions/files/files.php:468
+msgid "File:"
+msgstr ""
+
+#: actions/files/files.php:469
+msgid "Upload"
+msgstr ""
+
+#: actions/geshiversion/geshiversion.php:24
+#: actions/mysqlversion/mysqlversion.php:24
+#: actions/phpversion/phpversion.php:24 actions/system/system.php:28
+#: actions/wikkapatchlevel/wikkapatchlevel.php:20
+#: actions/wikkaversion/wikkaversion.php:25
+msgid "Sorry, only wiki administrators can display this information"
+msgstr ""
+
+#: actions/geshiversion/geshiversion.php:24
+#: actions/geshiversion/geshiversion.php:41
+#: actions/mysqlversion/mysqlversion.php:24
+#: actions/phpversion/phpversion.php:24 actions/system/system.php:28
+#: actions/wikkapatchlevel/wikkapatchlevel.php:20
+#: actions/wikkaversion/wikkaversion.php:25
+msgid "n/a"
+msgstr ""
+
+#: actions/geshiversion/geshiversion.php:46
+msgid "not installed"
+msgstr ""
+
+#: actions/googleform/googleform.php:65
+msgid "Google"
+msgstr ""
+
+#: actions/highscores/highscores.php:56 actions/lastusers/lastusers.php:39
+msgid "complex"
+msgstr ""
+
+#: actions/highscores/highscores.php:61
+msgid "pages"
+msgstr ""
+
+#: actions/highscores/highscores.php:67
+msgid "edits"
+msgstr ""
+
+#: actions/highscores/highscores.php:73
+msgid "comments"
+msgstr ""
+
+#: actions/highscores/highscores.php:80
+msgid "pages owned"
+msgstr ""
+
+#: actions/highscores/highscores.php:110
+#, php-format
+msgid "'Top %s contributor(s"
+msgstr ""
+
+#: actions/highscores/highscores.php:113
+msgid "rank"
+msgstr ""
+
+#: actions/highscores/highscores.php:114
+msgid "user"
+msgstr ""
+
+#: actions/highscores/highscores.php:116
+msgid "percentage"
+msgstr ""
+
+#: actions/historylink/historylink.php:15
+msgid "Click to view recent edits to this page"
+msgstr ""
+
+#: actions/historylink/historylink.php:15
+msgid "[History]"
+msgstr ""
+
+#: actions/include/include.php:49
+#, php-format
+msgid "You aren't allowed to read included page <tt>%s</tt>"
+msgstr ""
+
+#: actions/include/include.php:51
+msgid "Circular reference detected!"
+msgstr ""
+
+#: actions/lastedit/lastedit.php:53
+msgid "Show differences from last revision"
+msgstr ""
+
+#: actions/lastedit/lastedit.php:57 actions/mychanges/mychanges.php:120
+#: actions/recentchanges/recentchanges.php:69
+#: actions/recentcomments/recentcomments.php:45
+#: actions/recentlycommented/recentlycommented.php:56
+msgid "D, d M Y"
+msgstr ""
+
+#: actions/lastedit/lastedit.php:58 actions/mychanges/mychanges.php:122
+#: actions/recentchanges/recentchanges.php:75
+#: actions/recentcomments/recentcomments.php:55
+#: actions/recentlycommented/recentlycommented.php:65
+msgid "H:i T"
+msgstr ""
+
+#: actions/lastedit/lastedit.php:61
+msgid "lastedit_notes"
+msgstr ""
+
+#: actions/lastedit/lastedit.php:66
+msgid "lastedit"
+msgstr ""
+
+#: actions/lastedit/lastedit.php:66
+#, php-format
+msgid "Last edited by %s"
+msgstr ""
+
+#: actions/lastusers/lastusers.php:56
+msgid "Recently registered users"
+msgstr ""
+
+#: actions/lastusers/lastusers.php:58
+msgid "Username"
+msgstr ""
+
+#: actions/lastusers/lastusers.php:59
+msgid "Owned pages"
+msgstr ""
+
+#: actions/lastusers/lastusers.php:60
+msgid "Signup date/time"
+msgstr ""
+
+#: actions/logout/logout.php:22 actions/usersettings/usersettings.php:94
+#: actions/usersettings/usersettings.php:174
+#: actions/usersettings/usersettings.php:356
+msgid "Logout"
+msgstr ""
+
+#: actions/logout/logout.php:28 actions/usersettings/usersettings.php:366
+#: actions/usersettings/usersettings.php:549
+#: actions/usersettings/usersettings.php:581
+#: actions/usersettings/usersettings.php:630
+msgid "Login"
+msgstr ""
+
+#: actions/mychanges/mychanges.php:61
+#, php-format
+msgid ""
+"This is a list of pages edited by %s, along with the time of the last change."
+msgstr ""
+
+#: actions/mychanges/mychanges.php:61
+msgid "order by date"
+msgstr ""
+
+#: actions/mychanges/mychanges.php:74
+#, php-format
+msgid ""
+"This is a list of pages edited by %s, ordered by the time of the last change."
+msgstr ""
+
+#: actions/mychanges/mychanges.php:74
+msgid "order alphabetically"
+msgstr ""
+
+#: actions/mychanges/mychanges.php:110 actions/mychanges/mychanges.php:123
+#: actions/revisionlink/revisionlink.php:16
+msgid "Click to view recent revisions list for this page"
+msgstr ""
+
+#: actions/mychanges/mychanges.php:129 actions/pageindex/pageindex.php:134
+msgid "No pages found."
+msgstr ""
+
+#: actions/mychanges/mychanges.php:134
+msgid ""
+"You're not logged in, thus the list of pages youve edited couldn't be "
+"retrieved."
+msgstr ""
+
+#: actions/mypages/mypages.php:33
+#, php-format
+msgid "This is the list of pages owned by %s"
+msgstr ""
+
+#: actions/mypages/mypages.php:59
+#, php-format
+msgid "%s doesn't own any pages.'"
+msgstr ""
+
+#: actions/mypages/mypages.php:64
+msgid ""
+"You're not logged in, thus the list of your pages could not be retrieved.'"
+msgstr ""
+
+#: actions/newpage/newpage.php:34
+#, php-format
+msgid ""
+"This page name is invalid. Valid page names must not contain the characters "
+"| ?  = &lt; &gt; / \\ \" % or &amp;.'"
+msgstr ""
+
+#: actions/newpage/newpage.php:38
+msgid "Sorry, the target page already exists"
+msgstr ""
+
+#: actions/newpage/newpage.php:51
+msgid "Create a new page"
+msgstr ""
+
+#: actions/newpage/newpage.php:53
+msgid "Create"
+msgstr ""
+
+#: actions/orphanedpages/orphanedpages.php:24
+msgid "No orphaned pages. Good!"
+msgstr ""
+
+#: actions/ownedpages/ownedpages.php:32
+#, php-format
+msgid "You own %s pages out of the %s pages on this Wiki."
+msgstr ""
+
+#: actions/ownedpages/ownedpages.php:34
+#, php-format
+msgid "That means you own %s of the total."
+msgstr ""
+
+#: actions/ownerlink/ownerlink.php:22
+msgid "Public page"
+msgstr ""
+
+#: actions/ownerlink/ownerlink.php:22 actions/ownerlink/ownerlink.php:29
+#: actions/ownerlink/ownerlink.php:33
+msgid "Change the Access Control List for this page"
+msgstr ""
+
+#: actions/ownerlink/ownerlink.php:22 actions/ownerlink/ownerlink.php:29
+#: actions/ownerlink/ownerlink.php:33
+msgid "[Edit ACLs]"
+msgstr ""
+
+#: actions/ownerlink/ownerlink.php:29 actions/ownerlink/ownerlink.php:38
+msgid "Owner:"
+msgstr ""
+
+#: actions/ownerlink/ownerlink.php:33
+msgid "You own this page"
+msgstr ""
+
+#: actions/ownerlink/ownerlink.php:43
+msgid "Nobody"
+msgstr ""
+
+#: actions/ownerlink/ownerlink.php:43
+msgid "Click to become the owner of this page"
+msgstr ""
+
+#: actions/ownerlink/ownerlink.php:43
+msgid "[Take Ownership]"
+msgstr ""
+
+#: actions/pageindex/pageindex.php:68 actions/pageindex/pageindex.php:144
+msgid "All"
+msgstr ""
+
+#: actions/pageindex/pageindex.php:69
+msgid "This is an alphabetical list of pages you can read on this server."
+msgstr ""
+
+#: actions/pageindex/pageindex.php:117
+#, php-format
+msgid "Owner: %s"
+msgstr ""
+
+#: actions/pageindex/pageindex.php:126
+msgid "Items marked with a * indicate pages that you own."
+msgstr ""
+
+#: actions/pageindex/pageindex.php:128
+msgid "Page Index"
+msgstr ""
+
+#: actions/recentchanges/recentchanges.php:39
+msgid "Recently changed pages"
+msgstr ""
+
+#: actions/recentchanges/recentchanges.php:102
+#: actions/recentchanges/recentchanges.php:103
+#, php-format
+msgid "View recent revisions list for %s"
+msgstr ""
+
+#: actions/recentchanges/recentchanges.php:104
+#, php-format
+msgid "View edit history of %s"
+msgstr ""
+
+#: actions/recentchanges/recentchanges.php:104
+msgid "history"
+msgstr ""
+
+#: actions/recentchanges/recentchanges.php:112
+msgid "There are no recently changed pages you have access to."
+msgstr ""
+
+#: actions/recentchanges/recentchanges.php:123
+#, php-format
+msgid "WikiPing enabled: Changes on this wiki are broadcast to %s"
+msgstr ""
+
+#: actions/recentchanges/recentchanges.php:128
+msgid "There are no recently changed pages."
+msgstr ""
+
+#: actions/recentcomments/recentcomments.php:30
+msgid "=====Recent comments====="
+msgstr ""
+
+#: actions/recentcomments/recentcomments.php:64 handlers/show/show.php:315
+#, php-format
+msgid "%s"
+msgstr ""
+
+#: actions/recentcomments/recentcomments.php:64
+#: actions/recentlycommented/recentlycommented.php:73
+msgid ", comment by "
+msgstr ""
+
+#: actions/recentcomments/recentcomments.php:69
+msgid "There are no recent comments you have access to."
+msgstr ""
+
+#: actions/recentcomments/recentcomments.php:76
+#, php-format
+msgid "There are no recent comments by %s."
+msgstr ""
+
+#: actions/recentcomments/recentcomments.php:80
+msgid "There are no recent comments."
+msgstr ""
+
+#: actions/recentlycommented/recentlycommented.php:41
+msgid "Recently commented pages"
+msgstr ""
+
+#: actions/recentlycommented/recentlycommented.php:78
+msgid "There are no recently commented pages you have access to."
+msgstr ""
+
+#: actions/recentlycommented/recentlycommented.php:85
+#, php-format
+msgid "There are no recently by %s commented pages."
+msgstr ""
+
+#: actions/recentlycommented/recentlycommented.php:89
+msgid "There are no recently commented pages."
+msgstr ""
+
+#: actions/redirect/redirect.php:79
+#, php-format
+msgid "Redirected from %s."
+msgstr ""
+
+#: actions/redirect/redirect.php:88
+#, php-format
+msgid "This page has been moved to %s."
+msgstr ""
+
+#: actions/redirect/redirect.php:92
+msgid "Invalid redirect. Target must be an existing wiki page."
+msgstr ""
+
+#: actions/referrerslink/referrerslink.php:15
+msgid "Click to view a list of URLs referring to this page."
+msgstr ""
+
+#: actions/referrerslink/referrerslink.php:15
+msgid "[Referrers]"
+msgstr ""
+
+#: actions/revertlink/revertlink.php:24 actions/revertlink/revertlink.php:28
+msgid "[Revert]"
+msgstr ""
+
+#: actions/revertlink/revertlink.php:28
+msgid "This is the oldest known version for this page"
+msgstr ""
+
+#: actions/revisionlink/revisionlink.php:16
+msgid "Click to display a feed with the latest revisions to this page"
+msgstr ""
+
+#: actions/rss/rss.php:115
+msgid ""
+"Error: Invalid RSS action syntax. <br /> Proper usage: {{rss http://domain."
+"com/feed.xml}} or {{rss url=\"http://domain.com/feed.xml\"}}"
+msgstr ""
+
+#: actions/searchform/searchform.php:6
+msgid "Search: "
+msgstr ""
+
+#: actions/system/system.php:66 handlers/edit/edit.php:255
+#, php-format
+msgid "(%s)"
+msgstr ""
+
+#: actions/textsearch/textsearch.php:37
+#: actions/textsearchexpanded/textsearchexpanded.php:43
+msgid "Search for"
+msgstr ""
+
+#: actions/textsearch/textsearch.php:70
+#: actions/textsearchexpanded/textsearchexpanded.php:137
+msgid "No matches"
+msgstr ""
+
+#: actions/textsearch/textsearch.php:73
+#: actions/textsearchexpanded/textsearchexpanded.php:140
+msgid "One match found"
+msgstr ""
+
+#: actions/textsearch/textsearch.php:76
+#: actions/textsearchexpanded/textsearchexpanded.php:143
+#, php-format
+msgid "%d matches found"
+msgstr ""
+
+#: actions/textsearch/textsearch.php:79
+#: actions/textsearchexpanded/textsearchexpanded.php:146
+#, php-format
+msgid "Search results: <strong>%s</strong> for <strong>%s</strong>"
+msgstr ""
+
+#: actions/textsearch/textsearch.php:83
+msgid "Expanded Text Search"
+msgstr ""
+
+#: actions/textsearch/textsearch.php:86
+msgid "Not sure which page to choose?"
+msgstr ""
+
+#: actions/textsearch/textsearch.php:86
+#, php-format
+msgid "Try the %s which shows surrounding text."
+msgstr ""
+
+#: actions/usersettings/usersettings.php:65
+msgid ""
+"A WikiName is formed by two or more capitalized words without space, e.g. "
+"John Doe"
+msgstr ""
+
+#: actions/usersettings/usersettings.php:65
+msgid "WikiName"
+msgstr ""
+
+#: actions/usersettings/usersettings.php:120
+#: actions/usersettings/usersettings.php:469
+msgid "Please specify an email address."
+msgstr ""
+
+#: actions/usersettings/usersettings.php:123
+#: actions/usersettings/usersettings.php:474
+msgid "/^.+?\\@.+?\\..+$/"
+msgstr ""
+
+#: actions/usersettings/usersettings.php:124
+msgid "That doesn't quite look like an email address."
+msgstr ""
+
+#: actions/usersettings/usersettings.php:128
+#, php-format
+msgid "The number of page revisions should not exceed %d."
+msgstr ""
+
+#: actions/usersettings/usersettings.php:132
+#, php-format
+msgid "The number of recently changed pages should not exceed %d."
+msgstr ""
+
+#: actions/usersettings/usersettings.php:171
+msgid "Your account"
+msgstr ""
+
+#: actions/usersettings/usersettings.php:173
+#, php-format
+msgid "You are logged in as %s"
+msgstr ""
+
+#: actions/usersettings/usersettings.php:183
+msgid "Settings"
+msgstr ""
+
+#: actions/usersettings/usersettings.php:191
+msgid "You have successfully registered!"
+msgstr ""
+
+#: actions/usersettings/usersettings.php:195
+msgid "User settings stored!"
+msgstr ""
+
+#: actions/usersettings/usersettings.php:222
+msgid "Please fill your password or password reminder."
+msgstr ""
+
+#: actions/usersettings/usersettings.php:226
+msgid "The old password you entered is wrong."
+msgstr ""
+
+#: actions/usersettings/usersettings.php:231
+msgid "Sorry, you entered a wrong password reminder."
+msgstr ""
+
+#: actions/usersettings/usersettings.php:236
+msgid "You must also fill in a new password."
+msgstr ""
+
+#: actions/usersettings/usersettings.php:241
+#: actions/usersettings/usersettings.php:451
+msgid "Sorry, blanks are not permitted in the password."
+msgstr ""
+
+#: actions/usersettings/usersettings.php:246
+#: actions/usersettings/usersettings.php:455
+#, php-format
+msgid "Sorry, the password must contain at least %d characters."
+msgstr ""
+
+#: actions/usersettings/usersettings.php:251
+msgid "Please confirm your new password in order to update your account."
+msgstr ""
+
+#: actions/usersettings/usersettings.php:257
+#: actions/usersettings/usersettings.php:464
+msgid "Passwords don\t match.'"
+msgstr ""
+
+#: actions/usersettings/usersettings.php:272
+msgid "Password successfully changed!"
+msgstr ""
+
+#: actions/usersettings/usersettings.php:281
+#: actions/usersettings/usersettings.php:597
+msgid "Your email address:"
+msgstr ""
+
+#: actions/usersettings/usersettings.php:284
+msgid "Doubleclick editing:"
+msgstr ""
+
+#: actions/usersettings/usersettings.php:288
+msgid "Show comments by default:"
+msgstr ""
+
+#: actions/usersettings/usersettings.php:291
+msgid "Comment style"
+msgstr ""
+
+#: actions/usersettings/usersettings.php:292
+msgid "Flat (oldest first)"
+msgstr ""
+
+#: actions/usersettings/usersettings.php:293
+msgid "Flat (newest first)"
+msgstr ""
+
+#: actions/usersettings/usersettings.php:294
+msgid "Threaded"
+msgstr ""
+
+#: actions/usersettings/usersettings.php:297
+msgid "Page revisions list limit:"
+msgstr ""
+
+#: actions/usersettings/usersettings.php:300
+msgid "RecentChanges display limit:"
+msgstr ""
+
+#: actions/usersettings/usersettings.php:303
+msgid "Theme:"
+msgstr ""
+
+#: actions/usersettings/usersettings.php:306
+msgid "Update Settings"
+msgstr ""
+
+#: actions/usersettings/usersettings.php:318
+msgid "Change your password"
+msgstr ""
+
+#: actions/usersettings/usersettings.php:331
+msgid "Your current password"
+msgstr ""
+
+#: actions/usersettings/usersettings.php:336
+msgid "Your new password:"
+msgstr ""
+
+#: actions/usersettings/usersettings.php:339
+msgid "Confirm new password:"
+msgstr ""
+
+#: actions/usersettings/usersettings.php:342
+msgid "Change password"
+msgstr ""
+
+#: actions/usersettings/usersettings.php:359
+msgid "You have successfully logged out."
+msgstr ""
+
+#: actions/usersettings/usersettings.php:379
+msgid ""
+"Sorry, this account has been suspended. Please contact an administrator for "
+"further details."
+msgstr ""
+
+#: actions/usersettings/usersettings.php:382
+#: actions/usersettings/usersettings.php:447
+msgid "Please fill in a password."
+msgstr ""
+
+#: actions/usersettings/usersettings.php:386
+#: actions/usersettings/usersettings.php:538
+msgid "Sorry, you entered the wrong password."
+msgstr ""
+
+#: actions/usersettings/usersettings.php:406
+#: actions/usersettings/usersettings.php:524
+msgid "Sorry, this user name doesn\t exist.'"
+msgstr ""
+
+#: actions/usersettings/usersettings.php:413
+#: actions/usersettings/usersettings.php:600
+msgid "Register"
+msgstr ""
+
+#: actions/usersettings/usersettings.php:428
+msgid "Registration validation failed, please try again!"
+msgstr ""
+
+#: actions/usersettings/usersettings.php:431
+msgid "Sorry, this user name is unavailable."
+msgstr ""
+
+#: actions/usersettings/usersettings.php:435
+msgid "Please fill in your user name."
+msgstr ""
+
+#: actions/usersettings/usersettings.php:439
+#: actions/usersettings/usersettings.php:518
+#, php-format
+msgid "Username must be formatted as a %s, e.g. %s."
+msgstr ""
+
+#: actions/usersettings/usersettings.php:439
+msgid "JohnDoe"
+msgstr ""
+
+#: actions/usersettings/usersettings.php:443
+msgid ""
+"Sorry, this name is reserved for a page. Please choose a different name."
+msgstr ""
+
+#: actions/usersettings/usersettings.php:459
+msgid "Please confirm your password in order to register a new account."
+msgstr ""
+
+#: actions/usersettings/usersettings.php:475
+msgid "That doesn't quite look like an email address.'"
+msgstr ""
+
+#: actions/usersettings/usersettings.php:549
+msgid "Login/Register"
+msgstr ""
+
+#: actions/usersettings/usersettings.php:562
+msgid "If you already have a login, sign in here:"
+msgstr ""
+
+#: actions/usersettings/usersettings.php:564
+#: actions/usersettings/usersettings.php:624
+#, php-format
+msgid "Your %s:"
+msgstr ""
+
+#: actions/usersettings/usersettings.php:567
+#, php-format
+msgid "Password (%s+ chars)"
+msgstr ""
+
+#: actions/usersettings/usersettings.php:575
+#, php-format
+msgid "Redirect to %s after login"
+msgstr ""
+
+#: actions/usersettings/usersettings.php:591
+msgid "If you are signing up as a new user:"
+msgstr ""
+
+#: actions/usersettings/usersettings.php:594
+msgid "Confirm password:"
+msgstr ""
+
+#: actions/usersettings/usersettings.php:612
+msgid "Password forgotten"
+msgstr ""
+
+#: actions/usersettings/usersettings.php:620
+#, php-format
+msgid "Log in with your [[%s password reminder]]:"
+msgstr ""
+
+#: actions/usersettings/usersettings.php:627
+msgid "Password reminder:"
+msgstr ""
+
+#: actions/wantedpages/wantedpages.php:29 handlers/backlinks/backlinks.php:33
+#, php-format
+msgid "Pages linking to %s"
+msgstr ""
+
+#: actions/wikkaconfig/wikkaconfig.php:28
+#, php-format
+msgid "Wikka Configuration Settings [%s]"
+msgstr ""
+
+#: actions/wikkaconfig/wikkaconfig.php:28
+msgid "http://docs.wikkawiki.org/ConfigurationOptions"
+msgstr ""
+
+#: actions/wikkaconfig/wikkaconfig.php:28
+msgid "Read the documentation on Wikka Configuration Settings"
+msgstr ""
+
+#: actions/wikkaconfig/wikkaconfig.php:31
+msgid "Option"
+msgstr ""
+
+#: actions/wikkaconfig/wikkaconfig.php:31
+msgid "Value"
+msgstr ""
+
+#: formatters/wakka.php:760
+msgid "Grab"
+msgstr ""
+
+#: handlers/acls/acls.php:64 handlers/acls/acls.php:147
+msgid "Store ACLs"
+msgstr ""
+
+#: handlers/acls/acls.php:93
+msgid "Access control lists updated."
+msgstr ""
+
+#: handlers/acls/acls.php:104
+msgid "'(Nobody"
+msgstr ""
+
+#: handlers/acls/acls.php:108
+#, php-format
+msgid "Ownership changed to %s"
+msgstr ""
+
+#: handlers/acls/acls.php:117
+#, php-format
+msgid "====Access Control Lists for %s===="
+msgstr ""
+
+#: handlers/acls/acls.php:123
+msgid "Read ACL:"
+msgstr ""
+
+#: handlers/acls/acls.php:128
+msgid "Write ACL:"
+msgstr ""
+
+#: handlers/acls/acls.php:133
+msgid "Comment Read ACL:"
+msgstr ""
+
+#: handlers/acls/acls.php:138
+msgid "Comment Post ACL:"
+msgstr ""
+
+#: handlers/acls/acls.php:152
+msgid "Set Page Owner:"
+msgstr ""
+
+#: handlers/acls/acls.php:154
+msgid "(Current Owner)"
+msgstr ""
+
+#: handlers/acls/acls.php:155
+msgid "(Public)"
+msgstr ""
+
+#: handlers/acls/acls.php:156
+msgid "(Nobody - Set free)"
+msgstr ""
+
+#: handlers/acls/acls.php:172
+msgid ""
+"'===Syntax:=== ---##*## = Everyone ---##+## = Registered users ---##\"JohnDoe"
+"\"## = the user called \"JohnDoe\", enter as many users as you want, one per "
+"line --- --- Any of these items can be negated with a ##!##: ---##!*## = No "
+"one (except admins"
+msgstr ""
+
+#: handlers/acls/acls.php:179
+msgid "You are not the owner of this page."
+msgstr ""
+
+#: handlers/addcomment/addcomment.php:17
+#: handlers/processcomment/processcomment.php:95
+msgid "Comment body was empty -- not saved!"
+msgstr ""
+
+#: handlers/addcomment/addcomment.php:21 handlers/addcomment/addcomment.php:25
+msgid "Your comment cannot be saved. Please contact the wiki administrator."
+msgstr ""
+
+#: handlers/addcomment/addcomment.php:39
+#: handlers/processcomment/processcomment.php:118
+msgid "Sorry, you're not allowed to post comments to this page'"
+msgstr ""
+
+#: handlers/backlinks/backlinks.php:38 handlers/showcode/showcode.php:48
+#, php-format
+msgid "Sorry, page %s does not exist."
+msgstr ""
+
+#: handlers/backlinks/backlinks.php:42
+msgid "You are not allowed to read this page"
+msgstr ""
+
+#: handlers/backlinks/backlinks.php:59
+msgid "There are no backlinks to this page."
+msgstr ""
+
+#: handlers/claim/claim.php:24
+msgid "You are now the owner of this page."
+msgstr ""
+
+#: handlers/clone/clone.php:48
+#, php-format
+msgid "Cloned from %s"
+msgstr ""
+
+#: handlers/clone/clone.php:50
+msgid "'Please fill in a valid target <tt>PageName</tt> and an (optional"
+msgstr ""
+
+#: handlers/clone/clone.php:56
+msgid "Clone current page"
+msgstr ""
+
+#: handlers/clone/clone.php:62
+#, php-format
+msgid " Sorry, page %s does not exist."
+msgstr ""
+
+#: handlers/clone/clone.php:69 handlers/showcode/showcode.php:43
+msgid "You are not allowed to read the source of this page."
+msgstr ""
+
+#: handlers/clone/clone.php:82
+#, php-format
+msgid "Sorry! You don\t have write-access to %s'"
+msgstr ""
+
+#: handlers/clone/clone.php:87
+#, php-format
+msgid ""
+"This page name is invalid. Valid page names must not contain the characters "
+"| ? = &lt; &gt; / \\ \" % or &amp;."
+msgstr ""
+
+#: handlers/clone/clone.php:95
+msgid "Sorry, the destination page already exists"
+msgstr ""
+
+#: handlers/clone/clone.php:111
+#, php-format
+msgid "%s was succesfully created!"
+msgstr ""
+
+#: handlers/clone/clone.php:120
+#, php-format
+msgid "Clone %s to:"
+msgstr ""
+
+#: handlers/clone/clone.php:124
+msgid "Edit note:"
+msgstr ""
+
+#: handlers/clone/clone.php:130
+msgid " Edit after creation "
+msgstr ""
+
+#: handlers/clone/clone.php:131
+msgid "Clone"
+msgstr ""
+
+#: handlers/delete/delete.php:58
+msgid "Page has been deleted!"
+msgstr ""
+
+#: handlers/delete/delete.php:71
+msgid "Completely delete this page, including all comments?"
+msgstr ""
+
+#: handlers/delete/delete.php:77
+msgid "Delete Page"
+msgstr ""
+
+#: handlers/delete/delete.php:88
+msgid "You are not allowed to delete this page."
+msgstr ""
+
+#: handlers/diff/diff.php:54
+msgid ""
+"The file <tt>libs/diff.lib.php</tt> could not be found. You may want to "
+"notify the wiki administrator"
+msgstr ""
+
+#: handlers/diff/diff.php:62
+msgid ""
+"The parameters you supplied are incorrect, one of the two revisions may have "
+"been removed."
+msgstr ""
+
+#: handlers/diff/diff.php:67 handlers/diff/diff.php:71
+msgid "(unregistered user)"
+msgstr ""
+
+#: handlers/diff/diff.php:87 handlers/diff/diff.php:150
+#, php-format
+msgid "Comparing %s for %s"
+msgstr ""
+
+#: handlers/diff/diff.php:87 handlers/diff/diff.php:150
+#, php-format
+msgid "Display the revision list for %s"
+msgstr ""
+
+#: handlers/diff/diff.php:87 handlers/diff/diff.php:150
+msgid "revisions"
+msgstr ""
+
+#: handlers/diff/diff.php:87 handlers/diff/diff.php:150
+msgid "Return to the latest version of this page"
+msgstr ""
+
+#: handlers/diff/diff.php:96
+msgid "Full Diff"
+msgstr ""
+
+#: handlers/diff/diff.php:103 handlers/history/history.php:100
+msgid "Additions:"
+msgstr ""
+
+#: handlers/diff/diff.php:109 handlers/history/history.php:107
+msgid "Deletions:"
+msgstr ""
+
+#: handlers/diff/diff.php:115 handlers/history/history.php:114
+msgid "No Differences"
+msgstr ""
+
+#: handlers/diff/diff.php:159 handlers/revisions/revisions.php:73
+msgid "Simple Diff"
+msgstr ""
+
+#: handlers/diff/diff.php:162
+msgid "Highlighting Guide:"
+msgstr ""
+
+#: handlers/diff/diff.php:162
+msgid "addition"
+msgstr ""
+
+#: handlers/diff/diff.php:162
+msgid "deletion"
+msgstr ""
+
+#: handlers/diff/diff.php:228 handlers/history/history.php:152
+#: handlers/revisions/revisions.php:120 handlers/show/show.php:55
+msgid "You are not allowed to read this page."
+msgstr ""
+
+#: handlers/edit/edit.php:59 handlers/edit/edit.php:203
+#: handlers/edit/edit.php:212 handlers/edit/edit.php:260
+msgid "Preview"
+msgstr ""
+
+#: handlers/edit/edit.php:70
+#, php-format
+msgid ""
+"This page name is invalid.  Valid page names must not contain the characters "
+"| ? = &lt; &gt; / \\ \" % or &amp;."
+msgstr ""
+
+#: handlers/edit/edit.php:86
+msgid "The revision id does not exist for the requested page"
+msgstr ""
+
+#: handlers/edit/edit.php:118 handlers/edit/edit.php:207
+#: handlers/edit/edit.php:259
+msgid "Store"
+msgstr ""
+
+#: handlers/edit/edit.php:133
+msgid ""
+"OVERWRITE ALERT: This page was modified by someone else while you were "
+"editing it."
+msgstr ""
+
+#: handlers/edit/edit.php:133
+msgid "Please copy your changes and re-edit this page."
+msgstr ""
+
+#: handlers/edit/edit.php:139
+msgid "MISSING EDIT NOTE: Please fill in an edit note!"
+msgstr ""
+
+#: handlers/edit/edit.php:175
+msgid "50"
+msgstr ""
+
+#: handlers/edit/edit.php:175
+msgid "Please add a note on your edit"
+msgstr ""
+
+#: handlers/edit/edit.php:205 handlers/edit/edit.php:257
+msgid "Store page"
+msgstr ""
+
+#: handlers/edit/edit.php:207 handlers/edit/edit.php:259
+msgid "s"
+msgstr ""
+
+#: handlers/edit/edit.php:208
+msgid "Re-edit"
+msgstr ""
+
+#: handlers/edit/edit.php:208
+msgid "r"
+msgstr ""
+
+#: handlers/edit/edit.php:234
+#, php-format
+msgid "Page name too long! %d characters max."
+msgstr ""
+
+#: handlers/edit/edit.php:235
+#, php-format
+msgid ""
+"Clicking on %s will automatically truncate the page name to the correct size"
+msgstr ""
+
+#: handlers/edit/edit.php:235 handlers/edit/edit.php:238
+msgid "Rename"
+msgstr ""
+
+#: handlers/edit/edit.php:260
+msgid "p"
+msgstr ""
+
+#: handlers/edit/edit.php:286
+msgid ""
+"You don't have write access to this page. You might need to [[UserSettings "
+"login]] or [[UserSettings register an account]] to be able to edit this page."
+msgstr ""
+
+#: handlers/edit/edit.php:288
+msgid "Click to view page formatting code"
+msgstr ""
+
+#: handlers/edit/edit.php:288
+msgid "View formatting code for this page"
+msgstr ""
+
+#: handlers/files.xml/files.xml.php:56
+msgid "Sorry, files of this type are not allowed."
+msgstr ""
+
+#: handlers/files.xml/files.xml.php:79
+#: handlers/recentchanges.xml.mm/recentchanges.xml.mm.php:112
+#: handlers/recentchanges_simple.xml.mm/recentchanges_simple.xml.mm.php:123
+#: handlers/revisions.xml/revisions.xml.php:58
+msgid "You are not allowed to access this information."
+msgstr ""
+
+#: handlers/files.xml/files.xml.php:115
+msgid "Sorry, the file could not be deleted!"
+msgstr ""
+
+#: handlers/grabcode/grabcode.php:38
+msgid ".txt"
+msgstr ""
+
+#: handlers/grabcode/grabcode.php:38
+msgid "codeblock.txt"
+msgstr ""
+
+#: handlers/grabcode/grabcode.php:54
+msgid "Sorry, there is no code to download."
+msgstr ""
+
+#: handlers/history/history.php:85 handlers/history/history.php:143
+#: handlers/show/show.php:78
+#, php-format
+msgid "Revision %s"
+msgstr ""
+
+#: handlers/history/history.php:89
+#, php-format
+msgid "Last edited on %s by %s"
+msgstr ""
+
+#: handlers/history/history.php:93
+#, php-format
+msgid "Edited on %s by %s"
+msgstr ""
+
+#: handlers/history/history.php:137
+msgid "here"
+msgstr ""
+
+#: handlers/history/history.php:138
+#, php-format
+msgid ""
+"Full history for this page cannot be displayed within a single page, click %"
+"s to view more."
+msgstr ""
+
+#: handlers/history/history.php:144
+#, php-format
+msgid "The oldest known version of this page was created on %s by %s"
+msgstr ""
+
+#: handlers/processcomment/processcomment.php:31 handlers/show/show.php:349
+msgid "Delete"
+msgstr ""
+
+#: handlers/processcomment/processcomment.php:44
+msgid "Sorry, you're not allowed to delete this comment!'"
+msgstr ""
+
+#: handlers/processcomment/processcomment.php:49
+#: handlers/processcomment/processcomment.php:68 handlers/show/show.php:335
+msgid "Reply"
+msgstr ""
+
+#: handlers/processcomment/processcomment.php:49 handlers/show/show.php:173
+#: handlers/show/show.php:228
+msgid "New Comment"
+msgstr ""
+
+#: handlers/processcomment/processcomment.php:69
+#, php-format
+msgid "In reply to %s:"
+msgstr ""
+
+#: handlers/processcomment/processcomment.php:72
+msgid "Post a new comment:"
+msgstr ""
+
+#: handlers/processcomment/processcomment.php:75
+#: handlers/processcomment/processcomment.php:86
+msgid "Add Comment"
+msgstr ""
+
+#: handlers/recentchanges.xml/recentchanges.xml.php:93
+#, php-format
+msgid "%s - recently changed pages"
+msgstr ""
+
+#: handlers/recentchanges.xml/recentchanges.xml.php:94
+#, php-format
+msgid "New and recently changed pages from %s"
+msgstr ""
+
+#: handlers/recentchanges.xml/recentchanges.xml.php:103
+msgid "Wikka logo"
+msgstr ""
+
+#: handlers/recentchanges.xml/recentchanges.xml.php:106
+msgid "Feed provided by Wikka"
+msgstr ""
+
+#: handlers/recentchanges.xml/recentchanges.xml.php:128
+#, php-format
+msgid "By %s"
+msgstr ""
+
+#: handlers/recentchanges.xml.mm/recentchanges.xml.mm.php:22
+#: handlers/recentchanges_simple.xml.mm/recentchanges_simple.xml.mm.php:42
+msgid "Recent Changes"
+msgstr ""
+
+#: handlers/recentchanges.xml.mm/recentchanges.xml.mm.php:59
+#, php-format
+msgid "Revision time: %s"
+msgstr ""
+
+#: handlers/recentchanges.xml.mm/recentchanges.xml.mm.php:66
+#, php-format
+msgid "Author: %s"
+msgstr ""
+
+#: handlers/recentchanges.xml.mm/recentchanges.xml.mm.php:69
+msgid "View History"
+msgstr ""
+
+#: handlers/recentchanges.xml.mm/recentchanges.xml.mm.php:110
+#: handlers/recentchanges_simple.xml.mm/recentchanges_simple.xml.mm.php:121
+#: handlers/revisions.xml/revisions.xml.php:56
+msgid "Error"
+msgstr ""
+
+#: handlers/referrers/referrers.php:68
+msgid "None"
+msgstr ""
+
+#: handlers/referrers/referrers.php:73
+msgid "You need to login to see referring sites"
+msgstr ""
+
+#: handlers/revert/revert.php:39
+msgid "Reverted to previous revision"
+msgstr ""
+
+#: handlers/revert/revert.php:50
+msgid "Sorry, you don't have privileges to revert this page"
+msgstr ""
+
+#: handlers/review_blacklist/review_blacklist.php:36
+msgid "Referrer Blacklist"
+msgstr ""
+
+#: handlers/review_blacklist/review_blacklist.php:45
+msgid "Remove"
+msgstr ""
+
+#: handlers/review_blacklist/review_blacklist.php:52
+msgid "Blacklist is empty."
+msgstr ""
+
+#: handlers/review_blacklist/review_blacklist.php:56
+msgid "View global referring sites"
+msgstr ""
+
+#: handlers/review_blacklist/review_blacklist.php:56
+msgid "view global referrers"
+msgstr ""
+
+#: handlers/revisions/revisions.php:45 handlers/revisions/revisions.php:107
+msgid "Return To Node / Cancel"
+msgstr ""
+
+#: handlers/revisions/revisions.php:69 handlers/revisions/revisions.php:112
+#, php-format
+msgid "Revisions for %s"
+msgstr ""
+
+#: handlers/revisions/revisions.php:72
+msgid "Show Differences"
+msgstr ""
+
+#: handlers/revisions/revisions.php:102
+#, php-format
+msgid ""
+"There are more revisions that were not shown here, click the button labelled "
+"%s below to view these entries"
+msgstr ""
+
+#: handlers/revisions/revisions.php:102 handlers/revisions/revisions.php:103
+msgid "Next..."
+msgstr ""
+
+#: handlers/revisions/revisions.php:113
+msgid "There are no revisions for this page yet"
+msgstr ""
+
+#: handlers/revisions.xml/revisions.xml.php:22
+msgid "UTF-8"
+msgstr ""
+
+#: handlers/revisions.xml/revisions.xml.php:23
+msgid "2.0"
+msgstr ""
+
+#: handlers/revisions.xml/revisions.xml.php:27
+#, php-format
+msgid "History/revisions of %s"
+msgstr ""
+
+#: handlers/revisions.xml/revisions.xml.php:28
+msgid "en-US"
+msgstr ""
+
+#: handlers/revisions.xml/revisions.xml.php:46
+#, php-format
+msgid "Edited by %s"
+msgstr ""
+
+#: handlers/show/show.php:60
+#, php-format
+msgid ""
+"This page name is invalid. Valid\n"
+"\tpage names must not contain the characters | ? = &lt; &gt; / \\ \" % or "
+"&amp;."
+msgstr ""
+
+#: handlers/show/show.php:68
+msgid "create"
+msgstr ""
+
+#: handlers/show/show.php:69
+#, php-format
+msgid "This page doesn\t exist yet. Maybe you want to %s it?'"
+msgstr ""
+
+#: handlers/show/show.php:80
+#, php-format
+msgid "This is an old revision of %s made by %s on %s."
+msgstr ""
+
+#: handlers/show/show.php:90
+msgid "Show formatted"
+msgstr ""
+
+#: handlers/show/show.php:90
+msgid "Show source"
+msgstr ""
+
+#: handlers/show/show.php:100
+msgid "Re-edit this old revision"
+msgstr ""
+
+#: handlers/show/show.php:166
+msgid "0"
+msgstr ""
+
+#: handlers/show/show.php:166
+msgid "Hide comments"
+msgstr ""
+
+#: handlers/show/show.php:224
+msgid "There are no comments on this page."
+msgstr ""
+
+#: handlers/show/show.php:233
+msgid "There is one comment on this page."
+msgstr ""
+
+#: handlers/show/show.php:234
+msgid "Display comment"
+msgstr ""
+
+#: handlers/show/show.php:237
+#, php-format
+msgid "There are %d comments on this page."
+msgstr ""
+
+#: handlers/show/show.php:239
+msgid "Show comments"
+msgstr ""
+
+#: handlers/show/show.php:307
+msgid "[Comment deleted]"
+msgstr ""
+
+#: handlers/show/show.php:319
+msgid "Comment by "
+msgstr ""
+
+#: handlers/showcode/showcode.php:37
+#, php-format
+msgid "Wiki source for %s"
+msgstr ""
+
+#: handlers/showcode/showcode.php:38
+msgid "Show raw source"
+msgstr ""
+
+#: lang/pl/pl.inc.php:809 lang/pl/pl.inc.php:811 lang/pl/pl.inc.php:813
+#: lang/pl/pl.inc.php:815
+msgid "apple"
+msgstr ""
+
+#: lang/pl/pl.inc.php:809
+msgid "banana"
+msgstr ""
+
+#: lang/pl/pl.inc.php:810
+msgid "Find pages that contain at least one of the two words."
+msgstr ""
+
+#: lang/pl/pl.inc.php:811
+msgid "juice"
+msgstr ""
+
+#: lang/pl/pl.inc.php:812
+msgid "Find pages that contain both words."
+msgstr ""
+
+#: lang/pl/pl.inc.php:813
+msgid "macintosh"
+msgstr ""
+
+#: lang/pl/pl.inc.php:814 lang/pl/pl.inc.php:818
+msgid "sprintf("
+msgstr ""
+
+#: lang/pl/pl.inc.php:816
+msgid "sprintf(Find pages that contain words starting with "
+msgstr ""
+
+#: lang/pl/pl.inc.php:817
+msgid "some"
+msgstr ""
+
+#: lang/pl/pl.inc.php:817
+msgid "words"
+msgstr ""
+
+#: libs/admin.lib.php:57 libs/admin.lib.php:80 libs/admin.lib.php:100
+msgid "Reversion to previous version FAILED!"
+msgstr ""
+
+#: libs/admin.lib.php:71
+#, php-format
+msgid "Reverting last edit by %s [%d] to previous version [%d]"
+msgstr ""
+
+#: libs/admin.lib.php:76
+msgid "Reverted to previous version"
+msgstr ""
+
+#: libs/Wakka.class.php:2356
+msgid "Create this page"
+msgstr ""
+
+#: libs/Wakka.class.php:2575
+msgid ""
+"A header template could not be found. Please make sure that a file called "
+"<code>header.php</code> exists in the templates directory."
+msgstr ""
+
+#: libs/Wakka.class.php:2590
+msgid ""
+"A footer template could not be found. Please make sure that a file called "
+"<code>footer.php</code> exists in the templates directory."
+msgstr ""
+
+#: libs/Wakka.class.php:2676
+#, php-format
+msgid "Default themes (%s)"
+msgstr ""
+
+#: libs/Wakka.class.php:2686
+#, php-format
+msgid "Custom themes (%s)"
+msgstr ""
+
+#: libs/Wakka.class.php:3019
+msgid "Unknown action; the action name must not contain special characters."
+msgstr ""
+
+#: libs/Wakka.class.php:3067
+#, php-format
+msgid "Unknown action \"%s\""
+msgstr ""
+
+#: libs/Wakka.class.php:3106
+msgid "Unknown handler; the handler name must not contain special characters."
+msgstr ""
+
+#: libs/Wakka.class.php:3114
+#, php-format
+msgid "Sorry, %s is an unknown handler."
+msgstr ""
+
+#: libs/Wakka.class.php:3172
+msgid ""
+"Unknown formatter; the formatter name must not contain special characters."
+msgstr ""
+
+#: libs/Wakka.class.php:3181
+#, php-format
+msgid "Formatter \"%s\" not found"
+msgstr ""
+
+#: templates/default/footer.php:14 templates/kubrick/footer.php:12
+#: templates/light/footer.php:14
+msgid "Valid XHTML"
+msgstr ""
+
+#: templates/default/footer.php:17 templates/kubrick/footer.php:15
+#: templates/light/footer.php:17
+msgid "Valid CSS:"
+msgstr ""
+
+#: templates/default/footer.php:20 templates/kubrick/footer.php:18
+#: templates/light/footer.php:20
+#, php-format
+msgid "Powered by %s"
+msgstr ""
+
+#: templates/default/footer.php:34 templates/kubrick/footer.php:32
+#: templates/light/footer.php:34
+#, php-format
+msgid "Page was generated in %.4f seconds"
+msgstr ""
+
+#: templates/default/header.php:10 templates/kubrick/header.php:10
+#: templates/light/header.php:10
+#, php-format
+msgid "Click to edit %s"
+msgstr ""
+
+#: wikka.php:495
+msgid "This site is currently being upgraded. Please try again later."
+msgstr ""
+
+#: wikka.php:575
+msgid "Error: Unable to connect to the database."
+msgstr ""

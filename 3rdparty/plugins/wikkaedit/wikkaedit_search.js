@@ -1,11 +1,11 @@
 /*
 ////////////////////////////////////////////////////////////////////////
 // WikkaEdit                                                          //
-// v. 1.00                                                            //
+//                                                                    //
 // supported browsers : MZ1.4+, MSIE5+, Opera 8+, khtml/webkit        //
 //                                                                    //
-// (C) 2007 Olivier Borowski (olivier.borowski@wikkawiki.org)         //
-// Homepage : http://docs.wikkawiki.org/WikkaEdit                          //
+// (C) 2007-2008 Olivier Borowski (olivier.borowski@wikkawiki.org)    //
+// Homepage : http://wikkawiki.org/WikkaEdit                          //
 //                                                                    //
 // This program is free software; you can redistribute it and/or      //
 // modify it under the terms of the GNU General Public License        //
@@ -99,11 +99,19 @@ WikkaEdit.prototype.checkIfMatch = function(searched, text, start, end) {
 
 // ===== find the next occurence or replace selection =====
 WikkaEdit.prototype.findNext = function() {
+	var searchfor = this.we_searchFor;
+
+	// empty search field => removes selection and does nothing
+	if (searchfor == "") {
+		this.we_ta.focus();
+		this.setSelectionRange(0);
+		return;
+	}
+
 	// position of the selection
 	var sr = this.getSelectionRange();
 	// textarea content
 	var text = this.getTextAreaContent();
-	var searchfor = this.we_searchFor;
 
 	// duplicate these variables to simplify search in case sensitive or not
 	var textC = text, searchforC = searchfor;
@@ -115,14 +123,11 @@ WikkaEdit.prototype.findNext = function() {
 	var currentSelectionMatch = this.checkIfMatch(searchforC, textC, sr.start, sr.end);
 
 	if ((this.we_replace) && (currentSelectionMatch)) {
-		var beforeSel = text.substr(0, sr.start);
-		var afterSel = text.substr(sr.end);
-		// update selection content
-		var scrollTop = this.we_ta.scrollTop;
-		this.we_ta.value = beforeSel + this.we_replaceWith + afterSel;
-		this.we_ta.scrollTop = scrollTop;
-		// replace selection
-		this.setSelectionRange(sr.start, sr.start + this.we_replaceWith.length);
+		// selection content
+		var selCont = this.getSelectionContent(sr);
+		// update textarea content & move selection
+		var newSr = new SelRange(sr.start, sr.start + this.we_replaceWith.length);
+		this.setTextAreaContent(selCont.before + this.we_replaceWith + selCont.after, newSr);
 		// as the textarea content has change, textC, sr... are not up to date so
 		// we restart at the beginning of the function
 		this.findNext();
@@ -142,10 +147,13 @@ WikkaEdit.prototype.findNext = function() {
 		if (newSrStart == -1) {					// not found
 			finished = true;
 			this.we_lastMsg = "no other occurence";
-		} else if (!this.we_whole) {				// found => ok
+		} else if (!this.we_whole) {			// found => ok
 			finished = true;
 		} else {								// found but is this a whole word?
 			finished = this.checkIfMatch(searchforC, textC, newSrStart, newSrStart + searchfor.length);
+			// not a whole word => need to move to the next character to avoid an infinite loop
+			if (!finished)
+				newSrStart++;
 		}
 	}
 

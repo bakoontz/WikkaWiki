@@ -4,7 +4,7 @@
  *
  * @package		Handlers
  * @subpackage	Mindmaps
- * @version		$Id$
+ * @version		$Id: mindmap.mm.php 738 2007-10-03 11:48:41Z JavaWoman $
  * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
  *

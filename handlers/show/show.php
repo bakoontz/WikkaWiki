@@ -9,7 +9,7 @@
  *
  * @package		Handlers
  * @subpackage	Page
- * @version		$Id$
+ * @version		$Id: show.php 1367 2009-06-06 22:57:34Z BrianKoontz $
  * @license		http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
  *
@@ -24,6 +24,7 @@
  * @uses		Wakka::GetUserName()
  * @uses		Wakka::HasAccess()
  * @uses		Wakka::Href()
+ * @uses		Wakka::IsWikiName()
  * @uses		Wakka::htmlspecialchars_ent()
  * @uses		Wakka::LoadComments()
  * @uses		Wakka::LoadPage()
@@ -32,28 +33,40 @@
  * 
  */
 
-//constants
-define('SHOW_OLD_REVISION_SOURCE', 0); # if set to 1 shows by default the source of an old revision instead of the rendered version
+# if set to 1 shows by default the source of an old revision instead
+# of the rendered version
+if(!defined('SHOW_OLD_REVISION_SOURCE')) define('SHOW_OLD_REVISION_SOURCE', 0); 
+if(!defined('COMMENT_NO_DISPLAY')) define('COMMENT_NO_DISPLAY', 0);
+if(!defined('COMMENT_ORDER_DATE_ASC')) define('COMMENT_ORDER_DATE_ASC', 1);
+if(!defined('COMMENT_ORDER_DATE_DESC')) define('COMMENT_ORDER_DATE_DESC', 2);
+if(!defined('COMMENT_ORDER_THREADED')) define('COMMENT_ORDER_THREADED', 3);
+if(!defined('COMMENT_MAX_TRAVERSAL_DEPTH')) define('COMMENT_MAX_TRAVERSAL_DEPTH', 10);
+if (!defined('SHOW_INVALID_CHARS')) define('SHOW_INVALID_CHARS', '| ? = &lt; &gt; / \ " % &amp;');
 
 //validate URL parameters
 $raw = (!empty($_GET['raw']))? (int) $this->GetSafeVar('raw', 'get') : SHOW_OLD_REVISION_SOURCE;
 
 echo "\n".'<!--starting page content-->'."\n";
-echo '<div class="page"';
+echo '<div id="content"';
 echo (($user = $this->GetUser()) && ($user['doubleclickedit'] == 'N') || !$this->HasAccess('write')) ? '' : ' ondblclick="document.location=\''.$this->Href('edit', '', 'id='.$this->page['id']).'\';" '; #268
 echo '>'."\n";
 
 if (!$this->HasAccess('read'))
 {
-	echo '<p><em class="error">'.WIKKA_ERROR_ACL_READ.'</em></p>';
+	echo '<p><em class="error">'.T_("You are not allowed to read this page.").'</em></p>';
+	echo "\n".'</div><!--closing page content-->'."\n";
+}
+else if(!$this->IsWikiName($this->tag))
+{
+	echo '<p><em class="error">'.sprintf(T_("This page name is invalid. Valid page names must not contain the characters %s."), SHOW_INVALID_CHARS).'</em></p>';
 	echo "\n".'</div><!--closing page content-->'."\n";
 }
 else
 {
 	if (!$this->page)
 	{
-		$createlink = '<a href="'.$this->Href('edit').'">'.WIKKA_PAGE_CREATE_LINK_DESC.'</a>';
-		echo '<p>'.sprintf(SHOW_ASK_CREATE_PAGE_CAPTION,$createlink).'</p>'."\n";
+		$createlink = '<a href="'.$this->Href('edit').'">'.T_("create").'</a>';
+		echo '<p>'.sprintf(T_("This page doesn't exist yet. Maybe you want to %s it?"),$createlink).'</p>'."\n";
 		echo '</div><!--closing page content-->'."\n";
 	}
 	else
@@ -62,9 +75,9 @@ else
 		{
 			$pagelink = '<a href="'.$this->Href().'">'.$this->tag.'</a>';
 			echo '<div class="revisioninfo">'."\n";
-			echo '<h4 class="clear">'.sprintf(WIKKA_REVISION_NUMBER, '<a href="'.$this->Href('', '', 'time='.urlencode($this->page['time'])).'">['.$this->page['id'].']</a>').'</h4>'."\n";
+			echo '<h4 class="clear">'.sprintf(T_("Revision %s"), '<a href="'.$this->Href('', '', 'time='.urlencode($this->page['time'])).'">['.$this->page['id'].']</a>').'</h4>'."\n";
 			echo '<p>';
-			echo sprintf(SHOW_OLD_REVISION_CAPTION, $pagelink, $this->FormatUser($this->page['user']), $this->Link($this->tag, 'revisions', $this->page['time'], TRUE, TRUE, '', 'datetime'));
+			echo sprintf(T_("This is an old revision of %s made by %s on %s."), $pagelink, $this->FormatUser($this->page['user']), $this->Link($this->tag, 'revisions', $this->page['time'], TRUE, TRUE, '', 'datetime'));
 			
 			// added if encapsulation: in case where some pages were brutally deleted from database
 			if ($latest = $this->LoadPage($this->tag))
@@ -74,7 +87,7 @@ else
 				<?php echo $this->FormOpen('show', '', 'GET', '', 'left') ?>
 				<input type="hidden" name="time" value="<?php echo $this->GetSafeVar('time', 'get') ?>" />
 				<input type="hidden" name="raw" value="<?php echo ($raw == 1)? '0' :'1' ?>" />
-				<input type="submit" value="<?php echo ($raw == 1)? SHOW_FORMATTED_BUTTON : SHOW_SOURCE_BUTTON ?>" />&nbsp;
+				<input type="submit" value="<?php echo ($raw == 1)? T_("Show formatted") : T_("Show source") ?>" />&nbsp;
 				<?php echo $this->FormClose(); ?>
 <?php
 				// if this is an editable revision, display form
@@ -84,7 +97,7 @@ else
 					<?php echo $this->FormOpen('edit') ?>
 					<input type="hidden" name="previous" value="<?php echo $latest['id'] ?>" />
 					<input type="hidden" name="body" value="<?php echo $this->htmlspecialchars_ent($this->page['body']) ?>" />
-					<input type="submit" name="submit" value="<?php echo SHOW_RE_EDIT_BUTTON ?>" />
+					<input type="submit" name="submit" value="<?php echo T_("Re-edit this old revision") ?>" />
 					<?php echo $this->FormClose(); ?>
 <?php
 				}
@@ -145,34 +158,24 @@ else
 				// load comments for this page
 				$comments = $this->LoadComments($this->tag, $_SESSION['show_comments'][$tag]);
 				$display_mode = $_SESSION['show_comments'][$tag];
-				// set up icons
-				$sort_desc_icon_url = $this->StaticHref('images/icons/sort_desc.gif');
-				$sort_asc_icon_url = $this->StaticHref('images/icons/sort_asc.gif');
-				$sort_comment_icon_url = $this->StaticHref('images/icons/comment.gif');
-
-
 				// display comments header
 ?>
 				<!--starting comments header (show)-->
-				<div class="commentsheader">
-					<div id="commentsnav">
-						<a href="<?php echo $this->Href('', '', 'show_comments='.COMMENT_ORDER_DATE_DESC.'#comments') ?>"><?php echo '<img class="'.($display_mode==COMMENT_ORDER_DATE_DESC ?  "icon_on" : "icon").'" alt="flat" title="Flat (newest first)" src="'.$sort_desc_icon_url.'" />' ?></a>
-						<a href="<?php echo $this->Href('', '', 'show_comments='.COMMENT_ORDER_DATE_ASC.'#comments') ?>"><?php echo '<img class="'.($display_mode==COMMENT_ORDER_DATE_ASC ?  "icon_on" : "icon").'" alt="flat" title="Flat (oldest first)" src="'.$sort_asc_icon_url.'" />' ?></a>
-						<a href="<?php echo $this->Href('', '', 'show_comments='.COMMENT_ORDER_THREADED.'#comments') ?>"><?php echo '<img class="'.($display_mode==COMMENT_ORDER_THREADED ?  "icon_on" : "icon").'" alt="threaded" title="Threaded" src="'.$sort_comment_icon_url.'" />' ?></a> 
-					</div><!-- closing commentsnav div -->
-				<?php echo COMMENTS_CAPTION ?>
-				[<a href="<?php echo $this->Href('', '', 'show_comments='.COMMENT_NO_DISPLAY) ?>"><?php echo HIDE_COMMENTS_LINK_DESC ?></a>]
-<?php
-			if ($this->HasAccess('comment_post'))
-			{
-?>
-				<?php echo $this->FormOpen('processcomment') ?>
-				<input type="submit" name="submit" value="<?php echo COMMENT_NEW_BUTTON ?>" />
-				<?php echo $this->FormClose() ?>
+				<div id="commentheader">
+					<?php echo T_("Comments") ?>
+					[<a href="<?php echo $this->Href('', '', 'show_comments=0') ?>"><?php echo T_("Hide comments") ?></a>]
+	<?php
+				if ($this->HasAccess('comment_post'))
+				{
+	?>
+					<?php echo
+					$this->FormOpen("processcomment","","post","","",FALSE,"#comments") ?>
+					<input type="submit" name="submit" value="<?php echo T_("New Comment") ?>" />
+					<?php echo $this->FormClose() ?>
 <?php
 			}
 ?>
-				</div><!--closing commentsheader (show)-->
+				</div><!--closing commentheader (show)-->
 
 <?php
 				// display comments themselves
@@ -185,7 +188,7 @@ else
 			{
 
 				echo '<!--starting comments header (hide)-->'."\n";
-				echo '<div class="commentsheader">'."\n";
+				echo '<div id="commentheader">'."\n";
 				$commentCount = $this->CountComments($this->tag);
 				$showcomments_text = '';
 
@@ -218,27 +221,27 @@ else
 				switch ($commentCount)
 				{
 					case 0:
-						$comments_message = STATUS_NO_COMMENTS.' ';
+						$comments_message = T_("There are no comments on this page.").' ';
 						if ($this->HasAccess('comment_post'))
 						{
-							$showcomments_text  = $this->FormOpen("processcomment");
-							$showcomments_text .= '<input type="submit" name="submit" value="'.COMMENT_NEW_BUTTON.'" />';
+							$showcomments_text  = $this->FormOpen("processcomment","","post","","",FALSE,"#comments");
+							$showcomments_text .= '<input type="submit" name="submit" value="'.T_("New Comment").'" />';
 							$showcomments_text .= $this->FormClose();
 						}
 						break;
 					case 1:
-						$comments_message = STATUS_ONE_COMMENT.' ';
-						$showcomments_text = '[<a href="'.$this->Href('', '', 'show_comments='.$comment_ordering.'#comments').'">'.DISPLAY_COMMENT_LINK_DESC.'</a>]';
+						$comments_message = T_("There is one comment on this page.").' ';
+						$showcomments_text = '[<a href="'.$this->Href('', '', 'show_comments='.$comment_ordering.'#comments').'">'.T_("Display comment").'</a>]';
 						break;
 					default:
-						$comments_message = sprintf(STATUS_SOME_COMMENTS, $commentCount).' ';
+						$comments_message = sprintf(T_("There are %d comments on this page."), $commentCount).' ';
 
-						$showcomments_text = '[<a href="'.$this->Href('', '', 'show_comments='.$comment_ordering.'#comments').'">'.DISPLAY_COMMENTS_LABEL.'</a>]';
+						$showcomments_text = '[<a href="'.$this->Href('', '', 'show_comments='.$comment_ordering.'#comments').'">'.T_("Show comments").'</a>]';
 				}
 
 				echo $comments_message;
 				echo $showcomments_text;
-				echo "\n".'</div><!--closing commentsheader (hide)-->'."\n";
+				echo "\n".'</div><!--closing commentheader (hide)-->'."\n";
 			}
 			echo '</div><!--closing comments block-->'."\n\n";
 		}
@@ -257,6 +260,7 @@ else
  */
 function displayComments(&$obj, &$comments, $tag)
 {
+	$logged_in = $obj->GetUser();
 	$current_user = $obj->GetUserName();
 	$is_owner = $obj->UserIsOwner();
 	$prev_level = NULL;
@@ -300,7 +304,7 @@ function displayComments(&$obj, &$comments, $tag)
 		if ($comment['status'] == 'deleted') {
 ?>
 	<div class="<?php echo $comment_class ?>">
-		<div class="commentdeleted"><?php echo COMMENT_DELETED_LABEL ?></div>
+		<div class="commentdeleted"><?php echo T_("[Comment deleted]") ?></div>
 <?php
 		}
 		else
@@ -308,11 +312,11 @@ function displayComments(&$obj, &$comments, $tag)
 			# Some stats
 			//$comment_author = $obj->LoadUser($comment['user'])? $obj->Format($comment['user']) : $comment['user'];
 			$comment_author = $obj->FormatUser($comment['user']);
-			$comment_ts = sprintf(COMMENT_TIME_CAPTION,$comment['time']);
+			$comment_ts = sprintf("%s", $comment['time']);
 ?>
 	<div id="comment_<?php echo $comment['id'] ?>" class="<?php echo $comment_class ?>" >
 		<div class="commentheader">
-		<div class="commentauthor"><?php echo COMMENT_BY_LABEL.$comment_author ?></div>
+		<div class="commentauthor"><?php echo T_("Comment by ").$comment_author ?></div>
 		<div class="commentinfo"><?php echo $comment_ts ?></div>
 		</div>
 		<div class="commentbody">
@@ -322,25 +326,27 @@ function displayComments(&$obj, &$comments, $tag)
 			if ($obj->HasAccess('comment_post'))
 			{
 				echo '<div class="commentaction">';
-				echo $obj->FormOpen("processcomment");
+				echo
+				$obj->FormOpen("processcomment","","post","","",FALSE,"#comments");
 ?>
 		<input type="hidden" name="comment_id" value="<?php echo $comment['id'] ?>" />
 <?php
 ?>
-		<input type="submit" name="submit" value="<?php echo COMMENT_REPLY_BUTTON ?>" />
+		<input type="submit" name="submit" value="<?php echo T_("Reply") ?>" />
 <?php
-				/*
-				$user = $obj->GetUser();
-				if (isset($user))
-				{
-					$name = $user['name'];
-				}
-				*/
-				#if ($is_owner || $name == $comment['user'] || ($obj->config['anony_delete_own_comments'] && $current_user == $comment['user']))
-				if ($is_owner || $obj->reg_username == $comment['user'] || ($obj->config['anony_delete_own_comments'] && $current_user == $comment['user']))
+				/* Conditions for which delete button is displayed:
+				 * 1. Current user owns the page the comment is on:
+				 * 2. Current user owns the comment;
+				 * 3. Current non-logged-in user matches IP or
+				 *    hostname of comment
+				 */
+				if ($logged_in & 
+					($is_owner || 
+				     $current_user == $comment['user']) || 
+					$obj->config['anony_delete_own_comments'] && $current_user == $comment['user'])
 				{
 ?>
-		<input type="submit" name="submit" value="<?php echo COMMENT_DELETE_BUTTON ?>" />
+		<input type="submit" name="submit" value="<?php echo T_("Delete") ?>" />
 <?php
 				}
 				echo $obj->FormClose();

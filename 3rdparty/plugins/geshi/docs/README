@@ -1,10 +1,10 @@
 
-        GeSHi - GEneric Syntax HIghlighter
-        ----------------------------------
-                Version 1.0.7.21
+        GeSHi - GEneric Syntax HIlighter
+        --------------------------------
+                Version 1.0.7.20
 
-Author:          Nigel McNie, Benny Baumann
-Email:           nigel@geshi.org, BenBE@omorphia.de
+Author:          Nigel McNie
+Email:           nigel@geshi.org
 GeSHi Website:   http://qbnz.com/highlighter
 
 GeSHi is a generic syntax highlighter, written in PHP. You simply

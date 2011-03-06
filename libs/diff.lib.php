@@ -1,31 +1,34 @@
 <?php
-/**
- * A php wdiff (word diff) for wakka.
- *
- * Adapted by David Delon based on wdiff and phpwiki diff (copyright below).
- *
- * @package		Wikka
- * @subpackage	Libs
- * @version		$Id$
- * @license		http://www.gnu.org/copyleft/gpl.html GNU General Public License
- * @filesource
- * 
- * @author		Geoffrey T. Dairiki
- * @author		Francois Pinard
- * @copyright	Copyright (C) 2000, 2001 Geoffrey T. Dairiki <dairiki@dairiki.org>
- * @copyright	Copyright (C) 1992 Free Software Foundation, Inc. Francois Pinard <pinard@iro.umontreal.ca>.
- *
- * @todo 	Since wdiff use only directive lines, all stuff in diff class
- *			related to line and context display should be removed.
- * @todo	Use a more flexible diff class
- */
+/* A php wdiff  (word diff) for wakka, adapted by David Delon
+   based on wdiff and phpwiki diff (copyright below).
+   TODO : Since wdiff use only directive lines, all stuff in diff class 
+   related to line and context display should be removed.
 
-/**
- * @name		Side
- * @package		Wikka
- * @subpackage	Libs
- * @access		public
- *  */
+   This program is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation; either version 2, or (at your option)
+   any later version. */
+
+  
+/* A PHP diff engine for phpwiki.
+  
+   Copyright (C) 2000, 2001 Geoffrey T. Dairiki <dairiki@dairiki.org>
+   You may copy this code freely under the conditions of the GPL.
+*/
+ 
+/* wdiff -- front end to diff for comparing on a word per word basis.
+   Copyright (C) 1992 Free Software Foundation, Inc.
+   Francois Pinard <pinard@iro.umontreal.ca>.
+
+   This program is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation; either version 2, or (at your option)
+   any later version.
+
+*/
+
+// Side : a string for wdiff
+
 class Side {
     var $position;
     var $cursor;
@@ -232,22 +235,18 @@ class Side {
 
 }
 
-/**
- * Difflib: A PHP diff engine for phpwiki.
- * 
- * @copyright (C) 2000, 2001 Geoffrey T. Dairiki <dairiki@dairiki.org>
- * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
- */
+// difflib
+//
+// A PHP diff engine for phpwiki.
+//
+// Copyright (C) 2000, 2001 Geoffrey T. Dairiki <dairiki@dairiki.org>
+// You may copy this code freely under the conditions of the GPL.
+//
+
 
 // PHP3 does not have assert()
 define('USE_ASSERTS', function_exists('assert'));
 
-/**
- * @name		_DiffOp
- * @package		Wikka
- * @subpackage	Libs
- * @access		private
- */
 class _DiffOp {
     var $type;
     var $orig;
@@ -262,12 +261,7 @@ class _DiffOp {
 	return $this->final ? sizeof($this->final) : 0;
     }
 }
-/**
- * @name		_DiffOp_Copy
- * @package		Wikka
- * @subpackage	Libs
- * @access		private
- */
+
 class _DiffOp_Copy extends _DiffOp {
     var $type = 'copy';
     
@@ -279,12 +273,7 @@ class _DiffOp_Copy extends _DiffOp {
     }
 
 }
-/**
- * @name		_DiffOp_Delete
- * @package		Wikka
- * @subpackage	Libs
- * @access		private
- */
+
 class _DiffOp_Delete extends _DiffOp {
     var $type = 'delete';
     
@@ -294,12 +283,7 @@ class _DiffOp_Delete extends _DiffOp {
     }
 
 }
-/**
- * @name		_DiffOp_Add
- * @package		Wikka
- * @subpackage	Libs
- * @access		private
- */
+
 class _DiffOp_Add extends _DiffOp {
     var $type = 'add';
     
@@ -309,12 +293,7 @@ class _DiffOp_Add extends _DiffOp {
     }
 
 }
-/**
- * @name		_DiffOp_Change
- * @package		Wikka
- * @subpackage	Libs
- * @access		private
- */
+
 class _DiffOp_Change extends _DiffOp {
     var $type = 'change';
     
@@ -324,6 +303,8 @@ class _DiffOp_Change extends _DiffOp {
     }
 
 }
+	
+      
 /**
  * Class used internally by Diff to actually compute the diffs.
  *
@@ -341,11 +322,8 @@ class _DiffOp_Change extends _DiffOp {
  * Finally, some ideas (subdivision by NCHUNKS > 2, and some optimizations)
  * are my own.
  *
- * @author		Geoffrey T. Dairiki
- * @name		_DiffEngine
- * @package		Wikka
- * @subpackage	Libs
- * @access		private
+ * @author Geoffrey T. Dairiki
+ * @access private
  */
 class _DiffEngine
 {
@@ -730,13 +708,8 @@ class _DiffEngine
 
 /**
  * Class representing a 'diff' between two sequences of strings.
- *
- * @name		Diff
- * @package		Wikka
- * @subpackage	Libs
- * @access		public
  */
-class Diff
+class Diff 
 {
     var $edits;
 
@@ -755,7 +728,7 @@ class Diff
 
 }
 
-
+	    
 
 /**
  * A class to format Diffs
@@ -763,11 +736,6 @@ class Diff
  * This class formats the diff in classic diff format.
  * It is intended that this class be customized via inheritance,
  * to obtain fancier outputs.
- *
- * @name		DiffFormatter
- * @package		Wikka
- * @subpackage	Libs
- * @access		public
  */
 class DiffFormatter
 {

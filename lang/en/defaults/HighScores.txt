@@ -1,4 +1,0 @@
-{{highscores style="simple"}}
-
-----
-CategoryWiki

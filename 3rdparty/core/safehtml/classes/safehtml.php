@@ -1,28 +1,32 @@
 <?php
-/**
- * SafeHTML Parser.
- * 
- * v1.2.1.
- * Modifications by JavaWoman - http://wikkawiki.org/JavaWoman - 2005-01-20
- * 1) added 'callto' protocol to whitelist
- * 2) special handling for "dangerous" attributes id and name:
- *		- id is validated by syntax
- *		- name is valid only in form controls and if it conforms to PHP
- *		  variable name rules (http://php.net/language.variables)
- * extra parameter $tagname added to writeAttrs() to provide
- * context for validating name attribute
- *
- * @package 3rdParty
- * @subpackage SafeHTML
- * @version $Id$
- * 
- * @copyright Copyright (c) 2004, Roman Ivanov <mailto:thingol@mail.ru>
- * @filesource
- */
-/**
- * Require plugin
- */
-require_once(dirname(__FILE__).DIRECTORY_SEPARATOR.'HTMLSax.php');
+/*
+
+  SafeHTML Parser.
+  v1.2.1. (modified, see notes below from JavaWoman)
+  21 October 2004.
+
+  ---------
+
+  http://pixel-apes.com/safehtml
+
+  Copyright (c) 2004, Roman Ivanov <mailto:thingol@mail.ru>
+  All rights reserved.
+
+  For LICENSE see license.txt
+
+  Modifications by JavaWoman - http://wikkawiki.org/JavaWoman - 2005-01-20
+  1) added 'callto' protocol to whitelist
+  2) special handling for "dangerous" attributes id and name:
+		- id is validated by syntax
+		- name is valid only in form controls and if it conforms to PHP
+		  variable name rules (http://php.net/language.variables)
+	 extra parameter $tagname added to writeAttrs() to provide
+	 context for validating name attribute
+
+=============================================================== (kukutz@npj)
+*/
+
+require_once(dirname(__FILE__).'/HTMLSax.php');
 
 class safehtml {
   var $xhtml = "";
@@ -186,7 +190,10 @@ class safehtml {
 	if (in_array($name, $this->DeleteContent))
 	{
 	 array_push($this->dcStack, $name);
-		if (!isset($this->dcCounter[$name])) $this->dcCounter[$name] = 0; #38
+	 if(!isset($this->dcCounter[$name]))
+	 {
+		$this->dcCounter[$name] = 0;
+	 }
 	 $this->dcCounter[$name]++;
 	}
 	if (count($this->dcStack)!=0) return true;
@@ -209,9 +216,8 @@ class safehtml {
 	  return true;
 	}
 
-	if (!isset($this->Counter['table'])) $this->Counter['table'] = 0; #38
 	// TABLES: cannot open table elements when we are not inside table
-	if ($this->Counter["table"]<=0 && in_array($name, $this->tableTags)) return true;
+	if (isset($this->Counter['table']) && $this->Counter["table"]<=0 && in_array($name, $this->tableTags)) return true;
 
 	// PARAGRAPHS: close paragraph when closeParagraph tags opening
 	if (in_array($name, $this->closeParagraph) && in_array("p", $this->Stack))
@@ -234,8 +240,7 @@ class safehtml {
 	$this->writeAttrs($attrs, $name);										# pass tag $name to writeAttrs to provide context - JavaWoman
 	$this->xhtml.=">";
 	array_push($this->Stack,$name);
-	if (!isset($this->Counter[$name])) $this->Counter[$name] = 0; #38
-	$this->Counter[$name]++;
+	$this->Counter[$name] = (isset($this->Counter[$name])) ? $this->Counter[$name] + 1 : 1;
   }
 
   // Closing tag handler
@@ -243,13 +248,10 @@ class safehtml {
 
 	$name = strtolower($name);
 
-	if (!isset($this->dcCounter[$name])) $this->dcCounter[$name] = 0; #38
-	if (!isset($this->Counter[$name])) $this->Counter[$name] = 0; #38
 	if ($this->dcCounter[$name]>0 && in_array($name, $this->DeleteContent))
 	{
 	 while ($name!=($tag=array_pop($this->dcStack)))
 	 {
-			if (!isset($this->dcCounter[$tag])) $this->dcCounter[$tag] = 0; #38
 	  $this->dcCounter[$tag]--;
 	 }
 	$this->dcCounter[$name]--;
@@ -257,7 +259,7 @@ class safehtml {
 
 	if (count($this->dcStack)!=0) return true;
 
-	if ($this->Counter[$name]>0)
+	if (isset($this->Counter[$name]) && ($this->Counter[$name]>0))
 	{
 	 while ($name!=($tag=array_pop($this->Stack)))
 	   $this->closeTag($tag);
@@ -271,7 +273,6 @@ class safehtml {
 	if (!in_array($tag, $this->noClose))
 	  $this->xhtml.="</".$tag.">";
 
-	if (!isset($this->Counter[$tag])) $this->Counter[$tag] = 0; #38
 	$this->Counter[$tag]--;
 	if (in_array($tag, $this->listTags)) $this->listScope--;
 	if ($tag=="li") array_pop($this->liStack);

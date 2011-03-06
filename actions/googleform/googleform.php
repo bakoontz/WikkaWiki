@@ -10,7 +10,7 @@
  * When the user clicks on the button labelled <tt>Google</tt>, a google search will start in a new window.</p>
  *
  * @package		Actions
- * @version		$Id$
+ * @version		$Id: googleform.php 1196 2008-07-16 04:25:09Z BrianKoontz $
  * @license		http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
  *
@@ -62,5 +62,5 @@ $query = $this->htmlspecialchars_ent($query);
 ?>
 <form action="http://www.google.com/search" method="get" target="_blank">
 	<input type="text" value="<?php echo $query; ?>" name="q" size="30" maxlength="2048" class="WBselectonfocus" />
-	<input name="btnG" type="submit" value="<?php echo GOOGLE_BUTTON;?>" />
+	<input name="btnG" type="submit" value="<?php echo T_("Google");?>" />
 <?php echo $this->FormClose(); ?>

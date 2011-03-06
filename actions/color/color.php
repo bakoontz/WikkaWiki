@@ -7,7 +7,7 @@
 *
 * @package		Actions
 * @name			Color
-* @version		$Id$
+* @version		$Id: color.php 1196 2008-07-16 04:25:09Z BrianKoontz $
 * @license		http://www.gnu.org/copyleft/gpl.html GNU General Public License
 * @filesource
 *
@@ -15,6 +15,7 @@
 * @author	{@link http://wikkawiki.org/NilsLindenberg Nils Lindenberg} (modifications)
 * @author	{@link http://wikkawiki.org/DotMG Mahefa Randimbisoa} (modification - RGB syntax)
 *
+* @version    1.3
 * @uses		Wakka::htmlspecialchars_ent()
 * @uses		color_syntax_is_valid()
 * @input	string	$text	mandatory: the text which should be colored.
@@ -26,9 +27,17 @@
 * @input	string	$bg		optional: (html)name or hex-value for the backgroundcolor;
 * @output	colored text
 *
+* @constraint    at least one valid parameter for $c (or $hex or $fg) or $bg is required
+*
+* @documentation  {@link http://wikkawiki.org/PatternValidColorInfoFR}
+* @documentation  {@link http://wikkawiki.org/ColorActionInfo}
+*
 * @todo		make it part of the formatter instead of using an action
 *			note that most of the color names are not valid in CSS!
 */
+
+if(!defined('PATTERN_VALID_HEX_COLOR')) define('PATTERN_VALID_HEX_COLOR', '#(?>[\da-f]{3}){1,2}');
+if(!defined('PATTERN_VALID_RGB_COLOR')) define('PATTERN_VALID_RGB_COLOR', 'rgb\(\s*\d+((?>\.\d*)?%)?\s*(?>,\s*\d+(?(1)(\.\d*)?%)\s*){2}\)');
 
 // ***Internal function to test if syntax is valid
 if (!function_exists('color_syntax_is_valid'))
@@ -38,7 +47,7 @@ if (!function_exists('color_syntax_is_valid'))
 	 *
 	 * @author	{@link http://wikkawiki.org/DotMG Mahefa Randimbisoa}
 	 * @since	1.1.6.2
-	 * @version	$Id$
+	 * @version	$Id: color.php 1196 2008-07-16 04:25:09Z BrianKoontz $
 	 *
 	 * @input	string $syntax requiered: the color syntax to be validated
 	 * @todo	To be more strict, ensure that when using rgb(r, g, b) syntax,
@@ -48,8 +57,6 @@ if (!function_exists('color_syntax_is_valid'))
 	function color_syntax_is_valid($syntax)
 	{
 		//Todo: To be more strict, ensure that when using rgb(r, g, b) syntax, integer values for r, g, and b are less than 256, or if % is used, those values are not greater than 100%
-		if (!defined ('PATTERN_VALID_HEX_COLOR')) define('PATTERN_VALID_HEX_COLOR', '#(?>[\da-f]{3}){1,2}');
-		if (!defined ('PATTERN_VALID_RGB_COLOR')) define('PATTERN_VALID_RGB_COLOR', 'rgb\(\s*\d+((?>\.\d*)?%)?\s*(?>,\s*\d+(?(1)(\.\d*)?%)\s*){2}\)');
 		$html_color_names = array('aqua', 'black', 'blue', 'fuchsia', 'gray', 'green', 'lime', 'maroon', 'navy', 'olive', 'purple', 'red', 'silver', 
 		'teal', 'white', 'yellow');
 		$syntax = trim(strtolower($syntax));
@@ -57,7 +64,7 @@ if (!function_exists('color_syntax_is_valid'))
 		{
 			return($syntax);
 		}
-		if (preg_match('/^(?>'.PATTERN_VALID_HEX_COLOR.'|'.PATTERN_VALID_RGB_COLOR.')$/i', $syntax, $match))
+		if( preg_match('/^(?>'.PATTERN_VALID_HEX_COLOR.'|'.PATTERN_VALID_RGB_COLOR.')/', $syntax, $match) )
 		{
 			return($match[0]);
 		}
@@ -103,11 +110,11 @@ if (is_array($vars))
 	}
 	elseif (!$mytext)
 	{
-		$output .= '<em class="error">'.ERROR_NO_TEXT_GIVEN.'</em>';
+		$output .= '<em class="error">'.T_("There is no text to highlight!").'</em>';
 	}
 	elseif (!$style)
 	{
-		$output .= '<em class="error">'.ERROR_NO_COLOR_SPECIFIED.'</em>';
+		$output .= '<em class="error">'.T_("Sorry, but you did not specify a color for highlighting!").'</em>';
 	}
 	// *** Output section ***
 	print ($output);

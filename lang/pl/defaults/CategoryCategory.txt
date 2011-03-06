@@ -1,0 +1,6 @@
+===Kategorie===
+Poniższa lista zawiera wszystkie kategorie występujące w tej witrynie, pod warunkiem, że nie popełniono błędu podczas ich tworzenia lub tworzenia poszczególnych stron. Dalsze informacje dostępne są w artykule WikiCategory.
+
+----
+
+{{Category}}

@@ -22,20 +22,21 @@
  *
  * @todo user central regex library #34
  */
+if (!defined('NEWPAGE_INVALID_CHARS')) define('NEWPAGE_INVALID_CHARS', '| ? = &lt; &gt; / \ " % &amp;');
 
 $showform = TRUE;
-
+$pagename = '';
 if (isset($_POST['pagename']))
 {
 	$pagename = $this->GetSafeVar('pagename', 'post');
 
-	if (!$this->IsWikiName($pagename)) #34
+	if(!$this->IsWikiName($pagename))
 	{
-		echo '<em class="error">'.sprintf(WIKKA_ERROR_INVALID_PAGE_NAME, $pagename).'</em>';
+		echo '<em class="error">'.sprintf(T_("This page name is invalid. Valid page names must not contain the characters %s."), NEWPAGE_INVALID_CHARS).'</em>';
 	}
 	else if ($this->ExistsPage($pagename))
 	{
-		echo '<em class="error">'.WIKKA_ERROR_PAGE_ALREADY_EXIST.'</em>';
+		echo '<em class="error">'.T_("Sorry, the target page already exists").'</em>';
 	}
 	else
 	{
@@ -48,9 +49,9 @@ if (isset($_POST['pagename']))
 if ($showform)
 { ?>
 	<?php echo $this->FormOpen(); ?>
-		<fieldset class="newpage"><legend><?php echo NEWPAGE_CREATE_LEGEND; ?></legend>
+		<fieldset class="newpage"><legend><?php echo T_("Create a new page"); ?></legend>
 		<input type="text" name="pagename" size="40" value="<?php echo $pagename; ?>" />
-		<input type="submit" value="<?php echo NEWPAGE_CREATE_BUTTON; ?>" />
+		<input type="submit" value="<?php echo T_("Create"); ?>" />
 		</fieldset>
 	<?php echo $this->FormClose();
 }

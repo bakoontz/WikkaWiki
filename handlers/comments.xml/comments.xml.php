@@ -7,7 +7,7 @@
  *
  * @package		Handlers
  * @author		{@link http://wikkawiki.org/DarTar Dario Taraborelli}
- * @version		$Id$
+ * @version		$Id: comments.xml.php 892 2008-02-07 08:20:26Z DotMG $
  * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
  *
@@ -39,6 +39,7 @@
  *			does not already have '&' in a URL escaped (as Href() is doing!)
  *			because it gets "double-escaped" now; in fact, I think it should not
  *			be escaped at all in a feed, only in HTML
+ *			(for now : use str_replace() to unescape result of Href)
  * @todo	review whether page, or actual comment, should be used for the item
  *			'source' attribute in RSS 1.0
  * @todo	replace current feed image 'images/wikka_logo.jpg' by a more
@@ -51,7 +52,7 @@
 if (!defined('FEED_VALID_FORMATS')) define('FEED_VALID_FORMATS', 'RSS0.91,RSS1.0,RSS2.0,ATOM1.0'); 
 if (!defined('FEED_DESCRIPTION_TRUNCATE_SIZE')) define('FEED_DESCRIPTION_TRUNCATE_SIZE', 200); #character limit to truncate description	// expects integer
 if (!defined('FEED_DESCRIPTION_HTML')) define('FEED_DESCRIPTION_HTML',TRUE); #Indicates whether the description field should be rendered in HTML	// expects boolean
-if (!defined('FEED_DEFAULT_OUTPUT_FORMAT')) define('FEED_DEFAULT_OUTPUT_FORMAT','RSS2.0'); #any of the valid formats specified in VALID_FORMATS
+if (!defined('FEED_DEFAULT_OUTPUT_FORMAT')) define('FEED_DEFAULT_OUTPUT_FORMAT','RSS2.0'); #any of the valid formats specified in FEED_VALID_FORMATS
 //if (!defined('FEED_DEFAULT_USER_FILTER')) define('FEED_DEFAULT_USER_FILTER', ''); #empty, modifications by any user
 //if (!defined('FEED_DEFAULT_DAY_LIMIT')) define('FEED_DEFAULT_DAY_LIMIT', 30); #default number of days
 //if (!defined('FEED_DEFAULT_ITEMS_LIMIT')) define('FEED_DEFAULT_ITEMS_LIMIT', 20); #default number of items to display @@@
@@ -86,7 +87,8 @@ $d = ''; #days limit
 //get URL parameters
 $formats = explode(",",FEED_VALID_FORMATS);
 #$f = (in_array($_GET['f'], $formats))? $_GET['f'] : FEED_DEFAULT_OUTPUT_FORMAT;
-$f = (isset($_GET['f']) && in_array($_GET['f'], $formats)) ? $_GET['f'] : FEED_DEFAULT_OUTPUT_FORMAT;
+$f = (isset($_GET['f']) && in_array($_GET['f'], $formats)) ?
+$this->GetSafeVar('f', 'get') : FEED_DEFAULT_OUTPUT_FORMAT;
 
 //create object
 #include_once('3rdparty'.DIRECTORY_SEPARATOR.'core'.DIRECTORY_SEPARATOR.'feedcreator'.DIRECTORY_SEPARATOR.'feedcreator.class.php');
@@ -102,18 +104,18 @@ $rss = instantiate('UniversalFeedCreator');
 $rss->useCached(); //TODO: make this configurable
 $rss->title = sprintf(FEED_TITLE_RECENT_COMMENTS, $this->GetConfigValue('wakka_name')); 
 $rss->description = sprintf(FEED_DESCRIPTION_RECENT_COMMENTS, $this->GetConfigValue('wakka_name'));
-$rss->cssStyleSheet = $this->StaticHref('css/'.FEED_CSS);
+$rss->cssStyleSheet = str_replace('&amp;', '&', $this->StaticHref('css/'.FEED_CSS));
 $rss->descriptionTruncSize = FEED_DESCRIPTION_TRUNCATE_SIZE;
 $rss->descriptionHtmlSyndicated = FEED_DESCRIPTION_HTML;
-$rss->link = $this->Href('', $this->GetConfigValue('root_page'));
-$rss->syndicationURL = $this->Href($this->handler,'','f='.$f);
+$rss->link = str_replace('&amp;', '&', $this->Href('', $this->GetConfigValue('root_page')));
+$rss->syndicationURL = str_replace('&amp;', '&', $this->Href($this->handler,'','f='.$f));
 
 //create feed image
 #$image = new FeedImage();
 $image = instantiate('FeedImage');
 $image->title = FEED_IMAGE_TITLE;
 $image->url = FEED_IMAGE_URL;
-$image->link = $this->Href('', $this->GetConfigValue('root_page'));
+$image->link = str_replace('&amp;', '&', $this->Href('', $this->GetConfigValue('root_page')));
 $image->description = FEED_IMAGE_DESCRIPTION;
 $image->descriptionTruncSize = FEED_DESCRIPTION_TRUNCATE_SIZE;
 $image->descriptionHtmlSyndicated = FEED_DESCRIPTION_HTML;
@@ -138,7 +140,7 @@ if ($comments = $this->LoadRecentComments(2*$n))
 		#$item = new FeedItem();
 		$item = instantiate('FeedItem');
 		$item->title = $comment['page_tag']; 
-		$item->link = $this->Href('', $comment['page_tag'], 'show_comments=1').'#comment_'.$comment['id'];
+		$item->link = str_replace('&amp;', '&', $this->Href('', $comment['page_tag'], 'show_comments=1').'#comment_'.$comment['id']);
 		// @@@ ^ uses &amp;amp; in all formats - this is FC escaping the &amp; that Href() outputs
 		// WARNING: the double escape comes from the use of htmlspecialchars()
 		// see also recentchanges.xml.php
@@ -162,7 +164,7 @@ Element: Source
 */
 		if ('RSS1.0' == $f)		// dc:source used only here
 		{
-			$item->source = $this->Href('', $comment['page_tag']);	// use page, rather than comment, for now
+			$item->source = str_replace('&amp;', '&', $this->Href('', $comment['page_tag']));	// use page, rather than comment, for now
 		}
 		#if ($f == 'ATOM1.0' || $f == 'RSS1.0')
 		if (('ATOM1.0' == $f || 'RSS1.0' == $f) && $this->existsUser($comment['user']))	// check for existence of user

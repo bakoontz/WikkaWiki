@@ -1,11 +1,11 @@
 /*
 ////////////////////////////////////////////////////////////////////////
 // WikkaEdit                                                          //
-// v. 1.00                                                            //
+//                                                                    //
 // supported browsers : MZ1.4+, MSIE5+, Opera 8+, khtml/webkit        //
 //                                                                    //
-// (C) 2007 Olivier Borowski (olivier.borowski@wikkawiki.org)         //
-// Homepage : http://docs.wikkawiki.org/WikkaEdit                          //
+// (C) 2007-2008 Olivier Borowski (olivier.borowski@wikkawiki.org)    //
+// Homepage : http://wikkawiki.org/WikkaEdit                          //
 //                                                                    //
 // This program is free software; you can redistribute it and/or      //
 // modify it under the terms of the GNU General Public License        //
@@ -29,15 +29,16 @@
 // ===== initialization =====
 WikkaEdit.prototype.init = function() {
 	// load CSS
-	document.write("<link rel=\"stylesheet\" type=\"text/css\" href=\""+Wikkaedit_baseURL+"3rdparty/plugins/wikkaedit/wikkaedit.css\" />");
+	document.write("<link rel=\"stylesheet\" type=\"text/css\" href=\"3rdparty/plugins/wikkaedit/wikkaedit.css\" />");
 
 	// init data
 	this.we_actionsMenuEnabled = (typeof(this.contextualHelp) != "undefined");
 	this.we_searchReplaceEnabled = (typeof(this.showSearchWindow) != "undefined");
 	this.initButtons();
-	this.initCategs();
-	if (this.we_actionsMenuEnabled)
+	if (this.we_actionsMenuEnabled) {
+		this.initCategs();
 		this.initActions();
+	}
 
 	//var we_ta_container = this.we_ta;		// without textarea_container (old method)
 	var we_ta_container = document.getElementById("textarea_container");	// with textarea_container
@@ -133,7 +134,7 @@ WikkaEdit.prototype.moveElementsAfterWindowResize = function() {
 		// make editor height follow browser window height
 		if (this.we_ta.style.height == "") this.we_ta.style.height = "500px"; // this.we_ta.style.height is "" the 1st time
 		var windowHeight = parseInt(window.innerHeight ? window.innerHeight : document.documentElement.clientHeight, 10);
-		var change = windowHeight - parseInt(document.body.offsetHeight, 10);
+		var change = windowHeight - parseInt(document.body.offsetHeight, 10) - 20;	// TODO remove this hardcoded value (needed for vertical scrollbar to disappear)
 		if (change != 0) {
 			var newheight = Math.max(this.EDITOR_MIN_HEIGHT, parseInt(this.we_ta.style.height, 10) + change);
 			this.we_ta.style.height = newheight + "px";
@@ -159,13 +160,13 @@ WikkaEdit.prototype.genToolbar = function() {
 	for(var i in this.we_buttons) {
 		switch (this.we_buttons[i].type) {
 			case "button" :		// button
-				html += "<img class=\"toolbutton\" src=\""+Wikkaedit_baseURL+"3rdparty/plugins/wikkaedit/images/" + this.refToName(i) + ".gif\" alt=\"" + this.refToName(i) + "\" title=\"" + this.we_buttons[i].title + "\" onclick=\"varWikkaEdit.toolbarButtonClick(this, '" + this.refToName(i) + "');\"" + ie6_hover + " />";
+				html += "<img class=\"toolbutton\" src=\"3rdparty/plugins/wikkaedit/images/" + this.refToName(i) + ".gif\" alt=\"" + this.refToName(i) + "\" title=\"" + this.we_buttons[i].title + "\" onclick=\"varWikkaEdit.toolbarButtonClick(this, '" + this.refToName(i) + "');\"" + ie6_hover + " />";
 				break;
 			case "submenu" :	// submenu
-				html += "<img class=\"toolbutton\" src=\""+Wikkaedit_baseURL+"3rdparty/plugins/wikkaedit/images/submenu.gif\" alt=\"submenu\" title=\"" + this.we_buttons[i].title + "\" onclick=\"varWikkaEdit.toolbarButtonClick(this, '" + this.refToName(i) + "');\"" + ie6_hover + " />";
+				html += "<img class=\"toolbutton\" src=\"3rdparty/plugins/wikkaedit/images/submenu.gif\" alt=\"submenu\" title=\"" + this.we_buttons[i].title + "\" onclick=\"varWikkaEdit.toolbarButtonClick(this, '" + this.refToName(i) + "');\"" + ie6_hover + " />";
 				break;
 			case "separator" :	// separator
-				html += "<img class=\"toolseparator\" src=\""+Wikkaedit_baseURL+"3rdparty/plugins/wikkaedit/images/separator.gif\" alt=\"|\" />";
+				html += "<img class=\"toolseparator\" src=\"3rdparty/plugins/wikkaedit/images/separator.gif\" alt=\"|\" />";
 				break;
 			default :
 				alert("genToolbar() : unknown type (" + this.we_buttons[i].type + ")");
@@ -178,7 +179,7 @@ WikkaEdit.prototype.genToolbar = function() {
 		html += "<span class='actiontitle'>Actions</span>";
 		for(i in this.we_categs) {
 			if (this.we_categs[i].title != null)	// hidden actions don't have a title
-				html += "<span class=\"toolbutton\" style='margin-left:20px; padding:2px 5px 3px 6px' onclick=\"varWikkaEdit.toolbarCategClick('" + i + "', this);\">" + this.we_categs[i].title + "<img src='"+Wikkaedit_baseURL+"3rdparty/plugins/wikkaedit/images/submenu.gif' style='vertical-align:middle'/></span>";
+				html += "<span class=\"toolbutton\" style='margin-left:20px; padding:2px 5px 3px 6px' onclick=\"varWikkaEdit.toolbarCategClick('" + i + "', this);\">" + this.we_categs[i].title + "<img src='3rdparty/plugins/wikkaedit/images/submenu.gif' style='vertical-align:middle'/></span>";
 		}
 	}
 
@@ -213,24 +214,44 @@ WikkaEdit.prototype.toolbarButtonClick = function(obj, buttonName, submenuName) 
 		case "numlist" :	this.addToLine("\t1) "); break;
 		case "comments" :	this.addToLine("\t& "); break;
 
-		case "indent" :		this.addToLine("\t"); break;
-		case "outdent" :	this.addToLine("outdent"); break;
+		case "indent" :		this.indent(1); break;
+		case "outdent" :	this.indent(-1); break;
 
 		case "hr" :			this.addToSelection("----"); break;
 
 		case "link" :		this.addToSelection("[[http://www.example.com Page Title]]"); break;
-		case "image" :		this.toolbarActionClick("_image"); break; //this.addToSelection("{{image url=\"path/image.jpg\" alt=\"alternate text\"}}"); break;
-		case "table" :		this.addToSelection("|=|header1|=|header2||\n||cell1||cell2||"); break;
-
-		case "rawhtml" :	this.addToSelection("\"\"insert-raw-html-here\"\""); break;
-		case "sourcecode" :	this.addToSelection("%%(language-ref)\ninsert-source-code-here\n%%"); break;
+		case "image" :		this.toolbarActionClick("we_image"); break;
+		case "table" :		this.addToSelection("|=|header1|=|header2||\n||cell1||cell2||");										// 1.2
+							break;
+		case "rawhtml" :
+			//Shift+Click means whole lines
+			var selRange = this.getSelectionRange();
+			if (event.shiftKey) selRange = this.getSelectionRangeWholeLines();
+			if (selRange.end - selRange.start > 0) {
+				this.addToSelection("\"\"","\"\"",null,selRange);
+			} else {
+				var nsr = new SelRange(selRange.start + 2, selRange.start + 22);
+				this.addToSelection("\"\"insert-raw-html-here\"\"","",nsr,selRange);
+			}
+			break;
+		case "sourcecode" :
+			//Shift+Click means whole lines
+			var selRange = this.getSelectionRange();
+			if (event.shiftKey) selRange = this.getSelectionRangeWholeLines();
+			var nsr = new SelRange(selRange.start + 3, selRange.start + 15);
+			if (selRange.end - selRange.start > 0) {
+				this.addToSelection("%%(language-ref)\n", "\n%%", nsr, selRange);
+			} else {
+				this.addToSelection("%%(language-ref)\ninsert-source-code-here\n%%","",nsr,selRange);
+			}
+			break;
 
 		case "find" :		this.showSearchWindow(); break;
-		case "shortcuts" :	this.toggleSubmenu(obj, "shortcuts"); break; //this.showShortcuts(obj); break;
+		case "shortcuts" :	this.toggleSubmenu(obj, "shortcuts"); break;
 		case "formatting_rules" :	this.showFormattingRules(); break;
 
 		// submenu : style
-		case "forecolor" :	this.toolbarActionClick("_color"); break; //this.addToSelection("{{color fg=\"text-color\" bg=\"background-color\" text=\"insert-text-here\"}}"); break;
+		case "forecolor" :	this.toolbarActionClick("we_color"); break;
 		case "monospace" :	this.addToSelection("##", "##"); break;
 		case "highlight" :	this.addToSelection("''", "''"); break;
 		case "key" :		this.addToSelection("#%", "#%"); break;
@@ -275,10 +296,10 @@ WikkaEdit.prototype.toolbarActionClick = function(actionRef) {
 	} else {
 		// === use static text to insert the action ===
 		switch (actionRef) {
-			case "_image" :
+			case "we_image" :
 				actionAndParams = "{{image url=\"url\" title=\"text\" alt=\"text\"}}";
 				break;
-			case "_color" :
+			case "we_color" :
 				actionAndParams = "{{color text=\"text\" c=\"color\"}}";
 				break;
 			default :
@@ -327,7 +348,7 @@ WikkaEdit.prototype.toggleSubmenu = function(obj, newSubmenu, isAction) {
 		html += "<span class='we_key'>Ctrl</span> + <span class='we_key'>Shift</span> + <span class='we_key'>S</span> : strike<br/>";
 		html += "<br/>";
 		html += "<span class='we_key'>Tab</span> : tab character or indent<br/>";
-		html += "<span class='we_key'>Shift</span> + <span class='we_key'>Tab</span> : unindent<br/>";
+		html += "<span class='we_key'>Shift</span> + <span class='we_key'>Tab</span> : outdent<br/>";
 		html += "<br/>";
 		// Ctrl + F is not intercepted by Safari
 		if (!this.we_webkit) {
@@ -350,15 +371,15 @@ WikkaEdit.prototype.toggleSubmenu = function(obj, newSubmenu, isAction) {
 		if (!isAction) {
 			for(i in this.we_buttons[this.nameToRef(newSubmenu)].we_buttons) {
 				html += "<div class=\"smbutton\" onclick=\"varWikkaEdit.toolbarButtonClick(this, '" + this.refToName(i) + "', '" + newSubmenu + "');\">";
-				html += "<img class=\"smimage\" src=\""+Wikkaedit_baseURL+"3rdparty/plugins/wikkaedit/images/" + this.refToName(i) + ".gif\" alt=\"" + this.refToName(i) + "\"" + ie6_hover + " />";
+				html += "<img class=\"smimage\" src=\"3rdparty/plugins/wikkaedit/images/" + this.refToName(i) + ".gif\" alt=\"" + this.refToName(i) + "\"" + ie6_hover + " />";
 				html += this.we_buttons[this.nameToRef(newSubmenu)].we_buttons[i].title;
 				html += "</div>";
 			}
 		} else {
 			for(i in this.we_actions) {
-				if (this.we_actions[i].we_categ == newSubmenu) {
-					html += "<div class=\"smbutton\" onclick=\"varWikkaEdit.toolbarActionClick('" + i + "');\"" + (this.we_actions[i].we_summary == null ? "" : " title=\"" + this.we_actions[i].we_summary + "\"") + ">";
-					html += "<img class=\"smimage\" src=\""+Wikkaedit_baseURL+"3rdparty/plugins/wikkaedit/images/actions/" + this.we_actions[i].we_name + ".gif\" alt=\"" + this.we_actions[i].we_name + "\"" + ie6_hover + " />";
+				if (this.we_actions[i].categ == newSubmenu) {
+					html += "<div class=\"smbutton\" onclick=\"varWikkaEdit.toolbarActionClick('" + i + "');\"" + (this.we_actions[i].summary == null ? "" : " title=\"" + this.we_actions[i].summary + "\"") + ">";
+					html += "<img class=\"smimage\" src=\"3rdparty/plugins/wikkaedit/images/" + this.we_actions[i].name + ".gif\" alt=\"" + this.we_actions[i].name + "\"" + ie6_hover + " />";
 					html += this.we_actions[i].we_title;
 					html += "</div>";
 				}
@@ -402,15 +423,15 @@ WikkaEdit.prototype.keyDown = function(e) {
 	switch (key) {
 		case 9 :	// tab
 			if (e.shiftKey) {
-				varWikkaEdit.addToLine("outdent");	// outdent
+				varWikkaEdit.indent(-1);		// outdent
 			} else {
 				var sr = varWikkaEdit.getSelectionRange();
 				if (sr.start == sr.end) {
 					// insert tab character and move carret after it
-					var srAfter = {start:sr.end + 1, end:sr.end + 1};
+					var srAfter = new SelRange(sr.end + 1);
 					varWikkaEdit.addToSelection("\t", null, srAfter);
 				} else {
-					varWikkaEdit.addToLine("\t");		// indent
+					varWikkaEdit.indent(1);		// indent
 				}
 			}
 			return varWikkaEdit.cancelKey(e);
@@ -442,11 +463,13 @@ WikkaEdit.prototype.keyDown = function(e) {
 					varWikkaEdit.toolbarButtonClick(null, "strike");
 					return varWikkaEdit.cancelKey(e);
 				}
+				break;
 			case 70 :	// ctrl + F
 				if (varWikkaEdit.we_searchReplaceEnabled) {
 					varWikkaEdit.showSearchWindow();
 					return varWikkaEdit.cancelKey(e);
 				}
+				break;
 		}
 	}
 	return true;
@@ -480,160 +503,121 @@ WikkaEdit.prototype.cancelKey = function(e) {
 WikkaEdit.prototype.autoIndent = function() {
 	// position of the selection
 	var sr = this.getSelectionRange();
-	// textarea content
-	var text = this.getTextAreaContent();
-	// strings before & after selection and previous line
-	var beforeSel = text.substr(0, sr.start);
-	var afterSel = text.substr(sr.end);
-	var previousLine = beforeSel.substr(beforeSel.lastIndexOf("\n") + 1);
+	// selection content
+	var selCont = this.getSelectionContent(sr);
 	// 3 types of indent characters : tab, 4 spaces or "~" (http://demo.wikkawiki.org/FormattingRules)
 	var sp = "(    +|\t+|~+)";
 	// indent markers : "- ", "& ", "a)", "a." (+ uppercase + numbers)
 	var it = "(\-|\&|([1-9][0-9]*|[a-zA-Z])([.]|[)])|)";
-	// does previous line contain indentation ?
+	// does previous line contain indentation?
 	var re = new RegExp("^" + sp + it + "(.*)$");
-	var m = previousLine.match(re);
+	var m = selCont.previousLine.match(re);
 	// yes
 	if (m) {
 		var indentChars = m[1];
 		var marker = m[2];
 		var currentLineContent = m[5].replace(/\s+/g, "");
-		//alert("indentChars="+indentChars+", marker="+marker+", currentLineContent="+currentLineContent);
-		// currentLineContent contains the line content stripped from indent, marker and space characters
-		// example : "~- test" returns "test"
-		var newBeforeSel;
-		//if (currentLineContent == "")	// empty content ? => empty line (only keep \n)
-		//	newBeforeSel = beforeSel.substr(0, beforeSel.lastIndexOf("\n") + 1);
-		//else
-		newBeforeSel = beforeSel + "\n" + indentChars + marker + (marker == "" ? "" : " ");
-		// update new line
-		var scrollTop = this.we_ta.scrollTop;
-		this.we_ta.value = newBeforeSel + afterSel;
-		this.we_ta.scrollTop = scrollTop;
-		// move selection
+		var newBeforeSel = selCont.before + "\n" + indentChars + marker + (marker == "" ? "" : " ");
+		// update textarea content & move selection
 		// (note : after emptying a line, cursor goes to the previous line. It's not perfect but we
 		// can't improve this as setSelectionRange() is intended to move selection, not caret position)
-		this.setSelectionRange(newBeforeSel.length, newBeforeSel.length);
+		var newSr = new SelRange(newBeforeSel.length);
+		this.setTextAreaContent(newBeforeSel + selCont.after, newSr);
 		return false;
 	}
 	// no => exit
 	return true;
 }
 
-/*WikkaEdit.prototype.setAreaContent = function(content) {
-	// position of the selection
-	var sr = this.getSelectionRange();
-	// textarea content
-	var text = this.getTextAreaContent();
-	// strings before, after, and selection content
-	var beforeSel = text.substr(0, sr.start);
-	var afterSel = text.substr(sr.end);
-	// update selection content
-	this.we_ta.value = beforeSel + content + afterSel;
-	// replace selection
-	sr.end += sr.start + content.length;
-	// focus on textarea
-	this.we_ta.focus();
-	this.setSelectionRange(sr.start, sr.end);
-}*/
-
 // ===== add some text to the selection =====
 WikkaEdit.prototype.addToSelection = function(leftTag, rightTag, srAfter, srBefore) {
 	if (timeoutSelectionRange != null) {
-		this.addLog("addToSelection() was called, but setSelectionRange() setTimeout() is not finished => exit");
+		this.addLog("addToSelection() was called, but setSelectionRange() setTimeout() is not finished");
 		//return;
 	}
 	if (rightTag == null) rightTag = "";
 	// position of the selection
 	var sr = (srBefore != null ? srBefore : this.getSelectionRange());
-	// textarea content
-	var text = this.getTextAreaContent();
-	// strings before, after, and selection content
-	var beforeSel = text.substr(0, sr.start);
-	var afterSel = text.substr(sr.end);
-	var sel = text.substring(sr.start, sr.end);
+	// selection content
+	var selCont = this.getSelectionContent(sr);
 	// intelligent carriage return for separator
 	if (leftTag == "----") {
-		if ((beforeSel != "") && (beforeSel.substr(beforeSel.length-1) != "\n"))
+		if ((selCont.before != "") && (selCont.before.substr(selCont.before.length-1) != "\n"))
 			leftTag = "\n" + leftTag;
-		if ((afterSel != "") && (afterSel.substr(0, 1) != "\n"))
+		if ((selCont.after != "") && (selCont.after.substr(0, 1) != "\n"))
 			leftTag += "\n";
 	}
-	// update selection content
-	var scrollTop = this.we_ta.scrollTop;
-	this.we_ta.value = beforeSel + leftTag + sel + rightTag + afterSel;
-	this.we_ta.scrollTop = scrollTop;
-	// replace selection
-	if (false) {
-		sr.end += (leftTag+rightTag).length;
-	} else {
-		sr.start += leftTag.length;
-		sr.end += leftTag.length;
-	}
-	// focus on textarea
-	this.we_ta.focus();
-	if (srAfter == null)
-		this.setSelectionRange(sr.start, sr.end);
+	// update textarea content & move selection
+	var newSr;
+	if (srAfter != null)
+		newSr = srAfter;
 	else
-		this.setSelectionRange(srAfter.start, srAfter.end);
+		newSr = new SelRange(sr.start + leftTag.length, sr.end + leftTag.length);
+	this.setTextAreaContent(selCont.before + leftTag + selCont.sel + rightTag + selCont.after, newSr);
 }
 
-// ===== add some text to the current line =====
+// ===== add some text to the current line(s) =====
 WikkaEdit.prototype.addToLine = function(leftTag, rightTag) {
 	if (timeoutSelectionRange != null) {
-		this.addLog("addToSelection() was called, but setSelectionRange() setTimeout() is not finished => exit");
+		this.addLog("addToLine() was called, but setSelectionRange() setTimeout() is not finished");
 		//return;
 	}
 	if (rightTag == null) rightTag = "";
-	// position of the selection
-	var sr = this.getSelectionRange();
-	// textarea content
-	var text = this.getTextAreaContent();
-	// select the whole lines
-	var lineStart = text.lastIndexOf("\n", sr.start-1);
-	if (lineStart > 0)
-		lineStart++;
-	else	// 0 or -1
-		lineStart = 0;
-	var lineEnd = text.indexOf("\n", sr.end);
-	if (lineEnd == -1) lineEnd = text.length;
-	// change selection
-	sr.start = lineStart;
-	sr.end = lineEnd;
-	// strings before, after, and selection content
-	var beforeSel = text.substr(0, sr.start);
-	var afterSel = text.substr(sr.end);
-	var sel = text.substring(sr.start, sr.end);
-	// entoure chaque ligne
-	var arr = sel.split("\n");
+	// position of the selection (extended to whole lines)
+	var sr = this.getSelectionRangeWholeLines();
+	// selection content
+	var selCont = this.getSelectionContent(sr);
+	// real selection
+	sr = this.getSelectionRange();
+	// add left and right tags for each line
+	var arr = selCont.sel.split("\n");
 	var newSel = "";
 	for(var i=0; i<arr.length; i++) {
-		switch (leftTag) {
-			case "outdent" :
-				if (arr[i].substr(0,1) == "\t") {
-					newSel += this.refToName(arr[i]) + (i < arr.length-1 ? "\n" : "");
-					sr.end--;
-				} else {
-					newSel += arr[i] + (i < arr.length-1 ? "\n" : "");
-				}
-				break;
-			default :
-				newSel += leftTag + arr[i] + rightTag + (i < arr.length-1 ? "\n" : "");
-				if (false) {
-					sr.end += (leftTag+rightTag).length;
-				} else {
-					sr.start += leftTag.length;
-					sr.end += leftTag.length;
-				}
-		}
+		newSel += leftTag + arr[i] + rightTag + (i < arr.length-1 ? "\n" : "");
+		if (i == 0)
+			sr.start += leftTag.length;
+		sr.end += leftTag.length;
 	}
-	// update selection content
-	var scrollTop = this.we_ta.scrollTop;
-	this.we_ta.value = beforeSel + newSel + afterSel;
-	this.we_ta.scrollTop = scrollTop;
-	// focus on textarea
-	this.we_ta.focus();
-	this.setSelectionRange(sr.start, sr.end);
+	// update textarea content & move selection
+	this.setTextAreaContent(selCont.before + newSel + selCont.after, sr);
+}
+
+// ===== indent / outdent current line(s) =====
+WikkaEdit.prototype.indent = function(sens) {
+	if (timeoutSelectionRange != null) {
+		this.addLog("addToLine() was called, but setSelectionRange() setTimeout() is not finished");
+		//return;
+	}
+	// position of the selection (extended to whole lines)
+	var sr = this.getSelectionRangeWholeLines();
+	// selection content
+	var selCont = this.getSelectionContent(sr);
+	// real selection
+	sr = this.getSelectionRange();
+	// indent / outdent each line
+	var arr = selCont.sel.split("\n");
+	var newSel = "";
+	for(var i=0; i<arr.length; i++) {
+		if (sens == -1) {	// outdent
+			if (arr[i].substr(0,1) == "\t") {
+				// remove leading tab
+				newSel += arr[i].substr(1) + (i < arr.length-1 ? "\n" : "");
+				if (i == 0)
+					sr.start--;
+				sr.end--;
+			} else {
+				// keep this line
+				newSel += arr[i] + (i < arr.length-1 ? "\n" : "");
+			}
+		} else {			// indent
+			newSel += "\t" + arr[i] + (i < arr.length-1 ? "\n" : "");
+			if (i == 0)
+				sr.start += 1;
+			sr.end += 1;
+	}
+	}
+	// update textarea content & move selection
+	this.setTextAreaContent(selCont.before + newSel + selCont.after, sr);
 }
 
 // ===== set a new selection =====
@@ -649,7 +633,7 @@ WikkaEdit.prototype.setSelectionRange = function(start, end) {
 	// so, apparently, does FF (#704)
 	// => need to wait a little for selection to be taken in account
 	// TODO : replace "if (false)"
-	//if (false) //(navigator.userAgent.indexOf("KHTML") == -1)
+	// if (false) //(navigator.userAgent.indexOf("KHTML") == -1)
 	if (navigator.userAgent.indexOf("KHTML") == -1 &&
 	    navigator.userAgent.indexOf("Mozilla") == -1)
 		this.setSelectionRange2(start, end);
@@ -699,18 +683,17 @@ WikkaEdit.prototype.setSelectionRange2 = function(start, end) {
 	timeoutSelectionRange = null;
 }
 
-// ===== get selection content =====
-WikkaEdit.prototype.getSelection = function() {
-	var str;
-	if (typeof(this.we_ta.setSelectionRange) != "undefined") {	// W3
-		var selStart = this.we_ta.selectionStart;
-		var selEnd = this.we_ta.selectionEnd;
-		str = this.we_ta.value.substring(selStart, selEnd);
-	} else {											// ie6
-		var range = document.selection.createRange();
-		str = range.text;
-	}
-	return str;
+// ===== get selection content (before, selection, after) =====
+WikkaEdit.prototype.getSelectionContent = function(sr) {
+	// textarea content
+	var text = this.getTextAreaContent();
+	// selection, strings before & after selection and previous line
+	var selCont = new Object();
+	selCont.before = text.substr(0, sr.start);
+	selCont.after = text.substr(sr.end);
+	selCont.sel = text.substring(sr.start, sr.end);
+	selCont.previousLine = selCont.before.substr(selCont.before.lastIndexOf("\n") + 1);
+	return selCont;
 }
 
 // ===== get selection range =====
@@ -757,18 +740,39 @@ WikkaEdit.prototype.getSelectionRange = function() {
 		range.moveEnd("character", end - start);
 		range.select();
 	}
-	return {start:start, end:end};
+	return new SelRange(start, end);
+}
+
+// ===== get selection range =====
+// - start
+// - end
+WikkaEdit.prototype.getSelectionRangeWholeLines = function() {
+	var sr = this.getSelectionRange();
+	// textarea content
+	var text = this.getTextAreaContent();
+	// select the whole lines
+	var lineStart = text.lastIndexOf("\n", sr.start-1);
+	if (lineStart > 0)
+		lineStart++;
+	else	// 0 or -1
+		lineStart = 0;
+	var lineEnd = text.indexOf("\n", sr.end);
+	if (lineEnd == -1) lineEnd = text.length;
+	// change selection
+	sr.start = lineStart;
+	sr.end = lineEnd;
+	return sr;
 }
 
 // ===== count the number of chars in the textarea =====
-// TODO : useless for() loop ?!?!?
 WikkaEdit.prototype.js_countTextAreaChars = function(text) {
-	var n = 0;
 	text = text.replace(/\r\n/g, "\n");
 	text = text.replace(/\r/g, "\n");
-	for (var i = 0; i < text.length; i++)
-		n++;
-	return n;
+	return text.length;
+	//var n = 0;
+	//for (var i = 0; i < text.length; i++)
+	//	n++;
+	//return n;
 }
 
 // ===== get textarea content =====
@@ -779,6 +783,18 @@ WikkaEdit.prototype.getTextAreaContent = function() {
 	text = text.replace(/\r\n/g, "\n");
 	text = text.replace(/\r/g, "\n");
 	return text;
+}
+
+// ===== set textarea content =====
+// set textarea content, move selection and give focus to the textarea
+WikkaEdit.prototype.setTextAreaContent = function(text, sr) {
+	// update textarea content
+	var scrollTop = this.we_ta.scrollTop;
+	this.we_ta.value = text;
+	this.we_ta.scrollTop = scrollTop;
+	// focus on textarea
+	this.we_ta.focus();
+	this.setSelectionRange(sr.start, sr.end);
 }
 
 // ===== add a line to the log =====
@@ -809,6 +825,12 @@ WikkaEdit.prototype.getObjectCoords = function(obj) {
 		y += obj.offsetTop;
 	} while ((obj = obj.offsetParent) != null);
 	return {x:x, y:y};
+}
+
+// ===== selectionRange object =====
+function SelRange(start, end) {
+	this.start = start;
+	this.end = (end == null ? start : end)
 }
 
 // ===== run wikkaedit =====

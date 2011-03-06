@@ -3,7 +3,7 @@
  * Display an image, optionally linked to an URL.
  *
  * @package		Actions
- * @version		$Id$
+ * @version		$Id: image.php 1342 2009-03-03 02:29:51Z BrianKoontz $
  * @license		http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
  *
@@ -48,7 +48,7 @@ if (is_array($vars))
 		if ($param == 'height' && (int)$vars['height'] > 0) {$height = (int)$vars['height'];}
 	}
 }
-(isset($vars['url'])) $url = $this->StaticHref($this->cleanUrl(trim($this->htmlspecialchars_ent($vars['url']))));
+if (isset($vars['url'])) $url = $this->StaticHref($this->cleanUrl(trim($this->htmlspecialchars_ent($vars['url']))));
 
 // try to determine image size if given none
 if (0 == $width && 0 == $height) #

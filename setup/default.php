@@ -1,106 +1,260 @@
 <?php
-/**
- * Display a configuration form to set language and database settings.
- * 
- * @package	Setup
- * @version	$Id$
- * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
- * @filesource
- *
- * @uses init_test_mod_rewrite()
- * @todo	make form accessible!
- */
-?>
-<form action="setup/test/test-mod-rewrite.php" name="form1" method="post">
-<table>
-	<?php
-	if (isset($config['wakka_version']) && ($config['wakka_version']))
+
+// Start session
+session_set_cookie_params(0, '/');
+session_name(md5('WikkaWiki'));
+session_start();
+
+include_once('setup/inc/functions.inc.php');
+	
+// Copy POST params to SESSION in preparation for redirect to install page
+$_SESSION['post'] = array();
+$_SESSION['post'] = array_merge($_SESSION['post'], $_POST);
+
+//Override default values with posted values
+if (isset($_POST['config']))
+{
+	/* debug */
+	//print_r($_POST['config']);
+	foreach($_POST['config'] as $key => $value)
 	{
-		echo '	<tr><td>&nbsp;</td><td><h1>'.__('WikkaWiki Upgrade').' (1/5)</h1></td></tr>'."\n";
-		echo '<tr><td>&nbsp;</td><td><p>'.sprintf(__('Welcome to the WikkaWiki Setup Wizard. Your installed WikkaWiki is reporting itself as %s'), '<tt>'.$config['wakka_version'].'</tt>').'</p><p>'.sprintf(__('You are about to %1$s WikkaWiki to version %2$s'), '<em>'.__('upgrade').'</em>', '<strong><tt>'.WAKKA_VERSION.'</tt></strong>').'. '.sprintf(__('Please refer to the %1$s for further instructions'), '<a href="http://docs.wikkawiki.org/UpgradeNotes" target="_blank">'.__('documentation').'</a>').'.</p></td></tr>'."\n";
+		$wakkaConfig[$key] = $value;
+	}
+}
+if (!isset($wakkaConfig['mysql_password']))
+{
+	$wakkaConfig['mysql_password'] = '';
+}
+
+// Validate data
+$error['flag'] = false;
+if(isset($_SESSION['error_flag']))
+{
+	if (isset($_POST['config']['mysql_host']) && strlen($_POST['config']['mysql_host']) == 0)
+	{
+		$error['mysql_host'] = "Please fill in a valid MySQL host."; 
+		$error['flag'] = true;
+	}
+	if (isset($_POST['config']['mysql_database']) && strlen($_POST['config']['mysql_database']) == 0)
+	{
+		$error['mysql_database'] = "Please fill in a valid database."; 
+		$error['flag'] = true;
+	}
+	if	(isset($_POST['config']['mysql_user']) && strlen($_POST['config']['mysql_user']) == 0)
+	{
+		$error['mysql_user'] = "Please fill in a valid MySQL username."; 
+		$error['flag'] = true;
+	}
+	if	(isset($_POST['config']['wakka_name']) && strlen($_POST['config']['wakka_name']) == 0)
+	{
+		$error['wakka_name'] = "Please fill in a title for your wiki. For example: <em>My Wikka website</em>"; 
+		$error['flag'] = true;
+	}
+	if	(isset($_POST['config']['root_page']))
+	{
+		if  (strlen($_POST['config']['root_page']) == 0 || preg_match('/^[A-Za-z0-9]{3,}$/', $_POST['config']['root_page']) == 0)
+		{
+			$error['root_page'] = "Please fill a valid name for your wiki's homepage. For example: <em>start</em> or <em>HomePage</em>"; 
+			$error['flag'] = true;
+		}
+	}
+	if (isset($_POST['config']['admin_users']))
+	{ 
+		if (strlen($_POST['config']['admin_users']) == 0)
+		{
+			$error['admin_users'] = "Please fill in an admin name."; 
+			$error['flag'] = true;
+		}
+		else if (strlen($_POST['config']['admin_users']) > 0 && preg_match('/^[A-Z][a-z]+[A-Z0-9][A-Za-z0-9]*$/', $_POST['config']['admin_users']) == 0)
+		{
+			$error['admin_users'] = "Admin name must be formatted as a WikiName. For example: <em>JohnSmith</em> or <em>AbC</em> or <em>Ted22</em>"; 
+			$error['flag'] = true;
+		}
+	}
+	if (isset($_POST['password']))
+	{
+		if (strlen($_POST['password']) == 0)
+		{
+			$error['password'] = "Please fill in a password.";
+			$error['flag'] = true;
+		}
+		else if (strlen($_POST['password']) < 5)
+		{
+			$error['password'] = "Password must be at least five (5) characters long.";
+			$error['flag'] = true;
+		}
+	}
+	if (isset($_POST['password2']))
+	{
+		if (strlen($_POST['password2']) == 0)
+		{
+			$error['password2'] = "Please confirm your password.";
+			$error['flag'] = true;
+		}
+		else if (strcmp($_POST['password'], $_POST['password2']) != 0)
+		{
+			$error['password2'] = "Passwords don't match.";
+			$error['flag'] = true;
+		}
+	}
+	if (isset($_POST['config']['admin_email']))
+	{
+		if (strlen($_POST['config']['admin_email']) == 0)
+		{
+			$error['admin_email'] = "Please fill in your email address.";
+			$error['flag'] = true;
+		}
+		else if (preg_match("/^[A-Za-z0-9.!#$%&'*+\/=?^_`{|}~-]+@[A-Za-z0-9.-]+$/i", $_POST['config']['admin_email']) == 0)
+		{
+			$error['admin_email'] = "Please fill in a valid email address.";
+			$error['flag'] = true;
+		}
+	}
+	if (isset($_POST['config']['base_url']) && strlen($_POST['config']['base_url']) == 0)
+	{
+		$error['base_url'] = "Please fill in a valid base URL."; 
+		$error['flag'] = true;
+	}
+}
+// i18n section
+if (!defined('SITE_SUFFIX_INFO')) define ('SITE_SUFFIX_INFO', 'Suffix used for cookies and part of the session name. This allows you to run multiple Wikka installations on the same server by configuring them to use different wiki prefixes.');
+if (!defined('SITE_SUFFIX_LABEL')) define ('SITE_SUFFIX_LABEL', 'Your Wiki suffix:');
+
+if (!$wakkaConfig["wakka_version"])
+{
+	$_SESSION['error_flag'] = $error['flag'];
+} 
+
+// Only redirect as a result of this page being POSTed!
+if(isset($_SESSION['error_flag']) && false === $_SESSION['error_flag'] && isset($_POST['submit']))
+{
+	header("Location: ".myLocation()."?installAction=install");
+}
+
+?>
+<form action="<?php echo myLocation() ?>?installAction=default" name="form1" method="post">
+<table>
+
+	<tr><td></td><td><h1>Wikka Installation</h1></td></tr>
+
+	<?php
+	if ($wakkaConfig["wakka_version"])
+	{
+		print("<tr><td></td><td>Your installed Wikka is reporting itself as <tt>".$wakkaConfig["wakka_version"]."</tt>. You are about to <strong>upgrade</strong> to Wikka ".WAKKA_VERSION.". Please review your configuration settings below.</td></tr>\n");
+		// This needs to be set to false for redirect to install page
+		$_SESSION['error_flag'] = false;
 	}
 	else
 	{
-		echo '	<tr><td>&nbsp;</td><td><h1>'.__('WikkaWiki Installation').' (1/5)</h1></td></tr>'."\n";
-		echo '<tr><td>&nbsp;</td><td><p>'.__('Welcome to the WikkaWiki Setup Wizard. Since there is no existing WikkaWiki configuration, this probably is a <em>fresh install</em>').'.</p><p>'.sprintf(__('You are about to install WikkaWiki (version %s). This wizard will guide you through the installation, which should take only a few minutes'), '<strong><tt>'.WAKKA_VERSION.'</tt></strong>').'. '.sprintf(__('Please refer to the %1$s for further instructions'), '<a href="http://docs.wikkawiki.org/WikkaInstallation" target="_blank">'.__('documentation').'</a>').'.</p></td></tr>'."\n";
-	}
-
-	$setupfiles_to_update = array(
-		'./.htaccess', './wikka.config.php', 'setup/test/.htaccess');
-	$setup_files_not_writable = '';
-	// Need to adjust setup/test/.htaccess if installed in a subdir
-	include_once('setup/inc/functions.inc.php');
-	$htaccess = 'setup/test/.htaccess';
-	if(setupfile_is_writable($htaccess))
-	{
-		$htaccess_content = file($htaccess);
-		$new_htaccess_content = '';
-		foreach($htaccess_content as $line)
-		{
-			if(preg_match("/^\\s*RewriteBase/i", $line))
-			{
-				$line = 'RewriteBase '.WIKKA_BASE_URL_PATH.'setup/test'; 
-			}
-			$new_htaccess_content .= $line;
-		}
-		print('<tr><td>&nbsp;</td><td class="note">'."\n");
-		print('<h2>'.__('Setting up mod_rewrite autodetection').'</h2>'."\n");
-		test(sprintf(__('Writing .htaccess file (%s)'), '<tt>'.$htaccess.'</tt>').'...', $f1 = @fopen($htaccess, "w"), "", 0);
-		print('</td></tr>'."\n");
-		if ($f1)
-		{
-			fwrite($f1, $new_htaccess_content);
-			fclose($f1);
-		}
-	}
-
-	foreach ($setupfiles_to_update as $f1)
-	{
-		if (!setupfile_is_writable($f1))
-		{
-			$setup_files_not_writable .= '<li><tt>'.$f1.'</tt></li>';
-		}
-	}
-	if ($setup_files_not_writable)
-	{
-		printf('<tr><td>&nbsp;</td><td class="note"><p>'.__('The following files need to be written/updated by the installer: %s'.
-		 'Please ensure that the file is writable.  <b>When fixed, reload this page using the Reload button in your browser.</b> ').
-		 '</p></td></tr>', '</p><ul>'.$setup_files_not_writable.'</ul><p>');
-	}
-	init_test_mod_rewrite();
-	// Language select
-	if (!isset($config['default_lang']))
-	{
-		// use constant CONFIG_DEFAULT_LANGUAGE
-		#$config['default_lang'] = 'en';
-		$config['default_lang'] = CONFIG_DEFAULT_LANGUAGE;
+		print("<tr><td></td><td>Since there is no existing Wikka configuration, this probably is a fresh Wikka install. You are about to install Wikka <tt>".WAKKA_VERSION."</tt>. Installing Wikka will take only a few minutes. To start the installation, please fill in the form below.</td></tr>\n");
 	}
 	?>
-	<tr><td>&nbsp;</td></tr>
-	<tr><td>&nbsp;</td><td><h2><?php echo __('Language settings'); ?></h2></td></tr>
-	<tr><td>&nbsp;</td><td><?php echo __('Please select a language for the default pages that Wikka will create:'); ?></td></tr>
-	<tr><td><?php echo __('Choose a default language'); ?>:</td><td><?php Language_selectbox($config['default_lang']); // @@@ does not actually display any language choice ?></td></tr>
-<?php 
-	if (!isset($config['wakka_version']) || (!$config['wakka_version']))
+
+	<tr><td></td><td><span class="note">NOTE: This installer will try to write the configuration data to a file called <tt>wikka.config.php</tt>, located in your Wikka directory. In order for this to work, you must make sure the web server has write access to that file! If you can't do this, you will have to edit the file manually (the installer will tell you how). Once Wikka is correctly installed, you will be able to modify its configuration by editing this file. See the <a href="http://docs.wikkawiki.org/WikkaInstallation" target="_blank">documentation</a> for details.</span></td></tr>
+	<?php if($error['flag'])
 	{
 	?>
-	<tr><td>&nbsp;</td></tr>
-	<tr><td>&nbsp;</td><td><h2><?php echo __('Database settings'); ?></h2></td></tr>
-	<tr><td>&nbsp;</td><td><?php echo __('WikkaWiki uses a MySQL database to store data. The wizard will start by checking the connection to the database.');?></td></tr>
-	<tr><td>&nbsp;</td><td><?php echo __('1. The host your MySQL server is running on. <span class="note">Usually <tt>localhost</tt> (i.e. the same machine your WikkaWiki site is on).</span>'); ?></td></tr>
-	<tr><td align="right" nowrap="nowrap"><?php echo __('MySQL host');?>:</td><td><input type="text" size="50" name="pconfig[mysql_host]" value="<?php echo $config["mysql_host"] ?>" /></td></tr>
-	<tr><td>&nbsp;</td><td><?php echo __('2. The name of the database WikkaWiki will use. <span class="note">Note that this database must already exist before you continue.</span>'); ?></td></tr>
-	<tr><td align="right" nowrap="nowrap"><?php echo __('MySQL database'); ?>:</td><td><input type="text" size="50" name="pconfig[mysql_database]" value="<?php echo $config["mysql_database"] ?>" /></td></tr>
-	<tr><td>&nbsp;</td><td><?php printf(__('3. Username and password to connect to your database. <span class="note">This user must exist and be granted access for <tt>%s</tt> operations to the database where WikkaWiki will be installed.</span>'), 'SELECT, INSERT, UPDATE, DELETE, ALTER TABLE'); ?></td></tr>
-	<tr><td align="right" nowrap="nowrap"><?php echo __('MySQL username'); ?>:</td><td><input type="text" size="50" name="pconfig[mysql_user]" value="<?php echo $config["mysql_user"] ?>" /></td></tr>
-	<tr><td align="right" nowrap="nowrap"><?php echo __('MySQL password'); ?>:</td><td><input type="password" size="50" name="pconfig[mysql_password]" value="" /></td></tr>
-<?php
+	<tr><td></td><td><em class="error">Please correct the errors below to proceed with the installation.</em></td></tr>
+	<?php
 	}
-?>
-	<tr><td>&nbsp;</td><td>
-	<input type="hidden" name="installAction" value="check" />
-	<input type="submit" value="<?php echo _p('Continue');?>" />
-	<input type="hidden" name="redirect_to" value="<?php echo $action_target; ?>" />
-	</td></tr>
+	 if (!$wakkaConfig["wakka_version"])
+ 	{
+	?>
+	<tr><td></td><td><br /><h2>1. Database Configuration</h2></td></tr>
+	<tr><td></td><td>The host your MySQL server is running on. Usually "localhost" (ie, the same machine your Wikka site is on).</td></tr>
+	<?php if(isset($error['mysql_host'])) { ?>
+	<tr><td></td><td><em class="error"><?php echo $error['mysql_host']; ?></em></td></tr>
+	<?php } ?>
+	<tr><td align="right" nowrap="nowrap">MySQL host:</td><td><input type="text" size="50" name="config[mysql_host]" value="<?php echo $wakkaConfig["mysql_host"] ?>" /></td></tr>
+	<tr><td></td><td>The MySQL database Wikka should use. This database needs to exist already before you continue!</td></tr>
+	<?php if(isset($error['mysql_database'])) { ?>
+	<tr><td></td><td><em class="error"><?php echo $error['mysql_database']; ?></em></td></tr>
+	<?php } ?>
+	<tr><td align="right" nowrap="nowrap">MySQL database:</td><td><input type="text" size="50" name="config[mysql_database]" value="<?php echo $wakkaConfig["mysql_database"] ?>" /></td></tr>
+	<tr><td></td><td>Name and password of the MySQL user used to connect to your database.</td></tr>
+	<?php if(isset($error['mysql_user'])) { ?>
+	<tr><td></td><td><em class="error"><?php echo $error['mysql_user']; ?></em></td></tr>
+	<?php } ?>
+	<tr><td align="right" nowrap="nowrap">MySQL user name:</td><td><input type="text" size="50" name="config[mysql_user]" value="<?php echo $wakkaConfig["mysql_user"] ?>" /></td></tr>
+	<tr><td align="right" nowrap="nowrap">MySQL password:</td><td><input type="password" size="50" name="config[mysql_password]" value="<?php echo $wakkaConfig["mysql_password"] ?>" /></td></tr>
+	<tr><td></td><td>Prefix of all tables used by Wikka. This allows you to run multiple Wikka installations using the same MySQL database by configuring them to use different table prefixes.</td></tr>
+	<tr><td align="right" nowrap="nowrap">Table prefix:</td><td><input type="text" size="50" name="config[table_prefix]" value="<?php echo $wakkaConfig["table_prefix"] ?>" /></td></tr>
+	<?php
+	 }
+	?>
+	<tr><td></td><td><br /><h2>2. Wiki Configuration</h2></td></tr>
+	<tr><td></td><td>The name of your wiki, as it will be displayed in the title.</td></tr>
+	<?php if(isset($error['wakka_name'])) { ?>
+	<tr><td></td><td><em class="error"><?php echo $error['wakka_name']; ?></em></td></tr>
+	<?php } ?>
+	<tr><td align="right" nowrap="nowrap">Your wiki's name:</td><td><input type="text" size="50" name="config[wakka_name]" value="<?php echo $wakkaConfig["wakka_name"] ?>" /></td></tr>
+	<tr><td></td><td>Your wiki's home page. It should not contain any space or special character and be at least 3 characters long. It is typically formatted as a <abbr title="A WikiName is formed by two or more capitalized words without space, e.g. HomePage">WikiName</abbr>.</td></tr>
+	<?php if(isset($error['root_page'])) { ?>
+	<tr><td></td><td><em class="error"><?php echo $error['root_page']; ?></em></td></tr>
+	<?php } ?>
+	<tr><td align="right" nowrap="nowrap">Home page:</td><td><input type="text" size="50" name="config[root_page]" value="<?php echo $wakkaConfig["root_page"] ?>" /></td></tr>
+
+	<tr><td></td><td><?php echo SITE_SUFFIX_INFO; ?></td></tr>
+	<tr><td align="right" nowrap="nowrap"><?php echo SITE_SUFFIX_LABEL; ?></td><td><input type="text" size="50" name="config[wiki_suffix]" value="<?php echo $wakkaConfig["wiki_suffix"] ?>" /></td></tr>
+
+	<tr><td></td><td>Optional keywords/description to insert into the HTML meta headers.</td></tr>
+	<tr><td align="right" nowrap="nowrap">Meta Keywords:</td><td><input type="text" size="50" name="config[meta_keywords]" value="<?php if(isset($wakkaConfig["meta_keywords"])) echo $wakkaConfig["meta_keywords"] ?>" /></td></tr>
+	<tr><td align="right" nowrap="nowrap">Meta Description:</td><td><input type="text" size="50" name="config[meta_description]" value="<?php if(isset($wakkaConfig["meta_description"])) echo $wakkaConfig["meta_description"] ?>" /></td></tr>
+	<tr><td></td><td>Choose the <em>look and feel</em> of your wiki (you'll be able to change this later).</td></tr>
+	<tr><td align="right" nowrap="nowrap">Theme:</td><td><?php SelectTheme($wakkaConfig["theme"]); /* refs #1025 */ ?></td></tr>
+	<tr><td align="right" nowrap="nowrap">Language pack:</td><td><?php Language_selectbox($wakkaConfig["default_lang"]); /* refs #1025 */ ?></td></tr>
+
+	<?php
+	 $curversion_num = ($wakkaConfig['wakka_version']) ? str_replace('.','',$wakkaConfig['wakka_version']) : 0;
+	 if (!$wakkaConfig["wakka_version"])
+	 {
+	?>
+	 <tr><td></td><td><br /><h2>3. Administrative Account Configuration</h2></td></tr>
+
+	 <tr><td></td><td>This is the username of the person running this wiki. Later you'll be able to add other admins. The admin username should be formatted as a <abbr title="A WikiName is formed by two or more capitalized words without space, e.g. JohnDoe">WikiName</abbr>.</td></tr>
+	<?php if(isset($error['admin_users'])) { ?>
+	<tr><td></td><td><em class="error"><?php echo $error['admin_users']; ?></em></td></tr>
+	<?php } ?>
+	 <tr><td align="right" nowrap="nowrap">Admin name:</td><td><input type="text" size="50" name="config[admin_users]" value="<?php echo $wakkaConfig["admin_users"] ?>" /></td></tr>
+	 <tr><td></td><td>Choose a password for the wiki administrator (5+ chars)</td></tr>
+	<?php if(isset($error['password'])) { ?>
+	<tr><td></td><td><em class="error"><?php echo $error['password']; ?></em></td></tr>
+	<?php } ?>
+	 <tr><td align="right" nowrap="nowrap">Enter password:</td><td><input type="password" size="50" name="password" value="<?php echo (isset($_POST['password']))? $_POST['password'] : ''; ?>" /></td></tr>
+	<?php if(isset($error['password2'])) { ?>
+	<tr><td></td><td><em class="error"><?php echo $error['password2']; ?></em></td></tr>
+	<?php } ?>
+	 <tr><td align="right" nowrap="nowrap">Confirm password:</td><td><input type="password" size="50" name="password2" value="<?php echo (isset($_POST['password2']))? $_POST['password2'] : ''; ?>" /></td></tr>
+	 <tr><td></td><td>Administrator email.</td></tr>
+	<?php if(isset($error['admin_email'])) { ?>
+	<tr><td></td><td><em class="error"><?php echo $error['admin_email']; ?></em></td></tr>
+	<?php } ?>
+	 <tr><td align="right" nowrap="nowrap">Email:</td><td><input type="text" size="50" name="config[admin_email]" value="<?php echo $wakkaConfig["admin_email"] ?>" /></td></tr>
+
+	<tr><td></td><td><br /><h2>4. URL Configuration</h2><?php echo $wakkaConfig["wakka_version"] ? '' : '<span class="note">Since this is a new installation, the installer tried to guess the correct values of Rewrite Mode and Base URL.<br />Change them only if you know what you\'re doing! 	See the <a href="http://docs.wikkawiki.org/ModRewrite" target="_blank">documentation</a> for details.</span>' ?></td></tr>
+	<tr><td></td><td><strong>Rewrite Mode</strong> is used to produce a nicer URL for your wiki. If Rewrite mode is modified, the base URL should be changed accordingly.
+	<ul>
+		<li>With Rewrite Mode <em>disabled</em>, your site's URL will look like the following:<br /><tt>http://www.example.com/wikka.php?wakka=HomePage</tt></li>
+		<li>If Rewrite Mode is <em>enabled</em>,  your site's URL will look like the following:<br /><tt>http://www.example.com/HomePage</tt></li>
+	</ul></td></tr>
+	<tr><td align="right" nowrap="nowrap">Rewrite mode:</td><td><input type="hidden" name="config[rewrite_mode]" value="0" /><input type="checkbox" name="config[rewrite_mode]" value="1" <?php echo ($wakkaConfig["rewrite_mode"])? 'checked="checked"' : ''; ?> /> Enabled</td></tr>
+	<tr><td></td><td>Your wiki's <strong>base URL</strong>. Page names get appended to it, so: <ul>
+		<li>if Rewrite Mode is not available on your server, the base URL should end with <tt>"wikka.php?wakka="</tt><br />e.g. <tt>http://www.example.com/wikka.php?wakka=</tt></li>
+		<li>if Rewrite Mode is enabled, make sure the base URL ends with a slash "/",<br />e.g. <tt>http://www.example.com/</tt></li>
+		</ul></td>
+	</tr>
+	<?php if(isset($error['base_url'])) { ?>
+	<tr><td></td><td><em class="error"><?php echo $error['base_url']; ?></em></td></tr>
+	<?php } ?>
+	<tr><td align="right" nowrap="nowrap">Base URL:</td><td><input type="text" size="50" name="config[base_url]" value="<?php echo $wakkaConfig["base_url"] ?>" /></td></tr>
+	<?php
+	 }
+	?>
+
+	<tr><td></td><td><br /><h2>5. Version update check</h2></td></tr>
+	<tr><td></td><td><span class="note">It is <strong>strongly recommended</strong> that you leave this option checked if your run your wiki on the internet. Administrator(s) will be notified automatically on the wiki if a new version of WikkaWiki is available for download. 	See the <a href="http://docs.wikkawiki.org/CheckVersionActionInfo" target="_blank">documentation</a> for details. Please note that if you leave this option enabled, your installation will periodically contact a WikkaWiki server for update information.  As a result, your IP address and/or domain name may be recorded in our referrer logs.  </span></td></tr>
+	<tr><td align="right" nowrap="nowrap"><label for="id_enable_version_check">Enable version checking:</label></td><td><input type="checkbox"<?php echo !isset($wakkaConfig["enable_version_check"]) || $wakkaConfig["enable_version_check"] == "1" ? ' checked="checked"' : ""; ?> name="config[enable_version_check]" value="1" id="id_enable_version_check" /></td></tr>
+	<tr><td></td><td><input type="submit" name="submit" value="Continue" /></td></tr>
+
 </table>
 </form>

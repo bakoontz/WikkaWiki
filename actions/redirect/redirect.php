@@ -75,8 +75,8 @@ $full_target = str_replace('&amp;', '&', $full_target); # workaround for Href ma
 if($redirect && '' != $full_target)
 {
 	header($headercode);
-	#$message = sprintf(REDIRECTED_FROM, $this->Link($this->tag));
-	$message = sprintf(REDIRECTED_FROM, $this->tag);
+	#$message = sprintf(T_("Redirected from %s."), $this->Link($this->tag));
+	$message = sprintf(T_("Redirected from %s."), $this->tag);
 	$this->Redirect($full_target, $message);
 }
 
@@ -85,11 +85,11 @@ else
 {
 	if ('' != $target)	
 	{
-		printf(PAGE_MOVED_TO, $this->Link($target)); 	
+		printf(T_("This page has been moved to %s."), $this->Link($target)); 	
 	}
 	else
 	{
-		echo '<em class="error">'.INVALID_REDIRECT.'</em>';
+		echo '<em class="error">'.T_("Invalid redirect. Target must be an existing wiki page.").'</em>';
 	}
 }
 ?>

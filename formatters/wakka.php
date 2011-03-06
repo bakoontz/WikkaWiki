@@ -5,7 +5,7 @@
  * This is the main formatting engine used by Wikka to parse wiki markup and render valid XHTML.
  * 
  * @package		Formatters
- * @version		$Id$
+ * @version		$Id: wakka.php 1368 2009-06-08 20:18:28Z BrianKoontz $
  * @license		http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
  *
@@ -139,7 +139,7 @@ if (isset($format_option) && preg_match(PATTERN_MATCH_PAGE_FORMATOPTION, $format
 					#503 - The text of a heading is now becoming a link to this heading, allowing an easy way to copy link to clipboard.
 					// For this, we take the textNode child of a heading, and if it is not enclosed in <a...></a>, we enclose it in 
 					// $opening_anchor and $closing_anchor.
-					$opening_anchor = '<a class="heading" href="#'.$h_id.'">';
+					$opening_anchor = '<a class="heading" href="'.$wakka->Href().'#'.$h_id.'">';
 					$closing_anchor = '</a>';
 					$h_heading = preg_replace('@('.PATTERN_OPEN_A_ALONE. '|'.PATTERN_END_OF_STRING_ALONE.  ')@', $closing_anchor.'\\0', $h_heading);
 					$h_heading = preg_replace('@('.PATTERN_CLOSE_A_ALONE.'|'.PATTERN_START_OF_STRING_ALONE.')@', '\\0'.$opening_anchor, $h_heading);
@@ -573,7 +573,7 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 			return (++$trigger_center % 2 ? "<div class=\"center\">\n" : "\n</div>\n");
 		}
 		// urls (see RFC 1738 <http://www.ietf.org/rfc/rfc1738.txt>)
-		elseif (preg_match("/^([a-z]+:\/\/[[:alnum:]\/?;:@&=\.]+[[:alnum:]\/])(.*)$/", $thing, $matches))
+		elseif (preg_match("/^([a-z]+:\/\/[[:alnum:]\/?;:@&=\.-]+[[:alnum:]\/])(.*)$/", $thing, $matches))
 		{
 			$url = $matches[1];
 			/* Inline images are disabled for security reason, use {{image action}} #142
@@ -631,7 +631,7 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 			{
 				// get tags with id attributes
 				# use backref to match both single and double quotes
-				$patTagWithId = '((<[a-z][^>]*)((?<=\\s)id=("|\')(.*?)\\4)(.*?>))';	// @@@ #34
+				$patTagWithId = '((<[a-z][^>]*)((?<=\\s)id=("|\')(.*?)\\4)(.*?>))';	// @@@ #34 The next <?php is just to unbreak syntax highlighting in my editor
 				// with PREG_SET_ORDER we get an array for each match: easy to use with list()!
 				// we do the match case-insensitive so we catch uppercase HTML as well;
 				// SafeHTML will treat this but 'raw' may end up with invalid code!
@@ -668,7 +668,7 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 			return null;
 		}
 		// Elided content (preserves trailing ws)
-		elseif(preg_match("/``(.*?)``/s", $thing, $matches))
+		elseif(preg_match("/^``(.*?)``$/s", $thing, $matches))
 		{
 			return null;
 		}
@@ -757,7 +757,7 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 			{
 				$output .= $wakka->FormOpen("grabcode");
 				// build form
-				$output .= '<input type="submit" class="grabcode" name="save" value="'.GRABCODE_BUTTON.'" title="'.rtrim(sprintf(GRABCODE_BUTTON_TITLE, $valid_filename)).'" />';
+				$output .= '<input type="submit" class="grabcode" name="save" value="'.T_("Grab").'" title="'.rtrim(sprintf(T_("Download %s"), $valid_filename)).'" />';
 				$output .= '<input type="hidden" name="filename" value="'.urlencode($valid_filename).'" />';
 				$output .= '<input type="hidden" name="code" value="'.urlencode($code).'" />';
 				$output .= $wakka->FormClose();
@@ -765,15 +765,53 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 			// output
 			return $output;
 		}
+
 		// forced links
 		// \S : any character that is not a whitespace character
 		// \s : any whitespace character
-		// @@@ regex accepts NO non-whitespace before whitespace, surely not correct? [[  something]]
-		else if (preg_match("/^\[\[(\S*)(\s+(.+))?\]\]$/s", $thing, $matches))		# recognize forced links across lines
+		else if(preg_match("/^\[\[(.*?)\]\]$/s", $thing, $matches))
 		{
-			if (!isset($matches[1])) $matches[1] = ''; #38
-			if (!isset($matches[3])) $matches[3] = ''; #38
-			list (, $url, , $text) = $matches;
+			$contents = $matches[1];
+			if(empty($contents) || !isset($contents))
+				return "";
+
+			// Case 1: Deprecated...(first part is a URL followed by
+			// one or more whitespaces)
+			if (preg_match("/^((http|https|ftp|news|irc|gopher):\/\/([^\|\\s\"<>]+))\s+([^\|]+)$/s", $contents, $matches))		# recognize forced links across lines
+			{
+				if (!isset($matches[1])) $matches[1] = ''; #38
+				if (!isset($matches[4])) $matches[4] = ''; #38
+				$url = $matches[1];
+				$text = $matches[4];
+			}
+
+			// Case 2: Deprecated...(first part is a string
+			// followed by one or more whitespaces)
+			else if(preg_match("/^(.*?)\s+([^|]+)$/s", $contents, $matches) && 
+					preg_match("/^[A-ZÄÖÜa-zßäöü][A-Za-z0-9ÄÖÜßäöü]*$/", $matches[1]))
+			{
+				$url = $matches[1]; 
+				$text = $matches[2];
+			}
+
+			// Case 3: If no "|" exists in $contents, assume the match
+			// refers to an internal page
+			else if(preg_match("/^([^\|]+)$/s", $contents, $matches))
+			{
+				$url = $matches[1];
+				$text = $matches[1];
+			}
+
+			// Case 4: If a "|" symbol exists, assume two parts, a URL and
+			// text
+			else if(preg_match("/^(.*?)\s*\|\s*(.*?)$/s", $contents, $matches))
+			{
+				if (!isset($matches[1])) $matches[1] = '';
+				if (!isset($matches[2])) $matches[2] = '';
+				$url = $matches[1];
+				$text = $matches[2];
+			}
+
 			if ($url)
 			{
 				//if ($url!=($url=(preg_replace("/@@|&pound;&pound;||\[\[/","",$url))))$result="</span>";
@@ -786,6 +824,7 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 				return "";
 			}
 		}
+
 		// indented text
 		elseif (preg_match("/(^|\n)([\t~]+)(-|&|([0-9a-zA-Z]+)\))?(\n|$)/s", $thing, $matches))
 		{
@@ -1001,11 +1040,14 @@ if (!function_exists('parse_attributes'))
 			foreach ( $hints as $hint )
 			{
 				$temp = $attributes[$hint];
-				if ($temp) $a = $temp[$key];
-				if ($a) break;
+				if(isset($temp) && isset($temp[$key]))
+				{
+					$a = $temp[$key];
+					break;
+				}
 			}
 	
-			if (!$a)
+			if (!isset($a))
 			{
 				//This attribute isn't allowed here / is wrong.
 				// WARNING: JS vulnerability: two minus signs are not allowed in a comment, so we replace any occurence of them by underscore.

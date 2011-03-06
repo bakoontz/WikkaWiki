@@ -8,6 +8,6 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
  */
-  header('Location: wikka.php');
+  header("Location: wikka.php");
   exit;
 ?>

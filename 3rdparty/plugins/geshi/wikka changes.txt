@@ -1,10 +1,11 @@
 Differences from standard GeSHi distribution:
 
 - contrib directory removed.
+- api directory removed.
 
-- docs/api directory removed.
-- docs/geshi-doc.txt removed.
-- docs/geshi-doc.html removed.
+
+- doc/geshi-doc.txt removed.
+- doc/geshi-doc.html removed.
 
 	Visit the official GeSHi website to view documentation:
 	http://qbnz.com/highlighter/geshi-doc.html

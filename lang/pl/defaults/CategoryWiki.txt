@@ -1,0 +1,11 @@
+===Kategoria: systemy wiki===
+Ta kategoria zawiera strony dotyczące systemów wiki i tematów z tym związanych. Tworząc strony należące do tej kategorii, należy dodać słowo kluczowe CategoryWiki na ich końcu, co zapewni umieszczenie ich na poniższej liście.
+
+
+----
+
+{{Category col="3"}}
+
+
+----
+[[CategoryCategory Lista wszystkich kategorii]]

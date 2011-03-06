@@ -3,7 +3,7 @@
  * Display a table of recently registered users.
  *
  * @package		Actions
- * @version		$Id$
+ * @version		$Id: lastusers.php 1232 2008-09-17 20:46:30Z DarTar $
  * @license		http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
  *
@@ -18,11 +18,11 @@
  *				default: "complex"
  * @output		a table with the last registered users
  * 
+ * @todo	document usage and parameters
  */
  
 //defaults
-define('LASTUSERS_DEFAULT_STYLE', 'complex'); # consistent parameter naming with HighScores action
-define('LASTUSERS_MAX_USERS_DISPLAY', 10);
+if (!defined('LASTUSERS_MAX_USERS_DISPLAY')) define('LASTUSERS_MAX_USERS_DISPLAY', 10);
 
 //initialize
 $htmlout = '';
@@ -36,7 +36,7 @@ if (isset($vars['style']) && in_array($vars['style'], array('complex','simple'))
 }
 else
 {
-	$style = LASTUSERS_DEFAULT_STYLE;	
+	$style = T_("complex");	
 }
 if (isset($vars['max']) && $vars['max'] > 0)
 {
@@ -53,11 +53,11 @@ $last_users = $this->LoadAll("SELECT name, signuptime FROM ".$this->GetConfigVal
 $htmlout .= '<table class="data lastusers">'."\n";
 if ($style == 'complex')
 {
-	$htmlout .= '<caption>'.LASTUSERS_CAPTION.'</caption>'."\n";
+	$htmlout .= '<caption>'.T_("Recently registered users").'</caption>'."\n";
 	$htmlout .= '  <tr>'."\n";
-	$htmlout .= '    <th>'.NAME_TH.'</th>'."\n";
-	$htmlout .= '    <th>'.OWNED_PAGES_TH.'</th>'."\n";
-	$htmlout .= '    <th>'.SIGNUP_DATE_TIME_TH.'</th>'."\n";
+	$htmlout .= '    <th>'.T_("Username").'</th>'."\n";
+	$htmlout .= '    <th>'.T_("Owned pages").'</th>'."\n";
+	$htmlout .= '    <th>'.T_("Signup date/time").'</th>'."\n";
 	$htmlout .= '  </tr>'."\n";
 }
 foreach($last_users as $user)

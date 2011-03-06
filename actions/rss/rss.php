@@ -55,7 +55,7 @@ $rss_path = $this->cleanUrl(trim($rss_path));
 // override
 if (preg_match("/^(http|https):\/\/([^\\s\"<>]+)$/i", $rss_path))
 {
-	$onyx_classpath = $this->GetConfigValue('onyx_path').DIRECTORY_SEPARATOR.'onyx-rss.php';
+	$onyx_classpath = $this->GetConfigValue('onyx_path', '3rdparty'.DIRECTORY_SEPARATOR.'plugins'.DIRECTORY_SEPARATOR.'onyx-rss').DIRECTORY_SEPARATOR.'onyx-rss.php';
 	/**
 	 * 3rdParty plugin; implements feed aggregation.
 	 */
@@ -112,7 +112,7 @@ if (preg_match("/^(http|https):\/\/([^\\s\"<>]+)$/i", $rss_path))
 }
 else
 {
-	echo '<p class="error">'.ERROR_INVALID_RSS_SYNTAX.'</p>'."\n"; # i18n
+	echo '<p class="error">'.T_("Error: Invalid RSS action syntax. <br /> Proper usage: {{rss http://domain.com/feed.xml}} or {{rss url=\"http://domain.com/feed.xml\"}}").'</p>'."\n"; # i18n
 }
 
 ?>

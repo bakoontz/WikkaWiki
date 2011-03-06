@@ -3,29 +3,25 @@
  * Claim the ownership of a page if has no owner, and if user is logged in.
  *
  * @package		Handlers
- * @subpackage	Page
- * @version		$Id$
+ * @version		$Id: claim.php 738 2007-10-03 11:48:41Z JavaWoman $
  * @license		http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
  *
- * @uses	Wakka::reg_username()
  * @uses	Wakka::GetPageOwner()
  * @uses	Wakka::GetPageTag()
- * @uses	Wakka::existsUser()
+ * @uses	Wakka::GetUser()
+ * @uses	Wakka::GetUserName()
  * @uses	Wakka::Href()
- * @uses	Wakka::SetRedirectMessage()
  * @uses	Wakka::Redirect()
+ * @uses	Wakka::SetPageOwner()
+ * @uses	Wakka::SetRedirectMessage()
  */
 
 // only claim ownership if current page has no owner, and if user is logged in.
-#if ($this->page && !$this->GetPageOwner() && $this->GetUser())
-#if ($this->page && !$this->GetPageOwner() && ($user = $this->GetUser()))
-if ($this->page && !$this->GetPageOwner() && $this->existsUser())
+if ($this->page && !$this->GetPageOwner() && $this->GetUser())
 {
-	#$this->SetPageOwner($this->GetPageTag(), $this->GetUserName());
-	#$this->SetPageOwner($this->GetPageTag(), $user['name']);
-	$this->SetPageOwner($this->GetPageTag(), $this->reg_username);
-	$this->SetRedirectMessage(USER_IS_NOW_OWNER);
+	$this->SetPageOwner($this->GetPageTag(), $this->GetUserName());
+	$this->SetRedirectMessage(T_("You are now the owner of this page."));
 }
 
 $this->Redirect($this->Href());

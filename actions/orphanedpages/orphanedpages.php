@@ -3,7 +3,7 @@
  * Display a list of orphaned pages, i.e. pages with no links from other pages.
  *
  * @package	Actions
- * @version	$Id$
+ * @version	$Id: orphanedpages.php 1132 2008-06-05 10:59:39Z DotMG $
  * @license	http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
  *
@@ -21,6 +21,6 @@ if ($pages = $this->LoadOrphanedPages())
 }
 else
 {
-	print '<em class="error">'.NO_ORPHANED_PAGES.'</em>';
+	print '<em class="error">'.T_("No orphaned pages. Good!").'</em>';
 }
 ?>

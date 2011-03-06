@@ -3,7 +3,7 @@
  * Search wiki pages for a phrase.
  *
  * @package	Actions
- * @version $Id$
+ * @version $Id: textsearch.php 1346 2009-03-03 03:38:17Z BrianKoontz $
  * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
  *
@@ -22,19 +22,25 @@
 
 // init
 $result_page_list = '';
+$utf8Compatible = 0;
+if(1 == $this->config['utf8_compat_search'])
+	$utf8Compatible = 1;
 
 // get input
-$phrase = (isset($_GET['phrase'])) ? stripslashes(trim($_GET['phrase'])) : ''; #312
-$case = (isset($_GET['case'])) ? stripslashes(trim($_GET['case'])) : 0; #312
-$phrase_disp = $this->htmlspecialchars_ent($phrase);
-$case_disp = $this->htmlspecialchars_ent($case);
+$phrase = stripslashes(trim($this->GetSafeVar('phrase', 'get'))); #312
+$case = stripslashes(trim($this->GetSafeVar('case', 'get'))); #312
 
 // display form
 // TODO i18n
 ?>
 <?php echo $this->FormOpen('', '', 'get'); ?>
-<fieldset><legend><?php echo SEARCH_FOR; ?></legend>
-<input name="phrase" size="40" value="<?php echo $phrase_disp ?>" /> <input name="case" type="checkbox" value="1" <?php echo (1==$case?'checked="checked"':'') ?> /><label for="case">Case sensitive</label> <input type="submit" value="Search"/>
+<fieldset><legend><?php echo T_("Search for"); ?></legend>
+<input name="phrase" size="40" value="<?php echo $phrase ?>" /> 
+<?php if(0==$utf8Compatible) { ?>
+<input id="case_sensitive" name="case" type="checkbox" value="1" <?php echo (1==$case?'checked="checked"':'') ?> />
+<label for="case_sensitive">Case sensitive</label> 
+<?php } ?>
+<input type="submit" value="Search"/>
 </fieldset>
 <?php echo $this->FormClose(); ?>
 
@@ -45,48 +51,44 @@ $case_disp = $this->htmlspecialchars_ent($case);
 // if 'phrase' is empty after trimming and removing slashes, search tips NOT displayed
 
 // process search request
-if ('' !== $phrase)
+$results = $this->FullTextSearch($phrase, $case, $utf8Compatible);
+$total_results = 0;
+if ($results)
 {
-	$results = $this->FullTextSearch($phrase, $case);
-	$total_results = 0;
-	if ($results)
+	foreach ($results as $i => $page)
 	{
-		foreach ($results as $i => $page)
+		if ($this->HasAccess('read',$page['tag']))
 		{
-			if ($this->HasAccess('read',$page['tag']))
-			{
-				$total_results++;
-				$result_page_list .= '<li>'.$this->Link($page['tag']).'</li>'."\n";	// @@@ make new array and let new array2list methods do the formatting
-			}
+			$total_results++;
+			$result_page_list .= '<li>'.$this->Link($page['tag']).'</li>'."\n";	// @@@ make new array and let new array2list methods do the formatting
 		}
 	}
-	switch ($total_results)
-	{
-		case 0:
-			$match_str = SEARCH_ZERO_MATCH;
-			break;
-		case 1:
-			$match_str = SEARCH_ONE_MATCH;
-			break;
-		default:
-			$match_str = sprintf(SEARCH_N_MATCH, $total_results);
-			break;
-	}
-	printf(SEARCH_RESULTS, $match_str, $this->htmlspecialchars_ent($phrase));
-	if ($total_results > 0)
-	{
-		$expsearchurl  = $this->Href('', 'TextSearchExpanded', 'phrase='.urlencode($phrase));
-		$expsearchlink = '<a href="'.$expsearchurl.'">'.SEARCH_EXPANDED_LINK_DESC.'</a>';
+}
+switch ($total_results)
+{
+	case 0:
+		$match_str = T_("No matches");
+		break;
+	case 1:
+		$match_str = T_("One match found");
+		break;
+	default:
+		$match_str = sprintf(T_("%d matches found"), $total_results);
+		break;
+}
+printf(T_("Search results: <strong>%s</strong> for <strong>%s</strong>"), $match_str, $this->htmlspecialchars_ent($phrase));
+if ($total_results > 0)
+{
+	$expsearchurl  = $this->Href('', 'TextSearchExpanded', 'phrase='.urlencode($phrase));
+	$expsearchlink = '<a href="'.$expsearchurl.'">'.T_("Expanded Text Search").'</a>';
 
-		echo '<ol>'.$result_page_list.'</ol>'."\n";
-		printf('<br />'.SEARCH_NOT_SURE_CHOICE.'<br />'.SEARCH_TRY_EXPANDED,$expsearchlink);
-	}
+	echo '<ol>'.$result_page_list.'</ol>'."\n";
+	printf('<br />'.T_("Not sure which page to choose?").'<br />'.T_("Try the %s which shows surrounding text."),$expsearchlink);
 }
 
 // display search tips
-#if ($this->CheckMySQLVersion(4,00,01))	// DONE replace with version_compare
-if ($this->CheckMySQLVersion('4.00.01'))
-{
+if(0==$utf8Compatible)
 	print(SEARCH_TIPS);
-}
+else
+	print(SEARCH_TIPS_UTF8_COMPAT);
 ?>

@@ -6,7 +6,7 @@
  * 
  * @package 3rdParty
  * @subpackage FeedCreator
- * @version $Id$
+ * @version $Id: feedcreator.class.php 368 2007-03-01 00:28:00Z DarTar $
  * @license http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
  * @filesource
  * 

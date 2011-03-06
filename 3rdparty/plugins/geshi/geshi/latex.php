@@ -2,22 +2,8 @@
 /*************************************************************************************
  * latex.php
  * -----
- * Author: efi, Matthias Pospiech (mail@matthiaspospiech.de)
- * Copyright: (c) 2006 efi, Matthias Pospiech (mail@matthiaspospiech.de), Nigel McNie (http://qbnz.com/highlighter)
- * Release Version: 1.0.7.21
- * Date Started: 2006/09/23
- *
- * LaTeX language file for GeSHi.
- *
- * CHANGES
- * -------
- * 2006/09/23 (1.0.0)
- *  -  First Release
- *
- * TODO
- * -------------------------
- * *
- *
+ * Original Author: efi
+ * modified by Matthias Pospiech (mail@matthiaspospiech.de)
  *************************************************************************************
  *
  *   This file is not yet part of GeSHi. (and is not compatible to the 1.1+ branch)
@@ -122,7 +108,7 @@ $language_data = array (
         3 => array(
             GESHI_SEARCH => "(\\{)(.*)(\\})",
             GESHI_REPLACE => '\2',
-            GESHI_MODIFIERS => 'U',
+            GESHI_MODIFIERS => '',
             GESHI_BEFORE => '\1',
             GESHI_AFTER => '\3'
             ),
@@ -130,7 +116,7 @@ $language_data = array (
         4 => array(
             GESHI_SEARCH => "(\[)(.+)(\])",
             GESHI_REPLACE => '\2',
-            GESHI_MODIFIERS => 'U',
+            GESHI_MODIFIERS => '',
             GESHI_BEFORE => '\1',
             GESHI_AFTER => '\3'
             ),

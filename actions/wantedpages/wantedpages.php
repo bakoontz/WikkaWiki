@@ -9,16 +9,6 @@
  * Then in brackets, you see the number of pages linking to the wanted page. This number is also in a form of a link:
  * clicking on it will let you see all the pages linking to the wanted page, using the {@link backlinks.php backlinks}
  * handler.</p>
- * <p>Since version 1.1.7, if there is only one page linking to the wanted page, that pagename is shown in brackets after
- * the number 1, you can click on the page name to see its content. Another link labelled <tt>edit<tt> is also provided
- * to let you edit the page. Such link is useful if, for example, you have a page named MySQL in the WantedPages list
- * but you certainly don't want to create such page, so you can start editing the page linking to it and unwikify
- * the word MySQL.</p>
- * <p>Another enhancement available since version 1.1.7 is the ability to sort the list by combination of the 3 parameters
- * below : <ul>
- * <li>count : number of distinct pages linking to the wanted page,</li>
- * <li>time : date last modified of any page linking to the wanted page,</li>
- * <li>page_tag : the name of the wanted page, alphabetically.</li></ul></p>
  *
  * @package	Actions
  * @version	$Id:wantedpages.php 369 2007-03-01 14:38:59Z DarTar $
@@ -27,68 +17,38 @@
  *
  * @uses	Wakka::Link()
  * @uses	Wakka::LoadWantedPages()
- * @uses	Wakka::FormOpen()
- * @uses	Wakka::FormClose()
  *
  * @todo	use new array2list methods to build output
  */
 
-$sorting_fields = array('count', 'time', 'page_tag');
-$sort = '';
-for ($i = 1; $i <= 3; $i ++)
+if (isset($_GET["linking_to"]))
 {
-	if (isset($_GET['ob'.$i]))
+	$linking_to = $this->GetSafeVar('linking_to');
+	if ($pages = $this->LoadPagesLinkingTo($linking_to))
 	{
-		if (in_array($_GET['ob'.$i], $sorting_fields))
+		print(sprintf(T_("Pages linking to %s"),$this->Link($linking_to)).":<br />\n");
+		foreach ($pages as $page)
 		{
-			if ($sort)
-			{
-				$sort .= ',';
-			}
-			$sort .= $this->GetSafeVar('ob'.$i, 'get').' ';
-			if (isset($_GET['de'.$i]))
-			{
-				$sort .= 'desc';
-			}
+			print($this->Link($page["page_tag"])."<br />\n");
 		}
 	}
-}
-if ($pages = $this->LoadWantedPages($sort))	// @@@ array -> list
-{
-	foreach ($pages as $page)
+	else
 	{
-		print($this->Link($page['page_tag']));
-		if ($page['count'] > 1)
-		{
-			print(' (<a href="'.$this->Href('backlinks', $page['page_tag']).'" title="'.sprintf(WIKKA_BACKLINKS_LINK_TITLE, $page['page_tag']).'">'.$page['count']."</a>)<br />\n");
-		}
-		else
-		{
-			preg_match('#/(.*)$#', $page['time'], $match);
-			$pagetime = $match[1];
-			print(' (1 : '.$this->Link($pagetime).' <small>['.$this->Link($pagetime, 'edit', WIKKA_PAGE_EDIT_LINK_DESC, FALSE, TRUE, sprintf(WIKKA_PAGE_EDIT_LINK_TITLE, $pagetime))."]</small>)<br />\n");
-		}
+		print('<p class="error">No page is linking to '.$this->Link($linking_to).".</p>");
 	}
-
-	// adding form to control sorting
-	$options = '<option value="">&nbsp;</option>';
-	foreach ($sorting_fields as $i)
-	{
-		$options .= '<option value="'.$i.'">'.$i.'</option>';
-	}
-	echo $this->FormOpen('', '', 'get');
-	echo '<fieldset id="wantedpages_sorting"><legend>'.SORTING_LEGEND.'</legend>';
-	for ($i=1; $i<=3; $i++)
-	{
-		echo '<label for="ob'.$i.'">'.sprintf(SORTING_NUMBER_LABEL,$i).'</label> <select id="ob'.$i.'" name="ob'.$i.'">'.$options.'</select>';
-		echo ' <input id="de'.$i.'" type="checkbox" name="de'.$i.'" /><label for="de'.$i.'">'.SORTING_DESC_LABEL.'</label><br />'."\n";
-	}
-	echo '<input type="submit" value="'.OK_BUTTON.'" />';
-	echo '</fieldset>';
-	echo $this->FormClose();
 }
 else
 {
-	print '<p class="error">'.NO_WANTED_PAGES.'</p>';
+	if ($pages = $this->LoadWantedPages())
+	{
+		foreach ($pages as $page)
+		{
+			print($this->Link($page["tag"])." (<a href=\"".$this->href("", "", "linking_to=".$page["tag"])."\">".$page["count"]."</a>)<br />\n");
+		}
+	}
+	else
+	{
+		print('<p class="error">No wanted pages. Good!</p>');
+	}
 }
 ?>

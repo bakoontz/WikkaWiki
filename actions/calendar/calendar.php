@@ -15,21 +15,23 @@
  * Credit:
  * This action was inspired mainly by the "Calendar Menu" code written by
  * {@link http://www.blazonry.com/about.php Marcus Kazmierczak}
- * (Â© 1998-2002 Astonish Inc.) which we traced back as being the ultimate origin of this code
+ * (© 1998-2002 Astonish Inc.) which we traced back as being the ultimate origin of this code
  * although our starting point was actually a (probably second-hand) variant found on the web which
  * did not contain any attribution.
  * However, not much of the original code is left in this version. Nevertheless, credit to
  * Marcus Kazmierczak for the original that inspired this, however indirectly: Thanks!
  *
  * @package		Actions
- * @version		$Id$
+ * @subpackage	Date and Time
+ * @name		Calendar
  *
  * @author		{@link http://wikkawiki.org/GmBowen GmBowen} (first draft)
  * @author		{@link http://wikkawiki.org/JavaWoman JavaWoman} (more modifications)
- * @author		{@link http://wikkawiki.org/JensFischer JensFischer} (modification to allow Monday as first weekday) 
+ * @version		0.8
  * @since		Wikka 1.1.6.0
  *
  * @uses		Wakka::Href()
+ * @uses		Wakka::GetSafeVar()
  * @input		integer  $year  optional: 4-digit year of the month to be displayed;
  *				default: current year
  *				the default can be overridden by providing a URL parameter 'year'
@@ -39,29 +41,24 @@
  * @output		data table for specified or current month
  *
  * @todo		take care we don't go over date limits for PHP with navigation links
- * @todo		configurable first day of week (partly solved, see 'FIRST_DOW' constant)
+ * @todo		configurable first day of week
  * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
  */
 
-/**
- * CONSTANTS section
- */
-define('MIN_DATETIME', strtotime('1970-01-01 00:00:00 GMT'));		# earliest timestamp PHP can handle (Windows and some others - to be safe)
-define('MAX_DATETIME', strtotime('2038-01-19 03:04:07 GMT'));		# latest timestamp PHP can handle
-define('MIN_YEAR', date('Y',MIN_DATETIME));
-define('MAX_YEAR', date('Y',MAX_DATETIME)-1);						# don't include partial January 2038
-define('FIRST_DOW', 'Sunday'); // set this to "Monday" or "Sunday" (#780)
-
-/**
- * not quite constants
- */
+// ***** CONSTANTS section *****
+if(!defined('CUR_YEAR')) define('CUR_YEAR', date('Y',mktime()));
+if(!defined('CUR_MONTH')) define('CUR_MONTH', date('n',mktime()));
+if(!defined('MIN_DATETIME')) define('MIN_DATETIME', strtotime('1970-01-01 00:00:00 GMT')); # earliest timestamp PHP can handle (Windows and some others - to be safe)
+if(!defined('MAX_DATETIME')) define('MAX_DATETIME', strtotime('2038-01-19 03:04:07 GMT')); # latest timestamp PHP can handle
+if(!defined('MIN_YEAR')) define('MIN_YEAR', date('Y',MIN_DATETIME));
+if(!defined('MAX_YEAR')) define('MAX_YEAR', date('Y',MAX_DATETIME)-1); # don't include partial January 2038
+// not-quite-constants
 $daysInMonth = array(31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31);
-define('CUR_YEAR', date('Y',mktime()));
-define('CUR_MONTH', date('n',mktime()));
 // format string for locale-specific month (%B) + 4-digit year (%Y) used for caption and title attributes
 // NOTE: monthname is locale-specific but order of month and year may need to be switched: hence the double quotes!
-define('LOC_MON_YEAR', "%B %Y");																	# i18n																# i18n
+if(!defined('LOC_MON_YEAR')) define('LOC_MON_YEAR', "%B %Y"); # i18n
+// ***** END CONSTANTS section *****
 
 // ***** (ACTION) PARAMETERS Interface *****
 // set parameter defaults: current year and month
@@ -69,24 +66,13 @@ $year	= CUR_YEAR;
 $month	= CUR_MONTH;
 
 // get and interpret parameters
-// 1) overrride defaults with parameters provided in URL (accept only valid values)
-if (isset($_GET['year']))
-{
-	$uYear = (int)$this->GetSafeVar('year', 'get');
-	if ($uYear >= MIN_YEAR && $uYear <= MAX_YEAR) $year = $uYear;
-}
-if (isset($_GET['month']))
-{
-	$uMonth = (int)$this->GetSafeVar('month', 'get');
-	if ($uMonth >= 1 && $uMonth <= 12) $month = $uMonth;
-}
+
 // 2) override with parameters provided in action itself (accept only valid values)
 $hasActionParams = FALSE;
 if (is_array($vars))
 {
 	foreach ($vars as $param => $value)
 	{
-		$value = $this->htmlspecialchars_ent($value);
 		switch ($param)
 		{
 			case 'year':
@@ -108,24 +94,29 @@ if (is_array($vars))
 		}
 	}
 }
+
+// 1) overrride defaults with parameters provided in URL (accept only valid values)
+if (isset($_GET['year']))
+{
+	$uYear = (int)$this->GetSafeVar('year', 'get');
+	if ($uYear >= MIN_YEAR && $uYear <= MAX_YEAR) $year = $uYear;
+}
+if (isset($_GET['month']))
+{
+	$uMonth = (int)$this->GetSafeVar('month', 'get');
+	if ($uMonth >= 1 && $uMonth <= 12) $month = $uMonth;
+}
+
 // ***** (ACTION) PARAMETERS Interface *****
 
 // ***** DERIVED VARIABLES *****
 // derive which weekday the first is on
 $datemonthfirst = sprintf('%4d-%02d-%02d',$year,$month,1);
 $firstwday = strftime('%w',strtotime($datemonthfirst));												# i18n
-#+first DOW configurable (#780)
-if (strtolower(FIRST_DOW) == "monday") {
-    $firstwday -= 1;
-    if ($firstwday < 0) {
-        $firstwday = 6;
-    }
-}
-#-first DOW configurable 
 
 // derive (locale-specific) caption text
 $monthYear	= strftime(LOC_MON_YEAR,strtotime($datemonthfirst));									# i18n
-$summary	= sprintf(FMT_SUMMARY, $monthYear);														# i18n
+$summary	= sprintf(T_("Calendar for %s"), $monthYear);														# i18n
 
 // derive last day of month
 $lastmday = $daysInMonth[$month - 1];
@@ -160,8 +151,7 @@ if (!$hasActionParams)
 }
 
 // build array with names of weekdays (locale-specific)
-$tmpTime = strtotime("this ". FIRST_DOW); #780
-#$tmpTime	= strtotime("this Sunday");			# get a starting date that is a Sunday
+$tmpTime	= strtotime("this Sunday");			# get a starting date that is a Sunday
 $tmpDate	= date('d',$tmpTime);
 $tmpMonth	= date('m',$tmpTime);
 $tmpYear	= date('Y',$tmpTime);

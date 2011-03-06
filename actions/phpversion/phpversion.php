@@ -10,7 +10,7 @@
  *
  * @package		Actions
  * @name		PHP Version	
- * @version		$Id$
+ * @version		$Id: phpversion.php 1105 2008-05-29 21:32:15Z DarTar $
  * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
  *
  * @author		{@link http://wikkawiki.org/Jsnx Jason Tourtelotte}
@@ -21,7 +21,7 @@
  */
 
 // defaults
-$out = '<abbr title="'.WIKKA_ADMIN_ONLY_TITLE.'">'.WIKKA_NOT_AVAILABLE.'</abbr>'."\n";
+$out = '<abbr title="'.T_("Sorry, only wiki administrators can display this information").'">'.T_("n/a").'</abbr>'."\n";
 
 //check privs
 if ($this->config['public_sysinfo'] == '1' || $this->IsAdmin())

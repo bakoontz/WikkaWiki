@@ -4,7 +4,7 @@
  * -------
  * Author: Alessandro Staltari (staltari@geocities.com)
  * Copyright: (c) 2005 Alessandro Staltari (http://www.geocities.com/SiliconValley/Vista/8155/)
- * Release Version: 1.0.7.21
+ * Release Version: 1.0.7.20
  * Date Started: 2005/07/05
  *
  * DOS language file for GeSHi.
@@ -97,9 +97,7 @@ $language_data = array (
 		),
 	'CASE_SENSITIVE' => array(
 		GESHI_COMMENTS => false,
-			1 => false,
-			2 => false,
-			3 => false,
+		1 => false
 		),
 	'STYLES' => array(
 		'KEYWORDS' => array(
@@ -121,7 +119,7 @@ $language_data = array (
 			0 => 'color: #ff0000;'
 			),
 		'NUMBERS' => array(
-			0 => 'color: #cc66cc;'
+/*			0 => 'color: #cc66cc;' */
 			),
 		'METHODS' => array(
 			),

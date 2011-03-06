@@ -1,13 +1,6 @@
 <?php
 /**
  * Email quoting file for Wikka highlighting.
- * 
- * @package	Formatters
- * @version	$Id$
- * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
- * @filesource
- * 
- * @uses	Wakka::htmlspecialchars_ent()
  */
 
  $text = $this->htmlspecialchars_ent($text);

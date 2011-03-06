@@ -6,7 +6,7 @@
  *
  * @package		Handlers
  * @subpackage	Files
- * @version		$Id$
+ * @version		$Id: grabcode.php 655 2007-08-04 17:15:23Z JavaWoman $
  * @license		http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
  *
@@ -33,9 +33,9 @@ if (1 == (int) $this->GetConfigValue('grabcode_button'))
 {
 
 	//get URL parameters
-	$code = urldecode($_POST['code']);
+	$code = urldecode($this->GetSafeVar('code', 'post'));
 	// TODO: use central regex library for filename validation
-	$filename = (isset($_POST['filename']) && preg_match('/\w[-.\w]*/', $this->GetSafeVar('filename', 'post'))) ? urldecode($this->GetSafeVar('filename', 'post')).FILE_EXTENSION : DEFAULT_FILENAME;
+	$filename = (preg_match('/\w[-.\w]*/', $this->GetSafeVar('filename', 'post'))) ?  urldecode($this->GetSafeVar('filename', 'post')).".txt" : T_("codeblock").".txt");
 
 	// @@@ shared download code
 	//set HTTP headers
@@ -51,6 +51,6 @@ if (1 == (int) $this->GetConfigValue('grabcode_button'))
 }
 else
 {
-	echo ERROR_NO_CODE;
+	echo T_("Sorry, there is no code to download.");
 }
 ?>

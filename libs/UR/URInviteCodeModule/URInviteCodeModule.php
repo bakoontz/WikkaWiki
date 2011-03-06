@@ -46,8 +46,7 @@
 				echo '<em class="error">Error in URInviteCode module</em>';
 				return;
 			}
-			echo '<label for="invitecode">Enter invitation code: </label>';
-			echo '<input id="UR_inviteCode" type=\'text\' name="UR_inviteCode"/><br/>';
+			echo "Enter invitation code:&nbsp;<input type='text' name='UR_inviteCode'/><br/>";
 		}
 
 		function URAuthTmplVerify()
@@ -56,8 +55,7 @@
 			{
 				return false;
 			}
-			if(isset($_POST['UR_inviteCode']) &&
-			   $_POST['UR_inviteCode'] === $this->inviteCode)
+			if($this->GetSafeVar('UR_inviteCode', 'post') === $this->inviteCode)
 			{
 				return true;
 			}
