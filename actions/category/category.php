@@ -36,14 +36,11 @@ if ($cattag = $_GET['wakka'])	#312 (only files action uses POST for wakka)
 
 	if ($this->CheckMySQLVersion(4,0,1))
 	{
-    	$results = $this->FullCategoryTextSearch($page); 
+    		$results = $this->FullCategoryTextSearch($page); 
 	}
 	else
 	{
-		$utf8Compatible = 0;
-		if(1 == $this->config['utf8_compat_search'])
-			$utf8Compatible = 1;
-    	$results = $this->FullTextSearch($page, 0, $utf8Compatible); 
+    		$results = $this->FullTextSearch($page); 
 	}
 
 	if ($results)

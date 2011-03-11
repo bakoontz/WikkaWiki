@@ -279,8 +279,7 @@ $wakkaDefaultConfig = array(
 	'allow_user_registration'	=> '1',
 	'enable_version_check'      => '1',
 	'version_check_interval'	=> '1h',
-	'default_lang'				=> 'en',
-	'utf8_compat_search'		=> '0'
+	'default_lang' => 'en'
 	);
 
 // load config
