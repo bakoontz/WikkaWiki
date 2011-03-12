@@ -2425,7 +2425,7 @@ class Wakka
 	/**
 	 * Check if a given string contains prohibited characters.
 	 * Currently, these prohibited characters are:
-	 *   | ? = < > ' " &
+	 *   [ ] { } % + | ? = < > ' " / 0x00-0x1f 0x7f ,
 	 *
 	 * @param	string $text mandatory:
 	 * @return	integer 1 if $text is a wikiname, 0 otherwise
@@ -2434,7 +2434,7 @@ class Wakka
 	 */
 	function IsWikiName($text)
 	{
-		$result = preg_match("/[\|\?=<>\'\"&\/%]/", $text);
+		$result = preg_match("/[\[\]\{\}%\+\|\?=<>\'\"\/\\x00-\\x1f\\x7f,]/", html_entity_decode($text));
 		return !$result;
 	}
 
