@@ -152,7 +152,7 @@ case "0":
 			"default_comment_display enum ('date_asc', 'date_desc', 'threaded') NOT NULL default 'threaded',".
 			"status enum('invited','signed-up','pending','active','suspended','banned','deleted'),".
 			"theme varchar(50) default '',".
-			"challenge varchar(8) default '00000000',".
+			"challenge varchar(8) default '',".
 			"PRIMARY KEY  (name),".
 			"KEY idx_signuptime (signuptime)".
 			") TYPE=MyISAM", $dblink), "Already exists?", 0);
@@ -235,8 +235,7 @@ case "0":
 	// Delete existing admin user in case installer was run twice
 	@mysql_query('delete from '.$config['table_prefix'].'users where name = \''.$config['admin_users'].'\'', $dblink);
     test(__('Adding admin user').'...',
-	        @mysql_query("insert into ".$config["table_prefix"]."users
-			set name = '".$config["admin_users"]."', password = '".$pass_val."', email = '".$config["admin_email"]."', signuptime = now(), challenge='".$challenge."'", $dblink), "Hmm!", 0);
+	        @mysql_query("insert into ".$config["table_prefix"]."users set name = '".$config["admin_users"]."', password = '".$pass_val."', email = '".$config["admin_email"]."', signuptime = now(), challenge='".$challenge."'", $dblink), "Hmm!", 0);
 
 	// Auto-login wiki admin
 	// Set default cookie path
@@ -453,6 +452,7 @@ case "1.2":
 		'TableMarkupReference', 
 		'WikkaConfig'), $dblink, $config, $lang_defaults_path, $lang_defaults_fallback_path, $upgrade_note);
 case "1.3":
+case "1.3.1":
 	// Dropping obsolete "handler" field from pages table, refs #452
 	test('Removing handler field from the pages table...',
 	@mysql_query("ALTER TABLE ".$config["table_prefix"]."pages DROP handler", $dblink), __('Already done? Hmm!'), 0);
@@ -503,6 +503,8 @@ case "1.3":
 	if(file_exists("config/options_menu.user.inc"))
 		brute_copy("config/options_menu.user.inc", 
 			 "config/options_menu.user.inc.prev");
+	test(__('Adding challenge field').'...',
+	@mysql_query("ALTER TABLE ".$config['table_prefix']."users ADD challenge VARCHAR( 8 ) NOT NULL default ''", $dblink);
 }
 
 // #600: Force reloading of stylesheet.
