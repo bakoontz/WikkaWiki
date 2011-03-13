@@ -504,7 +504,7 @@ case "1.3.1":
 		brute_copy("config/options_menu.user.inc", 
 			 "config/options_menu.user.inc.prev");
 	test(__('Adding challenge field').'...',
-	@mysql_query("ALTER TABLE ".$config['table_prefix']."users ADD challenge VARCHAR( 8 ) NOT NULL default ''", $dblink);
+	@mysql_query("ALTER TABLE ".$config['table_prefix']."users ADD challenge VARCHAR( 8 ) NOT NULL default ''", $dblink), __('Already done?  OK!'), 0);
 }
 
 // #600: Force reloading of stylesheet.
