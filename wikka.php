@@ -34,7 +34,10 @@
  */
 
 // ---------------------- DEBUGGING AND ERROR REPORTING -----------------------
-error_reporting(E_ALL);
+if(version_compare(phpversion(),'5.3','<'))
+	error_reporting(E_ALL);
+else
+	error_reporting(E_ALL & !E_DEPRECATED);
 // ---------------------- END DEBUGGING AND ERROR REPORTING -------------------
 
 // ---------------------------- VERSIONING ------------------------------------
