@@ -2607,7 +2607,7 @@ class Wakka
 	 	//check if custom theme is set in user preferences
 	 	if ($user = $this->GetUser())
 		{
-			$theme =  ($user['theme']!='')? $user['theme'] : $this->GetConfigValue('theme');
+			$theme =  (isset($user['theme']) && $user['theme']!='')? $user['theme'] : $this->GetConfigValue('theme');
 		}
 		else
 		{

@@ -476,12 +476,13 @@ if (file_exists('locked'))
 	$lockpw = trim($lines[0]);
 
 	// is authentification given?
+	$ask = false;
 	if (isset($_SERVER["PHP_AUTH_USER"])) {
 		if (!(($_SERVER["PHP_AUTH_USER"] == "admin") && ($_SERVER["PHP_AUTH_PW"] == $lockpw))) {
-			$ask = 1;
+			$ask = true;
 		}
 	} else {
-		$ask = 1;
+		$ask = true;
 	}
 
 	if ($ask) {
