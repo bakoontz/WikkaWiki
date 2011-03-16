@@ -471,6 +471,8 @@ case "1.3.1":
 	@mysql_query("alter table ".$config['table_prefix']."acls add comment_post_acl text not null", $dblink), __('Already done?  OK!'), 0); 
 	test('Copying existing comment_acls to new fields...', 
 	@mysql_query("update ".$config['table_prefix']."acls as a inner join(select page_tag, comment_acl from ".$config['table_prefix']."acls) as b on a.page_tag = b.page_tag set a.comment_read_acl=b.comment_acl, a.comment_post_acl=b.comment_acl", $dblink), __('Failed').'. ?', 1);
+	test('Drop old comment acl...', 
+	@mysql_query("alter ".$config['table_prefix']."acls drop comment_acl", $dblink), __('Failed').'. ?', 1);
 	test(__('Creating index on owner column').'...', 
 	@mysql_query('alter table '.$config['table_prefix'].'pages add index `idx_owner` (`owner`)', $dblink), __('Already done?  OK!'), 0); 
   	test(__('Altering referrers table structure').'...',
