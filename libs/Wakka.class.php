@@ -4105,6 +4105,7 @@ class Wakka
 	 */
 	function TrimACLs($list)
 	{
+		$trimmed_list = '';
 		foreach (explode("\n", $list) as $line)
 		{
 			$line = trim($line);

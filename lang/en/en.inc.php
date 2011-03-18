@@ -1056,6 +1056,8 @@ if(!defined('ERROR_PAGE_ALREADY_EXIST')) define('ERROR_PAGE_ALREADY_EXIST', 'Sor
 if(!defined('ERROR_PAGE_NOT_EXIST')) define('ERROR_PAGE_NOT_EXIST', ' Sorry, page %s does not exist.');
 if(!defined('LABEL_CLONE')) define('LABEL_CLONE', 'Clone');
 if(!defined('LABEL_EDIT_OPTION')) define('LABEL_EDIT_OPTION', ' Edit after creation ');
+if (!defined('LABEL_ACL_OPTION')) define('LABEL_ACL_OPTION', ' Clone
+ACL');
 if(!defined('PLEASE_FILL_VALID_TARGET')) define('PLEASE_FILL_VALID_TARGET', 'Please fill in a valid target <tt>PageName</tt> and an (optional) edit note.');
 /**#@-*/
 
