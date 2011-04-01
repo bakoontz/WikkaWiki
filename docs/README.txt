@@ -25,6 +25,9 @@ The Wikka Development Team
 - Brian Koontz
 - Tormod Haugen
 - Olivier Borowski
+- Yuxuan "fishy" Wang
+- EmeraldIsland
+- Krzysztof Trybowski
 
 Wikka Hall of Fame
 - JsnX [Jason Tourtelotte]
