@@ -9,12 +9,15 @@
  * page and write-access to the target page.
  * If the "Edit after creation" option is selected, the user is redirected to the
  * target page for editing immediately after its creation.
+ * If the "Clone ACL" option is selected, ACL settings are copied to the target page,  
+ * otherwise default ACL are applied to the new page.
  *
  * @package		Handlers
  * @name		clone
  *
  * @author		{@link http://wikkawiki.org/ChristianBarthelemy Christian Barthelemy} - original idea and code.
  * @author		{@link http://wikkawiki.org/DarTar Dario Taraborelli} - bugs fixed, code improved, removed popup alerts.
+ * @author		{@link http://wikkawiki.org/BrianKoontz Brian Koontz} - clone ACL option
  * @since		Wikka 1.1.6.0
  *
  * @uses	Wakka::HasAccess()
@@ -29,7 +32,7 @@
  * @uses	Wakka::FormClose()
  *
  * @input	string	$to	required: the page to be created
- *					must be a non existing page and current user must be authorized
+ *					must be a non existing page and current user must have privs 
  *					to create it
  *					default is source page name
  * @input	string	$note	optional: the note to be added to the page when created
@@ -37,6 +40,7 @@
  * @input	boolean	$editoption	optional: if true, the new page will be opened for
  *					editing on creation
  *					default is FALSE (to allow multiple cloning of the same source)
+ * @input   boolean $cloneaclsoption optional: if true, ACLs are copied from the source page to the new page; default is false 
  *
  * @todo	Use central regex library for valid pagenames.
  * @todo	Decide whether it's allowed to "re-create" a page of which only non-active versions exist
@@ -49,7 +53,8 @@ $from = $this->tag;
 $to = $this->tag;
 $note = sprintf(T_("Cloned from %s"), $from);
 $editoption = '';
-$box = T_("Please fill in a valid target <tt>PageName</tt> and an (optional) edit note");
+$cloneaclsoption = '';
+$box = PLEASE_FILL_VALID_TARGET;
 
 echo '<div id="content">'."\n";
 
@@ -78,6 +83,8 @@ if (!$this->existsPage($from))		// name change, interface change (allows only ac
 			$to = isset($_POST['to']) && $_POST['to'] ?  $this->GetSafeVar('to', 'post') : $to;
 			$note = isset($_POST['note']) && $_POST['note'] ?  $this->GetSafeVar('note', 'post') : $note;
 			$editoption = (isset($_POST['editoption'])) ? ' checked="checked"' : '';
+			$cloneaclsoption = (isset($_POST['cloneaclsoption']))? 'checked="checked"' : ''; 
+
 			// 3. Check user's write access
 			if (!$this->HasAccess('write', $to))
 			{
@@ -98,9 +105,22 @@ if (!$this->existsPage($from))		// name change, interface change (allows only ac
 				} else
 				{
 					// 6. Valid request - proceed to page cloning
-					$thepage = $this->LoadPage($from); # load the source page
-					if ($thepage) $pagecontent = $thepage['body']; # get its content
-					$this->SavePage($to, $pagecontent, $note); #create target page
+					$thepage=$this->LoadPage($from); 
+					if ($thepage) $pagecontent = $thepage['body']; 
+					$this->SavePage($to, $pagecontent, $note); 
+					// Clone ACLs if requested 
+					if ($cloneaclsoption == 'checked="checked"') 
+					{ 
+						echo $from;
+						$acl = $this->LoadAllACLs($from, 0); 
+						var_dump($acl);
+						$this->SaveACL($to, 'read', $this->TrimACLs($acl['read_acl'])); 
+						$this->SaveACL($to, 'write', $this->TrimACLs($acl['write_acl'])); 
+						$this->SaveACL($to, 'comment_read', $this->TrimACLs($acl['comment_read_acl'])); 
+						$this->SaveACL($to, 'comment_post', $this->TrimACLs($acl['comment_post_acl'])); 
+					} 
+
+					// Open editor if requested 
 					if ($editoption == ' checked="checked"')
 					{
 						// quick edit
@@ -129,8 +149,13 @@ if (!$this->existsPage($from))		// name change, interface change (allows only ac
 			'<tr>'."\n".
 			'<td></td>'."\n".
 			'<td>'."\n".
-			'<input type="checkbox" name="editoption"'.$editoption.' id="editoption" /><label for="editoption">'.T_(" Edit after creation ").'</label>'."\n".
-			'<input type="submit" name="create" value="'.T_("Clone").'" />'."\n".
+			'<input type="checkbox" name="editoption"'.$editoption.' id="editoption" /><label for="editoption">'.LABEL_EDIT_OPTION.'</label>'."\n".
+            '<input type="checkbox" name="cloneaclsoption" '.$cloneaclsoption.' id="cloneaclsoption" /><label for="cloneaclsoption">'.LABEL_ACL_OPTION.'</label>'."\n". 
+			'</tr>'."\n". 
+			'<tr>'."\n". 
+			'<td></td>'."\n". 
+			'<td>'."\n". 
+			'<input type="submit" name="create" value="'.LABEL_CLONE.'" />'."\n".
 			'</td>'."\n".
 			'</tr>'."\n".
 			'</table>'."\n";

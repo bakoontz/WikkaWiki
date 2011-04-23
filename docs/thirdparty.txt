@@ -61,3 +61,21 @@ Note       : Since the original site no longer exists (the domain is now
              location. The online documentation is still accessible via
              the WayBack Machine; start here:
 http://web.archive.org/web/20030601150132/www.readinged.com/onyx/rss/
+
+Name       : WikkaEdit 
+Bundled    : unknown version
+Description: Wiki editor
+For Wikka  : Featured wiki editor
+License    : GNU General Public License (GPL)
+Home page  : http://wikkawiki.org/WikkaEdit
+Author     : Olivier Borowski 
+			 olivier.borowski [at] wikkawiki [dot] org 
+
+Name       : FeedCreator
+Bundled    : Version 1.7.2-ppt
+Description: Flexible news feed generator
+For Wikka  : Provides feed generation functionality 
+License    : GNU Lesser General Public License (LGPL)
+Home page  : unknown
+Author     : Scott Reynen (and others) 
+			 scott [at] randomchaos [dot] com

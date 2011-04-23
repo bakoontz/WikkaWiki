@@ -234,15 +234,6 @@ a.ext:hover {
 	text-decoration: none;
 }
 
-#content h1:hover:after, 
-#content h2:hover:after, 
-#content h3:hover:after, 
-#content h4:hover:after, 
-#content h5:hover:after, 
-#content h6:hover:after {
-	color: #aaa; content: "\0020\0020\00b6";
-}
-
 #content a.heading {
 	line-height: inherit;
 	color: #666;
@@ -382,7 +373,7 @@ img.icon {
 /* text formatting */
 
 #content h1 {
-	font: normal 18pt/20pt Arial, "DejaVu Sans", Helvetica, Verdana, sans-serif;
+	font: normal 18pt/20pt  Arial, "DejaVu Sans", Helvetica, Verdana, sans-serif;
 	margin: 0pt;
 	color: #666;
 	padding-bottom: 10px;
@@ -391,7 +382,7 @@ img.icon {
 }
 
 #content h2 {
-	font: normal 16pt/18pt Arial, "DejaVu Sans", Helvetica, Verdana, sans-serif;
+	font: normal 16pt/18pt  Arial, "DejaVu Sans", Helvetica, Verdana, sans-serif;
 	margin: 0pt;
 	color: #666;
 	padding-bottom: 10px;
@@ -528,7 +519,7 @@ hr {
 	border-right: 1px solid #AAC;
 	border-left: 1px solid #AAC;
 	border-bottom: none;
-	font-family: Verdana, Arial, "DejaVu Sans", Helvetica, sans-serif;
+	font-family: Arial, Verdana, "DejaVu Sans", Helvetica, sans-serif;
 	font-size: 100%;
 	padding: 0 3px;
 	margin: 5px auto 0 auto;

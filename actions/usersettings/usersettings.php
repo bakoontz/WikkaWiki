@@ -161,7 +161,7 @@ if ($user = $this->GetUser())
 		$default_comment_display = $user['default_comment_display'];
 		$revisioncount = $user['revisioncount'];
 		$changescount = $user['changescount'];
-		$usertheme = ($user['theme']!= '')? $user['theme'] : $this->GetConfigValue('theme');
+		$usertheme = (isset($user['theme']) && $user['theme']!= '')? $user['theme'] : $this->GetConfigValue('theme');
 	}
 
 	// *** BEGIN LOGOUT/USERSETTINGS

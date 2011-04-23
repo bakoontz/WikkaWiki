@@ -2434,7 +2434,7 @@ class Wakka
 	/**
 	 * Check if a given string contains prohibited characters.
 	 * Currently, these prohibited characters are:
-	 *   | ? = < > ' " &
+	 *   [ ] { } % + | ? = < > ' " / 0x00-0x1f 0x7f ,
 	 *
 	 * @param	string $text mandatory:
 	 * @return	integer 1 if $text is a wikiname, 0 otherwise
@@ -2443,7 +2443,7 @@ class Wakka
 	 */
 	function IsWikiName($text)
 	{
-		$result = preg_match("/[\|\?=<>\'\"&\/%]/", $text);
+		$result = preg_match("/[\[\]\{\}%\+\|\?=<>\'\"\/\\x00-\\x1f\\x7f,]/", html_entity_decode($text));
 		return !$result;
 	}
 
@@ -2616,7 +2616,7 @@ class Wakka
 	 	//check if custom theme is set in user preferences
 	 	if ($user = $this->GetUser())
 		{
-			$theme =  ($user['theme']!='')? $user['theme'] : $this->GetConfigValue('theme');
+			$theme =  (isset($user['theme']) && $user['theme']!='')? $user['theme'] : $this->GetConfigValue('theme');
 		}
 		else
 		{
@@ -4115,6 +4115,7 @@ class Wakka
 	 */
 	function TrimACLs($list)
 	{
+		$trimmed_list = '';
 		foreach (explode("\n", $list) as $line)
 		{
 			$line = trim($line);

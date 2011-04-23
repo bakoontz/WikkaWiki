@@ -238,8 +238,7 @@ case "0":
 	// Delete existing admin user in case installer was run twice
 	@mysql_query('delete from '.$config['table_prefix'].'users where name = \''.$config['admin_users'].'\'', $dblink);
     test(__('Adding admin user').'...',
-	        @mysql_query("insert into ".$config["table_prefix"]."users
-			set name = '".$config["admin_users"]."', password = '".$pass_val."', email = '".$config["admin_email"]."', signuptime = now(), challenge='".$challenge."'", $dblink), "Hmm!", 0);
+	        @mysql_query("insert into ".$config["table_prefix"]."users set name = '".$config["admin_users"]."', password = '".$pass_val."', email = '".$config["admin_email"]."', signuptime = now(), challenge='".$challenge."'", $dblink), "Hmm!", 0);
 
 	// Auto-login wiki admin
 	// Set default cookie path
@@ -456,6 +455,7 @@ case "1.2":
 		'TableMarkupReference', 
 		'WikkaConfig'), $dblink, $config, $lang_defaults_path, $lang_defaults_fallback_path, $upgrade_note);
 case "1.3":
+case "1.3.1":
 	// Converting DB UTF-8 (but data remains
 	// unchanged -- this is handled by a standalone script)	
 	test("Setting up database for UTF-8...", true);
@@ -538,6 +538,8 @@ case "1.3":
 	@mysql_query("alter table ".$config['table_prefix']."acls add comment_post_acl text not null", $dblink), __('Already done?  OK!'), 0); 
 	test('Copying existing comment_acls to new fields...', 
 	@mysql_query("update ".$config['table_prefix']."acls as a inner join(select page_tag, comment_acl from ".$config['table_prefix']."acls) as b on a.page_tag = b.page_tag set a.comment_read_acl=b.comment_acl, a.comment_post_acl=b.comment_acl", $dblink), __('Failed').'. ?', 1);
+	test('Drop old comment acl...', 
+	@mysql_query("alter table ".$config['table_prefix']."acls drop comment_acl", $dblink), __('Failed').'. ?', 1);
 	test(__('Creating index on owner column').'...', 
 	@mysql_query('alter table '.$config['table_prefix'].'pages add index `idx_owner` (`owner`)', $dblink), __('Already done?  OK!'), 0); 
   	test(__('Altering referrers table structure').'...',
@@ -570,6 +572,8 @@ case "1.3":
 	if(file_exists("config/options_menu.user.inc"))
 		brute_copy("config/options_menu.user.inc", 
 			 "config/options_menu.user.inc.prev");
+	test(__('Adding challenge field').'...',
+	@mysql_query("ALTER TABLE ".$config['table_prefix']."users ADD challenge VARCHAR( 8 ) NOT NULL default ''", $dblink), __('Already done?  OK!'), 0);
 }
 
 // #600: Force reloading of stylesheet.

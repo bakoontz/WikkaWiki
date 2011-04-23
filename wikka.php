@@ -34,8 +34,10 @@
  */
 
 // ---------------------- DEBUGGING AND ERROR REPORTING -----------------------
-error_reporting(E_ALL);
-//error_reporting (E_ALL & E_NOTICE & E_DEPRECATED);
+if(version_compare(phpversion(),'5.3','<'))
+	error_reporting(E_ALL);
+else
+	error_reporting(E_ALL & !E_DEPRECATED);
 // ---------------------- END DEBUGGING AND ERROR REPORTING -------------------
 
 // ---------------------------- VERSIONING ------------------------------------
@@ -481,12 +483,13 @@ if (file_exists('locked'))
 	$lockpw = trim($lines[0]);
 
 	// is authentification given?
+	$ask = false;
 	if (isset($_SERVER["PHP_AUTH_USER"])) {
 		if (!(($_SERVER["PHP_AUTH_USER"] == "admin") && ($_SERVER["PHP_AUTH_PW"] == $lockpw))) {
-			$ask = 1;
+			$ask = true;
 		}
 	} else {
-		$ask = 1;
+		$ask = true;
 	}
 
 	if ($ask) {
