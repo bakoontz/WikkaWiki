@@ -113,7 +113,6 @@ else
 	$xml .= "</item>\n";
 }
 
-$xml .= "</node></node>\n";
 $xml .= "</map>\n";
 
 print($xml);

@@ -73,7 +73,7 @@ if ($pages = $this->LoadRecentlyChanged())
 			$xml .= '<node TEXT="'.$page['tag'].'">'."\n";
 			// $xml .= "<arrowlink ENDARROW=\"Default\" DESTINATION=\"Freemind_Link_".$page["user"]."\" STARTARROW=\"None\"/>\n";
 			$xml .= "</node>\n";
-			if (is_array($users[$page['user']]))
+			if (isset($users[$page['user']]))
 			{
 				$u_count = count($users[$page['user']]);
 				$users[$page['user']][$u_count] = $page['tag'];
@@ -124,7 +124,6 @@ else
 	$xml .= "</item>\n";
 }
 
-$xml .= "</node></node>\n";
 $xml .= "</map>\n";
 
 echo $xml;
