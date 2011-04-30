@@ -757,7 +757,7 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 			{
 				$output .= $wakka->FormOpen("grabcode");
 				// build form
-				$output .= '<input type="submit" class="grabcode" name="save" value="'.T_("Grab").'" title="'.rtrim(sprintf(T_("Download %s"), $valid_filename)).'" />';
+				$output .= '<input type="submit" class="grabcode" name="save" value="'.GRABCODE_BUTTON.'" title="'.rtrim(sprintf(GRABCODE_BUTTON_TITLE, $valid_filename)).'" />';
 				$output .= '<input type="hidden" name="filename" value="'.urlencode($valid_filename).'" />';
 				$output .= '<input type="hidden" name="code" value="'.urlencode($code).'" />';
 				$output .= $wakka->FormClose();
@@ -775,9 +775,24 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 			if(empty($contents) || !isset($contents))
 				return "";
 
-			// Case 1: Deprecated...(first part is a URL followed by
+			// Case 1: Interwiki link followed by | separator
+			if(preg_match("/^([A-ZÄÖÜ][A-Za-zÄÖÜßäöü]+[:].*?)\s*\|\s*(.*?)$/s", $contents, $matches))
+			{
+				$url = $matches[1];
+				$text = $matches[2];
+			}
+
+			// Case 2: Deprecated...(interwiki link followed by
+			// whitespace separator)
+			else if(preg_match("/^([A-ZÄÖÜ][A-Za-zÄÖÜßäöü]+[:]\S*)\s+(.*)$/s", $contents, $matches))
+			{
+				$url = $matches[1];
+				$text = $matches[2];
+			}
+
+			// Case 3: Deprecated...(first part is a URL followed by
 			// one or more whitespaces)
-			if (preg_match("/^((http|https|ftp|news|irc|gopher):\/\/([^\|\\s\"<>]+))\s+([^\|]+)$/s", $contents, $matches))		# recognize forced links across lines
+			else if (preg_match("/^((http|https|ftp|news|irc|gopher):\/\/([^\|\\s\"<>]+))\s+([^\|]+)$/s", $contents, $matches))		# recognize forced links across lines
 			{
 				if (!isset($matches[1])) $matches[1] = ''; #38
 				if (!isset($matches[4])) $matches[4] = ''; #38
@@ -785,7 +800,7 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 				$text = $matches[4];
 			}
 
-			// Case 2: Deprecated...(first part is a string
+			// Case 4: Deprecated...(first part is a string
 			// followed by one or more whitespaces)
 			else if(preg_match("/^(.*?)\s+([^|]+)$/s", $contents, $matches) && 
 					preg_match("/^[A-ZÄÖÜa-zßäöü][A-Za-z0-9ÄÖÜßäöü]*$/", $matches[1]))
@@ -794,7 +809,7 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 				$text = $matches[2];
 			}
 
-			// Case 3: If no "|" exists in $contents, assume the match
+			// Case 5: If no "|" exists in $contents, assume the match
 			// refers to an internal page
 			else if(preg_match("/^([^\|]+)$/s", $contents, $matches))
 			{
@@ -802,7 +817,7 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 				$text = $matches[1];
 			}
 
-			// Case 4: If a "|" symbol exists, assume two parts, a URL and
+			// Case 6: If a "|" symbol exists, assume two parts, a URL and
 			// text
 			else if(preg_match("/^(.*?)\s*\|\s*(.*?)$/s", $contents, $matches))
 			{
@@ -984,6 +999,7 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 			}
 		}
 		// interwiki links!
+		// Deprecated; use forced links with | separator instead
 		elseif (preg_match("/^[A-ZÄÖÜ][A-Za-zÄÖÜßäöü]+[:]\S*$/s", $thing))
 		{
 			return $wakka->Link($thing);
@@ -1100,7 +1116,8 @@ $text = preg_replace_callback(
 	"\|(?:[^\|])?\|(?:\(.*?\))?(?:\{[^\{\}]*?\})?(?:\n)?|".
 	# action
 	"\{\{.*?\}\}|".
-	# InterWiki link
+	# InterWiki link (deprecated, as pagenames may now contain spaces)
+	# Use forced links with a | separator instead
 	"\b[A-ZÄÖÜ][A-Za-zÄÖÜßäöü]+[:](?![=_])\S*\b|".
 	# CamelWords
 	"\b([A-ZÄÖÜ]+[a-zßäöü]+[A-Z0-9ÄÖÜ][A-Za-z0-9ÄÖÜßäöü]*)\b|".
