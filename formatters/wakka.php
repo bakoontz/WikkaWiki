@@ -757,7 +757,7 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 			{
 				$output .= $wakka->FormOpen("grabcode");
 				// build form
-				$output .= '<input type="submit" class="grabcode" name="save" value="'.GRABCODE_BUTTON.'" title="'.rtrim(sprintf(GRABCODE_BUTTON_TITLE, $valid_filename)).'" />';
+				$output .= '<input type="submit" class="grabcode" name="save" value="'.T_("Grab").'" title="'.rtrim(sprintf(T_("Download %s"), $valid_filename)).'" />';
 				$output .= '<input type="hidden" name="filename" value="'.urlencode($valid_filename).'" />';
 				$output .= '<input type="hidden" name="code" value="'.urlencode($code).'" />';
 				$output .= $wakka->FormClose();
