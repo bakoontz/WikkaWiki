@@ -374,6 +374,8 @@ if ($this->IsAdmin($this->GetUser()))
 		// build pager links
 		$ll = $s+$l+1;
 		$ul = ($s+2*$l) > $numusers ? $numusers : ($s+2*$l);
+		$start_ts = '';
+		$end_ts = '';
 		if ($s > 0)
 		{
 			$prev = '<a href="'.$this->Href('','','l='.$l.'&amp;sort='.$sort.'&amp;d='.$d.'&amp;s='.($s-$l)).  '&amp;search='.urlencode($search).  '&amp;start_ts='.urlencode($start_ts).  '&amp;end_ts='.urlencode($end_ts).  '" title="'.sprintf(T_("Show records from %d to %d"), ($s-$l+1), $s).'">'.($s-$l+1).'-'.$s.'</a> |  '."\n";
