@@ -282,6 +282,13 @@ $wakkaDefaultConfig = array(
 	'enable_version_check'      => '1',
 	'version_check_interval'	=> '1h',
 	'default_lang'				=> 'en',
+	'spamlog_path'				=> './spamlog.txt.php',
+	'badwords_path'				=> './badwords.txt.php',
+	'spam_logging'				=> '0',
+	'content_filtering'			=> '0',
+	'max_new_document_urls'		=> '15',
+	'max_new_comment_urls'		=> '6',
+	'max_new_feedback_urls'		=> '6',
 	'utf8_compat_search'		=> '0'
 	);
 

@@ -63,7 +63,7 @@ if(($_POST['submit']==T_("Reply") || $_POST['submit']==T_("New Comment")) && $th
 	</div><!--closing page content-->
 	<div id="comments">		
 	<div class="commentform">
-	<?php echo $this->FormOpen('processcomment'); ?>
+	<?php echo $this->FormOpen('addcomment'); ?>
 	<input type="hidden" name="comment_id" value="<?php echo $comment_id ?>" />
 	<?php if($_POST['submit']==T_("Reply")) { ?>
 	<label for="commentbox"><?php printf(T_("In reply to %s:"), $this->FormatUser($comment['user'])); ?></label><br />

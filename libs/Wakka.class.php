@@ -38,6 +38,11 @@ if (!defined('MAX_HOSTNAME_LENGTH_DISPLAY')) define('MAX_HOSTNAME_LENGTH_DISPLAY
 if (!defined('ID_LENGTH')) define('ID_LENGTH',10);		// @@@ maybe make length configurable
 /**#@-*/
 
+/**
+ * Signature for a spamlog metadata line; MUST look different than Wikka markup!
+ */
+define('SPAMLOG_SIG','-@-');
+
 /**#@+
  * String constant defining a regular expresion pattern.
  */
@@ -945,6 +950,26 @@ class Wakka
 		return '<!--start GeSHi-->'."\n".$geshi->parse_code()."\n".'<!--end GeSHi-->'."\n";
 	}
 
+	/**
+	 * Normalizes line endings to "*nix style" ("\n") in a string; handles both Dos/Win and Mac.
+	 *
+	 * @author		{@link http://wikka.jsnx.com/JavaWoman JavaWoman}
+	 * @copyright	Copyright © 2005, Marjolein Katsma
+	 * @license		http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
+	 * @version		0.5
+	 *
+	 * @access		public
+	 *
+	 * @param		string	$content	required: string to be normalized
+	 * @return		string				content with normalized line endings
+	 */
+	function normalizeLines($content)
+	{
+		return str_replace("\r","\n",str_replace("\r\n","\n",$content));
+	}
+
+
+
 	/**#@-*/
 
 	/**#@+
@@ -1160,6 +1185,318 @@ class Wakka
 			return TRUE;							# all is well
 		}
 	}
+
+	/**
+	 * Log probably spammy comment.
+	 *
+	 * @author		{@link http://wikka.jsnx.com/JavaWoman JavaWoman}
+	 * @copyright	Copyright © 2005, Marjolein Katsma
+	 * @license		http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
+	 * @version		0.7
+	 *
+	 * @access		public
+	 * @todo		- prepare strings for internationalization
+	 *
+	 * @uses		logSpam()
+	 *
+	 * @param		string	$tag		required: string page name
+	 * @param		string	$body		required: string containing comment body
+	 * @param		string	$reason		required: why attempt failed (urls|filter|nokey|badkey...)
+	 * @param		integer	$urlcount	optional: number of (new) URLs
+	 * @param		integer	$user		optional: original user/origin (rather than current user)
+	 * @param		integer	$time		optional: original time (rather than time of logging)
+	 * @return		mixed				bytes written if successful, FALSE otherwise.
+	 */
+	function logSpamComment($tag,$body,$reason,$urlcount=0,$user='',$time='')
+	{
+		$type		= 'comment ';
+		return $this->logSpam($type,$tag,$body,$reason,$urlcount,$user,$time);
+	}
+
+	/**
+	 * Log probably spammy document.
+	 *
+	 * @author		{@link http://wikka.jsnx.com/JavaWoman JavaWoman}
+	 * @copyright	Copyright © 2005, Marjolein Katsma
+	 * @license		http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
+	 * @version		0.7
+	 *
+	 * @access		public
+	 * @todo		- prepare strings for internationalization
+	 *
+	 * @uses		logSpam()
+	 *
+	 * @param		string	$tag		required: string page name
+	 * @param		string	$body		required: string containing comment body
+	 * @param		string	$reason		required: why attempt failed (urls|filter|nokey|badkey)
+	 * @param		integer	$urlcount	optional: number of (new) URLs
+	 * @param		integer	$user		optional: original user/origin (rather than current user)
+	 * @param		integer	$time		optional: original time (rather than time of logging)
+	 * @return		mixed				bytes written if successful, FALSE otherwise.
+	 */
+	function logSpamDocument($tag,$body,$reason,$urlcount=0,$user='',$time='')
+	{
+		$type		= 'document';
+		return $this->logSpam($type,$tag,$body,$reason,$urlcount,$user,$time);
+	}
+
+	/**
+	 * Log probably spammy feedback.
+	 *
+	 * @author		{@link http://wikka.jsnx.com/JavaWoman JavaWoman}
+	 * @copyright	Copyright © 2005, Marjolein Katsma
+	 * @license		http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
+	 * @version		0.7
+	 *
+	 * @access		public
+	 * @todo		- prepare strings for internationalization
+	 *
+	 * @uses		logSpam()
+	 *
+	 * @param		string	$tag		required: string page name
+	 * @param		string	$body		required: string containing feedback text
+	 * @param		string	$reason		required: why attempt failed (urls|filter|nokey|badkey)
+	 * @param		integer	$urlcount	optional: number of (new) URLs
+	 * @return		mixed				bytes written if successful, FALSE otherwise.
+	 */
+	function logSpamFeedback($tag,$body,$reason,$urlcount=0)
+	{
+		$type		= 'feedback';
+		return $this->logSpam($type,$tag,$body,$reason,$urlcount);
+	}
+
+	/**
+	 * Log probable spam (comment, document or feedback).
+	 *
+	 * @author		{@link http://wikka.jsnx.com/JavaWoman JavaWoman}
+	 * @copyright	Copyright © 2005, Marjolein Katsma
+	 * @license		http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
+	 * @version		0.7
+	 *
+	 * @access		private
+	 * @todo		- make recognition of mass delete i18n-proof
+	 *				- use configured (later!) timezone
+	 *				- use configured (later!) date/time format
+	 *
+	 * @param		string	$type		required: string containing type (document|comment)
+	 * @param		string	$tag		required: string page name
+	 * @param		string	$body		required: string containing content (document or comment)
+	 * @param		string	$reason		required: why attempt failed (urls|filter|nokey|badkey)
+	 * @param		integer	$urlcount	required: number of (new) URLs
+	 * @param		integer	$user		optional: user/origin - default current user/origin
+	 * @param		integer	$time		optional: time - default current time
+	 * @return		mixed				bytes written if successful, FALSE otherwise.
+	 */
+	function logSpam($type,$tag,$body,$reason,$urlcount,$user='',$time='')
+	{
+		// set path
+		$spamlogpath = (isset($this->config['spamlog_path'])) ? $this->config['spamlog_path'] : DEF_SPAMLOG_PATH;	# @@@ make function
+		// gather data
+		if ($user == '')
+		{
+			$user = $this->GetUserName();					# defaults to REMOTE_HOST to domain for anonymous user
+		}
+		if ($time == '')
+		{
+			$time = date('Y-m-d H:i:s');					# current date/time
+		}
+		if (preg_match('/^mass delete/',$reason))			# @@@ i18n
+		{
+			$originip = '0.0.0.0';							# don't record deleter's IP address!
+		}
+		else
+		{
+			$originip = $_SERVER['REMOTE_ADDR'];
+		}
+		$ua			= (isset($_SERVER['HTTP_USER_AGENT'])) ? '['.$_SERVER['HTTP_USER_AGENT'].']' : '[?]';
+		$body		= trim($body);
+		$sig		= SPAMLOG_SIG.' '.$type.' '.$time.' '.$tag.' - '.$originip.' - '.$user.' '.$ua.' - '.$reason.' - '.$urlcount."\n";
+		$content	= $sig.$body."\n\n";
+
+		// add data to log			@@@ use appendFile
+		return $this->appendFile($spamlogpath,$content);	# nr. of bytes written if successful, FALSE otherwise
+	}
+
+	/**
+	 * Get all meta data lines from the spamlog and return the data in an array.
+	 *
+	 * @author		{@link http://wikka.jsnx.com/JavaWoman JavaWoman}
+	 * @copyright	Copyright © 2005, Marjolein Katsma
+	 * @license		http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
+	 * @version		0.3
+	 *
+	 * @access		public
+	 *
+	 * @return		array		array with associative array for each metadata item in a line
+	 */
+	function getSpamlogSummary()
+	{
+		// set path
+		$spamlogpath = (isset($this->config['spamlog_path'])) ? $this->config['spamlog_path'] : DEF_SPAMLOG_PATH;	# @@@ make function
+		$aSummary = array();
+		$aLines = file($spamlogpath);						# get file as array so we can...
+		foreach ($aLines as $line)							# ... select the metadata
+		{
+			if (preg_match('/^'.SPAMLOG_SIG.'/',$line))
+			{
+				// gather data
+				list($header,$originIp,$userAgent,$reason,$urls) = explode(' - ',$line);
+				list(,$type,$day,$time,$page) = preg_split('/\s+/',$header);
+
+				$rc = preg_match('/^([^ ]+) \[([^\]]+)\]$/',$userAgent,$aMatches);
+				$user = (isset($aMatches[1])) ? $aMatches[1] : '?';
+				$ua   = (isset($aMatches[2])) ? $aMatches[2] : '?';
+
+				// write data
+				$aSummary[] = array('type'	=> $type,
+									'date'	=> $day.' '.$time,
+									'day'	=> $day,
+									'time'	=> $time,
+									'page'	=> $page,
+									'origin'=> $originIp,
+									'user'	=> $user,
+									'ua'	=> $ua,
+									'reason'=> $reason,
+									'urls'	=> $urls
+									);
+			}
+		}
+		return $aSummary;
+	}
+
+	// FILES (handling of text files)
+	/**
+	 * Read a local file, normalizing line endings.
+	 *
+	 * Reads a local file (not bothering to read in packets as would be needed
+	 * for network or remote files). Returns the content as a string with
+	 * normalized line endings ("\n"), or FALSE if the process failed for some
+	 * reason. Thus it is the caller's responsibility to provide a correct path
+	 * to an existing file.
+	 *
+	 * @author		{@link http://wikka.jsnx.com/JavaWoman JavaWoman}
+	 * @copyright	Copyright © 2005, Marjolein Katsma
+	 * @license		http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
+	 * @version		0.5
+	 * @todo
+	 *
+	 * @access		public
+	 * @uses		normalizeLines()
+	 *
+	 * @param		string	$file  required: relative or absolute file path
+	 * @return		mixed		normalized file content if found, FALSE if not
+	 */
+	function readFile($file)
+	{
+		#if version_compare(PHP_VERSION >= '4.3.0')
+		if (function_exists('file_get_contents'))			# gives best performance
+		{
+			$content = file_get_contents($file);
+		}
+		else												# alternative
+		{
+			$fh = @fopen($file,'r');						# suppress warning with @
+			if (!$fh)
+			{
+				$content = FALSE;
+			}
+			else
+			{
+				$content = fread($fh,filesize($file));
+				fclose($fh);
+			}
+		}
+		if (FALSE !== $content)
+		{
+			$content = $this->normalizeLines($content);		# normalize line endings
+		}
+		return $content;
+	}
+
+	/**
+	 * Writes new content to a (text) file.
+	 *
+	 * The content is normalized for line endings ("\n") before writing; this
+	 * implies this method CANNOT be used for binary files.
+	 * Returns the number of bytes written if successful, FALSE otherwise.
+	 *
+	 * @author		{@link http://wikka.jsnx.com/JavaWoman JavaWoman}
+	 * @copyright	Copyright © 2005, Marjolein Katsma
+	 * @license		http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
+	 * @version		0.5
+	 * @todo
+	 *
+	 * @access		public
+	 * @uses		normalizeLines()
+	 *
+	 * @param		string	$file		required: relative or absolute file path
+	 * @param		string	$content	required: contents be written to the file
+	 * @return		mixed				bytes written if successful, FALSE otherwise.
+	 */
+	function writeFile($file,$content)
+	{
+		$rc = FALSE;
+		$content = $this->normalizeLines($content);		# normalize line endings
+		if (function_exists('file_put_contents'))		# most efficient
+		{
+			$rc = file_put_contents($file,$content);
+#if (FALSE === $rc) echo 'file_put_contents FALSE!<br/>';
+			if (strlen($content) > 0 && $rc == 0) $rc = FALSE;		# for compatibility with fwrite() @@@ needed?
+		}
+		else											# alternative
+		{
+			$fh = @fopen($file,'w');					# open file for writing; suppress warning with @
+			if (FALSE !== $fh)
+			{
+				$rc = @fwrite($fh,$content);
+				fclose($fh);
+			}
+		}
+		return $rc;										# number of bytes written or FALSE if writing failed
+	}
+
+	/**
+	 * Appends new content to an existing file.
+	 *
+	 * The content is normalized for line endings ("\n") before writing; this
+	 * implies this method CANNOT be used for binary files.
+	 * Returns the number of bytes written if successful, FALSE otherwise.
+	 *
+	 * @author		{@link http://wikka.jsnx.com/JavaWoman JavaWoman}
+	 * @copyright	Copyright © 2005, Marjolein Katsma
+	 * @license		http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
+	 * @version		0.5
+	 * @todo
+	 *
+	 * @access		public
+	 * @uses		normalizeLines()
+	 *
+	 * @param		string	$file		required: relative or absolute file path
+	 * @param		string	$content	required: contents be written to the file
+	 * @return		mixed				bytes written if successful, FALSE otherwise.
+	 */
+	function appendFile($file,$content)
+	{
+		$rc = FALSE;
+		$content = $this->normalizeLines($content);		# normalize line endings
+		if (function_exists('file_put_contents'))		# most efficient
+		{
+			$rc = file_put_contents($file,$content,FILE_APPEND);
+			if (strlen($content) > 0 && $rc == 0) $rc = FALSE;		# for compatibility with fwrite() @@@ needed?
+		}
+		else											# alternative
+		{
+			$fh = @fopen($file,'a');				# open file for appending/writing; suppress warning with @
+			if (FALSE !== $fh)
+			{
+				$rc = @fwrite($fh,$content);
+				fclose($fh);
+			}
+		}
+		return $rc;										# number of bytes written or FALSE if writing failed
+	}
+
+
 
 	/**#@-*/
 
@@ -3661,6 +3998,24 @@ class Wakka
 	}
 
 	/**
+	 * Select and load a single comment.
+	 *
+	 * @author		{@link http://wikka.jsnx.com/JavaWoman JavaWoman}
+	 * @copyright	Copyright © 2005, Marjolein Katsma
+	 * @license		http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
+	 *
+	 * @access	public
+	 * @uses	LoadAll()
+	 *
+	 * @param	integer	$comment_id	required: id of comment to be deleted
+	 * @return	array 				associative array with comment data.
+	 */
+	function loadCommentId($comment_id)
+	{
+		return $this->LoadSingle("SELECT * FROM ".$this->config["table_prefix"]."comments WHERE id = '".$comment_id."'");
+	}
+
+	/**
 	 * Traverse comments in threaded order
 	 *
 	 * @uses	Wakka::GetConfigValue()
@@ -3878,6 +4233,26 @@ class Wakka
 				parent = ".$parent_id.",
 				user = '".mysql_real_escape_string($user)."'"
 			);
+	}
+
+	/**
+	 * Delete a comment.
+	 *
+	 * @author		{@link http://wikka.jsnx.com/JavaWoman JavaWoman}
+	 * @copyright	Copyright © 2005, Marjolein Katsma
+	 * @license		http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
+	 *
+	 * @access	public
+	 * @uses	Query()
+	 *
+	 * @param	integer	$comment_id	required: id of comment to be deleted
+	 * @return	boolean 			TRUE if successful, FALSE otherwise.
+	 */
+	function deleteComment($comment_id)
+	{
+		$rc = $this->Query("DELETE FROM ".$this->config["table_prefix"]."comments ".
+							"WHERE id = '".$comment_id."'");
+		return $rc;
 	}
 
 	/**#@-*/
@@ -4209,6 +4584,145 @@ class Wakka
 
 		// tough luck.
 		return FALSE;
+	}
+
+	// ANTI-SPAM
+	/**
+	 * Read contents of badwords file.
+	 *
+	 * Reads the content of the badwords file. Return contents as string if found, FALSE if not.
+	 *
+	 * @author		{@link http://wikka.jsnx.com/JavaWoman JavaWoman}
+	 * @copyright	Copyright © 2005, Marjolein Katsma
+	 * @license		http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
+	 * @version		0.5
+	 *
+	 * @access		public
+	 *
+	 * @return		mixed		normalized file content (sorted) if found, FALSE if not
+	 */
+	function readBadWords()
+	{
+		$badwordspath = (isset($this->config['badwords_path'])) ? $this->config['badwords_path'] : DEF_BADWORDS_PATH;	# @@@ make function
+		if (file_exists($badwordspath))
+		{
+			$aBadWords = file($badwordspath);				# get file as array so we can...
+			$aBadWords = array_unique($aBadWords);			# ...remove duplicates...
+			function _rot13($val) {
+				return str_rot13($val);
+			};
+			$aBadWords = array_map("_rot13", $aBadWords);
+
+			natcasesort($aBadWords);						# ...and sort
+			$badwords = $this->normalizeLines(implode('',$aBadWords));	# turn back into string
+		}
+		else
+		{
+			$badwords = FALSE;
+		}
+		return $badwords;
+	}
+
+	/**
+	 * Writes or rewrites the badwords file from a string with one word per line.
+	 *
+	 * Input must be a string with (preferably) one word per line; empty lines are filtered.
+	 * If the file exists, it is overwritten with the new content.
+	 * Returns TRUE if successful, FALSE otherwise.
+	 *
+	 * @author		{@link http://wikka.jsnx.com/JavaWoman JavaWoman}
+	 * @copyright	Copyright © 2005, Marjolein Katsma
+	 * @license		http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
+	 * @version		0.6
+	 *
+	 * @access		public
+	 * @uses		writeFile()
+	 *
+	 * @param		string	$lines	lines with one bad word on each
+	 * @return		mixed			bytes written if successful, FALSE otherwise.
+	 */
+	function writeBadWords($lines)
+	{
+		$badwordspath = (isset($this->config['badwords_path'])) ? $this->config['badwords_path'] : DEF_BADWORDS_PATH;	# @@@ make function
+		$rc = FALSE;
+		if (file_exists($badwordspath))
+		{
+			// build content
+			$lines = $this->normalizeLines($lines);			# normalize line endings (needed for explode!)
+			$lines = preg_replace('/[ \t]+/',"\n",$lines);	# split any multiple-word lines
+			$aBadWords = explode("\n",$lines);				# turn into array so we can...
+			$aBadWords = array_unique($aBadWords);			# ...remove duplicates
+			natcasesort($aBadWords);						# ...and sort
+			$badwords = '';
+			foreach ($aBadWords as $word)
+			{
+				if ('' !== $word) $badwords .= str_rot13($word)."\n";	# get rid of empty lines
+			}
+			$content = trim($badwords);
+			// write to file
+			$rc = $this->writeFile($badwordspath,$content);
+		}
+		return $rc;											# number of bytes written or FALSE if writing failed
+	}
+
+	/**
+	 * Retrieves badwords in a format ready for a RegEx, with '|' between each word.
+	 *
+	 * Turns the content of the badwords file into a RegEx (minus delimiters).
+	 * Return contents as a string if there is any; FALSE if file not found or empty.
+	 *
+	 * @author		{@link http://wikka.jsnx.com/JavaWoman JavaWoman}
+	 * @copyright	Copyright © 2005, Marjolein Katsma
+	 * @license		http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
+	 * @version		0.5
+	 *
+	 * @access		public
+	 * @uses		readBadWords()
+	 *
+	 * @return		mixed		RegEx with words if found and not empty, FALSE otherwise
+	 */
+	function getBadWords()
+	{
+		$badwords = $this->readBadWords();
+		if (FALSE === $badwords || '' == $badwords)
+		{
+			return FALSE;
+		}
+		else
+		{
+			return '('.str_replace("\n",'|',$badwords).')';
+		}
+	}
+
+	/**
+	 * Check content to see if it contains any bad words.
+	 *
+	 * Uses a RegEx built by getBadWords() to check the given content.
+	 * Returns TRUE if teh content contains any of the bad words, FALSE otherwise.
+	 *
+	 * @author		{@link http://wikka.jsnx.com/JavaWoman JavaWoman}
+	 * @copyright	Copyright © 2005, Marjolein Katsma
+	 * @license		http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
+	 * @version		0.5
+	 *
+	 * @access		public
+	 * @uses		getBadWords()
+	 * @todo
+	 *
+	 * @param		string $content	string to check for occurrence of bad words
+	 * @return		boolean			TRUE if content contains badwords, FALSE otherwise
+	 */
+	function hasBadWords($content)
+	{
+		$re = $this->getBadWords();
+		if (FALSE === $re)
+		{
+			return FALSE;					# no match since no words are defined
+		}
+		else
+		{
+			return preg_match('/'.$re.'/i',$content);		# case-insensitive comparison
+		}
 	}
 
 	/**#@-*/
