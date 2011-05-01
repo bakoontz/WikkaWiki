@@ -185,7 +185,9 @@ case "0":
 
 	update_default_page(array(
 	'_rootpage', 
+	'AdminBadWords',
 	'AdminPages',
+	'AdminSpamLog',
 	'AdminUsers',
 	'CategoryAdmin',
 	'CategoryCategory', 
@@ -213,6 +215,7 @@ case "0":
 	'WikiCategory', 
 	'WikkaConfig', 
 	'WikkaDocumentation', 
+	'WikkaMenulets',
 	'WikkaReleaseNotes'), $dblink, $config, $lang_defaults_path, $lang_defaults_fallback_path); 
 
 	test('Building links table...', 1);
@@ -231,6 +234,9 @@ case "0":
 	mysql_query("insert into ".$config['table_prefix']."acls set page_tag = 'SysInfo', read_acl = '!*', write_acl = '!*', comment_read_acl = '!*', comment_post_acl = '!*'", $dblink);
 	mysql_query("insert into ".$config['table_prefix']."acls set page_tag = 'WikkaConfig', read_acl = '!*', write_acl = '!*', comment_read_acl = '!*', comment_post_acl = '!*'", $dblink);
 	mysql_query("insert into ".$config['table_prefix']."acls set page_tag = 'DatabaseInfo', read_acl = '!*', write_acl = '!*', comment_read_acl = '!*', comment_post_acl = '!*'", $dblink);
+	mysql_query("insert into ".$config['table_prefix']."acls set page_tag = 'WikkaMenulets', read_acl = '!*', write_acl = '!*', comment_read_acl = '!*', comment_post_acl = '!*'", $dblink);
+	mysql_query("insert into ".$config['table_prefix']."acls set page_tag = 'AdminBadWords', read_acl = '!*', write_acl = '!*', comment_read_acl = '!*', comment_post_acl = '!*'", $dblink);
+	mysql_query("insert into ".$config['table_prefix']."acls set page_tag = 'AdminSpamLog', read_acl = '!*', write_acl = '!*', comment_read_acl = '!*', comment_post_acl = '!*'", $dblink);
 
 	// Register admin user
 	$challenge = dechex(crc32(time()));
@@ -574,6 +580,15 @@ case "1.3.1":
 			 "config/options_menu.user.inc.prev");
 	test(__('Adding challenge field').'...',
 	@mysql_query("ALTER TABLE ".$config['table_prefix']."users ADD challenge VARCHAR( 8 ) NOT NULL default ''", $dblink), __('Already done?  OK!'), 0);
+case "1.4":
+	update_default_page(array(
+	'AdminBadWords',
+	'AdminSpamLog',
+	'WikkaMenulets'), $dblink, $config, $lang_defaults_path, $lang_defaults_fallback_path); 
+	test("Setting default ACL...", 1);
+	mysql_query("insert into ".$config['table_prefix']."acls set page_tag = 'WikkaMenulets', read_acl = '!*', write_acl = '!*', comment_read_acl = '!*', comment_post_acl = '!*'", $dblink);
+	mysql_query("insert into ".$config['table_prefix']."acls set page_tag = 'AdminBadWords', read_acl = '!*', write_acl = '!*', comment_read_acl = '!*', comment_post_acl = '!*'", $dblink);
+	mysql_query("insert into ".$config['table_prefix']."acls set page_tag = 'AdminSpamLog', read_acl = '!*', write_acl = '!*', comment_read_acl = '!*', comment_post_acl = '!*'", $dblink);
 }
 
 // #600: Force reloading of stylesheet.
