@@ -1118,7 +1118,7 @@ $text = preg_replace_callback(
 	"\{\{.*?\}\}|".
 	# InterWiki link (deprecated, as pagenames may now contain spaces)
 	# Use forced links with a | separator instead
-	"\b[A-ZÄÖÜ][A-Za-zÄÖÜßäöü]+[:](?![=_])\S*\b|".
+	"\b[A-ZÄÖÜ][A-Za-zÄÖÜßäöü]+[:](?![=_#])\S*\b|".
 	# CamelWords
 	"\b([A-ZÄÖÜ]+[a-zßäöü]+[A-Z0-9ÄÖÜ][A-Za-z0-9ÄÖÜßäöü]*)\b|".
 	#ampersands! Track single ampersands or any htmlentity-like (&...;)
