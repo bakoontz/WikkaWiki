@@ -172,7 +172,7 @@ if($this->IsAdmin() && TRUE == $this->config['enable_version_check'])
 			{
 				echo '<div class="debug">'.sprintf(T_("[%s from host %s]"),$latest,$ip).'</div>'."\n";	
 			}
-			if("raw" == $vars['display'])
+			if(isset($vars['display']) && "raw" == $vars['display'])
 			{
 				echo $latest;
 			}
