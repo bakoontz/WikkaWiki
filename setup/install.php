@@ -462,6 +462,69 @@ case "1.2":
 		'WikkaConfig'), $dblink, $config, $lang_defaults_path, $lang_defaults_fallback_path, $upgrade_note);
 case "1.3":
 case "1.3.1":
+	// Dropping obsolete "handler" field from pages table, refs #452
+	test('Removing handler field from the pages table...',
+	@mysql_query("ALTER TABLE ".$config["table_prefix"]."pages DROP handler", $dblink), __('Already done? Hmm!'), 0);
+	// Support for threaded comments
+	test("Adding fields to comments table to enable threading...",  
+	mysql_query("alter table ".$config["table_prefix"]."comments add parent int(10) unsigned default NULL", $dblink), "Already done? OK!", 0);
+	test("Adding fields to comments table to enable threading...",
+	mysql_query("alter table ".$config["table_prefix"]."users add default_comment_display enum('date_asc', 'date_desc', 'threaded') NOT NULL default 'threaded'", $dblink), "Already done? OK!", 0);
+	test("Adding fields to comments table to enable threading...",  
+	mysql_query("alter table ".$config["table_prefix"]."comments add status enum('deleted') default NULL", $dblink), "Already done? OK!", 0);
+	// Create new fields for comment_read_acl and comment_post_acl, 
+	// and copy existing comment_acl values to these new fields 
+	test('Creating new comment_read_acl field...', 
+	@mysql_query("alter table ".$config['table_prefix']."acls add comment_read_acl text not null", $dblink), __('Already done?  OK!'), 0); 
+	test('Creating new comment_post_acl field...', 
+	@mysql_query("alter table ".$config['table_prefix']."acls add comment_post_acl text not null", $dblink), __('Already done?  OK!'), 0); 
+	test('Copying existing comment_acls to new fields...', 
+	@mysql_query("update ".$config['table_prefix']."acls as a inner join(select page_tag, comment_acl from ".$config['table_prefix']."acls) as b on a.page_tag = b.page_tag set a.comment_read_acl=b.comment_acl, a.comment_post_acl=b.comment_acl", $dblink), __('Failed').'. ?', 1);
+	test('Drop old comment acl...', 
+	@mysql_query("alter table ".$config['table_prefix']."acls drop comment_acl", $dblink), __('Failed').'. ?', 1);
+	test(__('Creating index on owner column').'...', 
+	@mysql_query('alter table '.$config['table_prefix'].'pages add index `idx_owner` (`owner`)', $dblink), __('Already done?  OK!'), 0); 
+  	test(__('Altering referrers table structure').'...',
+		@mysql_query("ALTER TABLE ".$config['table_prefix']."referrers MODIFY referrer varchar(255) NOT NULL default ''", $dblink), "Failed. ?", 1);
+	test(__('Altering referrer blacklist table structure').'...',
+		@mysql_query("ALTER TABLE ".$config['table_prefix']."referrer_blacklist MODIFY spammer varchar(255) NOT NULL default ''", $dblink), "Failed. ?", 1);
+	update_default_page(array(
+		'FormattingRules',
+		'SysInfo', 
+		'WikkaReleaseNotes',
+		'TableMarkup', 
+		'TableMarkupReference', 
+		'WikkaConfig'), $dblink, $config, $lang_defaults_path, $lang_defaults_fallback_path, $upgrade_note);
+	// Backup config/ files
+	if(file_exists("config/main_menu.admin.inc"))
+		brute_copy("config/main_menu.admin.inc", 
+			 "config/main_menu.admin.inc.prev");	
+	if(file_exists("config/main_menu.inc"))
+		brute_copy("config/main_menu.inc", 
+			 "config/main_menu.inc.prev");	
+	if(file_exists("config/main_menu.user.inc"))
+		brute_copy("config/main_menu.user.inc", 
+			 "config/main_menu.user.inc.prev");	
+	if(file_exists("config/options_menu.admin.inc"))
+		brute_copy("config/options_menu.admin.inc", 
+			 "config/options_menu.admin.inc.prev");	
+	if(file_exists("config/options_menu.inc"))
+		brute_copy("config/options_menu.inc", 
+			 "config/options_menu.inc.prev");	
+	if(file_exists("config/options_menu.user.inc"))
+		brute_copy("config/options_menu.user.inc", 
+			 "config/options_menu.user.inc.prev");
+	test(__('Adding challenge field').'...',
+	@mysql_query("ALTER TABLE ".$config['table_prefix']."users ADD challenge VARCHAR( 8 ) NOT NULL default ''", $dblink), __('Already done?  OK!'), 0);
+case "trunk":
+	update_default_page(array(
+	'AdminBadWords',
+	'AdminSpamLog',
+	'WikkaMenulets'), $dblink, $config, $lang_defaults_path, $lang_defaults_fallback_path); 
+	test("Setting default ACL...", 1);
+	mysql_query("insert into ".$config['table_prefix']."acls set page_tag = 'WikkaMenulets', read_acl = '!*', write_acl = '!*', comment_read_acl = '!*', comment_post_acl = '!*'", $dblink);
+	mysql_query("insert into ".$config['table_prefix']."acls set page_tag = 'AdminBadWords', read_acl = '!*', write_acl = '!*', comment_read_acl = '!*', comment_post_acl = '!*'", $dblink);
+	mysql_query("insert into ".$config['table_prefix']."acls set page_tag = 'AdminSpamLog', read_acl = '!*', write_acl = '!*', comment_read_acl = '!*', comment_post_acl = '!*'", $dblink);
 	// Converting DB UTF-8 (but data remains
 	// unchanged -- this is handled by a standalone script)	
 	test("Setting up database for UTF-8...", true);
@@ -521,74 +584,10 @@ case "1.3.1":
 	@mysql_query("ALTER TABLE ".$config['table_prefix']."sessions DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci", $dblink);
 	@mysql_query("ALTER TABLE ".$config['table_prefix']."sessions CHANGE `sessionid` `sessionid` CHAR( 32 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL", $dblink); // refs #1022
 	@mysql_query("ALTER TABLE ".$config['table_prefix']."sessions CHANGE `userid` `userid` VARCHAR( 75 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL", $dblink);
-
-	// Dropping obsolete "handler" field from pages table, refs #452
-	test('Removing handler field from the pages table...',
-	@mysql_query("ALTER TABLE ".$config["table_prefix"]."pages DROP handler", $dblink), __('Already done? Hmm!'), 0);
-	// Support for threaded comments
-	test("Adding fields to comments table to enable threading...",  
-	mysql_query("alter table ".$config["table_prefix"]."comments add parent int(10) unsigned default NULL", $dblink), "Already done? OK!", 0);
-	test("Adding fields to comments table to enable threading...",
-	mysql_query("alter table ".$config["table_prefix"]."users add default_comment_display enum('date_asc', 'date_desc', 'threaded') NOT NULL default 'threaded'", $dblink), "Already done? OK!", 0);
-	test("Adding fields to comments table to enable threading...",  
-	mysql_query("alter table ".$config["table_prefix"]."comments add status enum('deleted') default NULL", $dblink), "Already done? OK!", 0);
 	// Adding challenge, refs #1023
 	test("Adding challenge field to users table to improve security...",  
 	mysql_query("alter table ".$config["table_prefix"]."users add challenge varchar(8) COLLATE utf8_unicode_ci DEFAULT ''", $dblink), "Already done? OK!", 0);
 	@mysql_query("UPDATE ".$config['table_prefix']."users SET challenge='' WHERE challenge='00000000'", $dblink);
-	// Create new fields for comment_read_acl and comment_post_acl, 
-	// and copy existing comment_acl values to these new fields 
-	test('Creating new comment_read_acl field...', 
-	@mysql_query("alter table ".$config['table_prefix']."acls add comment_read_acl text not null", $dblink), __('Already done?  OK!'), 0); 
-	test('Creating new comment_post_acl field...', 
-	@mysql_query("alter table ".$config['table_prefix']."acls add comment_post_acl text not null", $dblink), __('Already done?  OK!'), 0); 
-	test('Copying existing comment_acls to new fields...', 
-	@mysql_query("update ".$config['table_prefix']."acls as a inner join(select page_tag, comment_acl from ".$config['table_prefix']."acls) as b on a.page_tag = b.page_tag set a.comment_read_acl=b.comment_acl, a.comment_post_acl=b.comment_acl", $dblink), __('Failed').'. ?', 1);
-	test('Drop old comment acl...', 
-	@mysql_query("alter table ".$config['table_prefix']."acls drop comment_acl", $dblink), __('Failed').'. ?', 1);
-	test(__('Creating index on owner column').'...', 
-	@mysql_query('alter table '.$config['table_prefix'].'pages add index `idx_owner` (`owner`)', $dblink), __('Already done?  OK!'), 0); 
-  	test(__('Altering referrers table structure').'...',
-		@mysql_query("ALTER TABLE ".$config['table_prefix']."referrers MODIFY referrer varchar(255) NOT NULL default ''", $dblink), "Failed. ?", 1);
-	test(__('Altering referrer blacklist table structure').'...',
-		@mysql_query("ALTER TABLE ".$config['table_prefix']."referrer_blacklist MODIFY spammer varchar(255) NOT NULL default ''", $dblink), "Failed. ?", 1);
-	update_default_page(array(
-		'FormattingRules',
-		'SysInfo', 
-		'WikkaReleaseNotes',
-		'TableMarkup', 
-		'TableMarkupReference', 
-		'WikkaConfig'), $dblink, $config, $lang_defaults_path, $lang_defaults_fallback_path, $upgrade_note);
-	// Backup config/ files
-	if(file_exists("config/main_menu.admin.inc"))
-		brute_copy("config/main_menu.admin.inc", 
-			 "config/main_menu.admin.inc.prev");	
-	if(file_exists("config/main_menu.inc"))
-		brute_copy("config/main_menu.inc", 
-			 "config/main_menu.inc.prev");	
-	if(file_exists("config/main_menu.user.inc"))
-		brute_copy("config/main_menu.user.inc", 
-			 "config/main_menu.user.inc.prev");	
-	if(file_exists("config/options_menu.admin.inc"))
-		brute_copy("config/options_menu.admin.inc", 
-			 "config/options_menu.admin.inc.prev");	
-	if(file_exists("config/options_menu.inc"))
-		brute_copy("config/options_menu.inc", 
-			 "config/options_menu.inc.prev");	
-	if(file_exists("config/options_menu.user.inc"))
-		brute_copy("config/options_menu.user.inc", 
-			 "config/options_menu.user.inc.prev");
-	test(__('Adding challenge field').'...',
-	@mysql_query("ALTER TABLE ".$config['table_prefix']."users ADD challenge VARCHAR( 8 ) NOT NULL default ''", $dblink), __('Already done?  OK!'), 0);
-case "1.4":
-	update_default_page(array(
-	'AdminBadWords',
-	'AdminSpamLog',
-	'WikkaMenulets'), $dblink, $config, $lang_defaults_path, $lang_defaults_fallback_path); 
-	test("Setting default ACL...", 1);
-	mysql_query("insert into ".$config['table_prefix']."acls set page_tag = 'WikkaMenulets', read_acl = '!*', write_acl = '!*', comment_read_acl = '!*', comment_post_acl = '!*'", $dblink);
-	mysql_query("insert into ".$config['table_prefix']."acls set page_tag = 'AdminBadWords', read_acl = '!*', write_acl = '!*', comment_read_acl = '!*', comment_post_acl = '!*'", $dblink);
-	mysql_query("insert into ".$config['table_prefix']."acls set page_tag = 'AdminSpamLog', read_acl = '!*', write_acl = '!*', comment_read_acl = '!*', comment_post_acl = '!*'", $dblink);
 }
 
 // #600: Force reloading of stylesheet.
