@@ -440,6 +440,7 @@ case "1.1.6.4":
 case "1.1.6.5":
 case "1.1.6.6":
 case "1.1.6.7":
+	print("<strong>1.1.6.7 to 1.2 changes:</strong><br />\n");
 	test("Adding theme field to user preference table...",
 	@mysql_query("ALTER TABLE ".$config['table_prefix']."users ADD
 	theme varchar(50) default ''", $dblink), "Already done? OK!", 0);
@@ -453,6 +454,7 @@ case "1.1.6.7":
 	@mysql_query("insert into ".$config['table_prefix']."acls set page_tag = 'DatabaseInfo', read_acl = '!*', write_acl = '!*', comment_acl = '!*', comment_read_acl = '!*', comment_post_acl = '!*'", $dblink), __('Already done? OK!'), 0);
 	update_default_page('FormattingRules', $dblink, $config, $lang_defaults_path, $lang_defaults_fallback_path, $upgrade_note);
 case "1.2":
+	print("<strong>1.2 to 1.3.1 changes:</strong><br />\n");
 	test(sprintf(ADDING_CONFIG_ENTRY, 'enable_user_host_lookup' ), 1);
 	$config['enable_user_host_lookup'] = '1';
 	update_default_page(array(
@@ -460,11 +462,9 @@ case "1.2":
 		'TableMarkup', 
 		'TableMarkupReference', 
 		'WikkaConfig'), $dblink, $config, $lang_defaults_path, $lang_defaults_fallback_path, $upgrade_note);
-case "1.3":
-case "1.3.1":
 	// Dropping obsolete "handler" field from pages table, refs #452
 	test('Removing handler field from the pages table...',
-	@mysql_query("ALTER TABLE ".$config["table_prefix"]."pages DROP handler", $dblink), __('Already done? Hmm!'), 0);
+	@mysql_query("ALTER TABLE ".$config["table_prefix"]."pages DROP handler", $dblink), __('Already done? OK!'), 0);
 	// Support for threaded comments
 	test("Adding fields to comments table to enable threading...",  
 	mysql_query("alter table ".$config["table_prefix"]."comments add parent int(10) unsigned default NULL", $dblink), "Already done? OK!", 0);
@@ -479,15 +479,15 @@ case "1.3.1":
 	test('Creating new comment_post_acl field...', 
 	@mysql_query("alter table ".$config['table_prefix']."acls add comment_post_acl text not null", $dblink), __('Already done?  OK!'), 0); 
 	test('Copying existing comment_acls to new fields...', 
-	@mysql_query("update ".$config['table_prefix']."acls as a inner join(select page_tag, comment_acl from ".$config['table_prefix']."acls) as b on a.page_tag = b.page_tag set a.comment_read_acl=b.comment_acl, a.comment_post_acl=b.comment_acl", $dblink), __('Failed').'. ?', 1);
+	@mysql_query("update ".$config['table_prefix']."acls as a inner join(select page_tag, comment_acl from ".$config['table_prefix']."acls) as b on a.page_tag = b.page_tag set a.comment_read_acl=b.comment_acl, a.comment_post_acl=b.comment_acl", $dblink), __('Already done?  OK!'), 0);
 	test('Drop old comment acl...', 
-	@mysql_query("alter table ".$config['table_prefix']."acls drop comment_acl", $dblink), __('Failed').'. ?', 1);
+	@mysql_query("alter table ".$config['table_prefix']."acls drop comment_acl", $dblink), __('Already done?  OK!'), 0);
 	test(__('Creating index on owner column').'...', 
 	@mysql_query('alter table '.$config['table_prefix'].'pages add index `idx_owner` (`owner`)', $dblink), __('Already done?  OK!'), 0); 
   	test(__('Altering referrers table structure').'...',
-		@mysql_query("ALTER TABLE ".$config['table_prefix']."referrers MODIFY referrer varchar(255) NOT NULL default ''", $dblink), "Failed. ?", 1);
+	@mysql_query("ALTER TABLE ".$config['table_prefix']."referrers MODIFY referrer varchar(255) NOT NULL default ''", $dblink), __('Already done?  OK!'), 0);
 	test(__('Altering referrer blacklist table structure').'...',
-		@mysql_query("ALTER TABLE ".$config['table_prefix']."referrer_blacklist MODIFY spammer varchar(255) NOT NULL default ''", $dblink), "Failed. ?", 1);
+	@mysql_query("ALTER TABLE ".$config['table_prefix']."referrer_blacklist MODIFY spammer varchar(255) NOT NULL default ''", $dblink), __('Already done?  OK!'), 0);
 	update_default_page(array(
 		'FormattingRules',
 		'SysInfo', 
@@ -514,9 +514,9 @@ case "1.3.1":
 	if(file_exists("config/options_menu.user.inc"))
 		brute_copy("config/options_menu.user.inc", 
 			 "config/options_menu.user.inc.prev");
-	test(__('Adding challenge field').'...',
-	@mysql_query("ALTER TABLE ".$config['table_prefix']."users ADD challenge VARCHAR( 8 ) NOT NULL default ''", $dblink), __('Already done?  OK!'), 0);
-case "trunk":
+case "1.3":
+case "1.3.1":
+	print("<strong>1.3.1 to 1.4 changes:</strong><br />\n");
 	update_default_page(array(
 	'AdminBadWords',
 	'AdminSpamLog',
@@ -585,9 +585,11 @@ case "trunk":
 	@mysql_query("ALTER TABLE ".$config['table_prefix']."sessions CHANGE `sessionid` `sessionid` CHAR( 32 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL", $dblink); // refs #1022
 	@mysql_query("ALTER TABLE ".$config['table_prefix']."sessions CHANGE `userid` `userid` VARCHAR( 75 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL", $dblink);
 	// Adding challenge, refs #1023
-	test("Adding challenge field to users table to improve security...",  
-	mysql_query("alter table ".$config["table_prefix"]."users add challenge varchar(8) COLLATE utf8_unicode_ci DEFAULT ''", $dblink), "Already done? OK!", 0);
+	test("Adding/updating challenge field to users table to improve security...",  
+	@mysql_query("alter table ".$config["table_prefix"]."users ADD challenge varchar(8) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT ''", $dblink), __("Already done? OK!"), 0);
+	@mysql_query("alter table ".$config["table_prefix"]."users CHANGE `challenge` `challenge` varchar(8) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT ''", $dblink);
 	@mysql_query("UPDATE ".$config['table_prefix']."users SET challenge='' WHERE challenge='00000000'", $dblink);
+case "1.4":
 }
 
 // #600: Force reloading of stylesheet.
