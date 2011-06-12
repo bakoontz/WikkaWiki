@@ -284,7 +284,9 @@ else if ($this->HasAccess("write") && $this->HasAccess("read"))
 }
 else
 {
-	$message = '<em class="error">'.sprintf(T_("You don't have write access to this page. You might need to <a href=\"%s\">login</a> or <a href=\"%s\">register an account</a> to be able to edit this page.", $this->Href('', 'UserSettings'), $this->Href('', 'UserSettings'))).'</em><br />'."\n".
+	$message = '<em class="error">'.
+		sprintf(T_( "You don't have write access to this page. You might need to <a href=\"%s\">login</a> or <a href=\"%s\">register an account</a> to be able to edit this page."), $this->Href('', 'UserSettings'), $this->Href('', 'UserSettings')).
+			'</em><br />'."\n".
 			"<br />\n".
 			'<a href="'.$this->Href('showcode').'" title="'.T_("Click to view page formatting code").'">'.T_("View formatting code for this page").'</a>'.
 			"<br />\n";
