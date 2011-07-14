@@ -104,7 +104,9 @@ if (preg_match("/^(http|https):\/\/([^\\s\"<>]+)$/i", $rss_path))
 	while ($max_items > 0 && ($item = $rss->getNextItem()))
 	{
 		$cached_output .= "<li><a href=\"".$item['link']."\">".$item['title']."</a><br />\n";
-		$cached_output .= $item['description']."</li>\n";
+		if(isset($item['description']))
+			$cached_output .= $item['description'];
+		$cached_output .= "</li>\n";
 		$max_items = $max_items - 1;
 	}
 	$cached_output .= "</ul>\n";

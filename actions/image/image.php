@@ -39,7 +39,7 @@ if (is_array($vars))
 	foreach ($vars as $param => $value)
 	{
 		$value = $this->htmlspecialchars_ent($value);
-		if ($param == 'src' && $vars['url'] == '') {$vars['url']=$value;}
+		if ($param == 'src' && $vars['url'] == '' || !isset($vars['url'])) {$vars['url']=$value;}
 		if ($param == 'title') {$title = $this->htmlspecialchars_ent($vars['title']);}
 		if ($param == 'class') {$class = $this->htmlspecialchars_ent($vars['class']);}
 		if ($param == 'alt') {$alt = $this->htmlspecialchars_ent($vars['alt']);}
