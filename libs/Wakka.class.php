@@ -2628,10 +2628,11 @@ class Wakka
 	 * @param	boolean	$escapeText	optional:
 	 * @param	string	$title		optional:
 	 * @param	string	$class		optional:
+	 * @param   boolean $assumePageExists	optional:
 	 * @return	string	an HTML hyperlink (a href) element
 	 * @todo	move regexps to regexp-library		#34
 	 */
-	function Link($tag, $handler='', $text='', $track=TRUE, $escapeText=TRUE, $title='', $class='')
+	function Link($tag, $handler='', $text='', $track=TRUE, $escapeText=TRUE, $title='', $class='', $assumePageExists=TRUE)
 	{
 		// init
 		if (!$text)
@@ -2688,7 +2689,7 @@ class Wakka
 			{
 				$this->TrackLinkTo($tag);
 			}
-			if (!$this->existsPage($tag))
+			if (!$assumePageExists && !$this->existsPage($tag))
 			{
 				$link = '<a class="missingpage" href="'.$this->Href('edit', $tag).'" title="'.T_("Create this page").'">'.$text.'</a>';
 			}
