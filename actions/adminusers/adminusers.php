@@ -307,7 +307,7 @@ if ($this->IsAdmin($this->GetUser()))
 		if(!in_array($d, $sort_order)) $d = "desc";
 		// start record
 		$s = (isset($_GET['s'])) ? $this->GetSafeVar('s', 'get') : ADMINUSERS_DEFAULT_START;
-		if (!(int)$s >=0) $s = ADMINUSERS_DEFAULT_START;
+		if ((int)$s < 0) $s = ADMINUSERS_DEFAULT_START;
 	
 		// search string
 		$search = ADMINUSERS_DEFAULT_SEARCH; 
