@@ -340,15 +340,21 @@ class Wakka
 	 *							prefix will be automatically added
 	 * @param	string	$where	optional: criteria to be specified for a WHERE clause;
 	 *							do not include WHERE
+	 * @param   boolean $usePrefix optional: if true, append prefix defined in wikka.config.php file; if false, do not append prefix
 	 * @return	integer	number of matches returned by MySQL
 	 */
-	function getCount($table, $where='')							# JW 2005-07-16
+	function getCount($table, $where='', $usePrefix=TRUE)							# JW 2005-07-16
 	{
 		// build query
+		$prefix = '';
+		if(TRUE===$usePrefix)
+		{
+			$prefix = $this->GetConfigValue('table_prefix');
+		}
 		$where = ('' != $where) ? ' WHERE '.$where : '';
 		$query = "
 			SELECT COUNT(*)
-			FROM ".$this->GetConfigValue('table_prefix').$table.
+			FROM ".$prefix.$table.
 			$where;
 
 		// get and return the count as an integer
