@@ -55,7 +55,7 @@ if ($this->IsAdmin() || ($this->UserIsOwner($tag) && (bool) $this->GetConfigValu
 			$this->Query("DELETE FROM ".$this->GetConfigValue('table_prefix')."referrers WHERE page_tag = '".mysql_real_escape_string($tag)."'");
 
 			// redirect back to main page
-			$this->Redirect($this->GetConfigValue('base_url'), T_("Page has been deleted!"));
+			$this->Redirect(WIKKA_BASE_URL, T_("Page has been deleted!"));
 		}
 	}
 	else

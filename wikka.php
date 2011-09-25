@@ -229,7 +229,7 @@ $wakkaDefaultConfig = array(
 
 	'root_page'					=> 'HomePage',
 	'wakka_name'				=> 'MyWikkaSite',
-	'base_url'					=> $t_scheme.$t_domain.$t_port.$t_request.$t_query,
+//	'base_url'					=> $t_scheme.$t_domain.$t_port.$t_request.$t_query,
 	'rewrite_mode'				=> $t_rewrite_mode,
 	'wiki_suffix'				=> '@wikka',
 	'enable_user_host_lookup'	=> '0',	#enable (1) or disable (0, default) lookup of user hostname from IP address

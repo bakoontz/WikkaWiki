@@ -62,6 +62,12 @@ if (!defined('PATTERN_REPLACE_IMG_WITH_ALTTEXT')) define('PATTERN_REPLACE_IMG_WI
 if (!defined('PATTERN_INVALID_ID_CHARS')) define ('PATTERN_INVALID_ID_CHARS', '/[^A-Za-z0-9_:.-\s]/');
 /**#@-*/
 
+/**#@+
+ * String constant defining a regularly used bit of constant text.
+ */
+if (!defined('WIKKA_URL_EXTENSION')) define('WIKKA_URL_EXTENSION', 'wikka.php?wakka=');
+/**#@-*/
+
 /**
  * The Wikka core class.
  *
@@ -206,6 +212,19 @@ class Wakka
 	 * @var		array()
 	 */
 	var $anon_users = array();
+	/**#@-*/
+
+	/**#@+*
+	 * URL or URL component, derived just once in {@link Wakka::Run()} for later usage.
+	 */
+	/**
+	 * Complete Wikka URL ready to append a page name to.
+	 * Derived from {@link WIKKA_BASE_URL} and (if rewrite mode is NOT on)
+	 * {@link WIKKA_URL_EXTENSION} concatenated.
+	 *
+	 * @var string
+	 */
+	var $wikka_url = '';
 	/**#@-*/
 
 	/**
@@ -2551,7 +2570,6 @@ class Wakka
 	 * @access	public
 	 * @since	Wikka 1.1.6.2
 	 *
-	 * @uses	Config::$base_url
 	 * @param	string	$url: destination URL; if not specified redirect to the same page.
 	 * @param	string	$message: message that will show as alert in the destination URL
 	 */
@@ -2561,7 +2579,7 @@ class Wakka
 		{
 			$_SESSION['redirectmessage'] = $message;
 		}
-		$url = ($url == '' ) ? $this->GetConfigValue('base_url').$this->tag : $url;
+		$url = ($url == '' ) ? $this->wikka_url.$this->tag : $url;
 		if ((eregi('IIS', $_SERVER['SERVER_SOFTWARE'])) && ($this->cookies_sent))
 		{
 			@ob_end_clean();
@@ -2596,7 +2614,6 @@ class Wakka
 	 *
 	 * @uses	Config::$rewrite_mode
 	 * @uses	Wakka::MiniHref()
-	 * @uses	Config::$base_url
 	 * @param	$method
 	 * @param	$tag
 	 * @param	$params
@@ -2604,7 +2621,7 @@ class Wakka
 	 */
 	function Href($method='', $tag='', $params='')
 	{
-		$href = $this->GetConfigValue('base_url').$this->MiniHref($method, $tag);
+		$href = $this->wikka_url.$this->MiniHref($method, $tag);
 		if ($params)
 		{
 			$href .= ($this->GetConfigValue('rewrite_mode') ? '?' : '&amp;').$params;
@@ -3267,7 +3284,6 @@ class Wakka
 	 * @uses	Wakka::GetConfigValue()
 	 * @uses	Wakka::LoadSingle()
 	 * @uses	Wakka::Query()
-	 * @uses	Config::$base_url
 	 * @uses	Config::$table_prefix
 	 * @param	$tag
 	 * @param	$referrer
@@ -3289,8 +3305,7 @@ class Wakka
 		$referrer = trim($this->cleanUrl($referrer));			# secured JW 2005-01-20
 
 		// check if it's coming from another site
-		#if ($referrer && !preg_match('/^'.preg_quote($this->GetConfigValue('base_url'), '/').'/', $referrer))
-		if (!empty($referrer) && !preg_match('/^'.preg_quote($this->GetConfigValue('base_url'), '/').'/', $referrer))
+		if (!empty($referrer) && !preg_match('/^'.preg_quote(WIKKA_BASE_URL, '/').'/', $referrer))
 		{
 			$parsed_url = parse_url($referrer);
 			$spammer = $parsed_url['host'];
@@ -4853,6 +4868,9 @@ class Wakka
 		$this->wikka_cookie_path = ('/' == $base_url_path) ? '/' : substr($base_url_path,0,-1);
 
 		// do our stuff!
+		$this->wikka_url = ((bool) $this->GetConfigValue('rewrite_mode')) ? WIKKA_BASE_URL : WIKKA_BASE_URL.WIKKA_URL_EXTENSION;
+		$this->config['base_url'] = $this->wikka_url; #backward compatibility
+
 		if (!$this->handler = trim($method)) $this->handler = 'show';
 		if (!$this->tag = trim($tag)) $this->Redirect($this->Href('', $this->GetConfigValue('root_page')));
 		if ($this->GetUser())
