@@ -55,7 +55,7 @@
 			{
 				return false;
 			}
-			if($this->GetSafeVar('UR_inviteCode', 'post') === $this->inviteCode)
+			if($this->wakka->GetSafeVar('UR_inviteCode', 'post') === $this->inviteCode)
 			{
 				return true;
 			}
