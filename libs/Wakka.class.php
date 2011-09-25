@@ -2878,7 +2878,7 @@ class Wakka
 			foreach ($linktable as $to_tag)
 			{
 				$lower_to_tag = strtolower($to_tag);
-				if ((!$written[$lower_to_tag]) && ($lower_to_tag != strtolower($from_tag)))
+				if ((!isset($written[$lower_to_tag])) && ($lower_to_tag != strtolower($from_tag)))
 				{
 					if ($sql)
 					{
