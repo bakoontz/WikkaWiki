@@ -53,7 +53,7 @@ if ($pages = $this->LoadRecentlyChanged())
 				$curday = $day;
 			}
 
-			$pagelink = $this->GetConfigValue('base_url').urlencode($page['tag']);
+			$pagelink = WIKKA_BASE_URL.urlencode($page['tag']);
 			$xml .= '<node LINK="'.$pagelink.'" TEXT="'.$pagetag.'" FOLDED="true">'."\n";
 			$timeformatted = date('H:i T', strtotime($page['time']));
 			$xml .= '<node LINK="'.$pagelink.'/revisions" TEXT="'.sprintf(T_("Revision time: %s"),$timeformatted).'"/>'."\n";

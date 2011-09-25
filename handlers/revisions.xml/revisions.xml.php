@@ -9,7 +9,6 @@
  * @filesource
  *
  * @uses		Config::$wakka_name
- * @uses		Config::$base_url
  * @uses		Wakka::GetConfigValue()
  * @uses		Wakka::HasAccess()
  * @uses		Wakka::LoadRevisions()

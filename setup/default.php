@@ -110,11 +110,6 @@ if(isset($_SESSION['error_flag']))
 			$error['flag'] = true;
 		}
 	}
-	if (isset($_POST['config']['base_url']) && strlen($_POST['config']['base_url']) == 0)
-	{
-		$error['base_url'] = "Please fill in a valid base URL."; 
-		$error['flag'] = true;
-	}
 }
 // i18n section
 if (!defined('SITE_SUFFIX_INFO')) define ('SITE_SUFFIX_INFO', 'Suffix used for cookies and part of the session name. This allows you to run multiple Wikka installations on the same server by configuring them to use different wiki prefixes.');
@@ -231,27 +226,7 @@ if(isset($_SESSION['error_flag']) && false === $_SESSION['error_flag'] && isset(
 	<?php } ?>
 	 <tr><td align="right" nowrap="nowrap">Email:</td><td><input type="text" size="50" name="config[admin_email]" value="<?php echo $wakkaConfig["admin_email"] ?>" /></td></tr>
 
-	<tr><td></td><td><br /><h2>4. URL Configuration</h2><?php echo $wakkaConfig["wakka_version"] ? '' : '<span class="note">Since this is a new installation, the installer tried to guess the correct values of Rewrite Mode and Base URL.<br />Change them only if you know what you\'re doing! 	See the <a href="http://docs.wikkawiki.org/ModRewrite" target="_blank">documentation</a> for details.</span>' ?></td></tr>
-	<tr><td></td><td><strong>Rewrite Mode</strong> is used to produce a nicer URL for your wiki. If Rewrite mode is modified, the base URL should be changed accordingly.
-	<ul>
-		<li>With Rewrite Mode <em>disabled</em>, your site's URL will look like the following:<br /><tt>http://www.example.com/wikka.php?wakka=HomePage</tt></li>
-		<li>If Rewrite Mode is <em>enabled</em>,  your site's URL will look like the following:<br /><tt>http://www.example.com/HomePage</tt></li>
-	</ul></td></tr>
-	<tr><td align="right" nowrap="nowrap">Rewrite mode:</td><td><input type="hidden" name="config[rewrite_mode]" value="0" /><input type="checkbox" name="config[rewrite_mode]" value="1" <?php echo ($wakkaConfig["rewrite_mode"])? 'checked="checked"' : ''; ?> /> Enabled</td></tr>
-	<tr><td></td><td>Your wiki's <strong>base URL</strong>. Page names get appended to it, so: <ul>
-		<li>if Rewrite Mode is not available on your server, the base URL should end with <tt>"wikka.php?wakka="</tt><br />e.g. <tt>http://www.example.com/wikka.php?wakka=</tt></li>
-		<li>if Rewrite Mode is enabled, make sure the base URL ends with a slash "/",<br />e.g. <tt>http://www.example.com/</tt></li>
-		</ul></td>
-	</tr>
-	<?php if(isset($error['base_url'])) { ?>
-	<tr><td></td><td><em class="error"><?php echo $error['base_url']; ?></em></td></tr>
-	<?php } ?>
-	<tr><td align="right" nowrap="nowrap">Base URL:</td><td><input type="text" size="50" name="config[base_url]" value="<?php echo $wakkaConfig["base_url"] ?>" /></td></tr>
-	<?php
-	 }
-	?>
-
-	<tr><td></td><td><br /><h2>5. Version update check</h2></td></tr>
+	<tr><td></td><td><br /><h2>4. Version update check</h2></td></tr>
 	<tr><td></td><td><span class="note">It is <strong>strongly recommended</strong> that you leave this option checked if your run your wiki on the internet. Administrator(s) will be notified automatically on the wiki if a new version of WikkaWiki is available for download. 	See the <a href="http://docs.wikkawiki.org/CheckVersionActionInfo" target="_blank">documentation</a> for details. Please note that if you leave this option enabled, your installation will periodically contact a WikkaWiki server for update information.  As a result, your IP address and/or domain name may be recorded in our referrer logs.  </span></td></tr>
 	<tr><td align="right" nowrap="nowrap"><label for="id_enable_version_check">Enable version checking:</label></td><td><input type="checkbox"<?php echo !isset($wakkaConfig["enable_version_check"]) || $wakkaConfig["enable_version_check"] == "1" ? ' checked="checked"' : ""; ?> name="config[enable_version_check]" value="1" id="id_enable_version_check" /></td></tr>
 	<tr><td></td><td><input type="submit" name="submit" value="Continue" /></td></tr>

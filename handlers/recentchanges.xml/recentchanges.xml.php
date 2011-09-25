@@ -14,7 +14,6 @@
  * @access	public
  * @since	1.1.7
  * @uses	FeedCreator
- * @uses	Config::$base_url
  * @uses	Config::$wakka_name
  * @uses	Config::$root_page
  * @uses	Config::$xml_recent_changes
@@ -126,7 +125,7 @@ if ($pages = $this->LoadRecentlyChanged())
 			// In the case of RecentChanges.xml, we must unescape the url before giving it to FC
 			$item->date = date('r',strtotime($page['time']));	// RFC2822
 			$item->description = sprintf(T_("By %s"), $page['user']).($page['note'] ? ' ('.$page['note'].')' : '')."\n";
-			$item->source = $this->GetConfigValue('base_url');
+			$item->source = WIKKA_BASE_URL;
 			// @@@ JW: ^ should link to *actual* page not root
 /*
 http://dublincore.org/documents/1999/07/02/dces/

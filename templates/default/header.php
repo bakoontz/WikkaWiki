@@ -2,7 +2,7 @@
 //init
 $message = $this->GetRedirectMessage();
 $user = $this->GetUser();
-$site_base = $this->GetConfigValue("base_url");
+$site_base = WIKKA_BASE_URL;
 //UniversalEditButton (http://universaleditbutton.org/Universal_Edit_Button) #779
 $ueb = '';
 if ($this->GetHandler() != 'edit' && $this->HasAccess("write", $this->page["tag"]))

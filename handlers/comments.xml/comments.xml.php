@@ -146,8 +146,6 @@ if ($comments = $this->LoadRecentComments(2*$n))
 		// see also recentchanges.xml.php
 		$item->date = date('r', strtotime($comment['time'])); 
 		$item->description = 'By '.$comment['user'].': '.$comment['comment']."\n";
-		#$item->source = $this->GetConfigValue('base_url');
-		#$item->source = $this->base_url;	// home page
 		// @@@ ^ JW: should link to actual comment, or (maybe) the page that has the comment
 /*
 http://dublincore.org/documents/1999/07/02/dces/

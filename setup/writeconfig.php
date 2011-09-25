@@ -91,7 +91,7 @@ if ($fp)
 	// write
 	fclose($fp);
 	
-	print("<p>That's all! You can now <a href=\"".$config["base_url"]."\">return to your Wikka site</a>. However, you are advised to remove write access to <tt>wikka.config.php</tt> again now that it's been written. Leaving the file writable can be a security risk!</p>");
+	print("<p>That's all! You can now <a href=\"".WIKKA_BASE_URL."\">return to your Wikka site</a>. However, you are advised to remove write access to <tt>wikka.config.php</tt> again now that it's been written. Leaving the file writable can be a security risk!</p>");
 }
 else
 {
