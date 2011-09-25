@@ -279,7 +279,7 @@ if ($this->IsAdmin($this->GetUser()))
 		}
 		else
 		{
-			$this->Redirect($this->Href(), T_("User has been sucessfully deleted"));
+			$this->Redirect($this->Href(), T_("Users have been sucessfully deleted"));
 		}
 	}
 	else 
@@ -374,15 +374,13 @@ if ($this->IsAdmin($this->GetUser()))
 		// build pager links
 		$ll = $s+$l+1;
 		$ul = ($s+2*$l) > $numusers ? $numusers : ($s+2*$l);
-		$start_ts = '';
-		$end_ts = '';
 		if ($s > 0)
 		{
-			$prev = '<a href="'.$this->Href('','','l='.$l.'&amp;sort='.$sort.'&amp;d='.$d.'&amp;s='.($s-$l)).  '&amp;search='.urlencode($search).  '&amp;start_ts='.urlencode($start_ts).  '&amp;end_ts='.urlencode($end_ts).  '" title="'.sprintf(T_("Show records from %d to %d"), ($s-$l+1), $s).'">'.($s-$l+1).'-'.$s.'</a> |  '."\n";
+			$prev = '<a href="'.$this->Href('','','l='.$l.'&amp;sort='.$sort.'&amp;d='.$d.'&amp;s='.($s-$l)).  '&amp;search='.urlencode($search).'" title="'.sprintf(T_("Show records from %d to %d"), ($s-$l+1), $s).'">'.($s-$l+1).'-'.$s.'</a> |  '."\n";
 		}
 		if ($numusers > ($s + $l))
 		{
-			$next = ' | <a href="'.$this->Href('','','l='.$l.'&amp;sort='.$sort.'&amp;d='.$d.'&amp;s='.($s+$l)).'&amp;search='.urlencode($search).'&amp;start_ts='.urlencode($start_ts).'&amp;end_ts='.urlencode($end_ts).'" title="'.sprintf(T_("Show records from %d to %d"), $ll, $ul).'">'.$ll.(($ll==$ul)?'':('-'.$ul)).'</a>'."\n";
+			$next = ' | <a href="'.$this->Href('','','l='.$l.'&amp;sort='.$sort.'&amp;d='.$d.'&amp;s='.($s+$l)).'&amp;search='.urlencode($search).'" title="'.sprintf(T_("Show records from %d to %d"), $ll, $ul).'">'.$ll.(($ll==$ul)?'':('-'.$ul)).'</a>'."\n";
 		}
 		$form_filter .= T_("Records").' ('.$numusers.'): '.$prev.(($s+$l)>$numusers?($s+1).'-'.$numusers:($s+1).'-'.($s+$l)).$next.'<br />'."\n";
 		$form_filter .= '<span class="sortorder">'.T_("Sorted by:").' <tt>'.$sort.', '.$d.'</tt></span>'."\n";
