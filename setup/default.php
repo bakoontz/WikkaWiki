@@ -225,6 +225,7 @@ if(isset($_SESSION['error_flag']) && false === $_SESSION['error_flag'] && isset(
 	<tr><td></td><td><em class="error"><?php echo $error['admin_email']; ?></em></td></tr>
 	<?php } ?>
 	 <tr><td align="right" nowrap="nowrap">Email:</td><td><input type="text" size="50" name="config[admin_email]" value="<?php echo $wakkaConfig["admin_email"] ?>" /></td></tr>
+<?php } ?>
 
 	<tr><td></td><td><br /><h2>4. Version update check</h2></td></tr>
 	<tr><td></td><td><span class="note">It is <strong>strongly recommended</strong> that you leave this option checked if your run your wiki on the internet. Administrator(s) will be notified automatically on the wiki if a new version of WikkaWiki is available for download. 	See the <a href="http://docs.wikkawiki.org/CheckVersionActionInfo" target="_blank">documentation</a> for details. Please note that if you leave this option enabled, your installation will periodically contact a WikkaWiki server for update information.  As a result, your IP address and/or domain name may be recorded in our referrer logs.  </span></td></tr>
