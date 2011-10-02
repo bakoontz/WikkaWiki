@@ -2969,10 +2969,11 @@ class Wakka
 	 * @param  string path_sep Use this to override the OS default
 	 * DIRECTORY_SEPARATOR (usually used in conjunction with CSS path
 	 * generation). Default is DIRECTORY_SEPARATOR.
+	 * @param  string theme_override Specify a specific theme. Default is NULL (use configuration theme).
 	 *
      * @return string A fully-qualified pathname or NULL if none found
 	 */
-	 function GetThemePath($path_sep = DIRECTORY_SEPARATOR)
+	 function GetThemePath($path_sep = DIRECTORY_SEPARATOR, $theme_override = NULL)
 	 {
 	 	//check if custom theme is set in user preferences
 	 	if ($user = $this->GetUser())
@@ -2982,6 +2983,10 @@ class Wakka
 		else
 		{
 			$theme = $this->GetConfigValue('theme');
+		}
+		if(NULL !== $theme_override)
+		{
+			$theme = $theme_override;
 		}
 		$path = $this->BuildFullpathFromMultipath($theme, $this->GetConfigValue('wikka_template_path'), $path_sep);
 	 	if(FALSE===file_exists($path))
@@ -4924,6 +4929,11 @@ class Wakka
 		elseif(0 !== strcmp($newtag = preg_replace('/\s+/', '_', $tag), $tag))
 		{
 			header("Location: ".$this->Href('', $newtag));
+		}
+		elseif($this->handler == 'html')
+		{
+			header('Content-type: text/html');
+			print($this->handler($this->handler));
 		}
 		else
 		{
