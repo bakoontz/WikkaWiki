@@ -1,5 +1,5 @@
-**Wikka Release Notes for Version 1.3.1 (Released 31Mar2011)**
+**Wikka Release Notes for Version 1.3.2 (Released 31Oct2011)**
 
-For the latest WikkaWiki 1.3.1 release notes, please visit
-http://docs.wikkawiki.org/WikkaReleaseNotes131
+For the latest WikkaWiki 1.3.2 release notes, please visit
+http://docs.wikkawiki.org/WikkaReleaseNotes132
 
