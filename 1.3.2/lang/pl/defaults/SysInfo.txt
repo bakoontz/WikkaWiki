@@ -1,0 +1,15 @@
+{{checkversion}}
+=====Informacja o serwerze=====
+
+~-Wersja ""WikkaWiki"": ##{{wikkaversion}}##
+~-Wersja PHP: ##{{phpversion}}##
+~-Wersja ""MySQL"": ##{{mysqlversion}}##
+~-Wersja ""GeSHi"": ##{{geshiversion}}##
+~-Serwer:
+~~-Nazwa hosta: ##{{system show="host"}}##
+~~-System operacyjny: ##{{system show="os"}}##
+~~-Szczegóły sprzętowe: ##{{system show="machine"}}##
+
+{{wikkaconfig}}
+----
+CategoryWiki

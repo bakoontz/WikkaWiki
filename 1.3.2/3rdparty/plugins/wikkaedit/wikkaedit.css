@@ -1,0 +1,177 @@
+/* ================================== main ================================= */
+#body {
+	background-color: white; /* TODO may be better remove the grey background for hover/focus in the main css */
+}
+
+#wikkalog {
+	position:fixed;
+	left: 400px;
+	top: 0;
+	width: 600px;
+	height: 70px;
+	background-color: #CCCCCC;
+	border: 1px solid black;
+	overflow: auto;
+}
+
+/* ================================ toolbar ================================ */
+.toolseparator {
+	vertical-align: middle;
+	margin: 0 1px 0 2px;
+}
+.toolbutton {
+	vertical-align: middle;
+	padding: 1px;
+	border: 1px solid #F0F0EE;
+	cursor: default;
+	white-space: nowrap;
+}
+.toolbutton:hover {
+	vertical-align: middle;
+	padding: 1px;
+	border: 1px solid #0a246a;
+	background-color: #B6BDD2;
+}
+
+/* ie6 hack */
+.toolbutton_std {
+	vertical-align: middle;
+	padding: 1px;
+	border: 1px solid #F0F0EE;
+}
+.toolbutton_hover {
+	vertical-align: middle;
+	padding: 1px;
+	border: 1px solid #0a246a;
+	background-color: #B6BDD2;
+}
+/* end ie6 hack */
+
+#wikkatoolbar {
+	border: 1px solid #CCCCCC;
+	background-color: #F0F0EE;
+	padding: 2px;
+	margin-bottom: 2px;
+	cursor: default;
+	/*-moz-user-select: none;*/
+}
+
+.toolhorizsep {
+	border-top:1px solid #CCCCCC;
+	margin:1px 0 4px 0;
+}
+
+.actiontitle {
+	text-transform: uppercase;
+	font-size: 7pt;
+	letter-spacing: 2px;
+	color: #666;
+	vertical-align: middle;
+	margin-left:5px;
+}
+
+/* ================================ submenu ================================ */
+#wikkasubmenu {
+	position: absolute;
+	border: 1px solid #CCCCCC;
+	background-color: #F0F0EE;
+	padding: 2px;
+}
+
+.smimage {
+	vertical-align: middle;
+	margin-left: 2px;
+	margin-right: 4px;
+}
+
+div.smbutton {
+	padding: 1px;
+	border: 1px solid #F0F0EE;
+	cursor: default;
+}
+div.smbutton:hover {
+	padding: 1px;
+	border: 1px solid #0a246a;
+	background-color: #B6BDD2;
+}
+
+/* ================================= help ================================== */
+#wikkahelp {
+	margin-top: 2px;
+	border: 1px solid #D0D0C0;
+	background-color: #F0F0D0;
+	padding-left: 2px;
+	color: #303030;
+	cursor: default;
+	/*-moz-user-select: none;*/
+}
+
+.wikkaparamlink {
+	cursor: pointer;
+}
+.wikkaparamlink:hover {
+	color: #CC0000;
+}
+
+/* ================================ tooltip ================================ */
+#wikkatooltip {
+	position: absolute;
+	border: 1px solid #000000;
+	background-color: #FFFFBF;
+	color: #303030;
+	cursor: default;
+	max-width: 400px;
+	/*-moz-user-select: none;*/
+}
+
+.wikkatooltip_header {
+	padding: 0 3px 0 3px;
+	background-color: #E0E0A0;
+	font-size: 9px;
+}
+
+.wikkatooltip_separator {
+	border-top: 1px solid #B0B090;
+	margin: 2px 0 2px 0;
+}
+
+.wikkatooltip_body {
+	padding: 0 3px 2px 3px;
+	font-size: 80%;
+	line-height: 150%;
+}
+
+/* ============================ search & replace =========================== */
+#wikkasearch {
+	position: absolute;
+	left: 0;
+	right: 0;
+	border: 1px solid #CCCCCC;
+	border-bottom: 0px;
+	background-color: #f0f0ee;
+	cursor: default;
+}
+
+#sr_window_title {
+	border: 1px solid #0a246a;
+	background-color: #B6BDD2;
+	text-align: center;
+}
+
+#sr_window_content {
+	background-color: #ffffff;
+	border: 1px solid #919b9c;
+	margin: 25px 5px 0px 5px;
+	height: 50px;
+}
+
+#sr_window_tab {
+	border: 1px solid #919b9c;
+	border-bottom: 0px;
+}
+
+.we_key {
+	border: 2px outset #00F;
+	background-color: #AAD;
+	padding: 0px 4px 1px 4px;
+}

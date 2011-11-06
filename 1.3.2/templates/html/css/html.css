@@ -1,0 +1,1285 @@
+/*
+-----------------------------------------------
+Wikka Default Stylesheet (screen)
+----------------------------------------------- */
+
+/* Support for HTML handler */
+.header, .footer, .commentsheader, .copyright, .smallprint { display: none; }
+
+/* page layout */
+
+body {
+	font-family: "Lucida Grande", "Lucida Sans Unicode", "DejaVu Sans", Verdana, sans-serif;
+	font-size: 13px;
+	line-height: 20px;
+	color: #000000;
+	background-color: #F8F8F8;
+	margin: 0;
+/*	text-align: justify; */			/* comment out this line if you really need justified text */
+}
+
+#page {
+}
+
+#header {
+	position: relative; /* needed for the correct positioning of system messages */
+	padding: 10px 10px 0 10px;
+}
+
+#content {
+	clear: both;
+	color: #000;
+	background-color: white;
+	padding: 15px;
+	border: 1px solid #CCC;
+}
+
+#footer {
+	background-color: #EAEAEA;
+	border-bottom: 1px solid #CCC;
+	padding: 0 10px;
+	height: 25px;
+}
+
+#smallprint {
+	clear: both;
+	float: right;
+	font-size: 0.8em;
+	color: #777;
+	padding-right: 0.5%;
+	text-align: right;
+}
+
+/* comments */
+
+/* wrapper for the whole comments block, contains the header and the actual comments */
+#comments {
+	margin: 0px;
+	background-color: #DDD;
+	padding-bottom: 10px;
+	border-bottom: 1px solid #CCC;
+}
+
+#comments form {
+	display: inline;
+}
+
+div#comments form input[type=submit] {
+	font-size: 80%;
+	padding: 1px 2px;
+}
+
+#commentheader {
+	clear: both;
+	background-color: #DDD;
+	padding: 2px 10px;
+	border-left: 1px solid #CCC;
+	border-right: 1px solid #CCC;
+	border-top: none;
+}
+
+/* wrapper for the comment lists */
+.commentscontainer {
+}
+
+#commentlist {}
+
+/* alternate color for single comments */
+.comment-layout-1 {
+	background-color: #DDDDDD;
+	padding: 5px;
+	border: 1px solid #CCCCCC;
+	margin: 10px;
+}
+
+.comment-layout-2 {
+	background-color: #EEEEEE;
+	padding: 5px;
+	border: 1px solid #CCCCCC;
+	margin: 10px;
+}
+
+.commentbody {
+}
+
+.commentaction {
+}
+
+.commentform {
+	background-color: #EEE;
+	padding: 10px;
+}
+
+.commentinfo {
+	color: #999;
+	font-size: 80%;
+	font-family: "Lucida Console", Monaco, monospace;
+}
+
+.commentdeleted {
+	color: #AAA;
+}
+
+.commentauthor {
+	font-size: 1.2em;
+	line-height: 20px;
+	color: #000;
+	margin: 5px 5px 0 0;
+}
+
+.commentparent {
+	font-size: 1em;
+	line-height: 20px;
+	margin: 5px;
+}
+
+/* links */
+
+a {
+	color: #339;
+	text-decoration: none;
+}
+
+a:visited {
+	text-decoration: none;
+}
+
+a:hover {
+	color: #933;
+}
+
+a:active {
+	text-decoration: none;
+}
+
+a.ext {
+	color: #339;
+}
+
+a.ext:hover {
+	color: #933;
+}
+
+/* link icons */
+
+#content a.ext {
+	background: url('../images/ext_simple.gif') left bottom no-repeat;
+	padding-left: .8em;
+}
+
+#content a.mailto {
+	background: url('../images/mail.gif') left bottom no-repeat;
+	padding-left: .9em;
+}
+
+#content a.interwiki {
+	background: url('../images/ext.gif') left bottom no-repeat;
+	padding-left: 1em;
+}
+
+a.user, a.user:hover {
+	background: url('../images/user.gif') left bottom no-repeat;
+	padding-left: 1em;
+}
+#header a:hover {
+	color: #933;
+	background: transparent;
+	border-bottom: 0px;
+}
+
+a#homepage_link {
+	color: #000;
+}
+
+#content a {
+	text-decoration: none;
+}
+
+#content a:hover {
+	color: #933;
+	text-decoration: underline;
+}
+
+#content a.keys:hover {
+	text-decoration: none;
+	color: #333;	
+}
+
+#content a.heading {
+	color: #000;
+}
+
+#content a.heading:hover {
+	color: #000;
+	text-decoration: none;
+}
+
+/* lists */
+
+ul, ol {
+	margin-top: 0px;
+	margin-bottom: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
+ul.thread {
+	list-style-type: none;
+	border-left: 2px #666 solid;
+	padding-left: 10px;
+	margin: 5px 0px;
+}
+
+ul.thread li {
+	color: #333;
+	font-size: 11px;
+}
+
+/* images */
+
+img {
+	border: 0px;
+}
+
+img.centre {
+	display: block; 
+	text-align: center; 
+	margin: 5px auto;
+}
+
+img.center {
+	display: block; 
+	text-align: center; 
+	margin: 5px auto;
+}
+
+img.left {
+	margin: 5px 5px 5px -5px;
+	float: left;
+}
+
+img.right {
+	margin: 5px -5px 5px 5px; 
+	float: right;
+}
+
+img.icon {
+	border: 0px;
+	vertical-align: middle;
+}
+
+/* floats */
+
+.floatl {
+	float: left;
+	text-align: left;
+	width: 46%;
+	margin-right: 15px;
+	padding: 4px;
+	background: #EEE;
+	border: 1px solid #CCC; 		
+}
+
+.floatr {
+	float: right;
+	text-align: left;
+	width: 46%;
+	margin-left: 15px;
+	padding: 4px;
+	background: #EEE;
+	border: 1px solid #CCC; 		
+}
+
+/* simply left-float element */
+.left {
+	float:left;
+}
+
+/* simply right-float element */
+.right {
+	float:right;
+}
+
+.clear {clear:both;}
+
+/* text formatting */
+
+h1, h2, h3, h4, h5 {
+	font-family: Georgia, "DejaVu Serif", Times, serif;
+	font-weight: normal;
+	margin: 0px;
+	padding: 0px;
+}
+
+#content h5 {
+	margin-bottom: 4pt;
+	font-size: 12pt;
+}
+
+#content h4 {
+	margin-bottom: 5pt;
+	font-size: 14pt;
+}
+
+#content h3 {
+	font-size: 16pt;
+	margin-bottom: 6pt;
+}
+
+#content h2 {
+	font-size: 18pt;
+	margin-bottom: 8pt;
+}
+
+#content h1 {
+	font-size: 20pt;
+	margin-bottom: 10pt;
+}
+
+#header h2 {
+	font-size: 18pt;
+	padding: .3em 0; 
+}
+
+tt {
+	color: #666;
+}
+
+.hidden {
+	display: none;
+}
+
+.wikisource {
+	font-family: monospace;
+	font-size: 1.1em;
+	color: #666;
+	background-color: #F9F9F9;
+	border: 1px solid #CCC;
+	padding: 1em;
+	margin-bottom: .5em;
+}
+
+.highlight {color: red; background: #FFFFD0;}
+
+.strikethrough {color: #888; text-decoration: line-through;}
+
+.underline {text-decoration: underline;}
+
+.indent {
+	margin-left: 40px;
+}
+
+.notes {
+	color: #880;
+}
+
+.help {
+	cursor: help;
+}
+
+.centre {text-align: center;}
+
+.center, .center p {text-align: center;}
+
+.keys {
+	color: #666;
+	background-color: #DDD;
+	font: normal 95% Verdana, sans-serif;
+	text-align: center;
+	border-top: 1px solid #FFF;
+	border-left: 1px solid #FFF;
+	border-right: 1px solid #AAA;
+	border-bottom: 1px solid #AAA;
+	padding: .1em .2em;
+}
+
+.keys:hover {
+	color: #555;
+	background-color: #CCC;
+	border-top: 1px solid #FFF;
+	border-left: 1px solid #FFF;
+	border-right: 1px solid #999;
+	border-bottom: 1px solid #999;
+}
+
+acronym {
+	border-bottom: 1px dotted #333;
+	cursor: help;
+}
+
+abbr {
+	border-bottom: 1px dotted #333;
+	cursor: help;
+}
+
+blockquote {
+	font-size: 90%;
+}
+
+hr {
+	border: 0;
+	border-top: 1px solid #EEE;
+}
+
+.disabled {
+	color: #AAA;
+}
+
+/* code blocks */
+
+.code_header {
+	color: #336;	
+	background-color: #D0E0F0;
+	border-top: 1px solid #AAC;
+	border-right: 1px solid #AAC;
+	border-left: 1px solid #AAC;
+	border-bottom: none;
+	font-family: Verdana, Arial, sans-serif;
+	font-size: 100%;
+	padding: 0 3px;
+	margin: 5px auto 0 auto;
+	text-align: left;
+	line-height: 1.5em;
+}
+
+.code {
+	color: black;
+	background: #F3F3FF;
+	border: 1px solid #AAC;
+	font-size: 11px;
+	font-family: "Lucida Console", Monaco, monospace;
+	margin: auto;
+	padding: 6px 5px 13px 5px;	/* padding-bottom solves hor. scrollbar hiding single line of code in IE6 but causes vert. scrollbar... */
+	text-align: left;			/* override justify on body */
+	overflow: auto;				/* allow scroll bar in case of long lines - goes together with white-space: nowrap! */
+	white-space: nowrap;		/* prevent line wrapping */
+}
+
+.code pre {
+	margin-top: 6px;
+	margin-bottom: 6px;			/* prevent vertical scroll bar in case of overflow */
+	font-size: 11px;
+	font-family: "Lucida Console", Monaco, monospace;
+}
+
+/* form elements */
+
+form {
+	margin: 0px;
+	padding: 0px;
+}
+
+fieldset {
+	margin-top: 10px;
+	margin-bottom: 10px;
+	border: 1px solid #CCC;	
+}
+
+fieldset legend {
+	font-size: 115%;
+	color: #666;
+	padding:2px;
+}
+
+select {
+	border: 1px solid #CCC;	
+}
+
+select:hover {
+	background-color: #F3F3F3;
+}
+
+select:focus {
+	background-color: #E6E6FF;
+}
+
+/* Usersettings action */
+
+fieldset#account {
+	display: block;
+	min-width: 600px;
+	padding: 10px;
+	background-color: #F6F6F6;
+	text-align: left;
+}
+
+fieldset#account span#account_info {
+	display: block;
+	width: 230px;
+	float: left;
+	margin-bottom: 10px;
+	text-align: right;
+	padding-right: 10px;
+}
+
+fieldset#account input#logout {
+	float: left;
+	margin-left: 0;
+}
+
+fieldset.usersettings {
+	display: block;
+	min-width: 600px;
+	padding: 10px;
+}
+
+fieldset.usersettings fieldset {
+	clear: left;
+	display: block;
+	width: 236px;
+	float: left;
+	margin: 0 0 10px 240px;
+}
+
+fieldset.usersettings fieldset legend {
+	margin: 0;
+}
+
+fieldset.usersettings fieldset input{
+	display: block;
+	float: left;
+	padding: 0;
+	margin: 0;
+}
+
+fieldset.usersettings fieldset label {
+	vertical-align: top;
+	margin: 0 0 0 10px;
+	display: inline;
+	text-align: left;
+	width: auto;
+	float:left;
+}
+
+fieldset.usersettings em {
+	clear: left;
+	float: left;
+	display: block;
+	margin: 0 0 0 240px;
+}
+
+fieldset.usersettings em.usersettings_info {
+	clear: left;
+	float: left;
+	text-align: center;
+	display: block;
+	width: 246px;
+	margin: 0 0 5px 240px;
+	font-style: normal;
+	font-size: 85%;
+	color: #666;
+	border: 1px solid #CCC;
+	background-color: #F0F0F0;
+	padding: 2px;
+}
+
+fieldset.usersettings label {
+	display: block;
+	width: 230px;
+	float: left;
+	margin-bottom: 10px;
+	text-align: right;
+	padding-right: 10px;
+}
+
+fieldset.usersettings select#update_option {
+	display: block;
+	width: 230px;
+	float: left;
+	margin: 0px 10px 10px 0px;
+}
+
+fieldset.usersettings input[type=text], fieldset.usersettings input[type=password] {
+	display: block;
+	width: 250px;
+	float: left;
+	margin-bottom: 10px;
+	border:1px solid #CCC;
+}
+
+fieldset.usersettings input[type=submit] {
+	float: left;
+	margin-left: 250px;
+}
+
+fieldset.usersettings br {
+	clear: left;
+}
+
+textarea {
+	border: 1px solid #CCC;	
+}
+
+textarea:focus {
+	background-color: #E6E6FF;
+}
+
+input {
+	border: 1px solid #CCC;	
+}
+
+input:hover {
+	background-color: #F3F3F3;
+}
+
+input:focus {
+	background-color: #E6E6FF;
+}
+
+input[type=hidden] {
+	display: none;
+}
+
+input[type=submit], input[type=button] {
+	color: #666;
+	background-color: #EEE;
+	font: normal 95% Verdana, sans-serif;
+	text-align: center;
+	border-top: 1px solid #FFF;
+	border-left: 1px solid #FFF;
+	border-right: 1px solid #AAA;
+	border-bottom: 1px solid #AAA;
+	padding: .1em .2em;
+}
+
+input[type=submit]:hover, input[type=button]:hover {
+	color: #333;
+	background-color: #DDD;
+	border-top: 1px solid #FFF;
+	border-left: 1px solid #FFF;
+	border-right: 1px solid #999;
+	border-bottom: 1px solid #999;
+}
+
+/* editor textarea decorations */
+/* (decorations can't be in "textarea#body" declaration, else the "width:100%" won't work) */
+#textarea_container {
+	border: 1px solid #CCC;
+	padding: 2px;
+	margin-bottom: 2px;
+}
+
+textarea#body{
+	width: 100%;
+	height: 500px;
+	/* padding and border must be 0 for the "width:100%" to work */
+	padding: 0;
+	border: 0;
+}
+
+.searchbox {
+	/* border: none; */
+	border: 1px solid #CCA;
+	padding: 0px;
+	margin: 0px;
+}
+
+input.grabcode {
+	float: right;
+	margin-top: 0px;
+	font-size: 90%;
+}
+
+input.highlight {
+	font-weight: normal;
+	background-color: #FCC;
+	color: #000;
+}
+
+/* system information */
+
+.datetime {
+	color: #666;
+	font-size: 80%;
+	font-family: "Lucida Console", Monaco, monospace;
+}
+
+.missingpage {
+	/* background: #ccffff; */
+	text-decoration: none;
+	border-bottom-width: 1px;
+	border-bottom-color: #933;
+	border-bottom-style: dashed;
+}
+
+/* inline system messages */
+em.error {
+	color: #A33; 
+	font-style: normal;
+	font-weight: bold;
+	font-size: 95%;
+}
+
+em.success {
+	color: #3A3; 
+	font-style: normal;
+	font-weight: bold;
+	font-size: 95%;
+}
+
+/* redirection messages */
+
+div.success {
+	position: fixed;
+	top: 6em;
+	right: 1.5em;
+	max-width: 40%;
+	border: 2px solid #3A3;
+	padding: .2em .4em;
+	color: #3A3; 
+	background-color: #EFE;
+	font-style: normal;
+	font-weight: bold;
+	font-size: 90%;
+}
+
+.comments {display: none;}
+
+.revisioninfo {
+	color: #000000;
+	background-color: #E9F9E9;
+	border: 1px solid #ACA;
+	padding: 5px 10px;
+	font-size: 90%;
+	margin-bottom: 1em;
+}
+
+.history_revisioninfo { 
+        float: left; 
+        text-align: left; 
+        padding: 4px; 
+        background: #EEE; 
+        border: 1px solid #CCC;                  
+}
+
+.copyright {
+	font-size: 11px;
+	color: #AAA;
+	text-align: right;
+}
+
+.copyright a {
+	color: #AAA;
+}
+
+.previewhead {
+	margin: auto;
+	z-index:20;
+	position:fixed;
+	top: 70px;
+	right: 10px;
+	color: red;
+	font-size: xx-large;
+	font-weight: bold;
+	padding: 5px;
+}
+
+ins {
+	background-color: #CFC;
+	text-decoration: none;
+}
+
+del {
+	color: #876;
+	background-color: #FC9;
+	text-decoration: none;
+}
+
+.pagenote {color: #888;}
+
+.smaller {font-size: smaller;}
+
+#smallprint a {
+	color: #987;
+}
+
+/* sort order information in sortable lists and tables*/
+.sortorder {
+	font-size: 70%;
+	text-transform: uppercase;	
+	letter-spacing: 1px;
+}
+
+/* debug messages */
+.debug {
+	color: #AAA;
+	font-size: 70%;
+	text-transform: uppercase;	
+	letter-spacing: 1px;
+}
+
+
+/* Tables */
+table.data {
+	border: 2px solid #CCC;
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+table.data caption {
+	border: 1px solid #CCC;
+	font-size: 95%;
+	color: #666;
+	margin:5px 0;
+	padding:2px;
+}
+
+table.data thead {
+	background-color: #DDD;
+}
+
+table.data tfoot {
+	background-color: #DDD;
+}
+
+table.data th {
+	border: 1px solid #CCC;
+	padding: .1em .25em;
+}
+
+table.data thead th {
+	background-color: #DDD;
+}
+
+table.data tfoot th {
+	background-color: #DDD;
+}
+
+table.data tbody th {
+	background-color: #EEE;
+}
+
+table.data tbody tr:hover {
+	background-color: #E9E9F9;
+}
+
+table.data tbody tr.alt:hover {
+	background-color: #E9E9F9;
+}
+
+table.data td {
+	border: 1px solid #CCC;
+	padding: .1em .25em;
+}
+
+table.data td.number {
+	text-align: right;
+}
+
+table.data td.datetime {
+	text-align: right;
+	white-space: nowrap;
+}
+
+/* --- alternate row & column color --- */
+
+table.data tr.alt {
+	background-color: #EEE;
+}
+
+table.data th.c1 {
+	background-color: #CDD;
+}
+
+table.data th.c2 {
+	background-color: #DCC;
+}
+
+table.data th.c3 {
+	background-color: #DDC;
+}
+
+table.data th.c4 {
+	background-color: #CDC;
+}
+
+table.data th.c5 {
+	background-color: #CCD;
+}
+
+table.data th.c6 {
+	background-color: #DCD;
+}
+
+table.data td.c1 {
+	background-color: #EFF;
+}
+
+table.data td.c2 {
+	background-color: #FEE;
+}
+
+table.data td.c3 {
+	background-color: #FFE;
+}
+
+table.data td.c4 {
+	background-color: #EFE;
+}
+
+table.data td.c5 {
+	background-color: #EEF;
+}
+
+table.data td.c6 {
+	background-color: #FEF;
+}
+
+table.data tr.alt td.c1 {
+	background-color: #DEE;
+}
+
+table.data tr.alt td.c2 {
+	background-color: #EDD;
+}
+
+table.data tr.alt td.c3 {
+	background-color: #EED;
+}
+
+table.data tr.alt td.c4 {
+	background-color: #DED;
+}
+
+table.data tr.alt td.c5 {
+	background-color: #DDE;
+}
+
+table.data tr.alt td.c6 {
+	background-color: #EDE;
+}
+
+/* Action-related styling */
+
+/* Adminpages action */
+
+table#adminpages {
+	border: 1px solid #CCC;
+	width: 100%;
+}
+
+table#adminpages td.actions {
+	text-align: center;
+	font-size: 70%;
+	font-family: Verdana, Arial, Helvetica, sans-serif; 	
+}
+
+form#form_page_admin_panel fieldset {
+	line-height: 2em;	
+}
+
+/* Adminuser action */
+
+table#adminusers {
+	border: 1px solid #CCC;
+	width: 100%;
+}
+
+table#adminusers td.actions {
+	text-align: center;
+	font-size: 70%;
+	font-family: Verdana, Arial, Helvetica, sans-serif; 	
+}
+
+form#form_user_admin_panel fieldset {
+	line-height: 2em;	
+}
+
+/* Lastedit action */
+.lastedit {
+	border:dotted 1px;
+	padding:3pt;
+	margin:8pt; color:#888;
+	font-size:8pt;
+	width:30%;
+}
+
+.lastedit_notes {
+	color: #880;
+}
+
+/* TextSearch & TextSearchExpanded Actions*/
+.tse_keywords {
+	font-weight: bold;
+	color: green;
+	background-color: #FAEBD7;
+}
+
+/* Calendar Action */
+table.calendar {
+	color: #000;
+	background-color: #EEE;
+	border-collapse: collapse;
+}
+
+table.calendar caption {
+	border: 1px solid #CCC;
+	margin:5px 0;
+	font-size: 95%;
+	color: #666;
+	padding:2px;
+}
+
+table.calendar thead {
+	border: 2px solid #CCC;
+	background-color: #DDD;
+}
+
+table.calendar tbody.face {
+	background-color: #EEE;
+	border: 2px solid #CCC;
+}
+
+table.calendar tbody.calnav {
+	background-color: #FFF;
+}
+
+table.calendar thead th {
+	border: 1px solid #CCC;
+	padding: 1px;
+	text-align: center;
+	font-size: 85%;
+	width: 26px;
+}
+
+table.calendar tbody.face td {
+	border: 1px solid #CCC;
+	text-align: right;
+}
+
+table.calendar td.currentday {
+	color: #FFF;
+	background-color: #33A;
+}
+
+table.calendar tbody.face td:hover {
+	background-color: #DDD;
+}
+
+table.calendar tbody.face td.currentday:hover {
+	color: #FFF;
+	background-color: #66C;
+}
+
+table.calendar tbody.calnav {
+	font-weight: bold;
+}
+
+table.calendar td.prevmonth {
+	text-align: left;
+	font-size: 85%;
+}
+
+table.calendar td.curmonth {
+	text-align: center;
+}
+
+table.calendar td.nextmonth {
+	text-align: right;
+	font-size: 85%;
+}
+
+table.calendar a:link {
+	color: #339;
+	text-decoration: none;
+}
+
+table.calendar a:visited {
+	color: #339;
+	text-decoration: none;
+}
+
+table.calendar a:hover {
+	color: #933;
+}
+
+table.calendar a:active {
+	color: #339;
+	text-decoration: none;
+}
+
+/* RecentChanges action */
+
+ul.recentchanges {
+	list-style-type: none;
+	padding-left: 0;
+	margin-left: 1em;
+	margin-bottom: 1em;
+}
+
+ul.recentchanges li {
+	font-size: 0.9em;
+}
+
+/* Usersettings action */
+table.usersettings {
+}
+
+/* Wikkaconfig action */
+table.wikkaconfig {
+	width: 70%;
+	font-size: 90%;	
+}
+
+table.wikkaconfig caption {
+	font-size: 120%;
+	background-color: #E9E9F9;
+	padding: 5px;
+}
+
+table.wikkaconfig tbody th[scope=row] {
+	text-align: right;
+	padding-right: 5px;
+}
+
+table.wikkaconfig tbody td {
+	padding-left: 5px;
+}
+
+
+/* Handler-related styling */
+
+/* Acls handler */
+table.acls {
+}
+
+/* 3rdparty-code related styling */
+
+/* syntax highlighting code - GeSHi */
+.code ol {
+	margin-top: 6px;
+	margin-bottom: 6px;			/* prevent vertical scroll bar in case of overflow */
+}
+.code li {
+	font-size: 11px;
+	font-family: "Lucida Console", Monaco, monospace;
+}
+.code .br0	{ color: #6C6; }
+.code .co1	{ color: #808080; font-style: italic; }
+.code .co2	{ color: #808080; font-style: italic; }
+.code .coMULTI	{ color: #808080; font-style: italic; }
+.code .es0	{ color: #009; font-weight: bold; }
+.code .kw1	{ color: #b1b100; }
+.code .kw2	{ color: #000; font-weight: bold; }
+.code .kw3	{ color: #006; }
+.code .kw4	{ color: #933; }
+.code .kw5	{ color: #00F; }
+.code .me0	{ color: #060; }
+.code .nu0	{ color: #C6C; }
+.code .re0	{ color: #00F; }
+.code .re1	{ color: #00F; }
+.code .re2	{ color: #00F; }
+.code .re4	{ color: #099; }
+.code .sc0	{ color: #0BD; }
+.code .sc1	{ color: #DB0; }
+.code .sc2	{ color: #090; }
+.code .st0	{ color: #F00; }
+
+/* wikiedit */
+
+.toolbar tr { background: ButtonFace; }
+.toolbar .btn-, .toolbar  .btn-hover,  .toolbar .btn-active,
+.toolbar .btn-pressed {
+	background: ButtonFace;
+	color: ButtonText;
+	border: 1px solid ButtonFace;
+	padding: 1px;
+	margin: 0px;
+	cursor: pointer;
+}
+.toolbar .btn- img  { width: 20px; height: 20px; }
+.toolbar .btn-hover { border-color: ButtonHighlight ButtonShadow ButtonShadow ButtonHighlight; }
+.toolbar .btn-active,
+.toolbar .btn-pressed { border-color: ButtonShadow ButtonHighlight ButtonHighlight ButtonShadow; }
+.toolbar .btn-pressed { background: ButtonHighlight; }
+.editornamecss { background-color:#CCCCFF; font-size: 18px; padding: 0 10px; }
+
+/* menus */
+
+
+ul#main_menu {
+	margin-top: 10px;
+	text-align: left;
+	list-style-type: none;
+	padding: 0px;
+}
+
+ul#main_menu li {
+	float: left;
+	width: auto;
+	text-align: left; 
+	padding: 2pt;
+}
+
+ul#main_menu li+li:before {
+	content: " :: ";
+}
+
+ul#options_menu {
+	padding: 5px 10px;
+	text-align: left;
+	list-style-type: none;
+	padding: 0px;
+}
+
+ul#options_menu li {
+    float: left;
+    width: auto;
+    text-align: left; 
+    padding: 2pt;
+    margin-right: 15px;
+}
+
+ul.menu li form {
+    display: inline;
+}
+
+ul.menu li input {
+	font-weight: bold;
+	border: none;
+	border-bottom: 2px solid #CCC;
+	background-color: transparent;
+}
+
+ul.menu form#form_logout input[type=submit] {
+    background-color: transparent;
+    border: none;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: inherit;
+    padding: inherit;
+    font-weight: inherit;
+    color: #993357;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+ul#dashboard {
+	position: absolute;
+	top: 0;
+	right: 0;
+	padding: 0 5px 0 5px;
+	background-color: #633;
+	color: #ECC;
+	font-size: 85%;
+	list-style-type: none;
+}
+
+ul#dashboard li {
+	float: left;
+	width: auto;
+	text-align: left; 
+	padding: 0 2pt;
+}
+
+ul#dashboard li a {
+	color: #FFF;
+}
+
+ul#dashboard li > a:hover {
+	  background-color: transparent;
+	  color: #ECC;
+}
+
+ul#dashboard li+li:before {
+	content: " :: ";
+}

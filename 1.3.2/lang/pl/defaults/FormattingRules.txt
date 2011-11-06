@@ -1,0 +1,343 @@
+======Zasady formatowania stron w systemie Wikka======
+
+<<**Uwaga:** Tekst zawarty między podwójnymi cudzysłowami nie jest formatowany.<<::c::
+Po przeczytaniu niniejszego poradnika, możesz poćwiczyć na [[SandBox stronie testowej]].
+----
+===1. Formatowanie tekstu===
+
+<<
+~##""**pogrubienie**""##
+~**pogrubienie**
+<<::c::
+<<
+~##""//pochylenie//""##
+~//pochylenie//
+<<::c::
+<<
+~##""__podkreślenie__""##
+~__podkreślenie__
+<<::c::
+<<
+~##""##tekst maszynowy##""##
+~##tekst maszynowy##
+<<::c::
+<<
+~##""''tekst wyróżniony''""## (używa się dwóch apostrofów)
+~''tekst wyróżniony''
+<<::c::
+<<
+~##""++tekst przekreślony++""##
+~++tekst przekreślony++
+<<::c::
+<<
+~##""&pound;&pound;Text insertion&pound;&pound;""##
+~ &pound;&pound;Tekst dodany&pound;&pound;
+<<::c::
+<<
+~##""&yen;&yen;Text deletion&yen;&yen;""##
+~ &yen;&yen;Tekst usunięty&yen;&yen;
+<<::c::
+<<
+~##""oznaczenie klawisza: #%Enter#%""##
+~oznaczenie klawisza: #%Enter#%
+<<::c::
+<<
+~##""@@tekst wycentrowany@@""##
+~@@tekst wycentrowany@@
+<<::c::
+<<
+~##""/* Treść pominięta */""##
+~/* Treść pominięta*/
+~Ukrywa treść objętą znacznikami. Dodatkowo nie wyświetla znaku końca linii. Przydatne przy wstawianiu komentarzy technicznych dotyczących składni artykułów.
+<<::c::
+<<
+~##""`` Treść pominięta (z zachowaniem znaków końca linni``""##
+~`` Treść pominięta (z zachowaniem znaków końca linni``
+~Ukrywa treść objętą znacznikami, ale zachowuje znajdujące się na jej końcu znaki końca linii bądź spacje.
+<<::c::
+===2. Nagłówki===
+
+Aby wstawiany tekst był nagłówkiem należy dodać odpowiednią ilość znaku ##=## po obydwu jego stronach. Sześć znaków ##=## wstawia największy nagłówek, dwa znaki ##=## &mdash; najmniejszy.
+<<
+~##""====== Bardzo duży nagłówek ======""##
+~====== Bardzo duży nagłówek ======
+<<::c::
+<<
+~##""===== Dość duży nagłówek =====""##
+~===== Dość duży nagłówek =====
+<<::c::
+<<
+~##""==== Średni nagłówek ====""##
+~==== Średni nagłówek ====
+<<::c::
+<<
+~##""=== Mniejszy nagłówek ===""##
+~=== Mniejszy nagłówek ===
+<<::c::
+<<
+~##""== Nagłówek bardzo mały ==""##
+~== Nagłówek bardzo mały ==
+<<::c::
+===3. Pozioma linia oddzielająca===
+~##""----""##
+----
+
+===4. Wymuszony znak nowej linii===
+~##""---""##
+---
+
+===5. Wypunktowania i wcięcia akapitów===
+
+Aby zastosować wcięcie akapitu należy rozpocząć linię od znaku tyldy (**~**), **tabulatora** lub **czterech spacji** (które zostaną automatycznie zamienione w znak tabulatora).
+<<
+##""~Ten tekst posiada wcięcie<br />~~Ten posiada podwójne wcięcie<br />&nbsp;&nbsp;&nbsp;&nbsp;Ten tekst także posiada wcięcie""##
+<<::c::
+<<
+~Ten tekst posiada wcięcie
+~~Ten posiada podwójne wcięcie
+    Ten tekst także posiada wcięcie
+<<::c::
+Aby utworzyć wypunktowanie lub listę numerowaną należy użyć nastepującej składni. Pamiętaj, że zamiast znaku tyldy (##**~**##) można użyć czterech spacji.
+<<
+**Lista wypunktowana**
+##""~- Pomarańcze""##
+##""~- Jabłka""##
+##""~- Cytryny""##
+<<::c::
+<<
+~- Pomarańcze
+~- Jabłka
+~- Cytryny
+<<::c::
+**Lista numerowana**
+<<
+##""~1) Pomarańcze""##
+##""~1) Jabłka""##
+##""~1) Cytryny""##
+<<::c::
+<<
+~1) Pomarańcze
+~1) Jabłka
+~1) Cytryny
+<<::c::
+**Lista numerowana (z użyciem wielkich liter)**
+<<
+##""~A) Pomarańcze""##
+##""~A) Gruszki""##
+<<::c::
+<<
+~A) Pomarańcze
+~A) Gruszki
+<<::c::
+**Lista numerowana (z użyciem małych liter)**
+<<
+##""~a) Pomarańcze""##
+##""~a) Gruszki""##
+<<::c::
+<<
+~a) Pomarańcze
+~a) Gruszki
+<<::c::
+**Lista numerowana (z użyciem numeracji rzymskiej)**
+<<
+##""~I) Pomarańcze""##
+##""~I) Gruszki""##
+<<::c::
+<<
+~I) Pomarańcze
+~I) Gruszki
+<<::c::
+**Lista numerowana (z użyciem numeracji rzymskiej małymi literami)**
+<<
+##""~i) Pomarańcze""##
+##""~i) Gruszki""##
+<<::c::
+<<
+~i) Pomarańcze
+~i) Gruszki
+<<::c::
+===6. Komentarze===
+
+Aby sformatować tekst jako komentarz, najpierw wstaw wcięcie ( **~**, **tabulator** lub **cztery spacje**), a następnie znak **""&amp;""**.
+
+##""~&amp; Komentarz tłumacza""##
+##""~~&amp; Odpowiedź na komentarz""##
+##""~~~&amp; Dalsze uwagi""##
+
+~& Komentarz tłumacza
+~~& Odpowiedź na komentarz
+~~~& Dalsze uwagi
+
+===7. Wstawianie grafiki===
+
+Aby wstawić grafikę, należy użyć akcji o nazwie ##image##.
+
+~##""{{image class="center" alt="logo DVD" title="Odnośnik z grafiką" url="images/dvdvideo.gif" link="RecentChanges"}}""##
+~{{image class="center" alt="logo DVD" title="Odnośnik z grafiką" url="images/dvdvideo.gif" link="RecentChanges"}}
+
+Wymagany jest jedynie parametr ##url## oraz ##alt##, pozostałe są opcjonalne. Parametr ##link## służy do wstawiania odnośnika (może być nim zarówno odnośnik wewnętrzny jak i zewnętrzny). Można także pominąć go w zupełności &mdash; w takim wypadku wstawiona zostanie jedynie grafika. Można użyć klas ##left##, ##right## oraz ##center##, które spowodują umieszczenie grafiki odpowiednio po stronie lewej, prawej lub na środku.
+
+===8. Odnośniki===
+
+Istnieją trzy możliwości tworzenia odnośników do stron **wewnątrz wiki**: ---
+~1) wstaw nazwę strony (##""WikiName""##): --- --- ##""FormattingRules""## --- FormattingRules --- ---
+~1) możesz dodać własny tekst dla odnośnika przez ujęcie go w nawiasy kwadratowe ##""[[""## i ##""]]""## (wewnątrz nawiasów wszystko po pierwszej spacji będzie traktowane jak tekst dla odnośnika): --- --- ##""[[FormattingRules Zasady formatowania artykułów w systemie Wikka]]""## --- [[FormattingRules Zasady formatowania stron w systemie Wikka]] --- ---
+~1) wstaw grafikę z odnośnikiem (patrz instrukcje wyżej).
+
+Aby wstawić **odnośnik do innych stron** (spoza wiki): ---
+~1) wpisz adres w treści strony: --- --- ##""http://www.example.com""## --- http://www.example.com --- --- 
+~1) możesz dodać własny tekst odnośnika przez ujęcie go w nawiasy kwadratowe ##""[[""## i ##""]]""## (wewnątrz nawiasów wszystko po pierwszej spacji będzie traktowane jak tekst dla odnośnika): --- --- ##""[[http://example.com/mandarynki/ Strona o mandarynkach]]""## --- [[http://example.com/mandarynki/ Strona o mandarynkach]] --- --- ##""[[mail@example.com Napisz do mnie!]]""## --- [[mail@example.com Napisz do mnie!]] --- ---
+~1) wstaw link typu //interwiki// (zobacz [[InterWiki listę stron dostępnych przez interwiki]]): --- --- ##""Wikipedia:WikkaWiki""## --- Wikipedia:WikkaWiki --- --- ##""Google:CSS""## --- Google:CSS --- --- ##""Thesaurus:Happy""## --- Thesaurus:Happy --- ---
+~1) możesz dodać własny tekst dla odnośnika analogicznie jak powyżej: --- --- ##""[[Wikipedia:WikkaWiki Co mówi Wikipedia na temat WikkaWiki?]]""##  --- [[Wikipedia:WikkaWiki Co mówi Wikipedia na temat WikkaWiki?]] 
+~1) wstaw grafikę z odnośnikiem (patrz niżej).
+
+===9. Tabele===
+
+Aby wstawić tabelę, należy użyć akcji o nazwie ##table##.
+
+~##""{{table columns="5" cellpadding="1" cells="###;ROZMIAR;KOLOR;URODA;INTELIGENCJA;SŁOŃ;duży;szary;znaczna;wysoka;ŻABA;nieduży;zielony;###;bardzo wysoka"}}""##
+~{{table columns="5" cellpadding="1" cells="###;ROZMIAR;KOLOR;URODA;INTELIGENCJA;SŁOŃ;duży;szary;znaczna;wysoka;ŻABA;nieduży;zielona;###;bardzo wysoka"}}
+
+W miejscu pustych komórek tabeli należy wstawić ##""###""##.
+Bardziej skomplikowane tabele można wstawiać używając języka HTML (patrz niżej).
+
+===10. Tekst kolorowy===
+
+Aby wstawić tekst w danym kolorze, należy użyć akcji o nazwie ##color##.
+<<
+~##""{{color c="blue" text="Cały jestem niebieski!"}}""##
+~{{color c="blue" text="Cały jestem niebieski!"}}
+<<::c::
+Można także użyć wartości szesnastkowych (zgodnie ze składnią HTML). Użyj parametru ##hex##.
+<<
+~##""{{color hex="#E60000" text="Czerwony."}}""##
+~{{color hex="#E60000" text="Czerwony."}}
+<<::c::
+Można także oprócz koloru znaków zmieniać kolor tła. W tym celu użyj parametrów ##fg## i ##bg##.
+<<
+~##""{{color fg="#A60000" bg="#f9f2d3" text="Mam żółtawe tło i czerwone znaki."}}""##
+~{{color fg="#A60000" bg="#f9f2d3" text="Mam żółtawe tło i czerwone znaki."}}
+<<::c::
+<<
+~##""{{color fg="yellow" bg="black" text="Mam czarne tło i zółte znaki."}}""##
+~{{color fg="yellow" bg="black" text="Mam czarne tło i zółte znaki."}}
+<<::c::
+
+===11. Tekst w ramce===
+
+Można wstawić tekst w ramce wyrównanej do lewej lub prawej strony. W przypadku wyrównania **do lewej** należy objąć tekst znakami ##&lt;&lt;##.
+
+~##""&lt;&lt;Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Duis volutpat nulla. Suspendisse convallis aliquam augue. Mauris nisi magna, commodo non, lobortis tempus, eleifend a, ante.&lt;&lt; &nbsp;Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Sed bibendum. Sed luctus. Nullam tempor iaculis velit. Praesent nunc justo, lacinia vel, malesuada quis, convallis gravida, felis. Nunc tincidunt imperdiet felis. Nullam lectus. Morbi at ligula. Aenean at risus. Nunc eros quam, pellentesque vitae, posuere a, ultricies a, orci. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Integer pretium est dictum purus. Integer eget nulla at enim laoreet rutrum. Sed aliquet bibendum justo. Nulla semper tellus sed quam. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Sed nec risus. Fusce est augue, laoreet in, blandit a, vehicula et, justo. Ut turpis. Mauris non eros.""##
+
+<<Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Duis volutpat nulla. Suspendisse convallis aliquam augue. Mauris nisi magna, commodo non, lobortis tempus, eleifend a, ante.<<  Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Sed bibendum. Sed luctus. Nullam tempor iaculis velit. Praesent nunc justo, lacinia vel, malesuada quis, convallis gravida, felis. Nunc tincidunt imperdiet felis. Nullam lectus. Morbi at ligula. Aenean at risus. Nunc eros quam, pellentesque vitae, posuere a, ultricies a, orci. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Integer pretium est dictum purus. Integer eget nulla at enim laoreet rutrum. Sed aliquet bibendum justo. Nulla semper tellus sed quam. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Sed nec risus. Fusce est augue, laoreet in, blandit a, vehicula et, justo. Ut turpis. Mauris non eros. 
+
+::c::Aby wstawić tekst w obramowaniu wyrównanym **do prawej** należy użyć znaków ##&gt;&gt;##.
+
+~##""&gt;&gt;Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Duis volutpat nulla. Suspendisse convallis aliquam augue. Mauris nisi magna, commodo non, lobortis tempus, eleifend a, ante.&gt;&gt; &nbsp;Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Sed bibendum. Sed luctus. Nullam tempor iaculis velit. Praesent nunc justo, lacinia vel, malesuada quis, convallis gravida, felis. Nunc tincidunt imperdiet felis. Nullam lectus. Morbi at ligula. Aenean at risus. Nunc eros quam, pellentesque vitae, posuere a, ultricies a, orci. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Integer pretium est dictum purus. Integer eget nulla at enim laoreet rutrum. Sed aliquet bibendum justo. Nulla semper tellus sed quam. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Sed nec risus. Fusce est augue, laoreet in, blandit a, vehicula et, justo. Ut turpis. Mauris non eros.""##
+
+>>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Duis volutpat nulla. Suspendisse convallis aliquam augue. Mauris nisi magna, commodo non, lobortis tempus, eleifend a, ante.>>  Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Sed bibendum. Sed luctus. Nullam tempor iaculis velit. Praesent nunc justo, lacinia vel, malesuada quis, convallis gravida, felis. Nunc tincidunt imperdiet felis. Nullam lectus. Morbi at ligula. Aenean at risus. Nunc eros quam, pellentesque vitae, posuere a, ultricies a, orci. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Integer pretium est dictum purus. Integer eget nulla at enim laoreet rutrum. Sed aliquet bibendum justo. Nulla semper tellus sed quam. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Sed nec risus. Fusce est augue, laoreet in, blandit a, vehicula et, justo. Ut turpis. Mauris non eros. 
+::c::Wstaw ##""::c::""##  aby dalszy tekst umieścić pod tekstem w obramowaniu (działanie identyczne jak w języku HTML polecenie clear="both").
+
+===12. Formatowaniu kodu===
+
+Przy użyciu relatywnie prostej składni, można do treści strony wstawić kod źródłowy w dowolnym języku programowania. Cały tekst wewnątrz tak zdefiniowanego bloku nie będzie w żaden sposób interpretowany.
+Aby wstawić blok z kodem źródłowym **bez wyszczególniania języka** należy użyć składni:
+
+~##""%% To jest blok tekstu będący kodem. %%""##. 
+
+%% To jest blok tekstu będący kodem. %%
+
+Aby wstawić blok z kodem źródłowym **z kolorowaniem składni**, należy dodatkowo okreslić język kodu. Lista obsługiwanych języków znajduje się poniżej.
+
+~##""%%(""{{color c="red" text="php"}}"")<br />&lt;?php<br />echo "Hello, World!";<br />?&gt;<br />%%""##
+
+%%(php)
+<?php
+echo "Hello, World!";
+?>
+%%
+
+Można także włączyć numerowanie linii i określić początkowy numer linii:
+
+~##""%%(php;""{{color c="red" text="15"}}"")<br />&lt;?php<br />echo "Hello, World!";<br />?&gt;<br />%%""##
+
+%%(php;15)
+<?php
+echo "Hello, World!";
+?>
+%%
+
+Jeśli dodatkowo podasz nazwę pliku, będzie ona użyta przy pobieraniu pliku z kodem.
+
+~##""%%(php;15;""{{color c="red" text="test.php"}}"")<br />&lt;?php<br />echo "Hello, World!";<br />?&gt;<br />%%""##
+
+%%(php;15;test.php)
+<?php
+echo "Hello, World!";
+?>
+%%
+
+|?|Obsługiwane języki||
+||
+|=|Język|=|Formatter|=|Język|=|Formatter|=|Język|=|Formatter||
+|#|
+|=|Actionscript||##actionscript##|=|ABAP||##abap##|=|ADA||##ada##||
+|=|Apache Log||##apache##|=|""AppleScript""||##applescript##|=|ASM||##asm##||
+|=|ASP||##asp##|=|""AutoIT""||##autoit##|=|Bash||##bash##||
+|=|""BlitzBasic""||##blitzbasic##|=|""Basic4GL""||##basic4gl##|=|bnf||##bnf##||
+|=|C||##c##|=|C for Macs||##c_mac##|=|C#||##csharp##||
+|=|C""++""||##cpp##|=|C""++"" (+QT)||##cpp-qt##|=|CAD DCL||##caddcl##||
+|=|""CadLisp""||##cadlisp##|=|CFDG||##cfdg##|=|""ColdFusion""||##cfm##||
+|=|CSS||##css##|=|D||##d##|=|Delphi||##delphi##||
+|=|Diff-Output||##diff##|=|DIV||##div##|=|DOS||##dos##||
+|=|Dot||##dot##|=|Eiffel||##eiffel##|=|Fortran||##fortran##||
+|=|""FreeBasic""||##freebasic##|=|FOURJ's Genero 4GL||##genero##|=|GML||##gml##||
+|=|Groovy||##groovy##|=|Haskell||##haskell##|=|HTML||##html4strict##||
+|=|INI||##ini##|=|Inno Script||##inno##|=|Io||##io##||
+|=|Java 5||##java5##|=|Java||##java##|=|Javascript||##javascript##||
+|=|""LaTeX""||##latex##|=|Lisp||##lisp##|=|Lua||##lua##||
+|=|Matlab||##matlab##|=|mIRC Scripting||##mirc##|=|Microchip Assembler||##mpasm##||
+|=|Microsoft Registry||##reg##|=|Motorola 68k Assembler||##m68k##|=|""MySQL""||##mysql##||
+|=|NSIS||##nsis##|=|Objective C||##objc##|=|""OpenOffice"" BASIC||##oobas##||
+|=|Objective Caml||##ocaml##|=|Objective Caml (brief)||##ocaml-brief##|=|Oracle 8||##oracle8##||
+|=|Pascal||##pascal##|=|Per (FOURJ's Genero 4GL)||##per##|=|Perl||##perl##||
+|=|PHP||##php##|=|PHP (brief)||##php-brief##|=|PL/SQL||##plsql##||
+|=|Python||##phyton##|=|Q(uick)BASIC||##qbasic##|=|robots.txt||##robots##||
+|=|Ruby on Rails||##rails##|=|Ruby||##ruby##|=|SAS||##sas##||
+|=|Scheme||##scheme##|=|sdlBasic||##sdlbasic##|=|Smarty||##smarty##||
+|=|SQL||##sql##|=|TCL/iTCL||##tcl##|=|T-SQL||##tsql##||
+|=|Text||##text##|=|thinBasic||##thinbasic##|=|Unoidl||##idl##||
+|=|VB.NET||##vbnet##|=|VHDL||##vhdl##|=|Visual BASIC||##vb##||
+|=|Visual Fox Pro||##visualfoxpro##|=|""WinBatch""||##winbatch##|=|XML||##xml##||
+|=|X""++""||##xpp##|=|""ZiLOG"" Z80 Assembler||##z80##|=| ||
+
+===13. Mindmapy===
+
+Wikka obsługuje mindmapy w formacie [[Wikka:FreeMind mindmapy w formacie FreeMind]]. Umieścić mindmapę w artykule można na dwa sposoby.
+
+**Sposób 1**: Umieścić plik z mindmapą na serwerze oraz wstawić odnośnik do strony, np: --- ##""http://yourdomain.com/freemind/freemind.mm""## --- Nie ma potrzeby stosowania dodatkowego formatowania.
+
+**Sposób 2**: Wkleić zawartość pliku z mindmapą bezpośrednio do treści strony: 
+~-Otworzyć plik w formacie ""FreeMind"" w edytorze tekstowym.
+~- Zaznaczyć całość tekstu i skopiować do schowka.
+~- Wkleić do treści strony w Wikka.
+
+===14. Wstawianie kodu HTML===
+
+Można z łatwością umieścić kod HTML na stronie wiki przez objęcie go podwójnym cudzysłowem:
+
+~##&quot;&quot;[html code]&quot;&quot;##
+
+<<
+~##&quot;&quot;y = x<sup>n+1</sup>&quot;&quot;##
+~""y = x<sup>n+1</sup>""
+<<::c::
+<<
+~##&quot;&quot;<acronym title="Cascade Style Sheets">CSS</acronym>&quot;&quot;##
+~""<acronym title="Cascade Style Sheets">CSS</acronym>""
+<<::c::
+Domyślnie niektóre polecenia HTML są usuwane, celem zabezpieczenia przed potencjalnie niebezpiecznym kodem. Więcej informacji na ten temat: Wikka:SafeHTML.
+Jeśli chcesz wyłączyć to zabezpieczenie, przeczytaj instrukcje na stronie Wikka:UsingHTML.
+
+----
+CategoryWiki

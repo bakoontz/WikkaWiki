@@ -1,0 +1,11 @@
+=====Kategoria: administracja systemem wiki=====
+Ta kategoria zawiera strony dotyczące administrowania tym systemem wiki. Tworząc strony należące do tej kategorii, należy dodać słowo kluczowe CategoryAdmin na ich końcu, co zapewni umieszczenie ich na poniższej liście.
+
+
+----
+
+{{category}}
+
+
+----
+[[CategoryCategory Lista wszystkich kategorii]]
