@@ -159,6 +159,8 @@ if ($this->IsAdmin($this->GetUser()))
 	
 	//perform actions if required
 	$g_action = '';
+	//var_dump($_REQUEST);
+	echo $this->GetSafeVar('submit','post');
 	if(isset($_GET['action']))
 	{
 		$g_action = $this->GetSafeVar('action', 'get');
@@ -181,12 +183,12 @@ if ($this->IsAdmin($this->GetUser()))
 		echo $this->Action('userfeedback'); #to be added in 1.1.7, see #608
 	}
 	*/
-	elseif($g_action == 'delete')
+	elseif($this->GetSafeVar('submit', 'post') == T_("Delete"))
 	{
-		if(isset($_GET['user']))
+		if($this->GetSafeVar('user', 'post') != null)
 		{
 			include_once($this->BuildFullpathFromMultipath('..'.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'libs'.DIRECTORY_SEPARATOR.'admin.lib.php', $this->config['action_path']));
-			$status = DeleteUser($this, $this->GetSafeVar('user', 'get'));
+			$status = DeleteUser($this, $this->GetSafeVar('user', 'post'));
 			if(false===$status)
 			{
 				$this->Redirect($this->Href(), T_("Sorry, could not delete user. Please check your admin settings"));
@@ -197,12 +199,12 @@ if ($this->IsAdmin($this->GetUser()))
 			}
 		}
 	}
-	elseif($g_action == 'massdelete')
+	elseif($this->GetSafeVar('submit', 'post') == T_("Execute"))
 	{
 		$usernames = array();
-		foreach($_GET as $key => $val)
+		foreach($_POST as $key => $val)
 		{
-			$val = $this->GetSafeVar($key, 'get');
+			$val = $this->GetSafeVar($key, 'post');
 			if($val == "on")
 			{
 				array_push($usernames, $this->htmlspecialchars_ent($key));
@@ -210,6 +212,7 @@ if ($this->IsAdmin($this->GetUser()))
 		}
 		if(count($usernames) > 0)
 		{
+			echo $this->FormOpen();
 			echo '<h3>'.T_("Delete these users?").'</h3><br />'."\n".'<ul>';
 			$errors = 0;
 			foreach($usernames as $username)
@@ -223,7 +226,6 @@ if ($this->IsAdmin($this->GetUser()))
 				echo "<li>".$username."</li>\n";
 			}
 			echo "</ul><br/>\n";
-			echo $this->FormOpen() 
 			?>
 			<table border="0" cellspacing="0" cellpadding="0">
 				<tr>
@@ -250,7 +252,11 @@ if ($this->IsAdmin($this->GetUser()))
 				</tr>
 			</table>
 			<?php
-			print($this->FormClose());
+			echo $this->FormClose();
+		}
+		else
+		{
+			$this->Redirect();
 		}
 	}	
 	else if($this->GetSafeVar('massaction', 'post') == 'massdelete')
@@ -433,13 +439,11 @@ if ($this->IsAdmin($this->GetUser()))
 				// build handler links
 				// Disable delete link if user is admin
 				$deleteuser = '';
-				if($this->IsAdmin($user['name']))
+				if(!$this->IsAdmin($user['name']))
 				{
-					$deleteuser = "<span class='disabled'>".T_("delete")."</span>";
-				}
-				else
-				{
-					$deleteuser = '<a title="'.sprintf(T_("Remove user %s"), $user['name']).'" href="'.$this->Href('','','user='.$user['name'].'&amp;action=delete').'">'.T_("delete").'</a>';
+					$deleteuser .= '<input type="submit" value="'.T_("Delete").'" name="submit" />';
+					$deleteuser .= '<input type="hidden" name="user" value="'.$user['name'].'"/>';
+					//$deleteuser = '<a title="'.sprintf(T_("Remove user %s"), $user['name']).'" href="'.$this->Href('','','user='.$user['name'].'&amp;action=delete').'">'.T_("delete").'</a>';
 				}
 				//$feedbackuser = '<a title="'.sprintf(ADMINUSERS_ACTION_FEEDBACK_LINK_TITLE, $user['name']).'" href="'.$this->Href('','','user='.$user['name'].'&amp;action=feedback').'">'.ADMINUSERS_ACTION_FEEDBACK_LINK.'</a>'; #to be added in 1.1.7, see #608
 	
@@ -474,7 +478,7 @@ if ($this->IsAdmin($this->GetUser()))
 			$data_table .= "</table>\n";
 
 			// mass operations		JW 2005-07-19 accesskey removed (causes more problems than it solves)
-			$form_mass = $this->FormOpen('','','get');
+			$form_mass = $this->FormOpen();
 			$form_mass .= $data_table;			
 			$form_mass .= '<fieldset>'."\n".
 				'	<legend>'.T_("Mass-action").'</legend>'."\n".
@@ -484,7 +488,7 @@ if ($this->IsAdmin($this->GetUser()))
 				'		<option value="" selected="selected">---</option>'."\n".
 				'		<option value="massdelete">'.T_("Delete selected").'</option>'."\n".
 				//'		<option value="massfeedback">'.ADMINUSERS_FORM_MASSACTION_OPT_FEEDBACK.'</option>'."\n". #to be added in 1.1.7, see #608
-				'	</select> <input type="submit" value="'.T_("Submit").'" />'."\n".
+				'	</select> <input type="submit" name="submit" value="'.T_("Execute").'" />'."\n".
 				'</fieldset>';
 			$form_mass .= $this->FormClose();
 
