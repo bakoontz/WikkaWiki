@@ -1334,7 +1334,8 @@ class Wakka
 			$originip = $_SERVER['REMOTE_ADDR'];
 		}
 		$ua			= (isset($_SERVER['HTTP_USER_AGENT'])) ? '['.$_SERVER['HTTP_USER_AGENT'].']' : '[?]';
-		$body		= trim($body);
+		$ua = $this->htmlspecialchars_ent($ua);
+		$body		= $this->htmlspecialchars_ent(trim($body));
 		$sig		= SPAMLOG_SIG.' '.$type.' '.$time.' '.$tag.' - '.$originip.' - '.$user.' '.$ua.' - '.$reason.' - '.$urlcount."\n";
 		$content	= $sig.$body."\n\n";
 
