@@ -273,7 +273,7 @@ elseif ($this->page && $this->HasAccess('read') && $this->handler == 'show' && $
 					$error_msg = sprintf(T_("Attempted file upload was too big. Maximum allowed size is %s."), bytesToHumanReadableUsage($max_upload_size));
 					unlink($_FILES['file']['tmp_name']);
 				}
-				elseif (preg_match('/.+\.('.$allowed_extensions.')$/i', $_FILES['file']['name']))
+				elseif (preg_match('/^[^\.]+\.('.$allowed_extensions.')$/i', $_FILES['file']['name']))
 				{
 					$strippedname = str_replace('\'', '', $_FILES['file']['name']);
 					$strippedname = rawurlencode($strippedname);

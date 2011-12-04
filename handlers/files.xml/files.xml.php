@@ -51,7 +51,7 @@ if (!isset($_GET['file']) || !isset($_GET['action']) || !is_string($_GET['file']
 }
 
 $file = $this->GetSafeVar('file', 'get');
-if ('.' == $file{0})
+if(preg_match("/^[\.\/]/", $file))
 {
 	$this->Redirect($this->Href(), T_("Sorry, files of this type are not allowed."));
 }

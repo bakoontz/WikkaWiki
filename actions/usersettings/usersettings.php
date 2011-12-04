@@ -139,9 +139,9 @@ if ($user = $this->GetUser())
 					SET	email = '".mysql_real_escape_string($email)."',
 						doubleclickedit = '".mysql_real_escape_string($doubleclickedit)."',
 						show_comments = '".mysql_real_escape_string($show_comments)."',
-						default_comment_display = '".$default_comment_display."',
-						revisioncount = ".$revisioncount.",
-						changescount = ".$changescount.",
+						default_comment_display = '".mysql_real_escape_string($default_comment_display)."',
+						revisioncount = ".mysql_real_escape_string($revisioncount).",
+						changescount = ".mysql_real_escape_string($changescount).",
 						theme = '".mysql_real_escape_string($usertheme)."'
 					WHERE name = '".$user['name']."'
 					LIMIT 1"
