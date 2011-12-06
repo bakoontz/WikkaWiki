@@ -190,6 +190,12 @@ else
 $action = $this->GetSafeVar('action', 'get');
 $file = $this->GetSafeVar('file', 'get');
 $file_to_delete = $this->GetSafeVar('file_to_delete', 'post');
+$prohibited_filepath_tokens = "/^[\.\/\\\]/";
+if(preg_match($prohibited_filepath_tokens, $file) ||
+   preg_match($prohibited_filepath_tokens, $file_to_delete))
+{
+	$this->Redirect($this->Href(), T_("Sorry, files of this type are not allowed."));
+}
 
 // 1a. User has requested a file to be deleted
 if(FALSE===empty($action) && FALSE===empty($file) && TRUE===userCanUpload())
