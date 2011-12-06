@@ -31,5 +31,5 @@ if (!defined('WAKKA_VERSION')) define('WAKKA_VERSION', $svn_version);
  * Defines the current Wikka patch level. This should be 0 by default, 
  * and does not need to be changed for major/minor releases.
  */
-if(!defined('WIKKA_PATCH_LEVEL')) define('WIKKA_PATCH_LEVEL', '2');
+if(!defined('WIKKA_PATCH_LEVEL')) define('WIKKA_PATCH_LEVEL', '3');
 ?>
