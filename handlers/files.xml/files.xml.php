@@ -47,14 +47,21 @@ if (!isset($_GET['file']) || !isset($_GET['action']) || !is_string($_GET['file']
 {
 	// invocation of files.xml must provide $_GET['file'] and $_GET['action'].
 	// todo: add an error message here: probably, T_("The parameters you supplied are incorrect, one of the two revisions may have been removed.") should be splitted.
-	$this->Redirect('');
+	$this->Redirect();
 }
 
-$file = $this->GetSafeVar('file', 'get');
-if(preg_match("/^[\.\/\\\]/", $file))
+// Sanitize the filename to prevent path traversal attacks
+$file = $this->GetSafeVar('file','get');
+$matches = '';
+preg_match("/^.*?([^\.\/\\\]+\.[A-Za-z0-9]{2,4})$/", $file, $matches);
+if(isset($matches[1]))
+	$file = $matches[1];
+else
 {
-	$this->Redirect($this->Href(), T_("Sorry, files of this type are not allowed."));
+	$this->SetRedirectMessage(T_("Invalid filename"));
+	$this->Redirect();
 }
+
 // do the action
 $action = $this->GetSafeVar('action', 'get');
 switch ($action)	# #312
