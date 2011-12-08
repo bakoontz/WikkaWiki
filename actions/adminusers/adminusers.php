@@ -159,8 +159,6 @@ if ($this->IsAdmin($this->GetUser()))
 	
 	//perform actions if required
 	$g_action = '';
-	//var_dump($_REQUEST);
-	echo $this->GetSafeVar('submit','post');
 	if(isset($_GET['action']))
 	{
 		$g_action = $this->GetSafeVar('action', 'get');
@@ -185,6 +183,12 @@ if ($this->IsAdmin($this->GetUser()))
 	*/
 	elseif($this->GetSafeVar('submit', 'post') == T_("Delete"))
 	{
+		$form_id = $this->GetSafeVar('form_id', 'post');
+		$keyArray = $this->getSessionKey($form_id);
+	    if(TRUE !== $this->hasValidSessionKey($keyArray))
+		{
+			$this->Redirect($this->Href(), T_("Form validation failed"));
+		}
 		if($this->GetSafeVar('user', 'post') != null)
 		{
 			include_once($this->BuildFullpathFromMultipath('..'.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'libs'.DIRECTORY_SEPARATOR.'admin.lib.php', $this->config['action_path']));
@@ -201,6 +205,13 @@ if ($this->IsAdmin($this->GetUser()))
 	}
 	elseif($this->GetSafeVar('submit', 'post') == T_("Execute"))
 	{
+		$form_id = $this->GetSafeVar('form_id', 'post');
+		$keyArray = $this->getSessionKey($form_id);
+	    if(TRUE !== $this->hasValidSessionKey($keyArray))
+		{
+			$this->Redirect($this->Href(), T_("Form validation failed"));
+		}
+
 		$usernames = array();
 		foreach($_POST as $key => $val)
 		{
@@ -261,6 +272,13 @@ if ($this->IsAdmin($this->GetUser()))
 	}	
 	else if($this->GetSafeVar('massaction', 'post') == 'massdelete')
 	{
+		$form_id = $this->GetSafeVar('form_id', 'post');
+		$keyArray = $this->getSessionKey($form_id);
+	    if(TRUE !== $this->hasValidSessionKey($keyArray))
+		{
+			$this->Redirect($this->Href(), T_("Form validation failed"));
+		}
+
 		$usernames = array();
 		foreach($_POST as $key => $val)
 		{
