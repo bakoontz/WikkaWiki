@@ -187,15 +187,31 @@ else
 	$is_writable = TRUE;
 }
 
+// Sanitize filenames to prevent path traversal attacks
 $action = $this->GetSafeVar('action', 'get');
 $file = $this->GetSafeVar('file', 'get');
 $file_to_delete = $this->GetSafeVar('file_to_delete', 'post');
-$prohibited_filepath_tokens = "/^[\.\/\\\]/";
-if(preg_match($prohibited_filepath_tokens, $file) ||
-   preg_match($prohibited_filepath_tokens, $file_to_delete))
+
+$fileregex = "/^.*?([^\.\/\\\]+\.[A-Za-z0-9]{2,4})$/";
+if(isset($_GET['file']))
 {
-	$this->Redirect($this->Href(), T_("Sorry, files of this type are not allowed."));
+	$matches = '';
+	preg_match($fileregex, $file, $matches);
+	if(isset($matches[1]))
+		$file = $matches[1];
+	else
+		$this->Redirect('', T_("Invalid filename"));
 }
+if(isset($_POST['file_to_delete']))
+{
+	$matches = '';
+	preg_match($fileregex, $file_to_delete, $matches);
+	if(isset($matches[1]))
+		$file_to_delete = $matches[1];
+	else
+		$this->Redirect('', T_("Invalid filename"));
+}
+
 
 // 1a. User has requested a file to be deleted
 if(FALSE===empty($action) && FALSE===empty($file) && TRUE===userCanUpload())
