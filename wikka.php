@@ -539,6 +539,10 @@ $wikka_cookie_path = ('/' == $base_url_path) ? '/' : substr($base_url_path,0,-1)
 session_set_cookie_params(0, $wikka_cookie_path);
 session_name(md5(BASIC_COOKIE_NAME.$wakkaConfig['wiki_suffix']));
 session_start();
+if(!isset($_SESSION['CSRFToken']))
+{
+	$_SESSION['CSRFToken'] = sha1(getmicrotime());
+}
 
 // fetch wakka location
 /**

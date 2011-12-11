@@ -16,8 +16,6 @@
  * @uses		Wakka::FormOpen()
  * @uses		Wakka::GetPageOwner()
  * @uses		Wakka::GetPageTag()
- * @uses		Wakka::getSessionKey()
- * @uses		Wakka::hasValidSessionKey()
  * @uses		Wakka::htmlspecialchars_ent()
  * @uses		Wakka::Href()
  * @uses		Wakka::LoadSingle()
@@ -42,18 +40,8 @@ $keep_post_data = FALSE;
 
 if ($this->UserIsOwner())
 {
-	if (isset($_POST['form_id']))
+	if (NULL != $_POST)
 	{
-
-		if (FALSE != ($aKey = $this->getSessionKey($this->GetSafeVar('form_id', 'post'))))     # check if page key was stored in session 
-		{ 
-			if (TRUE == ($rc = $this->hasValidSessionKey($aKey)))   # check if correct name,key pair was passed 
-			{ 
-				$keep_post_data  = TRUE; 
-			} 
-        } 
-        if(!$keep_post_data) unset($_POST); 
-		
 		// cancel action and return to the page
 		if (isset($_POST['cancel']) && ($_POST['cancel'] == T_("Cancel")))
 		{

@@ -93,7 +93,7 @@ else if ($this->HasAccess("write") && $this->HasAccess("read"))
 		}
 	}
 
-	if (isset($_POST['form_id']))
+	if(NULL != $_POST)
 	{
 		// strip CRLF line endings down to LF to achieve consistency ... plus it saves database space.
 		// Note: these codes must remain enclosed in double-quotes to work! -- JsnX
@@ -118,14 +118,6 @@ else if ($this->HasAccess("write") && $this->HasAccess("read"))
 		// only if saving:
 		if ($this->GetSafeVar('submit', 'post') == T_("Store"))
 		{
-			if (FALSE != ($aKey = $this->getSessionKey($this->GetSafeVar('form_id', 'post'))))	# check if form key was stored in session
-			{
-				if (TRUE != ($rc = $this->hasValidSessionKey($aKey)))	# check if correct name,key pair was passed
-				{
-					$error = 'Something went wrong with your credentials. Page was not saved';
-				}
-			}
-			
 			// check for overwriting
 			if ($this->page)
 			{
