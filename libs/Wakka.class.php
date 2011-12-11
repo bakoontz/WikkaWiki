@@ -857,6 +857,9 @@ class Wakka
 	 * Get a value provided by user (by get, post or cookie) and sanitize it.
 	 * The method is also helpful to disable warning when the value was absent.
 	 *
+	 * Note that form token checks are enforced for all POST
+	 * operations to prevent CSRF attacks.
+	 *
 	 * @version	1.0
 	 *
 	 * @uses	Wakka::htmlspecialchars_ent()
@@ -867,14 +870,41 @@ class Wakka
 	 * @param	string	$varname required: field name on get or post or cookie name
 	 * @param	string	$gpc one of 'get', 'post', or 'cookie'. Optional,
 	 *			defaults to 'get'.
-	 * @return	string	sanitized value of $_GET[$varname] (or $_POST, $_COOKIE, depending on $gpc)
+	 * @param   string  $authenticate one of TRUE (use for sensitive
+				 POSTs or FALSE (do not check form token). Optional, defaults to
+				 TRUE (most secure option).
+	 * @return	string	sanitized value of $_GET[$varname] (or $_POST,
+	 *          $_COOKIE, depending on $gpc).  Redirects with error message upon
+	 *          authentication error.
 	 */
-	function GetSafeVar($varname, $gpc='get')
+	function GetSafeVar($varname, $gpc='get', $authenticate=TRUE)
 	{
 		$safe_var = NULL;
 		if ($gpc == 'post')
 		{
-			$safe_var = isset($_POST[$varname]) ? $_POST[$varname] : NULL;
+			// Is this a posted form?
+			if(NULL != $_POST)
+			{
+				if(TRUE == $authenticate)
+				{
+					if(!isset($_POST['CSRFToken']))
+					{
+						$this->SetRedirectMessage('Authentication failed: NoCSRFToken');
+						$this->Redirect();
+					}
+					$CSRFToken = $this->htmlspecialchars_ent($_POST['CSRFToken']);
+					if($CSRFToken != $_SESSION['CSRFToken'])
+					{
+						$this->SetRedirectMessage('Authentication failed: CSRFToken mismatch');
+						$this->Redirect();
+					}
+				}
+				$safe_var = isset($_POST[$varname]) ? $_POST[$varname] : NULL;
+			}
+			else
+			{
+				$safe_var = NULL;
+			}
 		}
 		elseif ($gpc == 'get')
 		{
@@ -1098,117 +1128,6 @@ class Wakka
 	function GetWikkaPatchLevel()
 	{
 		return $this->PATCH_LEVEL;
-	}
-
-
-	/**
-	 * Create and store a secret key ("session key").
-	 *
-	 * Creates a random value and a random field name to be used to pass on the value.
-	 * The key,value pair is stored in the session as a serialized array.
-	 *
-	 * @author		{@link http://wikkawiki.org/JavaWoman JavaWoman}
-	 * @copyright	Copyright (c) 2005, Marjolein Katsma
-	 * @license		http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
-	 * @version		0.5
-	 *
-	 * @access		public
-	 *
-	 * @param		string	$keyname	required: name under which created secret key should be stored in the session
-	 * @return		array				fieldname and key value.
-	 */
-	function createSessionKey($keyname)
-	{
-		// create key and field name for it
-		$key = md5(getmicrotime());
-		$field = 'f'.substr(md5($key.getmicrotime()),0,10);
-		// store session key
-		$_SESSION[$keyname] = serialize(array($field,$key));
-		// return name, value pair
-		return array($field,$key);
-	}
-
-	/**
-	 * Retrieve a secret session key.
-	 *
-	 * Retrieves a named secret key and returns the result as an array with name,value pair.
-	 * Returns FALSE if the key is not found.
-	 *
-	 * @author		{@link http://wikkawiki.org/JavaWoman JavaWoman}
-	 * @copyright	Copyright (c) 2005, Marjolein Katsma
-	 * @license		http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
-	 * @version		0.5
-	 *
-	 * @access		public
-	 *
-	 * @param		string	$keyname	required: name of secret key to retrieve from the session
-	 * @return		mixed				array with name,value pair on success, FALSE if entry not found.
-	 */
-	function getSessionKey($keyname)
-	{
-		if (!isset($_SESSION[$keyname]))
-		{
-			return FALSE;
-		}
-		else
-		{
-			$aKey = unserialize($_SESSION[$keyname]);		# retrieve secret key data
-			unset($_SESSION[$keyname]);						# clear secret key
-			return $aKey;
-		}
-	}
-
-	/**
-	 * Check if a user-provided key/value matches the one stored in the server-provided "session key".
-	 *
-	 * <p>Used to defend against FormSpoofing: each form gets a unique key+value which are stored
-	 * on the server(session) as well as send to the user (hidden form fields). If the user $_POSTs data,
-	 * there is a check if key+value are included and match those stored in the session. Otherwise the data is
-	 * discarded.</p>
-	 *
-	 * Make sure to check for identity TRUE (TRUE === returnval), do not evaluate return value
-	 * as boolean!
-	 *
-	 * @author		{@link http://wikkawiki.org/JavaWoman JavaWoman}
-	 * @copyright	Copyright (c) 2005, Marjolein Katsma
-	 * @license		http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
-	 * @version		0.5
-	 *
-	 * @access		public
-	 * @param		array	$aKey	required: [0] fieldname, [1] key value.
-	 * @param		string	$method	optional: form method; default post;
-	 * @return		mixed	TRUE if correct name,value found; reason for failure otherwise.
-	 * @todo	replace $method by $useGet=FALSE (easier since we only have two methods)
-	 * @todo	do we need error messages here? If not, return FALSE instead (more logical).
-	 * @todo	prepare strings for internationalization
-	 */
-	function hasValidSessionKey($aKey, $method='post')
-	{
-		// get pair to look for
-		list($ses_field,$ses_key) = $aKey;
-		// check method and prepare what to look for
-		if (isset($method))
-		{
-			$aServervars = ($method == 'get') ? $_GET : $_POST;
-		}
-		else
-		{
-			$aServervars = $_POST;					# default
-		}
-
-		// check passed values
-		if (!isset($aServervars[$ses_field]))
-		{
-			return 'form no key';					# key not present
-		}
-		elseif ($aServervars[$ses_field] != $ses_key)
-		{
-			return 'form bad key';					# incorrect value passed
-		}
-		else
-		{
-			return TRUE;							# all is well
-		}
 	}
 
 	/**
@@ -3179,10 +3098,7 @@ class Wakka
 		// add validation key fields used against FormSpoofing
 		if('post' == $formMethod)
 		{
-			$tmp = $this->createSessionKey($id);
-			$hidden[$tmp[0]] = $tmp[1];
-			unset($tmp);
-			$hidden['form_id'] = $id;
+			$hidden['CSRFToken'] = $_SESSION['CSRFToken'];
 		}
 
 		// build HTML fragment

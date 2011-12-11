@@ -12,8 +12,6 @@
  * @uses	Wakka::UserIsOwner()
  * @uses	Wakka::LoadSingle()
  * @uses	Wakka::GetUserName()
- * @uses	Wakka::getSessionKey()
- * @uses	Wakka::hasValidSessionKey()
  * @uses	Wakka::Query()
  * @uses	Href()
  * 
@@ -27,19 +25,11 @@ if(isset($_POST['form_id']) && isset($_POST["comment_id"]))
 	$current_user = $this->GetUserName();	
 	
 	$delete = FALSE;
-    if (FALSE != ($aKey = $this->getSessionKey($this->GetSafeVar('form_id', 'post'))))	# check if form key was stored in session
+	if ($this->UserIsOwner() || $comment["user"]==$current_user)
 	{
-		if (TRUE == ($rc = $this->hasValidSessionKey($aKey)))	# check if correct name,key pair was passed
-		{
-			
-			if ($this->UserIsOwner() || $comment["user"]==$current_user)
-			{
-				$delete = TRUE;
-			}
-			
-		}
+		$delete = TRUE;
 	}
-
+			
 	// delete comment
 	if (TRUE === $delete)
 	{

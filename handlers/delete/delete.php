@@ -35,28 +35,17 @@ if ($this->GetSafeVar('cancel', 'post') == T_("Cancel"))
 
 if ($this->IsAdmin() || ($this->UserIsOwner($tag) && (bool) $this->GetConfigValue('owner_delete_page')))
 {
-	if (isset($_POST['form_id']))
+	if (NULL != $_POST)
     {
-	    $delete = FALSE;
-    	if (FALSE != ($aKey = $this->getSessionKey($this->GetSafeVar('form_id', 'post'))))	# check if form key was stored in session
-		{
-			if (TRUE == ($rc = $this->hasValidSessionKey($aKey)))	# check if correct name,key pair was passed
-			{
-				$delete = TRUE;
-			}
-		}
-		if (TRUE == $delete)
-		{
-			// delete the page, comments, related "from" links, acls and referrers
-			$this->Query("DELETE FROM ".$this->GetConfigValue('table_prefix')."pages WHERE tag = '".mysql_real_escape_string($tag)."'");
-			$this->Query("DELETE FROM ".$this->GetConfigValue('table_prefix')."comments WHERE page_tag = '".mysql_real_escape_string($tag)."'");
-			$this->Query("DELETE FROM ".$this->GetConfigValue('table_prefix')."links WHERE from_tag = '".mysql_real_escape_string($tag)."'");
-			$this->Query("DELETE FROM ".$this->GetConfigValue('table_prefix')."acls WHERE page_tag = '".mysql_real_escape_string($tag)."'");
-			$this->Query("DELETE FROM ".$this->GetConfigValue('table_prefix')."referrers WHERE page_tag = '".mysql_real_escape_string($tag)."'");
+		// delete the page, comments, related "from" links, acls and referrers
+		$this->Query("DELETE FROM ".$this->GetConfigValue('table_prefix')."pages WHERE tag = '".mysql_real_escape_string($tag)."'");
+		$this->Query("DELETE FROM ".$this->GetConfigValue('table_prefix')."comments WHERE page_tag = '".mysql_real_escape_string($tag)."'");
+		$this->Query("DELETE FROM ".$this->GetConfigValue('table_prefix')."links WHERE from_tag = '".mysql_real_escape_string($tag)."'");
+		$this->Query("DELETE FROM ".$this->GetConfigValue('table_prefix')."acls WHERE page_tag = '".mysql_real_escape_string($tag)."'");
+		$this->Query("DELETE FROM ".$this->GetConfigValue('table_prefix')."referrers WHERE page_tag = '".mysql_real_escape_string($tag)."'");
 
-			// redirect back to main page
-			$this->Redirect(WIKKA_BASE_URL, T_("Page has been deleted!"));
-		}
+		// redirect back to main page
+		$this->Redirect(WIKKA_BASE_URL, T_("Page has been deleted!"));
 	}
 	else
 	{

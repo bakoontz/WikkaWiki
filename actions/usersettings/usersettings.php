@@ -382,7 +382,8 @@ else
 					$error = T_("Please fill in a password.");
 					$password_highlight = 'class="highlight"';
 					break;
-				case (md5($existingUser['challenge'].$this->GetSafeVar('password', 'post')) != $existingUser['password']):
+				case
+				(md5($existingUser['challenge'].$this->GetSafeVar('password', 'post')) != $existingUser['password']):
 					$error = T_("Sorry, you entered the wrong password.");
 					$password_highlight = 'class="highlight"';
 					break;

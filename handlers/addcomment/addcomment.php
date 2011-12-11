@@ -38,28 +38,6 @@ if (($this->HasAccess('comment') || $this->IsAdmin()) && $this->existsPage($this
 		}
 	}
 
-	else if (FALSE === ($aKey = $this->getSessionKey($this->GetSafeVar('form_id', 'post'))))	# check if page key was stored in session
-	{
-		$redirectmessage = ERROR_COMMENT_NO_KEY;
-
-		if ($logging)
-		{
-			$failed = TRUE;
-			$reason = 'session no commentkey';
-		}
-	}
-
-	else if (TRUE !== ($rc = $this->hasValidSessionKey($aKey)))	# check if correct name,key pair was passed
-	{
-		$redirectmessage = ERROR_COMMENT_INVALID_KEY;
-
-		if ($logging)
-		{
-			$failed = TRUE;
-			$reason = $rc;
-		}
-	}
-
 	# Apply content filter if configured
 	else if ($this->config['content_filtering'] == "1" && $this->hasBadWords($body))
 	{

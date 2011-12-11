@@ -94,16 +94,6 @@ if ($_POST['submit']==T_("Add Comment"))
 		{
 			$redirectmessage = T_("Comment body was empty -- not saved!");
 		}
-/*
-		elseif (FALSE === ($aKey = getSessionKey($this, $this->tag.'_commentkey'))) # check if page key was stored in session
-		{
-			$redirectmessage = T_(""Your comment cannot be saved. Please contact the wiki administrator."");
-		}
-		elseif (TRUE !== ($rc = hasValidSessionKey($this, $aKey)))  # check if correct name,key pair was passed
-		{
-			$redirectmessage = T_(""Your comment cannot be saved. Please contact the wiki administrator."");
-		}
-*/
 		else
 		{
 			// store new comment
