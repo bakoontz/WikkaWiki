@@ -9,7 +9,7 @@ if (!defined('ERROR_COMMENT_INVALID_KEY')) define('ERROR_COMMENT_INVALID_KEY', "
 $redirectmessage = '';
 
 $parent_id = (int) trim($this->GetSafeVar('comment_id', 'post'));
-if (($this->HasAccess('comment') || $this->IsAdmin()) && $this->existsPage($this->tag))
+if ((($this->HasAccess('comment_read') && $this->HasAccess('comment_post')) || $this->IsAdmin()) && $this->existsPage($this->tag))
 {
 	$body = trim($this->GetSafeVar('body', 'post'));
 
