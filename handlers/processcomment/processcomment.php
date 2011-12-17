@@ -83,29 +83,6 @@ if(($_POST['submit']==T_("Reply") || $_POST['submit']==T_("New Comment")) && $th
 }
 
 // Save comment
-if ($_POST['submit']==T_("Add Comment"))
-{
-	$parent_id = (int) trim($this->GetSafeVar('comment_id', 'post'));
-	if (($this->HasAccess('comment_post') || $this->IsAdmin()) && $this->existsPage($this->tag))
-	{
-		$redirectmessage = '';
-		$body = nl2br($this->htmlspecialchars_ent(trim($this->GetSafeVar('body', 'post'))));	// @@@ check for empty before converting
-		if (!$body)
-		{
-			$redirectmessage = T_("Comment body was empty -- not saved!");
-		}
-		else
-		{
-			// store new comment
-			$this->SaveComment($this->tag, $body, $parent_id);
-		}
+// This functionality has been moved to the addcomment handler...
 
-		// redirect to page
-		$this->redirect($this->Href()."#comments", $redirectmessage);
-	}
-	else
-	{
-		echo '<div class="page"><em class="error">'.T_("Sorry, you're not allowed to post comments to this page'").'</em></div>'."\n";
-	}
-}
 ?>

@@ -8,6 +8,7 @@ if (!defined('ERROR_COMMENT_INVALID_KEY')) define('ERROR_COMMENT_INVALID_KEY', "
 
 $redirectmessage = '';
 
+$parent_id = (int) trim($this->GetSafeVar('comment_id', 'post'));
 if (($this->HasAccess('comment') || $this->IsAdmin()) && $this->existsPage($this->tag))
 {
 	$body = trim($this->GetSafeVar('body', 'post'));
@@ -53,7 +54,7 @@ if (($this->HasAccess('comment') || $this->IsAdmin()) && $this->existsPage($this
 	else
 	{
 		$body = nl2br($this->htmlspecialchars_ent($body));
-		$this->SaveComment($this->tag, $body);
+		$this->SaveComment($this->tag, $body, $parent_id);
 	}
 
 	// log failed attempt
