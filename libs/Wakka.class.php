@@ -1633,7 +1633,6 @@ class Wakka
 	 * @uses	Config::$pagename_case_sensitive
 	 * @uses	Config::$table_prefix
 	 * @uses	Wakka::GetConfigValue()
-	 * @uses	Wakka::$specialCache
 	 * @uses	Wakka::LoadSingle()
 	 *
 	 * @param	string	$tag	The name of the page to load oldest revision of.

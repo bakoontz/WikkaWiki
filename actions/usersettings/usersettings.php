@@ -146,8 +146,6 @@ if ($user = $this->GetUser())
 					WHERE name = '".$user['name']."'
 					LIMIT 1"
 					);
-				#unset($this->specialCache['user'][strtolower($user['name'])]);	// OBSOLETE invalidate cache if exists #368
-				#$this->SetUser($this->LoadUser($user['name']));
 				$this->SetUser($this->loadUserData($user['name']));
 		}
 	}
@@ -266,7 +264,6 @@ if ($user = $this->GetUser())
 					SET password = '".md5($challenge.mysql_real_escape_string($password))."',
 					challenge = '".$challenge."' WHERE name = '".$user['name']."'"
 					);
-				unset($this->specialCache['user'][strtolower($name)]);  //invalidate cache if exists #368
 				$user['password'] = md5($challenge.$password);
 				$this->SetUser($user);
 				$passsuccess = T_("Password successfully changed!");
@@ -487,7 +484,6 @@ else
 					"challenge = '".$challenge."', ".
 					"default_comment_display = '".$this->GetConfigValue('default_comment_display')."', ".
 					"password = md5('".$challenge.mysql_real_escape_string($this->GetSafeVar('password', 'post'))."')");
-				unset($this->specialCache['user'][strtolower($name)]);	//invalidate cache if exists #368
 
 				// log in
 				#$this->SetUser($this->LoadUser($name));
