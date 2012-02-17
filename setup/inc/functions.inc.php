@@ -102,7 +102,7 @@ function update_default_page($tag, $dblink, $config, $lang_defaults_path, $lang_
  */
 function __($s)
 {
-	return (eregi_replace('---<.*$', '', $s));
+	return (preg_replace('/---<.*$/i', '', $s));
 }
 
 /**

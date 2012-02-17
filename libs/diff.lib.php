@@ -104,7 +104,7 @@ class Side {
     }     
 
     function isspace($char) {
-       if (ereg('[[:space:]]',$char)) {
+       if (preg_match('/[[:space:]]/',$char)) {
 	  return true;
        }
        else {
@@ -113,7 +113,7 @@ class Side {
     }
 
     function isdigit($char) {
-       if (ereg('[[:digit:]]',$char)) {
+       if (preg_match('/[[:digit:]]/',$char)) {
 	  return true;
        }
        else {

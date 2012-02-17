@@ -2096,7 +2096,7 @@ class Wakka
 	{
 		$title = '';
 		$pagecontent = $this->page['body'];
-		if (ereg( "(=){3,5}([^=\n]+)(=){3,5}", $pagecontent, $title)) {
+		if (preg_match( "/(=){3,5}([^=\n]+)(=){3,5}/", $pagecontent, $title)) {
 			$formatting_tags = array("**", "//", "__", "##", "''", "++", "#%", "@@", "\"\"");
 			$title = str_replace($formatting_tags, "", $title[2]);
 		}
@@ -2499,7 +2499,7 @@ class Wakka
 			$_SESSION['redirectmessage'] = $message;
 		}
 		$url = ($url == '' ) ? $this->wikka_url.$this->tag : $url;
-		if ((eregi('IIS', $_SERVER['SERVER_SOFTWARE'])) && ($this->cookies_sent))
+		if ((preg_match('/IIS/i', $_SERVER['SERVER_SOFTWARE'])) && ($this->cookies_sent))
 		{
 			@ob_end_clean();
 			die('<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
