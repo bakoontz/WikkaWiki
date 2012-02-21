@@ -1889,6 +1889,8 @@ class Wakka
 					$owner = $oldPage['owner'];
 				}
 			}
+			// Parse page title
+			$page_title = $this->ParsePageTitle($body);
 
 			// set all other revisions to old
 			$this->Query("
@@ -1901,6 +1903,7 @@ class Wakka
 			$this->Query("
 				INSERT INTO ".$this->GetConfigValue('table_prefix')."pages
 				SET	tag		= '".mysql_real_escape_string($tag)."',
+				  title = '".mysql_real_escape_string($page_title)."',
 					time	= now(),
 					owner	= '".mysql_real_escape_string($owner)."',
 					user	= '".mysql_real_escape_string($user)."',
@@ -2085,23 +2088,53 @@ class Wakka
 	 *	and is not the current page that's loaded
 	 *
 	 * @uses	Wakka::GetPageTag()
+	 * @uses	Wakka::HasPageTitle()
+	 * @uses	Wakka::$page_title
+	 * @uses	Wakka::LoadSingle()
+	 *
 	 *
 	 * @param	string	@tag	optional: page to get title for (default current page)
-	 * @return	mixed	the title of the current page or NULL if none found
-	 * @todo	it would be more appropriate if SetPageTitle() received only
-	 *			already text-only titles, or did the conversion itself: derive once,
-	 *			use many times. It should not be necessary to do any "cleaning" here!
+	 * @return	mixed	the title of the current page or the page name if none found
 	 */
-	function PageTitle()
+	function PageTitle($tag=null)
 	{
-		$title = '';
-		$pagecontent = $this->page['body'];
-		if (preg_match( "/(=){3,5}([^=\n]+)(=){3,5}/", $pagecontent, $title)) {
-			$formatting_tags = array("**", "//", "__", "##", "''", "++", "#%", "@@", "\"\"");
-			$title = str_replace($formatting_tags, "", $title[2]);
+		if ($tag === null)
+		{
+			$tag = $this->GetPageTag();
 		}
-		if ($title) return strip_tags($this->Format($title));				# fix for forced links in heading
-		else return $this->GetPageTag();
+		if ($this->HasPageTitle() && $tag == $this->GetPageTag())
+		{
+			return $this->page_title;
+		}
+		$query = "SELECT title FROM ".
+				$this->GetConfigValue('table_prefix').
+				"pages WHERE tag = '".
+				mysql_real_escape_string($tag).
+				"' AND LATEST = 'Y'";
+		$res = $this->LoadSingle($query);
+		$page_title = trim($res['title']) !== '' ? $res['title'] : $tag;
+		return $page_title;
+	}
+
+	/**
+	 * Parses the body of a page for a page title
+	 *
+	 * Searches for first instance of header markup in page body and
+	 * returns this string as the page title, or empty if none found
+	 *
+	 * @param body string page body
+	 * @return string the title of the current page, or empty string
+	 */
+	function ParsePageTitle($body)
+	{
+		$page_title = '';
+		if (preg_match("#(={3,6})([^=].*?)\\1#s", $body, $matches))
+		{
+			list($h_fullmatch, $h_markup, $h_heading) = $matches;
+			$page_title = $h_heading;
+		}
+		// We need trim because $this->Format() appends a carriage return
+		return trim(strip_tags($this->Format($page_title)));
 	}
 
 	/**

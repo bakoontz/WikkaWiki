@@ -4,12 +4,12 @@
  *
  * This action checks user read privileges and displays an index of read-accessible pages.
  *
- * Optionally: {{pageindex showpagetitle='1'}}
+ * Optionally: {{pageindex showpagetitle='0'}}
  *             {{pageindex showjustletters = 'PageIndex'}}
  *
- * where 
-         showpagetitle='1' displays page titles (or page tag by
- *	default if no page title can be generated)
+ * where showpagetitle='1' displays page titles (or page tag by
+ *	default if no page title can be generated) 
+ * Defaut value for showpagetitle is '1'
  *       showjustletters='PageIndex' displays only letters, with links pointing 
  *  to a page configured to display a full page index
  * @package		Actions
@@ -46,10 +46,10 @@ if (isset($vars['showjustletters']))
 else
 {
 
-    $showpagetitle = FALSE;
-    if (isset($vars['showpagetitle']) && 1 == (int) $vars['showpagetitle'])
+    $showpagetitle = true;
+    if (isset($vars['showpagetitle']) && 0 === (int) $vars['showpagetitle'])
     {
-        $showpagetitle = TRUE;
+        $showpagetitle = false;
     }
 
     if ($pages = $this->LoadPageTitles())
@@ -105,7 +105,7 @@ else
                 // Output page title if $showpagetitle set to 1
                 if (TRUE === $showpagetitle)
                 {
-                    $index_output .= "<span class=\"pagetitle\">[".$this->PageTitle($page['tag'])."]</span>";
+                    $index_output .= " <span class=\"pagetitle\">[".$this->PageTitle($page['tag'])."]</span>";
                 }
                 if ($cached_username == $page_owner)
                 {

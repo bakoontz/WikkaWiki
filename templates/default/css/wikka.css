@@ -782,7 +782,7 @@ del {
 	text-decoration: none;
 }
 
-.pagenote {color: #888;}
+.pagetitle, .pagenote {color: #888;}
 
 .smaller {font-size: smaller;}
 

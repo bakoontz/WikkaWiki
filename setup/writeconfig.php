@@ -90,6 +90,11 @@ if ($fp)
 	fwrite($fp, $configCode);
 	// write
 	fclose($fp);
+
+	if ($config2['wakka_version'] <= '1.3.2')
+	{
+		print("<p>Almost done! A maintenance operation is needed due to a change in the database structure. This maintenance can be resource consuming if you had many pages. Click on the following link and refresh the page until you see only the text \"Done...\". <a style=\"font-size: 24pt;\" href=\"".WIKKA_BASE_URL."/wikka.php?wakka=Do/maintenance.xml\" target=\"_blank\">Do maintenance.</a></p>");
+	}
 	
 	print("<p>That's all! You can now <a href=\"".WIKKA_BASE_URL."\">return to your Wikka site</a>. However, you are advised to remove write access to <tt>wikka.config.php</tt> again now that it's been written. Leaving the file writable can be a security risk!</p>");
 }

@@ -95,6 +95,7 @@ case "0":
 			"CREATE TABLE ".$config['table_prefix']."pages (".
 			"id int(10) unsigned NOT NULL auto_increment,".
 			"tag varchar(75) NOT NULL default '',".
+			"title varchar(75) NOT NULL default '',".
 			"time datetime NOT NULL default '0000-00-00 00:00:00',".
 			"body mediumtext NOT NULL,".
 			"owner varchar(75) NOT NULL default '',".
@@ -516,7 +517,7 @@ case "1.2":
 			 "config/options_menu.user.inc.prev");
 case "1.3":
 case "1.3.1":
-	print("<strong>1.3.1 to 1.4 changes:</strong><br />\n");
+	print("<strong>1.3.1 to 1.3.2 changes:</strong><br />\n");
 	update_default_page(array(
 	'AdminBadWords',
 	'AdminSpamLog',
@@ -589,6 +590,10 @@ case "1.3.1":
 	@mysql_query("alter table ".$config["table_prefix"]."users ADD challenge varchar(8) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT ''", $dblink), __("Already done? OK!"), 0);
 	@mysql_query("alter table ".$config["table_prefix"]."users CHANGE `challenge` `challenge` varchar(8) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT ''", $dblink);
 	@mysql_query("UPDATE ".$config['table_prefix']."users SET challenge='' WHERE challenge='00000000'", $dblink);
+case "1.3.2": 
+	print("<strong>1.3.2 to 1.3.3 changes:</strong><br />\n");
+	test("Adding/updating title field to users page ...",  
+	@mysql_query("alter table `".$config["table_prefix"]."pages` ADD `title` varchar(75) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT '' AFTER `tag`", $dblink), __("Already done? OK!"), 0); // refs #529
 case "1.4":
 }
 

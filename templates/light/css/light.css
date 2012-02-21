@@ -762,7 +762,7 @@ ins tt, del tt {
 	background-color: inherit;
 }
 
-.pagenote {color: #888;}
+.pagetitle, .pagenote {color: #888;}
 
 .smaller {font-size: smaller;}
 
