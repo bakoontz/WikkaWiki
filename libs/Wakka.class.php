@@ -2732,10 +2732,10 @@ class Wakka
 			{
 				$edit_link = ' <small>['.$this->Link($val, 'edit', WIKKA_PAGE_EDIT_LINK_DESC, false, true, sprintf(WIKKA_PAGE_EDIT_LINK_TITLE, $val)).']</small>';
 			}
+			$val = preg_replace('! !', '_', $val);
 			if ($compact)
 			{
 				#$link = '[['.$val;
-				$val = preg_replace('! !', '_', $val);
 				if (eregi('^Category', $val))
 				{
 					$val .= ' '.eregi_replace('^Category', '', $val);
