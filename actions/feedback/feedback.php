@@ -1,7 +1,23 @@
 <?php
+/** 
+ * Displays a form to send feedback to the site administrator, as specified in wikka.config.php
+ *
+ * It first validates the form, then sends it using the mail() function;
+ *
+ * @package		Actions
+ * @version		$Id:feedback.php$
+ * @license		http://www.gnu.org/copyleft/gpl.html GNU General Public License
+ * @filesource
+ *
+ * @uses	Wakka::FormClose()
+ * @uses	Wakka::FormOpen()
+ * @uses	Wakka::GetSafeVar()
+ * @uses	Wakka::GetWakkaName()
+ * @uses	Wakka::Href()
+ * @uses	Config::$admin_email
+ * @uses	Config::$root_page
+ */
 
-// Displays a form to send feedback to the site administrator, as specified in wikka.config.php
-// It first validates the form, then sends it using the mail() function;
 
 $name = $this->GetSafeVar('name', 'post');
 $email = $this->GetSafeVar('email', 'post');
@@ -43,7 +59,7 @@ if ($this->GetSafeVar('mail', 'post')=='result')
 		$msg .= 'Email:\t'.$email."\n";
 		$msg .= "\n".$comments."\n";
 		$recipient = $this->GetConfigValue('admin_email');
-		$subject = sprintf(T_("Feedback from %s"),$this->GetConfigValue("wakka_name"));
+		$subject = sprintf(T_("Feedback from %s"),$this->GetWakkaName());
 		$mailheaders = 'From:'.$email."\n";
 		$mailheaders .= 'Reply-To:'.$email;
 		mail($recipient, $subject, $msg, $mailheaders);

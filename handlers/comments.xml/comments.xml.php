@@ -15,10 +15,14 @@
  * @since	1.1.7
  *
  * @uses	FeedCreator
- * @uses	Config::$wakka_name
  * @uses	Config::$root_page
+ * @uses	Config::$feedcreator_path
+ * @uses	Wakka::existsUser()
+ * @uses	Wakka::GetHandler()
+ * @uses	Wakka::GetSafeVar()
+ * @uses	Wakka::GetWakkaName()
+ * @uses	Wakka::HasAccess()
  * @uses	Wakka::Href()
- * @uses	Wakka::htmlspecialchars_ent()
  * @uses	Wakka::LoadRecentComments()
  * @uses	Wakka::StaticHref()
  *
@@ -102,8 +106,8 @@ $rss = instantiate('UniversalFeedCreator');
 
 //initialize feed (general settings)
 $rss->useCached(); //TODO: make this configurable
-$rss->title = sprintf(FEED_TITLE_RECENT_COMMENTS, $this->GetConfigValue('wakka_name')); 
-$rss->description = sprintf(FEED_DESCRIPTION_RECENT_COMMENTS, $this->GetConfigValue('wakka_name'));
+$rss->title = sprintf(FEED_TITLE_RECENT_COMMENTS, $this->GetWakkaName()); 
+$rss->description = sprintf(FEED_DESCRIPTION_RECENT_COMMENTS, $this->GetWakkaName());
 $rss->cssStyleSheet = str_replace('&amp;', '&', $this->StaticHref('css/'.FEED_CSS));
 $rss->descriptionTruncSize = FEED_DESCRIPTION_TRUNCATE_SIZE;
 $rss->descriptionHtmlSyndicated = FEED_DESCRIPTION_HTML;

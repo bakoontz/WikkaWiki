@@ -12,11 +12,12 @@
  * @author	{@link http://wikkawiki.org/NilsLindenberg Nils Lindenberg} rewritten
  * @author	{@link http://wikkawiki.org/DarTar Dario Taraborelli} further cleanup, error styling and improved logical structure
  *
- * @uses	Wakka::Format()
  * @uses	Wakka::loadUserData()
  * @uses	Wakka::FormOpen()
  * @uses	Wakka::FormClose()
- * @uses	Wakka::GetConfigValue()
+ * @uses	Wakka::GetWakkaName()
+ * @uses	Wakka::GetSafeVar()
+ * @uses	Config::$admin_email
  */
 
 // *** initialization ***
@@ -45,10 +46,10 @@ if (isset($_POST['wikiname'])) // get posted values
 			$highlight = 'class="highlight"';
 			break;
 		case ($input != '' && $user): // user exists, proceed
-			$header = "From: ".$this->GetConfigValue('wakka_name')." <".$this->GetConfigValue('admin_email').">";
+			$header = "From: ".$this->GetWakkaName()." <".$this->GetConfigValue('admin_email').">";
 			$header .= "\r\nContent-Type: text/plain; charset=UTF-8";
 			$reference = sprintf(T_("Password reminder for %s"), $user['name']);
-			$mail = sprintf(T_('Hello, %s!  Someone requested that we send to this email address a password reminder to login at %s. If you did not request this reminder, disregard this email, no action is necessary. Your password will stay the same.  Your wikiname: %s Password reminder: %s URL: %s Do not forget to change the password immediately after logging in.'), $user['name'], $this->GetConfigValue('wakka_name'), $user['name'], $user['password'], $this->Href('', 'UserSettings'))."\n";
+			$mail = sprintf(T_('Hello, %s!  Someone requested that we send to this email address a password reminder to login at %s. If you did not request this reminder, disregard this email, no action is necessary. Your password will stay the same.  Your wikiname: %s Password reminder: %s URL: %s Do not forget to change the password immediately after logging in.'), $user['name'], $this->GetWakkaName(), $user['name'], $user['password'], $this->Href('', 'UserSettings'))."\n";
 			if (mail($user['email'], $reference, $mail, $header))
 			{
 				$mailsent = TRUE;

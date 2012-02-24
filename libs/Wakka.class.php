@@ -2344,9 +2344,8 @@ class Wakka
 	 * Gather the necessary parameters for WikiPing.
 	 *
 	 * @uses	Wakka::Href()
-	 * @uses	Wakka::GetConfigValue()
+	 * @uses	Wakka::GetWakkaName()
 	 * @uses	Wakka::LoadPage()
-	 * @uses	Config::$wakka_name
 	 *
 	 * @param	string	$server	mandatory:
 	 * @param	string	$tag	mandatory:
@@ -2375,7 +2374,7 @@ class Wakka
 			{
 				return FALSE;
 			}
-			if (!$ping['wiki'] = $this->GetConfigValue('wakka_name')) // set site-name
+			if (!$ping['wiki'] = $this->GetWakkaName()) // set site-name
 			{
 				return FALSE;
 			}

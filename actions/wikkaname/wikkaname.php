@@ -7,8 +7,7 @@
  * @license	http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
  *
- * @uses	Wakka::GetConfigValue()
- * @uses	Config::$wakka_name
+ * @uses	Wakka::GetWakkaName()
  */
-echo $this->GetConfigValue('wakka_name');
+echo $this->GetWakkaName();
 ?>

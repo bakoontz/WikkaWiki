@@ -14,14 +14,15 @@
  * @access	public
  * @since	1.1.7
  * @uses	FeedCreator
- * @uses	Config::$wakka_name
  * @uses	Config::$root_page
  * @uses	Config::$xml_recent_changes
  * @uses	Wakka::LoadUser()
  * @uses	Wakka::GetConfigValue()
+ * @uses	Wakka::GetHandler()
  * @uses	Wakka::GetSafeVar()
+ * @uses	Wakka::GetWakkaName()
+ * @uses	Wakka::HasAccess()
  * @uses	Wakka::Href()
- * @uses	Wakka::htmlspecialchars_ent()
  * @uses	Wakka::LoadRecentlyChanged()
  * @uses	Wikka::StaticHref()
  *
@@ -89,8 +90,8 @@ include_once('3rdparty'.DIRECTORY_SEPARATOR.'core'.DIRECTORY_SEPARATOR.'feedcrea
 //initialize feed (general settings)
 $rss = new UniversalFeedCreator(); 
 $rss->useCached(); //TODO: make this configurable
-$rss->title = sprintf(T_("%s - recently changed pages"), $this->GetConfigValue('wakka_name'));
-$rss->description = sprintf(T_("New and recently changed pages from %s"), $this->GetConfigValue('wakka_name'));
+$rss->title = sprintf(T_("%s - recently changed pages"), $this->GetWakkaName());
+$rss->description = sprintf(T_("New and recently changed pages from %s"), $this->GetWakkaName());
 $rss->cssStyleSheet = $this->StaticHref('css/'.FEED_CSS);
 $rss->descriptionTruncSize = FEED_DESCRIPTION_TRUNCATE_SIZE;
 $rss->descriptionHtmlSyndicated = FEED_DESCRIPTION_HTML;
