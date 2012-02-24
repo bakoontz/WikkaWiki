@@ -69,7 +69,7 @@ Prints a link to the FilesHandler differently depending if there are attached do
 <?php
 	// this is a menulet action relying on the files handler
 	// upload path
-	$upload_path = $this->config['upload_path'].'/'.$this->GetPageTag();
+	$upload_path = $this->GetConfigValue('upload_path').'/'.$this->GetPageTag();
 	$AttachmentClass = "";
 		if(is_dir($upload_path) ){
 			$handle = opendir($upload_path);
@@ -141,7 +141,7 @@ Prints the total number of comments: {{countcomments}}
 /**
  * Print total number of comments in this wiki.
  */
-$commentsdata = $this->LoadSingle("SELECT count(*) as num FROM ".$this->config["table_prefix"]."comments");
+$commentsdata = $this->LoadSingle("SELECT count(*) as num FROM ".$this->GetConfigValue('table_prefix')."comments");
 echo $commentsdata["num"];
 ?>
 %%
@@ -167,7 +167,7 @@ Prints the number of pages owned by the current user: {{countowned}}
 /**
  * Print number of pages owned by the current user.
  */
-$str = 'SELECT COUNT(*) FROM '.$this->config["table_prefix"].'pages WHERE `owner` ';
+$str = 'SELECT COUNT(*) FROM '.$this->GetConfigValue('table_prefix').'pages WHERE `owner` ';
 $str .= "= '" . $this->GetUserName() . "' AND `latest` = 'Y'";
 $countquery = $this->Query($str);
 $count  = mysql_result($countquery, 0);
@@ -199,7 +199,7 @@ Prints the total number of pages: {{countpages}}
 /** 
  * Print the total number of pages in this wiki.
  */
-$pagedata = $this->LoadSingle("SELECT count(*) as num FROM ".$this->config["table_prefix"]."pages WHERE latest = 'Y'");
+$pagedata = $this->LoadSingle("SELECT count(*) as num FROM ".$this->GetConfigValue('table_prefix')."pages WHERE latest = 'Y'");
 echo $this->Link('PageIndex', '', $pagedata['num'],'','','Display an alphabetical page index');
 ?>
 %%
@@ -243,7 +243,7 @@ Prints the number of registered users: {{countusers}}
 /**
  * Print number of registered users.
  */ 
-$userdata = $this->LoadSingle("SELECT count(*) as num FROM ".$this->config["table_prefix"]."users ");
+$userdata = $this->LoadSingle("SELECT count(*) as num FROM ".$this->GetConfigValue('table_prefix')."users ");
 echo $userdata["num"];
 ?>
 %%
@@ -304,7 +304,7 @@ Prints a link to the wiki homepage specified in the config file: {{homepage}}
 
 %%(php)
 <?php
-echo $this->Link($this->config['root_page']);
+echo $this->Link($this->GetConfigValue('root_page'));
 ?>
 %%
 
@@ -315,7 +315,7 @@ Prints the author of the last page version: {{lasteditauthor}}
 
 %%(php)
 <?php
-$page = $this->LoadSingle("SELECT * FROM ".$this->config['table_prefix']."pages WHERE tag='".$this->GetPageTag()."' AND latest = 'Y'");
+$page = $this->LoadSingle("SELECT * FROM ".$this->GetConfigValue('table_prefix')."pages WHERE tag='".$this->GetPageTag()."' AND latest = 'Y'");
 $user = ($this->LoadUser($page["user"]))? $this->Link($page["user"]) : "anonymous";
 echo $user;
 ?>
@@ -453,7 +453,7 @@ Prints the last edit notes: {{lasteditnotes}}
 
 %%(php)
 <?php
-$page = $this->LoadSingle("SELECT * FROM ".$this->config['table_prefix']."pages WHERE tag='".$this->GetPageTag()."' AND latest = 'Y'");
+$page = $this->LoadSingle("SELECT * FROM ".$this->GetConfigValue('table_prefix')."pages WHERE tag='".$this->GetPageTag()."' AND latest = 'Y'");
 echo ($page["note"])? $this->Format("//".$page["note"]."//") : "";
 ?>
 %%
@@ -466,7 +466,7 @@ Displays a wikka logo set by admins (in the future the path should be set in the
 
 %%(php)
 <?php
-echo $this->Format('{{image alt="logo" title="'.$this->config['wakka_name'].'" url="images/wizard.gif" link="'.$this->config['root_page'].'"}}');
+echo $this->Format('{{image alt="logo" title="'.$this->GetWakkaName().'" url="images/wizard.gif" link="'.$this->GetConfigValue('root_page').'"}}');
 ?>
 %%
 
@@ -477,8 +477,8 @@ My version (which needs the config entry: "wiki_logo => "yourlogo.jpg" [must be 
 define('LOGO_ALT_TEXT', "logo");    # alt-text for the logo image
 
 //print the image
-if ($this->config['wiki_logo'] && file_exists($this->config['wiki_logo'])) echo $this->Format('{{image alt="LOGO_ALT_TEXT" title="'.$this->config['wakka_name'].'" url="'.$this->config['wiki_logo'].'" link="'.$this->config['root_page'].'"}}');
-else echo $this->Format('{{image alt="LOGO_ALT_TEXT" title="'.$this->config['wakka_name'].'" url="images/wizard.gif" link="'.$this->config['root_page'].'"}}');
+if ($this->GetConfigValue('wiki_logo') && file_exists($this->GetConfigValue('wiki_logo'))) echo $this->Format('{{image alt="LOGO_ALT_TEXT" title="'.$this->GetWakkaName().'" url="'.$this->GetConfigValue('wiki_logo').'" link="'.$this->GetConfigValue('root_page').'"}}');
+else echo $this->Format('{{image alt="LOGO_ALT_TEXT" title="'.$this->GetWakkaName().'" url="images/wizard.gif" link="'.$this->GetConfigValue('root_page').'"}}');
 ?>
 %%
 --NilsLindenberg
@@ -643,7 +643,7 @@ Displays a clickable link to the current skin: ""{{skin}}""
 %%(php)
 <?php
 #$skin = ($this->GetCookie("wikiskin"))? $this->GetCookie("wikiskin") : $this->GetConfigValue("stylesheet");
-$defaultskin = $this->config['stylesheet'];
+$defaultskin = $this->GetConfigValue('stylesheet');
 $skin = (!$this->GetCookie('wikiskin')) ? $defaultskin : $this->GetCookie('wikiskin'); # JW 2005-07-08 FIX possibly undefined cookie
 echo '<a href="'.WIKKA_BASE_URL.'css/'.$skin.'" title="Display stylesheet">'.$skin.'</a>';
 ?>
@@ -754,7 +754,7 @@ Prints the name of the current Wikka: {{wikkaname}}
 
 %%(php)
 <?php
-echo $this->config['wakka_name'];
+echo $this->GetWakkaName();
 ?>
 %%
 
@@ -881,7 +881,7 @@ Installed as a beta feature on this site.
 
 ~& **Original idea**
 ~& %%(php)<?php
-$all = $this->LoadAll("select distinct tag from ".$this->config["table_prefix"]."pages");
+$all = $this->LoadAll("select distinct tag from ".$this->GetConfigValue('table_prefix')."pages");
 print $this->Link( $all[array_rand($all)]['tag'], '', 'RandomPage', FALSE, TRUE, 'A random page on this site' );
 ?>
 %%
@@ -915,11 +915,11 @@ print $this->Link( $all[array_rand($all)]['tag'], '', 'RandomPage', FALSE, TRUE,
  * @ToDo        Get list of pages from the tagCache of the ExistsPage function by IanAndolina
  */
 
-$errorpage = $this->config["root_page"];
+$errorpage = $this->GetConfigValue('root_page');
 $neg_list_default = array("HomePage","UserSettings","TextSearch","TextSearchExpanded","PageIndex");
 $title = isset($vars['title']) ? $this->htmlspecialchars_ent($vars['title']) : "RandomPage"; //i18n
 
-foreach( $this->LoadAll("select distinct tag from ".$this->config["table_prefix"]."pages") as $key => $val ){
+foreach( $this->LoadAll("select distinct tag from ".$this->GetConfigValue('table_prefix')."pages") as $key => $val ){
 		$all[]=$val['tag'];
 }
 $pos_list = isset($vars['pos']) ? split('[|,]', preg_replace( "/[\ ]/", '', $vars['pos'] ) ) : $all ;
@@ -958,8 +958,8 @@ print $this->Link( $page, '', $title, FALSE, TRUE, "$page, a random page on this
  * @since       Wikka 1.1.6.0
  */
 
-$q = 'SELECT Count(*) AS cnt, `user` FROM '.$this->config["table_prefix"].'pages '.
-		'WHERE `tag`="'.$this->tag.'" GROUP BY user ORDER BY cnt DESC;';
+$q = 'SELECT Count(*) AS cnt, `user` FROM '.$this->GetConfigValue('table_prefix').'pages '.
+		'WHERE `tag`="'.$this->GetPageTag().'" GROUP BY user ORDER BY cnt DESC;';
 $all = $this->LoadAll( $q );
 
 foreach($all as $key=>$val)

@@ -66,7 +66,7 @@ if ($this->GetSafeVar('submit', 'post') == T_("Preview") &&
 ?>
 <div id="content"<?php echo $ondblclick;?>>
 <?php
-if(!$this->IsWikiName($this->tag))
+if(!$this->IsWikiName($this->GetPageTag()))
 {
 	echo '<em class="error">'.sprintf(T_("This page name is invalid.  Valid page names must not contain the characters %s."), EDIT_INVALID_CHARS).'</em>';
 }
@@ -139,7 +139,7 @@ else if ($this->HasAccess("write") && $this->HasAccess("read"))
 				if ($body != $this->page['body']) {
 
 					// add page (revisions)
-					$this->SavePage($this->tag, $body, $note);
+					$this->SavePage($this->GetPageTag(), $body, $note);
 
 					// now we render it internally so we can write the updated link table.
 					// if we no longer do link tracking for header and footer why are we creating dummy output?
@@ -219,15 +219,15 @@ else if ($this->HasAccess("write") && $this->HasAccess("read"))
 		$output .= "<br />\n".$preview_buttons.$this->FormClose()."\n";
 	}
 	// RENAME screen
-	elseif (!$this->page && strlen($this->tag) > $maxtaglen)
+	elseif (!$this->page && strlen($this->GetPageTag()) > $maxtaglen)
 	{
 		// truncate tag to feed a backlinks-handler with the correct value. may be omited. it only works if the link to a backlinks-handler is built in the footer.
-		$this->tag = substr($this->tag, 0, $maxtaglen);
+		$this->tag = substr($this->GetPageTag(), 0, $maxtaglen);
 
 		$output  = '<em class="error">'.sprintf(T_("Page name too long! %d characters max."), $maxtaglen).'</em><br />'."\n";
 		$output .= sprintf(T_("Clicking on %s will automatically truncate the page name to the correct size"), T_("Rename")).'<br /><br />'."\n";
 		$output .= $this->FormOpen('edit');
-		$output .= '<input name="newtag" size="'.MAX_TAG_LENGTH.'" value="'.$this->htmlspecialchars_ent($this->tag).'" />';
+		$output .= '<input name="newtag" size="'.MAX_TAG_LENGTH.'" value="'.$this->htmlspecialchars_ent($this->GetPageTag()).'" />';
 		$output .= '<input name="submit" type="submit" value="'.T_("Rename").'" />'."\n";
 		$output .= $this->FormClose();
 	}

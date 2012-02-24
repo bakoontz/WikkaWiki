@@ -55,7 +55,7 @@ if(($_POST['submit']==T_("Reply") || $_POST['submit']==T_("New Comment")) && $th
 		$comment = $this->LoadSingle("SELECT user, comment FROM ".$this->GetConfigValue('table_prefix')."comments WHERE id = '".$comment_id."' LIMIT 1");
 	}
 
-	//$keyfield = createSessionKeyFieldset($this, createSessionKey($this, $this->tag.'_commentkey'));
+	//$keyfield = createSessionKeyFieldset($this, createSessionKey($this, $this->GetPageTag().'_commentkey'));
 ?>
 	<div id="content">
 	<?php echo $this->Format($this->page['body'], 'wakka', 'page'); ?>

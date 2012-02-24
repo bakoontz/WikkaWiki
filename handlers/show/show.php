@@ -56,7 +56,7 @@ if (!$this->HasAccess('read'))
 	echo '<p><em class="error">'.T_("You are not allowed to read this page.").'</em></p>';
 	echo "\n".'</div><!--closing page content-->'."\n";
 }
-else if(!$this->IsWikiName($this->tag))
+else if(!$this->IsWikiName($this->GetPageTag()))
 {
 	echo '<p><em class="error">'.sprintf(T_("This page name is invalid. Valid page names must not contain the characters %s."), SHOW_INVALID_CHARS).'</em></p>';
 	echo "\n".'</div><!--closing page content-->'."\n";
@@ -73,14 +73,14 @@ else
 	{
 		if ($this->page['latest'] == 'N')
 		{
-			$pagelink = '<a href="'.$this->Href().'">'.$this->tag.'</a>';
+			$pagelink = '<a href="'.$this->Href().'">'.$this->GetPageTag().'</a>';
 			echo '<div class="revisioninfo">'."\n";
 			echo '<h4 class="clear">'.sprintf(T_("Revision %s"), '<a href="'.$this->Href('', '', 'time='.urlencode($this->page['time'])).'">['.$this->page['id'].']</a>').'</h4>'."\n";
 			echo '<p>';
-			echo sprintf(T_("This is an old revision of %s made by %s on %s."), $pagelink, $this->FormatUser($this->page['user']), $this->Link($this->tag, 'revisions', $this->page['time'], TRUE, TRUE, '', 'datetime'));
+			echo sprintf(T_("This is an old revision of %s made by %s on %s."), $pagelink, $this->FormatUser($this->page['user']), $this->Link($this->GetPageTag(), 'revisions', $this->page['time'], TRUE, TRUE, '', 'datetime'));
 			
 			// added if encapsulation: in case where some pages were brutally deleted from database
-			if ($latest = $this->LoadPage($this->tag))
+			if ($latest = $this->LoadPage($this->GetPageTag()))
 			{
 ?>
 				<br />
@@ -156,7 +156,7 @@ else
 			if (isset($_SESSION['show_comments'][$tag]) && $_SESSION['show_comments'][$tag] != COMMENT_NO_DISPLAY)
 			{
 				// load comments for this page
-				$comments = $this->LoadComments($this->tag, $_SESSION['show_comments'][$tag]);
+				$comments = $this->LoadComments($this->GetPageTag(), $_SESSION['show_comments'][$tag]);
 				$display_mode = $_SESSION['show_comments'][$tag];
 				// display comments header
 ?>
@@ -189,7 +189,7 @@ else
 
 				echo '<!--starting comments header (hide)-->'."\n";
 				echo '<div id="commentheader">'."\n";
-				$commentCount = $this->CountComments($this->tag);
+				$commentCount = $this->CountComments($this->GetPageTag());
 				$showcomments_text = '';
 
 				// Determine comment ordering preference

@@ -108,7 +108,7 @@ $rss->cssStyleSheet = str_replace('&amp;', '&', $this->StaticHref('css/'.FEED_CS
 $rss->descriptionTruncSize = FEED_DESCRIPTION_TRUNCATE_SIZE;
 $rss->descriptionHtmlSyndicated = FEED_DESCRIPTION_HTML;
 $rss->link = str_replace('&amp;', '&', $this->Href('', $this->GetConfigValue('root_page')));
-$rss->syndicationURL = str_replace('&amp;', '&', $this->Href($this->handler,'','f='.$f));
+$rss->syndicationURL = str_replace('&amp;', '&', $this->Href($this->GetHandler(),'','f='.$f));
 
 //create feed image
 #$image = new FeedImage();

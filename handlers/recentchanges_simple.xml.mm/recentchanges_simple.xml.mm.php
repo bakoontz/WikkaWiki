@@ -94,7 +94,7 @@ if ($pages = $this->LoadRecentlyChanged())
 	}
 
 	$xml .= '</node></node><node TEXT="Author" POSITION="left">'."\n";
-	// $pages = $this->LoadAll("select DISTINCT user from ".$this->config["table_prefix"]."pages where latest = 'Y' order by time desc");
+	// $pages = $this->LoadAll("select DISTINCT user from ".$this->GetConfigValue('table_prefix')."pages where latest = 'Y' order by time desc");
 	foreach ($users as $user)
 	{
 		$start_loop = true;

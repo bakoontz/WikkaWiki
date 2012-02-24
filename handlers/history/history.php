@@ -44,7 +44,7 @@ $start = (int) $this->GetSafeVar('start', 'get');	// @@@ accept only positive va
 
 if ($this->HasAccess("read")) {
 	// load revisions for this page
-	if ($pages = $this->LoadRevisions($this->tag, $start))
+	if ($pages = $this->LoadRevisions($this->GetPageTag(), $start))
 	{
 		$note = '';
 		$output = "";
@@ -123,7 +123,7 @@ if ($this->HasAccess("read")) {
 			$pageA = $this->LoadPageById($page["id"]);
 			$EditedByUser = $this->FormatUser($page["user"]);
 		}
-		$oldest_revision = $this->LoadOldestRevision($this->tag);
+		$oldest_revision = $this->LoadOldestRevision($this->GetPageTag());
 		if (strlen($pageB['note']) == 0)
 		{
 			$note_oldest = '';

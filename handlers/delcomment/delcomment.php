@@ -21,7 +21,7 @@ if(isset($_POST['form_id']) && isset($_POST["comment_id"]))
 {
 	//select comment
 	$comment_id = intval(trim($this->GetSafeVar('comment_id', 'post')));
-	$comment = $this->LoadSingle("select user from ".$this->config["table_prefix"]."comments where id = '".$comment_id."' limit 1");
+	$comment = $this->LoadSingle("select user from ".$this->GetConfigValue('table_prefix')."comments where id = '".$comment_id."' limit 1");
 	$current_user = $this->GetUserName();	
 	
 	$delete = FALSE;
@@ -33,7 +33,7 @@ if(isset($_POST['form_id']) && isset($_POST["comment_id"]))
 	// delete comment
 	if (TRUE === $delete)
 	{
-		$this->Query("DELETE FROM ".$this->config["table_prefix"]."comments WHERE id = '".$comment_id."' LIMIT 1");
+		$this->Query("DELETE FROM ".$this->GetConfigValue('table_prefix')."comments WHERE id = '".$comment_id."' LIMIT 1");
 		// redirect to page
 		$this->redirect($this->Href(), 'Comment succesfully deleted.');
 	}

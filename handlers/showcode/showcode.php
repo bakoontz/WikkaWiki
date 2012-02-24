@@ -27,13 +27,13 @@
  */
 
 //check if page exists
-if ($this->ExistsPage($this->tag))
+if ($this->ExistsPage($this->GetPageTag()))
 {
 	//check if user has read access
 	if ($this->HasAccess('read'))
 	{
 		// display raw page, slightly formatted for viewing
-		$pagelink = $this->Link($this->tag, '', $this->tag);
+		$pagelink = $this->Link($this->GetPageTag(), '', $this->GetPageTag());
 		printf('<h4>'.T_("Wiki source for %s").'</h4><br />', $pagelink);
 		echo '<p><a class="keys" href="'.$this->Href('raw').'">'.T_("Show raw source").'</a></p>';
 		echo '<div class="wikisource">'.nl2br($this->htmlspecialchars_ent($this->page["body"], ENT_QUOTES)).'</div>';
@@ -45,7 +45,7 @@ if ($this->ExistsPage($this->tag))
 }
 else
 {
-	echo '<em class="error">'.sprintf(T_("Sorry, page %s does not exist."),$this->tag).'</em>';
+	echo '<em class="error">'.sprintf(T_("Sorry, page %s does not exist."),$this->GetPageTag()).'</em>';
 }
 
 ?>

@@ -56,7 +56,7 @@ if ($this->HasAccess('read'))
 			$pageA = $this->LoadPageById($a);
 		}
 	}
-	$pages = $this->LoadRevisions($this->tag, $start);
+	$pages = $this->LoadRevisions($this->GetPageTag(), $start);
 	if (isset($pageA) && is_array($pageA) && is_array($pages))
 	{
 		array_unshift($pages, $pageA);
@@ -66,7 +66,7 @@ if ($this->HasAccess('read'))
 	{
 		$output  = $this->FormOpen('diff', '', 'get');
 		$output .= "<fieldset>\n";
-		$output .= "<legend>".sprintf(T_("Revisions for %s"), $this->Link($this->tag))."</legend>"."\n";
+		$output .= "<legend>".sprintf(T_("Revisions for %s"), $this->Link($this->GetPageTag()))."</legend>"."\n";
 		$output .= '<table border="0" cellspacing="0" cellpadding="1">'."\n";
 		$output .= "<tr>\n";
 		$output .= '<td><input type="submit" value="'.T_("Show Differences").'" /></td>';
@@ -95,7 +95,7 @@ if ($this->HasAccess('read'))
 		}
 		$output .= "</table>\n";
 		$output .= "</fieldset>\n";
-		$oldest_revision = $this->LoadOldestRevision($this->tag);
+		$oldest_revision = $this->LoadOldestRevision($this->GetPageTag());
 		if ($oldest_revision['id'] != $page['id'])
 		{
 			$output .= '<input type="hidden" name="start" value="'.($start + $c).'" />'."\n";
@@ -109,7 +109,7 @@ if ($this->HasAccess('read'))
 	}
 	else
 	{
-		$output  = '<h3>'.sprintf(T_("Revisions for %s"), $this->Link($this->tag))."</h3>\n";
+		$output  = '<h3>'.sprintf(T_("Revisions for %s"), $this->Link($this->GetPageTag()))."</h3>\n";
 		$output .= '<em>'.T_("There are no revisions for this page yet").'</em>'."\n";
 	}
 
