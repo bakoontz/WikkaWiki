@@ -175,7 +175,7 @@ if ($this->GetConfigValue('upload_path') == '')
 {
 	$this->SetConfigValue('upload_path','files');
 }
-$upload_path = $this->GetConfigValue('upload_path').DIRECTORY_SEPARATOR.$this->tag; # #89
+$upload_path = $this->GetConfigValue('upload_path').DIRECTORY_SEPARATOR.$this->GetPageTag(); # #89
 
 // 1. check if main upload path is writable
 if (!is_writable($this->GetConfigValue('upload_path')))
@@ -241,7 +241,7 @@ if(FALSE===empty($action) && FALSE===empty($file) && TRUE===userCanUpload())
 // 1b. User has confirmed file deletion
 elseif(FALSE===empty($file_to_delete) && TRUE===userCanUpload())
 {
-	$this->Redirect($this->Href('files.xml',$this->tag,'action=delete&file='.rawurlencode($file_to_delete)), T_("File deleted"));
+	$this->Redirect($this->Href('files.xml',$this->GetPageTag(),'action=delete&file='.rawurlencode($file_to_delete)), T_("File deleted"));
 }
 
 // 2. print a simple download link for the specified file, if it exists
@@ -259,7 +259,7 @@ elseif (isset($vars['download']))
 		}
 		//Although $output is passed to ReturnSafeHTML, it's better to sanitize $text here. At least it can avoid invalid XHTML.
 		$output .=  '<a href="'
-			. $this->Href('files.xml', $this->tag, 'action=download&amp;file='.rawurlencode($this->htmlspecialchars_ent($vars['download'])))
+			. $this->Href('files.xml', $this->GetPageTag(), 'action=download&amp;file='.rawurlencode($this->htmlspecialchars_ent($vars['download'])))
 			. '" title="'.sprintf(T_("Download %s"), $text).'">'
 			. urldecode($text)
 			. '</a>';
@@ -274,7 +274,7 @@ elseif (isset($vars['download']))
 }
 
 // 3. user is trying to upload
-elseif ($this->page && $this->HasAccess('read') && $this->handler == 'show' && $is_writable)
+elseif ($this->page && $this->HasAccess('read') && $this->GetHandler() == 'show' && $is_writable)
 {
 
 	// create new folders if needed
@@ -408,7 +408,7 @@ if (is_readable($upload_path))
 			.$this->Href('', '', 'action=delete&amp;file='.rawurlencode($file))	// @@@ should be POST form button, not link
 			.'" title="'.sprintf(T_("Remove %s"), $file).'">x</a>';
 		}
-		$download_link = '<a href="' .$this->Href('files.xml',$this->tag,'action=download&amp;file='.rawurlencode($file))
+		$download_link = '<a href="' .$this->Href('files.xml',$this->GetPageTag(),'action=download&amp;file='.rawurlencode($file))
 			.'" title="'.sprintf(T_("Download %s"), $file).'">'.urldecode($file).'</a>';
 		$size = bytesToHumanReadableUsage($filesize); # #89
 		$date = date(UPLOAD_DATE_FORMAT, $filedate); # #89
@@ -436,9 +436,9 @@ if (is_readable($upload_path))
 		{
 			$output .= '<th>&nbsp;</th>'."\n"; //For the delete link. Only needed when user has file upload privs.
 		}
-		$output .= '<th><a href="'.$this->Href('', $this->tag, 'sortby=filename').'">'.T_("File").'</a></th>'."\n"
-		.'<th><a href="'.$this->Href('', $this->tag, 'sortby=date').'">'.T_("Last modified").'</a></th>'."\n"
-		.'<th><a href="'.$this->Href('', $this->tag, 'sortby=size').'">'.T_("Size").'</a></th>'."\n"
+		$output .= '<th><a href="'.$this->Href('', $this->GetPageTag(), 'sortby=filename').'">'.T_("File").'</a></th>'."\n"
+		.'<th><a href="'.$this->Href('', $this->GetPageTag(), 'sortby=date').'">'.T_("Last modified").'</a></th>'."\n"
+		.'<th><a href="'.$this->Href('', $this->GetPageTag(), 'sortby=size').'">'.T_("Size").'</a></th>'."\n"
 			.'</tr>'."\n"
 			.'</thead>'."\n"
 			.'<tbody>'."\n";

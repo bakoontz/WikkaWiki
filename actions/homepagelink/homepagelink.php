@@ -12,5 +12,5 @@
  *
  * @author		{@link http://wikkawiki.org/DarTar Dario Taraborelli}
  */
-echo '<a href="'.$this->href('', $this->config['root_page'], '').'">'.$this->config['root_page'].'</a>'."\n";
+echo '<a href="'.$this->href('', $this->GetConfigValue('root_page'), '').'">'.$this->GetConfigValue('root_page').'</a>'."\n";
 ?>

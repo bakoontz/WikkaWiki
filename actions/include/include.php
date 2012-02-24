@@ -36,9 +36,9 @@ if('' != $page)
 {
 	$orig_page = $page;
 	$page = strtolower($page);
-	if (!isset($this->config['includes'])) $this->config['includes'][] = strtolower($this->tag);
+	if (!isset($this->config['includes'])) $this->config['includes'][] = strtolower($this->GetPageTag());
 	
-	if (!in_array($page, $this->config['includes']) && $page != $this->tag) 
+	if (!in_array($page, $this->GetConfigValue('includes')) && $page != $this->GetPageTag()) 
 	{
 		if ($this->HasAccess('read', $page)) 
 		{

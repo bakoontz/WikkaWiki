@@ -14,7 +14,7 @@
  *
  * @author		{@link http://wikkawiki.org/DarTar Dario Taraborelli}
  */
-if ($this->handler == 'edit' || $this->handler == 'showcode')
+if ($this->GetHandler() == 'edit' || $this->GetHandler() == 'showcode')
 {
 	echo '<a href="'.$this->Href().'" title="'.T_("Displayed the formatted version of this page").'">'.T_("[Show]").'</a>';
 }

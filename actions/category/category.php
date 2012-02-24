@@ -27,9 +27,9 @@ if ($cattag = $_GET['wakka'])	#312 (only files action uses POST for wakka)
 	{
 		#232 : if page is not given, and if this action is called from an included page, use the name of the page that is included
 		#  and not the caller's PageTag.
-		if (isset($this->config['includes']) && is_array($this->config['includes']))
+		if (isset($this->config['includes']) && is_array($this->GetConfigValue('includes')))
 		{
-			$count = count($this->config['includes']) - 1;
+			$count = count($this->GetConfigValue('includes')) - 1;
 			$page = $this->config['includes'][$count];
 		}
 		else

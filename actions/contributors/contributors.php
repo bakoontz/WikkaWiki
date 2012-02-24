@@ -13,8 +13,8 @@
  * @since       Wikka 1.1.6.0
  */
 
-$q = 'SELECT Count(*) AS cnt, `user` FROM '.$this->config["table_prefix"].'pages '.
-		'WHERE `tag`="'.$this->tag.'" GROUP BY user ORDER BY cnt DESC;';
+$q = 'SELECT Count(*) AS cnt, `user` FROM '.$this->GetConfigValue('table_prefix').'pages '.
+		'WHERE `tag`="'.$this->GetPageTag().'" GROUP BY user ORDER BY cnt DESC;';
 $all = $this->LoadAll( $q );
 
 foreach($all as $key=>$val)

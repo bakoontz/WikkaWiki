@@ -503,7 +503,7 @@ if ($this->IsAdmin($this->GetUser()))
 				$table = 'pages';	
 		}
 
-		$query = "SELECT *".$count." FROM ".$this->config['table_prefix'].$table." WHERE ".  $where." ".$group." ORDER BY ".$sort." ".$d." LIMIT ".$s.", ".$l;
+		$query = "SELECT *".$count." FROM ".$this->GetConfigValue('table_prefix').$table." WHERE ".  $where." ".$group." ORDER BY ".$sort." ".$d." LIMIT ".$s.", ".$l;
 		$pagedata = $this->LoadAll($query);
 
 		if ($pagedata)

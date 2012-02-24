@@ -1,7 +1,7 @@
 <?php
     // this is a menulet action relying on the files handler
     // upload path
-    $upload_path = $this->config['upload_path'].'/'.$this->GetPageTag();
+    $upload_path = $this->GetConfigValue('upload_path').'/'.$this->GetPageTag();
     $AttachmentClass = "";
         if(is_dir($upload_path) ){
             $handle = opendir($upload_path);

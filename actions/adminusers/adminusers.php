@@ -185,7 +185,7 @@ if ($this->IsAdmin($this->GetUser()))
 	{
 		if($this->GetSafeVar('user', 'post') != null)
 		{
-			include_once($this->BuildFullpathFromMultipath('..'.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'libs'.DIRECTORY_SEPARATOR.'admin.lib.php', $this->config['action_path']));
+			include_once($this->BuildFullpathFromMultipath('..'.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'libs'.DIRECTORY_SEPARATOR.'admin.lib.php', $this->GetConfigValue('action_path')));
 			$status = DeleteUser($this, $this->GetSafeVar('user', 'post'));
 			if(false===$status)
 			{
@@ -270,7 +270,7 @@ if ($this->IsAdmin($this->GetUser()))
 		}
 		if(count($usernames) > 0)
 		{
-			include_once($this->BuildFullpathFromMultipath('..'.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'libs'.DIRECTORY_SEPARATOR.'admin.lib.php', $this->config['action_path']));
+			include_once($this->BuildFullpathFromMultipath('..'.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'libs'.DIRECTORY_SEPARATOR.'admin.lib.php', $this->GetConfigValue('action_path')));
 			$status = true;
 			foreach($usernames as $username)
 			{
@@ -391,7 +391,7 @@ if ($this->IsAdmin($this->GetUser()))
 		$form_filter .= '</fieldset>'.$this->FormClose()."\n";
 
 		// get user list
-		$userdata = $this->LoadAll("SELECT * FROM ".$this->config["table_prefix"]."users WHERE ".$where." ORDER BY ".$sort." ".$d." limit ".$s.", ".$l);
+		$userdata = $this->LoadAll("SELECT * FROM ".$this->GetConfigValue('table_prefix')."users WHERE ".$where." ORDER BY ".$sort." ".$d." limit ".$s.", ".$l);
 	
 		if ($userdata)
 		{

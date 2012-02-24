@@ -38,7 +38,7 @@ if(!defined('CHECKVERSION_RELEASE_FILE')) define('CHECKVERSION_RELEASE_FILE', '/
 if(!defined('CHECKVERSION_DOWNLOAD_URL')) define('CHECKVERSION_DOWNLOAD_URL', 'http://docs.wikkawiki.org/WhatsNew');
 if(!defined('CHECKVERSION_CONNECTION_TIMEOUT')) define('CHECKVERSION_CONNECTION_TIMEOUT', 5);
 
-if($this->IsAdmin() && TRUE == $this->config['enable_version_check'])
+if($this->IsAdmin() && TRUE == $this->GetConfigValue('enable_version_check'))
 {
 	
 	$debug = FALSE;
@@ -54,7 +54,7 @@ if($this->IsAdmin() && TRUE == $this->config['enable_version_check'])
 	# default intervall if config param not set in wikka.config.php: 1h 
 	elseif(isset($this->config['version_check_interval']))
 	{
-		$interval = $this->config['version_check_interval'];
+		$interval = $this->GetConfigValue('version_check_interval');
 		
 		if(preg_match("/^(\d+)([hmsdwMy])$/", $interval, $matches) > 0)
 		{
@@ -166,7 +166,7 @@ if($this->IsAdmin() && TRUE == $this->config['enable_version_check'])
 		$latest = trim(array_pop(explode("\r\n", $data)));
 		fclose($fp);
 		
-		if(TRUE === version_compare($this->config['wakka_version'], $latest, "<"))
+		if(TRUE === version_compare($this->GetConfigValue('wakka_version'), $latest, "<"))
 		{
 			if($debug)
 			{

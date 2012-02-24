@@ -69,8 +69,8 @@ $msgOnlyAdmin	= T_("Sorry, only administrators can view database information.");
 // variables
 
 $isAdmin	= $this->IsAdmin();
-$database	= $this->config['mysql_database'];
-$prefix		= $this->config['table_prefix'];
+$database	= $this->GetConfigValue('mysql_database');
+$prefix		= $this->GetConfigValue('table_prefix');
 
 // ---------------------- processsing --------------------------
 
