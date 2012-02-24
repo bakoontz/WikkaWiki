@@ -292,7 +292,7 @@ class Wakka
 			ob_end_clean();
 			die("Query failed: ".$query." (".mysql_error().")"); #i18n
 		}
-		if ($object && $this->config['sql_debugging'])
+		if ($object && $this->GetConfigValue('sql_debugging'))
 		{
 			$time = $this->GetMicroTime() - $start;
 			$this->queryLog[] = array(
@@ -1234,7 +1234,7 @@ class Wakka
 	function logSpam($type,$tag,$body,$reason,$urlcount,$user='',$time='')
 	{
 		// set path
-		$spamlogpath = (isset($this->config['spamlog_path'])) ? $this->config['spamlog_path'] : DEF_SPAMLOG_PATH;	# @@@ make function
+		$spamlogpath = (isset($this->config['spamlog_path'])) ? $this->GetConfigValue('spamlog_path') : DEF_SPAMLOG_PATH;	# @@@ make function
 		// gather data
 		if ($user == '')
 		{
@@ -1277,7 +1277,7 @@ class Wakka
 	function getSpamlogSummary()
 	{
 		// set path
-		$spamlogpath = (isset($this->config['spamlog_path'])) ? $this->config['spamlog_path'] : DEF_SPAMLOG_PATH;	# @@@ make function
+		$spamlogpath = (isset($this->config['spamlog_path'])) ? $this->GetConfigValue('spamlog_path') : DEF_SPAMLOG_PATH;	# @@@ make function
 		$aSummary = array();
 		$aLines = file($spamlogpath);						# get file as array so we can...
 		foreach ($aLines as $line)							# ... select the metadata
@@ -1482,7 +1482,7 @@ class Wakka
 			if ($page=="cached_nonexistent_page") return null;
 		}
 		// load page
-		if (!isset($page)) $page = $this->LoadSingle("select * from ".$this->config["table_prefix"]."pages where tag = '".mysql_real_escape_string($tag)."' ".($time ? "and time = '".mysql_real_escape_string($time)."'" : "and latest = 'Y'")." limit 1");
+		if (!isset($page)) $page = $this->LoadSingle("select * from ".$this->GetConfigValue('table_prefix')."pages where tag = '".mysql_real_escape_string($tag)."' ".($time ? "and time = '".mysql_real_escape_string($time)."'" : "and latest = 'Y'")." limit 1");
 		// cache result
 		if ($page && !$time) {
 			$this->pageCache[$page["tag"]] = $page;
@@ -1949,12 +1949,12 @@ class Wakka
 			// Should work with any browser/entity conversion scheme
 			$search_phrase = mysql_real_escape_string($phrase);
 			if ( 1 == $caseSensitive ) $id = ', id';
-			$sql  = "select * from ".$this->config['table_prefix']."pages where latest = ".  "'Y'" ." and match(tag, body".$id.") against(". "'$search_phrase'" ." IN BOOLEAN MODE) order by time DESC";
+			$sql  = "select * from ".$this->GetConfigValue('table_prefix')."pages where latest = ".  "'Y'" ." and match(tag, body".$id.") against(". "'$search_phrase'" ." IN BOOLEAN MODE) order by time DESC";
 		}
 		else
 		{
 			$search_phrase = mysql_real_escape_string($phrase);
-			$sql  = "select * from ".$this->config['table_prefix']."pages WHERE latest = ". "'Y'";
+			$sql  = "select * from ".$this->GetConfigValue('table_prefix')."pages WHERE latest = ". "'Y'";
 			foreach( explode(' ', $search_phrase) as $term ) 
 				$sql .= " AND ((`tag` LIKE '%{$term}%') OR (body LIKE '%{$term}%'))";
 		}
@@ -1970,7 +1970,7 @@ class Wakka
 	 */
 	function FullCategoryTextSearch($phrase)
 	{
-		return $this->LoadAll("select * from ".$this->config["table_prefix"]."pages where latest = 'Y' and match(body) against('".mysql_real_escape_string($phrase)."' IN BOOLEAN MODE)");
+		return $this->LoadAll("select * from ".$this->GetConfigValue('table_prefix')."pages where latest = 'Y' and match(body) against('".mysql_real_escape_string($phrase)."' IN BOOLEAN MODE)");
 	}
 
 	/**#@-*/
@@ -2167,7 +2167,7 @@ class Wakka
 	{
 		// init
 		$count = 0;
-		$table_prefix = (empty($prefix) && isset($this)) ? $this->config['table_prefix'] : $prefix;
+		$table_prefix = (empty($prefix) && isset($this)) ? $this->GetConfigValue('table_prefix') : $prefix;
 		if (is_null($dblink))
 		{
 			$dblink = $this->dblink;
@@ -2422,8 +2422,8 @@ class Wakka
 	 */
 	function SetSessionCookie($name, $value)
 	{
-		SetCookie($name.$this->config['wiki_suffix'], $value, 0, $this->wikka_cookie_path);
-		$_COOKIE[$name.$this->config['wiki_suffix']] = $value;
+		SetCookie($name.$this->GetConfigValue('wiki_suffix'), $value, 0, $this->wikka_cookie_path);
+		$_COOKIE[$name.$this->GetConfigValue('wiki_suffix')] = $value;
 		$this->cookies_sent = TRUE;
 	}
 
@@ -2436,8 +2436,8 @@ class Wakka
 	 */
 	function SetPersistentCookie($name, $value)
 	{
-		SetCookie($name.$this->config['wiki_suffix'], $value, time() + $this->cookie_expiry, $this->wikka_cookie_path);
-		$_COOKIE[$name.$this->config['wiki_suffix']] = $value;
+		SetCookie($name.$this->GetConfigValue('wiki_suffix'), $value, time() + $this->cookie_expiry, $this->wikka_cookie_path);
+		$_COOKIE[$name.$this->GetConfigValue('wiki_suffix')] = $value;
 		$this->cookies_sent = TRUE;
 	}
 
@@ -2449,8 +2449,8 @@ class Wakka
 	 */
 	function DeleteCookie($name)
 	{
-		SetCookie($name.$this->config['wiki_suffix'], "", 1, $this->wikka_cookie_path);
-		$_COOKIE[$name.$this->config['wiki_suffix']] = "";
+		SetCookie($name.$this->GetConfigValue('wiki_suffix'), "", 1, $this->wikka_cookie_path);
+		$_COOKIE[$name.$this->GetConfigValue('wiki_suffix')] = "";
 		$this->cookies_sent = TRUE;
 	}
 
@@ -2461,9 +2461,9 @@ class Wakka
 	 */
 	function GetCookie($name)
 	{
-		if (isset($_COOKIE[$name.$this->config['wiki_suffix']]))
+		if (isset($_COOKIE[$name.$this->GetConfigValue('wiki_suffix')]))
 		{
-			return $_COOKIE[$name.$this->config['wiki_suffix']];
+			return $_COOKIE[$name.$this->GetConfigValue('wiki_suffix')];
 		}
 		else
 		{
@@ -2531,7 +2531,7 @@ class Wakka
 		{
 			$_SESSION['redirectmessage'] = $message;
 		}
-		$url = ($url == '' ) ? $this->wikka_url.$this->tag : $url;
+		$url = ($url == '' ) ? $this->wikka_url.$this->GetPageTag() : $url;
 		if ((preg_match('/IIS/i', $_SERVER['SERVER_SOFTWARE'])) && ($this->cookies_sent))
 		{
 			@ob_end_clean();
@@ -2556,7 +2556,7 @@ class Wakka
 	 */
 	function MiniHref($handler='', $tag='')
 	{
-		if (!$tag = trim($tag)) $tag = $this->tag;
+		if (!$tag = trim($tag)) $tag = $this->GetPageTag();
 		$tag = preg_replace('/\s+/', '_', $tag);
 		return $tag.($handler ? "/".$handler : "");
 	}
@@ -2889,7 +2889,7 @@ class Wakka
 		$this->Query("
 			DELETE
 			FROM ".$this->GetConfigValue('table_prefix')."links
-			WHERE from_tag = '".mysql_real_escape_string($this->tag)."'"
+			WHERE from_tag = '".mysql_real_escape_string($this->GetPageTag())."'"
 			);
 		// build and insert new entries for current page in link table
 		if ($linktable = $this->GetLinkTable())
@@ -3319,7 +3319,7 @@ class Wakka
 		if (!$tag = trim($tag))
 		{
 			#$tag = $this->GetPageTag();
-			$tag = $this->tag;
+			$tag = $this->GetPageTag();
 		}
 		#if (!$referrer = trim($referrer)) $referrer = $_SERVER["HTTP_REFERER"]; NOTICE
 		if (empty($referrer))
@@ -3447,7 +3447,7 @@ class Wakka
 		}
 		$result =
 		$this->IncludeBuffered(strtolower($action_name).DIRECTORY_SEPARATOR.strtolower($action_name).'.php',
-		sprintf(T_("Unknown action \"%s\""), '"'.$action_name.'"'), $vars, $this->config['action_path']);
+		sprintf(T_("Unknown action \"%s\""), '"'.$action_name.'"'), $vars, $this->GetConfigValue('action_path'));
 		if ($link_tracking_state)
 		{
 			$this->StartLinkTracking();
@@ -3495,7 +3495,7 @@ class Wakka
 			$handler = strtolower($handler);
 		}
 		$handlerLocation = $handler.DIRECTORY_SEPARATOR.$handler.'.php';	#89
-                $tempOutput = $this->IncludeBuffered($handlerLocation, '', '', $this->config['handler_path']);
+                $tempOutput = $this->IncludeBuffered($handlerLocation, '', '', $this->GetConfigValue('handler_path'));
                 if (FALSE===$tempOutput)
                 {
                         return $this->wrapHandlerError(sprintf(T_("Sorry, %s is an unknown handler."), '"'.$handlerLocation.'"'));
@@ -3716,7 +3716,7 @@ class Wakka
 	{
 		return $this->LoadSingle("
 			SELECT *
-			FROM ".$this->config['table_prefix']."users
+			FROM ".$this->GetConfigValue('table_prefix')."users
 			WHERE name = '".mysql_real_escape_string($name)."' ".($password === 0 ? "" : "and password = '".mysql_real_escape_string($password)."'")."
 			LIMIT 1"
 			);
@@ -3813,7 +3813,7 @@ class Wakka
 		$this->DeleteCookie('user_name');
 		$this->DeleteCookie('pass');
 		// Delete this session from sessions table
-		$this->Query("DELETE FROM ".$this->config['table_prefix']."sessions WHERE userid='".$this->GetUserName()."' AND sessionid='".session_id()."'");
+		$this->Query("DELETE FROM ".$this->GetConfigValue('table_prefix')."sessions WHERE userid='".$this->GetUserName()."' AND sessionid='".session_id()."'");
 		$_SESSION['user'] = '';
 		// This seems a good as place as any to purge all session records
 		// older than PERSISTENT_COOKIE_EXPIRY, as this is not a
@@ -4058,7 +4058,7 @@ class Wakka
 	 */
 	function loadCommentId($comment_id)
 	{
-		return $this->LoadSingle("SELECT * FROM ".$this->config["table_prefix"]."comments WHERE id = '".$comment_id."'");
+		return $this->LoadSingle("SELECT * FROM ".$this->GetConfigValue('table_prefix')."comments WHERE id = '".$comment_id."'");
 	}
 
 	/**
@@ -4296,7 +4296,7 @@ class Wakka
 	 */
 	function deleteComment($comment_id)
 	{
-		$rc = $this->Query("DELETE FROM ".$this->config["table_prefix"]."comments ".
+		$rc = $this->Query("DELETE FROM ".$this->GetConfigValue('table_prefix')."comments ".
 							"WHERE id = '".$comment_id."'");
 		return $rc;
 	}
@@ -4649,7 +4649,7 @@ class Wakka
 	 */
 	function readBadWords()
 	{
-		$badwordspath = (isset($this->config['badwords_path'])) ? $this->config['badwords_path'] : DEF_BADWORDS_PATH;	# @@@ make function
+		$badwordspath = (isset($this->config['badwords_path'])) ? $this->GetConfigValue('badwords_path') : DEF_BADWORDS_PATH;	# @@@ make function
 		if (file_exists($badwordspath))
 		{
 			$aBadWords = file($badwordspath);				# get file as array so we can...
@@ -4689,7 +4689,7 @@ class Wakka
 	 */
 	function writeBadWords($lines)
 	{
-		$badwordspath = (isset($this->config['badwords_path'])) ? $this->config['badwords_path'] : DEF_BADWORDS_PATH;	# @@@ make function
+		$badwordspath = (isset($this->config['badwords_path'])) ? $this->GetConfigValue('badwords_path') : DEF_BADWORDS_PATH;	# @@@ make function
 		$rc = FALSE;
 		if (file_exists($badwordspath))
 		{
@@ -4856,7 +4856,7 @@ class Wakka
 				WHERE time < date_sub(now(), interval '".mysql_real_escape_string($days)."' day)
 					AND latest = 'N'"
 				);
-			$this->Query("delete from ".$this->config["table_prefix"]."pages where time < date_sub(now(), interval '".mysql_real_escape_string($days)."' day) and latest = 'N'");
+			$this->Query("delete from ".$this->GetConfigValue('table_prefix')."pages where time < date_sub(now(), interval '".mysql_real_escape_string($days)."' day) and latest = 'N'");
 		}
 	}
 
@@ -4917,47 +4917,47 @@ class Wakka
 		$this->SetPage($this->LoadPage($tag, $this->GetSafeVar('time', 'get'))); #312
 
 		$this->LogReferrer();
-		$this->ACLs = $this->LoadAllACLs($this->tag);
+		$this->ACLs = $this->LoadAllACLs($this->GetPageTag());
 		$this->ReadInterWikiConfig();
 		if(!($this->GetMicroTime()%3)) $this->Maintenance();
 
-		if (preg_match('/\.(xml|mm)$/', $this->handler))
+		if (preg_match('/\.(xml|mm)$/', $this->GetHandler()))
 		{
 			header('Content-type: text/xml');
-			print($this->handler($this->handler));
+			print($this->handler($this->GetHandler()));
 		}
 		// raw page handler
-		elseif ($this->handler == "raw")
+		elseif ($this->GetHandler() == "raw")
 		{
 			header('Content-type: text/plain');
-			print($this->handler($this->handler));
+			print($this->handler($this->GetHandler()));
 		}
 		// grabcode page handler
-		elseif ($this->handler == 'grabcode')
+		elseif ($this->GetHandler() == 'grabcode')
 		{
-			print($this->handler($this->handler));
+			print($this->handler($this->GetHandler()));
 		}
-		elseif (preg_match('/\.(gif|jpg|png)$/', $this->handler))		# should not be necessary
+		elseif (preg_match('/\.(gif|jpg|png)$/', $this->GetHandler()))		# should not be necessary
 		{
-			header('Location: images/' . $this->handler);
+			header('Location: images/' . $this->GetHandler());
 		}
-		elseif (preg_match('/\.css$/', $this->handler))					# should not be necessary
+		elseif (preg_match('/\.css$/', $this->GetHandler()))					# should not be necessary
 		{
-			header('Location: css/' . $this->handler);
+			header('Location: css/' . $this->GetHandler());
 		}
 		elseif(0 !== strcmp($newtag = preg_replace('/\s+/', '_', $tag), $tag))
 		{
 			header("Location: ".$this->Href('', $newtag));
 		}
-		elseif($this->handler == 'html')
+		elseif($this->GetHandler() == 'html')
 		{
 			header('Content-type: text/html');
-			print($this->handler($this->handler));
+			print($this->handler($this->GetHandler()));
 		}
 		else
 		{
 			//output page
-			$content_body = $this->handler($this->handler);
+			$content_body = $this->handler($this->GetHandler());
 			echo $this->Header();
 			echo $content_body;
 			echo $this->Footer();
