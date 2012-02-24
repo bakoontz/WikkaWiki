@@ -23,7 +23,20 @@ if ($cattag = $_GET['wakka'])	#312 (only files action uses POST for wakka)
 	$str ="";
 	if (!isset($col)) $col=1;
 	if (!isset($compact)) $compact=0;
-	if (!isset($page)) $page=$this->GetPageTag(); 
+	if (!isset($page)) 
+	{
+		#232 : if page is not given, and if this action is called from an included page, use the name of the page that is included
+		#  and not the caller's PageTag.
+		if (isset($this->config['includes']) && is_array($this->config['includes']))
+		{
+			$count = count($this->config['includes']) - 1;
+			$page = $this->config['includes'][$count];
+		}
+		else
+		{
+			$page=$this->GetPageTag(); 
+		}
+	}
 	if ($page=="/") $page="CategoryCategory"; 
 	if (!isset($class)) $class='';
 
@@ -34,7 +47,6 @@ if ($cattag = $_GET['wakka'])	#312 (only files action uses POST for wakka)
 	} else {
 		$class="";
 	}
-	if (!$page) {$page=$cattag;}
 
 	$results = $this->LoadPagesLinkingTo($page);
 
