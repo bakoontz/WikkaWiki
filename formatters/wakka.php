@@ -573,7 +573,7 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 			return (++$trigger_center % 2 ? "<div class=\"center\">\n" : "\n</div>\n");
 		}
 		// urls (see RFC 1738 <http://www.ietf.org/rfc/rfc1738.txt>)
-		elseif (preg_match("/^([a-z]+:\/\/[[:alnum:]\/?;:@&=\._-]+[[:alnum:]\/])(.*)$/", $thing, $matches))
+		elseif (preg_match("/^([a-z]+:\/\/[[:alnum:]\/?;:@%&=\._-]+[[:alnum:]\/])(.*)$/", $thing, $matches))
 		{
 			$url = $matches[1];
 			/* Inline images are disabled for security reason, use {{image action}} #142
@@ -1105,7 +1105,7 @@ $text = preg_replace_callback(
 	# forced linebreak and hr
 	"-{3,}|".  
 	# URL
-	"\b[a-z]+:\/\/[[:alnum:]\/?;:@&=\._-]+[[:alnum:]\/]|".
+	"\b[a-z]+:\/\/[[:alnum:]\/?;:@%&=\._-]+[[:alnum:]\/]|".
 	# Wiki markup
 	"\*\*|\'\'|\#\#|\#\%|@@|::c::|\>\>|\<\<|&pound;&pound;|&yen;&yen;|\+\+|__|<|>|\/\/|".
 	# headings
