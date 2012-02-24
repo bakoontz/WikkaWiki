@@ -1218,6 +1218,13 @@ class Wakka
 	 * @version		0.7
 	 *
 	 * @access		private
+	 *
+	 * @uses      DEFAULT_SPAMLOG_PATH
+	 * @uses      Config::$spamlog_path
+	 * @uses      Wakka::appendFile()
+	 * @uses      Wakka::GetUserName()
+	 * @uses      Wakka::htmlspecialchars_ent()
+	 *
 	 * @todo		- make recognition of mass delete i18n-proof
 	 *				- use configured (later!) timezone
 	 *				- use configured (later!) date/time format
@@ -1234,7 +1241,7 @@ class Wakka
 	function logSpam($type,$tag,$body,$reason,$urlcount,$user='',$time='')
 	{
 		// set path
-		$spamlogpath = (isset($this->config['spamlog_path'])) ? $this->GetConfigValue('spamlog_path') : DEF_SPAMLOG_PATH;	# @@@ make function
+		$spamlogpath = $this->GetConfigValue('spamlog_path', DEFAULT_SPAMLOG_PATH);
 		// gather data
 		if ($user == '')
 		{
@@ -1258,7 +1265,7 @@ class Wakka
 		$sig		= SPAMLOG_SIG.' '.$type.' '.$time.' '.$tag.' - '.$originip.' - '.$user.' '.$ua.' - '.$reason.' - '.$urlcount."\n";
 		$content	= $sig.$body."\n\n";
 
-		// add data to log			@@@ use appendFile
+		// add data to log	
 		return $this->appendFile($spamlogpath,$content);	# nr. of bytes written if successful, FALSE otherwise
 	}
 
@@ -1270,6 +1277,9 @@ class Wakka
 	 * @license		http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
 	 * @version		0.3
 	 *
+	 * @uses      DEFAULT_SPAMLOG_PATH
+	 * @uses      Config::$spamlog_path
+	 *
 	 * @access		public
 	 *
 	 * @return		array		array with associative array for each metadata item in a line
@@ -1277,7 +1287,7 @@ class Wakka
 	function getSpamlogSummary()
 	{
 		// set path
-		$spamlogpath = (isset($this->config['spamlog_path'])) ? $this->GetConfigValue('spamlog_path') : DEF_SPAMLOG_PATH;	# @@@ make function
+		$spamlogpath = $this->GetConfigValue('spamlog_path', DEFAULT_SPAMLOG_PATH);
 		$aSummary = array();
 		$aLines = file($spamlogpath);						# get file as array so we can...
 		foreach ($aLines as $line)							# ... select the metadata
@@ -4642,13 +4652,17 @@ class Wakka
 	 * @license		http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
 	 * @version		0.5
 	 *
+	 * @uses      DEFAULT_BADWORDS_PATH
+	 * @uses      Config::$badwords_path
+	 * @uses      Wakka::normalizeLines()
+	 *
 	 * @access		public
 	 *
 	 * @return		mixed		normalized file content (sorted) if found, FALSE if not
 	 */
 	function readBadWords()
 	{
-		$badwordspath = (isset($this->config['badwords_path'])) ? $this->GetConfigValue('badwords_path') : DEF_BADWORDS_PATH;	# @@@ make function
+		$badwordspath = $this->GetConfigValue('badwords_path', DEFAULT_BADWORDS_PATH);
 		if (file_exists($badwordspath))
 		{
 			$aBadWords = file($badwordspath);				# get file as array so we can...
@@ -4680,6 +4694,10 @@ class Wakka
 	 * @license		http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
 	 * @version		0.6
 	 *
+	 * @uses      DEFAULT_BADWORDS_PATH
+	 * @uses      Config::$badwords_path
+	 * @uses      Wakka::writeFile()
+	 *
 	 * @access		public
 	 * @uses		writeFile()
 	 *
@@ -4688,7 +4706,7 @@ class Wakka
 	 */
 	function writeBadWords($lines)
 	{
-		$badwordspath = (isset($this->config['badwords_path'])) ? $this->GetConfigValue('badwords_path') : DEF_BADWORDS_PATH;	# @@@ make function
+		$badwordspath = $this->GetConfigValue('badwords_path', DEFAULT_BADWORDS_PATH);
 		$rc = FALSE;
 		if (file_exists($badwordspath))
 		{

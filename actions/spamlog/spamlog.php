@@ -20,7 +20,15 @@
  *				- make sortable by column (requires multi-level sort class/routine)
  *				- make spamlog downloadable (extra button on full view)
  *
- * @uses		name of other element it depends on - creates links both ways
+ * @uses		DEFAULT_SPAMLOG_PATH
+ * @uses    Config::$spamlog_path
+ * @uses    Wakka::FormClose()
+ * @uses    Wakka::FormOpen()
+ * @uses    Wakka::getSpamlogSummary()
+ * @uses    Wakka::IsAdmin()
+ * @uses    Wakka::makeId()
+ * @uses    Wakka::readFile()
+ *
  * @see			name of related element - creates link
  *
  * @input		datatype  $paramname  description
@@ -188,7 +196,7 @@ $msgResult  = '';
 $log = '';
 
 // set path
-$spamlogpath = (isset($this->config['spamlog_path'])) ? $this->GetConfigValue('spamlog_path') : DEF_SPAMLOG_PATH;	# @@@ make function
+$spamlogpath = $this->GetConfigValue('spamlog_path', DEFAULT_SPAMLOG_PATH);
 
 // ---------------------- processsing --------------------------
 
