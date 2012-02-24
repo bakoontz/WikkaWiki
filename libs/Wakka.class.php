@@ -2735,6 +2735,7 @@ class Wakka
 			if ($compact)
 			{
 				#$link = '[['.$val;
+				$val = preg_replace('! !', '_', $val);
 				if (eregi('^Category', $val))
 				{
 					$val .= ' '.eregi_replace('^Category', '', $val);
