@@ -49,8 +49,8 @@
 if (!defined('CLONE_INVALID_CHARS')) define('CLONE_INVALID_CHARS', '| ? = &lt; &gt; / \ " % &amp;'); 
 
 // initialization
-$from = $this->tag;
-$to = $this->tag;
+$from = $this->GetPageTag();
+$to = $this->GetPageTag();
 $note = sprintf(T_("Cloned from %s"), $from);
 $editoption = '';
 $cloneaclsoption = '';

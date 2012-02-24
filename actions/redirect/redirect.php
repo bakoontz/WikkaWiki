@@ -39,7 +39,7 @@ $page = '';
 $target = '';
 
 // only redirect if we show the page
-if('show' != $this->handler)
+if('show' != $this->GetHandler())
 {
 	$redirect = FALSE;
 }
@@ -75,8 +75,8 @@ $full_target = str_replace('&amp;', '&', $full_target); # workaround for Href ma
 if($redirect && '' != $full_target)
 {
 	header($headercode);
-	#$message = sprintf(T_("Redirected from %s."), $this->Link($this->tag));
-	$message = sprintf(T_("Redirected from %s."), $this->tag);
+	#$message = sprintf(T_("Redirected from %s."), $this->Link($this->GetPageTag()));
+	$message = sprintf(T_("Redirected from %s."), $this->GetPageTag());
 	$this->Redirect($full_target, $message);
 }
 

@@ -24,7 +24,7 @@
 $out = '<abbr title="'.T_("Sorry, only wiki administrators can display this information").'">'.T_("n/a").'</abbr>'."\n";
 
 //check privs
-if ($this->config['public_sysinfo'] == '1' || $this->IsAdmin())
+if ($this->GetConfigValue('public_sysinfo') == '1' || $this->IsAdmin())
 {
 	$out = mysql_get_server_info();
 }

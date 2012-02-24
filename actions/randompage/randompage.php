@@ -27,11 +27,11 @@
  * @ToDo        Get list of pages from the tagCache of the ExistsPage function by IanAndolina
  */
 
-$errorpage = $this->config["root_page"];
+$errorpage = $this->GetConfigValue('root_page');
 $neg_list_default = array("HomePage","UserSettings","TextSearch","TextSearchExpanded","PageIndex");
 $title = isset($vars['title']) ? $this->htmlspecialchars_ent($vars['title']) : "RandomPage"; //i18n
 
-foreach( $this->LoadAll("select distinct tag from ".$this->config["table_prefix"]."pages") as $key => $val ){
+foreach( $this->LoadAll("select distinct tag from ".$this->GetConfigValue('table_prefix')."pages") as $key => $val ){
         $all[]=$val['tag'];
 }
 $pos_list = isset($vars['pos']) ? split('[|,]', preg_replace( "/[\ ]/", '', $vars['pos'] ) ) : $all ;

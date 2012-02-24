@@ -30,12 +30,12 @@
 echo '<div id="content">'."\n";
 
 // build backlinks list
-echo '<h3>'.sprintf(T_("Pages linking to %s"),$this->tag).'</h3><br />'."\n";
+echo '<h3>'.sprintf(T_("Pages linking to %s"),$this->GetPageTag()).'</h3><br />'."\n";
 
 switch(TRUE) 
 {
-	case (!$this->existsPage($this->tag)):
-	echo '<em class="error">'.sprintf(T_("Sorry, page %s does not exist."),$this->tag).'</em>'."\n";
+	case (!$this->existsPage($this->GetPageTag())):
+	echo '<em class="error">'.sprintf(T_("Sorry, page %s does not exist."),$this->GetPageTag()).'</em>'."\n";
 	break;
 
 	case (!$this->HasAccess('read')):
@@ -43,7 +43,7 @@ switch(TRUE)
 	break;
 	
 	default:	
-	if ($pages = $this->LoadPagesLinkingTo($this->tag))
+	if ($pages = $this->LoadPagesLinkingTo($this->GetPageTag()))
 	{
 		foreach ($pages as $page) {
 			$tag = $page['page_tag'];

@@ -3,7 +3,7 @@
  * PHP language file for Wikka highlighting (uses PHP built-in highlighting).
  */
 
-if ($this->handler == "diff") {
+if ($this->GetHandler() == "diff") {
 	// save output buffer and restart with clean buffer
 	$dummy = ob_get_clean(); ob_start();
 	// replace diff-tags to prevent highlighting these html-entities!
@@ -12,7 +12,7 @@ if ($this->handler == "diff") {
 
 highlight_string($text);
 
-if ($this->handler == "diff") {
+if ($this->GetHandler() == "diff") {
 	// get highlighting output
 	$listing = ob_get_clean(); ob_start();
 	// render diff tags

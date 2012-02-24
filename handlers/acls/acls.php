@@ -64,7 +64,7 @@ if ($this->UserIsOwner())
 			// store lists only if ACLs have previously been defined,
 			// or if the posted values are different than the defaults
 	
-			$page = $this->LoadSingle('SELECT * FROM '.$this->config['table_prefix'].
+			$page = $this->LoadSingle('SELECT * FROM '.$this->GetConfigValue('table_prefix').
 			    "acls WHERE page_tag = '".mysql_real_escape_string($this->GetPageTag()).
 			    "' LIMIT 1");
 	
@@ -102,7 +102,7 @@ if ($this->UserIsOwner())
 	}
 	else	// show form
 	{
-	echo sprintf(T_("<h3>Access Control Lists for <a href=\"%s\">%s</a></h3><br/>"), $this->Href('', $this->tag), $this->tag);
+	echo sprintf(T_("<h3>Access Control Lists for <a href=\"%s\">%s</a></h3><br/>"), $this->Href('', $this->GetPageTag()), $this->GetPageTag());
 ?>
 <?php echo $this->FormOpen('acls') ?>
 <table class="acls">

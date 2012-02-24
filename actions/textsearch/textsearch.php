@@ -23,7 +23,7 @@
 // init
 $result_page_list = '';
 $utf8Compatible = 0;
-if(1 == $this->config['utf8_compat_search'])
+if(1 == $this->GetConfigValue('utf8_compat_search'))
 	$utf8Compatible = 1;
 
 // get input

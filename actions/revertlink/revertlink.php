@@ -18,7 +18,7 @@
 if ($this->IsAdmin())
 {
 	include_once($this->BuildFullpathFromMultipath('..'.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'libs'.DIRECTORY_SEPARATOR.'admin.lib.php', $this->GetConfigValue('action_path')));
-	$res = LoadLastTwoPagesByTag($this, $this->tag);
+	$res = LoadLastTwoPagesByTag($this, $this->GetPageTag());
 	if(null !== $res)
 	{
 		echo '<a href="'.$this->Href('revert').'" title="Click to revert this page to the previous revision">'.T_("[Revert]").'</a>';

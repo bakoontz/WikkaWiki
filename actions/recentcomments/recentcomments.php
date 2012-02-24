@@ -111,7 +111,7 @@ if ($comments = $this->LoadRecentComments($max))	# JW 2005-07-23 use RecentChang
 			}
 
 			$dayformatted = date($longdayformat,strtotime($time));
-			#$action = $this->tag.'#form_'.$day;	@@@ fragments not supported yet in Href, MiniHref or FormOpen
+			#$action = $this->GetPageTag().'#form_'.$day;	@@@ fragments not supported yet in Href, MiniHref or FormOpen
 
 			if ($isAdmin)
 			{

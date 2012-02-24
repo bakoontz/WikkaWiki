@@ -180,7 +180,7 @@ $msgOnlyAdmin	= SPLOG_MSG_SPAMLOG_ONLY_ADMIN;
 // variables
 
 $isAdmin	= $this->IsAdmin();
-$prefix		= $this->config['table_prefix'];
+$prefix		= $this->GetConfigValue('table_prefix');
 
 // initializations
 
@@ -188,7 +188,7 @@ $msgResult  = '';
 $log = '';
 
 // set path
-$spamlogpath = (isset($this->config['spamlog_path'])) ? $this->config['spamlog_path'] : DEF_SPAMLOG_PATH;	# @@@ make function
+$spamlogpath = (isset($this->config['spamlog_path'])) ? $this->GetConfigValue('spamlog_path') : DEF_SPAMLOG_PATH;	# @@@ make function
 
 // ---------------------- processsing --------------------------
 

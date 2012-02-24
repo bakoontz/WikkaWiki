@@ -77,7 +77,7 @@ preg_match('/^(.*)ReferrerMarker/', $this->Href('', 'ReferrerMarker'), $match);	
 $regex_referrer = '@^'.preg_quote($match[1], '@').'([^\/\?&]*)@';
 if (isset($_SERVER['HTTP_REFERER']) && preg_match($regex_referrer, $_SERVER['HTTP_REFERER'], $match))
 {
-	if (strcasecmp($this->tag, $match[1]))
+	if (strcasecmp($this->GetPageTag(), $match[1]))
 	{
 		$_SESSION['go_back'] = $_SERVER['HTTP_REFERER'];
 		//We save the tag of the referring page, this tag is to be shown in label <Go back to ...>. We must use a session here because if the user
