@@ -2691,6 +2691,75 @@ class Wakka
 	}
 
 	/**
+	 * Takes an array of pages returned by LoadAll() and renders it as a table or unordered list.
+	 *
+	 * @author		{@link http://wikkawiki.org/DotMG DotMG}
+	 *
+	 * @access		public
+	 * @uses	Wakka::Format()
+	 *
+	 * @param	mixed	$pages			required: Array of pages returned by LoadAll
+	 * @param	string	$nopagesText	optional: Error message returned if $pages is void. Default: ''
+	 * @param	string	$class			optional: A classname to be attached to the table or unordered list. Default: ''
+	 * @param	int		$columns		optional: Number of columns of the table if compact = 0. Default: 3
+	 * @param	int		$compact		optional: If 0: use table, if 1: use unordered list. Default: 0
+	 * @param	boolean	$show_edit_link	If true, each page is followed by an edit link. Default: false.
+	 * @return	string	formated array contents
+	 * @todo	Use as a wrapper for the new array functions - avoiding table layout and enhancing scannability of the result!!!
+	 */
+	function ListPages($pages, $nopagesText = '', $class = '', $columns = 3, $compact = 0, $show_edit_link=false)
+	{
+		$edit_link = '';
+		if (!$pages)
+		{
+			return ($nopagesText);
+		}
+		if ($class)
+		{
+			$class = ' class="'.$class.'"';
+		}
+		$str = $compact ? '<div'.$class.'><ul>' : '<table width="100%"'.$class.'><tr>'."\n";
+		foreach ($pages as $page)
+		{
+			#$list[] = $page['tag'];
+			$list[] = $page['page_tag'];	#487 - was not handled in [520]!
+		}
+		sort($list);			// @@@ caller should ensure (via query!) the list is already sorted
+		$count = 0;
+		foreach ($list as $val)
+		{
+			if ($show_edit_link)
+			{
+				$edit_link = ' <small>['.$this->Link($val, 'edit', WIKKA_PAGE_EDIT_LINK_DESC, false, true, sprintf(WIKKA_PAGE_EDIT_LINK_TITLE, $val)).']</small>';
+			}
+			if ($compact)
+			{
+				#$link = '[['.$val;
+				if (eregi('^Category', $val))
+				{
+					$val .= ' '.eregi_replace('^Category', '', $val);
+				}
+				// @@@ Format() should not be used to format a link
+				$str .= '<li>'."\n".$this->Format('[['.$val.']]').$edit_link.'</li>';
+			}
+			else
+			{
+				if ($count == $columns)
+				{
+					$str .= '</tr><tr>'."\n";
+					$count = 0;
+				}
+				// @@@ Format() should not be used to format a link
+				$str .= '<td>'.$this->Format('[['.$val.']]').$edit_link.'</td>';
+			}
+			$count ++;
+		}
+		$str .= $compact ? '</ul></div>' : '</tr></table>';
+		return $str;
+	}
+
+
+	/**
 	 * Create a href for a static file.
 	 *
 	 * It takes a parameter $filepath, the path of the static file, and returns
