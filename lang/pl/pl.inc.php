@@ -336,8 +336,8 @@ if(!defined('MIN_DATETIME')) define('MIN_DATETIME', strtotime('1970-01-01 00:00:
 if(!defined('MAX_DATETIME')) define('MAX_DATETIME', strtotime('2038-01-19 03:04:07 GMT')); # latest timestamp PHP can handle
 if(!defined('MIN_YEAR')) define('MIN_YEAR', date('Y',MIN_DATETIME));
 if(!defined('MAX_YEAR')) define('MAX_YEAR', date('Y',MAX_DATETIME)-1); # don't include partial January 2038
-if(!defined('CUR_YEAR')) define('CUR_YEAR', date('Y',mktime()));
-if(!defined('CUR_MONTH')) define('CUR_MONTH', date('n',mktime()));
+if(!defined('CUR_YEAR')) define('CUR_YEAR', date('Y',time()));
+if(!defined('CUR_MONTH')) define('CUR_MONTH', date('n',time()));
 if(!defined('LOC_MON_YEAR')) define('LOC_MON_YEAR', "%B %Y"); # i18n
 /**#@-*/
 

@@ -47,8 +47,8 @@
  */
 
 // ***** CONSTANTS section *****
-if(!defined('CUR_YEAR')) define('CUR_YEAR', date('Y',mktime()));
-if(!defined('CUR_MONTH')) define('CUR_MONTH', date('n',mktime()));
+if(!defined('CUR_YEAR')) define('CUR_YEAR', date('Y',time()));
+if(!defined('CUR_MONTH')) define('CUR_MONTH', date('n',time()));
 if(!defined('MIN_DATETIME')) define('MIN_DATETIME', strtotime('1970-01-01 00:00:00 GMT')); # earliest timestamp PHP can handle (Windows and some others - to be safe)
 if(!defined('MAX_DATETIME')) define('MAX_DATETIME', strtotime('2038-01-19 03:04:07 GMT')); # latest timestamp PHP can handle
 if(!defined('MIN_YEAR')) define('MIN_YEAR', date('Y',MIN_DATETIME));
@@ -126,7 +126,7 @@ if (2 == $month)													# correct for leap year if necessary
 }
 
 // derive "today" to detect when to mark this up in the calendar face
-$today = date("Y:m:d",mktime());
+$today = date("Y:m:d",time());
 
 // build navigation variables - locale-specific (%B gets full month name)
 // FIXME: @@@ take care we don't go over date limits for PHP
