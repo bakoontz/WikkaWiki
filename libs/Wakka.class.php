@@ -2103,7 +2103,7 @@ class Wakka
 	 *
 	 *
 	 * @param	string	@tag	optional: page to get title for (default current page)
-	 * @return	mixed	the title of the current page or the page name if none found
+	 * @return	mixed	the title of the current page or the page name if none found, trimmed
 	 */
 	function PageTitle($tag=null)
 	{
@@ -2122,7 +2122,7 @@ class Wakka
 				"' AND LATEST = 'Y'";
 		$res = $this->LoadSingle($query);
 		$page_title = trim($res['title']) !== '' ? $res['title'] : $tag;
-		return $page_title;
+		return trim($page_title);
 	}
 
 	/**
@@ -2704,59 +2704,117 @@ class Wakka
 	 * @author		{@link http://wikkawiki.org/DotMG DotMG}
 	 *
 	 * @access		public
-	 * @uses	Wakka::Format()
+	 * @uses	Wakka::Link()
+	 * @uses	Wakka::PageTitle()
 	 *
 	 * @param	mixed	$pages			required: Array of pages returned by LoadAll
-	 * @param	string	$nopagesText	optional: Error message returned if $pages is void. Default: ''
-	 * @param	string	$class			optional: A classname to be attached to the table or unordered list. Default: ''
-	 * @param	int		$columns		optional: Number of columns of the table if compact = 0. Default: 3
-	 * @param	int		$compact		optional: If 0: use table, if 1: use unordered list. Default: 0
-	 * @param	boolean	$show_edit_link	If true, each page is followed by an edit link. Default: false.
+	 * @param	array $array_param An associative array representing the options to pass to the function ListPages
+	 *         The following keys are currently supported :
+	 *            nopagesText: Text to display when the list is empty, default: empty string
+	 *            class: a space separated list of classNames used for styling the enclosing div or table tag
+	 *            compact: If 0, use table; if 1: use unordered list. Default: 0
+	 *            columns: If compact = 0, number of columns of the table. Default: 3
+	 *            show_edit_link: If true, each page is followed by an edit link. Default: false.
+	 *            show_page_title: If true, show the title of the page after the page name. Default: true.
+	 *            sort: Should the data be sorted before being listed? Default: no (no sorting)
+	 *  Other possible values for sort: 
+	 *   ignore_case ou ksort: sort page names, ignoring case
+	 *   reverse ou rsort: sort in reverse order, not ignoring case
+	 *   ignore_case_reverse ou krsort: sort in reverse order, not ignoring case
 	 * @return	string	formated array contents
 	 * @todo	Use as a wrapper for the new array functions - avoiding table layout and enhancing scannability of the result!!!
 	 */
-	function ListPages($pages, $nopagesText = '', $class = '', $columns = 3, $compact = 0, $show_edit_link=false)
+	function ListPages($pages, $array_param=array())
 	{
-		$edit_link = '';
+		$defaut_options = array(
+				'nopagesText' => '',
+				'class' => '',
+				'compact' => 0,
+				'columns' => 3,
+				'show_edit_link' => false,
+				'show_page_title' => true,
+				'sort' => 'no');
+		$options = array_merge($defaut_options, $array_param);
+
+		$output_edit_link = '';
+		$output_page_title = '';
+		$output_body = '';
+		$class = '';
+
 		if (!$pages)
 		{
-			return ($nopagesText);
+			return ($options['nopagesText']);
 		}
-		if ($class)
+		if ($options['class'])
 		{
-			$class = ' class="'.$class.'"';
+			$class = ' class="'.str_replace('"', '', $options['class']).'"';
 		}
-		$str = $compact ? '<div'.$class.'><ul>' : '<table width="100%"'.$class.'><tr>'."\n";
+		if ($options['compact'])
+		{
+			$output_start = "\n<div".$class.'><ul>';
+			$output_end = '</ul></div>';
+		}
+		else
+		{
+			$output_start = '<table '.$class.'><tr>';
+			$output_end = '</tr></table>';
+		}
+		// sorting
 		foreach ($pages as $page)
 		{
-			$list[] = $page['page_tag'];	#487 - was not handled in [520]!
+			$k = strtolower($page['page_tag']);
+			$list[strtolower($k)] = $page['page_tag'];
 		}
-		sort($list);			// @@@ caller should ensure (via query!) the list is already sorted
+		switch ($options['sort'])
+		{
+			case 'ignore_case': case 'ksort':
+				ksort($list);
+				break;
+			case 'no': case false: case 0:
+				break;
+			case 'reverse': case 'rsort':
+				rsort($list);
+				break;
+			case 'ignore_case_reverse': case 'krsort':
+				krsort($list);
+				break;
+			default:
+				sort($list);
+		}
 		$count = 0;
 		foreach ($list as $val)
 		{
-			if ($show_edit_link)
+			if ($options['show_edit_link'])
 			{
-				$edit_link = ' <small>['.$this->Link($val, 'edit', WIKKA_PAGE_EDIT_LINK_DESC, false, true, sprintf(WIKKA_PAGE_EDIT_LINK_TITLE, $val)).']</small>';
+				$output_edit_link = ' <small>['.$this->Link($val, 'edit', WIKKA_PAGE_EDIT_LINK_DESC, false, true, sprintf(WIKKA_PAGE_EDIT_LINK_TITLE, $val)).']</small>';
 			}
-			if ($compact)
+			if ($options['show_page_title'])
+			{
+				$output_page_title = ' <span class="pagetitle">['.$this->PageTitle($val).']</span>';
+			}
+			if ($options['compact'])
 			{
 				$text = preg_replace('!^Category!i', '', $val);
-				$str .= '<li>'.$this->Link($val, '', $text).$edit_link.'</li>'."\n";
+				$output_link = $this->Link($val, '', $text);
+				$output_item_sep_begin = "\n <li>";
+				$output_item_sep_end = "</li>";
+				$output_body .= $output_item_sep_begin.$output_link.$output_edit_link.$output_page_title.$output_item_sep_end;
 			}
 			else
 			{
-				if ($count == $columns)
+				if ($count == intval($options['columns']))
 				{
-					$str .= '</tr><tr>';
+					$output_body .= '</tr><tr>';
 					$count = 0;
 				}
-				$str .= '<td>'.$this->Link($val).$edit_link.'</td>'."\n";
+				$output_link = $this->Link($val);
+				$output_item_sep_begin = "\n <td>";
+				$output_item_sep_end = "</td>";
+				$output_body .= $output_item_sep_begin.$output_link.$output_edit_link.$output_page_title.$output_item_sep_end;
 			}
 			$count ++;
 		}
-		$str .= $compact ? '</ul></div>' : '</tr></table>';
-		return $str;
+		return $output_start.$output_body.$output_end;
 	}
 
 

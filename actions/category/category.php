@@ -43,7 +43,14 @@ if ($cattag = $_GET['wakka'])	#312 (only files action uses POST for wakka)
 	$results = $this->LoadPagesLinkingTo($page);
 
 	$errmsg = '<em class="error">'.sprintf(T_("Sorry, No items found for %s"), $page).'</em>';
-	$str = $this->ListPages($results, $errmsg, $class, $col, $compact);
+	$list_pages_option = array(
+			'nopagesText' => $errmsg,
+			'class' => $class,
+			'columns' => $col,
+			'sort' => 'no',
+			'compact' => $compact
+			);
+	$str = $this->ListPages($results, $list_pages_option);
 	if ($str != $errmsg)
 	{
 		printf(T_("The following %d page(s) belong to %s").'<br /><br />', count($results), $page);
