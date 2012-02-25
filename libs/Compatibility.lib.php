@@ -132,7 +132,7 @@ function instantiate($class, $par1=NULL, $par2=NULL, $par3=NULL)
 	}
 	else
 	{
-		$obj =& new $class($par1, $par2, $par3);	// reverting [558] see #496 - comment 4
+		require ('libs/Compatibility.deprecated.php');
 	}
 	return $obj;
 }
