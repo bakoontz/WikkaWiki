@@ -40,14 +40,6 @@ if ($cattag = $_GET['wakka'])	#312 (only files action uses POST for wakka)
 	if ($page=="/") $page="CategoryCategory"; 
 	if (!isset($class)) $class='';
 
-//	$page= preg_replace( "/(\w+)\s(\w+)/", "$1$2",$page);
-	if (isset($class)) 
-	{
-		$class="class=\"$class\"";
-	} else {
-		$class="";
-	}
-
 	$results = $this->LoadPagesLinkingTo($page);
 
 	$errmsg = '<em class="error">'.sprintf(T_("Sorry, No items found for %s"), $page).'</em>';

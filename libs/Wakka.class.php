@@ -2729,7 +2729,6 @@ class Wakka
 		$str = $compact ? '<div'.$class.'><ul>' : '<table width="100%"'.$class.'><tr>'."\n";
 		foreach ($pages as $page)
 		{
-			#$list[] = $page['tag'];
 			$list[] = $page['page_tag'];	#487 - was not handled in [520]!
 		}
 		sort($list);			// @@@ caller should ensure (via query!) the list is already sorted
@@ -2740,26 +2739,19 @@ class Wakka
 			{
 				$edit_link = ' <small>['.$this->Link($val, 'edit', WIKKA_PAGE_EDIT_LINK_DESC, false, true, sprintf(WIKKA_PAGE_EDIT_LINK_TITLE, $val)).']</small>';
 			}
-			$val = preg_replace('! !', '_', $val);
 			if ($compact)
 			{
-				#$link = '[['.$val;
-				if (eregi('^Category', $val))
-				{
-					$val .= ' '.eregi_replace('^Category', '', $val);
-				}
-				// @@@ Format() should not be used to format a link
-				$str .= '<li>'."\n".$this->Format('[['.$val.']]').$edit_link.'</li>';
+				$text = preg_replace('!^Category!i', '', $val);
+				$str .= '<li>'.$this->Link($val, '', $text).$edit_link.'</li>'."\n";
 			}
 			else
 			{
 				if ($count == $columns)
 				{
-					$str .= '</tr><tr>'."\n";
+					$str .= '</tr><tr>';
 					$count = 0;
 				}
-				// @@@ Format() should not be used to format a link
-				$str .= '<td>'.$this->Format('[['.$val.']]').$edit_link.'</td>';
+				$str .= '<td>'.$this->Link($val).$edit_link.'</td>'."\n";
 			}
 			$count ++;
 		}
