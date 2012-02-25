@@ -464,7 +464,7 @@ class XML_HTMLSax {//extends Pear {
     */
     function XML_HTMLSax() {
         if (version_compare(phpversion(), '4.3', 'ge')) {
-						$this->state_parser = instantiate('XML_HTMLSax_StateParser_Gtet430', $this);
+            $this->state_parser = instantiate('XML_HTMLSax_StateParser_Gtet430', $this);
         } else {
             $this->state_parser = instantiate('XML_HTMLSax_StateParser_Lt430', $this);
         }

@@ -309,7 +309,7 @@ class safehtml {
    $doc = str_replace("\xC0\xBC", "&lt;", $doc);
 
    // Instantiate the parser
-	 $parser = instantiate('XML_HTMLSax');
+   $parser = instantiate('XML_HTMLSax');
 
    // Register the handler with the parser
    $parser->set_object($this);
