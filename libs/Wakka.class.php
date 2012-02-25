@@ -632,7 +632,6 @@ class Wakka
 		require_once $safehtml_classpath;
 
 		// Instantiate the handler
-		#$safehtml =& new safehtml();
 		$safehtml = instantiate('safehtml');
 
 		$filtered_output = $safehtml->parse($html);
@@ -962,7 +961,7 @@ class Wakka
 	{
 		// create GeSHi object
 		include_once($this->GetConfigValue('geshi_path').DIRECTORY_SEPARATOR.'geshi.php');
-		$geshi =& new GeSHi($sourcecode, $language, $this->GetConfigValue('geshi_languages_path'));				# create object by reference
+		$geshi = instantiate('GeSHi', $sourcecode, $language, $this->GetConfigValue('geshi_languages_path'));				# create object by reference
 
 		$geshi->enable_classes();								# use classes for hilighting (must be first after creating object)
 		$geshi->set_overall_class('code');						# enables using a single stylesheet for multiple code fragments
