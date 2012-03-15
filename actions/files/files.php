@@ -207,7 +207,13 @@ if(isset($_POST['file_to_delete']))
 	$matches = '';
 	preg_match($fileregex, $file_to_delete, $matches);
 	if(isset($matches[1]))
-		$file_to_delete = $matches[1];
+	{
+		$result = @unlink($upload_path.DIRECTORY_SEPARATOR.$file_to_delete);
+		if (!$result)
+		{
+			$this->Redirect('', sprintf(T_('Unable to delete file %s'), $file_to_delete));
+		}
+	}
 	else
 		$this->Redirect('', T_("Invalid filename"));
 }
