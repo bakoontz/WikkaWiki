@@ -116,8 +116,12 @@ switch ($action)	# #312
 	case 'delete':
 		if ($this->IsAdmin() && FALSE===empty($file) && T_("File deleted") == $_SESSION['redirectmessage'])
 		{
-			$delete_success = @unlink($upload_path.DIRECTORY_SEPARATOR.$file); # #89, #312 
-			if (!$delete_success)
+			// Some versions of PHP return an incorrect value for
+			// unlink, so we simply check to see if file still exists
+			$filepath = $upload_path.DIRECTORY_SEPARATOR.$file;
+			@unlink($filepath);
+			$status = stat($filepath);
+			if (TRUE === is_array($status)) #89, #312
 			{
 				$this->SetRedirectMessage(T_("Sorry, the file could not be deleted!"));
 			}
