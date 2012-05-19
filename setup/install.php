@@ -571,7 +571,6 @@ case "1.3.1":
 	@mysql_query("ALTER TABLE ".$config['table_prefix']."users CHANGE `default_comment_display` `default_comment_display` ENUM( 'date_asc','date_desc','threaded' ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL default 'threaded'", $dblink);
 	@mysql_query("ALTER TABLE ".$config['table_prefix']."users CHANGE `status` `status` ENUM( 'invited','signed-up','pending','active','suspended','banned','deleted') CHARACTER SET utf8 COLLATE utf8_unicode_ci", $dblink);
 	@mysql_query("ALTER TABLE ".$config['table_prefix']."users CHANGE `theme` `theme` VARCHAR( 50 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci default ''", $dblink); // refs #1022
-	@mysql_query("ALTER TABLE ".$config['table_prefix']."users CHANGE `challenge` `challenge` VARCHAR( 8 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL default ''", $dblink); // refs #1023
 	// Converting comments table and fields to UTF-8
 	test("Setting up comments table and fields for UTF-8...", true);
 	@mysql_query("ALTER TABLE ".$config['table_prefix']."comments DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci", $dblink);
