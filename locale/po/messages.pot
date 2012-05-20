@@ -8,10 +8,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-12-20 10:11-0600\n"
+"POT-Creation-Date: 2012-05-20 12:36-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -25,11 +26,11 @@ msgstr ""
 
 #: actions/adminpages/adminpages.php:135 actions/adminpages/adminpages.php:258
 #: actions/adminusers/adminusers.php:127 actions/adminusers/adminusers.php:248
-#: actions/files/files.php:209 actions/files/files.php:210
-#: handlers/acls/acls.php:58 handlers/acls/acls.php:148
-#: handlers/delete/delete.php:31 handlers/delete/delete.php:78
-#: handlers/edit/edit.php:55 handlers/edit/edit.php:210
-#: handlers/edit/edit.php:262
+#: actions/files/files.php:237 actions/files/files.php:238
+#: handlers/acls/acls.php:46 handlers/acls/acls.php:136
+#: handlers/delete/delete.php:31 handlers/delete/delete.php:67
+#: handlers/edit/edit.php:55 handlers/edit/edit.php:202
+#: handlers/edit/edit.php:254
 msgid "Cancel"
 msgstr ""
 
@@ -53,7 +54,7 @@ msgstr ""
 msgid "Page Administration"
 msgstr ""
 
-#: actions/adminpages/adminpages.php:366 actions/adminusers/adminusers.php:360
+#: actions/adminpages/adminpages.php:366 actions/adminusers/adminusers.php:364
 msgid "Filter view:"
 msgstr ""
 
@@ -61,13 +62,12 @@ msgstr ""
 msgid "Search page:"
 msgstr ""
 
-#: actions/adminpages/adminpages.php:367 actions/adminusers/adminusers.php:361
+#: actions/adminpages/adminpages.php:367 actions/adminusers/adminusers.php:365
 msgid "Enter a search string"
 msgstr ""
 
 #: actions/adminpages/adminpages.php:367 actions/adminpages/adminpages.php:701
-#: actions/adminusers/adminusers.php:325 actions/adminusers/adminusers.php:361
-#: actions/adminusers/adminusers.php:487
+#: actions/adminusers/adminusers.php:329 actions/adminusers/adminusers.php:365
 msgid "Submit"
 msgstr ""
 
@@ -81,34 +81,34 @@ msgstr ""
 msgid "and"
 msgstr ""
 
-#: actions/adminpages/adminpages.php:455 actions/adminusers/adminusers.php:364
+#: actions/adminpages/adminpages.php:455 actions/adminusers/adminusers.php:368
 msgid "Show"
 msgstr ""
 
-#: actions/adminpages/adminpages.php:456 actions/adminusers/adminusers.php:365
+#: actions/adminpages/adminpages.php:456 actions/adminusers/adminusers.php:369
 msgid "Select records-per-page limit"
 msgstr ""
 
-#: actions/adminpages/adminpages.php:463 actions/adminusers/adminusers.php:372
+#: actions/adminpages/adminpages.php:463 actions/adminusers/adminusers.php:376
 msgid "records per page"
 msgstr ""
 
-#: actions/adminpages/adminpages.php:463 actions/adminusers/adminusers.php:348
-#: actions/adminusers/adminusers.php:372
+#: actions/adminpages/adminpages.php:463 actions/adminusers/adminusers.php:352
+#: actions/adminusers/adminusers.php:376
 msgid "Apply"
 msgstr ""
 
 #: actions/adminpages/adminpages.php:470 actions/adminpages/adminpages.php:474
-#: actions/adminusers/adminusers.php:379 actions/adminusers/adminusers.php:383
+#: actions/adminusers/adminusers.php:383 actions/adminusers/adminusers.php:387
 #, php-format
 msgid "Show records from %d to %d"
 msgstr ""
 
-#: actions/adminpages/adminpages.php:476 actions/adminusers/adminusers.php:385
+#: actions/adminpages/adminpages.php:476 actions/adminusers/adminusers.php:389
 msgid "Records"
 msgstr ""
 
-#: actions/adminpages/adminpages.php:477 actions/adminusers/adminusers.php:386
+#: actions/adminpages/adminpages.php:477 actions/adminusers/adminusers.php:390
 msgid "Sorted by:"
 msgstr ""
 
@@ -156,7 +156,7 @@ msgstr ""
 msgid "Revisions"
 msgstr ""
 
-#: actions/adminpages/adminpages.php:528 actions/adminusers/adminusers.php:412
+#: actions/adminpages/adminpages.php:528 actions/adminusers/adminusers.php:416
 #: handlers/show/show.php:165
 msgid "Comments"
 msgstr ""
@@ -169,7 +169,7 @@ msgstr ""
 msgid "Referrers"
 msgstr ""
 
-#: actions/adminpages/adminpages.php:531 actions/adminusers/adminusers.php:413
+#: actions/adminpages/adminpages.php:531 actions/adminusers/adminusers.php:417
 msgid "Actions"
 msgstr ""
 
@@ -191,13 +191,12 @@ msgstr ""
 msgid "edit"
 msgstr ""
 
-#: actions/adminpages/adminpages.php:564 handlers/delete/delete.php:65
+#: actions/adminpages/adminpages.php:564 handlers/delete/delete.php:54
 #, php-format
 msgid "Delete %s"
 msgstr ""
 
-#: actions/adminpages/adminpages.php:564 actions/adminusers/adminusers.php:438
-#: actions/adminusers/adminusers.php:442
+#: actions/adminpages/adminpages.php:564
 msgid "delete"
 msgstr ""
 
@@ -223,7 +222,7 @@ msgstr ""
 msgid "Take ownership of"
 msgstr ""
 
-#: actions/adminpages/adminpages.php:624 handlers/acls/acls.php:104
+#: actions/adminpages/adminpages.php:624 handlers/acls/acls.php:92
 msgid "(Nobody)"
 msgstr ""
 
@@ -252,7 +251,7 @@ msgstr ""
 msgid "Display external sites linking to %s (%d)"
 msgstr ""
 
-#: actions/adminpages/adminpages.php:663 actions/adminusers/adminusers.php:456
+#: actions/adminpages/adminpages.php:663 actions/adminusers/adminusers.php:458
 #, php-format
 msgid "Select %s"
 msgstr ""
@@ -261,7 +260,7 @@ msgstr ""
 msgid "(No edit note)"
 msgstr ""
 
-#: actions/adminpages/adminpages.php:689 actions/adminusers/adminusers.php:480
+#: actions/adminpages/adminpages.php:689 actions/adminusers/adminusers.php:482
 msgid "Mass-action"
 msgstr ""
 
@@ -281,7 +280,7 @@ msgstr ""
 msgid "Uncheck all"
 msgstr ""
 
-#: actions/adminpages/adminpages.php:691 actions/adminusers/adminusers.php:482
+#: actions/adminpages/adminpages.php:691 actions/adminusers/adminusers.php:484
 msgid "With selected"
 msgstr ""
 
@@ -298,19 +297,28 @@ msgstr ""
 msgid "Sorry, there are no pages matching \"%s\""
 msgstr ""
 
-#: actions/adminusers/adminusers.php:192 actions/adminusers/adminusers.php:278
+#: actions/adminusers/adminusers.php:184 actions/adminusers/adminusers.php:442
+#: handlers/processcomment/processcomment.php:31 handlers/show/show.php:349
+msgid "Delete"
+msgstr ""
+
+#: actions/adminusers/adminusers.php:192 actions/adminusers/adminusers.php:282
 msgid "Sorry, could not delete user. Please check your admin settings"
 msgstr ""
 
-#: actions/adminusers/adminusers.php:196 actions/adminusers/adminusers.php:282
+#: actions/adminusers/adminusers.php:196
 msgid "User has been sucessfully deleted"
 msgstr ""
 
-#: actions/adminusers/adminusers.php:213
+#: actions/adminusers/adminusers.php:200 actions/adminusers/adminusers.php:489
+msgid "Execute"
+msgstr ""
+
+#: actions/adminusers/adminusers.php:214
 msgid "Delete these users?"
 msgstr ""
 
-#: actions/adminusers/adminusers.php:220
+#: actions/adminusers/adminusers.php:221
 msgid "Cannot delete admins"
 msgstr ""
 
@@ -318,95 +326,94 @@ msgstr ""
 msgid "Delete Users"
 msgstr ""
 
-#: actions/adminusers/adminusers.php:354
+#: actions/adminusers/adminusers.php:286
+msgid "Users have been sucessfully deleted"
+msgstr ""
+
+#: actions/adminusers/adminusers.php:358
 msgid "User Administration"
 msgstr ""
 
-#: actions/adminusers/adminusers.php:361
+#: actions/adminusers/adminusers.php:365
 msgid "Search user:"
 msgstr ""
 
-#: actions/adminusers/adminusers.php:395
+#: actions/adminusers/adminusers.php:399
 msgid "Sort by user name"
 msgstr ""
 
-#: actions/adminusers/adminusers.php:395
+#: actions/adminusers/adminusers.php:399
 msgid "User Name"
 msgstr ""
 
-#: actions/adminusers/adminusers.php:396
+#: actions/adminusers/adminusers.php:400
 msgid "Sort by email"
 msgstr ""
 
-#: actions/adminusers/adminusers.php:396
+#: actions/adminusers/adminusers.php:400
 msgid "Email"
 msgstr ""
 
-#: actions/adminusers/adminusers.php:397
+#: actions/adminusers/adminusers.php:401
 msgid "Sort by signup time"
 msgstr ""
 
-#: actions/adminusers/adminusers.php:397
+#: actions/adminusers/adminusers.php:401
 msgid "Signup Time"
 msgstr ""
 
-#: actions/adminusers/adminusers.php:402
+#: actions/adminusers/adminusers.php:406
 msgid "List of users registered on this server"
 msgstr ""
 
-#: actions/adminusers/adminusers.php:410
+#: actions/adminusers/adminusers.php:414
 msgid "Owned Pages"
 msgstr ""
 
-#: actions/adminusers/adminusers.php:411
+#: actions/adminusers/adminusers.php:415
 msgid "Edits"
 msgstr ""
 
-#: actions/adminusers/adminusers.php:429
+#: actions/adminusers/adminusers.php:433
 #, php-format
 msgid "Display pages owned by %s (%d)"
 msgstr ""
 
-#: actions/adminusers/adminusers.php:430
+#: actions/adminusers/adminusers.php:434
 #, php-format
 msgid "Display page edits by %s (%d)"
 msgstr ""
 
-#: actions/adminusers/adminusers.php:431
+#: actions/adminusers/adminusers.php:435
 #, php-format
 msgid "Display comments by %s (%d)"
 msgstr ""
 
-#: actions/adminusers/adminusers.php:442
-#, php-format
-msgid "Remove user %s"
-msgstr ""
-
-#: actions/adminusers/adminusers.php:481
+#: actions/adminusers/adminusers.php:483
 msgid "Select all records"
 msgstr ""
 
-#: actions/adminusers/adminusers.php:481
+#: actions/adminusers/adminusers.php:483
 msgid "Select all"
 msgstr ""
 
-#: actions/adminusers/adminusers.php:481
+#: actions/adminusers/adminusers.php:483
 msgid "Deselect all records"
 msgstr ""
 
-#: actions/adminusers/adminusers.php:481
+#: actions/adminusers/adminusers.php:483
 msgid "Deselect all"
 msgstr ""
 
-#: actions/adminusers/adminusers.php:483
+#: actions/adminusers/adminusers.php:485
 msgid "Choose an action to apply to the selected records"
 msgstr ""
 
-#: actions/adminusers/adminusers.php:485
+#: actions/adminusers/adminusers.php:487
 msgid "Delete selected"
 msgstr ""
 
-#: actions/adminusers/adminusers.php:498
+#: actions/adminusers/adminusers.php:500
 #, php-format
 msgid "Sorry, there are no users matching \"%s\""
 msgstr ""
@@ -416,14 +423,14 @@ msgstr ""
 msgid "Calendar for %s"
 msgstr ""
 
-#: actions/category/category.php:68
-#, php-format
-msgid "The following %d page(s)"
-msgstr ""
-
-#: actions/category/category.php:71
+#: actions/category/category.php:45
 #, php-format
 msgid "Sorry, No items found for %s"
+msgstr ""
+
+#: actions/category/category.php:56
+#, php-format
+msgid "The following %d page(s) belong to %s"
 msgstr ""
 
 #: actions/checkversion/checkversion.php:77
@@ -618,26 +625,26 @@ msgstr ""
 msgid "[Source]"
 msgstr ""
 
-#: actions/emailpassword/emailpassword.php:29
-#: actions/usersettings/usersettings.php:332
+#: actions/emailpassword/emailpassword.php:30
+#: actions/usersettings/usersettings.php:329
 msgid "Password reminder"
 msgstr ""
 
-#: actions/emailpassword/emailpassword.php:40
-#: actions/usersettings/usersettings.php:513
+#: actions/emailpassword/emailpassword.php:41
+#: actions/usersettings/usersettings.php:510
 msgid "Please fill in your username!"
 msgstr ""
 
-#: actions/emailpassword/emailpassword.php:44
+#: actions/emailpassword/emailpassword.php:45
 msgid "You have entered a non-existent user!"
 msgstr ""
 
-#: actions/emailpassword/emailpassword.php:50
+#: actions/emailpassword/emailpassword.php:51
 #, php-format
 msgid "Password reminder for %s"
 msgstr ""
 
-#: actions/emailpassword/emailpassword.php:51
+#: actions/emailpassword/emailpassword.php:52
 #, php-format
 msgid ""
 "Hello, %s!  Someone requested that we send to this email address a password "
@@ -647,75 +654,75 @@ msgid ""
 "password immediately after logging in."
 msgstr ""
 
-#: actions/emailpassword/emailpassword.php:55
+#: actions/emailpassword/emailpassword.php:56
 #, php-format
 msgid "A password reminder has been sent to %s's registered email address."
 msgstr ""
 
-#: actions/emailpassword/emailpassword.php:56
+#: actions/emailpassword/emailpassword.php:57
 #, php-format
 msgid "Return to the <a href=\"%s\">login</a> screen."
 msgstr ""
 
-#: actions/emailpassword/emailpassword.php:60
+#: actions/emailpassword/emailpassword.php:61
 msgid ""
 "An error occurred while trying to send the password. Outgoing mail might be "
 "disabled. Please try to contact your wiki administrator by posting a page "
 "comment."
 msgstr ""
 
-#: actions/emailpassword/emailpassword.php:69
+#: actions/emailpassword/emailpassword.php:70
 msgid ""
 "Enter your WikiName and a password reminder will be sent to your registered "
 "email address."
 msgstr ""
 
-#: actions/emailpassword/emailpassword.php:72
+#: actions/emailpassword/emailpassword.php:73
 msgid "Your WikiName:"
 msgstr ""
 
-#: actions/emailpassword/emailpassword.php:74
+#: actions/emailpassword/emailpassword.php:75
 msgid "Send reminder"
 msgstr ""
 
-#: actions/feedback/feedback.php:10
+#: actions/feedback/feedback.php:26
 msgid "<p>Fill in the form below to send us your comments:</p>\n"
 msgstr ""
 
-#: actions/feedback/feedback.php:12
+#: actions/feedback/feedback.php:28
 msgid "Name: "
 msgstr ""
 
-#: actions/feedback/feedback.php:14
+#: actions/feedback/feedback.php:30
 msgid "Email: "
 msgstr ""
 
-#: actions/feedback/feedback.php:15
+#: actions/feedback/feedback.php:31
 msgid "Comments:"
 msgstr ""
 
-#: actions/feedback/feedback.php:16
+#: actions/feedback/feedback.php:32
 msgid "Send"
 msgstr ""
 
-#: actions/feedback/feedback.php:26
+#: actions/feedback/feedback.php:42
 msgid "Please enter your name"
 msgstr ""
 
-#: actions/feedback/feedback.php:31
+#: actions/feedback/feedback.php:47
 msgid "Please enter a valid email address"
 msgstr ""
 
-#: actions/feedback/feedback.php:36
+#: actions/feedback/feedback.php:52
 msgid "Please enter some text"
 msgstr ""
 
-#: actions/feedback/feedback.php:46
+#: actions/feedback/feedback.php:62
 #, php-format
 msgid "Feedback from %s"
 msgstr ""
 
-#: actions/feedback/feedback.php:50
+#: actions/feedback/feedback.php:66
 #, php-format
 msgid ""
 "Thanks for your interest! Your feedback has been sent to %s. Return to the "
@@ -727,102 +734,112 @@ msgstr ""
 msgid "Please make sure that the server has write access to a folder named %s."
 msgstr ""
 
-#: actions/files/files.php:197
+#: actions/files/files.php:203 actions/files/files.php:218
+#: handlers/files.xml/files.xml.php:61
+msgid "Invalid filename"
+msgstr ""
+
+#: actions/files/files.php:214
+#, php-format
+msgid "Unable to delete file %s"
+msgstr ""
+
+#: actions/files/files.php:225
 msgid "Delete this file?"
 msgstr ""
 
-#: actions/files/files.php:208
+#: actions/files/files.php:236
 msgid "Delete File"
 msgstr ""
 
-#: actions/files/files.php:222 handlers/files.xml/files.xml.php:110
+#: actions/files/files.php:250 handlers/files.xml/files.xml.php:117
 msgid "File deleted"
 msgstr ""
 
-#: actions/files/files.php:241 actions/files/files.php:390
+#: actions/files/files.php:269 actions/files/files.php:418
 #: formatters/wakka.php:760
 #, php-format
 msgid "Download %s"
 msgstr ""
 
-#: actions/files/files.php:247 handlers/files.xml/files.xml.php:73
+#: actions/files/files.php:275 handlers/files.xml/files.xml.php:80
 #, php-format
 msgid "Sorry, a file named %s does not exist."
 msgstr ""
 
-#: actions/files/files.php:273 actions/files/files.php:307
+#: actions/files/files.php:301 actions/files/files.php:335
 #, php-format
 msgid "Attempted file upload was too big. Maximum allowed size is %s."
 msgstr ""
 
-#: actions/files/files.php:287
+#: actions/files/files.php:315
 msgid "File was successfully uploaded."
 msgstr ""
 
-#: actions/files/files.php:291
+#: actions/files/files.php:319
 msgid "There was an error uploading your file"
 msgstr ""
 
-#: actions/files/files.php:296
+#: actions/files/files.php:324
 #, php-format
 msgid "Sorry, a file named %s already exists."
 msgstr ""
 
-#: actions/files/files.php:301
+#: actions/files/files.php:329
 msgid "Sorry, files with this extension are not allowed."
 msgstr ""
 
-#: actions/files/files.php:310
+#: actions/files/files.php:338
 msgid "File upload incomplete! Please try again."
 msgstr ""
 
-#: actions/files/files.php:313
+#: actions/files/files.php:341
 msgid "No file selected."
 msgstr ""
 
-#: actions/files/files.php:316
+#: actions/files/files.php:344
 msgid "File upload impossible due to misconfigured server."
 msgstr ""
 
-#: actions/files/files.php:387
+#: actions/files/files.php:415
 #, php-format
 msgid "Remove %s"
 msgstr ""
 
-#: actions/files/files.php:410
+#: actions/files/files.php:438
 msgid "Attachments"
 msgstr ""
 
-#: actions/files/files.php:417
+#: actions/files/files.php:445
 msgid "File"
 msgstr ""
 
-#: actions/files/files.php:418
+#: actions/files/files.php:446
 msgid "Last modified"
 msgstr ""
 
-#: actions/files/files.php:419
+#: actions/files/files.php:447
 msgid "Size"
 msgstr ""
 
-#: actions/files/files.php:431
+#: actions/files/files.php:459
 #, php-format
 msgid "Please make sure that the server has read access to a folder named %s."
 msgstr ""
 
-#: actions/files/files.php:438
+#: actions/files/files.php:466
 msgid "This page contains no attachment."
 msgstr ""
 
-#: actions/files/files.php:468
+#: actions/files/files.php:496
 msgid "Add new attachment:"
 msgstr ""
 
-#: actions/files/files.php:469
+#: actions/files/files.php:497
 msgid "File:"
 msgstr ""
 
-#: actions/files/files.php:470
+#: actions/files/files.php:498
 msgid "Upload"
 msgstr ""
 
@@ -896,6 +913,15 @@ msgstr ""
 msgid "[History]"
 msgstr ""
 
+#: actions/image/image.php:63
+#, php-format
+msgid "Image file %s could not be loaded! Check if it's a valid image."
+msgstr ""
+
+#: actions/image/image.php:76
+msgid "image: "
+msgstr ""
+
 #: actions/include/include.php:49
 #, php-format
 msgid "You aren't allowed to read included page <tt>%s</tt>"
@@ -939,15 +965,15 @@ msgid "Signup date/time"
 msgstr ""
 
 #: actions/logout/logout.php:22 actions/usersettings/usersettings.php:94
-#: actions/usersettings/usersettings.php:174
-#: actions/usersettings/usersettings.php:356
+#: actions/usersettings/usersettings.php:172
+#: actions/usersettings/usersettings.php:353
 msgid "Logout"
 msgstr ""
 
-#: actions/logout/logout.php:28 actions/usersettings/usersettings.php:366
-#: actions/usersettings/usersettings.php:549
-#: actions/usersettings/usersettings.php:581
-#: actions/usersettings/usersettings.php:630
+#: actions/logout/logout.php:28 actions/usersettings/usersettings.php:363
+#: actions/usersettings/usersettings.php:546
+#: actions/usersettings/usersettings.php:578
+#: actions/usersettings/usersettings.php:627
 msgid "Login"
 msgstr ""
 
@@ -1001,12 +1027,12 @@ msgid ""
 "You're not logged in, thus the list of your pages could not be retrieved.'"
 msgstr ""
 
-#: actions/newpage/newpage.php:35 handlers/clone/clone.php:89
+#: actions/newpage/newpage.php:35 handlers/clone/clone.php:96
 #: handlers/show/show.php:61
 #, php-format
 msgid ""
-"This page name is invalid. Valid page names must not contain the characters %"
-"s."
+"This page name is invalid. Valid page names must not contain the characters "
+"%s."
 msgstr ""
 
 #: actions/newpage/newpage.php:39
@@ -1122,30 +1148,12 @@ msgstr ""
 msgid "There are no recently changed pages."
 msgstr ""
 
-#: actions/recentcomments/recentcomments.php:32
-msgid "<h2>Recent comments</h2><br/>"
-msgstr ""
-
-#: actions/recentcomments/recentcomments.php:66
-#: actions/recentlycommented/recentlycommented.php:75
-msgid ", comment by "
-msgstr ""
-
-#: actions/recentcomments/recentcomments.php:71
-msgid "There are no recent comments you have access to."
-msgstr ""
-
-#: actions/recentcomments/recentcomments.php:78
-#, php-format
-msgid "There are no recent comments by %s."
-msgstr ""
-
-#: actions/recentcomments/recentcomments.php:82
-msgid "There are no recent comments."
-msgstr ""
-
 #: actions/recentlycommented/recentlycommented.php:43
 msgid "Recently commented pages"
+msgstr ""
+
+#: actions/recentlycommented/recentlycommented.php:75
+msgid ", comment by "
 msgstr ""
 
 #: actions/recentlycommented/recentlycommented.php:80
@@ -1195,7 +1203,7 @@ msgstr ""
 msgid "Click to display a feed with the latest revisions to this page"
 msgstr ""
 
-#: actions/rss/rss.php:115
+#: actions/rss/rss.php:117
 msgid ""
 "Error: Invalid RSS action syntax. <br /> Proper usage: {{rss http://domain."
 "com/feed.xml}} or {{rss url=\"http://domain.com/feed.xml\"}}"
@@ -1256,12 +1264,12 @@ msgid "WikiName"
 msgstr ""
 
 #: actions/usersettings/usersettings.php:120
-#: actions/usersettings/usersettings.php:469
+#: actions/usersettings/usersettings.php:467
 msgid "Please specify an email address."
 msgstr ""
 
 #: actions/usersettings/usersettings.php:124
-#: actions/usersettings/usersettings.php:475
+#: actions/usersettings/usersettings.php:473
 msgid "That doesn't quite look like an email address."
 msgstr ""
 
@@ -1275,235 +1283,235 @@ msgstr ""
 msgid "The number of recently changed pages should not exceed %d."
 msgstr ""
 
-#: actions/usersettings/usersettings.php:171
+#: actions/usersettings/usersettings.php:169
 msgid "Your account"
 msgstr ""
 
-#: actions/usersettings/usersettings.php:173
+#: actions/usersettings/usersettings.php:171
 #, php-format
 msgid "You are logged in as %s"
 msgstr ""
 
-#: actions/usersettings/usersettings.php:183
+#: actions/usersettings/usersettings.php:181
 msgid "Settings"
 msgstr ""
 
-#: actions/usersettings/usersettings.php:191
+#: actions/usersettings/usersettings.php:189
 msgid "You have successfully registered!"
 msgstr ""
 
-#: actions/usersettings/usersettings.php:195
+#: actions/usersettings/usersettings.php:193
 msgid "User settings stored!"
 msgstr ""
 
-#: actions/usersettings/usersettings.php:222
+#: actions/usersettings/usersettings.php:220
 msgid "Please fill your password or password reminder."
 msgstr ""
 
-#: actions/usersettings/usersettings.php:226
+#: actions/usersettings/usersettings.php:224
 msgid "The old password you entered is wrong."
 msgstr ""
 
-#: actions/usersettings/usersettings.php:231
+#: actions/usersettings/usersettings.php:229
 msgid "Sorry, you entered a wrong password reminder."
 msgstr ""
 
-#: actions/usersettings/usersettings.php:236
+#: actions/usersettings/usersettings.php:234
 msgid "You must also fill in a new password."
 msgstr ""
 
-#: actions/usersettings/usersettings.php:241
-#: actions/usersettings/usersettings.php:451
+#: actions/usersettings/usersettings.php:239
+#: actions/usersettings/usersettings.php:449
 msgid "Sorry, blanks are not permitted in the password."
 msgstr ""
 
-#: actions/usersettings/usersettings.php:246
-#: actions/usersettings/usersettings.php:455
+#: actions/usersettings/usersettings.php:244
+#: actions/usersettings/usersettings.php:453
 #, php-format
 msgid "Sorry, the password must contain at least %d characters."
 msgstr ""
 
-#: actions/usersettings/usersettings.php:251
+#: actions/usersettings/usersettings.php:249
 msgid "Please confirm your new password in order to update your account."
 msgstr ""
 
-#: actions/usersettings/usersettings.php:257
-#: actions/usersettings/usersettings.php:464
+#: actions/usersettings/usersettings.php:255
+#: actions/usersettings/usersettings.php:462
 msgid "Passwords don't match."
 msgstr ""
 
-#: actions/usersettings/usersettings.php:272
+#: actions/usersettings/usersettings.php:269
 msgid "Password successfully changed!"
 msgstr ""
 
-#: actions/usersettings/usersettings.php:281
-#: actions/usersettings/usersettings.php:597
+#: actions/usersettings/usersettings.php:278
+#: actions/usersettings/usersettings.php:594
 msgid "Your email address:"
 msgstr ""
 
-#: actions/usersettings/usersettings.php:284
+#: actions/usersettings/usersettings.php:281
 msgid "Doubleclick editing:"
 msgstr ""
 
-#: actions/usersettings/usersettings.php:288
+#: actions/usersettings/usersettings.php:285
 msgid "Show comments by default:"
 msgstr ""
 
-#: actions/usersettings/usersettings.php:291
+#: actions/usersettings/usersettings.php:288
 msgid "Comment style"
 msgstr ""
 
-#: actions/usersettings/usersettings.php:292
+#: actions/usersettings/usersettings.php:289
 msgid "Flat (oldest first)"
 msgstr ""
 
-#: actions/usersettings/usersettings.php:293
+#: actions/usersettings/usersettings.php:290
 msgid "Flat (newest first)"
 msgstr ""
 
-#: actions/usersettings/usersettings.php:294
+#: actions/usersettings/usersettings.php:291
 msgid "Threaded"
 msgstr ""
 
-#: actions/usersettings/usersettings.php:297
+#: actions/usersettings/usersettings.php:294
 msgid "Page revisions list limit:"
 msgstr ""
 
-#: actions/usersettings/usersettings.php:300
+#: actions/usersettings/usersettings.php:297
 msgid "RecentChanges display limit:"
 msgstr ""
 
-#: actions/usersettings/usersettings.php:303
+#: actions/usersettings/usersettings.php:300
 msgid "Theme:"
 msgstr ""
 
-#: actions/usersettings/usersettings.php:306
+#: actions/usersettings/usersettings.php:303
 msgid "Update Settings"
 msgstr ""
 
-#: actions/usersettings/usersettings.php:318
+#: actions/usersettings/usersettings.php:315
 msgid "Change your password"
 msgstr ""
 
-#: actions/usersettings/usersettings.php:331
+#: actions/usersettings/usersettings.php:328
 msgid "Your current password"
 msgstr ""
 
-#: actions/usersettings/usersettings.php:336
+#: actions/usersettings/usersettings.php:333
 msgid "Your new password:"
 msgstr ""
 
-#: actions/usersettings/usersettings.php:339
+#: actions/usersettings/usersettings.php:336
 msgid "Confirm new password:"
 msgstr ""
 
-#: actions/usersettings/usersettings.php:342
+#: actions/usersettings/usersettings.php:339
 msgid "Change password"
 msgstr ""
 
-#: actions/usersettings/usersettings.php:359
+#: actions/usersettings/usersettings.php:356
 msgid "You have successfully logged out."
 msgstr ""
 
-#: actions/usersettings/usersettings.php:379
+#: actions/usersettings/usersettings.php:376
 msgid ""
 "Sorry, this account has been suspended. Please contact an administrator for "
 "further details."
 msgstr ""
 
-#: actions/usersettings/usersettings.php:382
-#: actions/usersettings/usersettings.php:447
+#: actions/usersettings/usersettings.php:379
+#: actions/usersettings/usersettings.php:445
 msgid "Please fill in a password."
 msgstr ""
 
-#: actions/usersettings/usersettings.php:386
-#: actions/usersettings/usersettings.php:538
+#: actions/usersettings/usersettings.php:384
+#: actions/usersettings/usersettings.php:535
 msgid "Sorry, you entered the wrong password."
 msgstr ""
 
-#: actions/usersettings/usersettings.php:406
-#: actions/usersettings/usersettings.php:524
+#: actions/usersettings/usersettings.php:404
+#: actions/usersettings/usersettings.php:521
 msgid "Sorry, this user name doesn't exist."
 msgstr ""
 
-#: actions/usersettings/usersettings.php:413
-#: actions/usersettings/usersettings.php:600
+#: actions/usersettings/usersettings.php:411
+#: actions/usersettings/usersettings.php:597
 msgid "Register"
 msgstr ""
 
-#: actions/usersettings/usersettings.php:428
+#: actions/usersettings/usersettings.php:426
 msgid "Registration validation failed, please try again!"
 msgstr ""
 
-#: actions/usersettings/usersettings.php:431
+#: actions/usersettings/usersettings.php:429
 msgid "Sorry, this user name is unavailable."
 msgstr ""
 
-#: actions/usersettings/usersettings.php:435
+#: actions/usersettings/usersettings.php:433
 msgid "Please fill in your user name."
 msgstr ""
 
-#: actions/usersettings/usersettings.php:439
-#: actions/usersettings/usersettings.php:518
+#: actions/usersettings/usersettings.php:437
+#: actions/usersettings/usersettings.php:515
 #, php-format
 msgid "Username must be formatted as a %s, e.g. %s."
 msgstr ""
 
-#: actions/usersettings/usersettings.php:439
+#: actions/usersettings/usersettings.php:437
 msgid "JohnDoe"
 msgstr ""
 
-#: actions/usersettings/usersettings.php:443
+#: actions/usersettings/usersettings.php:441
 msgid ""
 "Sorry, this name is reserved for a page. Please choose a different name."
 msgstr ""
 
-#: actions/usersettings/usersettings.php:459
+#: actions/usersettings/usersettings.php:457
 msgid "Please confirm your password in order to register a new account."
 msgstr ""
 
-#: actions/usersettings/usersettings.php:549
+#: actions/usersettings/usersettings.php:546
 msgid "Login/Register"
 msgstr ""
 
-#: actions/usersettings/usersettings.php:562
+#: actions/usersettings/usersettings.php:559
 msgid "If you already have a login, sign in here:"
 msgstr ""
 
-#: actions/usersettings/usersettings.php:564
-#: actions/usersettings/usersettings.php:624
+#: actions/usersettings/usersettings.php:561
+#: actions/usersettings/usersettings.php:621
 #, php-format
 msgid "Your %s:"
 msgstr ""
 
-#: actions/usersettings/usersettings.php:567
+#: actions/usersettings/usersettings.php:564
 #, php-format
 msgid "Password (%s+ chars)"
 msgstr ""
 
-#: actions/usersettings/usersettings.php:575
+#: actions/usersettings/usersettings.php:572
 #, php-format
 msgid "Redirect to %s after login"
 msgstr ""
 
-#: actions/usersettings/usersettings.php:591
+#: actions/usersettings/usersettings.php:588
 msgid "If you are signing up as a new user:"
 msgstr ""
 
-#: actions/usersettings/usersettings.php:594
+#: actions/usersettings/usersettings.php:591
 msgid "Confirm password:"
 msgstr ""
 
-#: actions/usersettings/usersettings.php:612
+#: actions/usersettings/usersettings.php:609
 msgid "Password forgotten"
 msgstr ""
 
-#: actions/usersettings/usersettings.php:620
+#: actions/usersettings/usersettings.php:617
 #, php-format
 msgid "Log in with your <a href=\"%s\">password reminder</a>:"
 msgstr ""
 
-#: actions/usersettings/usersettings.php:627
+#: actions/usersettings/usersettings.php:624
 msgid "Password reminder:"
 msgstr ""
 
@@ -1533,57 +1541,57 @@ msgstr ""
 msgid "Grab"
 msgstr ""
 
-#: handlers/acls/acls.php:64 handlers/acls/acls.php:147
+#: handlers/acls/acls.php:52 handlers/acls/acls.php:135
 msgid "Store ACLs"
 msgstr ""
 
-#: handlers/acls/acls.php:93
+#: handlers/acls/acls.php:81
 msgid "Access control lists updated."
 msgstr ""
 
-#: handlers/acls/acls.php:108
+#: handlers/acls/acls.php:96
 #, php-format
 msgid "Ownership changed to %s"
 msgstr ""
 
-#: handlers/acls/acls.php:117
+#: handlers/acls/acls.php:105
 #, php-format
 msgid "<h3>Access Control Lists for <a href=\"%s\">%s</a></h3><br/>"
 msgstr ""
 
-#: handlers/acls/acls.php:123
+#: handlers/acls/acls.php:111
 msgid "Read ACL:"
 msgstr ""
 
-#: handlers/acls/acls.php:128
+#: handlers/acls/acls.php:116
 msgid "Write ACL:"
 msgstr ""
 
-#: handlers/acls/acls.php:133
+#: handlers/acls/acls.php:121
 msgid "Comment Read ACL:"
 msgstr ""
 
-#: handlers/acls/acls.php:138
+#: handlers/acls/acls.php:126
 msgid "Comment Post ACL:"
 msgstr ""
 
-#: handlers/acls/acls.php:152
+#: handlers/acls/acls.php:140
 msgid "Set Page Owner:"
 msgstr ""
 
-#: handlers/acls/acls.php:154
+#: handlers/acls/acls.php:142
 msgid "(Current Owner)"
 msgstr ""
 
-#: handlers/acls/acls.php:155
+#: handlers/acls/acls.php:143
 msgid "(Public)"
 msgstr ""
 
-#: handlers/acls/acls.php:156
+#: handlers/acls/acls.php:144
 msgid "(Nobody - Set free)"
 msgstr ""
 
-#: handlers/acls/acls.php:172
+#: handlers/acls/acls.php:160
 msgid ""
 "<h4>Syntax:</h4><br/><tt>*</tt> = Everyone<br/><tt>+</tt> = Registered "
 "users<br/><tt>JohnDoe</tt> = the user called \"JohnDoe\", enter as many "
@@ -1596,22 +1604,8 @@ msgid ""
 "the defaults as specified in <tt>wikka.config.php</tt>."
 msgstr ""
 
-#: handlers/acls/acls.php:179
+#: handlers/acls/acls.php:167
 msgid "You are not the owner of this page."
-msgstr ""
-
-#: handlers/addcomment/addcomment.php:17
-#: handlers/processcomment/processcomment.php:95
-msgid "Comment body was empty -- not saved!"
-msgstr ""
-
-#: handlers/addcomment/addcomment.php:21 handlers/addcomment/addcomment.php:25
-msgid "Your comment cannot be saved. Please contact the wiki administrator."
-msgstr ""
-
-#: handlers/addcomment/addcomment.php:39
-#: handlers/processcomment/processcomment.php:118
-msgid "Sorry, you're not allowed to post comments to this page'"
 msgstr ""
 
 #: handlers/backlinks/backlinks.php:38 handlers/showcode/showcode.php:48
@@ -1631,73 +1625,60 @@ msgstr ""
 msgid "You are now the owner of this page."
 msgstr ""
 
-#: handlers/clone/clone.php:50
+#: handlers/clone/clone.php:54
 #, php-format
 msgid "Cloned from %s"
 msgstr ""
 
-#: handlers/clone/clone.php:52
-msgid ""
-"Please fill in a valid target <tt>PageName</tt> and an (optional) edit note"
-msgstr ""
-
-#: handlers/clone/clone.php:58
+#: handlers/clone/clone.php:63
 msgid "Clone current page"
 msgstr ""
 
-#: handlers/clone/clone.php:64
+#: handlers/clone/clone.php:69
 #, php-format
 msgid " Sorry, page %s does not exist."
 msgstr ""
 
-#: handlers/clone/clone.php:71 handlers/showcode/showcode.php:43
+#: handlers/clone/clone.php:76 handlers/showcode/showcode.php:43
 msgid "You are not allowed to read the source of this page."
 msgstr ""
 
-#: handlers/clone/clone.php:84
+#: handlers/clone/clone.php:91
 #, php-format
 msgid "Sorry! You don\t have write-access to %s'"
 msgstr ""
 
-#: handlers/clone/clone.php:97
+#: handlers/clone/clone.php:104
 msgid "Sorry, the destination page already exists"
 msgstr ""
 
-#: handlers/clone/clone.php:113
+#: handlers/clone/clone.php:133
 #, php-format
 msgid "%s was succesfully created!"
 msgstr ""
 
-#: handlers/clone/clone.php:122
+#: handlers/clone/clone.php:142
 #, php-format
 msgid "Clone %s to:"
 msgstr ""
 
-#: handlers/clone/clone.php:126
+#: handlers/clone/clone.php:146
 msgid "Edit note:"
 msgstr ""
 
-#: handlers/clone/clone.php:132
-msgid " Edit after creation "
-msgstr ""
-
-#: handlers/clone/clone.php:133
-msgid "Clone"
-msgstr ""
-
-#: handlers/delete/delete.php:58
+#: handlers/delete/delete.php:48
 msgid "Page has been deleted!"
 msgstr ""
 
-#: handlers/delete/delete.php:71
+#: handlers/delete/delete.php:60
 msgid "Completely delete this page, including all comments?"
 msgstr ""
 
-#: handlers/delete/delete.php:77
+#: handlers/delete/delete.php:66
 msgid "Delete Page"
 msgstr ""
 
-#: handlers/delete/delete.php:88
+#: handlers/delete/delete.php:77
 msgid "You are not allowed to delete this page."
 msgstr ""
 
@@ -1772,8 +1753,8 @@ msgstr ""
 msgid "You are not allowed to read this page."
 msgstr ""
 
-#: handlers/edit/edit.php:60 handlers/edit/edit.php:204
-#: handlers/edit/edit.php:213 handlers/edit/edit.php:261
+#: handlers/edit/edit.php:60 handlers/edit/edit.php:196
+#: handlers/edit/edit.php:205 handlers/edit/edit.php:253
 msgid "Preview"
 msgstr ""
 
@@ -1788,53 +1769,53 @@ msgstr ""
 msgid "The revision id does not exist for the requested page"
 msgstr ""
 
-#: handlers/edit/edit.php:119 handlers/edit/edit.php:208
-#: handlers/edit/edit.php:260
+#: handlers/edit/edit.php:119 handlers/edit/edit.php:200
+#: handlers/edit/edit.php:252
 msgid "Store"
 msgstr ""
 
-#: handlers/edit/edit.php:134
+#: handlers/edit/edit.php:126
 msgid ""
 "OVERWRITE ALERT: This page was modified by someone else while you were "
 "editing it."
 msgstr ""
 
-#: handlers/edit/edit.php:134
+#: handlers/edit/edit.php:126
 msgid "Please copy your changes and re-edit this page."
 msgstr ""
 
-#: handlers/edit/edit.php:140
+#: handlers/edit/edit.php:132
 msgid "MISSING EDIT NOTE: Please fill in an edit note!"
 msgstr ""
 
-#: handlers/edit/edit.php:176
+#: handlers/edit/edit.php:168
 msgid "Please add a note on your edit"
 msgstr ""
 
-#: handlers/edit/edit.php:206 handlers/edit/edit.php:258
+#: handlers/edit/edit.php:198 handlers/edit/edit.php:250
 msgid "Store page"
 msgstr ""
 
-#: handlers/edit/edit.php:209
+#: handlers/edit/edit.php:201
 msgid "Re-edit"
 msgstr ""
 
-#: handlers/edit/edit.php:235
+#: handlers/edit/edit.php:227
 #, php-format
 msgid "Page name too long! %d characters max."
 msgstr ""
 
-#: handlers/edit/edit.php:236
+#: handlers/edit/edit.php:228
 #, php-format
 msgid ""
 "Clicking on %s will automatically truncate the page name to the correct size"
 msgstr ""
 
-#: handlers/edit/edit.php:236 handlers/edit/edit.php:239
+#: handlers/edit/edit.php:228 handlers/edit/edit.php:231
 msgid "Rename"
 msgstr ""
 
-#: handlers/edit/edit.php:287
+#: handlers/edit/edit.php:280
 #, php-format
 msgid ""
 "You don't have write access to this page. You might need to <a href=\"%s"
@@ -1842,26 +1823,22 @@ msgid ""
 "this page."
 msgstr ""
 
-#: handlers/edit/edit.php:289
+#: handlers/edit/edit.php:283
 msgid "Click to view page formatting code"
 msgstr ""
 
-#: handlers/edit/edit.php:289
+#: handlers/edit/edit.php:283
 msgid "View formatting code for this page"
 msgstr ""
 
-#: handlers/files.xml/files.xml.php:56
-msgid "Sorry, files of this type are not allowed."
-msgstr ""
-
-#: handlers/files.xml/files.xml.php:79
+#: handlers/files.xml/files.xml.php:86
 #: handlers/recentchanges.xml.mm/recentchanges.xml.mm.php:112
 #: handlers/recentchanges_simple.xml.mm/recentchanges_simple.xml.mm.php:123
-#: handlers/revisions.xml/revisions.xml.php:58
+#: handlers/revisions.xml/revisions.xml.php:57
 msgid "You are not allowed to access this information."
 msgstr ""
 
-#: handlers/files.xml/files.xml.php:115
+#: handlers/files.xml/files.xml.php:126
 msgid "Sorry, the file could not be deleted!"
 msgstr ""
 
@@ -1896,17 +1873,13 @@ msgstr ""
 #: handlers/history/history.php:138
 #, php-format
 msgid ""
-"Full history for this page cannot be displayed within a single page, click %"
-"s to view more."
+"Full history for this page cannot be displayed within a single page, click "
+"%s to view more."
 msgstr ""
 
 #: handlers/history/history.php:144
 #, php-format
 msgid "The oldest known version of this page was created on %s by %s"
-msgstr ""
-
-#: handlers/processcomment/processcomment.php:31 handlers/show/show.php:349
-msgid "Delete"
 msgstr ""
 
 #: handlers/processcomment/processcomment.php:44
@@ -1933,7 +1906,6 @@ msgid "Post a new comment:"
 msgstr ""
 
 #: handlers/processcomment/processcomment.php:75
-#: handlers/processcomment/processcomment.php:86
 msgid "Add Comment"
 msgstr ""
 
@@ -1981,7 +1953,7 @@ msgstr ""
 
 #: handlers/recentchanges.xml.mm/recentchanges.xml.mm.php:110
 #: handlers/recentchanges_simple.xml.mm/recentchanges_simple.xml.mm.php:121
-#: handlers/revisions.xml/revisions.xml.php:56
+#: handlers/revisions.xml/revisions.xml.php:55
 msgid "Error"
 msgstr ""
 
@@ -2037,8 +2009,8 @@ msgstr ""
 #: handlers/revisions/revisions.php:102
 #, php-format
 msgid ""
-"There are more revisions that were not shown here, click the button labeled %"
-"s below to view these entries"
+"There are more revisions that were not shown here, click the button labeled "
+"%s below to view these entries"
 msgstr ""
 
 #: handlers/revisions/revisions.php:102 handlers/revisions/revisions.php:103
@@ -2049,16 +2021,16 @@ msgstr ""
 msgid "There are no revisions for this page yet"
 msgstr ""
 
-#: handlers/revisions.xml/revisions.xml.php:27
+#: handlers/revisions.xml/revisions.xml.php:26
 #, php-format
 msgid "History/revisions of %s"
 msgstr ""
 
-#: handlers/revisions.xml/revisions.xml.php:28
+#: handlers/revisions.xml/revisions.xml.php:27
 msgid "en-US"
 msgstr ""
 
-#: handlers/revisions.xml/revisions.xml.php:46
+#: handlers/revisions.xml/revisions.xml.php:45
 #, php-format
 msgid "Edited by %s"
 msgstr ""
@@ -2211,8 +2183,8 @@ msgstr ""
 #: lang/en/defaults/FormattingRules.php:23
 #, php-format
 msgid ""
-"In this case, the second set of %s (escaped) stars will be ignored, %si.e.,%"
-"s will not terminate the bold markup."
+"In this case, the second set of %s (escaped) stars will be ignored, %si.e.,"
+"%s will not terminate the bold markup."
 msgstr ""
 
 #: lang/en/defaults/FormattingRules.php:25
@@ -2660,8 +2632,8 @@ msgstr ""
 #: lang/en/defaults/FormattingRules.php:451
 #, php-format
 msgid ""
-"Alternatively, you can specify a foreground and background color using the %"
-"s and %s parameters (they accept both named and hex values):"
+"Alternatively, you can specify a foreground and background color using the "
+"%s and %s parameters (they accept both named and hex values):"
 msgstr ""
 
 #: lang/en/defaults/FormattingRules.php:457
@@ -3089,56 +3061,56 @@ msgstr ""
 msgid "Reverted to previous version"
 msgstr ""
 
-#: libs/Wakka.class.php:2356
+#: libs/Wakka.class.php:2677
 msgid "Create this page"
 msgstr ""
 
-#: libs/Wakka.class.php:2575
+#: libs/Wakka.class.php:3016
 msgid ""
 "A header template could not be found. Please make sure that a file called "
 "<code>header.php</code> exists in the templates directory."
 msgstr ""
 
-#: libs/Wakka.class.php:2590
+#: libs/Wakka.class.php:3031
 msgid ""
 "A footer template could not be found. Please make sure that a file called "
 "<code>footer.php</code> exists in the templates directory."
 msgstr ""
 
-#: libs/Wakka.class.php:2676
+#: libs/Wakka.class.php:3122
 #, php-format
 msgid "Default themes (%s)"
 msgstr ""
 
-#: libs/Wakka.class.php:2686
+#: libs/Wakka.class.php:3132
 #, php-format
 msgid "Custom themes (%s)"
 msgstr ""
 
-#: libs/Wakka.class.php:3019
+#: libs/Wakka.class.php:3460
 msgid "Unknown action; the action name must not contain special characters."
 msgstr ""
 
-#: libs/Wakka.class.php:3067
+#: libs/Wakka.class.php:3508
 #, php-format
 msgid "Unknown action \"%s\""
 msgstr ""
 
-#: libs/Wakka.class.php:3106
+#: libs/Wakka.class.php:3548
 msgid "Unknown handler; the handler name must not contain special characters."
 msgstr ""
 
-#: libs/Wakka.class.php:3114
+#: libs/Wakka.class.php:3559
 #, php-format
 msgid "Sorry, %s is an unknown handler."
 msgstr ""
 
-#: libs/Wakka.class.php:3172
+#: libs/Wakka.class.php:3637
 msgid ""
 "Unknown formatter; the formatter name must not contain special characters."
 msgstr ""
 
-#: libs/Wakka.class.php:3181
+#: libs/Wakka.class.php:3646
 #, php-format
 msgid "Formatter \"%s\" not found"
 msgstr ""
@@ -3171,10 +3143,10 @@ msgstr ""
 msgid "Click to edit %s"
 msgstr ""
 
-#: wikka.php:495
+#: wikka.php:505
 msgid "This site is currently being upgraded. Please try again later."
 msgstr ""
 
-#: wikka.php:575
+#: wikka.php:589
 msgid "Error: Unable to connect to the database."
 msgstr ""
