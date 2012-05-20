@@ -204,6 +204,7 @@ case "0":
 	'PageIndex', 
 	'PasswordForgotten', 
 	'RecentChanges', 
+	'RecentComments',
 	'RecentlyCommented', 
 	'SandBox', 
 	'SysInfo',
