@@ -288,7 +288,7 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 		}
 
 		// $matches[1] is element, $matches[2] is attributes, $matches[3] is styles and $matches[4] is linebreak
-		elseif ( preg_match("/^\|([^\|])?\|(\(.*?\))?(\{.*?\})?(\n)?$/", $thing, $matches) )
+		elseif ( preg_match("/^\|([^\|])?\|(\(.*?\))?(\{.*?\})?(\n)?$/u", $thing, $matches) )
 		{
 			for ( $i = 1; $i < 5; $i++ ) #38
 			{
@@ -446,7 +446,7 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 			}
 
 			//If attributes...
-			if ( preg_match("/\((.*)\)/", $matches[2], $attribs ) )
+			if ( preg_match("/\((.*)\)/u", $matches[2], $attribs ) )
 			{
 //				$hints = array('core' => 'core', 'i18n' => 'i18n');
 				$hints = array();
@@ -463,7 +463,7 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 			}
 
 			//If styles, just make attribute of it and parse again.
-			if ( preg_match("/\{(.*)\}/", $matches[3], $attribs ) )
+			if ( preg_match("/\{(.*)\}/u", $matches[3], $attribs ) )
 			{
 				$attribs = "s:".$attribs[1];
 				$open_part .= parse_attributes($attribs, array() );
@@ -573,7 +573,7 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 			return (++$trigger_center % 2 ? "<div class=\"center\">\n" : "\n</div>\n");
 		}
 		// urls (see RFC 1738 <http://www.ietf.org/rfc/rfc1738.txt>)
-		elseif (preg_match("/^([a-z]+:\/\/[[:alnum:]\/?;:@%&=\._-]+[[:alnum:]\/])(.*)$/", $thing, $matches))
+		elseif (preg_match("/^([[:lower:]]+:\/\/[[:alnum:]\/?;:@%&=\._-]+[[:alnum:]\/])(.*)$/", $thing, $matches))
 		{
 			$url = $matches[1];
 			/* Inline images are disabled for security reason, use {{image action}} #142
@@ -623,7 +623,7 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 			return "<br />";
 		}
 		// escaped text
-		elseif (preg_match("/^\"\"(.*)\"\"$/s", $thing, $matches))
+		elseif (preg_match("/^\"\"(.*)\"\"$/su", $thing, $matches))
 		{
 			$ddquotes_policy = $wakka->GetConfigValue("double_doublequote_html");
 			$embedded = $matches[1];
@@ -663,17 +663,17 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 			}
 		}
 		// Elided content (eliminates trailing ws)
-		elseif(preg_match("/^\/\*(.*?)\*\/[\s]*$/s", $thing, $matches))
+		elseif(preg_match("/^\/\*(.*?)\*\/[\s]*$/su", $thing, $matches))
 		{
 			return null;
 		}
 		// Elided content (preserves trailing ws)
-		elseif(preg_match("/^``(.*?)``$/s", $thing, $matches))
+		elseif(preg_match("/^``(.*?)``$/su", $thing, $matches))
 		{
 			return null;
 		}
 		// code text
-		elseif (preg_match("/^%%(.*?)%%$/s", $thing, $matches))
+		elseif (preg_match("/^%%(.*?)%%$/su", $thing, $matches))
 		{
 			/*
 			* Note: this routine is rewritten such that (new) language
@@ -698,7 +698,7 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 			$geshi_hi_path = isset($wakka->config['geshi_languages_path']) ? $wakka->config['geshi_languages_path'] : '/:/';
 			$wikka_hi_path = isset($wakka->config['wikka_highlighters_path']) ? $wakka->config['wikka_highlighters_path'] : '/:/';
 			// check if a language (and an optional starting line or filename) has been specified
-			if (preg_match('/^'.PATTERN_OPEN_BRACKET.PATTERN_FORMATTER.PATTERN_LINE_NUMBER.PATTERN_FILENAME.PATTERN_CLOSE_BRACKET.PATTERN_CODE.'$/s', $code, $matches))
+			if (preg_match('/^'.PATTERN_OPEN_BRACKET.PATTERN_FORMATTER.PATTERN_LINE_NUMBER.PATTERN_FILENAME.PATTERN_CLOSE_BRACKET.PATTERN_CODE.'$/su', $code, $matches))
 			{
 				list(, $language, , $start, , $filename, $invalid, $code) = $matches;
 			}
@@ -769,14 +769,14 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 		// forced links
 		// \S : any character that is not a whitespace character
 		// \s : any whitespace character
-		else if(preg_match("/^\[\[(.*?)\]\]$/s", $thing, $matches))
+		else if(preg_match("/^\[\[(.*?)\]\]$/su", $thing, $matches))
 		{
 			$contents = $matches[1];
 			if(empty($contents) || !isset($contents))
 				return "";
 
 			// Case 1: Interwiki link followed by | separator
-			if(preg_match("/^([A-ZÄÖÜ][A-Za-zÄÖÜßäöü]+[:].*?)\s*\|\s*(.*?)$/s", $contents, $matches))
+			if(preg_match("/^([[:upper:]][[:alpha:]]+[:].*?)\s*\|\s*(.*?)$/su", $contents, $matches))
 			{
 				$url = $matches[1];
 				$text = $matches[2];
@@ -784,7 +784,7 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 
 			// Case 2: Deprecated...(interwiki link followed by
 			// whitespace separator)
-			else if(preg_match("/^([A-ZÄÖÜ][A-Za-zÄÖÜßäöü]+[:]\S*)\s+(.*)$/s", $contents, $matches))
+			else if(preg_match("/^([[:upper:]][[:alpha:]]+[:]\S*)\s+(.*)$/su", $contents, $matches))
 			{
 				$url = $matches[1];
 				$text = $matches[2];
@@ -792,7 +792,7 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 
 			// Case 3: Deprecated...(first part is a URL followed by
 			// one or more whitespaces)
-			else if (preg_match("/^((http|https|ftp|news|irc|gopher):\/\/([^\|\\s\"<>]+))\s+([^\|]+)$/s", $contents, $matches))		# recognize forced links across lines
+			else if (preg_match("/^((http|https|ftp|news|irc|gopher):\/\/([^\|\\s\"<>]+))\s+([^\|]+)$/su", $contents, $matches))		# recognize forced links across lines
 			{
 				if (!isset($matches[1])) $matches[1] = ''; #38
 				if (!isset($matches[4])) $matches[4] = ''; #38
@@ -802,8 +802,8 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 
 			// Case 4: Deprecated...(first part is a string
 			// followed by one or more whitespaces)
-			else if(preg_match("/^(.*?)\s+([^|]+)$/s", $contents, $matches) && 
-					preg_match("/^[A-ZÄÖÜa-zßäöü][A-Za-z0-9ÄÖÜßäöü]*$/", $matches[1]))
+			else if(preg_match("/^(.*?)\s+([^|]+)$/su", $contents, $matches) && 
+					preg_match("/^[[:alpha:]][[:alnum:]]*$/u", $matches[1]))
 			{
 				$url = $matches[1]; 
 				$text = $matches[2];
@@ -819,7 +819,7 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 
 			// Case 6: If a "|" symbol exists, assume two parts, a URL and
 			// text
-			else if(preg_match("/^(.*?)\s*\|\s*(.*?)$/s", $contents, $matches))
+			else if(preg_match("/^(.*?)\s*\|\s*(.*?)$/su", $contents, $matches))
 			{
 				if (!isset($matches[1])) $matches[1] = '';
 				if (!isset($matches[2])) $matches[2] = '';
@@ -841,7 +841,7 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 		}
 
 		// indented text
-		elseif (preg_match("/(^|\n)([\t~]+)(-|&|([0-9a-zA-Z]+)\))?(\n|$)/s", $thing, $matches))
+		elseif (preg_match("/(^|\n)([\t~]+)(-|&|([[:alnum:]]+)\))?(\n|$)/su", $thing, $matches))
 		{
 			// find out which indent type we want
 			$newIndentType = $matches[3];
@@ -863,11 +863,11 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 			}
 			else
 			{
-				if (preg_match('/[0-9]/', $newIndentType[0])) { $newIndentType = '1'; }
+				if (preg_match('/[[:digit:]]/u', $newIndentType[0])) { $newIndentType = '1'; }
 				elseif (preg_match('/[IVX]/', $newIndentType[0])) { $newIndentType = 'I'; }
 				elseif (preg_match('/[ivx]/', $newIndentType[0])) { $newIndentType = 'i'; }
-				elseif (preg_match('/[A-Z]/', $newIndentType[0])) { $newIndentType = 'A'; }
-				elseif (preg_match('/[a-z]/', $newIndentType[0])) { $newIndentType = 'a'; }
+				elseif (preg_match('/[[:upper:]]/u', $newIndentType[0])) { $newIndentType = 'A'; }
+				elseif (preg_match('/[[:lower:]]/u', $newIndentType[0])) { $newIndentType = 'a'; }
 
 				$li = 1;
 			}
@@ -987,7 +987,7 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 			return $result;
 		}
 		// Actions
-		elseif (preg_match("/^\{\{(.*?)\}\}$/s", $thing, $matches))
+		elseif (preg_match("/^\{\{(.*?)\}\}$/su", $thing, $matches))
 		{
 			if ($matches[1])
 			{
@@ -1000,12 +1000,12 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 		}
 		// interwiki links!
 		// Deprecated; use forced links with | separator instead
-		elseif (preg_match("/^[A-ZÄÖÜ][A-Za-zÄÖÜßäöü]+[:]\S*$/s", $thing))
+		elseif (preg_match("/^[[:upper:]][[:lower:]]+[:]\S*$/su", $thing))
 		{
 			return $wakka->Link($thing);
 		}
 		// wiki links!
-		elseif (preg_match("/^[A-ZÄÖÜ]+[a-zßäöü]+[A-Z0-9ÄÖÜ][A-Za-z0-9ÄÖÜßäöü]*$/s", $thing))
+		elseif (preg_match("/^[[:upper:]]+[[:lower:]]+[[:upper:][:digit:]][[:alnum:]]*$/su", $thing))
 		{
 			return $wakka->Link($thing);
 		}
@@ -1118,14 +1118,14 @@ $text = preg_replace_callback(
 	"\{\{.*?\}\}|".
 	# InterWiki link (deprecated, as pagenames may now contain spaces)
 	# Use forced links with a | separator instead
-	"\b[A-ZÄÖÜ][A-Za-zÄÖÜßäöü]+[:](?![=_#])\S*\b|".
+	"\b[[:upper:]][[:alpha:]]+[:](?![=_#])\S*\b|".
 	# CamelWords
-	"\b([A-ZÄÖÜ]+[a-zßäöü]+[A-Z0-9ÄÖÜ][A-Za-z0-9ÄÖÜßäöü]*)\b|".
+	"\b([[:upper:]]+[[:lower:]]+[[:upper:][:digit:]][[:alnum:]]*)\b|".
 	#ampersands! Track single ampersands or any htmlentity-like (&...;)
 	'\\&([#a-zA-Z0-9]+;)?|'. 	
 	# newline
 	"\n".
-	"/ms", "wakka2callback", $text."\n"); #append \n (#444)
+	"/msu", "wakka2callback", $text."\n"); #append \n (#444)
 
 // we're cutting the last <br />
 $text = preg_replace("/<br \/>$/","", $text);
