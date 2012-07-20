@@ -832,7 +832,7 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 				//if ($url!=($url=(preg_replace("/@@|&pound;&pound;||\[\[/","",$url))))$result="</span>";
 				if (!$text) $text = $url;
 				//$text=preg_replace("/@@|&pound;&pound;|\[\[/","",$text);
-				return $result.$wakka->Link($url, "", $text);
+				return $result.$wakka->Link($url, "", $text, TRUE, TRUE, '', '', FALSE);
 			}
 			else
 			{
@@ -1007,7 +1007,7 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 		// wiki links!
 		elseif (preg_match("/^[[:upper:]]+[[:lower:]]+[[:upper:][:digit:]][[:alnum:]]*$/su", $thing))
 		{
-			return $wakka->Link($thing);
+			return $wakka->Link($thing,'','',TRUE,TRUE,'','',FALSE);
 		}
 		// separators
 		elseif (preg_match("/-{4,}/", $thing, $matches))
