@@ -26,7 +26,7 @@ if (isset($_GET["linking_to"]))
 	$linking_to = $this->GetSafeVar('linking_to');
 	if ($pages = $this->LoadPagesLinkingTo($linking_to))
 	{
-		print(sprintf(T_("Pages linking to %s"),$this->Link($linking_to)).":<br />\n");
+		print(sprintf(T_("Pages linking to %s"),$this->Link($linking_to, '', '', TRUE, TRUE, '', '', FALSE)).":<br />\n");
 		foreach ($pages as $page)
 		{
 			print($this->Link($page["page_tag"])."<br />\n");
@@ -34,7 +34,7 @@ if (isset($_GET["linking_to"]))
 	}
 	else
 	{
-		print('<p class="error">No page is linking to '.$this->Link($linking_to).".</p>");
+		print('<p class="error">No page is linking to '.$this->Link($linking_to, '', '', TRUE, TRUE, '', '', FALSE).".</p>");
 	}
 }
 else
@@ -43,7 +43,7 @@ else
 	{
 		foreach ($pages as $page)
 		{
-			print($this->Link($page["tag"])." (<a href=\"".$this->href("", "", "linking_to=".$page["tag"])."\">".$page["count"]."</a>)<br />\n");
+			print($this->Link($page["tag"], '', '', TRUE, TRUE, '', '', FALSE)." (<a href=\"".$this->href("", "", "linking_to=".$page["tag"])."\">".$page["count"]."</a>)<br />\n");
 		}
 	}
 	else
