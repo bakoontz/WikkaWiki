@@ -25,6 +25,7 @@
  * @input string $link optional: target link for image. Supports URL, WikiName links, InterWiki links, etc...
  * @input int $width optional: width used to strech or shrink the image along its width
  * @input int $height optional: height used to strech or shrink the image along its height
+ * @input boolean $forceLinkTracking optional: use to create backlinks for images linking to other wiki pages default: FALSE 
  *
  * @output string img element or image link
  */

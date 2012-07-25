@@ -3490,7 +3490,24 @@ class Wakka
 					// NOTE 2:	It is still the responsibility of each action
 					//			to validate its own parameters!
 					//			That includes guarding against directory traversal.
-					$vars[$matches[1][$a]] = $this->htmlspecialchars_ent($matches[3][$a]);	// parameter name = sanitized value [SEC]
+					// Check to see if linktracking is desired (for
+					// instance, when using {{image}} tags to link to
+					// other wiki pages
+					if(FALSE !== strpos($matches[1][$a], "forceLinkTracking")) 
+					{
+						if(TRUE == $this->htmlspecialchars_ent($matches[3][$a]))
+						{
+							$forceLinkTracking = 1;	
+						}
+						else
+						{
+							$forceLinkTracking = 0;
+						}
+					}
+					else 
+					{
+						$vars[$matches[1][$a]] = $this->htmlspecialchars_ent($matches[3][$a]);	// parameter name = sanitized value [SEC]
+					}
 				}
 			}
 			$vars['wikka_vars'] = $paramlist; // <<< add the complete parameter-string to the array
