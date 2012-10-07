@@ -58,7 +58,7 @@ if ($pages = $this->LoadRecentlyChanged())
 
 	foreach ($pages as $i => $page)
 	{
-		if (($i < $max) && $this->HasAccess('read', $page['tag']))
+		if (($readable < $max) && $this->HasAccess('read', $page['tag']))
 		{
 			$readable++;
 			// print day header
@@ -108,6 +108,10 @@ if ($pages = $this->LoadRecentlyChanged())
 			$page_link     = '<a href="'.$page_url.'">'.$page['tag'].'</a>';
 			$editor        = $this->FormatUser($page['user']);
 			echo '<li>'.$revision_time_link.' '.$revision_number_link.' ['.$history_link.'] - &nbsp;'.$page_link.' '.PAGE_EDITOR_DIVIDER.' '.$editor.' '.$note.'</li>'."\n";
+		}
+		else if($readable >= $max)
+		{
+			break;
 		}
 	}
 	if ($readable == 0)
