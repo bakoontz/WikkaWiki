@@ -108,7 +108,11 @@ WikkaEdit.prototype.init = function() {
 	this.we_ta.focus();
 
 	// editor height follow browser window height
-	setInterval("varWikkaEdit.moveElementsAfterWindowResize();", this.EDITOR_HEIGHT_POLL_INTERV);
+	
+    if( navigator.userAgent.match(/iPad/i) == null && 
+        navigator.userAgent.match(/iPhone/i) == null ) {
+        setInterval("varWikkaEdit.moveElementsAfterWindowResize();", this.EDITOR_HEIGHT_POLL_INTERV);
+    }
 	// help for the command under the carret
 	if (this.we_actionsMenuEnabled)
 		setInterval("varWikkaEdit.contextualHelp();", this.CONTEXTUAL_HELP_POLL_INTERV);
