@@ -113,7 +113,6 @@ if (!$this->existsPage($from))		// name change, interface change (allows only ac
 					{ 
 						echo $from;
 						$acl = $this->LoadAllACLs($from, 0); 
-						var_dump($acl);
 						$this->SaveACL($to, 'read', $this->TrimACLs($acl['read_acl'])); 
 						$this->SaveACL($to, 'write', $this->TrimACLs($acl['write_acl'])); 
 						$this->SaveACL($to, 'comment_read', $this->TrimACLs($acl['comment_read_acl'])); 
