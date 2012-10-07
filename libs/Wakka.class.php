@@ -4643,15 +4643,18 @@ class Wakka
 		// set defaults
 		if (!$tag) $tag = $this->GetPageTag();
 		if (!$username) $username = $this->GetUserName();
-		// if current user is owner, return true. owner can do anything!
-		if ($this->UserIsOwner($tag)) return TRUE;
+                                       
+        // Get a user object for the named user
+        $user = ($username == $this->GetUserName()) ? $this->GetUser() : $this->LoadUser($username);
+                                       
+		// If user is owner or admin, return true. 
+		// Owner and admin can do anything!
+        if ($user != FALSE) {
+           if ($this->IsAdmin($username) || $this->GetPageOwner($tag) == $username) return TRUE;
+        }
 
-		// see whether user is registered and logged in
-		$this->registered = FALSE;
-		if ($this->GetUser())
-		{
-			$this->registered = TRUE;
-		}
+		// see whether user is registered
+        $registered = $user != FALSE;
 
 		// load acl
 		if ($tag == $this->GetPageTag())
@@ -4692,7 +4695,7 @@ class Wakka
 				// only registered users
 				case "+":
 					// return ($this->registered) ? !$negate : false;
-					return ($this->registered) ? !$negate : $negate;
+					return ($registered) ? !$negate : $negate;
 				// aha! a user entry.
 				default:
 					if (strtolower($line) == strtolower($username))
