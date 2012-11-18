@@ -116,7 +116,9 @@ if (isset($format_option) && preg_match(PATTERN_MATCH_PAGE_FORMATOPTION, $format
 				// @@@ apply nodeToTextOnly() on $h_heading so stored title is always valid
 				if ((!$wakka->HasPageTitle()) && ('h5' > $h_tagname))
 				{
-					$wakka->SetPageTitle($h_heading);
+					// Strip all HTML/PHP tags first
+					$h_heading_stripped = strip_tags($h_heading);
+					$wakka->SetPageTitle($h_heading_stripped);
 				}
 
 				if (preg_match(PATTERN_MATCH_ID_ATTRIBUTES, $h_attribs))
