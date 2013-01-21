@@ -1590,9 +1590,10 @@ class Wakka
 	 */
 	function SetPageTitle($page_title)
 	{
-		if (trim($page_title))
+		$stripped_page_title = trim(strip_tags($page_title));
+		if(null != $stripped_page_title)
 		{
-			$this->page_title = $page_title;
+			$this->page_title = $stripped_page_title;
 		}
 	}
 
@@ -2122,7 +2123,7 @@ class Wakka
 				"' AND LATEST = 'Y'";
 		$res = $this->LoadSingle($query);
 		$page_title = trim($res['title']) !== '' ? $res['title'] : $tag;
-		return trim($page_title);
+		return trim(strip_tags($page_title));
 	}
 
 	/**
