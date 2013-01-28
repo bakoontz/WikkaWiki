@@ -4622,6 +4622,25 @@ class Wakka
 	}
 
 	/**
+	 * Check to see if a user is a member of an ACL usergroup (i.e., 
+	 * the username appears within a set of "+" symbols).
+	 *
+	 * @param string $who	mandatory: Username
+	 * @param string $group mandatory: Name of page with list of users
+	 * @return boolean true if $who is member of $group
+	 */
+    function isGroupMember($who, $group)
+    {
+        $thegroup=$this->LoadPage($group);
+        if (isset($thegroup)) {
+            $search = "+".$who."+"; // In the GroupListPages, the participants logins have to be embbeded inside '+' signs
+            return (boolean)(substr_count($thegroup["body"], $search));
+        }
+        else return false;
+    }
+
+
+	/**
 	 * Determine if the (current) user has specified access for the specified page.
 	 *
 	 * Returns true if $username (defaults to current user) has $privilege
@@ -4703,6 +4722,12 @@ class Wakka
 					{
 						return !$negate;
 					}
+                    // this may be a UserGroup so we check if $user 
+					// is part of the group
+                    else if (($this->isGroupMember($username, $line)))
+                    {
+                        return !$negate;
+                    }
 				}
 			}
 		}
