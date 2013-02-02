@@ -108,7 +108,7 @@ case "0":
 			"KEY idx_time (time),".
 			"KEY idx_owner (owner), ".
 			"KEY idx_latest (latest)".
-			") TYPE=MyISAM CHARACTER SET utf8 COLLATE utf8_unicode_ci", $dblink), "Already exists?", 0);
+			") CHARACTER SET utf8 COLLATE utf8_unicode_ci", $dblink), "Already exists?", 0);
 	test("Creating ACL table...",
 		@mysql_query(
 			"CREATE TABLE ".$config['table_prefix']."acls (".
@@ -118,7 +118,7 @@ case "0":
 			"comment_read_acl text NOT NULL,".
 			"comment_post_acl text NOT NULL,".
 			"PRIMARY KEY  (page_tag)".
-			") TYPE=MyISAM CHARACTER SET utf8 COLLATE utf8_unicode_ci", $dblink), "Already exists?", 0);
+			") CHARACTER SET utf8 COLLATE utf8_unicode_ci", $dblink), "Already exists?", 0);
 	test("Creating link tracking table...",
 		@mysql_query(
 			"CREATE TABLE ".$config['table_prefix']."links (".
@@ -126,7 +126,7 @@ case "0":
 			"to_tag varchar(75) NOT NULL default '',".
 			"UNIQUE KEY from_tag (from_tag,to_tag),".
 			"KEY idx_to (to_tag)".
-			") TYPE=MyISAM CHARACTER SET utf8 COLLATE utf8_unicode_ci", $dblink), "Already exists?", 0);
+			") CHARACTER SET utf8 COLLATE utf8_unicode_ci", $dblink), "Already exists?", 0);
 	test("Creating referrer table...",
 		@mysql_query(
 			"CREATE TABLE ".$config['table_prefix']."referrers (".
@@ -135,13 +135,13 @@ case "0":
 			"time datetime NOT NULL default '0000-00-00 00:00:00',".
 			"KEY idx_page_tag (page_tag),".
 			"KEY idx_time (time)".
-			") TYPE=MyISAM CHARACTER SET utf8 COLLATE utf8_unicode_ci", $dblink), "Already exists?", 0);
+			") CHARACTER SET utf8 COLLATE utf8_unicode_ci", $dblink), "Already exists?", 0);
 	test("Creating referrer blacklist table...",
 		@mysql_query(
 			"CREATE TABLE ".$config['table_prefix']."referrer_blacklist (".
 			"spammer varchar(255) NOT NULL default '',".
 			"KEY idx_spammer (spammer)".
-			") TYPE=MyISAM CHARACTER SET utf8 COLLATE utf8_unicode_ci", $dblink), "Already exists?", 0);
+			") CHARACTER SET utf8 COLLATE utf8_unicode_ci", $dblink), "Already exists?", 0);
 	test("Creating user table...",
 		@mysql_query(
 			"CREATE TABLE ".$config['table_prefix']."users (".
@@ -159,7 +159,7 @@ case "0":
 			"challenge varchar(8) default '',". // refs #1023
 			"PRIMARY KEY  (name),".
 			"KEY idx_signuptime (signuptime)".
-			") TYPE=MyISAM CHARACTER SET utf8 COLLATE utf8_unicode_ci", $dblink), "Already exists?", 0);
+			") CHARACTER SET utf8 COLLATE utf8_unicode_ci", $dblink), "Already exists?", 0);
 	test("Creating comment table...",
 		@mysql_query(
 			"CREATE TABLE ".$config['table_prefix']."comments (".
@@ -174,7 +174,7 @@ case "0":
 			"PRIMARY KEY  (id),".
 			"KEY idx_page_tag (page_tag),".
 			"KEY idx_time (time)".
-			") TYPE=MyISAM CHARACTER SET utf8 COLLATE utf8_unicode_ci", $dblink), "Already exists?", 0);
+			") CHARACTER SET utf8 COLLATE utf8_unicode_ci", $dblink), "Already exists?", 0);
 	test("Creating session tracking table...",
 		@mysql_query(
 			"CREATE TABLE ".$config['table_prefix']."sessions (".
@@ -182,7 +182,7 @@ case "0":
 			"userid varchar(75) NOT NULL,".
 			"PRIMARY KEY (sessionid, userid),".
 			"session_start datetime NOT NULL".
-			") TYPE=MyISAM CHARACTER SET utf8 COLLATE utf8_unicode_ci", $dblink), "Already exists?", 0);
+			") CHARACTER SET utf8 COLLATE utf8_unicode_ci", $dblink), "Already exists?", 0);
 
 	update_default_page(array(
 	'_rootpage', 
