@@ -8,6 +8,8 @@ deny from env=BadReferrer
  #By default, RewriteEngine should be set to Off, to ensure at least installer works.
  RewriteEngine On
  RewriteCond %{REQUEST_FILENAME} -d
+ RewriteCond %{REQUEST_FILENAME} !^.*phpdocs.*$
  RewriteRule ^(.*/[^\./]*[^/])$ $1/
+ RewriteCond %{REQUEST_FILENAME} !^.*phpdocs.*$
  RewriteRule ^(.*)$ wikka.php?wakka=$1 [QSA,L]
 </IfModule>

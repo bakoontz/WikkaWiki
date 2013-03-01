@@ -144,7 +144,7 @@ define('HITS_MAX_OPTION', '<=');
 
 define('HOURS_LIMIT',2);				# days expressed as hours				@@@ could be made configurable
 define('DAYS_MAX', $this->GetConfigValue('referrers_purge_time'));
-define('DAYS_DEFAULT', '7');					# default period to retrieve	@@@ make configurable
+define('DAYS_DEFAULT', '1');					# default period to retrieve	@@@ make configurable
 
 $days_limits = array(7,30,90,365);				# ranges for days dropdown 		@@@ make configurable
 

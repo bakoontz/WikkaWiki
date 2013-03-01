@@ -4,10 +4,12 @@
  */
 
 //defaults
-define('INFOBOX_UNTIL_LATEST_VERSION', '1.1.6.6');
+define('INFOBOX_UNTIL_LATEST_VERSION', '1.1.6.7');
 define('INFOBOX_UNTIL_DEFAULT_ALIGN', 'float: right');
 define('INFOBOX_UNTIL_DEFAULT_MARGIN', 'margin: 0 0 10px 10px');
-$valid_versions = array('1.1.6.0', '1.1.6.1', '1.1.6.2', '1.1.6.3', '1.1.6.4', '1.1.6.5', '1.1.6.6', '1.1.7', '1.2', '1.3', '2.0');
+$valid_versions = array('1.1.6.0', '1.1.6.1', '1.1.6.2', '1.1.6.3',
+'1.1.6.4', '1.1.6.5', '1.1.6.6', '1.1.6.7', '1.2', '1.3', '1.3.1',
+'1.3.2', '1.4', '1.5', '1.6', '1.7', '1.8', '1.9', '2.0');
 
 //color scheme array
 $c = array(
@@ -30,10 +32,20 @@ else
 }
 
 //assign color scheme
+$s = chr(65 + array_search($display_version, $valid_versions) % count($c));
+/*
 switch ($display_version)
 {
 	case "2.0":
 	$s = 'D';
+	break;
+
+	case "1.3.1":
+	$s = 'E';
+	break;
+
+	case "1.3.1":
+	$s = 'E';
 	break;
 
 	case "1.3":
@@ -44,6 +56,10 @@ switch ($display_version)
 	$s = 'B';
 	break;
 
+        case "1.1.6.7":
+        $s = 'F';
+	break;
+  
 	case "1.1.6.6":
 	$s = 'A';
 	break;
@@ -75,6 +91,7 @@ switch ($display_version)
 	default:
 	$s = 'C';
 }
+*/
 
 
 //set alignment

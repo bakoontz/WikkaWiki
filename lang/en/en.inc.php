@@ -6,7 +6,7 @@
  *
  * @package 		Language
  *
- * @version		$Id:en.inc.php 481 2007-05-17 16:34:24Z DarTar $
+ * @version		$Id$
  * @license 		http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
  *
@@ -399,6 +399,14 @@ define('RECENTCOMMENTS_NONE_ACCESSIBLE', 'There are no recent comments you have 
 define('RECENTLYCOMMENTED_HEADING', 'Recently commented pages');
 define('RECENTLYCOMMENTED_NONE_FOUND', 'There are no recently commented pages.');
 define('RECENTLYCOMMENTED_NONE_ACCESSIBLE', 'There are no recently commented pages you have access to.');
+/**#@-*/
+
+/**#@+
+ * Language constants used by the {@link redirect.php redirect} action
+ */
+if(!defined('PAGE_MOVED_TO')) define('PAGE_MOVED_TO', 'This page has been moved to %s.'); # %s - targe page
+if(!defined('REDIRECTED_FROM')) define('REDIRECTED_FROM', 'Redirected from %s.'); # %s - redirecting page
+if(!defined('INVALID_REDIRECT')) define('INVALID_REDIRECT', 'Invalid redirect. Target must be an existing wiki page.');
 /**#@-*/
 
 /**#@+

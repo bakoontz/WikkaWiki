@@ -764,9 +764,9 @@ class Wakka
 			if ($compact)
 			{
 				#$link = '[['.$val;
-				if (eregi('^Category', $val))
+				if (preg_match('/^Category/', $val))
 				{
-					$val .= ' '.eregi_replace('^Category', '', $val);
+					$vae .= ' '.preg_replace('/^Category/', '', $val);
 				}
 				// @@@ Format() should not be used to format a link
 				$str .= '<li>'."\n".$this->Format('[['.$val.']]').$edit_link.'</li>';
@@ -1081,7 +1081,7 @@ class Wakka
 	{
 		// create GeSHi object
 		include_once($this->GetConfigValue('geshi_path').DIRECTORY_SEPARATOR.'geshi.php');
-		$geshi =& new GeSHi($sourcecode, $language, $this->GetConfigValue('geshi_languages_path'));				# create object by reference
+		$geshi = new GeSHi($sourcecode, $language, $this->GetConfigValue('geshi_languages_path'));				# create object by reference
 
 		$geshi->enable_classes();								# use classes for hilighting (must be first after creating object)
 		$geshi->set_overall_class('code');						# enables using a single stylesheet for multiple code fragments
@@ -2583,7 +2583,7 @@ if ($debug) echo "deleting 'pass".$this->GetConfigValue('wiki_suffix')."' at roo
 			$_SESSION['redirectmessage'] = $message;
 		}
 		$url = ($url == '' ) ? $this->wikka_url.$this->tag : $url;	// @@@ rewrite? TEST!
-		if ((eregi('IIS', $_SERVER['SERVER_SOFTWARE'])) && ($this->cookies_sent))
+		if ((preg_match('/IIS/', $_SERVER['SERVER_SOFTWARE'])) && ($this->cookies_sent))
 		{
 			@ob_end_clean();
 			$redirlink = '<a href="'.$this->Href($url).'">'.REDIR_LINK_DESC.'</a>';

@@ -196,7 +196,7 @@ ul.menu {
 ul.menu li {
 	display: inline;
 	font-size: 85%;
-	line-height: 85%;
+/*	line-height: 85%; */
 }
 
 ul.menu li a {
@@ -247,14 +247,19 @@ img.center {
 }
 
 img.left {
-	margin: 5px 5px 5px -5px;
+	margin: 5px 15px 5px 0px;
 	float: left;
 }
 
 img.right {
-	margin: 5px -5px 5px 5px; 
+	margin: 5px 0px 5px 15px; 
 	float: right;
 }
+
+img.border {
+	border: 1px solid #CCC;
+}
+
 
 img.icon {
 	border: 0px;
