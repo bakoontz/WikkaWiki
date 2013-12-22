@@ -17,13 +17,28 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @filesource
  */
- 
-if ($cattag = $_GET['wakka'])	#312 (only files action uses POST for wakka)
-{
-	$str ="";
-	if (!isset($col)) $col=1;
-	if (!isset($compact)) $compact=0;
-	if (!isset($page)) 
+
+	$str = "";
+
+	# 'col' option
+	$col = 1;
+	if(isset($vars['col']))
+		$col = $this->htmlspecialchars_ent($vars['col']);
+
+	# 'compact' option
+	$compact = 0;
+	if(isset($vars['compact']))
+		$compact = $this->htmlspecialchars_ent($vars['compact']);
+
+	# 'class' option
+	$class = 0;
+	if(isset($vars['class']))
+		$class = $this->htmlspecialchars_ent($vars['class']);
+
+	# 'page' option
+	if(isset($vars['page']))
+		$page = $this->htmlspecialchars_ent($vars['page']);
+	else
 	{
 		#232 : if page is not given, and if this action is called from an included page, use the name of the page that is included
 		#  and not the caller's PageTag.
@@ -38,7 +53,6 @@ if ($cattag = $_GET['wakka'])	#312 (only files action uses POST for wakka)
 		}
 	}
 	if ($page=="/") $page="CategoryCategory"; 
-	if (!isset($class)) $class='';
 
 	$results = $this->LoadPagesLinkingTo($page);
 
@@ -56,5 +70,4 @@ if ($cattag = $_GET['wakka'])	#312 (only files action uses POST for wakka)
 		printf(T_("The following %d page(s) belong to %s").'<br /><br />', count($results), $page);
 	}
 	print($str);
-}
 ?>
