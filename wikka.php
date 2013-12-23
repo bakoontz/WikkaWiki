@@ -356,7 +356,7 @@ $wakkaDefaultConfig = array(
 	// template
 	'wikka_template_path' 		=> 'plugins/templates'.PATH_DIVIDER.'templates',		# (location of Wikka template files - REQUIRED)
 	'feedcreator_path'			=> '3rdparty/core/feedcreator',
-   	'menu_config_path'			=> 'config', #858
+   	'menu_config_path'			=> 'plugins/config'.PATH_DIVIDER.'config', #858
 	'safehtml_path'				=> '3rdparty/core/safehtml',
 	'referrers_purge_time'		=> '30',
 	'pages_purge_time'			=> '0',
@@ -441,6 +441,8 @@ if(isset($wakkaConfig['wikka_formatter_path']) && preg_match('/plugins\/formatte
 	$wakkaConfig['wikka_formatter_path'] = "plugins/formatters," .  $wakkaConfig['wikka_formatter_path'];
 if(isset($wakkaConfig['lang_path']) && preg_match('/plugins\/lang/', $wakkaConfig['lang_path']) <= 0)
 	$wakkaConfig['lang_path'] = "plugins/lang," .  $wakkaConfig['lang_path'];
+if(isset($wakkaConfig['menu_config_path']) && preg_match('/plugins\/config/', $wakkaConfig['menu_config_path']) <= 0)
+	$wakkaConfig['menu_config_path'] = "plugins/config," .  $wakkaConfig['menu_config_path'];
 
 $wakkaConfig = array_merge($wakkaDefaultConfig, $wakkaConfig);	// merge defaults with config from file
 
@@ -549,7 +551,7 @@ if (file_exists($multisite_configfile))
 */
 
     $localDefaultConfig = array(
-    	'menu_config_path'			=> $configpath.DIRECTORY_SEPARATOR.'config'.PATH_DIVIDER.'config',
+    	'menu_config_path'			=> $configpath.DIRECTORY_SEPARATOR.'config'.PATH_DIVIDER.'plugins'.DIRECTORY_SEPARATOR.'config'.PATH_DIVIDER.'config',
         'action_path'				=> $configpath.DIRECTORY_SEPARATOR.'actions'.PATH_DIVIDER.'plugins'.DIRECTORY_SEPARATOR.'actions'.PATH_DIVIDER.'actions',
         'handler_path'				=> $configpath.DIRECTORY_SEPARATOR.'handlers'.PATH_DIVIDER.'plugins'.DIRECTORY_SEPARATOR.'handlers'.PATH_DIVIDER.'handlers',
         'wikka_formatter_path'		=> $configpath.DIRECTORY_SEPARATOR.'formatters'.PATH_DIVIDER.'plugins'.DIRECTORY_SEPARATOR.'formatters'.PATH_DIVIDER.'formatters',        # (location of Wikka formatter - REQUIRED)
