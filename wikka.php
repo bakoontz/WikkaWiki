@@ -75,35 +75,6 @@ if (!defined('MINIMUM_MYSQL_VERSION'))	define('MINIMUM_MYSQL_VERSION', '4.1');
 /**
  * Shamelessly lifted from libs/Wakka.class.php.  See that file for
  * documentation, credits, etc.
- * @see Wakka::hsc_secure()
-**/
-if(!function_exists('hsc_secure'))
-{
-	function hsc_secure($string, $quote_style=ENT_COMPAT)
-	{
-		// init
-		$aTransSpecchar = array('&' => '&amp;',
-								'"' => '&quot;',
-								'<' => '&lt;',
-								'>' => '&gt;'
-								);			// ENT_COMPAT set
-		if (ENT_NOQUOTES == $quote_style)	// don't convert double quotes
-		{
-			unset($aTransSpecchar['"']);
-		}
-		elseif (ENT_QUOTES == $quote_style)	// convert single quotes as well
-		{
-			$aTransSpecchar["'"] = '&#39;';	// (apos) htmlspecialchars() uses '&#039;'
-		}
-
-		// return translated string
-		return strtr($string,$aTransSpecchar);
-	}
-}
-
-/**
- * Shamelessly lifted from libs/Wakka.class.php.  See that file for
- * documentation, credits, etc.
  * @see Wakka::htmlspecialchars_ent()
 **/
 if(!function_exists('htmlspecialchars_ent'))
@@ -138,8 +109,7 @@ if(!function_exists('htmlspecialchars_ent'))
 		}
 		$escaped_entity = '&amp;('.$entitystring.')('.$terminator.')';
 
-		// execute our replacement hsc_secure() function, passing on optional parameters
-		$output = hsc_secure($text,$quote_style);
+		$output = Wakka::hsc_secure($text,$quote_style);
 
 		// "repair" escaped entities
 		// modifiers: s = across lines, i = case-insensitive

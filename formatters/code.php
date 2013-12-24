@@ -9,5 +9,5 @@
  * 
  * @uses	Wakka::hsc_secure()
  */
-echo '<pre>'.$this->hsc_secure($text,ENT_QUOTES).'</pre>';	#427
+echo '<pre>'.Wakka::hsc_secure($text,ENT_QUOTES).'</pre>';	#427
 ?>

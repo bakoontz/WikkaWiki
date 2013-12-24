@@ -165,7 +165,9 @@ else if ($this->HasAccess("write") && $this->HasAccess("read"))
 		// We need to escape ALL entity refs before display so we display them _as_ entities instead of interpreting them
 		// so we use hsc_secure() on the edit note (as on the body)
 		// JW/2007-02-20: why is this? wouldn't it be  easier for the person editing to show actual characters instead of entities?
-		$edit_note_field = '<input id="note" size="'.MAX_EDIT_NOTE_LENGTH.'" maxlength="'.MAX_EDIT_NOTE_LENGTH.'" type="text" name="note" value="'.$this->hsc_secure($note).'" '.$highlight_note.'/> <label for="note">'.T_("Please add a note on your edit").'</label><br />'."\n";	#427
+		$edit_note_field = '<input id="note"
+		size="'.MAX_EDIT_NOTE_LENGTH.'"
+		maxlength="'.MAX_EDIT_NOTE_LENGTH.'" type="text" name="note" value="'.Wakka::hsc_secure($note).'" '.$highlight_note.'/> <label for="note">'.T_("Please add a note on your edit").'</label><br />'."\n";	#427
 	}
 
 	// fetch fields
@@ -213,7 +215,7 @@ else if ($this->HasAccess("write") && $this->HasAccess("read"))
 			// We need to escape ALL entity refs before display so we display them _as_ entities instead of interpreting them
 			// hence hsc_secure() instead of htmlspecialchars_ent() which UNescapes entities!
 			// JW/2007-02-20: why is this? wouldn't it be  easier for the person editing to show actual characters instead of entities?
-			'<input type="hidden" name="body" value="'.$this->hsc_secure($body).'" />'."\n";	# #427
+			'<input type="hidden" name="body" value="'.Wakka::hsc_secure($body).'" />'."\n";	# #427
 		$output .= '</div>'."\n";	#683
 
 		$output .= "<br />\n".$preview_buttons.$this->FormClose()."\n";
@@ -259,7 +261,7 @@ else if ($this->HasAccess("write") && $this->HasAccess("read"))
 			// hence hsc_secure() instead of htmlspecialchars_ent() which UNescapes entities!
 			// JW/2007-02-20: why is this? wouldn't it be  easier for the person editing to show actual characters instead of entities?
 			'<div id="textarea_container">'."\n".
-			'<textarea id="body" name="body" rows="20" cols="100">'.$this->hsc_secure($body).'</textarea>'."\n".	# #427
+			'<textarea id="body" name="body" rows="20" cols="100">'.Wakka::hsc_secure($body).'</textarea>'."\n".	# #427
 			'</div>'."\n";
 		$output .= $edit_buttons;
 		$output .= $this->FormClose();
