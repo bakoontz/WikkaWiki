@@ -33,17 +33,47 @@
  *
  */
 
-if (TRUE===$this->IsAdmin())
+$tag = $this->GetPageTag();
+// cancel operation and return to the page
+if ($this->GetSafeVar('cancel', 'post') == T_("Cancel"))
 {
-	include_once($this->BuildFullpathFromMultipath('..'.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'libs'.DIRECTORY_SEPARATOR.'admin.lib.php', $this->GetConfigValue('action_path')));
-	$comment = T_("Reverted to previous revision");
-	if(TRUE===isset($_GET['comment']))
-	{
-		$comment = $this->GetSafeVar('comment', 'get');
+	$this->Redirect($this->Href());
+}
+
+if ($this->HasAccess('write'))
+{
+	if (NULL != $_POST)
+    {
+		include_once($this->BuildFullpathFromMultipath('..'.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'libs'.DIRECTORY_SEPARATOR.'admin.lib.php', $this->GetConfigValue('action_path')));
+		$comment = T_("Reverted to previous revision");
+		$tag = mysql_real_escape_string($this->GetPageTag());
+		$message = RevertPageToPreviousByTag($this, $tag, $comment);
+		$this->Redirect($this->Href(), $message);
 	}
-	$tag = mysql_real_escape_string($this->GetPageTag());
-	$message = RevertPageToPreviousByTag($this, $tag, $comment);
-	$this->Redirect($this->Href(), $message);
+	else
+	{
+		// show form
+		?>
+		<h3><?php printf(T_("Revert %s to previous version"),$this->Link($tag));?></h3>
+		<br />
+
+		<?php echo $this->FormOpen('revert') ?>
+		<table border="0" cellspacing="0" cellpadding="0">
+			<tr>
+				<td><?php echo T_("Revert this page to the previous version?") ?></td>
+			</tr>
+			<tr>
+				<td>
+				<!-- nonsense input so form submission works with rewrite mode -->
+				<input type="hidden" value="" name="null">
+				<input name="revert" type="submit" value="<?php echo T_("Revert Page") ?>"  style="width: 120px" />
+				<input type="submit" value="<?php echo T_("Cancel") ?>" name="cancel" style="width: 120px" />
+				</td>
+			</tr>
+		</table>
+		<?php
+		echo $this->FormClose();
+	}
 }
 else
 {
