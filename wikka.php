@@ -692,6 +692,10 @@ if(NULL != $user)
  * Run the engine.
  */
 if (!isset($handler)) $handler='';
+
+# Add Content-Type header (can be overridden by handlers)
+header('Content-Type: text/html; charset=utf-8');
+
 $wakka->Run($page, $handler);
 $content =  ob_get_contents();
 /**
@@ -717,8 +721,8 @@ header("Cache-Control: no-cache");
 
 $etag =  md5($content);
 header('ETag: '.$etag);
-
 header('Content-Length: '.$page_length);
+
 ob_end_clean();
 
 /**
