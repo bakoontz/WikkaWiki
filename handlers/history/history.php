@@ -40,6 +40,7 @@
  */
  
 echo '<div id="content">'."\n";
+echo '<h3>'.sprintf(T_("Revision history for %s"),$this->Link($this->GetPageTag(),'','',TRUE,TRUE,T_("Click here to return to original page"))).'</h3><br />'."\n";
 $start = (int) $this->GetSafeVar('start', 'get');	// @@@ accept only positive value here
 
 if ($this->HasAccess("read")) {

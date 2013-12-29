@@ -30,7 +30,7 @@
 echo '<div id="content">'."\n";
 
 // build backlinks list
-echo '<h3>'.sprintf(T_("Pages linking to %s"),$this->GetPageTag()).'</h3><br />'."\n";
+echo '<h3>'.sprintf(T_("Pages linking to %s"),$this->Link($this->GetPageTag(),'','',TRUE,TRUE,T_("Click here to return to original page"))).'</h3><br />'."\n";
 
 switch(TRUE) 
 {
