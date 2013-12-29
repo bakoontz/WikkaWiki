@@ -3257,7 +3257,7 @@ class Wakka
 		}
 
 		// add validation key fields used against FormSpoofing
-		if('post' == $formMethod)
+		if('post' == strtolower($formMethod))
 		{
 			$hidden['CSRFToken'] = $_SESSION['CSRFToken'];
 		}
