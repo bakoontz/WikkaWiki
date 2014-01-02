@@ -1,0 +1,12 @@
+cd repository
+git fetch origin
+# remote: Counting objects: 92, done.
+# remote: Compressing objects: 100% (63/63), done.
+# remote: Total 68 (delta 41), reused 0 (delta 0)
+# Unpacking objects: 100% (68/68), done.
+# From https://github.com/user/repo.git
+#  * [new branch]      gh-pages     -> origin/gh-pages
+
+git checkout gh-pages
+# Branch gh-pages set up to track remote branch gh-pages from origin.
+# Switched to a new branch 'gh-pages'
