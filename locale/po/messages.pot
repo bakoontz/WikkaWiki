@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-05-20 12:36-0500\n"
+"POT-Creation-Date: 2014-01-02 02:51-0600\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -29,8 +29,9 @@ msgstr ""
 #: actions/files/files.php:237 actions/files/files.php:238
 #: handlers/acls/acls.php:46 handlers/acls/acls.php:136
 #: handlers/delete/delete.php:31 handlers/delete/delete.php:67
-#: handlers/edit/edit.php:55 handlers/edit/edit.php:202
-#: handlers/edit/edit.php:254
+#: handlers/edit/edit.php:55 handlers/edit/edit.php:204
+#: handlers/edit/edit.php:256 handlers/revert/revert.php:38
+#: handlers/revert/revert.php:70
 msgid "Cancel"
 msgstr ""
 
@@ -177,7 +178,7 @@ msgstr ""
 msgid "revert"
 msgstr ""
 
-#: actions/adminpages/adminpages.php:561
+#: actions/adminpages/adminpages.php:561 handlers/revert/revert.php:57
 #, php-format
 msgid "Revert %s to previous version"
 msgstr ""
@@ -423,12 +424,12 @@ msgstr ""
 msgid "Calendar for %s"
 msgstr ""
 
-#: actions/category/category.php:45
+#: actions/category/category.php:59
 #, php-format
 msgid "Sorry, No items found for %s"
 msgstr ""
 
-#: actions/category/category.php:56
+#: actions/category/category.php:70
 #, php-format
 msgid "The following %d page(s) belong to %s"
 msgstr ""
@@ -757,7 +758,7 @@ msgid "File deleted"
 msgstr ""
 
 #: actions/files/files.php:269 actions/files/files.php:418
-#: formatters/wakka.php:760
+#: formatters/wakka.php:762
 #, php-format
 msgid "Download %s"
 msgstr ""
@@ -913,12 +914,12 @@ msgstr ""
 msgid "[History]"
 msgstr ""
 
-#: actions/image/image.php:63
+#: actions/image/image.php:64
 #, php-format
 msgid "Image file %s could not be loaded! Check if it's a valid image."
 msgstr ""
 
-#: actions/image/image.php:76
+#: actions/image/image.php:77
 msgid "image: "
 msgstr ""
 
@@ -1135,16 +1136,16 @@ msgstr ""
 msgid "history"
 msgstr ""
 
-#: actions/recentchanges/recentchanges.php:115
+#: actions/recentchanges/recentchanges.php:119
 msgid "There are no recently changed pages you have access to."
 msgstr ""
 
-#: actions/recentchanges/recentchanges.php:126
+#: actions/recentchanges/recentchanges.php:130
 #, php-format
 msgid "WikiPing enabled: Changes on this wiki are broadcast to %s"
 msgstr ""
 
-#: actions/recentchanges/recentchanges.php:131
+#: actions/recentchanges/recentchanges.php:135
 msgid "There are no recently changed pages."
 msgstr ""
 
@@ -1537,7 +1538,7 @@ msgstr ""
 msgid "Value"
 msgstr ""
 
-#: formatters/wakka.php:760
+#: formatters/wakka.php:762
 msgid "Grab"
 msgstr ""
 
@@ -1608,6 +1609,10 @@ msgstr ""
 msgid "You are not the owner of this page."
 msgstr ""
 
+#: handlers/backlinks/backlinks.php:33 handlers/history/history.php:43
+msgid "Click here to return to original page"
+msgstr ""
+
 #: handlers/backlinks/backlinks.php:38 handlers/showcode/showcode.php:48
 #, php-format
 msgid "Sorry, page %s does not exist."
@@ -1652,17 +1657,17 @@ msgstr ""
 msgid "Sorry, the destination page already exists"
 msgstr ""
 
-#: handlers/clone/clone.php:133
+#: handlers/clone/clone.php:132
 #, php-format
 msgid "%s was succesfully created!"
 msgstr ""
 
-#: handlers/clone/clone.php:142
+#: handlers/clone/clone.php:141
 #, php-format
 msgid "Clone %s to:"
 msgstr ""
 
-#: handlers/clone/clone.php:146
+#: handlers/clone/clone.php:145
 msgid "Edit note:"
 msgstr ""
 
@@ -1720,15 +1725,15 @@ msgstr ""
 msgid "Full Diff"
 msgstr ""
 
-#: handlers/diff/diff.php:103 handlers/history/history.php:100
+#: handlers/diff/diff.php:103 handlers/history/history.php:101
 msgid "Additions:"
 msgstr ""
 
-#: handlers/diff/diff.php:109 handlers/history/history.php:107
+#: handlers/diff/diff.php:109 handlers/history/history.php:108
 msgid "Deletions:"
 msgstr ""
 
-#: handlers/diff/diff.php:115 handlers/history/history.php:114
+#: handlers/diff/diff.php:115 handlers/history/history.php:115
 msgid "No Differences"
 msgstr ""
 
@@ -1748,13 +1753,13 @@ msgstr ""
 msgid "deletion"
 msgstr ""
 
-#: handlers/diff/diff.php:228 handlers/history/history.php:152
+#: handlers/diff/diff.php:228 handlers/history/history.php:153
 #: handlers/revisions/revisions.php:120 handlers/show/show.php:56
 msgid "You are not allowed to read this page."
 msgstr ""
 
-#: handlers/edit/edit.php:60 handlers/edit/edit.php:196
-#: handlers/edit/edit.php:205 handlers/edit/edit.php:253
+#: handlers/edit/edit.php:60 handlers/edit/edit.php:198
+#: handlers/edit/edit.php:207 handlers/edit/edit.php:255
 msgid "Preview"
 msgstr ""
 
@@ -1769,8 +1774,8 @@ msgstr ""
 msgid "The revision id does not exist for the requested page"
 msgstr ""
 
-#: handlers/edit/edit.php:119 handlers/edit/edit.php:200
-#: handlers/edit/edit.php:252
+#: handlers/edit/edit.php:119 handlers/edit/edit.php:202
+#: handlers/edit/edit.php:254
 msgid "Store"
 msgstr ""
 
@@ -1788,34 +1793,34 @@ msgstr ""
 msgid "MISSING EDIT NOTE: Please fill in an edit note!"
 msgstr ""
 
-#: handlers/edit/edit.php:168
+#: handlers/edit/edit.php:170
 msgid "Please add a note on your edit"
 msgstr ""
 
-#: handlers/edit/edit.php:198 handlers/edit/edit.php:250
+#: handlers/edit/edit.php:200 handlers/edit/edit.php:252
 msgid "Store page"
 msgstr ""
 
-#: handlers/edit/edit.php:201
+#: handlers/edit/edit.php:203
 msgid "Re-edit"
 msgstr ""
 
-#: handlers/edit/edit.php:227
+#: handlers/edit/edit.php:229
 #, php-format
 msgid "Page name too long! %d characters max."
 msgstr ""
 
-#: handlers/edit/edit.php:228
+#: handlers/edit/edit.php:230
 #, php-format
 msgid ""
 "Clicking on %s will automatically truncate the page name to the correct size"
 msgstr ""
 
-#: handlers/edit/edit.php:228 handlers/edit/edit.php:231
+#: handlers/edit/edit.php:230 handlers/edit/edit.php:233
 msgid "Rename"
 msgstr ""
 
-#: handlers/edit/edit.php:280
+#: handlers/edit/edit.php:282
 #, php-format
 msgid ""
 "You don't have write access to this page. You might need to <a href=\"%s"
@@ -1823,11 +1828,11 @@ msgid ""
 "this page."
 msgstr ""
 
-#: handlers/edit/edit.php:283
+#: handlers/edit/edit.php:285
 msgid "Click to view page formatting code"
 msgstr ""
 
-#: handlers/edit/edit.php:283
+#: handlers/edit/edit.php:285
 msgid "View formatting code for this page"
 msgstr ""
 
@@ -1850,34 +1855,39 @@ msgstr ""
 msgid "Sorry, there is no code to download."
 msgstr ""
 
-#: handlers/history/history.php:85 handlers/history/history.php:143
+#: handlers/history/history.php:43
+#, php-format
+msgid "Revision history for %s"
+msgstr ""
+
+#: handlers/history/history.php:86 handlers/history/history.php:144
 #: handlers/show/show.php:78
 #, php-format
 msgid "Revision %s"
 msgstr ""
 
-#: handlers/history/history.php:89
+#: handlers/history/history.php:90
 #, php-format
 msgid "Last edited on %s by %s"
 msgstr ""
 
-#: handlers/history/history.php:93
+#: handlers/history/history.php:94
 #, php-format
 msgid "Edited on %s by %s"
 msgstr ""
 
-#: handlers/history/history.php:137
+#: handlers/history/history.php:138
 msgid "here"
 msgstr ""
 
-#: handlers/history/history.php:138
+#: handlers/history/history.php:139
 #, php-format
 msgid ""
 "Full history for this page cannot be displayed within a single page, click "
 "%s to view more."
 msgstr ""
 
-#: handlers/history/history.php:144
+#: handlers/history/history.php:145
 #, php-format
 msgid "The oldest known version of this page was created on %s by %s"
 msgstr ""
@@ -1965,11 +1975,19 @@ msgstr ""
 msgid "You need to login to see referring sites"
 msgstr ""
 
-#: handlers/revert/revert.php:39
+#: handlers/revert/revert.php:48
 msgid "Reverted to previous revision"
 msgstr ""
 
-#: handlers/revert/revert.php:50
+#: handlers/revert/revert.php:63
+msgid "Revert this page to the previous version?"
+msgstr ""
+
+#: handlers/revert/revert.php:69
+msgid "Revert Page"
+msgstr ""
+
+#: handlers/revert/revert.php:80
 msgid "Sorry, you don't have privileges to revert this page"
 msgstr ""
 
@@ -3061,92 +3079,92 @@ msgstr ""
 msgid "Reverted to previous version"
 msgstr ""
 
-#: libs/Wakka.class.php:2677
+#: libs/Wakka.class.php:2678
 msgid "Create this page"
 msgstr ""
 
-#: libs/Wakka.class.php:3016
+#: libs/Wakka.class.php:3017
 msgid ""
 "A header template could not be found. Please make sure that a file called "
 "<code>header.php</code> exists in the templates directory."
 msgstr ""
 
-#: libs/Wakka.class.php:3031
+#: libs/Wakka.class.php:3032
 msgid ""
 "A footer template could not be found. Please make sure that a file called "
 "<code>footer.php</code> exists in the templates directory."
 msgstr ""
 
-#: libs/Wakka.class.php:3122
+#: libs/Wakka.class.php:3123
 #, php-format
 msgid "Default themes (%s)"
 msgstr ""
 
-#: libs/Wakka.class.php:3132
+#: libs/Wakka.class.php:3133
 #, php-format
 msgid "Custom themes (%s)"
 msgstr ""
 
-#: libs/Wakka.class.php:3460
+#: libs/Wakka.class.php:3461
 msgid "Unknown action; the action name must not contain special characters."
 msgstr ""
 
-#: libs/Wakka.class.php:3508
+#: libs/Wakka.class.php:3526
 #, php-format
 msgid "Unknown action \"%s\""
 msgstr ""
 
-#: libs/Wakka.class.php:3548
+#: libs/Wakka.class.php:3566
 msgid "Unknown handler; the handler name must not contain special characters."
 msgstr ""
 
-#: libs/Wakka.class.php:3559
+#: libs/Wakka.class.php:3577
 #, php-format
 msgid "Sorry, %s is an unknown handler."
 msgstr ""
 
-#: libs/Wakka.class.php:3637
+#: libs/Wakka.class.php:3655
 msgid ""
 "Unknown formatter; the formatter name must not contain special characters."
 msgstr ""
 
-#: libs/Wakka.class.php:3646
+#: libs/Wakka.class.php:3664
 #, php-format
 msgid "Formatter \"%s\" not found"
 msgstr ""
 
-#: templates/default/footer.php:14 templates/kubrick/footer.php:12
+#: templates/classic/footer.php:14 templates/kubrick/footer.php:12
 #: templates/light/footer.php:14
 msgid "Valid XHTML"
 msgstr ""
 
-#: templates/default/footer.php:17 templates/kubrick/footer.php:15
+#: templates/classic/footer.php:17 templates/kubrick/footer.php:15
 #: templates/light/footer.php:17
 msgid "Valid CSS:"
 msgstr ""
 
-#: templates/default/footer.php:20 templates/kubrick/footer.php:18
+#: templates/classic/footer.php:20 templates/kubrick/footer.php:18
 #: templates/light/footer.php:20
 #, php-format
 msgid "Powered by %s"
 msgstr ""
 
-#: templates/default/footer.php:34 templates/kubrick/footer.php:32
+#: templates/classic/footer.php:34 templates/kubrick/footer.php:32
 #: templates/light/footer.php:34
 #, php-format
 msgid "Page was generated in %.4f seconds"
 msgstr ""
 
-#: templates/default/header.php:10 templates/kubrick/header.php:10
+#: templates/classic/header.php:10 templates/kubrick/header.php:10
 #: templates/light/header.php:10
 #, php-format
 msgid "Click to edit %s"
 msgstr ""
 
-#: wikka.php:505
+#: wikka.php:583
 msgid "This site is currently being upgraded. Please try again later."
 msgstr ""
 
-#: wikka.php:589
+#: wikka.php:667
 msgid "Error: Unable to connect to the database."
 msgstr ""
