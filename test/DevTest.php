@@ -17,8 +17,8 @@ require_once('libs/Wakka.class.php');
 require_once('version.php');
 
 
-class ReadMeTest extends PHPUnit_Framework_TestCase
-{
+class ReadMeTest extends PHPUnit_Framework_TestCase {
+    
     protected static $pdo;
     protected static $wakka;
     protected static $config;
@@ -54,6 +54,11 @@ class ReadMeTest extends PHPUnit_Framework_TestCase
     /**
      * Tests
      */
+    public function testNotWrittenYet() {
+        # see http://phpunit.de/manual/current/en/incomplete-and-skipped-tests.html
+        $this->markTestIncomplete('For future tests. Will report as incomplete.');
+    }
+    
     public function testWikkaPresence() {
         $this->assertInstanceOf('Wakka', self::$wakka);
     }
