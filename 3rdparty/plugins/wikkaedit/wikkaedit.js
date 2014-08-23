@@ -230,7 +230,6 @@ WikkaEdit.prototype.toolbarButtonClick = function(obj, buttonName, submenuName) 
 		case "rawhtml" :
 			//Shift+Click means whole lines
 			var selRange = this.getSelectionRange();
-			if (event.shiftKey) selRange = this.getSelectionRangeWholeLines();
 			if (selRange.end - selRange.start > 0) {
 				this.addToSelection("\"\"","\"\"",null,selRange);
 			} else {
@@ -241,7 +240,6 @@ WikkaEdit.prototype.toolbarButtonClick = function(obj, buttonName, submenuName) 
 		case "sourcecode" :
 			//Shift+Click means whole lines
 			var selRange = this.getSelectionRange();
-			if (event.shiftKey) selRange = this.getSelectionRangeWholeLines();
 			var nsr = new SelRange(selRange.start + 3, selRange.start + 15);
 			if (selRange.end - selRange.start > 0) {
 				this.addToSelection("%%(language-ref)\n", "\n%%", nsr, selRange);
