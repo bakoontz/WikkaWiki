@@ -457,11 +457,6 @@ case "1.1.6.7":
 	update_default_page('FormattingRules', $dblink, $config, $lang_defaults_path, $lang_defaults_fallback_path, $upgrade_note);
 case "1.2":
 	print("<strong>1.2 to 1.3.1 changes:</strong><br />\n");
-	update_default_page(array(
-		'SysInfo', 
-		'TableMarkup', 
-		'TableMarkupReference', 
-		'WikkaConfig'), $dblink, $config, $lang_defaults_path, $lang_defaults_fallback_path, $upgrade_note);
 	// Dropping obsolete "handler" field from pages table, refs #452
 	test('Removing handler field from the pages table...',
 	@mysql_query("ALTER TABLE ".$config["table_prefix"]."pages DROP handler", $dblink), __('Already done? OK!'), 0);
