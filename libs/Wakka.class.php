@@ -1958,6 +1958,8 @@ class Wakka
 			$id = '';
 			// Should work with any browser/entity conversion scheme
 			$search_phrase = mysql_real_escape_string($phrase);
+			// Convert &quot; entity to actual quotes for exact phrase match
+			$search_phrase = stripslashes(str_replace("&quot;", "\"", $search_phrase));
 			if ( 1 == $caseSensitive ) $id = ', id';
 			$sql  = "select * from ".$this->GetConfigValue('table_prefix')."pages where latest = ".  "'Y'" ." and match(tag, body".$id.") against(". "'$search_phrase'" ." IN BOOLEAN MODE) order by time DESC";
 		}
