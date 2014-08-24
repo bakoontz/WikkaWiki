@@ -591,7 +591,7 @@ case "1.3.2":
 case "trunk":
 	print("<strong>1.3.5 to 1.3.6 changes:</strong><br />\n");
 	test("Changing \"default\" theme references to \"classic\" theme ...",  
-	@mysql_query("update table `".$config["table_prefix"]."users` SET theme='classic' WHERE theme='default'", $dblink), __("Already done? OK!"), 0);
+	@mysql_query("UPDATE `".$config["table_prefix"]."users` SET theme='classic' WHERE theme='default'", $dblink), __("Already done? OK!"), 0);
 }
 
 // #600: Force reloading of stylesheet.
