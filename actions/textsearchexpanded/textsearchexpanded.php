@@ -64,6 +64,7 @@ if ($results)
 	$additional_re = ''; #38
 	
 	// Extract Exact Phrases: terms inside double quotes
+	$phrase_re = html_entity_decode($phrase_re);
 	if (preg_match_all('/"([^"]+?)"/', $phrase_re, $match1))
 	{
 		$phrase_re = preg_replace('/"[^"]+?"/', '', $phrase_re);
