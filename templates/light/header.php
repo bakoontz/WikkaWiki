@@ -58,5 +58,11 @@ if (isset($message) && strlen($message)>0)
 <h2><a id="homepage_link" href="<?php echo $this->href('', $this->GetConfigValue('root_page'), ''); ?>"><?php echo $this->GetWakkaName();?></a> : <a href="<?php echo $this->href('backlinks', '', ''); ?>" title="Display a list of pages linking to <?php echo $this->GetPageTag() ?>"><?php echo $this->GetPageTag(); ?></a></h2>
 <?php echo $this->MakeMenu('main_menu'); ?>
 </div>
+<div>
+<?php
+	if($this->GetConfigValue('enable_breadcrumbs'))
+		echo $this->StringifyBreadcrumbs();
+?>	
+</div>
 <?php if ($this->IsAdmin()) echo $this->MakeMenu('dashboard'); ?>
 <!-- END PAGE HEADER -->

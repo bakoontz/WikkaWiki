@@ -38,6 +38,7 @@ if(version_compare(phpversion(),'5.3','<'))
 	error_reporting(E_ALL);
 else
 	error_reporting(E_ALL & !E_DEPRECATED);
+error_reporting(E_ALL);
 // ---------------------- END DEBUGGING AND ERROR REPORTING -------------------
 
 // ---------------------------- VERSIONING ------------------------------------
@@ -365,7 +366,10 @@ $wakkaDefaultConfig = array(
 	'max_new_document_urls'		=> '15',
 	'max_new_comment_urls'		=> '6',
 	'max_new_feedback_urls'		=> '6',
-	'utf8_compat_search'		=> '0'
+	'utf8_compat_search'		=> '0',
+	'enable_breadcrumbs'		=> '1',
+	'breadcrumb_node_delimiter' => '>',
+	'num_breadcrumb_nodes'		=> '5'
 	);
 
 // load config
@@ -693,6 +697,12 @@ if(NULL != $user)
  */
 if (!isset($handler)) $handler='';
 
+// Push onto breadcrumb queue
+if(0 != $wakkaConfig['enable_breadcrumbs'])
+{
+	$wakka->AddBreadcrumb($page);
+}
+
 # Add Content-Type header (can be overridden by handlers)
 header('Content-Type: text/html; charset=utf-8');
 
@@ -724,6 +734,7 @@ header('ETag: '.$etag);
 header('Content-Length: '.$page_length);
 
 ob_end_clean();
+
 
 /**
  * Output the page.

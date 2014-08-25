@@ -3887,12 +3887,14 @@ class Wakka
 	 */
 	function LogoutUser()
 	{
-		unset($_SESSION['show_comments']);
+		//unset($_SESSION['show_comments']);
+		$csrfToken = $_SESSION['CSRFToken'];
+		$_SESSION = [];
+		$_SESSION['CSRFToken'] = $csrfToken;
 		$this->DeleteCookie('user_name');
 		$this->DeleteCookie('pass');
 		// Delete this session from sessions table
 		$this->Query("DELETE FROM ".$this->GetConfigValue('table_prefix')."sessions WHERE userid='".$this->GetUserName()."' AND sessionid='".session_id()."'");
-		$_SESSION['user'] = '';
 		// This seems a good as place as any to purge all session records
 		// older than PERSISTENT_COOKIE_EXPIRY, as this is not a
 		// time-critical function for the user.  The assumption here
@@ -4973,6 +4975,63 @@ class Wakka
 			$this->Query("delete from ".$this->GetConfigValue('table_prefix')."pages where time < date_sub(now(), interval '".mysql_real_escape_string($days)."' day) and latest = 'N'");
 		}
 	}
+
+	/**
+	 * Add page to breadcrumb queue
+	 *
+	 * @uses $_[SESSION]
+	 * @uses session_id()
+	 * @uses Wakka::GetConfigValue()
+	 * @uses Config::$num_breadcrumb_nodes
+	 * @uses Config::$enable_breadcrumbs
+	 */
+	function AddBreadcrumb($page) {
+		if(0 != $this->GetConfigValue('enable_breadcrumbs')) {
+			if(isset($_SESSION['breadcrumbs'])) {
+				$q = new SplQueue();
+				$q->unserialize($_SESSION['breadcrumbs']);
+				if($page != $q->top()) { 
+					while($q->count() >= $this->GetConfigValue('num_breadcrumb_nodes')) {
+						$q->dequeue();
+					}
+					$q->enqueue($page);
+					$_SESSION['breadcrumbs'] = $q->serialize();
+				}
+			}
+			else if (isset($_SESSION['user'])) {
+					$q = new SplQueue();
+					$q->enqueue($page);
+					$_SESSION['breadcrumbs'] = $q->serialize();
+			}
+		}
+	}
+
+	/**
+	 * Return breadcrumb string
+	 **/
+	 function StringifyBreadcrumbs() {
+		$output = "<ul class=\"breadcrumb\" id=\"breadcrumb\">";
+		if(0 != $this->GetConfigValue('enable_breadcrumbs') &&
+		   isset($_SESSION['user']) &&
+		   isset($_SESSION['breadcrumbs'])) {
+			$delimiter = $this->GetConfigValue('breadcrumb_node_delimiter');
+			$q = new SplQueue();
+			$q->unserialize($_SESSION['breadcrumbs']);
+			$q->rewind();
+			$output .= "<li>";
+			$output .= "<a href=\"".$this->Href('', $q->current())."\">".$q->current()."</a>";
+			$q->next();
+			while($q->valid()) {
+				$output .= " $delimiter ";
+				$output .= "</li><li>";
+				$output .= "<a href=\"".$this->Href('', $q->current())."\">".$q->current()."</a>";
+				$q->next();
+			}
+			$output .= "</li></ul>";
+		}
+		return $output;
+	}
+
 
 	/**
 	 * THE BIG EVIL NASTY ONE!

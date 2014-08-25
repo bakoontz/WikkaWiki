@@ -1302,3 +1302,29 @@ ul.menu form#form_logout input[type=submit] {
 ul.menu form#form_logout input[type=submit]:hover {
 	color: #147;
 }
+
+ul#breadcrumb {
+	border: none;
+	float: left;
+	list-style-type: none;
+	padding: 0px;
+	margin-top: 0px;
+	width: 850px;
+}
+
+ul#breadcrumb li {
+	border-style: dotted;
+	border-width: 1px;
+	border-color: #bbb;
+	margin: 0 0 0 10px;
+	padding: 0;
+	float: left;
+	width: auto;
+	text-align: left;
+	font-size: 90%;
+}
+
+ul#breadcrumb li > a:hover {
+	background-color: transparent;
+	color: #FF9933;
+}
