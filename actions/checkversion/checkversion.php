@@ -163,7 +163,8 @@ if($this->IsAdmin() && TRUE == $this->GetConfigValue('enable_version_check'))
 		fwrite($fp, "Connection: Close\r\n\r\n");
 		stream_set_timeout($fp, $timeout);
 		$data = fread($fp, 4096);
-		$latest = trim(array_pop(explode("\r\n", $data)));
+		$tmp = explode("\r\n", $data);
+		$latest = trim(array_pop($tmp));
 		fclose($fp);
 		
 		if(TRUE === version_compare($this->GetConfigValue('wakka_version'), $latest, "<"))
