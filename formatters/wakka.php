@@ -75,85 +75,7 @@ if (!defined('PATTERN_CLOSE_A_ALONE')) define('PATTERN_CLOSE_A_ALONE', '</a>(?!<
  */
 if (!defined('PATTERN_START_OF_STRING_ALONE')) define('PATTERN_START_OF_STRING_ALONE', '^(?!<a )');
 
-// @@@	is this condition handy? would prevent generating IDs on a page fragment
-//		- unless formatter is called on those with an explicit foprmat option!
-if (isset($format_option) && preg_match(PATTERN_MATCH_PAGE_FORMATOPTION, $format_option))
-{
-	if (!function_exists('wakka3callback'))
-	{
-		/**
-		 * "Afterburner" formatting: extra handling of already-generated XHTML code.
-		 *
-		 * 1. For headings:
-		 * a) Use heading to derive a document title
-		 * b) Ensure every heading has an id, either specified or generated. (May be
-		 * extended to generate section TOC data.)
-		 * If an id is already specified, that is used without any modification.
-		 * If no id is specified, it is generated on the basis of the heading context:
-		 * - any image tag is replaced by its alt text (if specified)
-		 * - all tags are stripped
-		 * - all characters that are not valid in an ID are stripped (except whitespace)
-		 * - the resulting string is then used by makedId() to generate an id out of it
-		 *
-		 * @access	private
-		 * @uses	Wakka::HasPageTitle()
-		 * @uses	Wakka::SetPageTitle()
-		 * @uses	Wakka::CleanTextNode()
-		 * @uses	Wakka::makeId()
-		 *
-		 * @param	array	$things	required: matches of the regex in the preg_replace_callback
-		 * @return	string	heading with an id attribute
-		 */
-		function wakka3callback($things)
-		{
-			global $wakka;
-			$thing = $things[1];
 
-			// heading
-			if (preg_match(PATTERN_MATCH_HEADINGS, $thing, $matches))
-			{
-				list($h_element, $h_tagname, $h_attribs, $h_heading) = $matches;
-				// @@@ apply nodeToTextOnly() on $h_heading so stored title is always valid
-				if ((!$wakka->HasPageTitle()) && ('h5' > $h_tagname))
-				{
-					// Strip all HTML/PHP tags first
-					$h_heading_stripped = strip_tags($h_heading);
-					$wakka->SetPageTitle($h_heading_stripped);
-				}
-
-				if (preg_match(PATTERN_MATCH_ID_ATTRIBUTES, $h_attribs))
-				{
-					// existing id attribute: nothing to do (assume already treated as embedded code)
-					// @@@ we *may* want to gather ids and heading text for a TOC here ...
-					// heading text should then get partly the same treatment as when we're creating ids:
-					// at least replace images and strip tags - we can leave entities etc. alone - so we end up with
-					// plain text-only
-					// do this if we have a condition set to generate a TOC
-					return $h_element;
-				}
-				else
-				{
-					// no id: we'll have to create one
-					$headingtext = $wakka->CleanTextNode($h_heading);		// @@@ replace with headingToTextOnly()
-					// now create id based on resulting heading text
-					$h_id = $wakka->makeId('hn', $headingtext);
-
-					#503 - The text of a heading is now becoming a link to this heading, allowing an easy way to copy link to clipboard.
-					// For this, we take the textNode child of a heading, and if it is not enclosed in <a...></a>, we enclose it in 
-					// $opening_anchor and $closing_anchor.
-					$opening_anchor = '<a class="heading" href="'.$wakka->Href().'#'.$h_id.'">';
-					$closing_anchor = '</a>';
-					$h_heading = preg_replace('@('.PATTERN_OPEN_A_ALONE. '|'.PATTERN_END_OF_STRING_ALONE.  ')@', $closing_anchor.'\\0', $h_heading);
-					$h_heading = preg_replace('@('.PATTERN_CLOSE_A_ALONE.'|'.PATTERN_START_OF_STRING_ALONE.')@', '\\0'.$opening_anchor, $h_heading);
-
-					// rebuild element, adding id
-					return '<'.$h_tagname.$h_attribs.' id="'.$h_id.'">'.$h_heading.'</'.$h_tagname.'>';
-				}
-			}
-			// other elements to be treated go here (tables, images, code sections...)
-		}
-	}
-}
 // Note: all possible formatting tags have to be in a single regular expression for this to work correctly.
 
 if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix!
@@ -1033,6 +955,107 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 	}
 }
 
+if (!function_exists('wakka3callback'))
+{
+	/**
+	 * "Afterburner" formatting: extra handling of already-generated XHTML code.
+	 *
+	 * 1. For headings:
+	 * a) Use heading to derive a document title
+	 * b) Ensure every heading has an id, either specified or generated. (May be
+	 * extended to generate section TOC data.)
+	 * If an id is already specified, that is used without any modification.
+	 * If no id is specified, it is generated on the basis of the heading context:
+	 * - any image tag is replaced by its alt text (if specified)
+	 * - all tags are stripped
+	 * - all characters that are not valid in an ID are stripped (except whitespace)
+	 * - the resulting string is then used by makedId() to generate an id out of it
+	 *
+	 * @access	private
+	 * @uses	Wakka::HasPageTitle()
+	 * @uses	Wakka::SetPageTitle()
+	 * @uses	Wakka::CleanTextNode()
+	 * @uses	Wakka::makeId()
+	 *
+	 * @param	array	$things	required: matches of the regex in the preg_replace_callback
+	 * @return	string	heading with an id attribute
+	 */
+	function wakka3callback($things)
+	{
+		global $wakka;
+		$thing = $things[1];
+
+		// heading
+		if (preg_match(PATTERN_MATCH_HEADINGS, $thing, $matches))
+		{
+			list($h_element, $h_tagname, $h_attribs, $h_heading) = $matches;
+			// @@@ apply nodeToTextOnly() on $h_heading so stored title is always valid
+			if ((!$wakka->HasPageTitle()) && ('h5' > $h_tagname))
+			{
+				// Strip all HTML/PHP tags first
+				$h_heading_stripped = strip_tags($h_heading);
+				$wakka->SetPageTitle($h_heading_stripped);
+			}
+
+			if (preg_match(PATTERN_MATCH_ID_ATTRIBUTES, $h_attribs))
+			{
+				// existing id attribute: nothing to do (assume already treated as embedded code)
+				// @@@ we *may* want to gather ids and heading text for a TOC here ...
+				// heading text should then get partly the same treatment as when we're creating ids:
+				// at least replace images and strip tags - we can leave entities etc. alone - so we end up with
+				// plain text-only
+				// do this if we have a condition set to generate a TOC
+				return $h_element;
+			}
+			else
+			{
+				// no id: we'll have to create one
+				$headingtext = $wakka->CleanTextNode($h_heading);		// @@@ replace with headingToTextOnly()
+				// now create id based on resulting heading text
+				$h_id = $wakka->makeId('hn', $headingtext);
+
+				#503 - The text of a heading is now becoming a link to this heading, allowing an easy way to copy link to clipboard.
+				// For this, we take the textNode child of a heading, and if it is not enclosed in <a...></a>, we enclose it in 
+				// $opening_anchor and $closing_anchor.
+#				$opening_anchor = '<a class="heading" href="'.$wakka->Href().'#'.$h_id.'">';
+				$opening_anchor = '<a class="heading" href="'.$wakka->Href().'#">';
+				$closing_anchor = '</a>';
+				$h_heading = preg_replace('@('.PATTERN_OPEN_A_ALONE. '|'.PATTERN_END_OF_STRING_ALONE.  ')@', $closing_anchor.'\\0', $h_heading);
+				$h_heading = preg_replace('@('.PATTERN_CLOSE_A_ALONE.'|'.PATTERN_START_OF_STRING_ALONE.')@', '\\0'.$opening_anchor, $h_heading);
+				// rebuild element, adding id
+				return '<'.$h_tagname.$h_attribs.' id="'.$h_id.'">'.$h_heading.'</'.$h_tagname.'>';
+			}
+		}
+		// other elements to be treated go here (tables, images, code sections...)
+	}
+}
+
+if (isset($format_option) && preg_match(PATTERN_MATCH_PAGE_FORMATOPTION, $format_option))
+{
+	if (!function_exists('wakka4callback'))
+	{
+		function wakka4callback($things)
+		{
+			global $wakka;
+			$thing = $things[1];
+
+
+			if(preg_match('/^\{\{\{(.*?)\}\}\}$/su', $thing, $matches)) 
+			{
+				if ($matches[1])
+				{
+					return $wakka->Action($matches[1]);
+				}
+				else
+				{
+					return "{{{}}}";
+				}
+			}
+			// other elements to be treated go here (tables, images, code sections...)
+		}
+	}
+}
+
 if (!function_exists('parse_attributes'))
 {
 	function parse_attributes($attribs, $hints) {
@@ -1117,7 +1140,7 @@ $text = preg_replace_callback(
 	# Simple Tables	
 	"\|(?:[^\|])?\|(?:\(.*?\))?(?:\{[^\{\}]*?\})?(?:\n)?|".
 	# action
-	"\{\{.*?\}\}|".
+	"(?<!\{)\{\{[^\{|\}]*?\}\}(?!\})|".
 	# InterWiki link (deprecated, as pagenames may now contain spaces)
 	# Use forced links with a | separator instead
 	"\b[[:upper:]][[:alpha:]]+[:](?![=_#])\S*\b|".
@@ -1132,17 +1155,27 @@ $text = preg_replace_callback(
 // we're cutting the last <br />
 $text = preg_replace("/<br \/>$/","", $text);
 
+# wakka3callback
+$text .= wakka2callback('closetags');	// attempt close open tags @@@ may be needed for more than whole page!
+$text = preg_replace_callback(
+	"#(".
+	"<h[1-6](.*?)>.*?</h[1-6]>".
+	// other elements to be treated go here
+	')#ms','wakka3callback', $text);
+
 // @@@ don't report generation time unless some "debug mode" is on
 if (isset($format_option) && preg_match(PATTERN_MATCH_PAGE_FORMATOPTION, $format_option))
 {
-	$text .= wakka2callback('closetags');	// attempt close open tags @@@ may be needed for more than whole page!
+	# wakka4callback
 	$idstart = getmicrotime(TRUE);
+	$this->config['text'] = $text;
 	$text = preg_replace_callback(
-		'#('.
-		'<h[1-6].*?>.*?</h[1-6]>'.
+		"#(".
+		"\{\{\{.*?\}\}\}".
 		// other elements to be treated go here
-		')#ms','wakka3callback', $text);
+		')#ms','wakka4callback', $text);
 	printf('<!-- Header ID generation took %.6f seconds -->', (getmicrotime(TRUE) - $idstart));	#i18n
 }
+
 echo $text;
 ?>
