@@ -3,10 +3,14 @@
  * Generate a Table of Contents (ToC) based upon headings
  *
  * This action generates a Table of Contents (ToC) based upon
- * headings.  The ToC is by default displayed in a left-justified text
- * box, with heading strings indented depending upon the order of the
- * "levels" attribute (see below).  Please note that this action
- * requires the use of the post-processing action symbols: {{{toc}}}.
+ * headings.  The ToC is displayed with heading
+ * strings indented depending upon the order of the "levels" attribute
+ * (see below).  Please note that this action * requires the use of the
+ * post-processing action symbols: {{{toc}}}.
+ *
+ * To place the ToC in a right-justified text box, try
+ *
+ * >>{{{toc}}}>>::c::
  *
  * @package		Post-processing actions
  * @version		$Id$
@@ -65,7 +69,7 @@ foreach($levels as $level) {
 }
 	
 # Parse foreach level markup, store in string
-$displayString = ">>@@" . $title . "@@\n";
+$displayString = "@@" . $title . "@@\n";
 $text = $this->config['text'];
 foreach(preg_split("/\n/", $text) as $line) {
 	if(preg_match("/<h([1-5]).*?id=\"(.*?)\">.*?<a(.*?)>(.*?)<\/a><\/h[1-5]>/", $line, $matches)) {
@@ -88,6 +92,5 @@ foreach(preg_split("/\n/", $text) as $line) {
 		}
 	}
 }	
-$displayString .= ">>::c::\n";
 print $this->Format($displayString);
 ?>
