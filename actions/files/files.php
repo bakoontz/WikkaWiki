@@ -192,11 +192,11 @@ $action = $this->GetSafeVar('action', 'get');
 $file = $this->GetSafeVar('file', 'get');
 $file_to_delete = $this->GetSafeVar('file_to_delete', 'post');
 
-$fileregex = "/^.*?([^\.\/\\\]+\.[A-Za-z0-9]{2,4})$/";
+$filpreg_matchex = "/^.*?([^\.\/\\\]+\.[A-Za-z0-9]{2,4})$/";
 if(isset($_GET['file']))
 {
 	$matches = '';
-	preg_match($fileregex, $file, $matches);
+	preg_match($filpreg_matchex, $file, $matches);
 	if(isset($matches[1]))
 		$file = $matches[1];
 	else
@@ -205,7 +205,7 @@ if(isset($_GET['file']))
 if(isset($_POST['file_to_delete']))
 {
 	$matches = '';
-	preg_match($fileregex, $file_to_delete, $matches);
+	preg_match($filpreg_matchex, $file_to_delete, $matches);
 	if(isset($matches[1]))
 	{
 		$result = @unlink($upload_path.DIRECTORY_SEPARATOR.$file_to_delete);

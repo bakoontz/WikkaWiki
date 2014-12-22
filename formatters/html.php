@@ -807,11 +807,11 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 			} #inline comments
 			else
 			{
-				if (ereg('[0-9]', $newIndentType[0])) { $newIndentType = '1'; }
-				elseif (ereg('[IVX]', $newIndentType[0])) { $newIndentType = 'I'; }
-				elseif (ereg('[ivx]', $newIndentType[0])) { $newIndentType = 'i'; }
-				elseif (ereg('[A-Z]', $newIndentType[0])) { $newIndentType = 'A'; }
-				elseif (ereg('[a-z]', $newIndentType[0])) { $newIndentType = 'a'; }
+				if (preg_match('[0-9]', $newIndentType[0])) { $newIndentType = '1'; }
+				elseif (preg_match('[IVX]', $newIndentType[0])) { $newIndentType = 'I'; }
+				elseif (preg_match('[ivx]', $newIndentType[0])) { $newIndentType = 'i'; }
+				elseif (preg_match('[A-Z]', $newIndentType[0])) { $newIndentType = 'A'; }
+				elseif (preg_match('[a-z]', $newIndentType[0])) { $newIndentType = 'a'; }
 
 				$opener = '<ol type="'.$newIndentType.'"><li>';
 				$closer = '</li></ol>';
