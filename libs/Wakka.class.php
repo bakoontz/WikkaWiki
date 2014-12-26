@@ -3889,7 +3889,10 @@ class Wakka
 	{
 		//unset($_SESSION['show_comments']);
 		$csrfToken = $_SESSION['CSRFToken'];
-		$_SESSION = [];
+        #$_SESSION = [];
+        session_destroy();
+        session_id('');
+        unset($_SESSION['user']);
 		$_SESSION['CSRFToken'] = $csrfToken;
 		$this->DeleteCookie('user_name');
 		$this->DeleteCookie('pass');
