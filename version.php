@@ -24,7 +24,7 @@
  * version number might result in problems upgrading...please use
  * caution.
  */
-$svn_version = '1.3.6';
+$svn_version = 'trunk';
 if (!defined('WAKKA_VERSION')) define('WAKKA_VERSION', $svn_version);
 
 /**
