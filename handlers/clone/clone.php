@@ -88,7 +88,7 @@ if (!$this->existsPage($from))		// name change, interface change (allows only ac
 			// 3. Check user's write access
 			if (!$this->HasAccess('write', $to))
 			{
-				$box = '<em class="error">'.sprintf(T_("Sorry! You don\t have write-access to %s'"), $to).'</em>';
+				$box = '<em class="error">'.sprintf(T_("Sorry! You don't have write-access to %s"), $to).'</em>';
 			} 
 			// 3a. Check target pagename validity
 			else if(!$this->IsWikiName($to))
