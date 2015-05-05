@@ -2010,7 +2010,7 @@ class Wakka
 	 *			(and use that in the Formatter, of course)
 	 * @todo	move regexes to library #34
 	 */
-	function CleanTextNode($textvalue, $pattern_prohibited_chars = '/[^A-Za-z0-9_:.-\s]/', $decode_html_entities = TRUE)
+	function CleanTextNode($textvalue, $pattern_prohibited_chars = '/[^A-Za-z0-9_:.\s-]/', $decode_html_entities = TRUE)
 	{
 		// START -- nodeToTextOnly
 		$textvalue = trim($textvalue);
