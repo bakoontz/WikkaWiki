@@ -2177,6 +2177,8 @@ class Wakka
 	 */
 	function existsPage($page, $prefix='', $dblink=NULL, $active=TRUE)
 	{
+		// Always replace '_' with ws
+		$page = preg_replace('/_+/', ' ', $page);
 		// init
 		$count = 0;
 		$table_prefix = (empty($prefix) && isset($this)) ? $this->GetConfigValue('table_prefix') : $prefix;
@@ -3213,7 +3215,7 @@ class Wakka
 			$handler = '';
 		}
 		#$tag = ($validPage) ? $tag : '';
-		if (!empty($tag) && !$this->existspage($tag))
+		if (!empty($tag) && !$this->existsPage($tag))
 		{
 			$tag = '';	// Href() will pick up current page name if none specified
 		}
