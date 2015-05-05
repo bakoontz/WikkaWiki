@@ -19,6 +19,7 @@
  * @uses	Wakka::Query()
  * @uses	Wakka::Redirect()
  * @uses	Wakka::Href()
+ * @uses    Wakka::GetReferrerPage()
  *
  * @todo	don't show cancel button when JavaScript is not active
  * @todo	avoid layout table (there are not even virtual columns!)
@@ -44,11 +45,20 @@ if ($this->IsAdmin() || ($this->UserIsOwner($tag) && (bool) $this->GetConfigValu
 		$this->Query("DELETE FROM ".$this->GetConfigValue('table_prefix')."acls WHERE page_tag = '".mysql_real_escape_string($tag)."'");
 		$this->Query("DELETE FROM ".$this->GetConfigValue('table_prefix')."referrers WHERE page_tag = '".mysql_real_escape_string($tag)."'");
 
-		// redirect back to main page
-		$this->Redirect(WIKKA_BASE_URL, T_("Page has been deleted!"));
+		// redirect back to main page, or AdminPages if it is redirect page.
+		if (isset($_POST['redirect_page']) && $this->existsPage($_POST['redirect_page']) && 'AdminPages' == $_POST['redirect_page'])
+		{
+    		$this->Redirect($this->Href('', $_POST['redirect_page']), T_("Page has been deleted!"));
+		}
+		else
+		{
+			$this->Redirect(WIKKA_BASE_URL, T_("Page has been deleted!"));
+		}
+
 	}
 	else
 	{
+        $redirect_page = $this->GetReferrerPage();
 		// show form
 		?>
 		<h3><?php printf(T_("Delete %s"),$this->Link($tag));?></h3>
@@ -63,6 +73,7 @@ if ($this->IsAdmin() || ($this->UserIsOwner($tag) && (bool) $this->GetConfigValu
 				<td>
 				<!-- nonsense input so form submission works with rewrite mode -->
 				<input type="hidden" value="" name="null">
+				<input type="hidden" value="<?php echo $redirect_page ?>" name="redirect_page">
 				<input name="delete" type="submit" value="<?php echo T_("Delete Page") ?>"  style="width: 120px" />
 				<input type="submit" value="<?php echo T_("Cancel") ?>" name="cancel" style="width: 120px" />
 				</td>

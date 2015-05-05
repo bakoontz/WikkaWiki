@@ -2561,6 +2561,31 @@ class Wakka
 	}
 
 	/**
+	 * Returns the name of the referring page, if internal page
+	 *
+	 * @author	{@link http://wikkawiki.org/TormodHaugen Tormod Haugen}
+	 *
+	 * @access	public
+	 * @since	Wikka 1.3.7
+	 *
+	 * @return string name of refering page if internal, or NULL
+	 */
+	function GetReferrerPage()
+	{
+		preg_match('/^(.*)ReferrerMarker/', $this->Href('', 'ReferrerMarker'), $match);	// @@@ use wikka_url here!
+		$regex_referrer = '@^'.preg_quote($match[1], '@').'([^\/\?&]*)@';
+		if (isset($_SERVER['HTTP_REFERER']) && preg_match($regex_referrer, $_SERVER['HTTP_REFERER'], $match))
+		{
+			return $match[1];
+		}
+		else
+		{
+			return NULL;
+		}
+	}
+
+
+	/**
 	 * Return the pagename (with optional handler appended).
 	 *
 	 * @param $handler
