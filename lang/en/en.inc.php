@@ -825,6 +825,9 @@ if(!defined('SEARCH_TARGET_5')) define('SEARCH_TARGET_5',sprintf("Find pages tha
 if(!defined('SEARCH_TIPS_TITLE')) define('SEARCH_TIPS_TITLE', 'Search Tips');
 if(!defined('SEARCH_TIPS_UTF8_COMPAT_TITLE')) define('SEARCH_TIPS_UTF8_COMPAT_TITLE', 'Search Tips');
 if(!defined('SEARCH_TIPS')) define('SEARCH_TIPS', '<br /><br /><hr /><br /><strong>'.SEARCH_TIPS_TITLE.':</strong><br /><br />'
+    ."<i>Note: By default, searches are limited to text strings greater
+    than 4 characters. For searches involving search strings shorter than
+    this, please use the * operator (see below).</i><br/><br/>"
 	.'<div class="indent"><tt>'.SEARCH_WORD_1.' '.SEARCH_WORD_2.'</tt></div>'
 	.SEARCH_TARGET_1.'<br /><br />'
 	.'<div class="indent"><tt>'.'+'.SEARCH_WORD_1.' '.'+'.SEARCH_WORD_3.'</tt></div>'
