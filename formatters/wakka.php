@@ -693,14 +693,14 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 		// forced links
 		// \S : any character that is not a whitespace character
 		// \s : any whitespace character
-		else if(preg_match("/^\[\[(.*?)\]\]$/su", $thing, $matches))
+		else if(preg_match("/^\[\[\s*(.*?)\s*\]\]$/su", $thing, $matches))
 		{
 			$contents = $matches[1];
 			if(empty($contents) || !isset($contents))
 				return "";
 
 			// Case 1: Interwiki link followed by | separator
-			if(preg_match("/^([[:upper:]][[:alpha:]]+[:].*?)\s*\|\s*(.*?)$/su", $contents, $matches))
+			if(preg_match("/^\s*([[:upper:]][[:alpha:]]+[:].*?)\s*\|\s*(.*?)\s*$/su", $contents, $matches))
 			{
 				$url = $matches[1];
 				$text = $matches[2];
@@ -726,16 +726,11 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 
 			// Case 4: Deprecated...(first part is a string
 			// followed by one or more whitespaces)
-			else if(preg_match("/^(.*?)\s+([^|]+)$/su", $contents, $matches) && 
-					preg_match("/^[[:alpha:]][[:alnum:]]*$/u", $matches[1]))
-			{
-				$url = $matches[1]; 
-				$text = $matches[2];
-			}
+            // Removed 1.3.7 as it broke page names with embedded ws 
 
 			// Case 5: If no "|" exists in $contents, assume the match
 			// refers to an internal page
-			else if(preg_match("/^([^\|]+)$/s", $contents, $matches))
+			else if(preg_match("/^\s*([^\|]+)\s*$/s", $contents, $matches))
 			{
 				$url = $matches[1];
 				$text = $matches[1];
@@ -743,7 +738,7 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 
 			// Case 6: If a "|" symbol exists, assume two parts, a URL and
 			// text
-			else if(preg_match("/^(.*?)\s*\|\s*(.*?)$/su", $contents, $matches))
+			else if(preg_match("/^\s*(.*?)\s*\|\s*(.*?)\s*$/su", $contents, $matches))
 			{
 				if (!isset($matches[1])) $matches[1] = '';
 				if (!isset($matches[2])) $matches[2] = '';
