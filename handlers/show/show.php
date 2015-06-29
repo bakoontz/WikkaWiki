@@ -53,11 +53,15 @@ echo '>'."\n";
 
 if (!$this->HasAccess('read'))
 {
+    // Set HTTP 403 error
+    header('Content-Type: text/html; charset=utf-8', true, 403);
 	echo '<p><em class="error">'.T_("You are not allowed to read this page.").'</em></p>';
 	echo "\n".'</div><!--closing page content-->'."\n";
 }
 else if(!$this->IsWikiName($this->GetPageTag()))
 {
+    // Set HTTP 404 error 
+    header('Content-Type: text/html; charset=utf-8', true, 404);
 	echo '<p><em class="error">'.sprintf(T_("This page name is invalid. Valid page names must not contain the characters %s."), SHOW_INVALID_CHARS).'</em></p>';
 	echo "\n".'</div><!--closing page content-->'."\n";
 }
@@ -66,6 +70,8 @@ else
 	if (!$this->page)
 	{
 		$createlink = '<a href="'.$this->Href('edit').'">'.T_("create").'</a>';
+        // Set HTTP 404 error 
+        header('Content-Type: text/html; charset=utf-8', true, 404);
 		echo '<p>'.sprintf(T_("This page doesn't exist yet. Maybe you want to %s it?"),$createlink).'</p>'."\n";
 		echo '</div><!--closing page content-->'."\n";
 	}

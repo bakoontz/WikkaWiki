@@ -703,7 +703,8 @@ if(0 != $wakkaConfig['enable_breadcrumbs'])
 	$wakka->AddBreadcrumb($page);
 }
 
-# Add Content-Type header (can be overridden by handlers)
+# Add Content-Type header (can be overridden by handlers; PHP default is to
+# replace previous headers that may have been set)
 header('Content-Type: text/html; charset=utf-8');
 
 $wakka->Run($page, $handler);
