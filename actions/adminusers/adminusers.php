@@ -186,14 +186,15 @@ if ($this->IsAdmin($this->GetUser()))
 		if($this->GetSafeVar('user', 'post') != null)
 		{
 			include_once($this->BuildFullpathFromMultipath('..'.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'libs'.DIRECTORY_SEPARATOR.'admin.lib.php', $this->GetConfigValue('action_path')));
-			$status = DeleteUser($this, $this->GetSafeVar('user', 'post'));
+			#$status = DeleteUser($this, $this->GetSafeVar('user', 'post'));
+            $this->Redirect($this->Href(), $this->GetSafeVar('user','post'));
 			if(false===$status)
 			{
 				$this->Redirect($this->Href(), T_("Sorry, could not delete user. Please check your admin settings"));
 			}
 			else
 			{
-				$this->Redirect($this->Href(), T_("User has been sucessfully deleted"));
+				$this->Redirect($this->Href(), T_("User has been successfully deleted"));
 			}
 		}
 	}
@@ -414,7 +415,6 @@ if ($this->IsAdmin($this->GetUser()))
 				'		<th'.(($c_color == 1)? ' class="c1"' : '').' title="'.T_("Owned Pages").'"><img src="images/icons/keyring.png" class="icon" alt="O"/></th>'."\n".
 				'		<th'.(($c_color == 1)? ' class="c2"' : '').' title="'.T_("Edits").'"><img src="images/icons/edit.png" class="icon" alt="E"/></th>'."\n".
 				'		<th'.(($c_color == 1)? ' class="c3"' : '').' title="'.T_("Comments").'"><img src="images/icons/comment.png" class="icon" alt="C"/></th>'."\n".
-				'		<th>'.T_("Actions").'</th>'."\n".
 	 		 	'	</tr>'."\n".
 	 		 	'</thead>'."\n";
 	
@@ -434,17 +434,6 @@ if ($this->IsAdmin($this->GetUser()))
 				$changeslink = ($numchanges > 0)? '<a title="'.sprintf(T_("Display page edits by %s (%d)"),$user['name'],$numchanges).'" href="'.$this->Href('','','user='.$user['name'].'&amp;action=changes').'">'.$numchanges.'</a>' : '0';
 				$commentslink = ($numcomments > 0)? '<a title="'.sprintf(T_("Display comments by %s (%d)"),$user['name'],$numcomments).'" href="'.$this->Href('','','user='.$user['name'].'&amp;action=comments').'">'.$numcomments.'</a>' : '0';
 
-				// build handler links
-				// Disable delete link if user is admin
-				$deleteuser = '';
-				if(!$this->IsAdmin($user['name']))
-				{
-					$deleteuser .= '<input type="submit" value="'.T_("Delete").'" name="submit" />';
-					$deleteuser .= '<input type="hidden" name="user" value="'.$user['name'].'"/>';
-					//$deleteuser = '<a title="'.sprintf(T_("Remove user %s"), $user['name']).'" href="'.$this->Href('','','user='.$user['name'].'&amp;action=delete').'">'.T_("delete").'</a>';
-				}
-				//$feedbackuser = '<a title="'.sprintf(ADMINUSERS_ACTION_FEEDBACK_LINK_TITLE, $user['name']).'" href="'.$this->Href('','','user='.$user['name'].'&amp;action=feedback').'">'.ADMINUSERS_ACTION_FEEDBACK_LINK.'</a>'; #to be added in 1.1.7, see #608
-	
 				// build table body
 				$data_table .= '<tbody>'."\n";
 				if ($r_color == 1)
@@ -463,7 +452,6 @@ if ($this->IsAdmin($this->GetUser()))
 					'		<td class="number'.(($c_color == 1)? ' c1' : '').'">'.$ownedlink.'</td>'."\n".  #set column color
 					'		<td class="number'.(($c_color == 1)? ' c2' : '').'">'.$changeslink.'</td>'."\n". #set column color
 					'		<td class="number'.(($c_color == 1)? ' c3' : '').'">'.$commentslink.'</td>'."\n".   #set column color
-					'		<td class="actions">'.$deleteuser.'</td>'."\n". 
 	 				'	</tr>'."\n".
 	 				'</tbody>'."\n";
 	
