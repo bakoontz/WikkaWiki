@@ -367,7 +367,7 @@ $wakkaDefaultConfig = array(
 	'max_new_comment_urls'		=> '6',
 	'max_new_feedback_urls'		=> '6',
 	'utf8_compat_search'		=> '0',
-	'enable_breadcrumbs'		=> '1',
+	'enable_breadcrumbs'		=> '0',
 	'breadcrumb_node_delimiter' => '>',
 	'num_breadcrumb_nodes'		=> '5'
 	);
