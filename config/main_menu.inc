@@ -1,6 +1,6 @@
-[[CategoryCategory Categories]]
+[[CategoryCategory|Categories]]
 PageIndex
 RecentChanges
 RecentlyCommented
-[[UserSettings Login/Register]]
+[[UserSettings|Login/Register]]
 {{searchform}}

@@ -1,8 +1,8 @@
-[[CategoryCategory Categories]]
+[[CategoryCategory|Categories]]
 PageIndex
 RecentChanges
 RecentlyCommented
-[[UserSettings Settings]]
+[[UserSettings|Settings]]
 You are {{whoami}}
 {{searchform}}
 {{logout}}
