@@ -31,7 +31,13 @@ $tag = $this->GetPageTag();
 // cancel operation and return to the page
 if ($this->GetSafeVar('cancel', 'post') == T_("Cancel"))
 {
-	$this->Redirect($this->Href());
+	// redirect back to AdminPages if delete was triggered from there, or back to page not to be deleted.
+	if (isset($_POST['redirect_page']) && $this->existsPage($_POST['redirect_page']) && 'AdminPages' == $_POST['redirect_page'])
+	{
+		$this->Redirect($this->Href('', $_POST['redirect_page']));
+	} else {
+		$this->Redirect($this->Href());
+	}
 }
 
 if ($this->IsAdmin() || ($this->UserIsOwner($tag) && (bool) $this->GetConfigValue('owner_delete_page')))
