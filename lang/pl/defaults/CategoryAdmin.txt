@@ -8,4 +8,4 @@ Ta kategoria zawiera strony dotyczÄ…ce administrowania tym systemem wiki. TworzÄ
 
 
 ----
-[[CategoryCategory Lista wszystkich kategorii]]
+[[CategoryCategory | Lista wszystkich kategorii]]

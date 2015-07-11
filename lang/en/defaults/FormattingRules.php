@@ -382,7 +382,7 @@ printf('
 ', T_('Add an image with a link (see instructions above)'));
 printf('---');
 printf('
-~- %s ([[InterWiki %s]]): --- --- ##""WikiPedia:WikkaWiki""## --- WikiPedia:WikkaWiki --- --- ##""Google:CSS""## --- Google:CSS --- --- ##""Thesaurus:%s""## --- Thesaurus:%s --- ---
+~- %s ([[InterWiki | %s]]): --- --- ##""WikiPedia:WikkaWiki""## --- WikiPedia:WikkaWiki --- --- ##""Google:CSS""## --- Google:CSS --- --- ##""Thesaurus:%s""## --- Thesaurus:%s --- ---
 ', T_('Add an interwiki link'), T_('browse the list of available interwiki tags'), T_('Happy'), T_('Happy'));
 printf('--- ---');
 printf('===%s===', T_('9. Tables'));

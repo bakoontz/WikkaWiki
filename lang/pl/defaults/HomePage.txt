@@ -1,24 +1,35 @@
 {{checkversion}}
 {{image url="images/wikka_logo.jpg" alt="wikka logo" title="Witaj na swojej własnej stronie WikkaWiki"}}
 
-Dziękujemy, że zdecydowałeś się zainstalować system Wikka. Używasz wersji ##{{wikkaversion}}##. Zapraszamy do przeczytania [[WikkaReleaseNotes listy zmian w tej wersji]].
+Dziękujemy, że zdecydowałeś się zainstalować system Wikka.
+Używasz wersji ##{{wikkaversion}}##. Zapraszamy do przeczytania
+[[WikkaReleaseNotes | listy zmian w tej wersji]].
 
 >>==Bądź na czasie!==
 
-Aby otrzymywać bieżące informacje od deweloperów systemu Wikka, zapisz się do którejś z naszych [[http://wikkawiki.org/WikkaMailingLists list mailingowych]], zasubskrybuj nasz [[http://blog.wikkawiki.org blog]] lub też wejdź na nasz [[http://wikkawiki.org/TheLounge kanał IRC]].
+Aby otrzymywać bieżące informacje od deweloperów systemu Wikka,
+zapisz się do którejś z naszych
+[[http://wikkawiki.org/WikkaMailingLists | list mailingowych]],
+zasubskrybuj nasz [[http://blog.wikkawiki.org | blog]] lub też wejdź
+na nasz [[http://wikkawiki.org/TheLounge | kanał IRC]].
 >>====Rozpoczynanie pracy z ""WikkaWiki""====
 
-Aby rozpocząć edycję, kliknij podwójnie na treści strony lub kliknij na **Edytuj stronę** w stopce. Jeśli nie znasz zasad formatowania artykułów w ""WikkaWiki"", przeczytaj stronę [[FormattingRules Zasady formatowania artykułów]] i poćwicz na [[SandBox stronie testowej]].
+Aby rozpocząć edycję, kliknij podwójnie na treści strony lub
+kliknij na **Edytuj stronę** w stopce. Jeśli nie znasz zasad
+formatowania artykułów w ""WikkaWiki"", przeczytaj stronę
+[[FormattingRules | Zasady formatowania artykułów]] i poćwicz na
+[[SandBox | stronie testowej]].
 
 ====Użyteczne strony====
 
-~-[[FormattingRules Zasady formatowania artykułów]]
-~-[[WikkaDocumentation Dokumentacja]]
-~-[[RecentChanges Strony zmodyfikowane niedawno]]
-~-[[SysInfo Informacja o systemie]]
+~-[[FormattingRules | Zasady formatowania artykułów]]
+~-[[WikkaDocumentation | Dokumentacja]]
+~-[[RecentChanges | Strony zmodyfikowane niedawno]]
+~-[[SysInfo | Informacja o systemie]]
 
-Więcej użytecznych stron znajdziesz w [[CategoryWiki kategorii Wiki]] lub w [[PageIndex indeksie stron]].
+Więcej użytecznych stron znajdziesz w [[CategoryWiki | kategorii
+Wiki]] lub w [[PageIndex | indeksie stron]].
 
 ====Potrzebujesz dalszej pomocy?====
 
-Znajdziesz ją na [[http://wikkawiki.org stronie WikkaWiki]]!
+Znajdziesz ją na [[http://wikkawiki.org | stronie WikkaWiki]]!

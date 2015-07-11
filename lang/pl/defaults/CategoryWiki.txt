@@ -8,4 +8,4 @@ Ta kategoria zawiera strony dotyczące systemów wiki i tematów z tym związany
 
 
 ----
-[[CategoryCategory Lista wszystkich kategorii]]
+[[CategoryCategory | Lista wszystkich kategorii]]

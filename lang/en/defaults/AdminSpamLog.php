@@ -6,10 +6,10 @@ $str = <<<EOD
 ~-AdminBadWords (to maintain the list of words for the content filter)
 **documentation and development**
 ~-WikkaBetaFeatures
-~-[[SpamLogAction SpamLog Action]]
+~-[[SpamLogAction | SpamLog Action]]
 
 ''While this action itself is still in beta, the 'spam log' this action allows to view, maintain and manage is very much "live" and **actually used for logging rejected "spammy submissions"**, which can be comments, pages or feedback.'' 
->>This is a test page for the (beta) [[SpamLogAction SpamLog]] action.
+>>This is a test page for the (beta) [[SpamLogAction | SpamLog]] action.
 
 Current data are a little bit "lacking" since during development the format changed somewhat. (The edit functionality was used to add placeholders for missing data; from now on new data should be writting in this format.)
 

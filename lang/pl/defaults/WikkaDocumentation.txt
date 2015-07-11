@@ -1,3 +1,4 @@
 =====Dokumentacja systemu Wikka=====
 
-Pełną i aktualną dokumentację systemu Wikka Wiki znajdziesz na [[http://docs.wikkawiki.org/WikkaDocumentation stronach pomocy]] (w języku angielskim).
+Pełną i aktualną dokumentację systemu Wikka Wiki znajdziesz na
+[[http://docs.wikkawiki.org/WikkaDocumentation | stronach pomocy]] (w języku angielskim).

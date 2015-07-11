@@ -3,7 +3,7 @@
 
 In the trac as [[Ticket:28]].
  
-As part of my proposal for a general overhaul of the [[WikkaMenus menu management system]] in WikkaWiki, I suggest we replace the current system-generated items that occur in the main menu and footer menu with a series of **menulets**, i.e. mini-actions generating content for menu items.
+As part of my proposal for a general overhaul of the [[WikkaMenus | menu management system]] in WikkaWiki, I suggest we replace the current system-generated items that occur in the main menu and footer menu with a series of **menulets**, i.e. mini-actions generating content for menu items.
 Any of these mini-actions can of course be used in the page body as well.
 
 Here's a list of potential menulets and their output, that I've uploaded to this server. 
@@ -146,7 +146,7 @@ echo $commentsdata["num"];
 ?>
 %%
 
-Compact version using the ##[[WikkaCountingRecords getCount()]]## method:
+Compact version using the ##[[WikkaCountingRecords | getCount()]]## method:
 
 %%(php)
 <?php
@@ -175,7 +175,7 @@ echo $this->Link('MyPages', '', $count,'','','Display a list of the pages you cu
 ?>
 %%
 
-Compact version using the ##[[WikkaCountingRecords getCount()]]## method:
+Compact version using the ##[[WikkaCountingRecords | getCount()]]## method:
 
 %%(php)
 <?php
@@ -204,7 +204,7 @@ echo $this->Link('PageIndex', '', $pagedata['num'],'','','Display an alphabetica
 ?>
 %%
 
-Compact version using the ##[[WikkaCountingRecords getCount()]]## method:
+Compact version using the ##[[WikkaCountingRecords | getCount()]]## method:
 
 %%(php)
 <?php
@@ -222,7 +222,7 @@ echo $this->Link('PageIndex', '', $count,'','','Display an alphabetical page ind
 
 Prints the total number of referrers to the wiki: {{countreferrers}}
 
-Compact version using the ##[[WikkaCountingRecords getCount()]]## method:
+Compact version using the ##[[WikkaCountingRecords | getCount()]]## method:
 
 %%(php)
 <?php
@@ -248,7 +248,7 @@ echo $userdata["num"];
 ?>
 %%
 
-Compact version using the ##[[WikkaCountingRecords getCount()]]## method:
+Compact version using the ##[[WikkaCountingRecords | getCount()]]## method:
 
 %%(php)
 <?php
@@ -867,7 +867,7 @@ Installed as a beta feature on this site.
 ----
 ==##""{{randompage}}""##==//like the "Random Article" on wikipedia...//
 ~ ##""{{randompage}}""##
-~~ Prints a link to a random page on this wiki. e.g. [[HomePage RandomPage]]
+~~ Prints a link to a random page on this wiki. e.g. [[HomePage | RandomPage]]
 ~ ##""{{randompage title="Random"}}""##
 ~~ Change the title, use ##""{{randompage title=&#34;&#34;}}""## to display the real pagename.
 ~ ##""{{randompage pos="ActionInfo, HandlerInfo, FunctionInfo"}}""##

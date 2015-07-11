@@ -4,5 +4,5 @@ printf(T_('This category links to pages for wiki administration.'));
 printf('--- --- ----');
 printf('{{category}}');
 printf('--- --- ----');
-printf('[[CategoryCategory %s]]', T_('List of all categories'));
+printf('[[CategoryCategory | %s]]', T_('List of all categories'));
 ?>

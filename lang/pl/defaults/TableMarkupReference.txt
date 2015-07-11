@@ -1,7 +1,8 @@
 ======Wikka Table Markup Reference======
 >>==See also:==
 ~-For an informal introduction to this markup and several examples consult this server's TableMarkup page.
-~-Updated versions of this page can be found on the [[Docs:TableMarkupReference Wikka documentation server]].
+~-Updated versions of this page can be found on the
+[[Docs:TableMarkupReference | Wikka documentation server]].
 >>
 ==== 1. Table Markup Scheme ====
 
@@ -18,7 +19,8 @@ The generic markup for table elements follows this scheme:
 ~1)**Opening delimiter** --- **##{{color fg="#F00" text="|*|"}}##** is any of the delimiters described in the //elements table// below.
 ~1)**Attributes** --- **##{{color fg="blue" text="(attribute parameters)"}}##** is an optional series of ##parameter:value## declarations enclosed in brackets. Valid parameters are described in the //attribute table// below. Multiple parameter declarations can be separated with a semicolon (**##;##**).
 ~1)**Style** --- **##{{color fg="green" text="{style parameters}"}}##** is an optional series of CSS style declarations enclosed in braces. Multiple style declarations can be separated with a semicolon (**##;##**).
-~1)**Content** --- **##content##** can be any valid content for that element (including [[Docs:TextFormatting formatted text]]).
+~1)**Content** --- **##content##** can be any valid content for that
+element (including [[Docs:TextFormatting | formatted text]]).
 ~1)**Closing delimiter** --- **##{{color fg="#F00" text="||"}}##** is the standard delimiter.
 
 ==Note:==

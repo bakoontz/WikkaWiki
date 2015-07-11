@@ -4,5 +4,5 @@ printf(T_('This Category will contain links to pages talking about Wikis and Wik
 printf('--- --- ---- ---');
 printf('{{Category col="3"}}');
 printf('--- --- ----');
-printf('[[CategoryCategory %s]]', T_('List of all categories'));
+printf('[[CategoryCategory | %s]]', T_('List of all categories'));
 ?>

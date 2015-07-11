@@ -1,7 +1,7 @@
 ======Zasady formatowania stron w systemie Wikka======
 
 <<**Uwaga:** Tekst zawarty między podwójnymi cudzysłowami nie jest formatowany.<<::c::
-Po przeczytaniu niniejszego poradnika, możesz poćwiczyć na [[SandBox stronie testowej]].
+Po przeczytaniu niniejszego poradnika, możesz poćwiczyć na [[SandBox | stronie testowej]].
 ----
 ===1. Formatowanie tekstu===
 
@@ -181,14 +181,26 @@ Wymagany jest jedynie parametr ##url## oraz ##alt##, pozostałe są opcjonalne. 
 
 Istnieją trzy możliwości tworzenia odnośników do stron **wewnątrz wiki**: ---
 ~1) wstaw nazwę strony (##""WikiName""##): --- --- ##""FormattingRules""## --- FormattingRules --- ---
-~1) możesz dodać własny tekst dla odnośnika przez ujęcie go w nawiasy kwadratowe ##""[[""## i ##""]]""## (wewnątrz nawiasów wszystko po pierwszej spacji będzie traktowane jak tekst dla odnośnika): --- --- ##""[[FormattingRules Zasady formatowania artykułów w systemie Wikka]]""## --- [[FormattingRules Zasady formatowania stron w systemie Wikka]] --- ---
+~1) możesz dodać własny tekst dla odnośnika przez ujęcie go w
+nawiasy kwadratowe ##""[[""## i ##""]]""## (wewnątrz nawiasów
+wszystko po pierwszej spacji będzie traktowane jak tekst dla
+odnośnika): --- --- ##""[[FormattingRules | Zasady formatowania
+artykułów w systemie Wikka]]""## --- [[FormattingRules | Zasady formatowania stron w systemie Wikka]] --- ---
 ~1) wstaw grafikę z odnośnikiem (patrz instrukcje wyżej).
 
 Aby wstawić **odnośnik do innych stron** (spoza wiki): ---
 ~1) wpisz adres w treści strony: --- --- ##""http://www.example.com""## --- http://www.example.com --- --- 
-~1) możesz dodać własny tekst odnośnika przez ujęcie go w nawiasy kwadratowe ##""[[""## i ##""]]""## (wewnątrz nawiasów wszystko po pierwszej spacji będzie traktowane jak tekst dla odnośnika): --- --- ##""[[http://example.com/mandarynki/ Strona o mandarynkach]]""## --- [[http://example.com/mandarynki/ Strona o mandarynkach]] --- --- ##""[[mail@example.com Napisz do mnie!]]""## --- [[mail@example.com Napisz do mnie!]] --- ---
-~1) wstaw link typu //interwiki// (zobacz [[InterWiki listę stron dostępnych przez interwiki]]): --- --- ##""Wikipedia:WikkaWiki""## --- Wikipedia:WikkaWiki --- --- ##""Google:CSS""## --- Google:CSS --- --- ##""Thesaurus:Happy""## --- Thesaurus:Happy --- ---
-~1) możesz dodać własny tekst dla odnośnika analogicznie jak powyżej: --- --- ##""[[Wikipedia:WikkaWiki Co mówi Wikipedia na temat WikkaWiki?]]""##  --- [[Wikipedia:WikkaWiki Co mówi Wikipedia na temat WikkaWiki?]] 
+~1) możesz dodać własny tekst odnośnika przez ujęcie go w
+nawiasy kwadratowe ##""[[""## i ##""]]""## (wewnątrz nawiasów
+wszystko po pierwszej spacji będzie traktowane jak tekst dla
+odnośnika): --- --- ##""[[http://example.com/mandarynki/ | Strona o
+mandarynkach]]""## --- [[http://example.com/mandarynki/ | Strona o
+mandarynkach]] --- --- ##""[[mail@example.com Napisz do mnie!]]""##
+--- [[mail@example.com | Napisz do mnie!]] --- ---
+~1) wstaw link typu //interwiki// (zobacz [[InterWiki listę | stron dostępnych przez interwiki]]): --- --- ##""Wikipedia:WikkaWiki""## --- Wikipedia:WikkaWiki --- --- ##""Google:CSS""## --- Google:CSS --- --- ##""Thesaurus:Happy""## --- Thesaurus:Happy --- ---
+~1) możesz dodać własny tekst dla odnośnika analogicznie jak
+powyżej: --- --- ##""[[Wikipedia:WikkaWiki | Co mówi Wikipedia na
+temat WikkaWiki?]]""##  --- [[Wikipedia:WikkaWiki | Co mówi Wikipedia na temat WikkaWiki?]] 
 ~1) wstaw grafikę z odnośnikiem (patrz niżej).
 
 ===9. Tabele===
@@ -313,7 +325,7 @@ echo "Hello, World!";
 
 ===13. Mindmapy===
 
-Wikka obsługuje mindmapy w formacie [[Wikka:FreeMind mindmapy w formacie FreeMind]]. Umieścić mindmapę w artykule można na dwa sposoby.
+Wikka obsługuje mindmapy w formacie [[Wikka:FreeMind | mindmapy w formacie FreeMind]]. Umieścić mindmapę w artykule można na dwa sposoby.
 
 **Sposób 1**: Umieścić plik z mindmapą na serwerze oraz wstawić odnośnik do strony, np: --- ##""http://yourdomain.com/freemind/freemind.mm""## --- Nie ma potrzeby stosowania dodatkowego formatowania.
 

@@ -2,8 +2,8 @@
 $str = <<<EOD
 =====Wikka Table Markup Guide=====
 >>==See also:==
-~-For earlier Wikka versions, check the [[Docs:TableActionInfo table]] action
-~-Updated versions of this page can be found on the [[Docs:TableMarkup Wikka documentation server]] 
+~-For earlier Wikka versions, check the [[Docs:TableActionInfo | table]] action
+~-Updated versions of this page can be found on the [[Docs:TableMarkup | Wikka documentation server]] 
 ~-For a more formal description, check this server's TableMarkupReference page.
 >>
 As of ##1.2##, Wikka introduces a flexible markup for data tables. Any kind of tables allowed by XHTML can be created using this markup, from the most basic examples (e.g. simple rows of cells) to complex tables with full support for accessibility options.::c::
@@ -92,7 +92,9 @@ Usually tables are introduced with a caption that describes what the table conta
 
 ====4. Spans====
 
-**Spans** are used to combine multiple cells or multiple headings vertically or horizontally and are created using the following [[TableMarkupReference attribute parameters]]:
+**Spans** are used to combine multiple cells or multiple headings
+vertically or horizontally and are created using the following
+[[TableMarkupReference | attribute parameters]]:
 
 ##""||""(''span options'')Element content""||""##
 
@@ -143,7 +145,7 @@ Column and row spans can be combined to created funky table layouts:
 
 ====5. Formatting text within tables====
 
-You can use any kind of basic [[Docs:TextFormatting Wikka markup]] to render text within tables.
+You can use any kind of basic [[Docs:TextFormatting | Wikka markup]] to render text within tables.
 The following example adds basic formatting to cell content:
 
 ##""|?|Using text formatting within tables||""##
@@ -156,7 +158,8 @@ The following example adds basic formatting to cell content:
 
 ====6. Adding actions and images within tables====
 
-Simple, content-generating [[Docs:UsingActions actions]] (including [[Docs:AddingImages images]]) can be added within table cells and headings.
+Simple, content-generating [[Docs:UsingActions | actions]] (including
+[[Docs:AddingImages | images]]) can be added within table cells and headings.
 
 ##""|?|Using actions within tables||""##
 ##""||This wiki contains {{countpages}} pages||""##
@@ -170,31 +173,31 @@ Simple, content-generating [[Docs:UsingActions actions]] (including [[Docs:Addin
 
 ====7. Adding links within tables====
 
-All the available options to create [[Docs:AddingLinks links]] can be used within table cells or headings:
+All the available options to create [[Docs:AddingLinks | links]] can be used within table cells or headings:
 
 ##""|?|Adding links within tables||""##
 ##""||Camelcase links: SandBox||""##
 ##""||Escaped camelcase links: &quot;&quot;SandBox&quot;&quot; escaped||""##
-##""||Forced links: [[HomePage main]]||""##
+##""||Forced links: [[HomePage | main]]||""##
 ##""||Interwiki links: Wikipedia:Wikka||""##
-##""||Forced interwiki links: [[Wikipedia:Wikka Wikka article on Wikipedia]]||""##
+##""||Forced interwiki links: [[Wikipedia:Wikka | Wikka article on Wikipedia]]||""##
 ##""||External links: http://www.example.com ||""##
-##""||Forced external links: [[http://www.example.com Example.com]]||""##
+##""||Forced external links: [[http://www.example.com | Example.com]]||""##
 ##""||Image links: {{image url="images/wizard.gif" alt="wizard" title="Display an index of pages on this wiki" link="PageIndex"}}||""##
 
 |?|Adding links within tables||
 ||Camelcase links: SandBox||
 ||Escaped camelcase links: ""SandBox escaped""||
-||Forced links: [[HomePage main]]||
+||Forced links: [[HomePage | main]]||
 ||Interwiki links: Wikipedia:Wikka||
-||Forced interwiki links: [[Wikipedia:Wikka Wikka article on Wikipedia]]||
+||Forced interwiki links: [[Wikipedia:Wikka | Wikka article on Wikipedia]]||
 ||External links: http://www.example.com ||
-||Forced external links: [[http://www.example.com Example.com]]||
+||Forced external links: [[http://www.example.com | Example.com]]||
 ||Image links: {{image url="images/wizard.gif" alt="wizard" title="Display an index of pages on this wiki" link="PageIndex"}}||
 
 ====8. Adding HTML within tables====
 
-You can also use [[Docs:UsingHTML embedded HTML]] in table elements:
+You can also use [[Docs:UsingHTML | embedded HTML]] in table elements:
 
 ##""|?|Embedding HTML within tables||""##
 ##""||Here's some superscript: &quot;&quot;a&lt;sup&gt;2+1&lt;/sup&gt;&quot;&quot;||""##
@@ -208,7 +211,7 @@ You can also use [[Docs:UsingHTML embedded HTML]] in table elements:
 
 ====9. Adding a touch of style====
 
-The table markup introduces a new [[TableMarkupReference style selector]]. CSS style options can be added to any element by enclosing them within **single braces**, right before the element content, e.g.:
+The table markup introduces a new [[TableMarkupReference | style selector]]. CSS style options can be added to any element by enclosing them within **single braces**, right before the element content, e.g.:
 ##""||""{''style options''}Element content""||""##
 
 For example, to render a cell with **red background** and **white text color**, you can do the following:
@@ -247,7 +250,9 @@ You can also apply style to **headings** and **captions**:
 |=|{color:#000; font-size:150%; font-style:italic; font-family:Georgia, Hoefler Text, Georgia, serif; font-weight:normal; line-height:150%}Emphemeral Quibus|=|
 ||Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Duis auctor auctor pede.||
 
-Please note that **style parameters should always follow attribute parameters**, when both are specified for an element (see the [[TableMarkupReference table markup reference]]):
+Please note that **style parameters should always follow attribute
+parameters**, when both are specified for an element (see the
+[[TableMarkupReference | table markup reference]]):
 
 ##""|?|Give priority||""##
 ##""||(x:2;y:2){background-color:pink}2x2||(x:2){background-color:lightblue}2x1||(y:2){background-color:lightyellow}1x2||""##
