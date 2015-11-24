@@ -32,18 +32,21 @@ class LinkMigrator {
         $db_archive_file = sprintf('%s-backup.%s.sql', $config['mysql_database'], date('Ymd'));
         $mysqldump_f = 'mysqldump %s --user=%s --password=%s --single-transaction > /tmp/%s';
 
-        # Is exec the way to go here?
-        $result = exec(sprintf($mysqldump_f,
-                               $config['mysql_database'],
-                               $config['mysql_user'],
-                               $config['mysql_password'],
-                               $db_archive_file));
+        $command = sprintf($mysqldump_f,
+                           $config['mysql_database'],
+                           $config['mysql_user'],
+                           $config['mysql_password'],
+                           $db_archive_file);
 
-        if ( ! $result ) {
+        # Is exec the way to go here?
+        exec($command, $output, $error_code);
+
+        if ( ! $error_code ) {
             printf("Database %s backed up to /tmp/%s\n", $config['mysql_database'], $db_archive_file);
         }
         else {
-            printf("Database backup failed: %s\n", $result);
+            printf(join("\n", $output));
+            throw new Exception('Database backup failed.');
         }
     }
 
