@@ -4,7 +4,7 @@ $str = <<<EOD
 >>==See also:==
 ~-For earlier Wikka versions, check the [[Docs:TableActionInfo | table]] action
 ~-Updated versions of this page can be found on the [[Docs:TableMarkup | Wikka documentation server]] 
-~-For a more formal description, check this server's TableMarkupReference page.
+~-For a more formal description, check the document server [[Docs:TableMarkupReference TableMarkupReference]] page.
 >>
 As of ##1.2##, Wikka introduces a flexible markup for data tables. Any kind of tables allowed by XHTML can be created using this markup, from the most basic examples (e.g. simple rows of cells) to complex tables with full support for accessibility options.::c::
 
