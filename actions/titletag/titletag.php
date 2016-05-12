@@ -23,7 +23,7 @@
 * @uses		Wakka::htmlspecialchars_ent()
 * @uses     Wakka::AddCustomHeader()
 * @input	string	$string	    mandatory: value of the string enclosed by
-* the titlemeta tag 
+* the title tag 
 * @output	HTML title tag 
 *
 * @documentation  {@link http://docs.wikkawiki.org/TitletagActionInfo}
