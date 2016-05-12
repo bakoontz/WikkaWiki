@@ -4,10 +4,10 @@
 *
 * Specify a name for the meta tag, and the content:
 *
-*     {{meta name="somename" content="blah blah blah"}}
+*     {{metatag name="somename" content="blah blah blah"}}
 *
 * @package		Actions
-* @name		    meta	
+* @name		    metatag
 * @version		$Id$
 * @license		http://www.gnu.org/copyleft/gpl.html GNU General Public License
 * @filesource
@@ -23,7 +23,7 @@
 * of the meta tag 
 * @output	HTML meta tag 
 *
-* @documentation  {@link http://docs.wikkawiki.org/MetaActionInfo}
+* @documentation  {@link http://docs.wikkawiki.org/MetatagActionInfo}
 *
 */
 
