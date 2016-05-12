@@ -358,10 +358,12 @@ printf('
 ', T_('Type a'), T_('works only for page names with no whitespace'));
 printf('---');
 printf('
-~- %s ##""[[""## %s ##""]]""## (%s): --- --- ##""[[SandBox|%s]]""## --- [[SandBox|%s]] --- --- ##""[[SandBox|&#27801;&#31665;]]""## --- [[SandBox|&#27801;&#31665;]] --- ---
-', T_('Add a forced link surrounding the page name by'), T_('and'),
+~- %s ##""[[ target URL or page | description ]]""## (%s): --- --- ##""[[SandBox | %s]]""## --- [[SandBox | %s]] --- --- ##""[[SandBox | &#27801;&#31665;]]""## --- [[SandBox | &#27801;&#31665;]] --- --- ##""[[http://docs.wikkawiki.org | Wikka %s]]""## --- [[http://docs.wikkawiki.org | Wikka %s]] --- --- ##""[[community@wikkawiki.org | Wikka %s]]""## --- [[community@wikkawiki.org | Wikka %s]] --- ---', 
+T_('Add a forced link surrounding the page name by'),
 T_('everything after the | will be shown as description'), T_('Test
-your formatting skills'), T_('Test your formatting skills'));
+your formatting skills'), T_('Test your formatting skills'),
+T_('documentation'), T_('documentation'), T_('community list'),
+T_('community list'));
 printf('---');
 printf('
 ~- %s
@@ -372,10 +374,6 @@ printf('--- ---');
 printf('
 ~- %s: --- --- ##""http://blog.wikkawiki.org""## --- http://blog.wikkawiki.org --- --- 
 ', T_('Type a URL inside the page'));
-printf('---');
-printf('
-~- %s ##""[[""## %s ##""]]""## (%s): --- --- ##""[[http://docs.wikkawiki.org|Wikka %s]]""## --- [[http://docs.wikkawiki.org|Wikka %s]] --- --- ##""[[community@wikkawiki.org|Wikka %s]]""## --- [[community@wikkawiki.org|Wikka %s]] --- ---
-', T_('Add a forced link surrounding the URL by'), T_('and'), T_('everything after the | will be shown as description'), T_('documentation'), T_('documentation'), T_('community list'), T_('community list'));
 printf('---');
 printf('
 ~- %s 
