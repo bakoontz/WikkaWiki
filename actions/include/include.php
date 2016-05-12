@@ -42,9 +42,10 @@ if('' != $page)
 	{
 		if ($this->HasAccess('read', $page)) 
 		{
-	      	$this->config['includes'][] = $page;
-	        	$page = $this->LoadPage($page);
+			$this->config['includes'][] = $page;
+			$page = $this->LoadPage($page);
 			print $this->Format($page['body']);
+			array_pop($this->config['includes']);
 		}
 		else printf('<p class="error">'.T_("You aren't allowed to read included page <tt>%s</tt>")."</p>\n", $orig_page);
 	} 
