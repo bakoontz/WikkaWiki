@@ -118,6 +118,31 @@ Spans can also be applied to rows. A **cell spanning multiple rows** is generate
 ||Cell 5||Cell 6||
 ||Cell 7||Cell 8||Cell 9||
 
+Note that you must account for cells that are "pushed down" when using row spans:
+
+##""|=|     |=|Mon|=|Tue|=|Wed|=|Thu|=|Fri|=|""##
+##""|=|8-9  || ||(y:9) Outreach|| ||(y:9) Outreach|| ||""##
+##""|=|9-10 || || || ||""## <-- reduced by two columns
+##""|=|10-11|| || || ||""##
+##""|=|11-12|| || || ||""##
+##""|=|12-1 || || || ||""##
+##""|=|1-2  || || || ||""##
+##""|=|2-3  ||(y:3) CSCI 102 ||CSCI 101||CSCI 101||""##
+##""|=|3-4  || || ||""## <-- reduced by one column
+##""|=|4-5  || || ||""##
+
+|=|     |=|Mon|=|Tue|=|Wed|=|Thu|=|Fri|=|
+|=|8-9  || ||(y:9) Outreach|| ||(y:9) Outreach|| ||
+|=|9-10 || || || ||
+|=|10-11|| || || ||
+|=|11-12|| || || ||
+|=|12-1 || || || ||
+|=|1-2  || || || ||
+|=|2-3  ||(y:3) CSCI 102 ||CSCI 101||CSCI 101||
+|=|3-4  || || ||
+|=|4-5  || || ||
+
+
 Spans are particularly useful to create **subheadings**:
 
 ##""|?|Fruit production in the last two years||""##

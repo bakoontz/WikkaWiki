@@ -424,7 +424,10 @@ printf('
 ||Cell 3||Cell 4||
 ');
 printf('--- ---');
-printf(T_('Many additional features are available using table markup.  A more comprehensive table markup guide is available on this server\'s TableMarkup page. A complete syntax reference is available on this server\'s TableMarkupReference page.'));
+printf(T_('Many additional features are available using table markup.  A
+more comprehensive table markup guide is available on this server\'s
+TableMarkup page. A complete syntax reference is available on the document
+server [[Docs:TableMarkupReference TableMarkupReference]] page.'));
 printf('--- ---');
 printf('===%s===', T_('10. Colored Text'));
 printf('---');
