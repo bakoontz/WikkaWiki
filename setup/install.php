@@ -592,7 +592,7 @@ case "1.3.6":
 	test("Changing \"default\" theme references to \"classic\" theme ...",  
 	@mysql_query("UPDATE `".$config["table_prefix"]."users` SET theme='classic' WHERE theme='default'", $dblink), __("Already done? OK!"), 0);
 case "1.3.7":
-case "trunk":
+case "master":
 }
 
 // #600: Force reloading of stylesheet.

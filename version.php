@@ -24,8 +24,8 @@
  * version number might result in problems upgrading...please use
  * caution.
  */
-$svn_version = '1.3.7';
-if (!defined('WAKKA_VERSION')) define('WAKKA_VERSION', $svn_version);
+$git_version = 'master';
+if (!defined('WAKKA_VERSION')) define('WAKKA_VERSION', $git_version);
 
 /**
  * Defines the current Wikka patch level. This should be 0 by default, 
