@@ -69,6 +69,12 @@ if(!defined('PATH_DIVIDER')) define('PATH_DIVIDER', ',');
  */
 if (!defined('MINIMUM_PHP_VERSION'))	define('MINIMUM_PHP_VERSION', '5.0');
 if (!defined('MINIMUM_MYSQL_VERSION'))	define('MINIMUM_MYSQL_VERSION', '4.1');
+if (!defined('PHP_VERSION_ID')) {
+    $version = explode('.', PHP_VERSION);
+
+    define('PHP_VERSION_ID', ($version[0] * 10000 + $version[1] * 100 + $version[2]));
+}
+
 /**#@-*/
 // ----------------------------- END BASIC CONSTANTS ---------------------------
 
@@ -372,6 +378,11 @@ $wakkaDefaultConfig = array(
 	'num_breadcrumb_nodes'		=> '5'
 	);
 
+// Enable breadcrumbs for PHP versions >= 5.4
+if(PHP_VERSION_ID >= 50400) {
+	$wakkaDefaultConfig['enable_breadcrumbs'] = 1;
+}
+
 // load config
 $wakkaConfig = array();
 if (file_exists('wakka.config.php')) rename('wakka.config.php', 'wikka.config.php"');	// upgrade from Wakka
@@ -397,7 +408,7 @@ if (isset($wakkaConfig['footer_action'])) //since 1.1.6.4
 {
 	unset($wakkaConfig['footer_action']);
 }
-
+	
 // Remove old stylesheet, #6
 if(isset($wakkaConfig['stylesheet']))
 {
