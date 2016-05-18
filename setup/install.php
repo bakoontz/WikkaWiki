@@ -209,7 +209,6 @@ case "0":
 	'SandBox', 
 	'SysInfo',
 	'TableMarkup',
-	'TableMarkupReference',
 	'TextSearch', 
 	'TextSearchExpanded', 
 	'UserSettings', 
