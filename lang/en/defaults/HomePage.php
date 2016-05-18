@@ -3,6 +3,10 @@ printf('{{image url="images/wikka_logo.jpg" alt="wikka logo" title="%s"}}---', T
 printf('{{checkversion}}---');
 printf(T_('Thanks for installing Wikka! This wiki runs on version %s, patch level %s. You may want to read the %s to learn what\'s new in this release.---'), '##{{wikkaversion}}##', '##{{wikkapatchlevel}}##', '[[WikkaReleaseNotes | '.T_("release notes").']]');
 printf('---');
+printf('---');
+printf(T_('{{color c=\'red\' text=\'NOTE: This version has registrations disabled by default.\'}} You MUST enable user registrations in ##wikka.config.php## (##\'allow_user_registration\' => \'1\',##) to allow access by users other than the administrator set up during installation.'));
+printf('---');
+printf('---');
 printf('>>==%s==', T_('Keep up-to-date'));
 printf(T_('To receive the latest news from the Wikka Development Team, you can sign up to one of our %s, subscribe to our %s or join us for a chat on %s.---'), '[[http://wikkawiki.org/WikkaMailingLists | '.T_('mailing lists').']]', '[[http://blog.wikkawiki.org | Blog]]', '[[http://wikkawiki.org/TheLounge | IRC]]');
 printf('>>====%s====', T_('Getting started'));
