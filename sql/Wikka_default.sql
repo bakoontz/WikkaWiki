@@ -52,7 +52,7 @@ DROP TABLE IF EXISTS `wikka_comments`;
 CREATE TABLE `wikka_comments` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `page_tag` varchar(75) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
-  `time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `time` datetime NOT NULL DEFAULT '1900-01-01 00:00:00',
   `comment` text COLLATE utf8_unicode_ci NOT NULL,
   `user` varchar(75) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `parent` int(10) unsigned DEFAULT NULL,
@@ -109,7 +109,7 @@ CREATE TABLE `wikka_pages` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `tag` varchar(75) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `title` varchar(75) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
-  `time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `time` datetime NOT NULL DEFAULT '1900-01-01 00:00:00',
   `body` mediumtext COLLATE utf8_unicode_ci NOT NULL,
   `owner` varchar(75) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `user` varchar(75) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
@@ -166,7 +166,7 @@ DROP TABLE IF EXISTS `wikka_referrers`;
 CREATE TABLE `wikka_referrers` (
   `page_tag` varchar(75) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `referrer` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
-  `time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `time` datetime NOT NULL DEFAULT '1900-01-01 00:00:00',
   KEY `idx_page_tag` (`page_tag`),
   KEY `idx_time` (`time`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -220,7 +220,7 @@ CREATE TABLE `wikka_users` (
   `revisioncount` int(10) unsigned NOT NULL DEFAULT '20',
   `changescount` int(10) unsigned NOT NULL DEFAULT '50',
   `doubleclickedit` enum('Y','N') COLLATE utf8_unicode_ci NOT NULL DEFAULT 'Y',
-  `signuptime` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `signuptime` datetime NOT NULL DEFAULT '1900-01-01 00:00:00',
   `show_comments` enum('Y','N') COLLATE utf8_unicode_ci NOT NULL DEFAULT 'N',
   `status` enum('invited','signed-up','pending','active','suspended','banned','deleted') COLLATE utf8_unicode_ci DEFAULT NULL,
   `theme` varchar(50) COLLATE utf8_unicode_ci DEFAULT '',

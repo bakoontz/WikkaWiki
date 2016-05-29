@@ -96,7 +96,7 @@ case "0":
 			"id int(10) unsigned NOT NULL auto_increment,".
 			"tag varchar(75) NOT NULL default '',".
 			"title varchar(75) NOT NULL default '',".
-			"time datetime NOT NULL default '0000-00-00 00:00:00',".
+			"time datetime NOT NULL default '1900-01-01 00:00:00',".
 			"body mediumtext NOT NULL,".
 			"owner varchar(75) NOT NULL default '',".
 			"user varchar(75) NOT NULL default '',".
@@ -132,7 +132,7 @@ case "0":
 			"CREATE TABLE ".$config['table_prefix']."referrers (".
 			"page_tag varchar(75) NOT NULL default '',".
 			"referrer varchar(255) NOT NULL default '',".
-			"time datetime NOT NULL default '0000-00-00 00:00:00',".
+			"time datetime NOT NULL default '1900-01-01 00:00:00',".
 			"KEY idx_page_tag (page_tag),".
 			"KEY idx_time (time)".
 			") CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=MyISAM", $dblink), "Already exists?", 0);
@@ -151,7 +151,7 @@ case "0":
 			"revisioncount int(10) unsigned NOT NULL default '20',".
 			"changescount int(10) unsigned NOT NULL default '50',".
 			"doubleclickedit enum('Y','N') NOT NULL default 'Y',".
-			"signuptime datetime NOT NULL default '0000-00-00 00:00:00',".
+			"signuptime datetime NOT NULL default '1900-01-01 00:00:00',".
 			"show_comments enum('Y','N') NOT NULL default 'N',".
 			"status enum('invited','signed-up','pending','active','suspended','banned','deleted'),".
 			"theme varchar(50) default '',".
@@ -165,7 +165,7 @@ case "0":
 			"CREATE TABLE ".$config['table_prefix']."comments (".
 			"id int(10) unsigned NOT NULL auto_increment,".
 			"page_tag varchar(75) NOT NULL default '',".
-			"time datetime NOT NULL default '0000-00-00 00:00:00',".
+			"time datetime NOT NULL default '1900-01-01 00:00:00',".
 			"comment text NOT NULL,".
 			"user varchar(75) NOT NULL default '',".
 			"parent int(10) unsigned default NULL,". 
@@ -306,7 +306,7 @@ case "1.0.6":
 			"CREATE TABLE ".$config['table_prefix']."comments (".
 			"id int(10) unsigned NOT NULL auto_increment,".
 			"page_tag varchar(75) NOT NULL default '',".
-			"time datetime NOT NULL default '0000-00-00 00:00:00',".
+			"time datetime NOT NULL default '1900-01-01 00:00:00',".
 			"comment text NOT NULL,".
 			"user varchar(75) NOT NULL default '',".
 			"PRIMARY KEY  (id),".
@@ -591,9 +591,19 @@ case "1.3.6":
 	test("Changing \"default\" theme references to \"classic\" theme ...",  
 	@mysql_query("UPDATE `".$config["table_prefix"]."users` SET theme='classic' WHERE theme='default'", $dblink), __("Already done? OK!"), 0);
 case "1.3.7":
-case "1.3.8":
+	print("<strong>1.3.7 to 1.3.8 changes:</strong><br />\n");
 	// delete file removed from previous version
 	@unlink('lang/en/defaults/TableMarkupReference.php');
+	// Change datetime default to '1900-01-01' for MySQL > 5.7 compatibility
+	test("Altering pages table structure...",
+		@mysql_query("ALTER TABLE ".$config['table_prefix']."pages CHANGE time time datetime NOT NULL default '1900-01-01 00:00:00'", $dblink), "Failed. ?", 1);
+	test("Altering referrers table structure...",
+		@mysql_query("ALTER TABLE ".$config['table_prefix']."referrers CHANGE time time datetime NOT NULL default '1900-01-01 00:00:00'", $dblink), "Failed. ?", 1);
+	test("Altering users table structure...",
+		@mysql_query("ALTER TABLE ".$config['table_prefix']."users CHANGE signuptime signuptime datetime NOT NULL default '1900-01-01 00:00:00'", $dblink), "Failed. ?", 1);
+	test("Altering comments table structure...",
+		@mysql_query("ALTER TABLE ".$config['table_prefix']."comments CHANGE time time datetime NOT NULL default '1900-01-01 00:00:00'", $dblink), "Failed. ?", 1);
+case "1.3.8":
 case "master":
 }
 
