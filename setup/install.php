@@ -68,9 +68,10 @@ exit;
 
 // test configuration
 print("<h2>Testing Configuration</h2>\n");
-test("Testing MySQL connection settings...", $dblink = @mysql_connect($config["mysql_host"], $config["mysql_user"], $config["mysql_password"]));
+test("Testing DB connection settings...", $dblink = db_connect($config));
+/* 
 test("Looking for database...", @mysql_select_db($config["mysql_database"], $dblink), "The database you configured was not found. Remember, it needs to exist before you can install/upgrade Wakka!\n\nPress the Back button and reconfigure the settings.");
-@mysql_query("SET NAMES 'utf8'", $dblink); // refs #1024 
+*/
 print("<br />\n");
 
 // do installation stuff
@@ -89,9 +90,9 @@ switch ($version)
 case "0":
 	print("<h2>Installing Stuff</h2>");
 	test("Setting up database for UTF-8...", true);
-	@mysql_query( "ALTER DATABASE ".$config['mysql_database']." DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;", $dblink);
+	$dblink->exec("ALTER DATABASE ".$config['dbms_database']." DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;");
 	test("Creating page table...",
-		@mysql_query(
+		db_query(
 			"CREATE TABLE ".$config['table_prefix']."pages (".
 			"id int(10) unsigned NOT NULL auto_increment,".
 			"tag varchar(75) NOT NULL default '',".
@@ -108,9 +109,9 @@ case "0":
 			"KEY idx_time (time),".
 			"KEY idx_owner (owner), ".
 			"KEY idx_latest (latest)".
-			") CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=MyISAM", $dblink), "Already exists?", 0);
+			") CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=MyISAM", NULL, $dblink), "Already exists?", 0);
 	test("Creating ACL table...",
-		@mysql_query(
+		db_query(
 			"CREATE TABLE ".$config['table_prefix']."acls (".
 			"page_tag varchar(75) NOT NULL default '',".
 			"read_acl text NOT NULL,".
@@ -118,32 +119,32 @@ case "0":
 			"comment_read_acl text NOT NULL,".
 			"comment_post_acl text NOT NULL,".
 			"PRIMARY KEY  (page_tag)".
-			") CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=MyISAM", $dblink), "Already exists?", 0);
+			") CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=MyISAM", NULL, $dblink), "Already exists?", 0);
 	test("Creating link tracking table...",
-		@mysql_query(
+		db_query(
 			"CREATE TABLE ".$config['table_prefix']."links (".
 			"from_tag varchar(75) NOT NULL default '',".
 			"to_tag varchar(75) NOT NULL default '',".
 			"UNIQUE KEY from_tag (from_tag,to_tag),".
 			"KEY idx_to (to_tag)".
-			") CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=MyISAM", $dblink), "Already exists?", 0);
+			") CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=MyISAM", NULL, $dblink), "Already exists?", 0);
 	test("Creating referrer table...",
-		@mysql_query(
+		db_query(
 			"CREATE TABLE ".$config['table_prefix']."referrers (".
 			"page_tag varchar(75) NOT NULL default '',".
 			"referrer varchar(255) NOT NULL default '',".
 			"time datetime NOT NULL default '1900-01-01 00:00:00',".
 			"KEY idx_page_tag (page_tag),".
 			"KEY idx_time (time)".
-			") CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=MyISAM", $dblink), "Already exists?", 0);
+			") CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=MyISAM", NULL, $dblink), "Already exists?", 0);
 	test("Creating referrer blacklist table...",
-		@mysql_query(
+		db_query(
 			"CREATE TABLE ".$config['table_prefix']."referrer_blacklist (".
 			"spammer varchar(255) NOT NULL default '',".
 			"KEY idx_spammer (spammer)".
-			") CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=MyISAM", $dblink), "Already exists?", 0);
+			") CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=MyISAM", NULL, $dblink), "Already exists?", 0);
 	test("Creating user table...",
-		@mysql_query(
+		db_query(
 			"CREATE TABLE ".$config['table_prefix']."users (".
 			"name varchar(75) NOT NULL default '',".
 			"password varchar(32) NOT NULL default '',".
@@ -159,9 +160,9 @@ case "0":
 			"challenge varchar(8) default '',". // refs #1023
 			"PRIMARY KEY  (name),".
 			"KEY idx_signuptime (signuptime)".
-			") CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=MyISAM", $dblink), "Already exists?", 0);
+			") CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=MyISAM", NULL, $dblink), "Already exists?", 0);
 	test("Creating comment table...",
-		@mysql_query(
+		db_query(
 			"CREATE TABLE ".$config['table_prefix']."comments (".
 			"id int(10) unsigned NOT NULL auto_increment,".
 			"page_tag varchar(75) NOT NULL default '',".
@@ -174,15 +175,15 @@ case "0":
 			"PRIMARY KEY  (id),".
 			"KEY idx_page_tag (page_tag),".
 			"KEY idx_time (time)".
-			") CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=MyISAM", $dblink), "Already exists?", 0);
+			") CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=MyISAM", NULL, $dblink), "Already exists?", 0);
 	test("Creating session tracking table...",
-		@mysql_query(
+		db_query(
 			"CREATE TABLE ".$config['table_prefix']."sessions (".
 			"sessionid char(32) NOT NULL,".
 			"userid varchar(75) NOT NULL,".
 			"PRIMARY KEY (sessionid, userid),".
 			"session_start datetime NOT NULL".
-			") CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=MyISAM", $dblink), "Already exists?", 0);
+			") CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=MyISAM", NULL, $dblink), "Already exists?", 0);
 
 	update_default_page(array(
 	'_rootpage', 
@@ -229,23 +230,25 @@ case "0":
 	//		use page-specific "ACL" files to create page-specific ACLs (in update_default_page()!).
 	// @@@	use test() function to report actual results instead of assuming success!
 	test("Setting default ACL...", 1);
-	mysql_query("insert into ".$config['table_prefix']."acls set page_tag = 'UserSettings', read_acl = '*', write_acl = '+', comment_read_acl = '*', comment_post_acl = '+'", $dblink);
-	mysql_query("insert into ".$config['table_prefix']."acls set page_tag = 'AdminUsers', read_acl = '!*', write_acl = '!*', comment_read_acl = '!*', comment_post_acl = '!*'", $dblink);
-	mysql_query("insert into ".$config['table_prefix']."acls set page_tag = 'AdminPages', read_acl = '!*', write_acl = '!*', comment_read_acl = '!*', comment_post_acl = '!*'", $dblink);
-	mysql_query("insert into ".$config['table_prefix']."acls set page_tag = 'SysInfo', read_acl = '!*', write_acl = '!*', comment_read_acl = '!*', comment_post_acl = '!*'", $dblink);
-	mysql_query("insert into ".$config['table_prefix']."acls set page_tag = 'WikkaConfig', read_acl = '!*', write_acl = '!*', comment_read_acl = '!*', comment_post_acl = '!*'", $dblink);
-	mysql_query("insert into ".$config['table_prefix']."acls set page_tag = 'DatabaseInfo', read_acl = '!*', write_acl = '!*', comment_read_acl = '!*', comment_post_acl = '!*'", $dblink);
-	mysql_query("insert into ".$config['table_prefix']."acls set page_tag = 'WikkaMenulets', read_acl = '!*', write_acl = '!*', comment_read_acl = '!*', comment_post_acl = '!*'", $dblink);
-	mysql_query("insert into ".$config['table_prefix']."acls set page_tag = 'AdminBadWords', read_acl = '!*', write_acl = '!*', comment_read_acl = '!*', comment_post_acl = '!*'", $dblink);
-	mysql_query("insert into ".$config['table_prefix']."acls set page_tag = 'AdminSpamLog', read_acl = '!*', write_acl = '!*', comment_read_acl = '!*', comment_post_acl = '!*'", $dblink);
+	db_query("insert into ".$config['table_prefix']."acls set page_tag = 'UserSettings', read_acl = '*', write_acl = '+', comment_read_acl = '*', comment_post_acl = '+'", NULL, $dblink);
+	db_query("insert into ".$config['table_prefix']."acls set page_tag = 'AdminUsers', read_acl = '!*', write_acl = '!*', comment_read_acl = '!*', comment_post_acl = '!*'", NULL, $dblink);
+	db_query("insert into ".$config['table_prefix']."acls set page_tag = 'AdminPages', read_acl = '!*', write_acl = '!*', comment_read_acl = '!*', comment_post_acl = '!*'", NULL, $dblink);
+	db_query("insert into ".$config['table_prefix']."acls set page_tag = 'SysInfo', read_acl = '!*', write_acl = '!*', comment_read_acl = '!*', comment_post_acl = '!*'", NULL, $dblink);
+	db_query("insert into ".$config['table_prefix']."acls set page_tag = 'WikkaConfig', read_acl = '!*', write_acl = '!*', comment_read_acl = '!*', comment_post_acl = '!*'", NULL, $dblink);
+	db_query("insert into ".$config['table_prefix']."acls set page_tag = 'DatabaseInfo', read_acl = '!*', write_acl = '!*', comment_read_acl = '!*', comment_post_acl = '!*'", NULL, $dblink);
+	db_query("insert into ".$config['table_prefix']."acls set page_tag = 'WikkaMenulets', read_acl = '!*', write_acl = '!*', comment_read_acl = '!*', comment_post_acl = '!*'", NULL, $dblink);
+	db_query("insert into ".$config['table_prefix']."acls set page_tag = 'AdminBadWords', read_acl = '!*', write_acl = '!*', comment_read_acl = '!*', comment_post_acl = '!*'", NULL, $dblink);
+	db_query("insert into ".$config['table_prefix']."acls set page_tag = 'AdminSpamLog', read_acl = '!*', write_acl = '!*', comment_read_acl = '!*', comment_post_acl = '!*'", NULL, $dblink);
 
 	// Register admin user
 	$challenge = dechex(crc32(time()));
-	$pass_val = md5($challenge.(mysql_real_escape_string($_POST['password'])));
+	$pass_val = md5($challenge.$_POST['password']);
+	$name = $config['admin_users'];
+	$email = $config['admin_email'];
 	// Delete existing admin user in case installer was run twice
-	@mysql_query('delete from '.$config['table_prefix'].'users where name = \''.$config['admin_users'].'\'', $dblink);
+	db_query('delete from '.$config['table_prefix'].'users where name = :name', array(':name' => $name), $dblink);
     test(__('Adding admin user').'...',
-	        @mysql_query("insert into ".$config["table_prefix"]."users set name = '".$config["admin_users"]."', password = '".$pass_val."', email = '".$config["admin_email"]."', signuptime = now(), challenge='".$challenge."'", $dblink), "Hmm!", 0);
+	        db_query("insert into ".$config["table_prefix"]."users set name = :name, password = :pass_val, email = :email, signuptime = now(), challenge= :challenge", array(':name' => $name, ':pass_val' => $pass_val, ':email' => $email, ':challenge' => $challenge), $dblink), "Hmm!", 0);
 
 	// Auto-login wiki admin
 	// Set default cookie path
@@ -268,7 +271,7 @@ case "0":
 case "0.1":
 	print("<strong>Wakka 0.1 to 0.1.1</strong><br />\n");
 	test("Just very slightly altering the pages table...",
-		@mysql_query("alter table ".$config['table_prefix']."pages add body_r text not null default '' after body", $dblink), "Already done? Hmm!", 0);
+		db_query("alter table ".$config['table_prefix']."pages add body_r text not null default '' after body", NULL, $dblink), "Already done? Hmm!", 0);
 	test("Claiming all your base...", 1);
 
 // from 0.1.1 to 0.1.2
@@ -284,11 +287,11 @@ case "0.1.2":
 case "0.1.3-dev":
 	print("<strong>Wakka 0.1.3-dev to Wikka 1.0.0 changes:</strong><br />\n");
 	test("Adding note column to the pages table...",
-		@mysql_query("ALTER TABLE ".$config['table_prefix']."pages ADD note varchar(50) NOT NULL default '' after latest", $dblink), "Failed.", 1);
+		db_query("ALTER TABLE ".$config['table_prefix']."pages ADD note varchar(50) NOT NULL default '' after latest", NULL, $dblink), "Failed.", 1);
 	test("Just slightly altering the pages table...",
-		@mysql_query("alter table ".$config['table_prefix']."pages DROP COLUMN body_r", $dblink), "Already done? Hmm!", 0);
+		db_query("alter table ".$config['table_prefix']."pages DROP COLUMN body_r", NULL, $dblink), "Already done? Hmm!", 0);
 	test("Just slightly altering the users table...",
-		@mysql_query("alter table ".$config['table_prefix']."users DROP COLUMN motto", $dblink), "Already done? Hmm!", 0);
+		db_query("alter table ".$config['table_prefix']."users DROP COLUMN motto", NULL, $dblink), "Already done? Hmm!", 0);
 case "1.0":
 case "1.0.1":
 case "1.0.2":
@@ -302,7 +305,7 @@ case "1.0.5":
 case "1.0.6":
 	print("<strong>1.0.6 to 1.1.0 changes:</strong><br />\n");
 	test("Creating comment table...",
-		@mysql_query(
+		db_query(
 			"CREATE TABLE ".$config['table_prefix']."comments (".
 			"id int(10) unsigned NOT NULL auto_increment,".
 			"page_tag varchar(75) NOT NULL default '',".
@@ -312,65 +315,65 @@ case "1.0.6":
 			"PRIMARY KEY  (id),".
 			"KEY idx_page_tag (page_tag),".
 			"KEY idx_time (time)".
-			") ENGINE=MyISAM", $dblink), "Already done? Hmm!", 1);
+			") ENGINE=MyISAM", NULL, $dblink), "Already done? Hmm!", 1);
 	test("Copying comments from the pages table to the new comments table...",
-		@mysql_query("INSERT INTO ".$config['table_prefix']."comments (page_tag, time, comment, user) SELECT comment_on, time, body, user FROM ".$config['table_prefix']."pages WHERE comment_on != '';", $dblink), "Already done? Hmm!", 1);
+		db_query("INSERT INTO ".$config['table_prefix']."comments (page_tag, time, comment, user) SELECT comment_on, time, body, user FROM ".$config['table_prefix']."pages WHERE comment_on != '';", NULL, $dblink), "Already done? Hmm!", 1);
 	test("Deleting comments from the pages table...",
-		@mysql_query("DELETE FROM ".$config['table_prefix']."pages WHERE comment_on != ''", $dblink), "Already done? Hmm!", 1);
+		db_query("DELETE FROM ".$config['table_prefix']."pages WHERE comment_on != ''", NULL, $dblink), "Already done? Hmm!", 1);
 	test("Removing comment_on field from the pages table...",
-		@mysql_query("ALTER TABLE ".$config['table_prefix']."pages DROP comment_on", $dblink), "Already done? Hmm!", 1);
+		db_query("ALTER TABLE ".$config['table_prefix']."pages DROP comment_on", NULL, $dblink), "Already done? Hmm!", 1);
 	test("Removing comment pages from the ACL table...",
-		@mysql_query("DELETE FROM ".$config['table_prefix']."acls WHERE page_tag like 'Comment%'", $dblink), "Already done? Hmm!", 1);
+		db_query("DELETE FROM ".$config['table_prefix']."acls WHERE page_tag like 'Comment%'", NULL, $dblink), "Already done? Hmm!", 1);
 case "1.1.0":
 	print("<strong>1.1.0 to 1.1.2 changes:</strong><br />\n");
 	test("Dropping current ACL table structure...",
-		@mysql_query("DROP TABLE ".$config['table_prefix']."acls", $dblink), "Already done? Hmm!", 0);
+		db_query("DROP TABLE ".$config['table_prefix']."acls", NULL, $dblink), "Already done? Hmm!", 0);
 	test("Creating new ACL table structure...",
-		@mysql_query(
+		db_query(
 			"CREATE TABLE ".$config['table_prefix']."acls (".
 			"page_tag varchar(75) NOT NULL default '',".
 			"read_acl text NOT NULL,".
 			"write_acl text NOT NULL,".
 			"comment_acl text NOT NULL,".
 			"PRIMARY KEY  (page_tag)".
-			") ENGINE=MyISAM", $dblink), "Already exists?", 1);
+			") ENGINE=MyISAM", NULL, $dblink), "Already exists?", 1);
 case "1.1.2":
 case "1.1.3":
 	print("<strong>1.1.3 to 1.1.3.1 changes:</strong><br />\n");
 	test("Altering pages table structure...",
-		@mysql_query("ALTER TABLE ".$config['table_prefix']."pages CHANGE tag tag varchar(75) NOT NULL default ''", $dblink), "Failed. ?", 1);
+		db_query("ALTER TABLE ".$config['table_prefix']."pages CHANGE tag tag varchar(75) NOT NULL default ''", NULL, $dblink), "Failed. ?", 1);
 	test("Altering pages table structure...",
-		@mysql_query("ALTER TABLE ".$config['table_prefix']."pages CHANGE user user varchar(75) NOT NULL default ''", $dblink), "Failed. ?", 1);
+		db_query("ALTER TABLE ".$config['table_prefix']."pages CHANGE user user varchar(75) NOT NULL default ''", NULL, $dblink), "Failed. ?", 1);
 	test("Altering pages table structure...",
-		@mysql_query("ALTER TABLE ".$config['table_prefix']."pages CHANGE owner owner varchar(75) NOT NULL default ''", $dblink), "Failed. ?", 1);
+		db_query("ALTER TABLE ".$config['table_prefix']."pages CHANGE owner owner varchar(75) NOT NULL default ''", NULL, $dblink), "Failed. ?", 1);
 	test("Altering pages table structure...",
-		@mysql_query("ALTER TABLE ".$config['table_prefix']."pages CHANGE note note varchar(100) NOT NULL default ''", $dblink), "Failed. ?", 1);
+		db_query("ALTER TABLE ".$config['table_prefix']."pages CHANGE note note varchar(100) NOT NULL default ''", NULL, $dblink), "Failed. ?", 1);
 	test("Altering user table structure...",
-		@mysql_query("ALTER TABLE ".$config['table_prefix']."users CHANGE name name varchar(75) NOT NULL default ''", $dblink), "Failed. ?", 1);
+		db_query("ALTER TABLE ".$config['table_prefix']."users CHANGE name name varchar(75) NOT NULL default ''", NULL, $dblink), "Failed. ?", 1);
 	test("Altering comments table structure...",
-		@mysql_query("ALTER TABLE ".$config['table_prefix']."comments CHANGE page_tag page_tag varchar(75) NOT NULL default ''", $dblink), "Failed. ?", 1);
+		db_query("ALTER TABLE ".$config['table_prefix']."comments CHANGE page_tag page_tag varchar(75) NOT NULL default ''", NULL, $dblink), "Failed. ?", 1);
 	test("Altering comments table structure...",
-		@mysql_query("ALTER TABLE ".$config['table_prefix']."comments CHANGE user user varchar(75) NOT NULL default ''", $dblink), "Failed. ?", 1);
+		db_query("ALTER TABLE ".$config['table_prefix']."comments CHANGE user user varchar(75) NOT NULL default ''", NULL, $dblink), "Failed. ?", 1);
 	test("Altering acls table structure...",
-		@mysql_query("ALTER TABLE ".$config['table_prefix']."acls CHANGE page_tag page_tag varchar(75) NOT NULL default ''", $dblink), "Failed. ?", 1);
+		db_query("ALTER TABLE ".$config['table_prefix']."acls CHANGE page_tag page_tag varchar(75) NOT NULL default ''", NULL, $dblink), "Failed. ?", 1);
 	test("Altering links table structure...",
-		@mysql_query("ALTER TABLE ".$config['table_prefix']."links CHANGE from_tag from_tag varchar(75) NOT NULL default ''", $dblink), "Failed. ?", 1);
+		db_query("ALTER TABLE ".$config['table_prefix']."links CHANGE from_tag from_tag varchar(75) NOT NULL default ''", NULL, $dblink), "Failed. ?", 1);
 	test("Altering links table structure...",
-		@mysql_query("ALTER TABLE ".$config['table_prefix']."links CHANGE to_tag to_tag varchar(75) NOT NULL default ''", $dblink), "Failed. ?", 1);
+		db_query("ALTER TABLE ".$config['table_prefix']."links CHANGE to_tag to_tag varchar(75) NOT NULL default ''", NULL, $dblink), "Failed. ?", 1);
 	test("Altering referrers table structure...",
-		@mysql_query("ALTER TABLE ".$config['table_prefix']."referrers MODIFY referrer varchar(150) NOT NULL default ''", $dblink), "Failed. ?", 1);
+		db_query("ALTER TABLE ".$config['table_prefix']."referrers MODIFY referrer varchar(150) NOT NULL default ''", NULL, $dblink), "Failed. ?", 1);
 	test("Creating referrer_blacklist table...",
-		@mysql_query(
+		db_query(
 			"CREATE TABLE ".$config['table_prefix']."referrer_blacklist (".
 			"spammer varchar(150) NOT NULL default '',".
 			"KEY idx_spammer (spammer)".
-			") ENGINE=MyISAM", $dblink), "Already exists? Hmm!", 1);
+			") ENGINE=MyISAM", NULL, $dblink), "Already exists? Hmm!", 1);
 	test("Altering a pages table index...",
-		@mysql_query("alter table ".$config['table_prefix']."pages DROP INDEX tag", $dblink), "Already done? Hmm!", 0);
+		db_query("alter table ".$config['table_prefix']."pages DROP INDEX tag", NULL, $dblink), "Already done? Hmm!", 0);
 	test("Altering a pages table index...",
-		@mysql_query("alter table ".$config['table_prefix']."pages ADD FULLTEXT body (body)", $dblink), "Already done? Hmm!", 0);
+		db_query("alter table ".$config['table_prefix']."pages ADD FULLTEXT body (body)", NULL, $dblink), "Already done? Hmm!", 0);
 	test("Altering a users table index...",
-		@mysql_query("alter table ".$config['table_prefix']."users DROP INDEX idx_name", $dblink), "Already done? Hmm!", 0);
+		db_query("alter table ".$config['table_prefix']."users DROP INDEX idx_name", NULL, $dblink), "Already done? Hmm!", 0);
 case "1.1.3.1":
 case "1.1.3.2":
 	print("<strong>1.1.3.2 to 1.1.3.3 changes:</strong><br />\n");
@@ -432,56 +435,55 @@ case "1.1.6.3":
 		'DatabaseInfo', 
 		'WikiCategory'), $dblink, $config, $lang_defaults_path, $lang_defaults_fallback_path, $upgrade_note);
 	test("Adding status field to users table...",
-	mysql_query("alter table ".$config['table_prefix']."users add column status enum ('invited','signed-up','pending','active','suspended','banned','deleted')"), "Already done? OK!", 0); 
+	db_query("alter table ".$config['table_prefix']."users add column status enum ('invited','signed-up','pending','active','suspended','banned','deleted')", NULL, $dblink), "Already done? OK!", 0); 
 	test("Adding sessions tracking table...",
-	mysql_query("create table ".$config['table_prefix']."sessions (sessionid char(32) NOT NULL, userid varchar(75) NOT NULL, PRIMARY KEY (sessionid, userid), session_start datetime NOT NULL)"),	"Already done? OK!", 0); 
+	db_query("create table ".$config['table_prefix']."sessions (sessionid char(32) NOT NULL, userid varchar(75) NOT NULL, PRIMARY KEY (sessionid, userid), session_start datetime NOT NULL)", NULL, $dblink),	"Already done? OK!", 0); 
 	test('Dropping obsolete index `from_tag`...',
-	mysql_query('alter table '.$config['table_prefix'].'links drop index `idx_from`'), 'Already done?  OK!', 0);
+	db_query('alter table '.$config['table_prefix'].'links drop index `idx_from`', NULL, $dblink), 'Already done?  OK!', 0);
 case "1.1.6.4":
 case "1.1.6.5":
 case "1.1.6.6":
 case "1.1.6.7":
 	print("<strong>1.1.6.7 to 1.2 changes:</strong><br />\n");
 	test("Adding theme field to user preference table...",
-	@mysql_query("ALTER TABLE ".$config['table_prefix']."users ADD
-	theme varchar(50) default ''", $dblink), "Already done? OK!", 0);
+	db_query("ALTER TABLE ".$config['table_prefix']."users ADD theme varchar(50) default ''", NULL, $dblink), "Already done? OK!", 0);
 	test("Setting default UserSettings ACL...",
-	@mysql_query("insert into ".$config['table_prefix']."acls set page_tag = 'UserSettings', comment_read_acl = '*', comment_post_acl = '+'", $dblink), __('Already done? OK!'), 0);
+	db_query("insert into ".$config['table_prefix']."acls set page_tag = 'UserSettings', comment_read_acl = '*', comment_post_acl = '+'", NULL, $dblink), __('Already done? OK!'), 0);
 	test("Setting default AdminUsers ACL...",
-	@mysql_query("insert into ".$config['table_prefix']."acls set page_tag = 'AdminUsers', read_acl = '!*', write_acl = '!*', comment_acl = '!*', comment_read_acl = '!*', comment_post_acl = '!*'", $dblink), __('Already done? OK!'), 0);
+	db_query("insert into ".$config['table_prefix']."acls set page_tag = 'AdminUsers', read_acl = '!*', write_acl = '!*', comment_acl = '!*', comment_read_acl = '!*', comment_post_acl = '!*'", NULL, $dblink), __('Already done? OK!'), 0);
 	test("Setting default AdminPages ACL...",
-	@mysql_query("insert into ".$config['table_prefix']."acls set page_tag = 'AdminPages', read_acl = '!*', write_acl = '!*', comment_acl = '!*', comment_read_acl = '!*', comment_post_acl = '!*'", $dblink), __('Already done? OK!'), 0);
+	db_query("insert into ".$config['table_prefix']."acls set page_tag = 'AdminPages', read_acl = '!*', write_acl = '!*', comment_acl = '!*', comment_read_acl = '!*', comment_post_acl = '!*'", NULL, $dblink), __('Already done? OK!'), 0);
 	test("Setting default DatabaseInfo ACL...",
-	@mysql_query("insert into ".$config['table_prefix']."acls set page_tag = 'DatabaseInfo', read_acl = '!*', write_acl = '!*', comment_acl = '!*', comment_read_acl = '!*', comment_post_acl = '!*'", $dblink), __('Already done? OK!'), 0);
+	db_query("insert into ".$config['table_prefix']."acls set page_tag = 'DatabaseInfo', read_acl = '!*', write_acl = '!*', comment_acl = '!*', comment_read_acl = '!*', comment_post_acl = '!*'", NULL, $dblink), __('Already done? OK!'), 0);
 	update_default_page('FormattingRules', $dblink, $config, $lang_defaults_path, $lang_defaults_fallback_path, $upgrade_note);
 case "1.2":
 	print("<strong>1.2 to 1.3.1 changes:</strong><br />\n");
 	// Dropping obsolete "handler" field from pages table, refs #452
 	test('Removing handler field from the pages table...',
-	@mysql_query("ALTER TABLE ".$config["table_prefix"]."pages DROP handler", $dblink), __('Already done? OK!'), 0);
+	db_query("ALTER TABLE ".$config["table_prefix"]."pages DROP handler", NULL, $dblink), __('Already done? OK!'), 0);
 	// Support for threaded comments
 	test("Adding fields to comments table to enable threading...",  
-	mysql_query("alter table ".$config["table_prefix"]."comments add parent int(10) unsigned default NULL", $dblink), "Already done? OK!", 0);
+	db_query("alter table ".$config["table_prefix"]."comments add parent int(10) unsigned default NULL", NULL, $dblink), "Already done? OK!", 0);
 	test("Adding fields to comments table to enable threading...",
-	mysql_query("alter table ".$config["table_prefix"]."users add default_comment_display enum('date_asc', 'date_desc', 'threaded') NOT NULL default 'threaded'", $dblink), "Already done? OK!", 0);
+	db_query("alter table ".$config["table_prefix"]."users add default_comment_display enum('date_asc', 'date_desc', 'threaded') NOT NULL default 'threaded'", NULL, $dblink), "Already done? OK!", 0);
 	test("Adding fields to comments table to enable threading...",  
-	mysql_query("alter table ".$config["table_prefix"]."comments add status enum('deleted') default NULL", $dblink), "Already done? OK!", 0);
+	db_query("alter table ".$config["table_prefix"]."comments add status enum('deleted') default NULL", NULL, $dblink), "Already done? OK!", 0);
 	// Create new fields for comment_read_acl and comment_post_acl, 
 	// and copy existing comment_acl values to these new fields 
 	test('Creating new comment_read_acl field...', 
-	@mysql_query("alter table ".$config['table_prefix']."acls add comment_read_acl text not null", $dblink), __('Already done?  OK!'), 0); 
+	db_query("alter table ".$config['table_prefix']."acls add comment_read_acl text not null", NULL, $dblink), __('Already done?  OK!'), 0); 
 	test('Creating new comment_post_acl field...', 
-	@mysql_query("alter table ".$config['table_prefix']."acls add comment_post_acl text not null", $dblink), __('Already done?  OK!'), 0); 
+	db_query("alter table ".$config['table_prefix']."acls add comment_post_acl text not null", NULL, $dblink), __('Already done?  OK!'), 0); 
 	test('Copying existing comment_acls to new fields...', 
-	@mysql_query("update ".$config['table_prefix']."acls as a inner join(select page_tag, comment_acl from ".$config['table_prefix']."acls) as b on a.page_tag = b.page_tag set a.comment_read_acl=b.comment_acl, a.comment_post_acl=b.comment_acl", $dblink), __('Already done?  OK!'), 0);
+	db_query("update ".$config['table_prefix']."acls as a inner join(select page_tag, comment_acl from ".$config['table_prefix']."acls) as b on a.page_tag = b.page_tag set a.comment_read_acl=b.comment_acl, a.comment_post_acl=b.comment_acl", NULL, $dblink), __('Already done?  OK!'), 0);
 	test('Drop old comment acl...', 
-	@mysql_query("alter table ".$config['table_prefix']."acls drop comment_acl", $dblink), __('Already done?  OK!'), 0);
+	db_query("alter table ".$config['table_prefix']."acls drop comment_acl", NULL, $dblink), __('Already done?  OK!'), 0);
 	test(__('Creating index on owner column').'...', 
-	@mysql_query('alter table '.$config['table_prefix'].'pages add index `idx_owner` (`owner`)', $dblink), __('Already done?  OK!'), 0); 
+	db_query('alter table '.$config['table_prefix'].'pages add index `idx_owner` (`owner`)', NULL, $dblink), __('Already done?  OK!'), 0); 
   	test(__('Altering referrers table structure').'...',
-	@mysql_query("ALTER TABLE ".$config['table_prefix']."referrers MODIFY referrer varchar(255) NOT NULL default ''", $dblink), __('Already done?  OK!'), 0);
+	db_query("ALTER TABLE ".$config['table_prefix']."referrers MODIFY referrer varchar(255) NOT NULL default ''", NULL, $dblink), __('Already done?  OK!'), 0);
 	test(__('Altering referrer blacklist table structure').'...',
-	@mysql_query("ALTER TABLE ".$config['table_prefix']."referrer_blacklist MODIFY spammer varchar(255) NOT NULL default ''", $dblink), __('Already done?  OK!'), 0);
+	db_query("ALTER TABLE ".$config['table_prefix']."referrer_blacklist MODIFY spammer varchar(255) NOT NULL default ''", NULL, $dblink), __('Already done?  OK!'), 0);
 	update_default_page(array(
 		'FormattingRules',
 		'SysInfo', 
@@ -516,93 +518,93 @@ case "1.3.1":
 	'AdminSpamLog',
 	'WikkaMenulets'), $dblink, $config, $lang_defaults_path, $lang_defaults_fallback_path); 
 	test("Setting default ACL...", 1);
-	mysql_query("insert into ".$config['table_prefix']."acls set page_tag = 'WikkaMenulets', read_acl = '!*', write_acl = '!*', comment_read_acl = '!*', comment_post_acl = '!*'", $dblink);
-	mysql_query("insert into ".$config['table_prefix']."acls set page_tag = 'AdminBadWords', read_acl = '!*', write_acl = '!*', comment_read_acl = '!*', comment_post_acl = '!*'", $dblink);
-	mysql_query("insert into ".$config['table_prefix']."acls set page_tag = 'AdminSpamLog', read_acl = '!*', write_acl = '!*', comment_read_acl = '!*', comment_post_acl = '!*'", $dblink);
+	db_query("insert into ".$config['table_prefix']."acls set page_tag = 'WikkaMenulets', read_acl = '!*', write_acl = '!*', comment_read_acl = '!*', comment_post_acl = '!*'", NULL, $dblink);
+	db_query("insert into ".$config['table_prefix']."acls set page_tag = 'AdminBadWords', read_acl = '!*', write_acl = '!*', comment_read_acl = '!*', comment_post_acl = '!*'", NULL, $dblink);
+	db_query("insert into ".$config['table_prefix']."acls set page_tag = 'AdminSpamLog', read_acl = '!*', write_acl = '!*', comment_read_acl = '!*', comment_post_acl = '!*'", NULL, $dblink);
 	// Converting DB UTF-8 (but data remains
 	// unchanged -- this is handled by a standalone script)	
 	test("Setting up database for UTF-8...", true);
-	@mysql_query("ALTER DATABASE ".$config['mysql_database']." DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci", $dblink);
+	db_query("ALTER DATABASE ".$config['dbms_database']." DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci", NULL, $dblink);
 	// Converting pages table and fields to UTF-8
 	test("Setting up pages table and fields for UTF-8...", true);
-	@mysql_query("ALTER TABLE ".$config['table_prefix']."pages DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci", $dblink);
-	@mysql_query("ALTER TABLE ".$config['table_prefix']."pages CHANGE `tag` `tag` VARCHAR( 75 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL default ''", $dblink);
-	@mysql_query("ALTER TABLE ".$config['table_prefix']."pages CHANGE `body` `body` MEDIUMTEXT CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL", $dblink);
-	@mysql_query("ALTER TABLE ".$config['table_prefix']."pages CHANGE `owner` `owner` VARCHAR( 75 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL default ''", $dblink);
-	@mysql_query("ALTER TABLE ".$config['table_prefix']."pages CHANGE `user` `user` VARCHAR( 75 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL default ''", $dblink);
-	@mysql_query("ALTER TABLE ".$config['table_prefix']."pages CHANGE `latest` `latest` ENUM( 'Y','N' ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL default 'N'", $dblink);
-	@mysql_query("ALTER TABLE ".$config['table_prefix']."pages CHANGE `note` `note` varchar(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL default ''", $dblink); // refs #1021
+	db_query("ALTER TABLE ".$config['table_prefix']."pages DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci", NULL, $dblink);
+	db_query("ALTER TABLE ".$config['table_prefix']."pages CHANGE `tag` `tag` VARCHAR( 75 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL default ''", NULL, $dblink);
+	db_query("ALTER TABLE ".$config['table_prefix']."pages CHANGE `body` `body` MEDIUMTEXT CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL", NULL, $dblink);
+	db_query("ALTER TABLE ".$config['table_prefix']."pages CHANGE `owner` `owner` VARCHAR( 75 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL default ''", NULL, $dblink);
+	db_query("ALTER TABLE ".$config['table_prefix']."pages CHANGE `user` `user` VARCHAR( 75 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL default ''", NULL, $dblink);
+	db_query("ALTER TABLE ".$config['table_prefix']."pages CHANGE `latest` `latest` ENUM( 'Y','N' ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL default 'N'", NULL, $dblink);
+	db_query("ALTER TABLE ".$config['table_prefix']."pages CHANGE `note` `note` varchar(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL default ''", NULL, $dblink); // refs #1021
 	// Converting acls table and fields to UTF-8
 	test("Setting up acls table and fields for UTF-8...", true);
-	@mysql_query("ALTER TABLE ".$config['table_prefix']."acls DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci", $dblink);
-	@mysql_query("ALTER TABLE ".$config['table_prefix']."acls CHANGE `page_tag` `page_tag` VARCHAR( 75 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL default ''", $dblink);
-	@mysql_query("ALTER TABLE ".$config['table_prefix']."acls CHANGE `read_acl` `read_acl` TEXT CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL", $dblink);
-	@mysql_query("ALTER TABLE ".$config['table_prefix']."acls CHANGE `write_acl` `write_acl` TEXT CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL", $dblink);
-	@mysql_query("ALTER TABLE ".$config['table_prefix']."acls CHANGE `comment_read_acl` `comment_read_acl` TEXT CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL", $dblink);
-	@mysql_query("ALTER TABLE ".$config['table_prefix']."acls CHANGE `comment_post_acl` `comment_post_acl` TEXT CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL", $dblink);
+	db_query("ALTER TABLE ".$config['table_prefix']."acls DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci", NULL, $dblink);
+	db_query("ALTER TABLE ".$config['table_prefix']."acls CHANGE `page_tag` `page_tag` VARCHAR( 75 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL default ''", NULL, $dblink);
+	db_query("ALTER TABLE ".$config['table_prefix']."acls CHANGE `read_acl` `read_acl` TEXT CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL", NULL, $dblink);
+	db_query("ALTER TABLE ".$config['table_prefix']."acls CHANGE `write_acl` `write_acl` TEXT CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL", NULL, $dblink);
+	db_query("ALTER TABLE ".$config['table_prefix']."acls CHANGE `comment_read_acl` `comment_read_acl` TEXT CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL", NULL, $dblink);
+	db_query("ALTER TABLE ".$config['table_prefix']."acls CHANGE `comment_post_acl` `comment_post_acl` TEXT CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL", NULL, $dblink);
 	test("Setting up links table and fields for UTF-8...", true);
-	@mysql_query("ALTER TABLE ".$config['table_prefix']."links DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci", $dblink);
-	@mysql_query("ALTER TABLE ".$config['table_prefix']."links CHANGE `from_tag` `from_tag` VARCHAR( 75 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL default ''", $dblink);
-	@mysql_query("ALTER TABLE ".$config['table_prefix']."links CHANGE `to_tag` `to_tag` VARCHAR( 75 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL default ''", $dblink);
+	db_query("ALTER TABLE ".$config['table_prefix']."links DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci", NULL, $dblink);
+	db_query("ALTER TABLE ".$config['table_prefix']."links CHANGE `from_tag` `from_tag` VARCHAR( 75 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL default ''", NULL, $dblink);
+	db_query("ALTER TABLE ".$config['table_prefix']."links CHANGE `to_tag` `to_tag` VARCHAR( 75 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL default ''", NULL, $dblink);
 	// Converting referrers table and fields to UTF-8
 	test("Setting up referrers table and fields for UTF-8...", true);
-	@mysql_query("ALTER TABLE ".$config['table_prefix']."referrers DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci", $dblink);
-	@mysql_query("ALTER TABLE ".$config['table_prefix']."referrers CHANGE `page_tag` `page_tag` VARCHAR( 75 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL default ''", $dblink);
-	@mysql_query("ALTER TABLE ".$config['table_prefix']."referrers CHANGE `referrer` `referrer` VARCHAR(250) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL default ''", $dblink);
+	db_query("ALTER TABLE ".$config['table_prefix']."referrers DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci", NULL, $dblink);
+	db_query("ALTER TABLE ".$config['table_prefix']."referrers CHANGE `page_tag` `page_tag` VARCHAR( 75 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL default ''", NULL, $dblink);
+	db_query("ALTER TABLE ".$config['table_prefix']."referrers CHANGE `referrer` `referrer` VARCHAR(250) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL default ''", NULL, $dblink);
 	// Converting referrer_blacklist table and fields to UTF-8
 	test("Setting up referrer_blacklist table and fields for UTF-8...", true);
-	@mysql_query("ALTER TABLE ".$config['table_prefix']."referrer_blacklist DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci", $dblink);
-	@mysql_query("ALTER TABLE ".$config['table_prefix']."referrer_blacklist CHANGE `spammer` `spammer` VARCHAR(250) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL default ''", $dblink);
+	db_query("ALTER TABLE ".$config['table_prefix']."referrer_blacklist DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci", NULL, $dblink);
+	db_query("ALTER TABLE ".$config['table_prefix']."referrer_blacklist CHANGE `spammer` `spammer` VARCHAR(250) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL default ''", NULL, $dblink);
 	// Converting users table and fields to UTF-8
 	test("Setting up users table and fields for UTF-8...", true);
-	@mysql_query("ALTER TABLE ".$config['table_prefix']."users DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci", $dblink);
-	@mysql_query("ALTER TABLE ".$config['table_prefix']."users CHANGE `name` `name` VARCHAR( 75 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL default ''", $dblink);
-	@mysql_query("ALTER TABLE ".$config['table_prefix']."users CHANGE `password` `password` VARCHAR( 32 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL default ''", $dblink);
-	@mysql_query("ALTER TABLE ".$config['table_prefix']."users CHANGE `email` `email` VARCHAR( 50 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL default ''", $dblink);
-	@mysql_query("ALTER TABLE ".$config['table_prefix']."users CHANGE `doubleclickedit` `doubleclickedit` ENUM( 'Y','N' ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL default 'Y'", $dblink);
-	@mysql_query("ALTER TABLE ".$config['table_prefix']."users CHANGE `show_comments` `show_comments` ENUM( 'Y','N' ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL default 'N'", $dblink);
-	@mysql_query("ALTER TABLE ".$config['table_prefix']."users CHANGE `default_comment_display` `default_comment_display` ENUM( 'date_asc','date_desc','threaded' ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL default 'threaded'", $dblink);
-	@mysql_query("ALTER TABLE ".$config['table_prefix']."users CHANGE `status` `status` ENUM( 'invited','signed-up','pending','active','suspended','banned','deleted') CHARACTER SET utf8 COLLATE utf8_unicode_ci", $dblink);
-	@mysql_query("ALTER TABLE ".$config['table_prefix']."users CHANGE `theme` `theme` VARCHAR( 50 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci default ''", $dblink); // refs #1022
+	db_query("ALTER TABLE ".$config['table_prefix']."users DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci", NULL, $dblink);
+	db_query("ALTER TABLE ".$config['table_prefix']."users CHANGE `name` `name` VARCHAR( 75 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL default ''", NULL, $dblink);
+	db_query("ALTER TABLE ".$config['table_prefix']."users CHANGE `password` `password` VARCHAR( 32 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL default ''", NULL, $dblink);
+	db_query("ALTER TABLE ".$config['table_prefix']."users CHANGE `email` `email` VARCHAR( 50 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL default ''", NULL, $dblink);
+	db_query("ALTER TABLE ".$config['table_prefix']."users CHANGE `doubleclickedit` `doubleclickedit` ENUM( 'Y','N' ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL default 'Y'", NULL, $dblink);
+	db_query("ALTER TABLE ".$config['table_prefix']."users CHANGE `show_comments` `show_comments` ENUM( 'Y','N' ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL default 'N'", NULL, $dblink);
+	db_query("ALTER TABLE ".$config['table_prefix']."users CHANGE `default_comment_display` `default_comment_display` ENUM( 'date_asc','date_desc','threaded' ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL default 'threaded'", NULL, $dblink);
+	db_query("ALTER TABLE ".$config['table_prefix']."users CHANGE `status` `status` ENUM( 'invited','signed-up','pending','active','suspended','banned','deleted') CHARACTER SET utf8 COLLATE utf8_unicode_ci", NULL, $dblink);
+	db_query("ALTER TABLE ".$config['table_prefix']."users CHANGE `theme` `theme` VARCHAR( 50 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci default ''", NULL, $dblink); // refs #1022
 	// Converting comments table and fields to UTF-8
 	test("Setting up comments table and fields for UTF-8...", true);
-	@mysql_query("ALTER TABLE ".$config['table_prefix']."comments DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci", $dblink);
-	@mysql_query("ALTER TABLE ".$config['table_prefix']."comments CHANGE `page_tag` `page_tag` VARCHAR( 75 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL default ''", $dblink);
-	@mysql_query("ALTER TABLE ".$config['table_prefix']."comments CHANGE `comment` `comment` TEXT CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL", $dblink);
-	@mysql_query("ALTER TABLE ".$config['table_prefix']."comments CHANGE `user` `user` VARCHAR( 75 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL default ''", $dblink);
-	@mysql_query("ALTER TABLE ".$config['table_prefix']."comments CHANGE `status` `status` ENUM( 'deleted' ) CHARACTER SET utf8 COLLATE utf8_unicode_ci default NULL", $dblink);
-	@mysql_query("ALTER TABLE ".$config['table_prefix']."comments CHANGE `deleted` `deleted` CHAR( 1 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci default NULL", $dblink);
+	db_query("ALTER TABLE ".$config['table_prefix']."comments DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci", NULL, $dblink);
+	db_query("ALTER TABLE ".$config['table_prefix']."comments CHANGE `page_tag` `page_tag` VARCHAR( 75 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL default ''", NULL, $dblink);
+	db_query("ALTER TABLE ".$config['table_prefix']."comments CHANGE `comment` `comment` TEXT CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL", NULL, $dblink);
+	db_query("ALTER TABLE ".$config['table_prefix']."comments CHANGE `user` `user` VARCHAR( 75 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL default ''", NULL, $dblink);
+	db_query("ALTER TABLE ".$config['table_prefix']."comments CHANGE `status` `status` ENUM( 'deleted' ) CHARACTER SET utf8 COLLATE utf8_unicode_ci default NULL", NULL, $dblink);
+	db_query("ALTER TABLE ".$config['table_prefix']."comments CHANGE `deleted` `deleted` CHAR( 1 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci default NULL", NULL, $dblink);
 	// Converting sessions table and fields to UTF-8
 	test("Setting up sessions table and fields for UTF-8...", true);
-	@mysql_query("ALTER TABLE ".$config['table_prefix']."sessions DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci", $dblink);
-	@mysql_query("ALTER TABLE ".$config['table_prefix']."sessions CHANGE `sessionid` `sessionid` CHAR( 32 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL", $dblink); // refs #1022
-	@mysql_query("ALTER TABLE ".$config['table_prefix']."sessions CHANGE `userid` `userid` VARCHAR( 75 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL", $dblink);
+	db_query("ALTER TABLE ".$config['table_prefix']."sessions DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci", NULL, $dblink);
+	db_query("ALTER TABLE ".$config['table_prefix']."sessions CHANGE `sessionid` `sessionid` CHAR( 32 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL", NULL, $dblink); // refs #1022
+	db_query("ALTER TABLE ".$config['table_prefix']."sessions CHANGE `userid` `userid` VARCHAR( 75 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL", NULL, $dblink);
 	// Adding challenge, refs #1023
 	test("Adding/updating challenge field to users table to improve security...",  
-	@mysql_query("alter table ".$config["table_prefix"]."users ADD challenge varchar(8) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT ''", $dblink), __("Already done? OK!"), 0);
-	@mysql_query("alter table ".$config["table_prefix"]."users CHANGE `challenge` `challenge` varchar(8) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT ''", $dblink);
-	@mysql_query("UPDATE ".$config['table_prefix']."users SET challenge='' WHERE challenge='00000000'", $dblink);
+	db_query("alter table ".$config["table_prefix"]."users ADD challenge varchar(8) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT ''", NULL, $dblink), __("Already done? OK!"), 0);
+	db_query("alter table ".$config["table_prefix"]."users CHANGE `challenge` `challenge` varchar(8) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT ''", NULL, $dblink);
+	db_query("UPDATE ".$config['table_prefix']."users SET challenge='' WHERE challenge='00000000'", NULL, $dblink);
 case "1.3.2": 
 	print("<strong>1.3.2 to 1.3.3 changes:</strong><br />\n");
 	test("Adding/updating title field to users page ...",  
-	@mysql_query("alter table `".$config["table_prefix"]."pages` ADD `title` varchar(75) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT '' AFTER `tag`", $dblink), __("Already done? OK!"), 0); // refs #529
+	db_query("alter table `".$config["table_prefix"]."pages` ADD `title` varchar(75) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT '' AFTER `tag`", NULL, $dblink), __("Already done? OK!"), 0); // refs #529
 case "1.3.6":
 	print("<strong>1.3.5 to 1.3.6 changes:</strong><br />\n");
 	test("Changing \"default\" theme references to \"classic\" theme ...",  
-	@mysql_query("UPDATE `".$config["table_prefix"]."users` SET theme='classic' WHERE theme='default'", $dblink), __("Already done? OK!"), 0);
+	db_query("UPDATE `".$config["table_prefix"]."users` SET theme='classic' WHERE theme='default'", NULL, $dblink), __("Already done? OK!"), 0);
 case "1.3.7":
 	print("<strong>1.3.7 to 1.3.8 changes:</strong><br />\n");
 	// delete file removed from previous version
 	@unlink('lang/en/defaults/TableMarkupReference.php');
 	// Change datetime default to '1900-01-01' for MySQL > 5.7 compatibility
 	test("Altering pages table structure...",
-		@mysql_query("ALTER TABLE ".$config['table_prefix']."pages CHANGE time time datetime NOT NULL default '1900-01-01 00:00:00'", $dblink), "Failed. ?", 1);
+		db_query("ALTER TABLE ".$config['table_prefix']."pages CHANGE time time datetime NOT NULL default '1900-01-01 00:00:00'", NULL, $dblink), "Failed. ?", 1);
 	test("Altering referrers table structure...",
-		@mysql_query("ALTER TABLE ".$config['table_prefix']."referrers CHANGE time time datetime NOT NULL default '1900-01-01 00:00:00'", $dblink), "Failed. ?", 1);
+		db_query("ALTER TABLE ".$config['table_prefix']."referrers CHANGE time time datetime NOT NULL default '1900-01-01 00:00:00'", NULL, $dblink), "Failed. ?", 1);
 	test("Altering users table structure...",
-		@mysql_query("ALTER TABLE ".$config['table_prefix']."users CHANGE signuptime signuptime datetime NOT NULL default '1900-01-01 00:00:00'", $dblink), "Failed. ?", 1);
+		db_query("ALTER TABLE ".$config['table_prefix']."users CHANGE signuptime signuptime datetime NOT NULL default '1900-01-01 00:00:00'", NULL, $dblink), "Failed. ?", 1);
 	test("Altering comments table structure...",
-		@mysql_query("ALTER TABLE ".$config['table_prefix']."comments CHANGE time time datetime NOT NULL default '1900-01-01 00:00:00'", $dblink), "Failed. ?", 1);
+		db_query("ALTER TABLE ".$config['table_prefix']."comments CHANGE time time datetime NOT NULL default '1900-01-01 00:00:00'", NULL, $dblink), "Failed. ?", 1);
 case "1.3.8":
 case "master":
 }

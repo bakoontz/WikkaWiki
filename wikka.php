@@ -38,7 +38,7 @@ if(version_compare(phpversion(),'5.3','<'))
 	error_reporting(E_ALL);
 else
 	error_reporting(E_ALL & !E_DEPRECATED);
-error_reporting(E_ALL);
+error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED);
 // ---------------------- END DEBUGGING AND ERROR REPORTING -------------------
 
 // ---------------------------- VERSIONING ------------------------------------
@@ -157,7 +157,7 @@ if(!function_exists('GetSafeVar'))
 // ------------ CRITICAL ERROR MESSAGES USED BEFORE LANG FILE LOADED -----------
 // Do not move these declaration to lang files.
 if(!defined('ERROR_WRONG_PHP_VERSION')) define('ERROR_WRONG_PHP_VERSION', 'Wikka requires PHP %s or higher!');  // %s - version number
-if(!defined('ERROR_MYSQL_SUPPORT_MISSING')) define('ERROR_MYSQL_SUPPORT_MISSING', 'PHP can\'t find MySQL support but Wikka requires MySQL. Please check the output of <tt>phpinfo()</tt> in a php document for MySQL support: it needs to be compiled into PHP, the module itself needs to be present in the expected location, <strong>and</strong> php.ini needs to have it enabled.<br />Also note that you cannot have <tt>mysqli</tt> and <tt>mysql</tt> support both enabled at the same time.<br />Please double-check all of these things, restart your webserver after any fixes, and then try again!');
+if(!defined('ERROR_PDO_SUPPORT_MISSING')) define('ERROR_PDO_SUPPORT_MISSING', 'PHP can\'t find PDO (DBMS) support but Wikka requires it. Please check the output of <tt>phpinfo()</tt> in a php document for PDO support: it needs to be compiled into PHP, the module itself needs to be present in the expected location, <strong>and</strong> php.ini needs to have it enabled.<br />Please double-check all of these things, restart your webserver after any fixes, and then try again!');
 if(!defined('ERROR_WAKKA_LIBRARY_MISSING')) define('ERROR_WAKKA_LIBRARY_MISSING','The necessary file "libs/Wakka.class.php" could not be found. To run Wikka, please make sure the file exists and is placed in the right directory!');
 // --------END: CRITICAL ERROR MESSAGES USED BEFORE LANG FILE LOADED -----------
 
@@ -171,11 +171,10 @@ if (!function_exists('version_compare') ||
 	$php_version_error = sprintf(ERROR_WRONG_PHP_VERSION,MINIMUM_PHP_VERSION);
 	die($php_version_error);		# fatalerror	!!! default error in English
 }
-// MySQL needs to be installed and available
+// PDO needs to be installed and available
 // @@@ message could be refined by detecting detect OS (mention module name) and maybe server name
-if (!function_exists('mysql_connect'))
-{
-	die(ERROR_MYSQL_SUPPORT_MISSING);
+if(!extension_loaded('PDO')) {
+	die(ERROR_PDO_SUPPORT_MISSING);
 }
 
 /**
@@ -305,9 +304,10 @@ if(!defined('WIKKA_LIBRARY_PATH')) define('WIKKA_LIBRARY_PATH', 'lib');
 
 
 $wakkaDefaultConfig = array(
-	'mysql_host'				=> 'localhost',
-	'mysql_database'			=> 'wikka',
-	'mysql_user'				=> 'wikka',
+	'dbms_host'					=> 'localhost',
+	'dbms_database'				=> 'wikka',
+	'dbms_user'					=> 'wikka',
+	'dbms_type'					=> 'mysql',
 	'table_prefix'				=> 'wikka_',
 
 	'root_page'					=> 'HomePage',
@@ -690,16 +690,21 @@ $user = $wakka->GetUser();
 // Only store sessions for real users!
 if(NULL != $user)
 {
-	$res = $wakka->LoadSingle("SELECT * FROM ".$wakka->config['table_prefix']."sessions WHERE sessionid='".session_id()."' AND userid='".$user['name']."'");
+	$sessionid = session_id();
+	$username = $user['name'];
+	$res = $wakka->LoadSingle("SELECT * FROM ".$wakka->config['table_prefix']."sessions WHERE sessionid=:sessionid AND userid=:userid",
+		array(':sessionid' => $sessionid, ':userid' => $username));
 	if(isset($res))
 	{
 		// Just update the session_start time
-		$wakka->Query("UPDATE ".$wakka->config['table_prefix']."sessions SET session_start=FROM_UNIXTIME(".$wakka->GetMicroTime().") WHERE sessionid='".session_id()."' AND userid='".$user['name']."'");
+		$wakka->Query("UPDATE ".$wakka->config['table_prefix']."sessions SET session_start=FROM_UNIXTIME(".$wakka->GetMicroTime().") WHERE sessionid=:sessionid AND userid=:userid",
+			array(':sessionid' => $sessionid, ':userid' => $username));
 	}
 	else
 	{
 		// Create new session record
-		$wakka->Query("INSERT INTO ".$wakka->config['table_prefix']."sessions (sessionid, userid, session_start) VALUES('".session_id()."', '".$user['name']."', FROM_UNIXTIME(".$wakka->GetMicroTime()."))");
+		$wakka->Query("INSERT INTO ".$wakka->config['table_prefix']."sessions (sessionid, userid, session_start) VALUES(:sessionid, :userid, FROM_UNIXTIME(".$wakka->GetMicroTime()."))",
+			array(':sessionid' => $sessionid, ':username' => $username));
 	}
 }
 

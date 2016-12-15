@@ -31,8 +31,7 @@
  */
 function LoadLastTwoPagesByTag($wakka, $tag)
 {
-	$tag = mysql_real_escape_string($tag);
-	$res = $wakka->LoadAll("SELECT * FROM ".$wakka->config['table_prefix']."pages WHERE tag='".$tag."' ORDER BY time DESC LIMIT 2");
+	$res = $wakka->LoadAll("SELECT * FROM ".$wakka->config['table_prefix']."pages WHERE tag=:tag ORDER BY time DESC LIMIT 2", array(':tag' => $tag));
 	if(count($res) != 2)
 	{
 		return null;
@@ -55,8 +54,6 @@ function LoadLastTwoPagesByTag($wakka, $tag)
 function RevertPageToPreviousByTag($wakka, $tag, $comment='')
 {
 	$message = T_("Reversion to previous version FAILED!");
-	$tag = mysql_real_escape_string($tag);
-	$comment = mysql_real_escape_string($comment);
 	if(TRUE===$wakka->IsAdmin())
 	{
 		// Select current version of this page and version immediately preceding
@@ -98,7 +95,6 @@ function RevertPageToPreviousByTag($wakka, $tag, $comment='')
 function RevertPageToPreviousById($wakka, $id, $comment='')
 {
 	$message = T_("Reversion to previous version FAILED!");
-	$id = mysql_real_escape_string($id);
 	if(TRUE===$wakka->IsAdmin())
 	{
 		$res = $wakka->LoadPageById($id);
@@ -130,11 +126,7 @@ function DeleteUser($wakka, $user)
 	$status = true;
 	if(is_array($user))
 	{
-		$user = mysql_real_escape_string($user['name']);
-	}
-	else
-	{
-		$user = mysql_real_escape_string($user);
+		$user = $user['name'];
 	}
 	if(TRUE===$wakka->IsAdmin())
 	{
@@ -145,10 +137,10 @@ function DeleteUser($wakka, $user)
 		}		
 
 		// Reset password
-		$res = $wakka->LoadSingle("SELECT * FROM ".$wakka->config['table_prefix']."users WHERE name='".$user."'");
+		$res = $wakka->LoadSingle("SELECT * FROM ".$wakka->config['table_prefix']."users WHERE name=:user", array(':user' => $user));
 		if(FALSE===empty($res))
 		{
-			$wakka->Query("UPDATE ".$wakka->config['table_prefix']."users SET status='deleted', password='!' WHERE name='".$user."'");
+			$wakka->Query("UPDATE ".$wakka->config['table_prefix']."users SET status='deleted', password='!' WHERE name=:user", array(':user' => $user));
 		}
 		else
 		{
@@ -156,7 +148,7 @@ function DeleteUser($wakka, $user)
 		}
 
 		// Remove sessions
-		$res = $wakka->LoadAll("SELECT * FROM ".$wakka->config['table_prefix']."sessions WHERE userid='".$user."'");	
+		$res = $wakka->LoadAll("SELECT * FROM ".$wakka->config['table_prefix']."sessions WHERE userid=:user", array(':user' => $user));	
 		if(FALSE===empty($res))
 		{
 			foreach($res as $session)
@@ -164,7 +156,7 @@ function DeleteUser($wakka, $user)
 				$session_file = session_save_path().DIRECTORY_SEPARATOR."sess_".$session['sessionid'];
 			}
 		}
-		$wakka->Query("DELETE FROM ".$wakka->config['table_prefix']."sessions WHERE userid='".$user."'");
+		$wakka->Query("DELETE FROM ".$wakka->config['table_prefix']."sessions WHERE userid=:user", array(':user' => $user));
 
 		return $status;
 	}

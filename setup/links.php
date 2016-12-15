@@ -38,15 +38,17 @@ function LoadSomePages($start='', $limit=100)
 	global $config, $dblink;
 	//Less RAM: select tag and body only
 	// Note that LoadSomePages needs result to be sorted by tag.
-	$result = mysql_query("SELECT tag, body FROM {$config['table_prefix']}pages 
-	 WHERE tag > '".mysql_real_escape_string($start)."' AND latest = 'Y' 
+	$result = db_query("SELECT tag, body FROM {$config['table_prefix']}pages 
+	 WHERE tag > :start AND latest = 'Y' 
 		ORDER BY tag ASC  
-		LIMIT $limit", $dblink);
+		LIMIT :limit", array(':start' => $start, ':limit' => (int)$limit), $dblink);
 	$pages = array();
 	if ($result)
 	{
-		while ($row = mysql_fetch_assoc($result)) $pages[] = $row;
-		mysql_free_result($result);
+		$rows = $result->fetchAll();
+		foreach($rows as $row) {
+			$pages[] = $row;
+		}
 	}
 	return ($pages);
 }
@@ -56,7 +58,7 @@ $GLOBALS['sql'] = '';
 $GLOBALS['written'] = '';
 // Delete from wikka_links once for all
 // @@@ coding standards: don't use {...} or embedded variables but use concatenation
-mysql_query("TRUNCATE TABLE {$config['table_prefix']}links", $dblink);
+db_query("TRUNCATE TABLE {$config['table_prefix']}links", NULL, $dblink);
 while ($pages = LoadSomePages($start))
 {
 	foreach ($pages as $page)
@@ -101,7 +103,7 @@ function relinkcallback($thing)
 		if ($sql)	// @@@ bad name: it's only a "values" fragment; better: $values
 		{
 			// @@@ coding standards: don't use {...} or embedded variables but use concatenation
-			mysql_query("INSERT INTO {$config['table_prefix']}links VALUES $sql", $dblink);
+			db_query("INSERT INTO {$config['table_prefix']}links VALUES $sql", NULL, $dblink);
 		}
 		$sql = '';
 		return;
@@ -121,7 +123,7 @@ function relinkcallback($thing)
 		if (($url) && (!isset($written[strtolower($url)])) && (strtolower($url) != strtolower($tag)))
 		{
 			if ($sql) $sql .= ', ';
-			$sql .= "('".mysql_real_escape_string($tag)."', '".mysql_real_escape_string($url)."')";
+			$sql .= "('".$dblink->quote(tag)."', '".$dblink->quote($url)."')";
 			$written[strtolower($url)] = $url;
 		}
 	}

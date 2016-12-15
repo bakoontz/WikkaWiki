@@ -21,28 +21,28 @@ if (isset($_POST['config']))
 		$wakkaConfig[$key] = $value;
 	}
 }
-if (!isset($wakkaConfig['mysql_password']))
+if (!isset($wakkaConfig['dbms_password']))
 {
-	$wakkaConfig['mysql_password'] = '';
+	$wakkaConfig['dbms_password'] = '';
 }
 
 // Validate data
 $error['flag'] = false;
 if(isset($_SESSION['error_flag']))
 {
-	if (isset($_POST['config']['mysql_host']) && strlen($_POST['config']['mysql_host']) == 0)
+	if (isset($_POST['config']['dbms_host']) && strlen($_POST['config']['dbms_host']) == 0)
 	{
-		$error['mysql_host'] = "Please fill in a valid MySQL host."; 
+		$error['dbms_host'] = "Please fill in a valid DB host."; 
 		$error['flag'] = true;
 	}
-	if (isset($_POST['config']['mysql_database']) && strlen($_POST['config']['mysql_database']) == 0)
+	if (isset($_POST['config']['dbms_database']) && strlen($_POST['config']['dbms_database']) == 0)
 	{
-		$error['mysql_database'] = "Please fill in a valid database."; 
+		$error['dbms_database'] = "Please fill in a valid database."; 
 		$error['flag'] = true;
 	}
-	if	(isset($_POST['config']['mysql_user']) && strlen($_POST['config']['mysql_user']) == 0)
+	if	(isset($_POST['config']['dbms_user']) && strlen($_POST['config']['dbms_user']) == 0)
 	{
-		$error['mysql_user'] = "Please fill in a valid MySQL username."; 
+		$error['dbms_user'] = "Please fill in a valid DB username."; 
 		$error['flag'] = true;
 	}
 	if	(isset($_POST['config']['wakka_name']) && strlen($_POST['config']['wakka_name']) == 0)
@@ -156,23 +156,23 @@ if(isset($_SESSION['error_flag']) && false === $_SESSION['error_flag'] && isset(
  	{
 	?>
 	<tr><td></td><td><br /><h2>1. Database Configuration</h2></td></tr>
-	<tr><td></td><td>The host your MySQL server is running on. Usually "localhost" (ie, the same machine your Wikka site is on).</td></tr>
-	<?php if(isset($error['mysql_host'])) { ?>
-	<tr><td></td><td><em class="error"><?php echo $error['mysql_host']; ?></em></td></tr>
+	<tr><td></td><td>The host your DB server is running on. Usually "localhost" (ie, the same machine your Wikka site is on).</td></tr>
+	<?php if(isset($error['dbms_host'])) { ?>
+	<tr><td></td><td><em class="error"><?php echo $error['dbms_host']; ?></em></td></tr>
 	<?php } ?>
-	<tr><td align="right" nowrap="nowrap">MySQL host:</td><td><input type="text" size="50" name="config[mysql_host]" value="<?php echo $wakkaConfig["mysql_host"] ?>" /></td></tr>
-	<tr><td></td><td>The MySQL database Wikka should use. This database needs to exist already before you continue!</td></tr>
-	<?php if(isset($error['mysql_database'])) { ?>
-	<tr><td></td><td><em class="error"><?php echo $error['mysql_database']; ?></em></td></tr>
+	<tr><td align="right" nowrap="nowrap">DB host:</td><td><input type="text" size="50" name="config[dbms_host]" value="<?php echo $wakkaConfig["dbms_host"] ?>" /></td></tr>
+	<tr><td></td><td>The database Wikka should use. This database needs to exist already before you continue!</td></tr>
+	<?php if(isset($error['dbms_database'])) { ?>
+	<tr><td></td><td><em class="error"><?php echo $error['dbms_database']; ?></em></td></tr>
 	<?php } ?>
-	<tr><td align="right" nowrap="nowrap">MySQL database:</td><td><input type="text" size="50" name="config[mysql_database]" value="<?php echo $wakkaConfig["mysql_database"] ?>" /></td></tr>
-	<tr><td></td><td>Name and password of the MySQL user used to connect to your database.</td></tr>
-	<?php if(isset($error['mysql_user'])) { ?>
-	<tr><td></td><td><em class="error"><?php echo $error['mysql_user']; ?></em></td></tr>
+	<tr><td align="right" nowrap="nowrap">Database:</td><td><input type="text" size="50" name="config[dbms_database]" value="<?php echo $wakkaConfig["dbms_database"] ?>" /></td></tr>
+	<tr><td></td><td>Name and password of the DB user used to connect to your database.</td></tr>
+	<?php if(isset($error['dbms_user'])) { ?>
+	<tr><td></td><td><em class="error"><?php echo $error['dbms_user']; ?></em></td></tr>
 	<?php } ?>
-	<tr><td align="right" nowrap="nowrap">MySQL user name:</td><td><input type="text" size="50" name="config[mysql_user]" value="<?php echo $wakkaConfig["mysql_user"] ?>" /></td></tr>
-	<tr><td align="right" nowrap="nowrap">MySQL password:</td><td><input type="password" size="50" name="config[mysql_password]" value="<?php echo $wakkaConfig["mysql_password"] ?>" /></td></tr>
-	<tr><td></td><td>Prefix of all tables used by Wikka. This allows you to run multiple Wikka installations using the same MySQL database by configuring them to use different table prefixes.</td></tr>
+	<tr><td align="right" nowrap="nowrap">DB user name:</td><td><input type="text" size="50" name="config[dbms_user]" value="<?php echo $wakkaConfig["dbms_user"] ?>" /></td></tr>
+	<tr><td align="right" nowrap="nowrap">DB password:</td><td><input type="password" size="50" name="config[dbms_password]" value="<?php echo $wakkaConfig["dbms_password"] ?>" /></td></tr>
+	<tr><td></td><td>Prefix of all tables used by Wikka. This allows you to run multiple Wikka installations using the same database by configuring them to use different table prefixes.</td></tr>
 	<tr><td align="right" nowrap="nowrap">Table prefix:</td><td><input type="text" size="50" name="config[table_prefix]" value="<?php echo $wakkaConfig["table_prefix"] ?>" /></td></tr>
 	<?php
 	 }

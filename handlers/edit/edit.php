@@ -81,7 +81,7 @@ else if ($this->HasAccess("write") && $this->HasAccess("read"))
 	$id = $this->page['id'];
 	if(isset($_GET['id']))
 	{
-		$page = $this->LoadPageById(mysql_real_escape_string($this->GetSafeVar('id', 'get')));
+		$page = $this->LoadPageById($this->GetSafeVar('id', 'get'));
 		if($page['tag'] != $this->page['tag'])
 		{
 			$this->Redirect($this->Href(), T_("The revision id does not exist for the requested page"));
@@ -185,8 +185,9 @@ else if ($this->HasAccess("write") && $this->HasAccess("read"))
 	}
 
 	// derive maximum length for a page name from the table structure if possible
-	if ($result = mysql_query("describe ".$this->GetConfigValue('table_prefix')."pages tag")) {
-		$field = mysql_fetch_assoc($result);
+	// MySQL specific!
+	if ($result = $this->Query("describe ".$this->GetConfigValue('table_prefix')."pages tag")) {
+		$field = ($result->fetchAll())[0]; 
 		if (preg_match("/varchar\((\d+)\)/", $field['Type'], $matches)) $maxtaglen = $matches[1];
 	}
 	else

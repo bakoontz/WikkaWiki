@@ -306,26 +306,26 @@ if ($this->IsAdmin($this->GetUser()))
 		$sort_fields = array('name', 'email', 'signuptime');
 		$sort = (isset($_GET['sort'])) ? $this->GetSafeVar('sort', 'get') : "signuptime";
 		if(!in_array($sort, $sort_fields)) $sort = "signuptime";
-		// sort order
-		$sort_order = array('asc', 'desc');
-		$d = (isset($_GET['d'])) ? $this->GetSafeVar('d', 'get') : "desc";
-		if(!in_array($d, $sort_order)) $d = "desc";
+		$d = 'desc';
+		if(isset($_GET['d'])) {
+			if($this->GetSafeVar('d', 'get') == 'asc') {
+				$d = 'asc';
+			}
+		}
 		// start record
 		$s = (isset($_GET['s'])) ? $this->GetSafeVar('s', 'get') : ADMINUSERS_DEFAULT_START;
 		if ((int)$s < 0) $s = ADMINUSERS_DEFAULT_START;
 	
 		// search string
 		$search = ADMINUSERS_DEFAULT_SEARCH; 
-		$search_disp = ADMINUSERS_DEFAULT_SEARCH;
+		$search = ADMINUSERS_DEFAULT_SEARCH;
 		if (isset($_POST['search']))
 		{
-			$search = mysql_real_escape_string($this->GetSafeVar('search', 'post'));
-			$search_disp = $this->GetSafeVar('search', 'post');
+			$search = $this->GetSafeVar('search', 'post');
 		}
 		elseif (isset($_GET['search']))
 		{
-			$search = mysql_real_escape_string($this->GetSafeVar('search', 'get'));
-			$search_disp = $this->GetSafeVar('search', 'get');
+			$search = $this->GetSafeVar('search', 'get');
 		}
 		elseif($this->GetSafeVar('submit', 'post') == T_("Submit"))
 		{
@@ -335,6 +335,7 @@ if ($this->IsAdmin($this->GetUser()))
 	
 		// select all
 		$checked = '';
+		$params = array();
 		if (isset($_GET['selectall']))
 		{
 			$checked = (1 == $_GET['selectall']) ? ' checked="checked"' : '';
@@ -342,9 +343,15 @@ if ($this->IsAdmin($this->GetUser()))
 	
 		// restrict MySQL query by search string
 		$where = "(status IS NULL OR status != 'deleted') AND ";
-		$where .= ('' == $search) ? '1' : "name LIKE '%".$search."%'";
+		if('' == $search) {
+			$where .= '1';
+		} else {
+			$where .= "name LIKE :search";
+			$params = array(':search' => '%'.$search.'%');
+		}
 		// get total number of users
-		$numusers = $this->getCount('users', $where);
+
+		$numusers = $this->getCount('users', $where, $params);
 		// If the user doesn't specifically want to change the records
 		// per page, then use the default.  The problem here is that one
 		// form is being used to process two post requests, so things
@@ -363,7 +370,7 @@ if ($this->IsAdmin($this->GetUser()))
 		// build pager form	
 		$form_filter = $this->FormOpen('','','post','user_admin_panel');
 		$form_filter .= '<fieldset><legend>'.T_("Filter view:").'</legend>'."\n";
-		$form_filter .= '<label for="search">'.T_("Search user:").'</label> <input type ="text" id="search" name="search" title="'.T_("Enter a search string").'" size="20" maxlength="50" value="'.$search_disp.'"/> <input name="submit" type="submit" value="'.T_("Submit").'" /><br />'."\n";
+		$form_filter .= '<label for="search">'.T_("Search user:").'</label> <input type ="text" id="search" name="search" title="'.T_("Enter a search string").'" size="20" maxlength="50" value="'.$search.'"/> <input name="submit" type="submit" value="'.T_("Submit").'" /><br />'."\n";
 		// get values range for drop-down
 		$users_opts = optionRanges($user_limits,$numusers, ADMINUSERS_DEFAULT_MIN_RECORDS_DISPLAY);
 		$form_filter .= '<label for="l">'.T_("Show").'</label> '."\n";
@@ -392,8 +399,10 @@ if ($this->IsAdmin($this->GetUser()))
 		$form_filter .= '</fieldset>'.$this->FormClose()."\n";
 
 		// get user list
-		$userdata = $this->LoadAll("SELECT * FROM ".$this->GetConfigValue('table_prefix')."users WHERE ".$where." ORDER BY ".$sort." ".$d." limit ".$s.", ".$l);
-	
+		$params[':sort'] = $sort;
+		$params[':s'] = (int)$s;
+		$params[':l'] = (int)$l;
+		$userdata = $this->LoadAll("SELECT * FROM ".$this->GetConfigValue('table_prefix')."users WHERE ".$where." ORDER BY :sort $d limit :s, :l", $params);
 		if ($userdata)
 		{
 			// build header links
@@ -422,12 +431,18 @@ if ($this->IsAdmin($this->GetUser()))
 			foreach($userdata as $user)
 			{
 				// get counts	
-				$where_owned	= "`owner` = '".$user['name']."' AND latest = 'Y'";
-				$where_changes	= "`user` = '".$user['name']."'";
-				$where_comments	= "`user` = '".$user['name']."'";
-				$numowned = $this->getCount('pages', $where_owned);
-				$numchanges = $this->getCount('pages', $where_changes);
-				$numcomments = $this->getCount('comments', $where_comments);
+				$where_owned	= "`owner` = :owner AND latest = 'Y'";
+				$where_changes	= "`user` = :user";
+				$where_comments	= "`user` = :user";
+				$numowned = $this->getCount('pages', 
+				                            $where_owned,
+											array(':owner' => $user[name]));
+				$numchanges = $this->getCount('pages', 
+											  $where_changes,
+											  array(':user' => $user[name]));
+				$numcomments = $this->getCount('comments', 
+				                               $where_comments,
+											   array(':user' => $user[name]));
 		
 				// build statistics links if needed
 				$ownedlink = ($numowned > 0)? '<a title="'.sprintf(T_("Display pages owned by %s (%d)"),$user['name'],$numowned).'" href="'.$this->Href('','','user='.$user['name'].'&amp;action=owned').'">'.$numowned.'</a>' : '0';
@@ -485,7 +500,7 @@ if ($this->IsAdmin($this->GetUser()))
 		else
 		{
 			// no records matching the search string: print error message
-			echo '<p><em class="error">'.sprintf(T_("Sorry, there are no users matching \"%s\""), $search_disp).'</em></p>';
+			echo '<p><em class="error">'.sprintf(T_("Sorry, there are no users matching \"%s\""), $search).'</em></p>';
 		}
 	}
 }

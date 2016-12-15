@@ -10,6 +10,9 @@
  *	By specifying prefix='0' the prefix configured for Wikka is ignored, allowing other tables in the same database (if any)
  *	to be inspected.
  *
+ * NOTE: These calls are most likely MySQL-specific.  This action
+ * needs some work to make it db-agnostic.
+ *
  * Syntax:
  *	{{dbinfo [all="0|1"] [prefix="0|1"]}}
  *
@@ -69,7 +72,7 @@ $msgOnlyAdmin	= T_("Sorry, only administrators can view database information.");
 // variables
 
 $isAdmin	= $this->IsAdmin();
-$database	= $this->GetConfigValue('mysql_database');
+$database	= $this->GetConfigValue('dbms_database');
 $prefix		= $this->GetConfigValue('table_prefix');
 
 // ---------------------- processsing --------------------------
@@ -105,10 +108,10 @@ if ($isAdmin)
 	if ($bAll)
 	{
 		$query = 'SHOW DATABASES';
-		$tableresult = mysql_query($query);
+		$tableresult = $this->Query($query)->fetchAll();
 		if ($tableresult)
 		{
-			while ($row = mysql_fetch_assoc($tableresult))
+			foreach ($tableresult as $row)
 			{
 				$aDbList[] = $row['Database'];
 			}
@@ -142,14 +145,16 @@ if ($isAdmin)
 	{
 		$seldb = $database;								# no choice: wikka database
 	}
+
 	if (isset($seldb))
 	{
-		$query = 'SHOW CREATE DATABASE '.$seldb;
-		$dbcreateresult = mysql_query($query);
+		$query = 'SHOW CREATE DATABASE '.$this->pdo_quote_identifier($seldb);
+		$dbcreateresult = 
+			$this->Query($query);
 		if ($dbcreateresult)
 		{
-			$row = mysql_fetch_assoc($dbcreateresult);
-			$dbcreate = $row['Create Database'];
+			$dbcreate = ($dbcreateresult->fetch())['Create Database'];
+			$dbcreateresult->closeCursor();
 		}
 	}
 
@@ -157,13 +162,13 @@ if ($isAdmin)
 	$aTableList = array();
 	if (isset($seldb))
 	{
-		$query = 'SHOW TABLES FROM '.$seldb;
+		$query = 'SHOW TABLES FROM '.$this->pdo_quote_identifier($seldb);
 		if ($bPrefix)
 		{
 			$pattern = $prefix.'%';
 			$query .= " LIKE '".$pattern."'";
 		}
-		$tablelistresult = mysql_query($query);
+		$tablelistresult = $this->Query($query)->fetchAll(); 
 		if ($tablelistresult)
 		{
 			$colname = 'Tables_in_'.$seldb;
@@ -171,7 +176,7 @@ if ($isAdmin)
 			{
 				$colname .= ' ('.$pattern.')';
 			}
-			while ($row = mysql_fetch_assoc($tablelistresult))
+			foreach($tablelistresult as $row) 
 			{
 				$aTableList[] = $row[$colname];
 			}
@@ -184,12 +189,15 @@ if ($isAdmin)
 		if (isset($_POST['seltable']) && in_array($_POST['seltable'],$aTableList))	# valid choice
 		{
 			$seltable = $this->GetSafeVar('seltable', 'post');
+			$seltable = $this->pdo_quote_identifier($seltable);
 			$query = 'SHOW CREATE TABLE '.$seltable;
-			$tablecreateresult = mysql_query($query);
+			$tablecreateresult = 
+				$this->Query($query);
 			if ($tablecreateresult)
 			{
-				$row = mysql_fetch_assoc($tablecreateresult);
+				$row = $tablecreateresult->fetch();
 				$tablecreate = $row['Create Table'];
+				$tablecreateresult->closeCursor();
 			}
 		}
 	}

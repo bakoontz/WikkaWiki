@@ -328,9 +328,13 @@ if ($this->IsAdmin($this->GetUser()))
 		if(isset($_GET['sort']) && in_array($_GET['sort'], $sort_fields)) $sort = $_GET['sort'];
 
 		// sort order
-		$d = "desc";
-		$sort_order = array('asc', 'desc');
-		if(isset($_GET['d']) && in_array($_GET['d'], $sort_order)) $d = $_GET['d'];
+		$d = 'desc';
+		if(isset($_GET['d'])) {
+			if($this->GetSafeVar('d', 'get') == 'asc') {
+				$d = 'asc';
+			}
+		}
+
 		// start record
 		$s = ADMINPAGES_DEFAULT_START;
 		if (isset($_GET['s']) && (int)$_GET['s'] >=0) $s = (int)$_GET['s']; 
@@ -338,17 +342,14 @@ if ($this->IsAdmin($this->GetUser()))
 
 		// search string
 		$search = ADMINPAGES_DEFAULT_SEARCH;
-		$search_disp = ADMINPAGES_DEFAULT_SEARCH;
+		$search = ADMINPAGES_DEFAULT_SEARCH;
 		if (isset($_POST['search']))
 		{
-			$search =
-			mysql_real_escape_string($this->GetSafeVar('search', 'post'));
-			$search_disp = $this->GetSafeVar('search', 'post');
+			$search = $this->GetSafeVar('search', 'post');
 		}
 		elseif (isset($_GET['search']))
 		{
-			$search = mysql_real_escape_string($this->GetSafeVar('search', 'get'));
-			$search_disp = $this->GetSafeVar('search', 'get');
+			$search = $this->GetSafeVar('search', 'get');
 		}
 
 		// select all	added JW 2005-07-19
@@ -364,7 +365,7 @@ if ($this->IsAdmin($this->GetUser()))
 		// build pager form	
 		$form_filter = $this->FormOpen('','','post','page_admin_panel');
 		$form_filter .= '<fieldset><legend>'.T_("Filter view:").'</legend>'."\n";
-		$form_filter .= '<label for="search">'.T_("Search page:").'</label> <input type ="text" id="search" name="search" title="'.T_("Enter a search string").'" size="20" maxlength="50" value="'.$search_disp.'"/> <input type="submit" value="'.T_("Submit").'" /><br />'."\n";
+		$form_filter .= '<label for="search">'.T_("Search page:").'</label> <input type ="text" id="search" name="search" title="'.T_("Enter a search string").'" size="20" maxlength="50" value="'.$search.'"/> <input type="submit" value="'.T_("Submit").'" /><br />'."\n";
 		// build date range fields
 		$form_filter .= '<label>'.T_("Last edit range: Between").'</label>&nbsp;<input class="datetime" type="text" name="start_YY" size="4" maxlength="4" value="'.$start_YY.'"/>-<input class="datetime" type="text" name="start_MM" size="2" maxlength="2" value="'.$start_MM.'"/>-<input class="datetime" type="text" name="start_DD" size="2" maxlength="2" value="'.$start_DD.'"/>&nbsp;<input class="datetime" type="text" name="start_hh" size="2" maxlength="2" value="'.$start_hh.'"/>:<input class="datetime" type="text" name="start_mm" size="2" maxlength="2" value="'.$start_mm.'"/>:<input class="datetime" type="text" name="start_ss" size="2" maxlength="2" value="'.$start_ss.'"/>&nbsp;'.T_("and").'&nbsp;<input class="datetime" type="text" name="end_YY" size="4" maxlength="4" value="'.$end_YY.'"/>-<input class="datetime" type="text" name="end_MM" size="2" maxlength="2" value="'.$end_MM.'"/>-<input class="datetime" type="text" name="end_DD" size="2" maxlength="2" value="'.$end_DD.'"/>&nbsp;<input class="datetime" type="text" name="end_hh" size="2" maxlength="2" value="'.$end_hh.'"/>:<input class="datetime" type="text" name="end_mm" size="2" maxlength="2" value="'.$end_mm.'"/>:<input class="datetime" type="text" name="end_ss" size="2" maxlength="2" value="'.$end_ss.'"/><br />'."\n";
 
@@ -380,20 +381,20 @@ if ($this->IsAdmin($this->GetUser()))
 				   is_numeric($start_MM) && $start_MM > 0 && $start_MM < 13 &&
 				   is_numeric($start_DD) && $start_DD > 0 && $start_DD < 32)
 		{
-			$start_ts = mysql_real_escape_string($start_YY);
+			$start_ts = $start_YY;
 			$start_ts .= '-';
-			$start_ts .= mysql_real_escape_string($start_MM);
+			$start_ts .= $start_MM;
 			$start_ts .= '-';
-			$start_ts .= mysql_real_escape_string($start_DD);
+			$start_ts .= $start_DD;
 			if (is_numeric($start_hh) && $start_hh >= 0 && $start_hh <=24)
 			{
-				$start_ts .= ' '.mysql_real_escape_string($start_hh).':';
+				$start_ts .= ' '.$start_hh.':';
 				if (is_numeric($start_mm) && $start_mm >= 0 && $start_mm <= 59)
 				{
-					$start_ts .= mysql_real_escape_string($start_mm).':';
+					$start_ts .= $start_mm.':';
 					if (is_numeric($start_ss) && $start_ss >= 0 && $start_ss <= 59)
 					{
-						$start_ts .= mysql_real_escape_string($start_ss);
+						$start_ts .= $start_ss;
 					}
 					else
 					{
@@ -409,20 +410,20 @@ if ($this->IsAdmin($this->GetUser()))
 			   is_numeric($end_MM) && $end_MM > 0 && $end_MM < 13 &&
 			   is_numeric($end_DD) && $end_DD > 0 && $end_DD < 32)
 			{
-				$end_ts = mysql_real_escape_string($end_YY);
+				$end_ts = $end_YY;
 				$end_ts .= '-';
-				$end_ts .= mysql_real_escape_string($end_MM);
+				$end_ts .= $end_MM;
 				$end_ts .= '-';
-				$end_ts .= mysql_real_escape_string($end_DD);
+				$end_ts .= $end_DD;
 				if (is_numeric($end_hh) && $end_hh >= 0 && $end_hh <=24)
 				{
-					$end_ts .= ' '.mysql_real_escape_string($end_hh).':';
+					$end_ts .= ' '.$end_hh.':';
 					if (is_numeric($end_mm) && $end_mm >= 0 && $end_mm <= 59)
 					{
-						$end_ts .= mysql_real_escape_string($end_mm).':';
+						$end_ts .= $end_mm.':';
 						if (is_numeric($end_ss) && $end_ss >= 0 && $end_ss <= 59)
 						{
-							$end_ts .= mysql_real_escape_string($end_ss);
+							$end_ts .= $end_ss;
 						}
 						else
 						{
@@ -442,13 +443,21 @@ if ($this->IsAdmin($this->GetUser()))
 		}
 
 		// restrict MySQL query by search string	 modified JW 2005-07-19
-		$where = ('' == $search) ? "`latest` = 'Y'" : "`tag` LIKE '%".$search."%' AND `latest` = 'Y'";
+		$params = array();
+		if('' == $search) {
+			$where = "`latest` = 'Y'";
+		} else {
+			$where = "`tag` LIKE :search AND `latest` = 'Y'";
+			$params = array(':search' => '%'.$search.'%');
+		}
 		if (!empty($start_ts) && !empty($end_ts))
 		{
-			$where .= " AND time > '".$start_ts."' AND time < '".$end_ts."'"; 
+			$where .= " AND time > :start_ts AND time < :end_ts"; 
+			$params = array(':start_ts' => $start_ts,
+			                ':end_ts' => $end_ts);
 		}
 		// get total number of pages
-		$numpages = $this->getCount('pages', $where);
+		$numpages = $this->getCount('pages', $where, $params);
 
 		// ranged drop-down
 		$pages_opts = optionRanges($page_limits,$numpages, ADMINPAGES_DEFAULT_MIN_RECORDS_DISPLAY);
@@ -503,8 +512,11 @@ if ($this->IsAdmin($this->GetUser()))
 				$table = 'pages';	
 		}
 
-		$query = "SELECT *".$count." FROM ".$this->GetConfigValue('table_prefix').$table." WHERE ".  $where." ".$group." ORDER BY ".$sort." ".$d." LIMIT ".$s.", ".$l;
-		$pagedata = $this->LoadAll($query);
+		$params[':sort'] = $sort;
+		$params[':s'] = (int)$s;
+		$params[':l'] = (int)$l;
+		$query = "SELECT *".$count." FROM ".$this->GetConfigValue('table_prefix').$table." WHERE ".  $where." ".$group." ORDER BY :sort ".$d." LIMIT :s, :l";
+		$pagedata = $this->LoadAll($query, $params);
 
 		if ($pagedata)
 		{
@@ -710,7 +722,7 @@ if ($this->IsAdmin($this->GetUser()))
 		else
 		{
 			// no records matching the search string: print error message
-			echo '<p><em class="error">'.sprintf(T_("Sorry, there are no pages matching \"%s\""), $search_disp).'</em></p>';
+			echo '<p><em class="error">'.sprintf(T_("Sorry, there are no pages matching \"%s\""), $search).'</em></p>';
 		}
 	}
 }

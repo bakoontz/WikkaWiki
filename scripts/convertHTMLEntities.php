@@ -53,6 +53,16 @@
 <body>
 <?php
 
+// This script is deprecated for PHP versions 7 and greater!
+if (!defined('PHP_VERSION_ID')) {
+    $version = explode('.', PHP_VERSION);
+
+    define('PHP_VERSION_ID', ($version[0] * 10000 + $version[1] * 100 + $version[2]));
+}
+if(PHP_VERSION_ID >= 70000) {
+	die("This script is deprecated for PHP versions 7 and greater!");
+}
+
 include_once('../wikka.config.php');
 
 function replace_callback($matches)

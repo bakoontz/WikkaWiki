@@ -21,7 +21,6 @@
  * 			invalid input fields;
  * @todo	remove useless redirections;
  * @todo	[accessibility] make logout independent of JavaScript
- * @todo	remove mysql_real_escape_string from password storage #531
  * @todo	complete @uses
  */
 
@@ -123,17 +122,26 @@ if ($user = $this->GetUser())
 				break;
 			// @@@ validate doubleclickedit, show-comments and (especially) default_comment_display
 			default: // input is valid
+				$name = $user['name'];
 				$this->Query("
 					UPDATE ".$this->GetConfigValue('table_prefix')."users
-					SET	email = '".mysql_real_escape_string($email)."',
-						doubleclickedit = '".mysql_real_escape_string($doubleclickedit)."',
-						show_comments = '".mysql_real_escape_string($show_comments)."',
-						default_comment_display = '".mysql_real_escape_string($default_comment_display)."',
-						revisioncount = ".mysql_real_escape_string($revisioncount).",
-						changescount = ".mysql_real_escape_string($changescount).",
-						theme = '".mysql_real_escape_string($usertheme)."'
-					WHERE name = '".$user['name']."'
-					LIMIT 1"
+					SET	email = :email,
+						doubleclickedit = :doubleclickedit,
+						show_comments = :show_comments,
+						default_comment_display = :default_comment_display,
+						revisioncount = :revisioncount,
+						changescount = :changescount,
+						theme = :usertheme 
+					WHERE name = :name
+					LIMIT 1",
+					array(':email' => $email,
+					      ':doubleclickedit' => $doubleclickedit,
+						  ':show_comments' => $show_comments,
+						  ':default_comment_display' => $default_comment_display,
+						  ':revisioncount' => $revisioncount,
+						  ':changescount' => $changescount,
+						  ':usertheme' => $usertheme,
+						  ':name' => $name)
 					);
 				$this->SetUser($this->loadUserData($user['name']));
 		}
@@ -248,12 +256,16 @@ if ($user = $this->GetUser())
 				break;
 			default:
 				$challenge = dechex(crc32(time()));
+				$user['password'] = md5($challenge.$password);
+				$user['challenge'] = $challenge;
 				$this->Query("
 					UPDATE ".$this->GetConfigValue('table_prefix')."users
-					SET password = '".md5($challenge.mysql_real_escape_string($password))."',
-					challenge = '".$challenge."' WHERE name = '".$user['name']."'"
+					SET password = :password,
+					challenge = :challenge WHERE name = :name",
+					array(':password' => $user['password'],
+					      ':challenge' => $challenge,
+						  ':name' => $user['name'])
 					);
-				$user['password'] = md5($challenge.$password);
 				$this->SetUser($user);
 				$passsuccess = T_("Password successfully changed!");
 		}
@@ -466,13 +478,21 @@ else
 				break;
 			default: //valid input, create user
 				$challenge = dechex(crc32(time()));
-				$this->Query("INSERT INTO ".$this->GetConfigValue('table_prefix')."users SET ".
-					"signuptime = now(), ".
-					"name = '".mysql_real_escape_string($name)."', ".
-					"email = '".mysql_real_escape_string($email)."', ".
-					"challenge = '".$challenge."', ".
-					"default_comment_display = '".$this->GetConfigValue('default_comment_display')."', ".
-					"password = md5('".$challenge.mysql_real_escape_string($this->GetSafeVar('password', 'post'))."')");
+				$password = $this->GetSafeVar('password', 'post');
+				$password = md5($challenge.$password);
+				$default_comment_display = $this->GetConfigValue('default_comment_display');
+				$this->Query("INSERT INTO ".$this->GetConfigValue('table_prefix')."users SET
+					signuptime = now(),
+					name = :name,
+					email = :email,
+					challenge = :challenge,
+					default_comment_display = :default_comment_display,
+					password = :password",
+					array(':name' => $name,
+					      ':email' => $email,
+						  ':challenge' => $challenge,
+						  ':default_comment_display' => $default_comment_display,
+						  ':password' => $password));
 
 				// log in
 				#$this->SetUser($this->LoadUser($name));

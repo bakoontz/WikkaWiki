@@ -22,7 +22,7 @@ if ($this->IsAdmin())
 	$odd_row = TRUE;
 	$settings = $this->config;
 	//array of sensitive config options to exclude from the output 
-	$hide_options = array('mysql_host', 'mysql_user', 'mysql_password');
+	$hide_options = array('dbms_host', 'dbms_user', 'dbms_password');
 
 	$wc_output = '<table class="data wikkaconfig">'."\n";
 	$wc_output .= '	<caption>'.sprintf(T_("Wikka Configuration Settings [%s]"), '<a href="http://docs.wikkawiki.org/ConfigurationOptions" target="_blank" title="'.T_("Read the documentation on Wikka Configuration Settings").'">?</a>').'</caption>'."\n";

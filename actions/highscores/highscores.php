@@ -84,11 +84,11 @@ switch($rank)
 }
 
 //fetch data
-$rank_query = $this->Query($query);
+$rank_query = $this->Query($query)->fetchAll();
 
 $i = 0;
 $str = '';
-while($row = mysql_fetch_array($rank_query))
+foreach($rank_query as $row)
 {
 	$i++;
 	$str .= '	<tr '.(($i % 2)? '' : 'class="alt"').'>'."\n";
