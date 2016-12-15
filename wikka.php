@@ -408,7 +408,23 @@ if (isset($wakkaConfig['footer_action'])) //since 1.1.6.4
 {
 	unset($wakkaConfig['footer_action']);
 }
-	
+if(isset($wakkaConfig['mysql_host'])) {   //since 1.4.0
+	$wakkaConfig['dbms_host'] = $wakkaConfig['mysql_host'];
+	unset($wakkaConfig['mysql_host']);
+}
+if(isset($wakkaConfig['mysql_database'])) {   //since 1.4.0
+	$wakkaConfig['dbms_database'] = $wakkaConfig['mysql_database'];
+	unset($wakkaConfig['mysql_database']);
+}
+if(isset($wakkaConfig['mysql_user'])) {   //since 1.4.0
+	$wakkaConfig['dbms_user'] = $wakkaConfig['mysql_user'];
+	unset($wakkaConfig['mysql_user']);
+}
+if(isset($wakkaConfig['mysql_password'])) {   //since 1.4.0
+	$wakkaConfig['dbms_password'] = $wakkaConfig['mysql_password'];
+	unset($wakkaConfig['mysql_password']);
+}
+
 // Remove old stylesheet, #6
 if(isset($wakkaConfig['stylesheet']))
 {
