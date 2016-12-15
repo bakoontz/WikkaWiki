@@ -593,7 +593,7 @@ case "1.3.6":
 	test("Changing \"default\" theme references to \"classic\" theme ...",  
 	db_query("UPDATE `".$config["table_prefix"]."users` SET theme='classic' WHERE theme='default'", NULL, $dblink), __("Already done? OK!"), 0);
 case "1.3.7":
-	print("<strong>1.3.7 to 1.3.8 changes:</strong><br />\n");
+	print("<strong>1.3.7 to 1.4.0 changes:</strong><br />\n");
 	// delete file removed from previous version
 	@unlink('lang/en/defaults/TableMarkupReference.php');
 	// Change datetime default to '1900-01-01' for MySQL > 5.7 compatibility
@@ -605,7 +605,7 @@ case "1.3.7":
 		db_query("ALTER TABLE ".$config['table_prefix']."users CHANGE signuptime signuptime datetime NOT NULL default '1900-01-01 00:00:00'", NULL, $dblink), "Failed. ?", 1);
 	test("Altering comments table structure...",
 		db_query("ALTER TABLE ".$config['table_prefix']."comments CHANGE time time datetime NOT NULL default '1900-01-01 00:00:00'", NULL, $dblink), "Failed. ?", 1);
-case "1.3.8":
+case "1.4.0":
 case "master":
 }
 
