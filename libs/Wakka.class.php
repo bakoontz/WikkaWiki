@@ -311,15 +311,14 @@ class Wakka
 			}
 		} catch(PDOException $e) {
 			ob_end_clean();
-			/*
 			die('<em class="error">' . 
 			    T_("Query failed in Query(): ") .  
 				$e->getCode() .
 				'</em>');
-			*/
 
 			// DEBUG
 			// Don't use this in production!
+			/*
 			print $e;
 			print "<br/>";
 			print "Query: ".$query;
@@ -328,6 +327,7 @@ class Wakka
 			    T_("Query failed in Query(): ") .  
 				$e->getCode() .
 				'</em>');
+			*/
 		}
 		if ($object && $this->GetConfigValue('sql_debugging'))
 		{
