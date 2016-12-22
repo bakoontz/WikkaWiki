@@ -131,7 +131,7 @@ if ($user = $this->GetUser())
 						default_comment_display = :default_comment_display,
 						revisioncount = :revisioncount,
 						changescount = :changescount,
-						theme = :usertheme 
+						theme = :usertheme
 					WHERE name = :name
 					LIMIT 1",
 					array(':email' => $email,

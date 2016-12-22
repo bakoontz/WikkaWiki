@@ -242,16 +242,26 @@ class Wakka
 		$this->config = $config;
 
 		// Set up PDO object
-		$dsn = $this->GetConfigValue('dbms_type') . ':' .
-			   'host=' . $this->GetConfigValue('dbms_host') . ';' .
-			   'dbname=' . $this->GetConfigValue('dbms_database');
-		$user = $this->GetConfigValue('dbms_user');
-		$pass = $this->GetConfigValue('dbms_password');
-		try {
-			$this->dblink = new PDO($dsn, $user, $pass);
-		} catch(PDOException $e) {
-			die('<em class="error">'.T_("PDO connection error!").'</em>');
+		if($this->GetConfigValue('dbms_type') == "sqlite"){
+			$dsn = $this->GetConfigValue('dbms_type') . ':' . $this->GetConfigValue('dbms_file');
+			try {
+				$this->dblink = new PDO($dsn);
+			} catch(PDOException $e) {
+				die('<em class="error">'.T_("PDO connection error!").'</em>');
+			}
+		}else{
+			$dsn = $this->GetConfigValue('dbms_type') . ':' .
+					 'host=' . $this->GetConfigValue('dbms_host') . ';' .
+					 'dbname=' . $this->GetConfigValue('dbms_database');
+			$user = $this->GetConfigValue('dbms_user');
+			$pass = $this->GetConfigValue('dbms_password');
+			try {
+				$this->dblink = new PDO($dsn, $user, $pass);
+			} catch(PDOException $e) {
+				die('<em class="error">'.T_("PDO connection error!").'</em>');
+			}
 		}
+
 		$this->dblink->query("SET NAMES 'utf8'");
 
 		// Don't emulate prepare statements (to prevent injection attacks)
@@ -311,14 +321,15 @@ class Wakka
 			}
 		} catch(PDOException $e) {
 			ob_end_clean();
+/*
 			die('<em class="error">' .
 			    T_("Query failed in Query(): ") .
 				$e->getCode() .
 				'</em>');
-
+      */
 			// DEBUG
 			// Don't use this in production!
-			/*
+
 			print $e;
 			print "<br/>";
 			print "Query: ".$query;
@@ -327,7 +338,7 @@ class Wakka
 			    T_("Query failed in Query(): ") .
 				$e->getCode() .
 				'</em>');
-			*/
+
 		}
 		if ($object && $this->GetConfigValue('sql_debugging'))
 		{
@@ -2005,6 +2016,19 @@ class Wakka
 				);
 
 			// add new revision
+			if($this->GetConfigValue('dbms_type') == "sqlite"){
+				$this->Query("
+					INSERT INTO ".$this->GetConfigValue('table_prefix')."pages
+					(  tag, title     , time                      , owner, user, note, latest, body ) VALUES
+					( :tag,:page_title,datetime('now','localtime'),:owner,:user,:note,'Y'    ,:body )",
+						array(':tag' => $tag,
+						    ':page_title' => $page_title,
+							  ':owner' => $owner,
+							  ':user' => $user,
+							  ':note' => $note,
+							  ':body' => $body)
+					);
+			} else {
 			$this->Query("
 				INSERT INTO ".$this->GetConfigValue('table_prefix')."pages
 				SET	tag		= :tag,
@@ -2022,6 +2046,7 @@ class Wakka
 						  ':note' => $note,
 						  ':body' => $body)
 				);
+			}
 
 			// WikiPing
 			if ($pingdata = $this->GetPingParams($this->GetConfigValue('wikiping_server'), $tag, $user, $note))
@@ -4059,11 +4084,19 @@ class Wakka
 		// older than PERSISTENT_COOKIE_EXPIRY, as this is not a
 		// time-critical function for the user.  The assumption here
 		// is that server-side sessions have long ago been cleaned up by PHP.
+		// TODO: Set the mount from PERSISTENT_COOKIE_EXPIRY on the sqlite code.
+    if($this->GetConfigValue('dbms_type') == "sqlite"){
+			$this->Query("
+				DELETE FROM ".$this->GetConfigValue('table_prefix')."sessions
+				WHERE DATETIME('now','-3 month') > session_start"
+				);
+			}else{
 		$this->Query("
 			DELETE FROM ".$this->GetConfigValue('table_prefix')."sessions
-			WHERE DATE_SUB(NOW(), INTERVAL ".PERSISTENT_COOKIE_EXPIRY." SECOND) > session_start"
+			WHERE DATE_SUB(DATETIME('now','localtime'), INTERVAL ".PERSISTENT_COOKIE_EXPIRY." SECOND) > session_start"
 			);
 		$this->registered = false;
+		}
 	}
 
 	/**
@@ -4493,7 +4526,7 @@ class Wakka
 			WHERE c2.page_tag IS NULL
 				AND (comments.status IS NULL or comments.status != 'deleted')
 					".$where."
-			ORDER BY time DESC
+			ORDER BY comments.time DESC
 			LIMIT ".intval($limit);
 		return $this->LoadAll($sql, $params);
 	}
@@ -4519,6 +4552,18 @@ class Wakka
 		{
 			$parent_id = 'NULL';
 		}
+
+		if($this->GetConfigValue('dbms_type') == "sqlite"){
+			$this->Query("
+				INSERT INTO ".$this->GetConfigValue('table_prefix')."comments
+				(  page_tag, time                       , comment, parent   , user ) VALUES
+				( :page_tag, datetime('now','localtime'),:comment,:parent_id,:user )",
+				array(':page_tag' => $page_tag,
+				      ':comment' => $comment,
+					  ':parent_id' => ($parent_id == 'NULL') ? null : $parent_id,
+					  ':user' => $user)
+				);
+		} else {
 		$this->Query("
 			INSERT INTO ".$this->GetConfigValue('table_prefix')."comments
 			SET page_tag = :page_tag,
@@ -4531,6 +4576,7 @@ class Wakka
 				  ':parent_id' => ($parent_id == 'NULL') ? null : $parent_id,
 				  ':user' => $user)
 			);
+		}
 	}
 
 	/**
@@ -5139,7 +5185,7 @@ class Wakka
 	 *
 	 */
 	function Maintenance()
-	{
+	{ /*
 		// purge referrers
 		if ($days = $this->GetConfigValue("referrers_purge_time"))
 		{
@@ -5147,7 +5193,7 @@ class Wakka
 				DELETE FROM ".$this->GetConfigValue('table_prefix')."referrers
 				WHERE time < date_sub(now(), interval :days day)",
 				array(':days' => $days)
-				);
+			);
 		}
 
 		// purge old page revisions
@@ -5159,7 +5205,7 @@ class Wakka
 					AND latest = 'N'", array(':days' => $days)
 				);
 			$this->Query("delete from ".$this->GetConfigValue('table_prefix')."pages where time < date_sub(now(), interval :days day) and latest = 'N'", array(':days' => days));
-		}
+		} */
 	}
 
 	/**
