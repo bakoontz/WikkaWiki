@@ -512,10 +512,12 @@ if ($this->IsAdmin($this->GetUser()))
 				$table = 'pages';	
 		}
 
-		$params[':sort'] = $sort;
 		$params[':s'] = (int)$s;
 		$params[':l'] = (int)$l;
-		$query = "SELECT *".$count." FROM ".$this->GetConfigValue('table_prefix').$table." WHERE ".  $where." ".$group." ORDER BY :sort ".$d." LIMIT :s, :l";
+		if(!in_array($sort, $sort_fields)) {
+			$sort = 'tag';
+		}
+		$query = "SELECT *".$count." FROM ".$this->GetConfigValue('table_prefix').$table." WHERE ".  $where." ".$group." ORDER BY ".$sort." ".$d." LIMIT :s, :l";
 		$pagedata = $this->LoadAll($query, $params);
 
 		if ($pagedata)
