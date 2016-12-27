@@ -517,7 +517,7 @@ if ($this->IsAdmin($this->GetUser()))
 		if(!in_array($sort, $sort_fields)) {
 			$sort = 'tag';
 		}
-		$query = "SELECT *".$count." FROM ".$this->GetConfigValue('table_prefix').$table." WHERE ".  $where." ".$group." ORDER BY ".$sort." ".$d." LIMIT :s, :l";
+		$query = "SELECT ".implode(",", $sort_fields)." ".$count." FROM ".$this->GetConfigValue('table_prefix').$table." WHERE ".  $where." ".$group." ORDER BY ".$sort." ".$d." LIMIT :s, :l";
 		$pagedata = $this->LoadAll($query, $params);
 
 		if ($pagedata)
