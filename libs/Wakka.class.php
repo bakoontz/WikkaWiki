@@ -2308,7 +2308,7 @@ class Wakka
 			$r->closeCursor();
 		}
 		// report
-		return ($count > 0) ? TRUE : FALSE;
+		return ($count[0] > 0) ? TRUE : FALSE;
 	}
 
 	/**#@-*/
