@@ -399,10 +399,9 @@ if ($this->IsAdmin($this->GetUser()))
 		$form_filter .= '</fieldset>'.$this->FormClose()."\n";
 
 		// get user list
-		$params[':sort'] = $sort;
 		$params[':s'] = (int)$s;
 		$params[':l'] = (int)$l;
-		$userdata = $this->LoadAll("SELECT * FROM ".$this->GetConfigValue('table_prefix')."users WHERE ".$where." ORDER BY :sort $d limit :s, :l", $params);
+		$userdata = $this->LoadAll("SELECT ".implode(",", $sort_fields)." FROM ".$this->GetConfigValue('table_prefix')."users WHERE ".$where." ORDER BY ".$sort." ".$d." limit :s, :l", $params);
 		if ($userdata)
 		{
 			// build header links
