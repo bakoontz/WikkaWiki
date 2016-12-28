@@ -156,6 +156,8 @@ if(isset($_SESSION['error_flag']) && false === $_SESSION['error_flag'] && isset(
  	{
 	?>
 	<tr><td></td><td><br /><h2>1. Database Configuration</h2></td></tr>
+	<tr><td></td><td>The DB server.  Only those listed in the dropdown are supported.</td></tr>
+	<tr><td align="right" nowrap="nowrap">DB server type:</td><td><?php SelectDB($wakkaConfig["dbms_type"]); ?></td></tr>
 	<tr><td></td><td>The host your DB server is running on. Usually "localhost" (ie, the same machine your Wikka site is on).</td></tr>
 	<?php if(isset($error['dbms_host'])) { ?>
 	<tr><td></td><td><em class="error"><?php echo $error['dbms_host']; ?></em></td></tr>

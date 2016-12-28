@@ -84,6 +84,18 @@ function SelectTheme($default_theme='light')
 	echo '</select>';
 }
 
+function SelectDB($default_db='mysql')
+{
+	$avail_dbs = array('mysql','sqlite');
+	echo '<select name="config[dbms_type]">';
+	foreach($avail_dbs as $f) {
+		echo "\n ".'<option value="'.$f.'"';
+		if ($f == $default_db) echo ' selected="selected"';
+		echo '>'.$f.'</option>';
+	}
+	echo '</select>';
+}
+
 
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
