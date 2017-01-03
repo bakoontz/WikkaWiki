@@ -57,8 +57,8 @@ if($this->GetSafeVar('cancel', 'post') == T_("Cancel"))
 	$this->Redirect($this->Href());
 }
 
-if ($this->GetSafeVar('submit', 'post') == T_("Preview") && 
-	($user = $this->GetUser()) && 
+if ($this->GetSafeVar('submit', 'post') == T_("Preview") &&
+	($user = $this->GetUser()) &&
 	($user['doubleclickedit'] != 'N'))
 {
 	$ondblclick = ' ondblclick=\'document.getElementById("reedit_id").click();\'';
@@ -186,8 +186,11 @@ else if ($this->HasAccess("write") && $this->HasAccess("read"))
 
 	// derive maximum length for a page name from the table structure if possible
 	// MySQL specific!
-	if ($result = $this->Query("describe ".$this->GetConfigValue('table_prefix')."pages tag")) {
-		$field = ($result->fetchAll())[0]; 
+	if($this->GetConfigValue('dbms_type') == "sqlite"){
+		// For now this is the default on sqlite.
+		$maxtaglen = MAX_TAG_LENGTH;
+	} elseif ($result = $this->Query("describe ".$this->GetConfigValue('table_prefix')."pages tag")) {
+		$field = ($result->fetchAll())[0];
 		if (preg_match("/varchar\((\d+)\)/", $field['Type'], $matches)) $maxtaglen = $matches[1];
 	}
 	else

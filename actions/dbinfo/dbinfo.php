@@ -21,7 +21,7 @@
  * @filesource
  *
  * @author		{@link http://wikkawiki.org/JavaWoman JavaWoman}
- * @copyright	Copyright © 2005, Marjolein Katsma
+ * @copyright	Copyright ï¿½ 2005, Marjolein Katsma
  * @license		http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
  * @since		Wikka 1.1.6.4
  *
@@ -39,7 +39,7 @@
  * @uses	FormClose()
  * @uses	Format()
  * @uses	makeId()
- * 
+ *
  * @todo 	Prevent multiple calls, #634
  */
 
@@ -69,6 +69,18 @@ $hdTables		= T_("Tables");
 $txtActionInfo	= T_("This utility provides some information about the database(s). Depending on permissions for the Wikka database user, not all databases or tables may be visible. Where creation DDL is given, this reflects everything that would be needed to exactly recreate the same database and table definitions, including defaults that may not have been specified explicitly.");
 $msgOnlyAdmin	= T_("Sorry, only administrators can view database information.");
 
+if($this->GetConfigValue('dbms_type') == "sqlite"){
+
+	$isAdmin	= $this->IsAdmin();
+	$prefix		= $this->GetConfigValue('table_prefix');
+
+	if ($isAdmin)
+	{
+		print("sqlite3 database: <br>");
+		print("Path: ".$this->GetConfigValue('dbms_file'));
+	}
+
+} else {
 // variables
 
 $isAdmin	= $this->IsAdmin();
@@ -149,7 +161,7 @@ if ($isAdmin)
 	if (isset($seldb))
 	{
 		$query = 'SHOW CREATE DATABASE '.$this->pdo_quote_identifier($seldb);
-		$dbcreateresult = 
+		$dbcreateresult =
 			$this->Query($query);
 		if ($dbcreateresult)
 		{
@@ -168,7 +180,7 @@ if ($isAdmin)
 			$pattern = $prefix.'%';
 			$query .= " LIKE '".$pattern."'";
 		}
-		$tablelistresult = $this->Query($query)->fetchAll(); 
+		$tablelistresult = $this->Query($query)->fetchAll();
 		if ($tablelistresult)
 		{
 			$colname = 'Tables_in_'.$seldb;
@@ -176,7 +188,7 @@ if ($isAdmin)
 			{
 				$colname .= ' ('.$pattern.')';
 			}
-			foreach($tablelistresult as $row) 
+			foreach($tablelistresult as $row)
 			{
 				$aTableList[] = $row[$colname];
 			}
@@ -191,7 +203,7 @@ if ($isAdmin)
 			$seltable = $this->GetSafeVar('seltable', 'post');
 			$seltable = $this->pdo_quote_identifier($seltable);
 			$query = 'SHOW CREATE TABLE '.$seltable;
-			$tablecreateresult = 
+			$tablecreateresult =
 				$this->Query($query);
 			if ($tablecreateresult)
 			{
@@ -347,5 +359,6 @@ if ($isAdmin)
 else
 {
 	echo '<p class="error">'.$msgOnlyAdmin.'</p>'."\n";
+}
 }
 ?>

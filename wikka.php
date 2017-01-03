@@ -713,14 +713,24 @@ if(NULL != $user)
 	if(isset($res))
 	{
 		// Just update the session_start time
-		$wakka->Query("UPDATE ".$wakka->config['table_prefix']."sessions SET session_start=FROM_UNIXTIME(".$wakka->GetMicroTime().") WHERE sessionid=:sessionid AND userid=:userid",
-			array(':sessionid' => $sessionid, ':userid' => $username));
+		if ($wakka->config['dbms_type'] == 'sqlite'){
+			$wakka->Query("UPDATE ".$wakka->config['table_prefix']."sessions SET session_start=datetime(".$wakka->GetMicroTime().", 'unixepoch', 'localtime') WHERE sessionid=:sessionid AND userid=:userid",
+					array(':sessionid' => $sessionid, ':userid' => $username));
+		}else{
+			$wakka->Query("UPDATE ".$wakka->config['table_prefix']."sessions SET session_start=FROM_UNIXTIME(".$wakka->GetMicroTime().") WHERE sessionid=:sessionid AND userid=:userid",
+				array(':sessionid' => $sessionid, ':userid' => $username));
+		}
 	}
 	else
 	{
 		// Create new session record
-		$wakka->Query("INSERT INTO ".$wakka->config['table_prefix']."sessions (sessionid, userid, session_start) VALUES(:sessionid, :userid, FROM_UNIXTIME(".$wakka->GetMicroTime()."))",
+		if ($wakka->config['dbms_type'] == 'sqlite'){
+			$wakka->Query("INSERT INTO ".$wakka->config['table_prefix']."sessions (sessionid, userid, session_start) VALUES(:sessionid, :userid, datetime(".$wakka->GetMicroTime().", 'unixepoch', 'localtime'))",
+				array(':sessionid' => $sessionid, ':username' => $username));
+		}else{
+			$wakka->Query("INSERT INTO ".$wakka->config['table_prefix']."sessions (sessionid, userid, session_start) VALUES(:sessionid, :userid, FROM_UNIXTIME(".$wakka->GetMicroTime()."))",
 			array(':sessionid' => $sessionid, ':username' => $username));
+		}
 	}
 }
 
