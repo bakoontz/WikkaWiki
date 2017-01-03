@@ -24,6 +24,9 @@
  * @copyright Copyright 2006-2010 {@link http://wikkawiki.org/CreditsPage Wikka Development Team}
  */
 
+include_once("libs/Database.lib.php");
+
+
 /**
  * Time to live for client-side cookies in seconds (90 days)
  */
@@ -242,27 +245,10 @@ class Wakka
 		$this->config = $config;
 
 		// Set up PDO object
-		if($this->GetConfigValue('dbms_type') == "sqlite"){
-			$dsn = $this->GetConfigValue('dbms_type') . ':' . $this->GetConfigValue('dbms_file');
-			try {
-				$this->dblink = new PDO($dsn);
-			} catch(PDOException $e) {
-				die('<em class="error">'.T_("PDO connection error!").'</em>');
-			}
-		}else{
-			$dsn = $this->GetConfigValue('dbms_type') . ':' .
-					 'host=' . $this->GetConfigValue('dbms_host') . ';' .
-					 'dbname=' . $this->GetConfigValue('dbms_database');
-			$user = $this->GetConfigValue('dbms_user');
-			$pass = $this->GetConfigValue('dbms_password');
-			try {
-				$this->dblink = new PDO($dsn, $user, $pass);
-			} catch(PDOException $e) {
-				die('<em class="error">'.T_("PDO connection error!").'</em>');
-			}
+		$this->dblink = db_getPDO($this);
+		if($this->dblink == null) {
+			die('<em class="error">'.T_("DB connection error in Wakka()").'</em>');
 		}
-
-		$this->dblink->query("SET NAMES 'utf8'");
 
 		// Don't emulate prepare statements (to prevent injection attacks)
 		$this->dblink->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
@@ -2016,37 +2002,13 @@ class Wakka
 				);
 
 			// add new revision
-			if($this->GetConfigValue('dbms_type') == "sqlite"){
-				$this->Query("
-					INSERT INTO ".$this->GetConfigValue('table_prefix')."pages
-					(  tag, title     , time                      , owner, user, note, latest, body ) VALUES
-					( :tag,:page_title,datetime('now','localtime'),:owner,:user,:note,'Y'    ,:body )",
-						array(':tag' => $tag,
-						    ':page_title' => $page_title,
-							  ':owner' => $owner,
-							  ':user' => $user,
-							  ':note' => $note,
-							  ':body' => $body)
-					);
-			} else {
-			$this->Query("
-				INSERT INTO ".$this->GetConfigValue('table_prefix')."pages
-				SET	tag		= :tag,
-				  title = :page_title,
-					time	= now(),
-					owner	= :owner,
-					user	= :user,
-					note	= :note,
-					latest	= 'Y',
-					body	= :body",
-					array(':tag' => $tag,
-					      ':page_title' => $page_title,
-						  ':owner' => $owner,
-						  ':user' => $user,
-						  ':note' => $note,
-						  ':body' => $body)
-				);
-			}
+			$params = array(':tag' => $tag,
+			                ':page_title' => $page_title,
+							':owner' => $owner,
+							':user' => $user,
+							':note' => $note,
+							':body' => $body);
+			db_addNewRevision($this, $params);
 
 			// WikiPing
 			if ($pingdata = $this->GetPingParams($this->GetConfigValue('wikiping_server'), $tag, $user, $note))
@@ -3570,6 +3532,10 @@ class Wakka
 						time		= now()",
 					array(':tag' => $tag, ':referrer' => $referrer)
 					);
+				$this->Query("
+					INSERT INTO ".$this->GetConfigValue('table_prefix')."referrers (page_tag, referrer, time) VALUES (:tag, :referrer, now())",
+					array(':tag' => $tag, ':referrer' => $referrer)
+					);
 			}
 		}
 	}
@@ -4084,19 +4050,8 @@ class Wakka
 		// older than PERSISTENT_COOKIE_EXPIRY, as this is not a
 		// time-critical function for the user.  The assumption here
 		// is that server-side sessions have long ago been cleaned up by PHP.
-		// TODO: Set the mount from PERSISTENT_COOKIE_EXPIRY on the sqlite code.
-    if($this->GetConfigValue('dbms_type') == "sqlite"){
-			$this->Query("
-				DELETE FROM ".$this->GetConfigValue('table_prefix')."sessions
-				WHERE DATETIME('now','-3 month') > session_start"
-				);
-			}else{
-		$this->Query("
-			DELETE FROM ".$this->GetConfigValue('table_prefix')."sessions
-			WHERE DATE_SUB(DATETIME('now','localtime'), INTERVAL ".PERSISTENT_COOKIE_EXPIRY." SECOND) > session_start"
-			);
-		$this->registered = false;
-		}
+		db_purgeSessions($this);
+		$obj->registered = false;
 	}
 
 	/**
@@ -4552,31 +4507,12 @@ class Wakka
 		{
 			$parent_id = 'NULL';
 		}
-
-		if($this->GetConfigValue('dbms_type') == "sqlite"){
-			$this->Query("
-				INSERT INTO ".$this->GetConfigValue('table_prefix')."comments
-				(  page_tag, time                       , comment, parent   , user ) VALUES
-				( :page_tag, datetime('now','localtime'),:comment,:parent_id,:user )",
-				array(':page_tag' => $page_tag,
-				      ':comment' => $comment,
-					  ':parent_id' => ($parent_id == 'NULL') ? null : $parent_id,
-					  ':user' => $user)
-				);
-		} else {
-		$this->Query("
-			INSERT INTO ".$this->GetConfigValue('table_prefix')."comments
-			SET page_tag = :page_tag,
-				time = now(),
-				comment = :comment,
-				parent = :parent_id,
-				user = :user",
-			array(':page_tag' => $page_tag,
-			      ':comment' => $comment,
-				  ':parent_id' => ($parent_id == 'NULL') ? null : $parent_id,
-				  ':user' => $user)
-			);
-		}
+		
+		$params = array(':page_tag' => $page_tag,
+		                ':comment' => $comment,
+						':parent_id' => ($parent_id == 'NULL') ? null : $parent_id,
+						':user' => $user);
+		db_saveComment($this, $params);
 	}
 
 	/**
@@ -4829,6 +4765,11 @@ class Wakka
 		}
 		else
 		{
+			$this->Query("
+				INSERT INTO ".$this->GetConfigValue('table_prefix')."acls
+				SET".$default." `page_tag` = :tag, ".$privs." = :list",
+				array(':tag' => $tag, ':list' => $list)
+				);
 			$this->Query("
 				INSERT INTO ".$this->GetConfigValue('table_prefix')."acls
 				SET".$default." `page_tag` = :tag, ".$privs." = :list",

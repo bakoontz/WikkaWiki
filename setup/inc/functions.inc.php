@@ -22,26 +22,34 @@
 function db_connect($config)
 {
 	// Set up PDO object
-	$dsn = $config['dbms_type'] . ':' .
-		   'host=' . $config['dbms_host'] . ';' .
-		   'dbname=' . $config['dbms_database'];
-	$user = $config['dbms_user'];
-	$pass = $config['dbms_password'];
-	try {
-		$dblink = new PDO($dsn, $user, $pass);
-	} catch(PDOException $e) {
-		print 'Exeption code: '.$e->getCode()."\n<br/>";
-		print 'Exception message: '.$e->getMessage()."\n<br/>";
-		die('PDO connection error: '.$dsn);
+	$dblink = null;
+	if($config['dbms_type'] == 'sqlite') {
+		$dsn = $config['dbms_type'] . ':' . $config['dbms_database'];
+		try {
+			$dblink = new PDO($dsn);
+		} catch(PDOException $e) {
+			die('<em class="error">'.T_("PDO connection error!").'</em>');
+		}
+	} else { // mysql default
+		$dsn = $config['dbms_type'] . ':' .
+			   'host=' . $config['dbms_host'] . ';' .
+			   'dbname=' . $config['dbms_database'];
+		$user = $config['dbms_user'];
+		$pass = $config['dbms_password'];
+		try {
+			$dblink = new PDO($dsn, $user, $pass);
+			$dblink->exec("SET NAMES utf8");
+		} catch(PDOException $e) {
+			print 'Exeption code: '.$e->getCode()."\n<br/>";
+			print 'Exception message: '.$e->getMessage()."\n<br/>";
+			die('PDO connection error: '.$dsn);
+		}
 	}
 	// Don't emulate prepare statements (to prevent injection attacks)
 	$dblink->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
 	// Throw an exception on PDO::query calls
 	$dblink->setAttribute(PDO::ATTR_ERRMODE,
 								PDO::ERRMODE_EXCEPTION);
-
-	$dblink->exec("SET NAMES utf8");
-
 	return $dblink;
 }
 
@@ -69,9 +77,23 @@ function db_query($query, $params=NULL, $dblink)
 		$result = $dblink->prepare($query);
 		$result->execute($params);
 	} catch (PDOException $e) {
+		print $e;
 		return FALSE;
 	}
 	return $result;
+}
+
+/**
+ * Convenience method to return a db-specific string for now()
+ *
+ */
+function db_now($dblink) {
+	print $dblink->getAttribute(PDO::ATTR_DRIVER_NAME);
+	if($dblink->getAttribute(PDO::ATTR_DRIVER_NAME) == 'sqlite') {
+		return 'time(\'now\')';
+	} else { // mysql default
+		return 'now()';
+	}
 }
 
 /**
@@ -144,7 +166,7 @@ function update_default_page($tag, $dblink, $config, $lang_defaults_path, $lang_
 		//$body = implode('', file($txt_filepath));
 		db_query('update '.$config['table_prefix'].'pages set latest = "N" where tag = :tag', array(':tag' => $tag), $dblink);
 		test (sprintf(__('Adding/Updating default page %s'.'...'), $tag),
-			db_query('insert into '.$config['table_prefix'].'pages set tag = :tag, body = :body, user = \'WikkaInstaller\', owner = :owner, time=now(), latest =\'Y\', note = :note', array(':tag' => $tag, ':body' => $body, ':owner' => $admin_main_user, ':note' => $note), $dblink),
+			db_query('insert into '.$config['table_prefix'].'pages (tag, body, user, owner, time, latest, note) VALUES (:tag, :body, \'WikkaInstaller\', :owner, '.db_now($dblink).', \'Y\', :note)', array(':tag' => $tag, ':body' => $body, ':owner' => $admin_main_user, ':note' => $note), $dblink),
 			'',
 			0);
 		// @@@ pick up any page-specific ACL here (look in both $lang_defaults_path and $lang_defaults_fallback_path)

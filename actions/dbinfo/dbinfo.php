@@ -77,10 +77,10 @@ if($this->GetConfigValue('dbms_type') == "sqlite"){
 	if ($isAdmin)
 	{
 		print("sqlite3 database: <br>");
-		print("Path: ".$this->GetConfigValue('dbms_file'));
+		print("Path: ".$this->GetConfigValue('dbms_database'));
 	}
 
-} else {
+} else { //mysql default
 // variables
 
 $isAdmin	= $this->IsAdmin();

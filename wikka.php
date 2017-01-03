@@ -308,6 +308,7 @@ $wakkaDefaultConfig = array(
 	'dbms_database'				=> 'wikka',
 	'dbms_user'					=> 'wikka',
 	'dbms_type'					=> 'mysql',
+	'supported_dbms'			=> 'mysql, sqlite',
 	'table_prefix'				=> 'wikka_',
 
 	'root_page'					=> 'HomePage',
@@ -444,6 +445,9 @@ if(isset($wakkaConfig['lang_path']) && preg_match('/plugins\/lang/', $wakkaConfi
 	$wakkaConfig['lang_path'] = "plugins/lang," .  $wakkaConfig['lang_path'];
 if(isset($wakkaConfig['menu_config_path']) && preg_match('/plugins\/config/', $wakkaConfig['menu_config_path']) <= 0)
 	$wakkaConfig['menu_config_path'] = "plugins/config," .  $wakkaConfig['menu_config_path'];
+
+// Pick up DB-specific config options 
+db_configOptions($wakkaDefaultConfig, $wakkaConfig);
 
 $wakkaConfig = array_merge($wakkaDefaultConfig, $wakkaConfig);	// merge defaults with config from file
 
@@ -710,28 +714,8 @@ if(NULL != $user)
 	$username = $user['name'];
 	$res = $wakka->LoadSingle("SELECT * FROM ".$wakka->config['table_prefix']."sessions WHERE sessionid=:sessionid AND userid=:userid",
 		array(':sessionid' => $sessionid, ':userid' => $username));
-	if(isset($res))
-	{
-		// Just update the session_start time
-		if ($wakka->config['dbms_type'] == 'sqlite'){
-			$wakka->Query("UPDATE ".$wakka->config['table_prefix']."sessions SET session_start=datetime(".$wakka->GetMicroTime().", 'unixepoch', 'localtime') WHERE sessionid=:sessionid AND userid=:userid",
-					array(':sessionid' => $sessionid, ':userid' => $username));
-		}else{
-			$wakka->Query("UPDATE ".$wakka->config['table_prefix']."sessions SET session_start=FROM_UNIXTIME(".$wakka->GetMicroTime().") WHERE sessionid=:sessionid AND userid=:userid",
-				array(':sessionid' => $sessionid, ':userid' => $username));
-		}
-	}
-	else
-	{
-		// Create new session record
-		if ($wakka->config['dbms_type'] == 'sqlite'){
-			$wakka->Query("INSERT INTO ".$wakka->config['table_prefix']."sessions (sessionid, userid, session_start) VALUES(:sessionid, :userid, datetime(".$wakka->GetMicroTime().", 'unixepoch', 'localtime'))",
-				array(':sessionid' => $sessionid, ':username' => $username));
-		}else{
-			$wakka->Query("INSERT INTO ".$wakka->config['table_prefix']."sessions (sessionid, userid, session_start) VALUES(:sessionid, :userid, FROM_UNIXTIME(".$wakka->GetMicroTime()."))",
-			array(':sessionid' => $sessionid, ':username' => $username));
-		}
-	}
+	$update = isset($res) ? true : false;
+	db_storeSession($wakka, $update);	
 }
 
 /**

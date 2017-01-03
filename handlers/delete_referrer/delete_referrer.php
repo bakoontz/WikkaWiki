@@ -29,7 +29,7 @@ if (isset($spammer) && $spammer)
 	$this->Query("DELETE FROM ".$this->GetConfigValue('table_prefix')."referrers WHERE referrer LIKE :spammer", array(':spammer' => $like_spammer));
 	if (!$already_blacklisted = $this->LoadSingle("SELECT * from ".$this->GetConfigValue('table_prefix')."referrer_blacklist WHERE spammer = :spammer", array(':spammer' => $spammer)))
 	{
-		$this->Query("INSERT INTO ".$this->GetConfigValue('table_prefix')."referrer_blacklist SET spammer = :spammer", array(':spammer' => $spammer));
+		$this->Query("INSERT INTO ".$this->GetConfigValue('table_prefix')."referrer_blacklist (spammer) VALUES (:spammer)", array(':spammer' => $spammer));
 	}
 }
 

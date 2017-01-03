@@ -186,17 +186,7 @@ else if ($this->HasAccess("write") && $this->HasAccess("read"))
 
 	// derive maximum length for a page name from the table structure if possible
 	// MySQL specific!
-	if($this->GetConfigValue('dbms_type') == "sqlite"){
-		// For now this is the default on sqlite.
-		$maxtaglen = MAX_TAG_LENGTH;
-	} elseif ($result = $this->Query("describe ".$this->GetConfigValue('table_prefix')."pages tag")) {
-		$field = ($result->fetchAll())[0];
-		if (preg_match("/varchar\((\d+)\)/", $field['Type'], $matches)) $maxtaglen = $matches[1];
-	}
-	else
-	{
-		$maxtaglen = MAX_TAG_LENGTH;
-	}
+	$maxtaglen = db_getMaxTagLen($this);
 
 	// PREVIEW screen
 	if ($this->GetSafeVar('submit', 'post') == T_("Preview"))

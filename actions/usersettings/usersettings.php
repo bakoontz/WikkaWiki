@@ -481,13 +481,15 @@ else
 				$password = $this->GetSafeVar('password', 'post');
 				$password = md5($challenge.$password);
 				$default_comment_display = $this->GetConfigValue('default_comment_display');
-				$this->Query("INSERT INTO ".$this->GetConfigValue('table_prefix')."users SET
-					signuptime = now(),
-					name = :name,
-					email = :email,
-					challenge = :challenge,
-					default_comment_display = :default_comment_display,
-					password = :password",
+				$this->Query("INSERT INTO
+				".$this->GetConfigValue('table_prefix')."users ( 
+					signuptime,
+					name,
+					email,
+					challenge,
+					default_comment_display,
+					password) VALUES (now(), :name, :email,
+					:challenge, :default_comment_display, :password)",
 					array(':name' => $name,
 					      ':email' => $email,
 						  ':challenge' => $challenge,
