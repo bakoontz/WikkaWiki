@@ -1,0 +1,27 @@
+<?php
+/**
+ * WikkaWiki Test Configuration File (Dist Version)
+ *
+ * Create a version of this file without the -dist suffix:
+ *
+ * > cp -v test/test.config.php{-dist,}
+ *
+ * Then update any <VALUE> formatted like so below.
+ *
+ * Tests will attempt to create a temporary mysql database for testing on
+ * setup and destroy it on teardown. User needs to be setup in advance with
+ * full privileges but database need not be created.
+ *
+ * Make sure your database name doesn't conflict with the name of any databases
+ * you wish to keep.
+ * 
+ */
+$wikkaTestConfig = array(
+
+    # database
+    'mysql_host'        => 'localhost',
+    'mysql_user'        => '<DB_USER_NAME>',
+    'mysql_password'    => '<DB_USER_PASS>',
+    'mysql_database'    => 'wikkawiki_test_tmp',
+    
+);
