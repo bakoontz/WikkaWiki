@@ -4758,21 +4758,23 @@ class Wakka
 			$this->Query("
 				UPDATE ".$this->GetConfigValue('table_prefix')."acls
 				SET $privs = :list
-				WHERE page_tag = :tag
-				LIMIT 1",
+				WHERE page_tag = :tag",
 				array(':list' => $list, ':tag' => $tag)
 				);
 		}
 		else
 		{
+			$default_arr = preg_split('/,/', $default);
+			array_pop($default_arr);
+			foreach($default_arr as $default_value) {
+				$fields = preg_split('/=/', $default_value);
+				$default_privs .= $fields[0].', ';
+				$default_values .= $fields[1].', ';
+			}
 			$this->Query("
 				INSERT INTO ".$this->GetConfigValue('table_prefix')."acls
-				SET".$default." `page_tag` = :tag, ".$privs." = :list",
-				array(':tag' => $tag, ':list' => $list)
-				);
-			$this->Query("
-				INSERT INTO ".$this->GetConfigValue('table_prefix')."acls
-				SET".$default." `page_tag` = :tag, ".$privs." = :list",
+				(".$default_privs." `page_tag`, ".$privs.") VALUES
+				($default_values :tag, :list)",
 				array(':tag' => $tag, ':list' => $list)
 				);
 		}
