@@ -83,7 +83,6 @@ function db_getPDO($obj) {
 		}
 		$dblink->query("SET NAMES 'utf8'");
 	}
-	print $dsn;
 	return $dblink;
 }
 
