@@ -68,7 +68,7 @@ if ($this->GetSafeVar('submit', 'post') == T_("Preview") &&
 <?php
 if(!$this->IsWikiName($this->GetPageTag()))
 {
-	echo '<em class="error">'.sprintf(T_("This page name is invalid.  Valid page names must not contain the characters %s."), EDIT_INVALID_CHARS).'</em>';
+	echo '<em class="error">'.sprintf(T_("This page name is invalid.  Valid page names must not contain the characters %s."), EDIT_INVALID_CHARS).'<br/></em>';
 }
 else if ($this->HasAccess("write") && $this->HasAccess("read"))
 {
