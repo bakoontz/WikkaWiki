@@ -159,8 +159,8 @@ class safehtml {
 		 }
 		}
 
-		$tempval = preg_replace( '/&#(\d+);?/me', "chr('\\1')", $value ); //"'
-		$tempval = preg_replace( '/&#x([0-9a-f]+);?/mei', "chr(hexdec('\\1'))", $tempval ); //"'
+		$tempval = preg_replace( '/&#(\d+);?/m', "chr('\\1')", $value ); //"'
+		$tempval = preg_replace( '/&#x([0-9a-f]+);?/mi', "chr(hexdec('\\1'))", $tempval ); //"'
 
 		if (in_array($name, $this->ProtocolAttributes) && strpos($tempval, ":")!==false)
 		if ($this->ProtocolFiltering=="black")
