@@ -710,7 +710,6 @@ class Wakka
 	function ReturnSafeHTML($html)
 	{
                 if ( $this->GetConfigValue('htmlpurifier_path')!="" ) {
-		    print "algo";
                     $htmlpurifier_classpath = $this->GetConfigValue('htmlpurifier_path').DIRECTORY_SEPARATOR.'HTMLPurifier.standalone.php';
                     #print $safehtml_classpath;
                     require_once $htmlpurifier_classpath;
