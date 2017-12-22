@@ -33,4 +33,3 @@ The Wikka Development Team
 Wikka Hall of Fame
 - JsnX [Jason Tourtelotte]
 - DreckFehler [Sebastian]
-
