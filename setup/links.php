@@ -123,7 +123,7 @@ function relinkcallback($thing)
 		if (($url) && (!isset($written[strtolower($url)])) && (strtolower($url) != strtolower($tag)))
 		{
 			if ($sql) $sql .= ', ';
-			$sql .= "('".$dblink->quote(tag)."', '".$dblink->quote($url)."')";
+			$sql .= "(".$dblink->quote($tag).", ".$dblink->quote($url).")";
 			$written[strtolower($url)] = $url;
 		}
 	}
