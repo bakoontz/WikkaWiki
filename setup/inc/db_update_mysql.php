@@ -76,7 +76,7 @@ switch($version) {
 				"show_comments enum('Y','N') NOT NULL default 'N',".
 				"status enum('invited','signed-up','pending','active','suspended','banned','deleted'),".
 				"theme varchar(50) default '',".
-				"default_comment_display enum ('date_asc', 'date_desc', 'threaded') NOT NULL default 'threaded',".
+				"default_comment_display int(1) NOT NULL default '3',". // threaded is default
 				"challenge varchar(8) default '',". // refs #1023
 				"PRIMARY KEY  (name),".
 				"KEY idx_signuptime (signuptime)".
@@ -527,6 +527,9 @@ switch($version) {
 			db_query("ALTER TABLE ".$config['table_prefix']."comments CHANGE time time datetime NOT NULL default '1900-01-01 00:00:00'", NULL, $dblink), "Failed. ?", 1);
 	case "1.4.0":
 	case "master":
+		test("Altering users table structure (default_comment_display)...",
+			db_query("ALTER TABLE ".$config['table_prefix']."users CHANGE default_comment_display default_comment_display int NOT NULL default 3", NULL, $dblink), "Failed. ?", 1);
+
 }
 
 ?>

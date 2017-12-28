@@ -144,6 +144,14 @@ if ($user = $this->GetUser())
 						  ':name' => $name)
 					);
 				$this->SetUser($this->loadUserData($user['name']));
+                // Update changed settings
+                $user['doubleclickedit'] = $doubleclickedit;
+                $user['show_comments'] = $show_comments;
+                $user['default_comment_display'] = $default_comment_display;
+                $user['revisioncount'] = $revisioncount;
+                $user['changescount'] = $changescount;
+                $user['usertheme'] = $usertheme;
+                $user['name'] = $name;
 		}
 	}
 	// user just logged in, or just went to this page
@@ -287,9 +295,9 @@ if ($user = $this->GetUser())
 	<input type="hidden" name="show_comments" value="N" />
 	<input id="showcomments" type="checkbox" name="show_comments" value="Y" <?php echo $show_comments == 'Y' ? 'checked="checked"' : '' ?> />
 	<fieldset><legend><?php echo T_("Comment style") ?></legend>
-	<input id="default_comment_flat_asc" type="radio" name="default_comment_display" value="date_asc" <?php echo($default_comment_display=="date_asc" ?  'checked="checked"' : '') ?> /><label for="default_comment_flat_asc"><?php echo T_("Flat (oldest first)") ?></label><br />
-	<input id="default_comment_flat_desc" type="radio" name="default_comment_display" value="date_desc" <?php echo($default_comment_display=="date_desc" ?  'checked="checked"' : '') ?> /><label for="default_comment_flat_desc"><?php echo T_("Flat (newest first)") ?></label><br />
-	<input id="default_comment_threaded" type="radio" name="default_comment_display" value="threaded" <?php echo($default_comment_display=="threaded" ?  'checked="checked"' : '') ?> /><label for="default_comment_threaded"><?php echo T_("Threaded") ?></label><br />
+    <input id="default_comment_flat_asc" type="radio" name="default_comment_display" value="<?php echo COMMENT_ORDER_DATE_ASC ?>"<?php echo($default_comment_display==COMMENT_ORDER_DATE_ASC ?  'checked="checked"' : '') ?> /><label for="default_comment_flat_asc"><?php echo T_("Flat (oldest first)") ?></label><br />
+    <input id="default_comment_flat_desc" type="radio" name="default_comment_display" value="<?php echo COMMENT_ORDER_DATE_DESC ?>"<?php echo($default_comment_display==COMMENT_ORDER_DATE_DESC ?  'checked="checked"' : '') ?> /><label for="default_comment_flat_desc"><?php echo T_("Flat (newest first)") ?></label><br />
+    <input id="default_comment_threaded" type="radio" name="default_comment_display" value="<?php echo COMMENT_ORDER_THREADED ?>"<?php echo($default_comment_display==COMMENT_ORDER_THREADED ?  'checked="checked"' : '') ?> /><label for="default_comment_threaded"><?php echo T_("Threaded") ?></label><br />
 	</fieldset>
 	<br />
 	<label for="revisioncount"><?php echo T_("Page revisions list limit:") ?></label>

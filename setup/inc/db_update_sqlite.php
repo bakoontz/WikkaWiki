@@ -78,7 +78,7 @@ switch($version) {
 			  "show_comments" text  NOT NULL DEFAULT \'N\',
 			  "status" text  DEFAULT NULL,
 			  "theme" varchar(50) DEFAULT \'\',
-			  "default_comment_display" text  NOT NULL DEFAULT \'threaded\',
+			  "default_comment_display" int(1)  NOT NULL DEFAULT \'3\',
 			  "challenge" varchar(8) DEFAULT \'\',
 			  PRIMARY KEY ("name"))', NULL, $dblink), "Already exists?", 0);
 		$indices = 13;

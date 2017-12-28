@@ -4241,10 +4241,15 @@ class Wakka
 	 */
 	function LoadComments($tag, $order=NULL)
 	{
-		// default
-		if ($order == NULL)
+		// default ($user['show_comments'] overrides COMMENT_NO_DISPLAY in session)
+		if ($order === NULL)
 		{
-			if (isset($_SESSION['show_comments'][$tag]))
+            $user = $this->GetUser();
+            if(isset($user['show_comments']) && $user['show_comments'] == 'Y') 
+            {
+                $order = $user['default_comment_display'];
+            }
+            else if (isset($_SESSION['show_comments'][$tag]))
 			{
 				$order = $_SESSION['show_comments'][$tag];
 			}

@@ -159,18 +159,22 @@ else
 			}
 
 			// display comments!
-			if (isset($_SESSION['show_comments'][$tag]) && $_SESSION['show_comments'][$tag] != COMMENT_NO_DISPLAY)
+			if ((isset($_SESSION['show_comments'][$tag]) && $_SESSION['show_comments'][$tag] != COMMENT_NO_DISPLAY) ||
+               ($user['show_comments'] == 'Y'))
 			{
 				// load comments for this page
-				$comments = $this->LoadComments($this->GetPageTag(), $_SESSION['show_comments'][$tag]);
+				//$comments = $this->LoadComments($this->GetPageTag(), $_SESSION['show_comments'][$tag]);
+                $comments = $this->LoadComments($this->GetPageTag(), NULL);
 				$display_mode = $_SESSION['show_comments'][$tag];
 				// display comments header
 ?>
 				<!--starting comments header (show)-->
 				<div id="commentheader">
-					<?php echo T_("Comments") ?>
+                    <?php echo T_("Comments");
+                          if($user['show_comments'] == 'N') { ?>
 					[<a href="<?php echo $this->Href('', '', 'show_comments=0') ?>"><?php echo T_("Hide comments") ?></a>]
 	<?php
+                }
 				if ($this->HasAccess('comment_post'))
 				{
 	?>
@@ -208,21 +212,6 @@ else
 				{
 					$comment_ordering = $this->GetConfigValue('default_comment_display');
 				}
-
-				// Convert from DB enum to PHP enum
-				switch($comment_ordering)
-				{
-					case 'date_asc':
-						$comment_ordering = COMMENT_ORDER_DATE_ASC;
-						break;
-					case 'date_desc':
-						$comment_ordering = COMMENT_ORDER_DATE_DESC;
-						break;
-					case 'threaded':
-					default:
-						$comment_ordering = COMMENT_ORDER_THREADED;
-						break;
-				}												
 
 				switch ($commentCount)
 				{
@@ -271,11 +260,11 @@ function displayComments(&$obj, &$comments, $tag)
 	$is_owner = $obj->UserIsOwner();
 	$prev_level = NULL;
 	$threaded = 0;
-	if ($_SESSION['show_comments'][$tag] == COMMENT_ORDER_THREADED)
+    if(($_SESSION['show_comments'][$tag] == COMMENT_ORDER_THREADED) ||
+       ($logged_in && isset($logged_in['default_comment_display']) && $logged_in['default_comment_display'] == COMMENT_ORDER_THREADED))
 	{
 		$threaded = 1;
 	}
-
 	?>
 	<div class="commentscontainer">
 	<?php

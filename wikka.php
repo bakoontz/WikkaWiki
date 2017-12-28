@@ -322,7 +322,7 @@ $wakkaDefaultConfig = array(
 	'handler_path'				=> 'plugins/handlers'.PATH_DIVIDER.'handlers',
 	'lang_path'					=> 'plugins/lang',
 	'gui_editor'				=> '1',
-	'default_comment_display'	=> 'threaded',
+	'default_comment_display'	=> '3', #threaded
 	'theme'						=> 'light',
 
 	// formatter and code highlighting paths
