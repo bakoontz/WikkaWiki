@@ -43,7 +43,7 @@ if (!defined('PATTERN_CODE')) define('PATTERN_CODE', '(.*)');
  * This pattern will match only if the text it is applied to is valid XHTML: it should use lowercase in the tagName,
  * it should not contain the character ">" inside attributes.
  */
-if (!defined('PATTERN_MATCH_HEADINGS')) define('PATTERN_MATCH_HEADINGS', '#^<(h[1-6])(.*?)>(.*?)</\\1>$#s');
+if (!defined('PATTERN_MATCH_HEADINGS')) define('PATTERN_MATCH_HEADINGS', '#^<(h[1-6])(.*?)>\s*?([^\s]*?)\s*?</\\1>$#s');
 /**
  * Match id in attributes.
  *
@@ -977,6 +977,7 @@ if (!function_exists('wakka3callback'))
 	 */
 	function wakka3callback($things)
 	{
+        //return $things[0];
 		global $wakka;
 		$thing = $things[1];
 
