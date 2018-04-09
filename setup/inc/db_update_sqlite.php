@@ -129,6 +129,7 @@ switch($version) {
 		'WikiCategory', 
 		'WikkaConfig', 
 		'WikkaDocumentation', 
+        'WikkaInstaller',
 		'WikkaMenulets',
 		'WikkaReleaseNotes'), $dblink, $config, $lang_defaults_path, $lang_defaults_fallback_path); 
 
@@ -143,6 +144,7 @@ switch($version) {
 		db_query("insert into ".$config['table_prefix']."acls (page_tag, read_acl, write_acl, comment_read_acl, comment_post_acl) VALUES ('WikkaMenulets', '!*', '!*', '!*', '!*')", NULL, $dblink);
 		db_query("insert into ".$config['table_prefix']."acls (page_tag, read_acl, write_acl, comment_read_acl, comment_post_acl) VALUES ('AdminBadWords', '!*', '!*', '!*', '!*')", NULL, $dblink);
 		db_query("insert into ".$config['table_prefix']."acls (page_tag, read_acl, write_acl, comment_read_acl, comment_post_acl) VALUES ('AdminSpamLog', '!*', '!*', '!*', '!*')", NULL, $dblink);
+		db_query("insert into ".$config['table_prefix']."acls (page_tag, read_acl, write_acl, comment_read_acl, comment_post_acl) VALUES ('WikkaInstaller', '!*', '!*', '!*', '!*')", NULL, $dblink);
 
 		// Register admin user
 		$challenge = dechex(crc32(time()));
@@ -166,6 +168,15 @@ switch($version) {
 		SetCookie('pass@wikka', $pass_val, time() + PERSISTENT_COOKIE_EXPIRY, $wikka_cookie_path); 
 		$_COOKIE['pass'] = $pass_val; 
 
+		// Register WikkaInstaller user
+		$challenge = dechex(crc32(time()));
+		$pass_val = md5($challenge.$_POST['password']);
+		$name = 'WikkaInstaller';
+		$email = $config['admin_email'];
+		// Delete existing WikkaInstaller user in case installer was run twice
+		db_query('delete from '.$config['table_prefix'].'users where name = :name', array(':name' => $name), $dblink);
+		test(__('Adding WikkaInstaller user').'...',
+				db_query("insert into ".$config["table_prefix"]."users (name, password, email, signuptime, challenge) VALUES (:name, :pass_val, :email, ".db_now($dblink).", :challenge)", array(':name' => $name, ':pass_val' => $pass_val, ':email' => $email, ':challenge' => $challenge), $dblink), "Hmm!", 0);
 		break;
 	// Don't remove the break here ^^^, but don't include any after this point!
 	case "1.4.0":
