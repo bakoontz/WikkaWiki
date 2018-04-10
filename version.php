@@ -24,7 +24,7 @@
  * version number might result in problems upgrading...please use
  * caution.
  */
-$git_version = '1.4.0';
+$git_version = 'master';
 if (!defined('WAKKA_VERSION')) define('WAKKA_VERSION', $git_version);
 
 /**
