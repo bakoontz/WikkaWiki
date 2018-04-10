@@ -244,12 +244,51 @@ class Wakka
 		$this->config = $config;
 
 		// Set up PDO object
+<<<<<<< HEAD
+		$dsn = $this->GetConfigValue('dbms_type') . ':' .
+			   'host=' . $this->GetConfigValue('dbms_host') . ';' .
+			   'dbname=' . $this->GetConfigValue('dbms_database');
+		$user = $this->GetConfigValue('dbms_user');
+		$pass = $this->GetConfigValue('dbms_password');
+		try {
+			$this->dblink = new PDO($dsn, $user, $pass);
+		} catch(PDOException $e) {
+			die('<em class="error">'.T_("PDO connection error!").'</em>');
+||||||| merged common ancestors
+		if($this->GetConfigValue('dbms_type') == "sqlite"){
+			$dsn = $this->GetConfigValue('dbms_type') . ':' . $this->GetConfigValue('dbms_file');
+			try {
+				$this->dblink = new PDO($dsn);
+			} catch(PDOException $e) {
+				die('<em class="error">'.T_("PDO connection error!").'</em>');
+			}
+		}else{
+			$dsn = $this->GetConfigValue('dbms_type') . ':' .
+					 'host=' . $this->GetConfigValue('dbms_host') . ';' .
+					 'dbname=' . $this->GetConfigValue('dbms_database');
+			$user = $this->GetConfigValue('dbms_user');
+			$pass = $this->GetConfigValue('dbms_password');
+			try {
+				$this->dblink = new PDO($dsn, $user, $pass);
+			} catch(PDOException $e) {
+				die('<em class="error">'.T_("PDO connection error!").'</em>');
+			}
+=======
 		$this->dblink = db_getPDO($this);
 		if($this->dblink == null) {
 			die('<em class="error">'.T_("DB connection error in Wakka()").'</em>');
+>>>>>>> sqlite installer support (see #1230 notes)
 		}
+<<<<<<< HEAD
 		$this->dblink->query("SET NAMES 'utf8'");
 
+||||||| merged common ancestors
+
+		$this->dblink->query("SET NAMES 'utf8'");
+
+=======
+
+>>>>>>> sqlite installer support (see #1230 notes)
 		// Don't emulate prepare statements (to prevent injection attacks)
 		$this->dblink->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
 		// Throw an exception on PDO::query calls
@@ -307,15 +346,14 @@ class Wakka
 			}
 		} catch(PDOException $e) {
 			ob_end_clean();
-/*
 			die('<em class="error">' .
 			    T_("Query failed in Query(): ") .
 				$e->getCode() .
 				'</em>');
-      */
+
 			// DEBUG
 			// Don't use this in production!
-
+			/*
 			print $e;
 			print "<br/>";
 			print "Query: ".$query;
@@ -324,7 +362,7 @@ class Wakka
 			    T_("Query failed in Query(): ") .
 				$e->getCode() .
 				'</em>');
-
+			*/
 		}
 		if ($object && $this->GetConfigValue('sql_debugging'))
 		{
@@ -2016,6 +2054,25 @@ class Wakka
 				);
 
 			// add new revision
+<<<<<<< HEAD
+			$this->Query("
+				INSERT INTO ".$this->GetConfigValue('table_prefix')."pages
+				SET	tag		= :tag,
+				  title = :page_title,
+					time	= now(),
+					owner	= :owner,
+					user	= :user,
+					note	= :note,
+					latest	= 'Y',
+					body	= :body",
+					array(':tag' => $tag,
+					      ':page_title' => $page_title,
+						  ':owner' => $owner,
+						  ':user' => $user,
+						  ':note' => $note,
+						  ':body' => $body)
+				);
+||||||| merged common ancestors
 			if($this->GetConfigValue('dbms_type') == "sqlite"){
 				$this->Query("
 					INSERT INTO ".$this->GetConfigValue('table_prefix')."pages
@@ -2047,6 +2104,7 @@ class Wakka
 						  ':body' => $body)
 				);
 			}
+=======
 			$params = array(':tag' => $tag,
 			                ':page_title' => $page_title,
 							':owner' => $owner,
@@ -2054,6 +2112,7 @@ class Wakka
 							':note' => $note,
 							':body' => $body);
 			db_addNewRevision($this, $params);
+>>>>>>> sqlite installer support (see #1230 notes)
 
 			// WikiPing
 			if ($pingdata = $this->GetPingParams($this->GetConfigValue('wikiping_server'), $tag, $user, $note))
@@ -4097,6 +4156,17 @@ class Wakka
 		// older than PERSISTENT_COOKIE_EXPIRY, as this is not a
 		// time-critical function for the user.  The assumption here
 		// is that server-side sessions have long ago been cleaned up by PHP.
+        if($this->GetConfigValue('dbms_type') == "sqlite") {
+			$this->Query("
+				DELETE FROM ".$this->GetConfigValue('table_prefix')."sessions
+				WHERE DATETIME('now','-3 month') > session_start"
+				);
+		} else {
+            $this->Query("
+                DELETE FROM ".$this->GetConfigValue('table_prefix')."sessions
+                WHERE DATE_SUB(NOW(), INTERVAL ".PERSISTENT_COOKIE_EXPIRY." SECOND) > session_start"
+                );
+        }
 		db_purgeSessions($this);
 		$this->registered = false;
 	}
@@ -4533,7 +4603,7 @@ class Wakka
 			WHERE c2.page_tag IS NULL
 				AND (comments.status IS NULL or comments.status != 'deleted')
 					".$where."
-			ORDER BY comments.time DESC
+			ORDER BY time DESC
 			LIMIT ".intval($limit);
 		return $this->LoadAll($sql, $params);
 	}
@@ -4559,6 +4629,21 @@ class Wakka
 		{
 			$parent_id = 'NULL';
 		}
+<<<<<<< HEAD
+		$this->Query("
+			INSERT INTO ".$this->GetConfigValue('table_prefix')."comments
+			SET page_tag = :page_tag,
+				time = now(),
+				comment = :comment,
+				parent = :parent_id,
+				user = :user",
+			array(':page_tag' => $page_tag,
+			      ':comment' => $comment,
+				  ':parent_id' => ($parent_id == 'NULL') ? null : $parent_id,
+				  ':user' => $user)
+			);
+||||||| merged common ancestors
+
 		if($this->GetConfigValue('dbms_type') == "sqlite"){
 			$this->Query("
 				INSERT INTO ".$this->GetConfigValue('table_prefix')."comments
@@ -4583,11 +4668,14 @@ class Wakka
 				  ':user' => $user)
 			);
 		}
+=======
+		
 		$params = array(':page_tag' => $page_tag,
 		                ':comment' => $comment,
 						':parent_id' => ($parent_id == 'NULL') ? null : $parent_id,
 						':user' => $user);
 		db_saveComment($this, $params);
+>>>>>>> sqlite installer support (see #1230 notes)
 	}
 
 	/**
@@ -5203,7 +5291,7 @@ class Wakka
 	 *
 	 */
 	function Maintenance()
-	{ /*
+	{
 		// purge referrers
 		if ($days = $this->GetConfigValue("referrers_purge_time"))
 		{
@@ -5211,7 +5299,7 @@ class Wakka
 				DELETE FROM ".$this->GetConfigValue('table_prefix')."referrers
 				WHERE time < date_sub(now(), interval :days day)",
 				array(':days' => $days)
-			);
+				);
 		}
 
 		// purge old page revisions
@@ -5223,7 +5311,7 @@ class Wakka
 					AND latest = 'N'", array(':days' => $days)
 				);
 			$this->Query("delete from ".$this->GetConfigValue('table_prefix')."pages where time < date_sub(now(), interval :days day) and latest = 'N'", array(':days' => days));
-		} */
+		}
 	}
 
 	/**
