@@ -538,7 +538,6 @@ switch($version) {
 		test("Altering comments table structure...",
 			db_query("ALTER TABLE ".$config['table_prefix']."comments CHANGE time time datetime NOT NULL default '1900-01-01 00:00:00'", NULL, $dblink), "Failed. ?", 1);
 	case "1.4.0":
-	case "master":
 		db_query("insert into ".$config['table_prefix']."acls set page_tag = 'WikkaInstaller', read_acl = '!*', write_acl = '!*', comment_read_acl = '!*', comment_post_acl = '!*'", NULL, $dblink);
 		test("Altering users table structure (default_comment_display)...",
 			db_query("ALTER TABLE ".$config['table_prefix']."users CHANGE default_comment_display default_comment_display int NOT NULL default 3", NULL, $dblink), "Failed. ?", 1);
@@ -551,6 +550,7 @@ switch($version) {
 		db_query('delete from '.$config['table_prefix'].'users where name = :name', array(':name' => $name), $dblink);
 		test(__('Adding WikkaInstaller user').'...',
 				db_query("insert into ".$config["table_prefix"]."users set name = :name, password = :pass_val, email = :email, signuptime = now(), challenge= :challenge", array(':name' => $name, ':pass_val' => $pass_val, ':email' => $email, ':challenge' => $challenge), $dblink), "Hmm!", 0);
+    case "master":
 }
 
 ?>
