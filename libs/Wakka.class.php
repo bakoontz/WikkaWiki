@@ -24,7 +24,7 @@
  * @copyright Copyright 2006-2010 {@link http://wikkawiki.org/CreditsPage Wikka Development Team}
  */
 
-include_once("libs/Database.lib.php");
+include_once('libs/Database.lib.php');
 
 /**
  * Time to live for client-side cookies in seconds (90 days)
@@ -3400,7 +3400,7 @@ class Wakka
 		// add validation key fields used against FormSpoofing
 		if('post' == strtolower($formMethod))
 		{
-			$hidden['CSRFToken'] = $_SESSION['CSRFToken'];
+			$hidden['CSRFToken'] = $_SESSION['nextCSRFToken'];
 		}
 
 		// build HTML fragment

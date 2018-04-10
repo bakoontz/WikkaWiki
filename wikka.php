@@ -649,7 +649,8 @@ session_name(md5(BASIC_COOKIE_NAME.$wakkaConfig['wiki_suffix']));
 session_start();
 if(!isset($_SESSION['CSRFToken']))
 {
-	$_SESSION['CSRFToken'] = sha1(getmicrotime());
+    $_SESSION['CSRFToken'] = sha1(microtime());
+    $_SESSION['nextCSRFToken'] = $_SESSION['CSRFToken'];
 }
 
 // fetch wakka location
@@ -757,9 +758,15 @@ header('Content-Length: '.$page_length);
 
 ob_end_clean();
 
+/**
+ * Reset session CSRFToken for next GET/POST
+ */
+$_SESSION['CSRFToken'] = $_SESSION['nextCSRFToken'];
+$_SESSION['nextCSRFToken'] = sha1(microtime());
 
 /**
  * Output the page.
  */
 echo $page_output;
+
 ?>
