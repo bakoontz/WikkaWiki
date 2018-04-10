@@ -10,7 +10,6 @@
  * @author 	{@link http://www.comawiki.org/CoMa.php?CoMa=Costal_Martignier Costal Martignier} (initial version)
  * @author	{@link http://wikkawiki.org/JsnX JsnX} (modified 2005-1-17)
  * @author	{@link http://wikkawiki.org/JavaWoman JavaWoman} (modified 2005-1-17)
- *
  * @uses	Wakka::Redirect()
  * @uses	Wakka::FormOpen()
  * @uses	Wakka::FormClose()
@@ -70,9 +69,8 @@ if (isset($_POST['pagename']))
 	}
 	else
 	{
-		$url = $this->Href('edit', $pagename);
-		$this->Redirect($url);
-		$showform = FALSE;
+        $this->SetRedirectMessage('Please provide a new page name to create');
+        $this->Redirect();
 	}
 }
 
