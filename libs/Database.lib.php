@@ -127,7 +127,7 @@ function db_purgeSessions($obj) {
 			);
 	}else{ // mysql default
 		$obj->Query("
-			DELETE FROM ".$obj->GetConfigValue('table_prefix')."sessions WHERE DATE_SUB(DATETIME('now','localtime'), INTERVAL ".PERSISTENT_COOKIE_EXPIRY." SECOND) > session_start"
+			DELETE FROM ".$obj->GetConfigValue('table_prefix')."sessions WHERE DATE_SUB(NOW(), INTERVAL ".PERSISTENT_COOKIE_EXPIRY." SECOND) > session_start"
 			);
 	}
 }

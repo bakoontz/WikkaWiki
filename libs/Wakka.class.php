@@ -4066,7 +4066,7 @@ class Wakka
 		// time-critical function for the user.  The assumption here
 		// is that server-side sessions have long ago been cleaned up by PHP.
 		db_purgeSessions($this);
-		$obj->registered = false;
+		$this->registered = false;
 	}
 
 	/**
