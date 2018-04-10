@@ -34,10 +34,6 @@
  */
 
 // ---------------------- DEBUGGING AND ERROR REPORTING -----------------------
-if(version_compare(phpversion(),'5.3','<'))
-	error_reporting(E_ALL);
-else
-	error_reporting(E_ALL & !E_DEPRECATED);
 error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED);
 // ---------------------- END DEBUGGING AND ERROR REPORTING -------------------
 
@@ -67,8 +63,8 @@ if(!defined('PATH_DIVIDER')) define('PATH_DIVIDER', ',');
 /**#@+
  * Minimum version requirement.
  */
-if (!defined('MINIMUM_PHP_VERSION'))	define('MINIMUM_PHP_VERSION', '5.0');
-if (!defined('MINIMUM_MYSQL_VERSION'))	define('MINIMUM_MYSQL_VERSION', '4.1');
+if (!defined('MINIMUM_PHP_VERSION'))	define('MINIMUM_PHP_VERSION', '7.0');
+if (!defined('MINIMUM_MYSQL_VERSION'))	define('MINIMUM_MYSQL_VERSION', '5.5');
 if (!defined('PHP_VERSION_ID')) {
     $version = explode('.', PHP_VERSION);
 
