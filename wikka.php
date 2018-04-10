@@ -38,7 +38,7 @@ if(version_compare(phpversion(),'5.3','<'))
 	error_reporting(E_ALL);
 else
 	error_reporting(E_ALL & !E_DEPRECATED);
-error_reporting(E_ALL);
+error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED);
 // ---------------------- END DEBUGGING AND ERROR REPORTING -------------------
 
 // ---------------------------- VERSIONING ------------------------------------
@@ -157,7 +157,7 @@ if(!function_exists('GetSafeVar'))
 // ------------ CRITICAL ERROR MESSAGES USED BEFORE LANG FILE LOADED -----------
 // Do not move these declaration to lang files.
 if(!defined('ERROR_WRONG_PHP_VERSION')) define('ERROR_WRONG_PHP_VERSION', 'Wikka requires PHP %s or higher!');  // %s - version number
-if(!defined('ERROR_MYSQL_SUPPORT_MISSING')) define('ERROR_MYSQL_SUPPORT_MISSING', 'PHP can\'t find MySQL support but Wikka requires MySQL. Please check the output of <tt>phpinfo()</tt> in a php document for MySQL support: it needs to be compiled into PHP, the module itself needs to be present in the expected location, <strong>and</strong> php.ini needs to have it enabled.<br />Also note that you cannot have <tt>mysqli</tt> and <tt>mysql</tt> support both enabled at the same time.<br />Please double-check all of these things, restart your webserver after any fixes, and then try again!');
+if(!defined('ERROR_PDO_SUPPORT_MISSING')) define('ERROR_PDO_SUPPORT_MISSING', 'PHP can\'t find PDO (DBMS) support but Wikka requires it. Please check the output of <tt>phpinfo()</tt> in a php document for PDO support: it needs to be compiled into PHP, the module itself needs to be present in the expected location, <strong>and</strong> php.ini needs to have it enabled.<br />Please double-check all of these things, restart your webserver after any fixes, and then try again!');
 if(!defined('ERROR_WAKKA_LIBRARY_MISSING')) define('ERROR_WAKKA_LIBRARY_MISSING','The necessary file "libs/Wakka.class.php" could not be found. To run Wikka, please make sure the file exists and is placed in the right directory!');
 // --------END: CRITICAL ERROR MESSAGES USED BEFORE LANG FILE LOADED -----------
 
@@ -171,11 +171,10 @@ if (!function_exists('version_compare') ||
 	$php_version_error = sprintf(ERROR_WRONG_PHP_VERSION,MINIMUM_PHP_VERSION);
 	die($php_version_error);		# fatalerror	!!! default error in English
 }
-// MySQL needs to be installed and available
+// PDO needs to be installed and available
 // @@@ message could be refined by detecting detect OS (mention module name) and maybe server name
-if (!function_exists('mysql_connect'))
-{
-	die(ERROR_MYSQL_SUPPORT_MISSING);
+if(!extension_loaded('PDO')) {
+	die(ERROR_PDO_SUPPORT_MISSING);
 }
 
 /**
@@ -305,9 +304,11 @@ if(!defined('WIKKA_LIBRARY_PATH')) define('WIKKA_LIBRARY_PATH', 'lib');
 
 
 $wakkaDefaultConfig = array(
-	'mysql_host'				=> 'localhost',
-	'mysql_database'			=> 'wikka',
-	'mysql_user'				=> 'wikka',
+	'dbms_host'					=> 'localhost',
+	'dbms_database'				=> 'wikka',
+	'dbms_user'					=> 'wikka',
+	'dbms_type'					=> 'mysql',
+	'supported_dbms'			=> 'mysql, sqlite',
 	'table_prefix'				=> 'wikka_',
 
 	'root_page'					=> 'HomePage',
@@ -321,7 +322,7 @@ $wakkaDefaultConfig = array(
 	'handler_path'				=> 'plugins/handlers'.PATH_DIVIDER.'handlers',
 	'lang_path'					=> 'plugins/lang',
 	'gui_editor'				=> '1',
-	'default_comment_display'	=> 'threaded',
+	'default_comment_display'	=> '3', #threaded
 	'theme'						=> 'light',
 
 	// formatter and code highlighting paths
@@ -373,15 +374,10 @@ $wakkaDefaultConfig = array(
 	'max_new_comment_urls'		=> '6',
 	'max_new_feedback_urls'		=> '6',
 	'utf8_compat_search'		=> '0',
-	'enable_breadcrumbs'		=> '0',
+	'enable_breadcrumbs'		=> '1',
 	'breadcrumb_node_delimiter' => '>',
 	'num_breadcrumb_nodes'		=> '5'
 	);
-
-// Enable breadcrumbs for PHP versions >= 5.4
-if(PHP_VERSION_ID >= 50400) {
-	$wakkaDefaultConfig['enable_breadcrumbs'] = 1;
-}
 
 // load config
 $wakkaConfig = array();
@@ -408,7 +404,23 @@ if (isset($wakkaConfig['footer_action'])) //since 1.1.6.4
 {
 	unset($wakkaConfig['footer_action']);
 }
-	
+if(isset($wakkaConfig['mysql_host'])) {   //since 1.4.0
+	$wakkaConfig['dbms_host'] = $wakkaConfig['mysql_host'];
+	unset($wakkaConfig['mysql_host']);
+}
+if(isset($wakkaConfig['mysql_database'])) {   //since 1.4.0
+	$wakkaConfig['dbms_database'] = $wakkaConfig['mysql_database'];
+	unset($wakkaConfig['mysql_database']);
+}
+if(isset($wakkaConfig['mysql_user'])) {   //since 1.4.0
+	$wakkaConfig['dbms_user'] = $wakkaConfig['mysql_user'];
+	unset($wakkaConfig['mysql_user']);
+}
+if(isset($wakkaConfig['mysql_password'])) {   //since 1.4.0
+	$wakkaConfig['dbms_password'] = $wakkaConfig['mysql_password'];
+	unset($wakkaConfig['mysql_password']);
+}
+
 // Remove old stylesheet, #6
 if(isset($wakkaConfig['stylesheet']))
 {
@@ -428,6 +440,9 @@ if(isset($wakkaConfig['lang_path']) && preg_match('/plugins\/lang/', $wakkaConfi
 	$wakkaConfig['lang_path'] = "plugins/lang," .  $wakkaConfig['lang_path'];
 if(isset($wakkaConfig['menu_config_path']) && preg_match('/plugins\/config/', $wakkaConfig['menu_config_path']) <= 0)
 	$wakkaConfig['menu_config_path'] = "plugins/config," .  $wakkaConfig['menu_config_path'];
+
+// Pick up DB-specific config options 
+db_configOptions($wakkaDefaultConfig, $wakkaConfig);
 
 $wakkaConfig = array_merge($wakkaDefaultConfig, $wakkaConfig);	// merge defaults with config from file
 
@@ -634,7 +649,8 @@ session_name(md5(BASIC_COOKIE_NAME.$wakkaConfig['wiki_suffix']));
 session_start();
 if(!isset($_SESSION['CSRFToken']))
 {
-	$_SESSION['CSRFToken'] = sha1(getmicrotime());
+    $_SESSION['CSRFToken'] = sha1(microtime());
+    $_SESSION['nextCSRFToken'] = $_SESSION['CSRFToken'];
 }
 
 // fetch wakka location
@@ -690,17 +706,12 @@ $user = $wakka->GetUser();
 // Only store sessions for real users!
 if(NULL != $user)
 {
-	$res = $wakka->LoadSingle("SELECT * FROM ".$wakka->config['table_prefix']."sessions WHERE sessionid='".session_id()."' AND userid='".$user['name']."'");
-	if(isset($res))
-	{
-		// Just update the session_start time
-		$wakka->Query("UPDATE ".$wakka->config['table_prefix']."sessions SET session_start=FROM_UNIXTIME(".$wakka->GetMicroTime().") WHERE sessionid='".session_id()."' AND userid='".$user['name']."'");
-	}
-	else
-	{
-		// Create new session record
-		$wakka->Query("INSERT INTO ".$wakka->config['table_prefix']."sessions (sessionid, userid, session_start) VALUES('".session_id()."', '".$user['name']."', FROM_UNIXTIME(".$wakka->GetMicroTime()."))");
-	}
+	$sessionid = session_id();
+	$username = $user['name'];
+	$res = $wakka->LoadSingle("SELECT * FROM ".$wakka->config['table_prefix']."sessions WHERE sessionid=:sessionid AND userid=:userid",
+		array(':sessionid' => $sessionid, ':userid' => $username));
+	$update = isset($res) ? true : false;
+	db_storeSession($wakka, $update);	
 }
 
 /**
@@ -747,9 +758,15 @@ header('Content-Length: '.$page_length);
 
 ob_end_clean();
 
+/**
+ * Reset session CSRFToken for next GET/POST
+ */
+$_SESSION['CSRFToken'] = $_SESSION['nextCSRFToken'];
+$_SESSION['nextCSRFToken'] = sha1(microtime());
 
 /**
  * Output the page.
  */
 echo $page_output;
+
 ?>

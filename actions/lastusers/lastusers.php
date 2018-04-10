@@ -38,7 +38,7 @@ else
 {
 	$style = T_("complex");	
 }
-if (isset($vars['max']) && $vars['max'] > 0)
+if (isset($vars['max']) && is_numeric($vars['max']) && $vars['max'] > 0)
 {
 	$max = (int) $vars['max'];
 }
@@ -48,7 +48,7 @@ else
 }
 
 // @@@TODO reformat query
-$last_users = $this->LoadAll("SELECT name, signuptime FROM ".$this->GetConfigValue('table_prefix')."users ORDER BY signuptime DESC LIMIT ".$max);
+$last_users = $this->LoadAll("SELECT name, signuptime FROM ".$this->GetConfigValue('table_prefix')."users ORDER BY signuptime DESC LIMIT :max", array(':max' => $max));
 
 $htmlout .= '<table class="data lastusers">'."\n";
 if ($style == 'complex')
@@ -65,9 +65,9 @@ foreach($last_users as $user)
 	$htmlout .= '  <tr>'."\n";
 	if ($style == 'complex')
 	{
-		$where = "`owner` = '".mysql_real_escape_string($user['name'])."' AND `latest` = 'Y'";
+		$where = "`owner` = :name AND `latest` = 'Y'";
 		$htmlout .= '    <td>'.$this->FormatUser($user['name']).'</td>'."\n";
-		$htmlout .= '    <td class="number">'.$this->getCount('pages', $where).'</td>'."\n";
+		$htmlout .= '    <td class="number">'.$this->getCount('pages', $where, array(':name' => $user['name'])).'</td>'."\n";
 		$htmlout .= '    <td class="datetime">('.$user['signuptime'].')</td>'."\n";
 	}
 	else

@@ -10,6 +10,9 @@
  *	By specifying prefix='0' the prefix configured for Wikka is ignored, allowing other tables in the same database (if any)
  *	to be inspected.
  *
+ * NOTE: These calls are most likely MySQL-specific.  This action
+ * needs some work to make it db-agnostic.
+ *
  * Syntax:
  *	{{dbinfo [all="0|1"] [prefix="0|1"]}}
  *
@@ -18,7 +21,7 @@
  * @filesource
  *
  * @author		{@link http://wikkawiki.org/JavaWoman JavaWoman}
- * @copyright	Copyright © 2005, Marjolein Katsma
+ * @copyright	Copyright ï¿½ 2005, Marjolein Katsma
  * @license		http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
  * @since		Wikka 1.1.6.4
  *
@@ -36,7 +39,7 @@
  * @uses	FormClose()
  * @uses	Format()
  * @uses	makeId()
- * 
+ *
  * @todo 	Prevent multiple calls, #634
  */
 
@@ -66,10 +69,22 @@ $hdTables		= T_("Tables");
 $txtActionInfo	= T_("This utility provides some information about the database(s). Depending on permissions for the Wikka database user, not all databases or tables may be visible. Where creation DDL is given, this reflects everything that would be needed to exactly recreate the same database and table definitions, including defaults that may not have been specified explicitly.");
 $msgOnlyAdmin	= T_("Sorry, only administrators can view database information.");
 
+if($this->GetConfigValue('dbms_type') == "sqlite"){
+
+	$isAdmin	= $this->IsAdmin();
+	$prefix		= $this->GetConfigValue('table_prefix');
+
+	if ($isAdmin)
+	{
+		print("sqlite3 database: <br>");
+		print("Path: ".$this->GetConfigValue('dbms_database'));
+	}
+
+} else { //mysql default
 // variables
 
 $isAdmin	= $this->IsAdmin();
-$database	= $this->GetConfigValue('mysql_database');
+$database	= $this->GetConfigValue('dbms_database');
 $prefix		= $this->GetConfigValue('table_prefix');
 
 // ---------------------- processsing --------------------------
@@ -105,10 +120,10 @@ if ($isAdmin)
 	if ($bAll)
 	{
 		$query = 'SHOW DATABASES';
-		$tableresult = mysql_query($query);
+		$tableresult = $this->Query($query)->fetchAll();
 		if ($tableresult)
 		{
-			while ($row = mysql_fetch_assoc($tableresult))
+			foreach ($tableresult as $row)
 			{
 				$aDbList[] = $row['Database'];
 			}
@@ -142,14 +157,16 @@ if ($isAdmin)
 	{
 		$seldb = $database;								# no choice: wikka database
 	}
+
 	if (isset($seldb))
 	{
-		$query = 'SHOW CREATE DATABASE '.$seldb;
-		$dbcreateresult = mysql_query($query);
+		$query = 'SHOW CREATE DATABASE '.$this->pdo_quote_identifier($seldb);
+		$dbcreateresult =
+			$this->Query($query);
 		if ($dbcreateresult)
 		{
-			$row = mysql_fetch_assoc($dbcreateresult);
-			$dbcreate = $row['Create Database'];
+			$dbcreate = ($dbcreateresult->fetch())['Create Database'];
+			$dbcreateresult->closeCursor();
 		}
 	}
 
@@ -157,13 +174,13 @@ if ($isAdmin)
 	$aTableList = array();
 	if (isset($seldb))
 	{
-		$query = 'SHOW TABLES FROM '.$seldb;
+		$query = 'SHOW TABLES FROM '.$this->pdo_quote_identifier($seldb);
 		if ($bPrefix)
 		{
 			$pattern = $prefix.'%';
 			$query .= " LIKE '".$pattern."'";
 		}
-		$tablelistresult = mysql_query($query);
+		$tablelistresult = $this->Query($query)->fetchAll();
 		if ($tablelistresult)
 		{
 			$colname = 'Tables_in_'.$seldb;
@@ -171,7 +188,7 @@ if ($isAdmin)
 			{
 				$colname .= ' ('.$pattern.')';
 			}
-			while ($row = mysql_fetch_assoc($tablelistresult))
+			foreach($tablelistresult as $row)
 			{
 				$aTableList[] = $row[$colname];
 			}
@@ -184,12 +201,15 @@ if ($isAdmin)
 		if (isset($_POST['seltable']) && in_array($_POST['seltable'],$aTableList))	# valid choice
 		{
 			$seltable = $this->GetSafeVar('seltable', 'post');
+			$seltable = $this->pdo_quote_identifier($seltable);
 			$query = 'SHOW CREATE TABLE '.$seltable;
-			$tablecreateresult = mysql_query($query);
+			$tablecreateresult =
+				$this->Query($query);
 			if ($tablecreateresult)
 			{
-				$row = mysql_fetch_assoc($tablecreateresult);
+				$row = $tablecreateresult->fetch();
 				$tablecreate = $row['Create Table'];
+				$tablecreateresult->closeCursor();
 			}
 		}
 	}
@@ -339,5 +359,6 @@ if ($isAdmin)
 else
 {
 	echo '<p class="error">'.$msgOnlyAdmin.'</p>'."\n";
+}
 }
 ?>

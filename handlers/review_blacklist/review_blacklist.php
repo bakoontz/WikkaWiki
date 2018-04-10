@@ -28,7 +28,7 @@ echo '<div id="content">'."\n"; //TODO: move to templating class
 if ($IsAdmin && isset($_GET["whitelist"]))
 {
 	$whitelist = $this->GetSafeVar('whitelist');
-	$this->Query('DELETE FROM '.$this->GetConfigValue('table_prefix').'referrer_blacklist WHERE spammer = "'.mysql_real_escape_string($whitelist).'"');
+	$this->Query('DELETE FROM '.$this->GetConfigValue('table_prefix').'referrer_blacklist WHERE spammer = :whitelist', array(':whitelist' => $whitelist));
 	$this->redirect($this->Href('review_blacklist'));
 }
 else

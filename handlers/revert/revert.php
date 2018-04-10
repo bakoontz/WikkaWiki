@@ -46,7 +46,7 @@ if ($this->HasAccess('write'))
     {
 		include_once($this->BuildFullpathFromMultipath('..'.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'libs'.DIRECTORY_SEPARATOR.'admin.lib.php', $this->GetConfigValue('action_path')));
 		$comment = T_("Reverted to previous revision");
-		$tag = mysql_real_escape_string($this->GetPageTag());
+		$tag = $this->GetPageTag();
 		$message = RevertPageToPreviousByTag($this, $tag, $comment);
 		$this->Redirect($this->Href(), $message);
 	}

@@ -45,11 +45,11 @@ if ($this->IsAdmin() || ($this->UserIsOwner($tag) && (bool) $this->GetConfigValu
 	if (NULL != $_POST)
     {
 		// delete the page, comments, related "from" links, acls and referrers
-		$this->Query("DELETE FROM ".$this->GetConfigValue('table_prefix')."pages WHERE tag = '".mysql_real_escape_string($tag)."'");
-		$this->Query("DELETE FROM ".$this->GetConfigValue('table_prefix')."comments WHERE page_tag = '".mysql_real_escape_string($tag)."'");
-		$this->Query("DELETE FROM ".$this->GetConfigValue('table_prefix')."links WHERE from_tag = '".mysql_real_escape_string($tag)."'");
-		$this->Query("DELETE FROM ".$this->GetConfigValue('table_prefix')."acls WHERE page_tag = '".mysql_real_escape_string($tag)."'");
-		$this->Query("DELETE FROM ".$this->GetConfigValue('table_prefix')."referrers WHERE page_tag = '".mysql_real_escape_string($tag)."'");
+		$this->Query("DELETE FROM ".$this->GetConfigValue('table_prefix')."pages WHERE tag = :tag", array(':tag' => $tag));
+		$this->Query("DELETE FROM ".$this->GetConfigValue('table_prefix')."comments WHERE page_tag = :tag", array(':tag' => $tag));
+		$this->Query("DELETE FROM ".$this->GetConfigValue('table_prefix')."links WHERE from_tag = :tag", array(':tag' => $tag));
+		$this->Query("DELETE FROM ".$this->GetConfigValue('table_prefix')."acls WHERE page_tag = :tag", array(':tag' => $tag));
+		$this->Query("DELETE FROM ".$this->GetConfigValue('table_prefix')."referrers WHERE page_tag = :tag", array(':tag' => $tag));
 
 		// redirect back to main page, or AdminPages if it is redirect page.
 		if (isset($_POST['redirect_page']) && $this->existsPage($_POST['redirect_page']) && 'AdminPages' == $_POST['redirect_page'])

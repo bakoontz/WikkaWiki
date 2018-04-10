@@ -21,7 +21,6 @@
  * 			invalid input fields;
  * @todo	remove useless redirections;
  * @todo	[accessibility] make logout independent of JavaScript
- * @todo	remove mysql_real_escape_string from password storage #531
  * @todo	complete @uses
  */
 
@@ -123,19 +122,36 @@ if ($user = $this->GetUser())
 				break;
 			// @@@ validate doubleclickedit, show-comments and (especially) default_comment_display
 			default: // input is valid
+				$name = $user['name'];
 				$this->Query("
 					UPDATE ".$this->GetConfigValue('table_prefix')."users
-					SET	email = '".mysql_real_escape_string($email)."',
-						doubleclickedit = '".mysql_real_escape_string($doubleclickedit)."',
-						show_comments = '".mysql_real_escape_string($show_comments)."',
-						default_comment_display = '".mysql_real_escape_string($default_comment_display)."',
-						revisioncount = ".mysql_real_escape_string($revisioncount).",
-						changescount = ".mysql_real_escape_string($changescount).",
-						theme = '".mysql_real_escape_string($usertheme)."'
-					WHERE name = '".$user['name']."'
-					LIMIT 1"
+					SET	email = :email,
+						doubleclickedit = :doubleclickedit,
+						show_comments = :show_comments,
+						default_comment_display = :default_comment_display,
+						revisioncount = :revisioncount,
+						changescount = :changescount,
+						theme = :usertheme
+					WHERE name = :name
+					LIMIT 1",
+					array(':email' => $email,
+					      ':doubleclickedit' => $doubleclickedit,
+						  ':show_comments' => $show_comments,
+						  ':default_comment_display' => $default_comment_display,
+						  ':revisioncount' => $revisioncount,
+						  ':changescount' => $changescount,
+						  ':usertheme' => $usertheme,
+						  ':name' => $name)
 					);
 				$this->SetUser($this->loadUserData($user['name']));
+                // Update changed settings
+                $user['doubleclickedit'] = $doubleclickedit;
+                $user['show_comments'] = $show_comments;
+                $user['default_comment_display'] = $default_comment_display;
+                $user['revisioncount'] = $revisioncount;
+                $user['changescount'] = $changescount;
+                $user['usertheme'] = $usertheme;
+                $user['name'] = $name;
 		}
 	}
 	// user just logged in, or just went to this page
@@ -248,12 +264,16 @@ if ($user = $this->GetUser())
 				break;
 			default:
 				$challenge = dechex(crc32(time()));
+				$user['password'] = md5($challenge.$password);
+				$user['challenge'] = $challenge;
 				$this->Query("
 					UPDATE ".$this->GetConfigValue('table_prefix')."users
-					SET password = '".md5($challenge.mysql_real_escape_string($password))."',
-					challenge = '".$challenge."' WHERE name = '".$user['name']."'"
+					SET password = :password,
+					challenge = :challenge WHERE name = :name",
+					array(':password' => $user['password'],
+					      ':challenge' => $challenge,
+						  ':name' => $user['name'])
 					);
-				$user['password'] = md5($challenge.$password);
 				$this->SetUser($user);
 				$passsuccess = T_("Password successfully changed!");
 		}
@@ -275,9 +295,9 @@ if ($user = $this->GetUser())
 	<input type="hidden" name="show_comments" value="N" />
 	<input id="showcomments" type="checkbox" name="show_comments" value="Y" <?php echo $show_comments == 'Y' ? 'checked="checked"' : '' ?> />
 	<fieldset><legend><?php echo T_("Comment style") ?></legend>
-	<input id="default_comment_flat_asc" type="radio" name="default_comment_display" value="date_asc" <?php echo($default_comment_display=="date_asc" ?  'checked="checked"' : '') ?> /><label for="default_comment_flat_asc"><?php echo T_("Flat (oldest first)") ?></label><br />
-	<input id="default_comment_flat_desc" type="radio" name="default_comment_display" value="date_desc" <?php echo($default_comment_display=="date_desc" ?  'checked="checked"' : '') ?> /><label for="default_comment_flat_desc"><?php echo T_("Flat (newest first)") ?></label><br />
-	<input id="default_comment_threaded" type="radio" name="default_comment_display" value="threaded" <?php echo($default_comment_display=="threaded" ?  'checked="checked"' : '') ?> /><label for="default_comment_threaded"><?php echo T_("Threaded") ?></label><br />
+    <input id="default_comment_flat_asc" type="radio" name="default_comment_display" value="<?php echo COMMENT_ORDER_DATE_ASC ?>"<?php echo($default_comment_display==COMMENT_ORDER_DATE_ASC ?  'checked="checked"' : '') ?> /><label for="default_comment_flat_asc"><?php echo T_("Flat (oldest first)") ?></label><br />
+    <input id="default_comment_flat_desc" type="radio" name="default_comment_display" value="<?php echo COMMENT_ORDER_DATE_DESC ?>"<?php echo($default_comment_display==COMMENT_ORDER_DATE_DESC ?  'checked="checked"' : '') ?> /><label for="default_comment_flat_desc"><?php echo T_("Flat (newest first)") ?></label><br />
+    <input id="default_comment_threaded" type="radio" name="default_comment_display" value="<?php echo COMMENT_ORDER_THREADED ?>"<?php echo($default_comment_display==COMMENT_ORDER_THREADED ?  'checked="checked"' : '') ?> /><label for="default_comment_threaded"><?php echo T_("Threaded") ?></label><br />
 	</fieldset>
 	<br />
 	<label for="revisioncount"><?php echo T_("Page revisions list limit:") ?></label>
@@ -466,13 +486,23 @@ else
 				break;
 			default: //valid input, create user
 				$challenge = dechex(crc32(time()));
-				$this->Query("INSERT INTO ".$this->GetConfigValue('table_prefix')."users SET ".
-					"signuptime = now(), ".
-					"name = '".mysql_real_escape_string($name)."', ".
-					"email = '".mysql_real_escape_string($email)."', ".
-					"challenge = '".$challenge."', ".
-					"default_comment_display = '".$this->GetConfigValue('default_comment_display')."', ".
-					"password = md5('".$challenge.mysql_real_escape_string($this->GetSafeVar('password', 'post'))."')");
+				$password = $this->GetSafeVar('password', 'post');
+				$password = md5($challenge.$password);
+				$default_comment_display = $this->GetConfigValue('default_comment_display');
+				$this->Query("INSERT INTO
+				".$this->GetConfigValue('table_prefix')."users ( 
+					signuptime,
+					name,
+					email,
+					challenge,
+					default_comment_display,
+					password) VALUES (now(), :name, :email,
+					:challenge, :default_comment_display, :password)",
+					array(':name' => $name,
+					      ':email' => $email,
+						  ':challenge' => $challenge,
+						  ':default_comment_display' => $default_comment_display,
+						  ':password' => $password));
 
 				// log in
 				#$this->SetUser($this->LoadUser($name));

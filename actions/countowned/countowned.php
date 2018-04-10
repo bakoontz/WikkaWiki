@@ -13,15 +13,11 @@
  * @todo	print different text if user is not logged in
  * @todo	Add parameter to specify date range #955
  */
-/*
-$where = "`owner` = '".mysql_real_escape_string($this->GetUserName())."' AND `latest` = 'Y'";
-$count = $this->getCount('pages', $where);
-*/
 $count = 0;
 if ($username = $this->GetUserName())		// no param: get name of logged in user only (#543)
 {
-	$where = "owner = '".mysql_real_escape_string($username)."' AND latest = 'Y'";
-	$count = $this->getCount('pages',$where);
+	$where = "owner = :username AND latest = 'Y'";
+	$count = $this->getCount('pages', $where, array(':username' => $username));
 }
 
 echo $this->Link('MyPages', '', $count,'','', T_("Display a list of the pages you currently own"));

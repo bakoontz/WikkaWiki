@@ -81,11 +81,11 @@ if (($this->IsAdmin() && !empty($username)) ||
 	$query = "
 		SELECT id, tag, time
 		FROM ".$this->GetConfigValue('table_prefix')."pages
-		WHERE user = '".mysql_real_escape_string($username)."'
+		WHERE user = :username
 		AND latest = 'Y'
 		ORDER BY ".$order;
 
-	if ($pages = $this->LoadAll($query))
+	if ($pages = $this->LoadAll($query, array(':username' => $username)))
 	{
 		$current = '';
 

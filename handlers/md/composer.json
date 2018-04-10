@@ -1,0 +1,5 @@
+{
+    "require": {
+        "cebe/markdown": "^1.1"
+    }
+}

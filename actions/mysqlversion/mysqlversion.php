@@ -26,7 +26,7 @@ $out = '<abbr title="'.T_("Sorry, only wiki administrators can display this info
 //check privs
 if ($this->GetConfigValue('public_sysinfo') == '1' || $this->IsAdmin())
 {
-	$out = mysql_get_server_info();
+	$out = $this->pdo_get_server_version();
 }
 echo $out;
 ?>

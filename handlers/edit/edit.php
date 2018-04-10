@@ -57,8 +57,8 @@ if($this->GetSafeVar('cancel', 'post') == T_("Cancel"))
 	$this->Redirect($this->Href());
 }
 
-if ($this->GetSafeVar('submit', 'post') == T_("Preview") && 
-	($user = $this->GetUser()) && 
+if ($this->GetSafeVar('submit', 'post') == T_("Preview") &&
+	($user = $this->GetUser()) &&
 	($user['doubleclickedit'] != 'N'))
 {
 	$ondblclick = ' ondblclick=\'document.getElementById("reedit_id").click();\'';
@@ -68,7 +68,7 @@ if ($this->GetSafeVar('submit', 'post') == T_("Preview") &&
 <?php
 if(!$this->IsWikiName($this->GetPageTag()))
 {
-	echo '<em class="error">'.sprintf(T_("This page name is invalid.  Valid page names must not contain the characters %s."), EDIT_INVALID_CHARS).'</em>';
+	echo '<em class="error">'.sprintf(T_("This page name is invalid.  Valid page names must not contain the characters %s."), EDIT_INVALID_CHARS).'<br/></em>';
 }
 else if ($this->HasAccess("write") && $this->HasAccess("read"))
 {
@@ -81,7 +81,7 @@ else if ($this->HasAccess("write") && $this->HasAccess("read"))
 	$id = $this->page['id'];
 	if(isset($_GET['id']))
 	{
-		$page = $this->LoadPageById(mysql_real_escape_string($this->GetSafeVar('id', 'get')));
+		$page = $this->LoadPageById($this->GetSafeVar('id', 'get'));
 		if($page['tag'] != $this->page['tag'])
 		{
 			$this->Redirect($this->Href(), T_("The revision id does not exist for the requested page"));
@@ -185,14 +185,8 @@ else if ($this->HasAccess("write") && $this->HasAccess("read"))
 	}
 
 	// derive maximum length for a page name from the table structure if possible
-	if ($result = mysql_query("describe ".$this->GetConfigValue('table_prefix')."pages tag")) {
-		$field = mysql_fetch_assoc($result);
-		if (preg_match("/varchar\((\d+)\)/", $field['Type'], $matches)) $maxtaglen = $matches[1];
-	}
-	else
-	{
-		$maxtaglen = MAX_TAG_LENGTH;
-	}
+	// MySQL specific!
+	$maxtaglen = db_getMaxTagLen($this);
 
 	// PREVIEW screen
 	if ($this->GetSafeVar('submit', 'post') == T_("Preview"))

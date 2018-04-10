@@ -9,6 +9,94 @@
  */
 
 /**
+ * Establish DB connection. (Modified version of Wakka::Wakka())
+ *
+ * @uses	Config::$dbms_database
+ * @uses	Config::$dbms_host
+ * @uses	Config::$dbms_password
+ * @uses	Config::$dbms_user
+ * @uses	Config::$dbms_type
+ *
+ * @return	PDO		connection handle
+ */
+function db_connect($config)
+{
+	// Set up PDO object
+	$dblink = null;
+	if($config['dbms_type'] == 'sqlite') {
+		$dsn = $config['dbms_type'] . ':' . $config['dbms_database'];
+		try {
+			$dblink = new PDO($dsn);
+		} catch(PDOException $e) {
+			die('<em class="error">'.T_("PDO connection error!").'</em>');
+		}
+	} else { // mysql default
+		$dsn = $config['dbms_type'] . ':' .
+			   'host=' . $config['dbms_host'] . ';' .
+			   'dbname=' . $config['dbms_database'];
+		$user = $config['dbms_user'];
+		$pass = $config['dbms_password'];
+		try {
+			$dblink = new PDO($dsn, $user, $pass);
+			$dblink->exec("SET NAMES utf8");
+		} catch(PDOException $e) {
+			print 'Exeption code: '.$e->getCode()."\n<br/>";
+			print 'Exception message: '.$e->getMessage()."\n<br/>";
+			die('PDO connection error: '.$dsn);
+		}
+	}
+	// Don't emulate prepare statements (to prevent injection attacks)
+	$dblink->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+	// Throw an exception on PDO::query calls
+	$dblink->setAttribute(PDO::ATTR_ERRMODE,
+								PDO::ERRMODE_EXCEPTION);
+	return $dblink;
+}
+
+/**
+ * Send a query to the database.  (Modified version of Wakka::Query())
+ *
+ * If the query fails, the function will simply die().
+ *
+ * To prevent SQL injection attacks, all queries must be
+ * parameterized!
+ *
+ * @param	string	$query	mandatory: the query to be executed.
+ * @param   array   $params optional:  parameters for query (NULL if none)
+ * @param	resource $dblink mandatory: connection to the database
+ * @return	PDOStatement	the result of the query.
+ *
+ */
+function db_query($query, $params=NULL, $dblink)
+{
+	if ('' == $dblink)
+	{
+		die('Must have valid instance of dblink in db_query!');
+	}
+	try {
+		$result = $dblink->prepare($query);
+		$result->execute($params);
+	} catch (PDOException $e) {
+		print $e;
+		return FALSE;
+	}
+	return $result;
+}
+
+/**
+ * Convenience method to return a db-specific string for now()
+ *
+ */
+function db_now($dblink) {
+	print $dblink->getAttribute(PDO::ATTR_DRIVER_NAME);
+	if($dblink->getAttribute(PDO::ATTR_DRIVER_NAME) == 'sqlite') {
+		return 'time(\'now\')';
+	} else { // mysql default
+		return 'now()';
+	}
+}
+
+/**
  * Brute force copy routine for those sites that have copy() disabled
  *
  * @param string $file1	source file
@@ -76,9 +164,9 @@ function update_default_page($tag, $dblink, $config, $lang_defaults_path, $lang_
 		$body = ob_get_contents();
 		ob_end_clean();
 		//$body = implode('', file($txt_filepath));
-		mysql_query('update '.$config['table_prefix'].'pages set latest = "N" where tag = \''.$tag.'\'', $dblink);
+		db_query('update '.$config['table_prefix'].'pages set latest = "N" where tag = :tag', array(':tag' => $tag), $dblink);
 		test (sprintf(__('Adding/Updating default page %s'.'...'), $tag),
-			@mysql_query('insert into '.$config['table_prefix'].'pages set tag=\''.$tag.'\', body = \''.mysql_real_escape_string($body).'\', user=\'WikkaInstaller\', owner = \''.$admin_main_user.'\', time=now(), latest =\'Y\', note = \''.mysql_real_escape_string($note).'\'', $dblink),
+			db_query('insert into '.$config['table_prefix'].'pages (tag, body, user, owner, time, latest, note) VALUES (:tag, :body, \'WikkaInstaller\', :owner, '.db_now($dblink).', \'Y\', :note)', array(':tag' => $tag, ':body' => $body, ':owner' => $admin_main_user, ':note' => $note), $dblink),
 			'',
 			0);
 		// @@@ pick up any page-specific ACL here (look in both $lang_defaults_path and $lang_defaults_fallback_path)

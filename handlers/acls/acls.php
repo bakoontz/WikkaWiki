@@ -64,9 +64,9 @@ if ($this->UserIsOwner())
 			// store lists only if ACLs have previously been defined,
 			// or if the posted values are different than the defaults
 	
-			$page = $this->LoadSingle('SELECT * FROM '.$this->GetConfigValue('table_prefix').
-			    "acls WHERE page_tag = '".mysql_real_escape_string($this->GetPageTag()).
-			    "' LIMIT 1");
+			$page_tag = $this->GetPageTag();
+			$page = $this->LoadSingle('SELECT * FROM '.$this->GetConfigValue('table_prefix')."acls WHERE page_tag = :page_tag LIMIT 1",
+				array(':page_tag' => $page_tag));
 	
 			if ($page ||
 			    ($posted_read_acl	 != $default_read_acl	||

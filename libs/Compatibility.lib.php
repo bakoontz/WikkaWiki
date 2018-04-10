@@ -66,21 +66,6 @@ function getmicrotime($get_as_float=FALSE)
 	return (FALSE === $get_as_float) ? $time : (float) $time;
 }
 
-if (!function_exists('mysql_real_escape_string'))
-{
-	/**
-	 * Escape special characters in a string for use in a SQL statement.
-	 *
-	 * This function is added for back-compatibility with MySQL 3.23.
-	 * @param	string	$string	the string to be escaped
-	 * @return	string	a string with special characters escaped
-	 */
-	function mysql_real_escape_string($string)
-	{
-		return mysql_escape_string($string);
-	}
-}
-
 /**
  * Workaround for the amazingly annoying magic quotes.
  *
@@ -137,6 +122,11 @@ function instantiate($class, $par1=NULL, $par2=NULL, $par3=NULL)
 	return $obj;
 }
 
+/* Deprecated as of 1.4.0 
+ * 
+ * Use Wakka::pdo_get_server_version() as a generic replacement
+ *
+
 function getMysqlVersion(&$mysql_errors)
 {
 	$mysql_version = FALSE;
@@ -172,6 +162,7 @@ function getMysqlVersion(&$mysql_errors)
 	}
 	return $mysql_version;
 }
+*/
 
 // The following functions are more utility functions than for compatibility
 // although in validLocalPath() we do take into account that realpath() under

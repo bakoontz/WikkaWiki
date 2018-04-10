@@ -35,7 +35,9 @@ function UpdatePageTitle(&$wakka, $limit = 100)
 		{
 			$page_title = trim(preg_replace('![A-Z]!', " \\0", $tag));
 		}
-		$wakka->Query("UPDATE ".$wakka->GetConfigValue('table_prefix')."pages set title = '".mysql_real_escape_string($page_title)."' WHERE tag = '".mysql_real_escape_string($tag)."' and latest = 'Y'");
+		$wakka->Query("UPDATE ".$wakka->GetConfigValue('table_prefix')."pages set title = :page_title WHERE tag = :tag and latest = 'Y'",
+			array(':page_title' => $page_title,
+			      ':tag' => $tag));
 		echo "$tag $page_title \n";
 	}
 	echo "Done...";

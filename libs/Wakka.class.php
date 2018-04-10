@@ -24,6 +24,8 @@
  * @copyright Copyright 2006-2010 {@link http://wikkawiki.org/CreditsPage Wikka Development Team}
  */
 
+include_once('libs/Database.lib.php');
+
 /**
  * Time to live for client-side cookies in seconds (90 days)
  */
@@ -231,25 +233,30 @@ class Wakka
 	 * Constructor.
 	 * Database connection is established when the main class Wakka is constructed.
 	 *
-	 * @uses	Config::$mysql_database
-	 * @uses	Config::$mysql_host
-	 * @uses	Config::$mysql_password
-	 * @uses	Config::$mysql_user
+	 * @uses	Config::$dbms_database
+	 * @uses	Config::$dbms_host
+	 * @uses	Config::$dbms_password
+	 * @uses	Config::$dbms_user
+	 * @uses	Config::$dbms_type
 	 */
 	function Wakka($config)
 	{
 		$this->config = $config;
 
-		$this->dblink = @mysql_connect($this->GetConfigValue('mysql_host'), $this->GetConfigValue('mysql_user'), $this->GetConfigValue('mysql_password'));
-		mysql_query("SET NAMES 'utf8'", $this->dblink);
-		if ($this->dblink)
-		{
-			if (!@mysql_select_db($this->GetConfigValue('mysql_database'), $this->dblink))
-			{
-				@mysql_close($this->dblink);
-				$this->dblink = FALSE;
-			}
+		// Set up PDO object
+		$this->dblink = db_getPDO($this);
+		if($this->dblink == null) {
+			die('<em class="error">'.T_("DB connection error in Wakka()").'</em>');
 		}
+		$this->dblink->query("SET NAMES 'utf8'");
+
+		// Don't emulate prepare statements (to prevent injection attacks)
+		$this->dblink->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+		// Throw an exception on PDO::query calls
+		$this->dblink->setAttribute(PDO::ATTR_ERRMODE,
+		                            PDO::ERRMODE_EXCEPTION);
+
+		// Set Wikka version, patch level (if present)
 		$this->VERSION = WAKKA_VERSION;
 		$this->PATCH_LEVEL = WIKKA_PATCH_LEVEL;
 	}
@@ -266,15 +273,19 @@ class Wakka
 	 * Debugging is enabled, the query and the time it took to execute
 	 * are added to the Query-Log.
 	 *
+	 * To prevent SQL injection attacks, all queries must be
+	 * parameterized!
+	 *
 	 * @uses	Config::$sql_debugging
 	 * @uses	Wakka::GetMicroTime()
 	 *
 	 * @param	string	$query	mandatory: the query to be executed.
+	 * @param   array   $params optional:  parameters for query (NULL if none)
 	 * @param	resource $dblink optional: connection to the database
-	 * @return	array	the result of the query.
+	 * @return	PDOStatement	the result of the query.
 	 *
 	 */
-	function Query($query, $dblink='')
+	function Query($query, $params=NULL, $dblink='')
 	{
 		// init - detect if called from object or externally
 		if ('' == $dblink)
@@ -287,10 +298,33 @@ class Wakka
 		{
 			$object = FALSE;
 		}
-		if (!$result = mysql_query($query, $dblink))
-		{
+		try {
+			$result = $dblink->prepare($query);
+			if(NULL == $params) {
+				$result->execute();
+			} else {
+				$result->execute($params);
+			}
+		} catch(PDOException $e) {
 			ob_end_clean();
-			die("Query failed: ".$query." (".mysql_error().")"); #i18n
+/*
+			die('<em class="error">' .
+			    T_("Query failed in Query(): ") .
+				$e->getCode() .
+				'</em>');
+      */
+			// DEBUG
+			// Don't use this in production!
+
+			print $e;
+			print "<br/>";
+			print "Query: ".$query;
+			print "Params: ".var_dump($params);
+			die('<em class="error">' .
+			    T_("Query failed in Query(): ") .
+				$e->getCode() .
+				'</em>');
+
 		}
 		if ($object && $this->GetConfigValue('sql_debugging'))
 		{
@@ -303,18 +337,81 @@ class Wakka
 	}
 
 	/**
+	 * Replacement for mysql_real_escape_string() (wrapper around
+	 * PDO::quote()).
+	 *
+	 * Note that the use of parameters using prepare()/execute() is
+	 * the preferred method for santizing input.  Use PDO::quote()
+	 * sparingly!
+	 *
+	 * @param	string	$val	mandatory: the string to be sanitized
+	 * @param	resource $dblink optional: connection to the database
+	 * @return	string	the sanitized string
+	 *
+	 */
+	function pdo_quote($val, $dblink='')
+	{
+		// init - detect if called from object or externally
+		if ('' == $dblink)
+		{
+			$dblink = $this->dblink;
+		}
+		return $dblink->quote($val);
+	}
+
+	/**
+	 * Return "safe" identifiers (tables, fields, and database names)
+	 * by enclosing in backticks.
+	 *
+	 * Note that this offers protection against SQL injection, but not
+	 * against dynamic input of table/field/db names.  Best to check
+	 * against a whitelist!
+	 *
+	 * Adapted from http://php.net/manual/en/pdo.quote.php#112169
+	 *
+	 * @param	string		$ident	mandatory: identifier
+	 * @param	resource	$dblink	optional: connection to the database
+	 * @return	string		the sanitized identifier
+	 */
+	function pdo_quote_identifier($ident, $dblink='') {
+		if('' == $dblink) {
+			$dblink = $this->dblink;
+		}
+		return "`".str_replace("`","``",$ident)."`";
+	}
+
+	/**
+     * Return DB server version.
+	 *
+	 * @param	resource $dblink optional: connection to the database
+	 * @return	string	the DB version
+	 */
+	function pdo_get_server_version($dblink='') {
+		// init - detect if called from object or externally
+		if ('' == $dblink)
+		{
+			$dblink = $this->dblink;
+		}
+		return $dblink->getAttribute(PDO::ATTR_SERVER_VERSION);
+	}
+
+
+	/**
 	 * Return the first row of a query executed on the database.
 	 *
 	 * @uses	Wakka::LoadAll()
 	 *
 	 * @param	string	$query	mandatory: the query to be executed
+	 * @param   array   $params optional: parameters for query (NULL if none)
 	 * @return	mixed	an array with the first result row of the query, or FALSE if nothing was returned.
 	 * @todo	for 1.3: check if indeed false is returned (compare with trunk)
 	 */
-	function LoadSingle($query)
+	function LoadSingle($query, $params=NULL)
 	{
-		if ($data = $this->LoadAll($query))
-		return $data[0];
+		if ($data = $this->LoadAll($query, $params)) {
+			return $data[0];
+		}
+		return FALSE;
 	}
 
 	/**
@@ -323,18 +420,14 @@ class Wakka
 	 * @uses	Wakka::Query()
 	 *
 	 * @param	string $query mandatory: the query to be executed
+	 * @param   array   $params optional: parameters for query (NULL if none)
 	 * @return	array the result of the query.
 	 */
-	function LoadAll($query)
+	function LoadAll($query, $params=NULL)
 	{
-		$data = array();
-		if ($r = $this->Query($query))
+		if ($r = $this->Query($query, $params))
 		{
-			while ($row = mysql_fetch_assoc($r))
-			{
-				$data[] = $row;
-			}
-			mysql_free_result($r);
+			$data = $r->fetchAll();
 		}
 		return $data;
 	}
@@ -360,9 +453,9 @@ class Wakka
 	 * @param	string	$where	optional: criteria to be specified for a WHERE clause;
 	 *							do not include WHERE
 	 * @param   boolean $usePrefix optional: if true, append prefix defined in wikka.config.php file; if false, do not append prefix
-	 * @return	integer	number of matches returned by MySQL
+	 * @return	integer	number of matches returned by query
 	 */
-	function getCount($table, $where='', $usePrefix=TRUE)							# JW 2005-07-16
+	function getCount($table, $where='', $params = NULL, $usePrefix=TRUE)
 	{
 		// build query
 		$prefix = '';
@@ -377,12 +470,14 @@ class Wakka
 			$where;
 
 		// get and return the count as an integer
-		$count = (int)mysql_result($this->Query($query),0);
-		return $count;
+		$r = $this->Query($query, $params);
+		$count = $r->fetch($cursor_offset = 0);
+		$r->closeCursor();
+		return $count[0];
 	}
 
 	/**
-	 * Check if the MySQL-Version is higher or equal to a given (minimum) one.
+	 * Check if the DB version is higher or equal to a given (minimum) one.
 	 *
 	 * @param $major
 	 * @param $minor
@@ -390,39 +485,28 @@ class Wakka
 	 * @return unknown_type
 	 * @todo	for 1.3: compare with trunk-version!
 	 */
-	function CheckMySQLVersion($major, $minor, $subminor)
+	function CheckDBVersion($major, $minor, $subminor)
 	{
-		$result = @mysql_query('SELECT VERSION() AS version');
-		if ($result !== FALSE && @mysql_num_rows($result) > 0)
+		$result = $this->pdo_get_server_version();
+		if ($result !== FALSE)
 		{
-			$row   = mysql_fetch_array($result);
-			$match = explode('.', $row['version']);
+			$match = explode('.', $result);
+		} else {
+			return -1;
+		}
+
+
+		$db_major = $match[0];
+		$db_minor = $match[1];
+		$db_subminor = $match[2][0].$match[2][1];
+
+		if ($db_major > $major)
+		{
+			return 1;
 		}
 		else
 		{
-			$result = @mysql_query('SHOW VARIABLES LIKE \'version\'');
-			if ($result !== FALSE && @mysql_num_rows($result) > 0)
-			{
-				$row   = mysql_fetch_row($result);
-				$match = explode('.', $row[1]);
-			}
-			else
-			{
-				return 0;
-			}
-		}
-
-			$mysql_major = $match[0];
-			$mysql_minor = $match[1];
-			$mysql_subminor = $match[2][0].$match[2][1];
-
-			if ($mysql_major > $major)
-			{
-				return 1;
-			}
-		else
-		{
-			if (($mysql_major == $major) && ($mysql_minor >= $minor) && ($mysql_subminor >= $subminor))
+			if (($db_major == $major) && ($db_minor >= $minor) && ($db_subminor >= $subminor))
 			{
 				return 1;
 			}
@@ -432,8 +516,6 @@ class Wakka
 			}
 		}
 	}
-
-	/**#@-*/
 
 	/**#@+
 	 * @category	Misc methods
@@ -544,7 +626,7 @@ class Wakka
 	 * overall).
 	 *
 	 * @author		{@link http://wikkawiki.org/JavaWoman JavaWoman}
-	 * @copyright	Copyright © 2005, Marjolein Katsma
+	 * @copyright	Copyright ï¿½ 2005, Marjolein Katsma
 	 * @license		http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
 	 * @since		Wikka 1.1.6.4
 	 * @version		1.0
@@ -628,6 +710,20 @@ class Wakka
 	 */
 	function ReturnSafeHTML($html)
 	{
+                if ( $this->GetConfigValue('htmlpurifier_path')!="" ) {
+                    $htmlpurifier_classpath = $this->GetConfigValue('htmlpurifier_path').DIRECTORY_SEPARATOR.'HTMLPurifier.standalone.php';
+                    #print $safehtml_classpath;
+                    require_once $htmlpurifier_classpath;
+
+                    // Instantiate the handler
+                    $config_purifier = HTMLPurifier_Config::createDefault();
+                    $purifier = new HTMLPurifier($config_purifier);
+                    $filtered_output = $purifier->purify($html);
+                    #$safehtml = instantiate('safehtml');
+                    #$filtered_output = $safehtml->parse($html);
+
+                    return $filtered_output;
+                }
 		$safehtml_classpath = $this->GetConfigValue('safehtml_path').DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'safehtml.php';
 		require_once $safehtml_classpath;
 
@@ -654,7 +750,7 @@ class Wakka
 	 * See #427.
 	 *
 	 * @author		{@link http://wikkawiki.org/JavaWoman JavaWoman}
-	 * @copyright	Copyright © 2004, Marjolein Katsma
+	 * @copyright	Copyright ï¿½ 2004, Marjolein Katsma
 	 * @license		http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
 	 * @version		1.0
 	 *
@@ -1008,7 +1104,7 @@ class Wakka
 	 * Normalizes line endings to "*nix style" ("\n") in a string; handles both Dos/Win and Mac.
 	 *
 	 * @author		{@link http://wikka.jsnx.com/JavaWoman JavaWoman}
-	 * @copyright	Copyright © 2005, Marjolein Katsma
+	 * @copyright	Copyright ï¿½ 2005, Marjolein Katsma
 	 * @license		http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
 	 * @version		0.5
 	 *
@@ -1133,7 +1229,7 @@ class Wakka
 	 * Log probably spammy comment.
 	 *
 	 * @author		{@link http://wikka.jsnx.com/JavaWoman JavaWoman}
-	 * @copyright	Copyright © 2005, Marjolein Katsma
+	 * @copyright	Copyright ï¿½ 2005, Marjolein Katsma
 	 * @license		http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
 	 * @version		0.7
 	 *
@@ -1160,7 +1256,7 @@ class Wakka
 	 * Log probably spammy document.
 	 *
 	 * @author		{@link http://wikka.jsnx.com/JavaWoman JavaWoman}
-	 * @copyright	Copyright © 2005, Marjolein Katsma
+	 * @copyright	Copyright ï¿½ 2005, Marjolein Katsma
 	 * @license		http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
 	 * @version		0.7
 	 *
@@ -1187,7 +1283,7 @@ class Wakka
 	 * Log probably spammy feedback.
 	 *
 	 * @author		{@link http://wikka.jsnx.com/JavaWoman JavaWoman}
-	 * @copyright	Copyright © 2005, Marjolein Katsma
+	 * @copyright	Copyright ï¿½ 2005, Marjolein Katsma
 	 * @license		http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
 	 * @version		0.7
 	 *
@@ -1212,7 +1308,7 @@ class Wakka
 	 * Log probable spam (comment, document or feedback).
 	 *
 	 * @author		{@link http://wikka.jsnx.com/JavaWoman JavaWoman}
-	 * @copyright	Copyright © 2005, Marjolein Katsma
+	 * @copyright	Copyright ï¿½ 2005, Marjolein Katsma
 	 * @license		http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
 	 * @version		0.7
 	 *
@@ -1264,7 +1360,7 @@ class Wakka
 		$sig		= SPAMLOG_SIG.' '.$type.' '.$time.' '.$tag.' - '.$originip.' - '.$user.' '.$ua.' - '.$reason.' - '.$urlcount."\n";
 		$content	= $sig.$body."\n\n";
 
-		// add data to log	
+		// add data to log
 		return $this->appendFile($spamlogpath,$content);	# nr. of bytes written if successful, FALSE otherwise
 	}
 
@@ -1272,7 +1368,7 @@ class Wakka
 	 * Get all meta data lines from the spamlog and return the data in an array.
 	 *
 	 * @author		{@link http://wikka.jsnx.com/JavaWoman JavaWoman}
-	 * @copyright	Copyright © 2005, Marjolein Katsma
+	 * @copyright	Copyright ï¿½ 2005, Marjolein Katsma
 	 * @license		http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
 	 * @version		0.3
 	 *
@@ -1329,7 +1425,7 @@ class Wakka
 	 * to an existing file.
 	 *
 	 * @author		{@link http://wikka.jsnx.com/JavaWoman JavaWoman}
-	 * @copyright	Copyright © 2005, Marjolein Katsma
+	 * @copyright	Copyright ï¿½ 2005, Marjolein Katsma
 	 * @license		http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
 	 * @version		0.5
 	 * @todo
@@ -1375,7 +1471,7 @@ class Wakka
 	 * Returns the number of bytes written if successful, FALSE otherwise.
 	 *
 	 * @author		{@link http://wikka.jsnx.com/JavaWoman JavaWoman}
-	 * @copyright	Copyright © 2005, Marjolein Katsma
+	 * @copyright	Copyright ï¿½ 2005, Marjolein Katsma
 	 * @license		http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
 	 * @version		0.5
 	 * @todo
@@ -1417,7 +1513,7 @@ class Wakka
 	 * Returns the number of bytes written if successful, FALSE otherwise.
 	 *
 	 * @author		{@link http://wikka.jsnx.com/JavaWoman JavaWoman}
-	 * @copyright	Copyright © 2005, Marjolein Katsma
+	 * @copyright	Copyright ï¿½ 2005, Marjolein Katsma
 	 * @license		http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
 	 * @version		0.5
 	 * @todo
@@ -1491,7 +1587,18 @@ class Wakka
 			if ($page=="cached_nonexistent_page") return null;
 		}
 		// load page
-		if (!isset($page)) $page = $this->LoadSingle("select * from ".$this->GetConfigValue('table_prefix')."pages where tag = '".mysql_real_escape_string($tag)."' ".($time ? "and time = '".mysql_real_escape_string($time)."'" : "and latest = 'Y'")." limit 1");
+		if(!isset($page)) {
+			$params = NULL;
+			if('' != $time) {
+				$params = array(':time'=>$time);
+			}
+			$params[':tag'] = $tag;
+			$query = "SELECT * FROM " . $this->GetConfigValue('table_prefix') .
+			         "pages WHERE tag=:tag " .
+					 ($time ? "AND time=:time " : "AND latest='Y' ") .
+					 "LIMIT 1";
+			$page = $this->LoadSingle($query, $params);
+		}
 		// cache result
 		if ($page && !$time) {
 			$this->pageCache[$page["tag"]] = $page;
@@ -1616,8 +1723,7 @@ class Wakka
 		return $this->LoadSingle("
 			SELECT *
 			FROM ".$this->GetConfigValue('table_prefix')."pages
-			WHERE id = '".mysql_real_escape_string($id)."'
-			LIMIT 1"
+			WHERE id = :id LIMIT 1", array(':id' => $id)
 			);
 	}
 
@@ -1633,7 +1739,7 @@ class Wakka
 	 */
 	function LoadRevisions($page)
 	{
-		return $this->LoadAll("select * from ".$this->GetConfigValue('table_prefix')."pages where tag = '".mysql_real_escape_string($page)."' order by id desc");
+		return $this->LoadAll("select * from ".$this->GetConfigValue('table_prefix')."pages where tag = :page order by id desc", array(':page' => $page));
 	}
 
 	/**
@@ -1661,9 +1767,9 @@ class Wakka
 			$oldest_revision = $this->LoadSingle("
 				SELECT note, id, time, user
 				FROM ".$this->GetConfigValue('table_prefix')."pages
-				WHERE tag = '".mysql_real_escape_string($tag)."'
+				WHERE tag = :tag
 				ORDER BY time
-				LIMIT 1"
+				LIMIT 1", array(':tag' => $tag)
 				);
 		return $oldest_revision;
 	}
@@ -1681,8 +1787,8 @@ class Wakka
 		return $this->LoadAll("
 			SELECT from_tag AS page_tag
 			FROM ".$this->GetConfigValue('table_prefix')."links
-			WHERE to_tag = '".mysql_real_escape_string($tag)."'
-			ORDER BY page_tag"
+			WHERE to_tag = :tag
+			ORDER BY page_tag", array(':tag' => $tag)
 			);
 	}
 
@@ -1830,8 +1936,8 @@ class Wakka
 			SELECT tag
 			FROM ".$this->GetConfigValue('table_prefix')."pages
 			WHERE `latest` = 'Y'
-				AND `owner` = '".mysql_real_escape_string($owner)."'
-			ORDER BY `tag`"
+				AND `owner` = :owner
+			ORDER BY `tag`", array(':owner' => $owner)
 			);
 	}
 
@@ -1906,21 +2012,48 @@ class Wakka
 			$this->Query("
 				UPDATE ".$this->GetConfigValue('table_prefix')."pages
 				SET latest = 'N'
-				WHERE tag = '".mysql_real_escape_string($tag)."'"
+				WHERE tag = :tag", array(':tag' => $tag)
 				);
 
 			// add new revision
+			if($this->GetConfigValue('dbms_type') == "sqlite"){
+				$this->Query("
+					INSERT INTO ".$this->GetConfigValue('table_prefix')."pages
+					(  tag, title     , time                      , owner, user, note, latest, body ) VALUES
+					( :tag,:page_title,datetime('now','localtime'),:owner,:user,:note,'Y'    ,:body )",
+						array(':tag' => $tag,
+						    ':page_title' => $page_title,
+							  ':owner' => $owner,
+							  ':user' => $user,
+							  ':note' => $note,
+							  ':body' => $body)
+					);
+			} else {
 			$this->Query("
 				INSERT INTO ".$this->GetConfigValue('table_prefix')."pages
-				SET	tag		= '".mysql_real_escape_string($tag)."',
-				  title = '".mysql_real_escape_string($page_title)."',
+				SET	tag		= :tag,
+				  title = :page_title,
 					time	= now(),
-					owner	= '".mysql_real_escape_string($owner)."',
-					user	= '".mysql_real_escape_string($user)."',
-					note	= '".mysql_real_escape_string($note)."',
+					owner	= :owner,
+					user	= :user,
+					note	= :note,
 					latest	= 'Y',
-					body	= '".mysql_real_escape_string($body)."'"
+					body	= :body",
+					array(':tag' => $tag,
+					      ':page_title' => $page_title,
+						  ':owner' => $owner,
+						  ':user' => $user,
+						  ':note' => $note,
+						  ':body' => $body)
 				);
+			}
+			$params = array(':tag' => $tag,
+			                ':page_title' => $page_title,
+							':owner' => $owner,
+							':user' => $user,
+							':note' => $note,
+							':body' => $body);
+			db_addNewRevision($this, $params);
 
 			// WikiPing
 			if ($pingdata = $this->GetPingParams($this->GetConfigValue('wikiping_server'), $tag, $user, $note))
@@ -1937,14 +2070,14 @@ class Wakka
 	 */
 
 	/**
-	 * Full text search, case-sensitive 
+	 * Full text search, case-sensitive
 	 *
 	 * @access	public
 	 *
-	 * @param	string	$phrase	the text to be searched for 
+	 * @param	string	$phrase	the text to be searched for
      * @param   string  $caseSensitive	optional: 0 for case-insensitive search (default), 1 for case-sensitive search
-	 * @param   string $utf8Compatible optional: 0 for legacy search (case sensitive, wildcards, but incompatible with some character codings), 1 for UTF-8 compatible searches (non-case-sensitive, no wildcards) 
-	 * @return	string  Search results	
+	 * @param   string $utf8Compatible optional: 0 for legacy search (case sensitive, wildcards, but incompatible with some character codings), 1 for UTF-8 compatible searches (non-case-sensitive, no wildcards)
+	 * @return	string  Search results
 	 */
 	function FullTextSearch($phrase, $caseSensitive=0, $utf8Compatible=0)
 	{
@@ -1956,21 +2089,20 @@ class Wakka
 		if(0 == $utf8Compatible)
 		{
 			$id = '';
-			// Should work with any browser/entity conversion scheme
-			$search_phrase = mysql_real_escape_string($phrase);
 			// Convert &quot; entity to actual quotes for exact phrase match
-			$search_phrase = stripslashes(str_replace("&quot;", "\"", $search_phrase));
+			$search_phrase = stripslashes(str_replace("&quot;", "\"", $phrase));
 			if ( 1 == $caseSensitive ) $id = ', id';
-			$sql  = "select * from ".$this->GetConfigValue('table_prefix')."pages where latest = ".  "'Y'" ." and match(tag, body".$id.") against(". "'$search_phrase'" ." IN BOOLEAN MODE) order by time DESC";
+			$sql  = "select * from ".$this->GetConfigValue('table_prefix')."pages where latest = ".  "'Y'" ." and match(tag, body".$id.") against(:search_phrase IN BOOLEAN MODE) order by time DESC";
+			$data = $this->LoadAll($sql, array(':search_phrase' => $search_phrase));
 		}
 		else
 		{
-			$search_phrase = mysql_real_escape_string($phrase);
 			$sql  = "select * from ".$this->GetConfigValue('table_prefix')."pages WHERE latest = ". "'Y'";
-			foreach( explode(' ', $search_phrase) as $term ) 
-				$sql .= " AND ((`tag` LIKE '%{$term}%') OR (body LIKE '%{$term}%'))";
+			foreach( explode(' ', $phrase) as $term )
+				$sql .= " AND ((`tag` LIKE '%'.$this->quote($term).'%') OR (body LIKE '%'.$this->quote($term).'%'))";
+			$data = $this->LoadAll($sql, NULL);
 		}
-		$data = $this->LoadAll($sql);
+
 		return $data;
 	}
 
@@ -1982,7 +2114,8 @@ class Wakka
 	 */
 	function FullCategoryTextSearch($phrase)
 	{
-		return $this->LoadAll("select * from ".$this->GetConfigValue('table_prefix')."pages where latest = 'Y' and match(body) against('".mysql_real_escape_string($phrase)."' IN BOOLEAN MODE)");
+		return $this->LoadAll("select * from ".$this->GetConfigValue('table_prefix')."pages where latest = 'Y' and match(body) against(':phrase' IN BOOLEAN MODE)",
+		array(':phrase' => $phrase));
 	}
 
 	/**#@-*/
@@ -2121,10 +2254,9 @@ class Wakka
 		else {
 			$query = "SELECT title FROM ".
 					$this->GetConfigValue('table_prefix').
-					"pages WHERE tag = '".
-					mysql_real_escape_string($tag).
-					"' AND LATEST = 'Y'";
-			$res = $this->LoadSingle($query);
+					"pages WHERE tag = :tag
+					AND LATEST = 'Y'";
+			$res = $this->LoadSingle($query, array(':tag' => $tag));
 			$page_title = trim($res['title']) !== '' ? $res['title'] : $tag;
 			$page_title = strip_tags($page_title);
 		}
@@ -2161,7 +2293,7 @@ class Wakka
 	 * Check by name if a page exists.
 	 *
 	 * @author		{@link http://wikkawiki.org/JavaWoman JavaWoman}
-	 * @copyright	Copyright © 2004, Marjolein Katsma
+	 * @copyright	Copyright ï¿½ 2004, Marjolein Katsma
 	 * @license		http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
 	 * @version		1.1
 	 *
@@ -2187,6 +2319,8 @@ class Wakka
 	{
 		// Always replace '_' with ws
 		$page = preg_replace('/_+/', ' ', $page);
+        // Strip anchors if they are there
+        $page = preg_replace('/^(.*?)(#.*)$/', "$1", $page);
 		// init
 		$count = 0;
 		$table_prefix = (empty($prefix) && isset($this)) ? $this->GetConfigValue('table_prefix') : $prefix;
@@ -2197,19 +2331,18 @@ class Wakka
 		// build query
 		$query = "SELECT COUNT(tag)
 				FROM ".$table_prefix."pages
-				WHERE tag='".mysql_real_escape_string($page)."'";
+				WHERE tag=:page";
 		if ($active)
 		{
 			$query .= "		AND latest='Y'";
 		}
 		// do query
-		if ($r = Wakka::Query($query, $dblink))
-		{
-			$count = mysql_result($r,0);
-			mysql_free_result($r);
+		if($r = $this->Query($query, array(':page' => $page))) {
+			$count = $r->fetch($cursor_offset = 0);
+			$r->closeCursor();
 		}
 		// report
-		return ($count > 0) ? TRUE : FALSE;
+		return ($count[0] > 0) ? TRUE : FALSE;
 	}
 
 	/**#@-*/
@@ -2401,7 +2534,7 @@ class Wakka
 				return FALSE;
 			}
 				$ping['history'] = $this->Href('revisions', $tag); // set url to history
-	
+
 				if ($user)
 				{
 					$ping['author'] = $user; // set username
@@ -2672,7 +2805,7 @@ class Wakka
 
 		// is this an interwiki link?
 		// before the : should be a WikiName; anything after can be (nearly) anything that's allowed in a URL
-		if (preg_match('/^([A-ZÄÖÜ][A-Za-zÄÖÜßäöü]+)[:](\S*)$/', $tag, $matches))	// @@@ FIXME #34 (inconsistent with Formatter)
+		if (preg_match('/^([A-Zï¿½ï¿½ï¿½][A-Za-zï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½])[:](\S*)$/', $tag, $matches))	// @@@ FIXME #34 (inconsistent with Formatter)
 		{
 			$url = $this->GetInterWikiUrl($matches[1], $matches[2]);
 			$class = 'interwiki';
@@ -2755,7 +2888,7 @@ class Wakka
 	 *            show_edit_link: If true, each page is followed by an edit link. Default: false.
 	 *            show_page_title: If true, show the title of the page after the page name. Default: true.
 	 *            sort: Should the data be sorted before being listed? Default: no (no sorting)
-	 *  Other possible values for sort: 
+	 *  Other possible values for sort:
 	 *   ignore_case ou ksort: sort page names, ignoring case
 	 *   reverse ou rsort: sort in reverse order, not ignoring case
 	 *   ignore_case_reverse ou krsort: sort in reverse order, not ignoring case
@@ -2982,17 +3115,19 @@ class Wakka
 	function WriteLinkTable()
 	{
 		// delete entries for current page from link table
+		$tag = $this->GetPageTag();
 		$this->Query("
 			DELETE
 			FROM ".$this->GetConfigValue('table_prefix')."links
-			WHERE from_tag = '".mysql_real_escape_string($this->GetPageTag())."'"
+			WHERE from_tag = :tag", array(':tag' => $tag)
 			);
 		// build and insert new entries for current page in link table
 		if ($linktable = $this->GetLinkTable())
 		{
-			$from_tag = mysql_real_escape_string($this->GetPageTag());
+			$from_tag = $this->GetPageTag();
 			$written = array();
 			$sql = '';
+			$params = array();
 			foreach ($linktable as $to_tag)
 			{
 				$lower_to_tag = strtolower($to_tag);
@@ -3002,16 +3137,17 @@ class Wakka
 					{
 						$sql .= ', ';
 					}
-					$sql .= "('".$from_tag."', '".mysql_real_escape_string($to_tag)."')";
+					//$sql .= "(:from_tag, :to_tag)";
+					$sql .= "(?, ?)";
+					array_push($params, $from_tag);
+					array_push($params, $to_tag);
 					$written[$lower_to_tag] = 1;
 				}
 			}
 			if($sql)
 			{
 				$this->Query("
-					INSERT INTO ".$this->GetConfigValue('table_prefix')."links
-					VALUES ".$sql
-					);
+					INSERT INTO ".$this->GetConfigValue('table_prefix')."links VALUES ".$sql, $params);
 			}
 		}
 	}
@@ -3296,7 +3432,7 @@ class Wakka
 		// add validation key fields used against FormSpoofing
 		if('post' == strtolower($formMethod))
 		{
-			$hidden['CSRFToken'] = $_SESSION['CSRFToken'];
+			$hidden['CSRFToken'] = $_SESSION['nextCSRFToken'];
 		}
 
 		// build HTML fragment
@@ -3432,15 +3568,20 @@ class Wakka
 			$blacklist = $this->LoadSingle("
 				SELECT *
 				FROM ".$this->GetConfigValue('table_prefix')."referrer_blacklist
-				WHERE spammer = '".mysql_real_escape_string($spammer)."'"
+				WHERE spammer = :spammer", array(':spammer' => $spammer)
 				);
 			if (FALSE == $blacklist)
 			{
 				$this->Query("
 					INSERT INTO ".$this->GetConfigValue('table_prefix')."referrers
-					SET page_tag	= '".mysql_real_escape_string($tag)."',
-						referrer	= '".mysql_real_escape_string($referrer)."',
-						time		= now()"
+					SET page_tag	= :tag,
+						referrer	= :referrer,
+						time		= now()",
+					array(':tag' => $tag, ':referrer' => $referrer)
+					);
+				$this->Query("
+					INSERT INTO ".$this->GetConfigValue('table_prefix')."referrers (page_tag, referrer, time) VALUES (:tag, :referrer, now())",
+					array(':tag' => $tag, ':referrer' => $referrer)
 					);
 			}
 		}
@@ -3455,14 +3596,24 @@ class Wakka
 	 */
 	function LoadReferrers($tag = '')
 	{
-		$where = ($tag = trim($tag)) ? "			WHERE page_tag = '".mysql_real_escape_string($tag)."'" : '';
-		$referrers = $this->LoadAll("
-			SELECT referrer, COUNT(referrer) AS num
-			FROM ".$this->GetConfigValue('table_prefix')."referrers".
-			$where."
-			GROUP BY referrer
-			ORDER BY num DESC"
-			);
+		$where = ($tag = trim($tag)) ? "			WHERE page_tag = :tag" : '';
+		if('' == $where) {
+			$referrers = $this->LoadAll("
+				SELECT referrer, COUNT(referrer) AS num
+				FROM ".$this->GetConfigValue('table_prefix')."referrers".
+				$where."
+				GROUP BY referrer
+				ORDER BY num DESC", NULL
+				);
+		} else {
+			$referrers = $this->LoadAll("
+				SELECT referrer, COUNT(referrer) AS num
+				FROM ".$this->GetConfigValue('table_prefix')."referrers".
+				$where."
+				GROUP BY referrer
+				ORDER BY num DESC", array(':tag' => $tag)
+				);
+		}
 		return $referrers;
 	}
 
@@ -3531,18 +3682,18 @@ class Wakka
 					// Check to see if linktracking is desired (for
 					// instance, when using {{image}} tags to link to
 					// other wiki pages
-					if(FALSE !== strpos($matches[1][$a], "forceLinkTracking")) 
+					if(FALSE !== strpos($matches[1][$a], "forceLinkTracking"))
 					{
 						if(TRUE == $this->htmlspecialchars_ent($matches[3][$a]))
 						{
-							$forceLinkTracking = 1;	
+							$forceLinkTracking = 1;
 						}
 						else
 						{
 							$forceLinkTracking = 0;
 						}
 					}
-					else 
+					else
 					{
 						$vars[$matches[1][$a]] = $this->htmlspecialchars_ent($matches[3][$a]);	// parameter name = sanitized value [SEC]
 					}
@@ -3730,7 +3881,7 @@ class Wakka
 		$users = $this->LoadAll("
 			SELECT *
 			FROM ".$this->GetConfigValue('table_prefix')."users
-			WHERE name = '".mysql_real_escape_string($c_username)."'"
+			WHERE name = :c_username", array(':c_username' => $c_username)
 			);
 		// evaluate result
 		if (is_array($users))
@@ -3801,8 +3952,8 @@ class Wakka
 		$user = $this->LoadSingle("
 			SELECT *
 			FROM ".$this->GetConfigValue('table_prefix')."users
-			WHERE name = '".mysql_real_escape_string($username)."'
-			LIMIT 1"
+			WHERE name = :username
+			LIMIT 1", array(':username' => $username)
 			);
 		if (is_array($user))
 		{
@@ -3827,12 +3978,21 @@ class Wakka
 	 */
 	function LoadUser($name, $password = 0)
 	{
-		return $this->LoadSingle("
-			SELECT *
-			FROM ".$this->GetConfigValue('table_prefix')."users
-			WHERE name = '".mysql_real_escape_string($name)."' ".($password === 0 ? "" : "and password = '".mysql_real_escape_string($password)."'")."
-			LIMIT 1"
-			);
+		if(0 === $password) {
+			return $this->LoadSingle("
+				SELECT *
+				FROM ".$this->GetConfigValue('table_prefix')."users
+				WHERE name = :name LIMIT 1", array(':name' => $name)
+				);
+		} else {
+			return $this->LoadSingle("
+				SELECT *
+				FROM ".$this->GetConfigValue('table_prefix')."users
+				WHERE name = :name and password = :password
+				LIMIT 1",
+				array(':name' => $name, ':password' => $password)
+				);
+		}
 	}
 
 	/**
@@ -3937,10 +4097,7 @@ class Wakka
 		// older than PERSISTENT_COOKIE_EXPIRY, as this is not a
 		// time-critical function for the user.  The assumption here
 		// is that server-side sessions have long ago been cleaned up by PHP.
-		$this->Query("
-			DELETE FROM ".$this->GetConfigValue('table_prefix')."sessions
-			WHERE DATE_SUB(NOW(), INTERVAL ".PERSISTENT_COOKIE_EXPIRY." SECOND) > session_start"
-			);
+		db_purgeSessions($this);
 		$this->registered = false;
 	}
 
@@ -4081,8 +4238,8 @@ class Wakka
 			$user = $this->LoadSingle("
 				SELECT `name`
 				FROM ".$this->GetConfigValue('table_prefix')."users
-				WHERE `name` = '".mysql_real_escape_string($username)."'
-				LIMIT 1"
+				WHERE `name` = :name
+				LIMIT 1", array(':name' => $name)
 				);
 			if (is_array($user))
 			{
@@ -4118,10 +4275,15 @@ class Wakka
 	 */
 	function LoadComments($tag, $order=NULL)
 	{
-		// default
-		if ($order == NULL)
+		// default ($user['show_comments'] overrides COMMENT_NO_DISPLAY in session)
+		if ($order === NULL)
 		{
-			if (isset($_SESSION['show_comments'][$tag]))
+            $user = $this->GetUser();
+            if(isset($user['show_comments']) && $user['show_comments'] == 'Y') 
+            {
+                $order = $user['default_comment_display'];
+            }
+            else if (isset($_SESSION['show_comments'][$tag]))
 			{
 				$order = $_SESSION['show_comments'][$tag];
 			}
@@ -4137,9 +4299,9 @@ class Wakka
 			return $this->LoadAll("
 				SELECT *
 				FROM ".$this->GetConfigValue('table_prefix')."comments
-				WHERE page_tag = '".mysql_real_escape_string($tag)."'
+				WHERE page_tag = :tag
 					AND (status IS NULL or status != 'deleted')
-				ORDER BY time"
+				ORDER BY time", array(':tag' => $tag)
 				);
 		}
 		elseif ($order == COMMENT_ORDER_DATE_DESC)
@@ -4148,9 +4310,9 @@ class Wakka
 			return $this->LoadAll("
 				SELECT *
 				FROM ".$this->GetConfigValue('table_prefix')."comments
-				WHERE page_tag = '".mysql_real_escape_string($tag)."'
+				WHERE page_tag = :tag
 					AND (status IS NULL or status != 'deleted')
-				ORDER BY time DESC"
+				ORDER BY time DESC", array(':tag' => $tag)
 				);
 		}
 		elseif ($order == COMMENT_ORDER_THREADED)
@@ -4165,7 +4327,7 @@ class Wakka
 	 * Select and load a single comment.
 	 *
 	 * @author		{@link http://wikka.jsnx.com/JavaWoman JavaWoman}
-	 * @copyright	Copyright © 2005, Marjolein Katsma
+	 * @copyright	Copyright ï¿½ 2005, Marjolein Katsma
 	 * @license		http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
 	 *
 	 * @access	public
@@ -4283,7 +4445,7 @@ class Wakka
 	 */
 	function CountComments($tag)
 	{
-		$count = $this->getCount('comments', "page_tag = '".mysql_real_escape_string($tag)."' AND (status IS NULL OR status != 'deleted')");
+		$count = $this->getCount('comments', "page_tag = :tag AND (status IS NULL OR status != 'deleted')", array(':tag' => $tag));
 		return $count;
 	}
 
@@ -4297,7 +4459,7 @@ class Wakka
 	 */
 	function CountAllComments($tag)
 	{
-		$count = $this->getCount('comments', "page_tag = '".mysql_real_escape_string($tag)."'");
+		$count = $this->getCount('comments', "page_tag = :tag", $params = array(':tag' => $tag));
 		return $count;
 	}
 	/**
@@ -4320,14 +4482,21 @@ class Wakka
 		if(!empty($user) &&
 		   ($this->GetUser() || $this->IsAdmin()))
 		{
-			$where = " WHERE user = '".mysql_real_escape_string($user)."' AND ";
+			$where = " WHERE user = :user AND ";
+			return $this->LoadAll("
+				SELECT *
+				FROM ".$this->GetConfigValue('table_prefix')."comments
+				".$where." (status IS NULL or status != 'deleted')
+				ORDER BY time DESC
+				LIMIT ".intval($limit), array(':user' => $user));
+		} else {
+			return $this->LoadAll("
+				SELECT *
+				FROM ".$this->GetConfigValue('table_prefix')."comments
+				".$where." (status IS NULL or status != 'deleted')
+				ORDER BY time DESC
+				LIMIT ".intval($limit));
 		}
-		return $this->LoadAll("
-			SELECT *
-			FROM ".$this->GetConfigValue('table_prefix')."comments
-			".$where." (status IS NULL or status != 'deleted')
-			ORDER BY time DESC
-			LIMIT ".intval($limit));
 	}
 
 	/**
@@ -4347,10 +4516,12 @@ class Wakka
 	function LoadRecentlyCommented($limit = 50, $user = '')	// @@@
 	{
 		$where = ' AND 1 ';
+		$params = NULL;
 		if(!empty($user) &&
 		   ($this->GetUser() || $this->IsAdmin()))
 		{
-			$where = " AND comments.user = '".mysql_real_escape_string($user)."' ";
+			$where = " AND comments.user = :user ";
+			$params = array(':user' => $user);
 		}
 
 		$sql = "
@@ -4362,9 +4533,9 @@ class Wakka
 			WHERE c2.page_tag IS NULL
 				AND (comments.status IS NULL or comments.status != 'deleted')
 					".$where."
-			ORDER BY time DESC
+			ORDER BY comments.time DESC
 			LIMIT ".intval($limit);
-		return $this->LoadAll($sql);
+		return $this->LoadAll($sql, $params);
 	}
 
 	/**
@@ -4384,26 +4555,46 @@ class Wakka
 		$user = $this->GetUserName();
 
 		// add new comment
-		$parent_id = mysql_real_escape_string($parent_id);
 		if (!$parent_id)
 		{
 			$parent_id = 'NULL';
 		}
+		if($this->GetConfigValue('dbms_type') == "sqlite"){
+			$this->Query("
+				INSERT INTO ".$this->GetConfigValue('table_prefix')."comments
+				(  page_tag, time                       , comment, parent   , user ) VALUES
+				( :page_tag, datetime('now','localtime'),:comment,:parent_id,:user )",
+				array(':page_tag' => $page_tag,
+				      ':comment' => $comment,
+					  ':parent_id' => ($parent_id == 'NULL') ? null : $parent_id,
+					  ':user' => $user)
+				);
+		} else {
 		$this->Query("
 			INSERT INTO ".$this->GetConfigValue('table_prefix')."comments
-			SET page_tag = '".mysql_real_escape_string($page_tag)."',
+			SET page_tag = :page_tag,
 				time = now(),
-				comment = '".mysql_real_escape_string($comment)."',
-				parent = ".$parent_id.",
-				user = '".mysql_real_escape_string($user)."'"
+				comment = :comment,
+				parent = :parent_id,
+				user = :user",
+			array(':page_tag' => $page_tag,
+			      ':comment' => $comment,
+				  ':parent_id' => ($parent_id == 'NULL') ? null : $parent_id,
+				  ':user' => $user)
 			);
+		}
+		$params = array(':page_tag' => $page_tag,
+		                ':comment' => $comment,
+						':parent_id' => ($parent_id == 'NULL') ? null : $parent_id,
+						':user' => $user);
+		db_saveComment($this, $params);
 	}
 
 	/**
 	 * Delete a comment.
 	 *
 	 * @author		{@link http://wikka.jsnx.com/JavaWoman JavaWoman}
-	 * @copyright	Copyright © 2005, Marjolein Katsma
+	 * @copyright	Copyright ï¿½ 2005, Marjolein Katsma
 	 * @license		http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
 	 *
 	 * @access	public
@@ -4440,7 +4631,7 @@ class Wakka
 	 */
 	function UserIsOwner($tag = '')
 	{
-	
+
 		// if not logged in, user can't be owner!
 		if (!$this->GetUser())
 		{
@@ -4526,10 +4717,10 @@ class Wakka
 			// update latest revision with new owner
 			$this->Query("
 				UPDATE ".$this->GetConfigValue('table_prefix')."pages
-				SET owner = '".mysql_real_escape_string($user)."'
-				WHERE tag = '".mysql_real_escape_string($tag)."'
+				SET owner = :user
+				WHERE tag = :tag
 					AND latest = 'Y'
-				LIMIT 1"
+				LIMIT 1", array(':user' => $user, ':tag' => $tag)
 				);
 		}
 	}
@@ -4552,11 +4743,16 @@ class Wakka
 	 */
 	function LoadACL($tag, $privilege, $useDefaults = 1)	// @@@
 	{
+		$allowed_privs = array('read', 'write', 'comment_read', 'comment_post');
+		if(!in_array($privilege, $allowed_privs)) {
+			die('<em class="error">'.T_("Invalid ACL privilege!").'</em>');
+		}
+		$privs = $privilege."_acl";
 		if ((!$acl = $this->LoadSingle("
-			SELECT ".mysql_real_escape_string($privilege)."_acl
+			SELECT $privs
 			FROM ".$this->GetConfigValue('table_prefix')."acls
-			WHERE `page_tag` = '".mysql_real_escape_string($tag)."'
-			LIMIT 1"
+			WHERE `page_tag` = :tag
+			LIMIT 1", array(':tag' => $tag)
 			)) && $useDefaults)
 		{
 			$acl = array(
@@ -4588,9 +4784,9 @@ class Wakka
 		if ((!$acl = $this->LoadSingle("
 			SELECT *
 			FROM ".$this->GetConfigValue('table_prefix')."acls
-			WHERE `page_tag` = '".mysql_real_escape_string($tag)."'
-			LIMIT 1
-		")) && $useDefaults)
+			WHERE `page_tag` = :tag
+			LIMIT 1", array(':tag' => $tag)
+		)) && $useDefaults)
 		{
 			$acl = array(
 				'page_tag' => $tag,
@@ -4622,24 +4818,39 @@ class Wakka
 	 */
 	function SaveACL($tag, $privilege, $list)
 	{
+		$allowed_privs = array('read', 'write', 'comment_read', 'comment_post');
+		if(!in_array($privilege, $allowed_privs)) {
+			die('<em class="error">'.T_("Invalid ACL privilege!").'</em>');
+		}
 		// the $default will be put in the SET statement of the INSERT SQL for default values. It isn't used in UPDATE.
 		$default = " read_acl = '', write_acl = '', comment_read_acl = '', comment_post_acl = '', ";
 		// we strip the privilege_acl from default, to avoid redundancy
 		$default = str_replace(" ".$privilege."_acl = '',", ' ', $default);
+		$privs = $privilege."_acl";
 		if ($this->LoadACL($tag, $privilege, 0))
 		{
+			$list = trim(str_replace("\r", "", $list));
 			$this->Query("
 				UPDATE ".$this->GetConfigValue('table_prefix')."acls
-				SET ".mysql_real_escape_string($privilege)."_acl = '".mysql_real_escape_string(trim(str_replace("\r", "", $list)))."'
-				WHERE page_tag = '".mysql_real_escape_string($tag)."'
-				LIMIT 1"
+				SET $privs = :list
+				WHERE page_tag = :tag",
+				array(':list' => $list, ':tag' => $tag)
 				);
 		}
 		else
 		{
+			$default_arr = preg_split('/,/', $default);
+			array_pop($default_arr);
+			foreach($default_arr as $default_value) {
+				$fields = preg_split('/=/', $default_value);
+				$default_privs .= $fields[0].', ';
+				$default_values .= $fields[1].', ';
+			}
 			$this->Query("
 				INSERT INTO ".$this->GetConfigValue('table_prefix')."acls
-				SET".$default." `page_tag` = '".mysql_real_escape_string($tag)."', ".mysql_real_escape_string($privilege)."_acl = '".mysql_real_escape_string(trim(str_replace("\r", "", $list)))."'"
+				(".$default_privs." `page_tag`, ".$privs.") VALUES
+				($default_values :tag, :list)",
+				array(':tag' => $tag, ':list' => $list)
 				);
 		}
 	}
@@ -4664,7 +4875,7 @@ class Wakka
 	}
 
 	/**
-	 * Check to see if a user is a member of an ACL usergroup (i.e., 
+	 * Check to see if a user is a member of an ACL usergroup (i.e.,
 	 * the username appears within a set of "+" symbols).
 	 *
 	 * @param string $who	mandatory: Username
@@ -4705,11 +4916,11 @@ class Wakka
 		// set defaults
 		if (!$tag) $tag = $this->GetPageTag();
 		if (!$username) $username = $this->GetUserName();
-                                       
+
         // Get a user object for the named user
         $user = ($username == $this->GetUserName()) ? $this->GetUser() : $this->LoadUser($username);
-                                       
-		// If user is owner or admin, return true. 
+
+		// If user is owner or admin, return true.
 		// Owner and admin can do anything!
         if ($user != FALSE) {
            if ($this->IsAdmin($username) || $this->GetPageOwner($tag) == $username) return TRUE;
@@ -4764,7 +4975,7 @@ class Wakka
 					{
 						return !$negate;
 					}
-                    // this may be a UserGroup so we check if $user 
+                    // this may be a UserGroup so we check if $user
 					// is part of the group
                     else if (($this->isGroupMember($username, $line)))
                     {
@@ -4785,7 +4996,7 @@ class Wakka
 	 * Reads the content of the badwords file. Return contents as string if found, FALSE if not.
 	 *
 	 * @author		{@link http://wikka.jsnx.com/JavaWoman JavaWoman}
-	 * @copyright	Copyright © 2005, Marjolein Katsma
+	 * @copyright	Copyright ï¿½ 2005, Marjolein Katsma
 	 * @license		http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
 	 * @version		0.5
 	 *
@@ -4827,7 +5038,7 @@ class Wakka
 	 * Returns TRUE if successful, FALSE otherwise.
 	 *
 	 * @author		{@link http://wikka.jsnx.com/JavaWoman JavaWoman}
-	 * @copyright	Copyright © 2005, Marjolein Katsma
+	 * @copyright	Copyright ï¿½ 2005, Marjolein Katsma
 	 * @license		http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
 	 * @version		0.6
 	 *
@@ -4872,7 +5083,7 @@ class Wakka
 	 * Return contents as a string if there is any; FALSE if file not found or empty.
 	 *
 	 * @author		{@link http://wikka.jsnx.com/JavaWoman JavaWoman}
-	 * @copyright	Copyright © 2005, Marjolein Katsma
+	 * @copyright	Copyright ï¿½ 2005, Marjolein Katsma
 	 * @license		http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
 	 * @version		0.5
 	 *
@@ -4901,7 +5112,7 @@ class Wakka
 	 * Returns TRUE if teh content contains any of the bad words, FALSE otherwise.
 	 *
 	 * @author		{@link http://wikka.jsnx.com/JavaWoman JavaWoman}
-	 * @copyright	Copyright © 2005, Marjolein Katsma
+	 * @copyright	Copyright ï¿½ 2005, Marjolein Katsma
 	 * @license		http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
 	 * @version		0.5
 	 *
@@ -4992,14 +5203,15 @@ class Wakka
 	 *
 	 */
 	function Maintenance()
-	{
+	{ /*
 		// purge referrers
 		if ($days = $this->GetConfigValue("referrers_purge_time"))
 		{
 			$this->Query("
 				DELETE FROM ".$this->GetConfigValue('table_prefix')."referrers
-				WHERE time < date_sub(now(), interval '".mysql_real_escape_string($days)."' day)"
-				);
+				WHERE time < date_sub(now(), interval :days day)",
+				array(':days' => $days)
+			);
 		}
 
 		// purge old page revisions
@@ -5007,11 +5219,11 @@ class Wakka
 		{
 			$this->Query("
 				DELETE FROM ".$this->GetConfigValue('table_prefix')."pages
-				WHERE time < date_sub(now(), interval '".mysql_real_escape_string($days)."' day)
-					AND latest = 'N'"
+				WHERE time < date_sub(now(), interval :days day)
+					AND latest = 'N'", array(':days' => $days)
 				);
-			$this->Query("delete from ".$this->GetConfigValue('table_prefix')."pages where time < date_sub(now(), interval '".mysql_real_escape_string($days)."' day) and latest = 'N'");
-		}
+			$this->Query("delete from ".$this->GetConfigValue('table_prefix')."pages where time < date_sub(now(), interval :days day) and latest = 'N'", array(':days' => days));
+		} */
 	}
 
 	/**
@@ -5028,7 +5240,7 @@ class Wakka
 			if(isset($_SESSION['breadcrumbs'])) {
 				$q = new SplQueue();
 				$q->unserialize($_SESSION['breadcrumbs']);
-				if($page != $q->top()) { 
+				if($page != $q->top()) {
 					while($q->count() >= $this->GetConfigValue('num_breadcrumb_nodes')) {
 						$q->dequeue();
 					}
@@ -5164,6 +5376,17 @@ class Wakka
 		{
 			header('Content-type: text/html');
 			print($this->Handler($this->GetHandler()));
+		}
+		elseif($this->GetHandler() == 'reveal')
+		{
+			print($this->Handler($this->GetHandler()));
+		}
+		elseif( $this->GetHandler() == 'show' && pathinfo($this->GetPageTag(), PATHINFO_EXTENSION) == 'md' && $this->page['body'] != '' )
+		{
+			$this->Handler($this->handler = 'md');
+			echo $this->Header();
+			echo $this->Handler($this->GetHandler());
+		  echo $this->Footer();
 		}
 		else
 		{
