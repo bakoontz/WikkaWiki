@@ -710,20 +710,6 @@ class Wakka
 	 */
 	function ReturnSafeHTML($html)
 	{
-                if ( $this->GetConfigValue('htmlpurifier_path')!="" ) {
-                    $htmlpurifier_classpath = $this->GetConfigValue('htmlpurifier_path').'/HTMLPurifier.standalone.php';
-                    #print $safehtml_classpath;
-                    require_once $htmlpurifier_classpath;
-
-                    // Instantiate the handler
-                    $config_purifier = HTMLPurifier_Config::createDefault();
-                    $purifier = new HTMLPurifier($config_purifier);
-                    $filtered_output = $purifier->purify($html);
-                    #$safehtml = instantiate('safehtml');
-                    #$filtered_output = $safehtml->parse($html);
-
-                    return $filtered_output;
-                }
 		$safehtml_classpath = $this->GetConfigValue('safehtml_path').'/classes/safehtml.php';
 		require_once $safehtml_classpath;
 
