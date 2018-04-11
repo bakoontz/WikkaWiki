@@ -697,7 +697,7 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 			// check if GeSHi path is set and we have a GeSHi highlighter for this language
 			if (isset($language) &&
 				isset($wakka->config['geshi_path']) &&
-				file_exists($geshi_hi_path.DIRECTORY_SEPARATOR.$language.'.php'))
+				file_exists($geshi_hi_path.'/'.$language.'.php'))
 			{
 				// check if specified filename is valid and generate code block header
 				if (isset($filename) &&
@@ -721,7 +721,7 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 			// check Wikka highlighter path is set and if we have an internal Wikka highlighter
 			elseif (isset($language) &&
 					isset($wakka->config['wikka_formatter_path']) &&
-					file_exists($wikka_hi_path.DIRECTORY_SEPARATOR.$language.'.php') && 
+					file_exists($wikka_hi_path.'/'.$language.'.php') && 
 					'wakka' != $language)
 			{
 				// use internal Wikka highlighter

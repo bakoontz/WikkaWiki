@@ -24,7 +24,7 @@ if(!is_writeable('config'))
 	<?php
 	return;	
 }
-$path = 'config'.DIRECTORY_SEPARATOR;
+$path = 'config/';
 if(isset($config['navigation_links']))
 {
 	$navlinks = $config['navigation_links'];

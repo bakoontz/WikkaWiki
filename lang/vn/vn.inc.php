@@ -651,7 +651,7 @@ if(!defined('PAGE_DELETION_CANCEL_BUTTON')) define('PAGE_DELETION_CANCEL_BUTTON'
  * Language constant used by the {@link diff.php diff} (page) handler
  */
 // diff
-if(!defined('ERROR_DIFF_LIBRARY_MISSING')) define('ERROR_DIFF_LIBRARY_MISSING', 'Tập tin <tt>'.WIKKA_LIBRARY_PATH.DIRECTORY_SEPARATOR.'diff.lib.php</tt> không được tìm thấy. Vui lòng liên hệ người quản trị hệ thống.');
+if(!defined('ERROR_DIFF_LIBRARY_MISSING')) define('ERROR_DIFF_LIBRARY_MISSING', 'Tập tin <tt>'.WIKKA_LIBRARY_PATH.'/diff.lib.php</tt> không được tìm thấy. Vui lòng liên hệ người quản trị hệ thống.');
 if(!defined('ERROR_BAD_PARAMETERS')) define('ERROR_BAD_PARAMETERS', 'Tham số bạn chỉ ra không hợp lệ: một trong hai phiên bản đã bị xóa.');
 if(!defined('DIFF_COMPARISON_HEADER')) define('DIFF_COMPARISON_HEADER', 'So sánh %1$s cho %2$s'); // %1$s - link to revision list; %2$s - link to page
 if(!defined('DIFF_REVISION_LINK_TITLE')) define('DIFF_REVISION_LINK_TITLE', 'Danh sách các phiên bản của trang %s'); // %s page name

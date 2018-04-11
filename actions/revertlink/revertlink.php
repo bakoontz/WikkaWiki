@@ -17,7 +17,7 @@
  */
 if ($this->IsAdmin())
 {
-	include_once($this->BuildFullpathFromMultipath('..'.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'libs'.DIRECTORY_SEPARATOR.'admin.lib.php', $this->GetConfigValue('action_path')));
+	include_once($this->BuildFullpathFromMultipath('../../libs/admin.lib.php', $this->GetConfigValue('action_path')));
 	$res = LoadLastTwoPagesByTag($this, $this->GetPageTag());
 	if(null !== $res)
 	{

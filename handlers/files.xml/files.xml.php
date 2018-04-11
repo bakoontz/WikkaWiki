@@ -37,7 +37,7 @@ if ('' == $this->GetConfigValue('upload_path'))
 {
 	$this->SetConfigValue('upload_path','files');
 }
-$upload_path = $this->GetConfigValue('upload_path').DIRECTORY_SEPARATOR.$this->GetPageTag(); # #89
+$upload_path = $this->GetConfigValue('upload_path').'/'.$this->GetPageTag(); # #89
 if (!is_dir($upload_path))
 {
 	mkdir_r($upload_path);
@@ -70,7 +70,7 @@ switch ($action)	# #312
 	case 'download':
 		header('Accept-Ranges: bytes');
 		$_GET['file'] = basename($file); # #312
-		$path = $upload_path.DIRECTORY_SEPARATOR.$file;	# #89, #312
+		$path = $upload_path.'/'.$file;	# #89, #312
 		$filename = basename($path);
 		header("Content-Type: application/x-download");
 		header("Content-Disposition: attachment; filename=\"".urldecode($filename)."\"");
@@ -118,7 +118,7 @@ switch ($action)	# #312
 		{
 			// Some versions of PHP return an incorrect value for
 			// unlink, so we simply check to see if file still exists
-			$filepath = $upload_path.DIRECTORY_SEPARATOR.$file;
+			$filepath = $upload_path.'/'.$file;
 			@unlink($filepath);
 			$status = stat($filepath);
 			if (TRUE === is_array($status)) #89, #312

@@ -175,7 +175,7 @@ if ($this->GetConfigValue('upload_path') == '')
 {
 	$this->SetConfigValue('upload_path','files');
 }
-$upload_path = $this->GetConfigValue('upload_path').DIRECTORY_SEPARATOR.$this->GetPageTag(); # #89
+$upload_path = $this->GetConfigValue('upload_path').'/'.$this->GetPageTag(); # #89
 
 // 1. check if main upload path is writable
 if (!is_writable($this->GetConfigValue('upload_path')))
@@ -208,7 +208,7 @@ if(isset($_POST['file_to_delete']))
 	preg_match($filpreg_matchex, $file_to_delete, $matches);
 	if(isset($matches[1]))
 	{
-		$result = @unlink($upload_path.DIRECTORY_SEPARATOR.$file_to_delete);
+		$result = @unlink($upload_path.'/'.$file_to_delete);
 		if (!$result)
 		{
 			$this->Redirect('', sprintf(T_('Unable to delete file %s'), $file_to_delete));
@@ -254,7 +254,7 @@ elseif(FALSE===empty($file_to_delete) && TRUE===userCanUpload())
 elseif (isset($vars['download']))
 {
 	if
-	(file_exists($upload_path.DIRECTORY_SEPARATOR.$this->htmlspecialchars_ent($vars['download']))) # #89
+	(file_exists($upload_path.'/'.$this->htmlspecialchars_ent($vars['download']))) # #89
 	{
 		if (!isset($vars['text']))
 		{
@@ -306,7 +306,7 @@ elseif ($this->page && $this->HasAccess('read') && $this->GetHandler() == 'show'
 					$strippedname = str_replace('\'', '', $_FILES['file']['name']);
 					$strippedname = rawurlencode($strippedname);
 					$strippedname = stripslashes($strippedname);
-					$destfile = $upload_path.DIRECTORY_SEPARATOR.$strippedname; #89
+					$destfile = $upload_path.'/'.$strippedname; #89
 
 					if (!file_exists($destfile))
 					{
@@ -368,7 +368,7 @@ if (is_readable($upload_path))
 	$sizeArr = array();
 	while (false !== ($file = readdir($dir)))
 	{
-		$fqfn = $upload_path.DIRECTORY_SEPARATOR.$file;
+		$fqfn = $upload_path.'/'.$file;
 		if($file{0} == '.' || !preg_match('/file|link/', filetype($fqfn)))
 		{
 			continue;

@@ -44,7 +44,7 @@ if ($this->HasAccess('write'))
 {
 	if (NULL != $_POST)
     {
-		include_once($this->BuildFullpathFromMultipath('..'.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'libs'.DIRECTORY_SEPARATOR.'admin.lib.php', $this->GetConfigValue('action_path')));
+		include_once($this->BuildFullpathFromMultipath('../../libs/admin.lib.php', $this->GetConfigValue('action_path')));
 		$comment = T_("Reverted to previous revision");
 		$tag = $this->GetPageTag();
 		$message = RevertPageToPreviousByTag($this, $tag, $comment);

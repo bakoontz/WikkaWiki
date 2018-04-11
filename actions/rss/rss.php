@@ -55,11 +55,11 @@ $rss_path = $this->cleanUrl(trim($rss_path));
 // override
 if (preg_match("/^(http|https):\/\/([^\\s\"<>]+)$/i", $rss_path))
 {
-	$onyx_classpath = $this->GetConfigValue('onyx_path', '3rdparty'.DIRECTORY_SEPARATOR.'plugins'.DIRECTORY_SEPARATOR.'onyx-rss').DIRECTORY_SEPARATOR.'onyx-rss.php';
+	$onyx_classpath = $this->GetConfigValue('onyx_path', '3rdparty/plugins/onyx-rss').'/onyx-rss.php';
 	/**
 	 * 3rdParty plugin; implements feed aggregation.
 	 */
-	#include_once('3rdparty'.DIRECTORY_SEPARATOR.'plugins'.DIRECTORY_SEPARATOR.'onyx-rss'.DIRECTORY_SEPARATOR.'onyx-rss.php');
+	#include_once('3rdparty/plugins/onyx-rss/onyx-rss.php');
 	include_once $onyx_classpath;
 	if (!class_exists('Wikka_Onyx'))
 	{

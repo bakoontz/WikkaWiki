@@ -26,12 +26,12 @@ $out = '<abbr title="'.T_("Sorry, only wiki administrators can display this info
 //check privs
 if ($this->GetConfigValue('public_sysinfo') == '1' || $this->IsAdmin())
 {
-	if (file_exists($this->GetConfigValue('geshi_path').DIRECTORY_SEPARATOR.'geshi.php'))
+	if (file_exists($this->GetConfigValue('geshi_path').'/geshi.php'))
 	{
 		/**
 		 * GeSHi core.
 		 */
-		include_once($this->GetConfigValue('geshi_path').DIRECTORY_SEPARATOR.'geshi.php');
+		include_once($this->GetConfigValue('geshi_path').'/geshi.php');
 		if (defined('GESHI_VERSION'))
 		{
 			$out = GESHI_VERSION;

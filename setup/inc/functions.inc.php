@@ -217,7 +217,7 @@ function Language_selectbox($default_lang)
 	while ($f = readdir($hdl))
 	{
 		if ($f[0] == '.') continue;
-		if (file_exists('lang'.DIRECTORY_SEPARATOR.$f.DIRECTORY_SEPARATOR.$f.'.inc.php'))
+		if (file_exists('lang/'.$f.'/'.$f.'.inc.php'))
 		{
 			echo "\n ".'<option value="'.$f.'"';
 			if ($f == $default_lang) echo ' selected="selected"';

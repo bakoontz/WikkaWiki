@@ -153,7 +153,7 @@ function DeleteUser($wakka, $user)
 		{
 			foreach($res as $session)
 			{
-				$session_file = session_save_path().DIRECTORY_SEPARATOR."sess_".$session['sessionid'];
+				$session_file = session_save_path().'/sess_'.$session['sessionid'];
 			}
 		}
 		$wakka->Query("DELETE FROM ".$wakka->config['table_prefix']."sessions WHERE userid=:user", array(':user' => $user));

@@ -711,7 +711,7 @@ class Wakka
 	function ReturnSafeHTML($html)
 	{
                 if ( $this->GetConfigValue('htmlpurifier_path')!="" ) {
-                    $htmlpurifier_classpath = $this->GetConfigValue('htmlpurifier_path').DIRECTORY_SEPARATOR.'HTMLPurifier.standalone.php';
+                    $htmlpurifier_classpath = $this->GetConfigValue('htmlpurifier_path').'/HTMLPurifier.standalone.php';
                     #print $safehtml_classpath;
                     require_once $htmlpurifier_classpath;
 
@@ -724,7 +724,7 @@ class Wakka
 
                     return $filtered_output;
                 }
-		$safehtml_classpath = $this->GetConfigValue('safehtml_path').DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'safehtml.php';
+		$safehtml_classpath = $this->GetConfigValue('safehtml_path').'/classes/safehtml.php';
 		require_once $safehtml_classpath;
 
 		// Instantiate the handler
@@ -1056,7 +1056,7 @@ class Wakka
 	function GeSHi_Highlight($sourcecode, $language, $start=0)
 	{
 		// create GeSHi object
-		include_once($this->GetConfigValue('geshi_path').DIRECTORY_SEPARATOR.'geshi.php');
+		include_once($this->GetConfigValue('geshi_path').'/geshi.php');
 		$geshi = instantiate('GeSHi', $sourcecode, $language, $this->GetConfigValue('geshi_languages_path'));				# create object by reference
 
 		$geshi->enable_classes();								# use classes for hilighting (must be first after creating object)
@@ -3221,13 +3221,11 @@ class Wakka
 	 * @uses	Config::$theme
 	 * @uses	Config::wikka_template_path
 	 * @param  string path_sep Use this to override the OS default
-	 * DIRECTORY_SEPARATOR (usually used in conjunction with CSS path
-	 * generation). Default is DIRECTORY_SEPARATOR.
 	 * @param  string theme_override Specify a specific theme. Default is NULL (use configuration theme).
 	 *
      * @return string A fully-qualified pathname or NULL if none found
 	 */
-	 function GetThemePath($path_sep = DIRECTORY_SEPARATOR, $theme_override = NULL)
+	 function GetThemePath($path_sep = '/', $theme_override = NULL)
 	 {
 	 	//check if custom theme is set in user preferences
 	 	if ($user = $this->GetUser())
@@ -3710,7 +3708,7 @@ class Wakka
 				$this->StopLinkTracking();
 		}
 		$result =
-		$this->IncludeBuffered(strtolower($action_name).DIRECTORY_SEPARATOR.strtolower($action_name).'.php',
+		$this->IncludeBuffered(strtolower($action_name).'/'.strtolower($action_name).'.php',
 		sprintf(T_("Unknown action \"%s\""), '"'.$action_name.'"'), $vars, $this->GetConfigValue('action_path'));
 		if ($link_tracking_state)
 		{
@@ -3758,7 +3756,7 @@ class Wakka
 			// valid handler name; now make sure it's lower case
 			$handler = strtolower($handler);
 		}
-		$handlerLocation = $handler.DIRECTORY_SEPARATOR.$handler.'.php';	#89
+		$handlerLocation = $handler.'/'.$handler.'.php';	#89
                 $tempOutput = $this->IncludeBuffered($handlerLocation, '', '', $this->GetConfigValue('handler_path'));
                 if (FALSE===$tempOutput)
                 {
@@ -3807,8 +3805,8 @@ class Wakka
 		$handler = $parts[0];
 #echo 'handler: '.$handler.'<br/>';
 		// now check if a handler by that name exists
-#echo 'checking path: '.$this->GetConfigValue('handler_path').DIRECTORY_SEPARATOR.'page'.DIRECTORY_SEPARATOR.$handler.'.php'.'<br/>';
-		$exists = $this->BuildFullpathFromMultipath($handler.DIRECTORY_SEPARATOR.$handler.'.php', $this->GetConfigValue('handler_path'));
+#echo 'checking path: '.$this->GetConfigValue('handler_path').'/page'.'/'.$handler.'.php'.'<br/>';
+		$exists = $this->BuildFullpathFromMultipath($handler.'/'.$handler.'.php', $this->GetConfigValue('handler_path'));
 		// return conclusion
 		if(TRUE===empty($exists))
 		{
@@ -5154,15 +5152,12 @@ class Wakka
 	 *			construction of fully-qualified filepath
 	 * @param string $pathlist mandatory: list of
 	 *			paths (delimited by ":", ";", or ",")
-	 * @param  string path_sep Use this to override the OS default
-     *              DIRECTORY_SEPARATOR (usually used in conjunction with CSS path
-     *              generation). Default is DIRECTORY_SEPARATOR.
 	 * @param  boolean $checkIfFileExists optional: if TRUE, returns
 	 *			only a pathname that points to a file that exists
 	 *			(default)
 	 * @return string A fully-qualified pathname or NULL if none found
 	 */
-	function BuildFullpathFromMultipath($filename, $pathlist, $path_sep = DIRECTORY_SEPARATOR, $checkIfFileExists=TRUE)
+	function BuildFullpathFromMultipath($filename, $pathlist, $path_sep = '/', $checkIfFileExists=TRUE)
 	{
 		$paths = preg_split('/;|:|,/', $pathlist);
 		if(empty($paths[0])) return NULL;

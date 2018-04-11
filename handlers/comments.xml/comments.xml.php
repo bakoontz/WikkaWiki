@@ -95,8 +95,8 @@ $f = (isset($_GET['f']) && in_array($_GET['f'], $formats)) ?
 $this->GetSafeVar('f', 'get') : FEED_DEFAULT_OUTPUT_FORMAT;
 
 //create object
-#include_once('3rdparty'.DIRECTORY_SEPARATOR.'core'.DIRECTORY_SEPARATOR.'feedcreator'.DIRECTORY_SEPARATOR.'feedcreator.class.php');
-$feedcreator_classpath = $this->GetConfigValue('feedcreator_path').DIRECTORY_SEPARATOR.'feedcreator.class.php';
+#include_once('3rdparty/core/feedcreator/feedcreator.class.php');
+$feedcreator_classpath = $this->GetConfigValue('feedcreator_path').'/feedcreator.class.php';
 /**
  * FeedCreator class library.
  */

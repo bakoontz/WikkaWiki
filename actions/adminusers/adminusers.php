@@ -185,7 +185,7 @@ if ($this->IsAdmin($this->GetUser()))
 	{
 		if($this->GetSafeVar('user', 'post') != null)
 		{
-			include_once($this->BuildFullpathFromMultipath('..'.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'libs'.DIRECTORY_SEPARATOR.'admin.lib.php', $this->GetConfigValue('action_path')));
+			include_once($this->BuildFullpathFromMultipath('../../libs/admin.lib.php', $this->GetConfigValue('action_path')));
 			#$status = DeleteUser($this, $this->GetSafeVar('user', 'post'));
             $this->Redirect($this->Href(), $this->GetSafeVar('user','post'));
 			if(false===$status)
@@ -271,7 +271,7 @@ if ($this->IsAdmin($this->GetUser()))
 		}
 		if(count($usernames) > 0)
 		{
-			include_once($this->BuildFullpathFromMultipath('..'.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'libs'.DIRECTORY_SEPARATOR.'admin.lib.php', $this->GetConfigValue('action_path')));
+			include_once($this->BuildFullpathFromMultipath('../../libs/admin.lib.php', $this->GetConfigValue('action_path')));
 			$status = true;
 			foreach($usernames as $username)
 			{

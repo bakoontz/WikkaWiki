@@ -42,12 +42,12 @@ if ($this->HasAccess('read'))
 	// @@@ TODO needed only if we're NOT doing a 'fastdiff'
 	// instead of copping out we could use fastdiff as fallback if the library is missing:
 	// first determine diff method based on params AND presense of library; then do it
-	if (file_exists('libs'.DIRECTORY_SEPARATOR.'diff.lib.php'))
+	if (file_exists('libs/diff.lib.php'))
 	{
 		/**
 		 * Diff library.
 		 */
-		require_once('libs'.DIRECTORY_SEPARATOR.'diff.lib.php');	#89
+		require_once('libs/diff.lib.php');	#89
 	}
 	else
 	{

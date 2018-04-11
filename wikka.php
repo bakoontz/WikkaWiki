@@ -465,12 +465,12 @@ $wakkaConfig = array_merge($wakkaDefaultConfig, $wakkaConfig);	// merge defaults
  */
 $default_lang = $wakkaConfig['default_lang'];
 $fallback_lang = 'en';
-$default_lang_path = 'lang'.DIRECTORY_SEPARATOR.$default_lang;
-$plugin_lang_path = $wakkaConfig['lang_path'].DIRECTORY_SEPARATOR.$default_lang;
-$fallback_lang_path = 'lang'.DIRECTORY_SEPARATOR.$fallback_lang;
-$default_lang_strings = $default_lang_path.DIRECTORY_SEPARATOR.$default_lang.'.inc.php';
-$plugin_lang_strings = $plugin_lang_path.DIRECTORY_SEPARATOR.$default_lang.'.inc.php';
-$fallback_lang_strings = $fallback_lang_path.DIRECTORY_SEPARATOR.$fallback_lang.'.inc.php';
+$default_lang_path = 'lang/'.$default_lang;
+$plugin_lang_path = $wakkaConfig['lang_path'].'/'.$default_lang;
+$fallback_lang_path = 'lang/'.$fallback_lang;
+$default_lang_strings = $default_lang_path.'/'.$default_lang.'.inc.php';
+$plugin_lang_strings = $plugin_lang_path.'/'.$default_lang.'.inc.php';
+$fallback_lang_strings = $fallback_lang_path.'/'.$fallback_lang.'.inc.php';
 $lang_packs_found = false;
 if (file_exists($plugin_lang_strings))
 {
@@ -535,11 +535,11 @@ if (file_exists($multisite_configfile))
     else
     {
         $requested_host = str_replace('_','.',$configkey);
-        $configpath = $multiConfig['local_config'].DIRECTORY_SEPARATOR.$requested_host;
+        $configpath = $multiConfig['local_config'].'/'.$requested_host;
         $multiConfig[$configkey] = $requested_host;
     }
 
-    $local_configfile = $configpath.DIRECTORY_SEPARATOR.'local.config.php';
+    $local_configfile = $configpath.'/local.config.php';
 /**
  * As each site may differ in its configuration and capabilities, we should consider using
  * plugin directories below the $configpath. Effectively, this replaces the 1.1.6.6 plugins
@@ -547,13 +547,13 @@ if (file_exists($multisite_configfile))
 */
 
     $localDefaultConfig = array(
-    	'menu_config_path'			=> $configpath.DIRECTORY_SEPARATOR.'config'.PATH_DIVIDER.'plugins'.DIRECTORY_SEPARATOR.'config'.PATH_DIVIDER.'config',
-        'action_path'				=> $configpath.DIRECTORY_SEPARATOR.'actions'.PATH_DIVIDER.'plugins'.DIRECTORY_SEPARATOR.'actions'.PATH_DIVIDER.'actions',
-        'handler_path'				=> $configpath.DIRECTORY_SEPARATOR.'handlers'.PATH_DIVIDER.'plugins'.DIRECTORY_SEPARATOR.'handlers'.PATH_DIVIDER.'handlers',
-        'wikka_formatter_path'		=> $configpath.DIRECTORY_SEPARATOR.'formatters'.PATH_DIVIDER.'plugins'.DIRECTORY_SEPARATOR.'formatters'.PATH_DIVIDER.'formatters',        # (location of Wikka formatter - REQUIRED)
-        'wikka_highlighters_path'	=> $configpath.DIRECTORY_SEPARATOR.'formatters'.PATH_DIVIDER.'plugins'.DIRECTORY_SEPARATOR.'formatters'.PATH_DIVIDER.'formatters',        # (location of Wikka code highlighters - REQUIRED)
-        'wikka_template_path'		=> $configpath.DIRECTORY_SEPARATOR.'templates'.PATH_DIVIDER.'plugins'.DIRECTORY_SEPARATOR.'templates'.PATH_DIVIDER.'templates',        # (location of Wikka template files - REQUIRED)
-        'upload_path'				=> $configpath.DIRECTORY_SEPARATOR.'uploads'
+    	'menu_config_path'			=> $configpath.'/config'.PATH_DIVIDER.'plugins/config'.PATH_DIVIDER.'config',
+        'action_path'				=> $configpath.'/actions'.PATH_DIVIDER.'plugins/actions'.PATH_DIVIDER.'actions',
+        'handler_path'				=> $configpath.'/handlers'.PATH_DIVIDER.'plugins/handlers'.PATH_DIVIDER.'handlers',
+        'wikka_formatter_path'		=> $configpath.'/formatters'.PATH_DIVIDER.'plugins/formatters'.PATH_DIVIDER.'formatters',        # (location of Wikka formatter - REQUIRED)
+        'wikka_highlighters_path'	=> $configpath.'/formatters'.PATH_DIVIDER.'plugins/formatters'.PATH_DIVIDER.'formatters',        # (location of Wikka code highlighters - REQUIRED)
+        'wikka_template_path'		=> $configpath.'/templates'.PATH_DIVIDER.'plugins/templates'.PATH_DIVIDER.'templates',        # (location of Wikka template files - REQUIRED)
+        'upload_path'				=> $configpath.'/uploads'
     );
     $localConfig = array();
     if (!file_exists($configpath))
@@ -564,15 +564,15 @@ if (file_exists($multisite_configfile))
         {
             $partialpath .= $part;
             if (!file_exists($partialpath)) mkdir($partialpath,0755);
-            $partialpath .= DIRECTORY_SEPARATOR;
+            $partialpath .= '/';
         }
-        mkdir($configpath.DIRECTORY_SEPARATOR.'config',0700);
-        mkdir($configpath.DIRECTORY_SEPARATOR.'actions',0700);
-        mkdir($configpath.DIRECTORY_SEPARATOR.'handlers',0700);
-        mkdir($configpath.DIRECTORY_SEPARATOR.'handlers'.DIRECTORY_SEPARATOR.'page',0700);
-        mkdir($configpath.DIRECTORY_SEPARATOR.'formatters',0700);
-        mkdir($configpath.DIRECTORY_SEPARATOR.'templates',0700);
-        mkdir($configpath.DIRECTORY_SEPARATOR.'uploads',0755);
+        mkdir($configpath.'/config',0700);
+        mkdir($configpath.'/actions',0700);
+        mkdir($configpath.'/handlers',0700);
+        mkdir($configpath.'/handlers/page',0700);
+        mkdir($configpath.'/formatters',0700);
+        mkdir($configpath.'/templates',0700);
+        mkdir($configpath.'/uploads',0755);
 //        if(file_exists($wakkaConfig['stylesheet'])) copy($wakkaConfig['stylesheet'],$localDefaultConfig['stylesheet']);
     }
     else if (file_exists($local_configfile)) include($local_configfile);
@@ -625,13 +625,13 @@ if ($wakkaConfig['wakka_version'] !== WAKKA_VERSION)
 	 */
 	$installAction = 'default';
 	if (isset($_GET['installAction'])) $installAction = trim(GetSafeVar('installAction'));	#312
-	if (file_exists('setup'.DIRECTORY_SEPARATOR.'header.php'))
-	include('setup'.DIRECTORY_SEPARATOR.'header.php'); else print '<em class="error">'.ERROR_SETUP_HEADER_MISSING.'</em>'; #89
+	if (file_exists('setup/header.php'))
+	include('setup/header.php'); else print '<em class="error">'.ERROR_SETUP_HEADER_MISSING.'</em>'; #89
 	if
-	(file_exists('setup'.DIRECTORY_SEPARATOR.$installAction.'.php'))
-	include('setup'.DIRECTORY_SEPARATOR.$installAction.'.php'); else print '<em class="error">'.ERROR_SETUP_FILE_MISSING.'</em>'; #89
-	if (file_exists('setup'.DIRECTORY_SEPARATOR.'footer.php'))
-	include('setup'.DIRECTORY_SEPARATOR.'footer.php'); else print '<em class="error">'.ERROR_SETUP_FOOTER_MISSING.'</em>'; #89
+	(file_exists('setup/'.$installAction.'.php'))
+	include('setup/'.$installAction.'.php'); else print '<em class="error">'.ERROR_SETUP_FILE_MISSING.'</em>'; #89
+	if (file_exists('setup/footer.php'))
+	include('setup/footer.php'); else print '<em class="error">'.ERROR_SETUP_FOOTER_MISSING.'</em>'; #89
 	exit;
 }
 

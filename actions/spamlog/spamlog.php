@@ -109,7 +109,7 @@ if (!function_exists('writeNewLog'))
 			if ($preext == 'pre')							# using backup prefix
 			{
 				$dir = dirname($path);
-				$dir = (isset($dir)) ? $dir.DIRECTORY_SEPARATOR : '';
+				$dir = (isset($dir)) ? $dir.'/' : '';
 				$backuppath = $dir.$bck.basename($path);
 			}
 			else # 'ext'

@@ -85,7 +85,7 @@ $formats = explode(',',FEED_VALID_FORMATS);
 $f = (isset($_GET['f']) && in_array($this->GetSafeVar('f'), $formats)) ? $this->GetSafeVar('f') : FEED_DEFAULT_OUTPUT_FORMAT;
 
 //create object
-include_once('3rdparty'.DIRECTORY_SEPARATOR.'core'.DIRECTORY_SEPARATOR.'feedcreator'.DIRECTORY_SEPARATOR.'feedcreator.class.php'); // TODO: MAKE THIS CONFIGURABLE
+include_once('3rdparty/core/feedcreator/feedcreator.class.php'); // TODO: MAKE THIS CONFIGURABLE
 
 //initialize feed (general settings)
 $rss = new UniversalFeedCreator(); 

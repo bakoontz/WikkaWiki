@@ -13,5 +13,5 @@
 /**
  * color.php action.
  */
-include($this->BuildFullpathFromMultipath('color'.DIRECTORY_SEPARATOR.'color.php', $this->GetConfigValue('action_path')));
+include($this->BuildFullpathFromMultipath('color/color.php', $this->GetConfigValue('action_path')));
 ?>

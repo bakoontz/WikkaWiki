@@ -628,7 +628,7 @@ if(!defined('PAGE_DELETION_CANCEL_BUTTON')) define('PAGE_DELETION_CANCEL_BUTTON'
  * Language constant used by the {@link diff.php diff} (page) handler
  */
 // diff
-if(!defined('ERROR_DIFF_LIBRARY_MISSING')) define('ERROR_DIFF_LIBRARY_MISSING', 'Het benodigde bestand "'.WIKKA_LIBRARY_PATH.DIRECTORY_SEPARATOR.'diff.lib.php" kon niet gevonden worden. Zorg dat het bestand bestaat en in de juiste directory staat!'); //TODO 'Please make sure' should be 'please inform WikiAdmin' - end user can't "make sure"
+if(!defined('ERROR_DIFF_LIBRARY_MISSING')) define('ERROR_DIFF_LIBRARY_MISSING', 'Het benodigde bestand "'.WIKKA_LIBRARY_PATH.'/diff.lib.php" kon niet gevonden worden. Zorg dat het bestand bestaat en in de juiste directory staat!'); //TODO 'Please make sure' should be 'please inform WikiAdmin' - end user can't "make sure"
 if(!defined('ERROR_BAD_PARAMETERS')) define('ERROR_BAD_PARAMETERS', 'Er is iets mis met de opties die je hebt opgegeven, het is waarschijnlijk dat een van de versies die je wilt vergelijken verwijderd is.');
 if(!defined('DIFF_ADDITIONS_HEADER')) define('DIFF_ADDITIONS_HEADER', 'Toevoegingen:');
 if(!defined('DIFF_DELETIONS_HEADER')) define('DIFF_DELETIONS_HEADER', 'Verwijderingen:');
