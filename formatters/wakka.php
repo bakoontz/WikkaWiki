@@ -1148,8 +1148,9 @@ $text = preg_replace_callback(
 	"\n".
 	"/msu", "wakka2callback", $text."\n"); #append \n (#444)
 
-// we're cutting the last <br />
+// we're cutting the last <br />/newline character
 $text = preg_replace("/<br \/>$/","", $text);
+$text = preg_replace("/\n$/","", $text);
 
 # wakka3callback
 $text .= wakka2callback('closetags');	// attempt close open tags @@@ may be needed for more than whole page!

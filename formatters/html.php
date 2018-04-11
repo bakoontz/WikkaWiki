@@ -989,8 +989,9 @@ $text = preg_replace_callback(
 	"\n".																					# new line
 	"/ms", "wakka2callback", $text."\n"); #append \n (#444)
 
-// we're cutting the last <br />
+// we're cutting the last <br />/newline character
 $text = preg_replace("/<br \/>$/","", $text);
+$text = preg_replace("/\n$/","", $text);
 
 // @@@ don't report generation time unless some "debug mode" is on
 if (isset($format_option) && preg_match(PATTERN_MATCH_PAGE_FORMATOPTION, $format_option))
