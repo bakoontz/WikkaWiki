@@ -18,18 +18,21 @@ find help and tutorials.
 The Wikka Development Team
 --------------------------
 
+- Brian Koontz
+- Chris Case
+- Tom Atwell
+- Oscar Muñoz
+
+Wikka Hall of Fame
+- JsnX [Jason Tourtelotte]
+- DreckFehler [Sebastian]
 - DarTar [Dario Taraborelli]
 - JavaWoman [Marjolein Katsma]
 - DotMG [Mahefa Randimbisoa]
 - Nils Lindenberg
 - YanB [Yan Brailowsky]
-- Brian Koontz
 - Tormod Haugen
 - Olivier Borowski
 - Yuxuan "fishy" Wang
 - EmeraldIsland
 - Krzysztof Trybowski
-
-Wikka Hall of Fame
-- JsnX [Jason Tourtelotte]
-- DreckFehler [Sebastian]
