@@ -1678,7 +1678,7 @@ class Wakka
 	 * @uses	Wakka::$page_title
 	 *
 	 * @param	string	$page_title	the new title of the page.
-	 * @return	void
+	 * @return  string  formatted $page_title	
 	 * @todo	probably better to use the already-existing Wakka::$page array to store this?
 	 */
 	function SetPageTitle($page_title)
@@ -1686,8 +1686,10 @@ class Wakka
 		$stripped_page_title = trim(strip_tags($page_title));
 		if(null != $stripped_page_title)
 		{
-			$this->page_title = $stripped_page_title;
+			$this->page_title = (strlen($stripped_page_title) > 75) ? 
+                substr($stripped_page_title, 0, 75) : $stripped_page_title;
 		}
+		return $this->page_title;
 	}
 
 	/**
@@ -2269,7 +2271,7 @@ class Wakka
 		if (preg_match("#(={3,6})([^=].*?)\\1#s", $body, $matches))
 		{
 			list($h_fullmatch, $h_markup, $h_heading) = $matches;
-			$page_title = $h_heading;
+			$page_title = $this->SetPageTitle($h_heading);
 		}
 		// We need trim because $this->Format() appends a carriage return
 		return trim(strip_tags($this->Format($page_title)));
