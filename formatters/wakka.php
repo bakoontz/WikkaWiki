@@ -760,7 +760,7 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 		}
 
 		// indented text
-		elseif (preg_match("/(^|\n)([\t~]+)(-|&|([[:alnum:]]+)\))?(\n|$)/su", $thing, $matches))
+		elseif (preg_match("/(^)([\t~]+)(-|&|([[:alnum:]]+)\))?(\n|$)/su", $thing, $matches))
 		{
 			// find out which indent type we want
 			$newIndentType = $matches[3];
@@ -1132,7 +1132,7 @@ $text = preg_replace_callback(
 	# headings
 	"======|=====|====|===|==|".
 	# indents and lists
-	"(^|\n)[\t~]+(-(?!-)|&|([0-9]+|[a-zA-Z]+)\))?|".
+	"(^)[\t~]+(-(?!-)|&|([0-9]+|[a-zA-Z]+)\))?|".
 	# Simple Tables	
 	"\|(?:[^\|])?\|(?:\(.*?\))?(?:\{[^\{\}]*?\})?(?:\n)?|".
 	# action
