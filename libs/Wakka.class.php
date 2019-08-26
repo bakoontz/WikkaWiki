@@ -2004,37 +2004,6 @@ class Wakka
 				);
 
 			// add new revision
-			if($this->GetConfigValue('dbms_type') == "sqlite"){
-				$this->Query("
-					INSERT INTO ".$this->GetConfigValue('table_prefix')."pages
-					(  tag, title     , time                      , owner, user, note, latest, body ) VALUES
-					( :tag,:page_title,datetime('now','localtime'),:owner,:user,:note,'Y'    ,:body )",
-						array(':tag' => $tag,
-						    ':page_title' => $page_title,
-							  ':owner' => $owner,
-							  ':user' => $user,
-							  ':note' => $note,
-							  ':body' => $body)
-					);
-			} else {
-			$this->Query("
-				INSERT INTO ".$this->GetConfigValue('table_prefix')."pages
-				SET	tag		= :tag,
-				  title = :page_title,
-					time	= now(),
-					owner	= :owner,
-					user	= :user,
-					note	= :note,
-					latest	= 'Y',
-					body	= :body",
-					array(':tag' => $tag,
-					      ':page_title' => $page_title,
-						  ':owner' => $owner,
-						  ':user' => $user,
-						  ':note' => $note,
-						  ':body' => $body)
-				);
-			}
 			$params = array(':tag' => $tag,
 			                ':page_title' => $page_title,
 							':owner' => $owner,
