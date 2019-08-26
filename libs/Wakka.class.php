@@ -2813,7 +2813,7 @@ class Wakka
 		//return $url ? '<a class="'.$class.'" href="'.$url.'">'.$text.'</a>' : $text;
 		if ('' != $url)
 		{
-			$result = '<a class="'.$class.'" href="'.$url.'">'.$text.'</a>';
+			$result = '<a class="'.$class.'" href="'.$url.'"'.$title_attr.'>'.$text.'</a>';
 		}
 		elseif ('' != $link)
 		{
