@@ -2762,7 +2762,7 @@ class Wakka
 
 		// is this an interwiki link?
 		// before the : should be a WikiName; anything after can be (nearly) anything that's allowed in a URL
-		if (preg_match('/^([A-Z���][A-Za-z�������])[:](\S*)$/', $tag, $matches))	// @@@ FIXME #34 (inconsistent with Formatter)
+		if (preg_match('/^([[:upper:]][[:alpha:]]+)[:](\S*)$/', $tag, $matches))	// @@@ FIXME #34 (inconsistent with Formatter)
 		{
 			$url = $this->GetInterWikiUrl($matches[1], $matches[2]);
 			$class = 'interwiki';
