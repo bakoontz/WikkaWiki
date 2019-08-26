@@ -307,18 +307,18 @@ else
             $tmppage = preg_replace("/\%\%(.*?)\%\%/s", '', $tmppage);
 
             // 1. is page tag formatted as a valid WikiName ?
-            if (!preg_match("/^([A-ZÄÖÜ]+[a-zßäöü]+[A-Z0-9ÄÖÜ][A-Za-z0-9ÄÖÜßäöü]*)$/", $row['tag'], $matches) && $show_badwnames)
-            {
+            if(!$this->IsWikiName($row['tag']) && $show_badwnames) {
                 $badlinks[$row['tag']." wn/&nbsp;*".CL_NON_WIKINAME] = (empty($badlinks[$row['tag']." wn/&nbsp;*".CL_NON_WIKINAME])) ? 1 : $badlinks[$row['tag']." wn/&nbsp;*".CL_NON_WIKINAME]+1;
                 $badcnts['wn'] += 1;
             }
             // 2. check actions
-            preg_match_all("/\{\{(.*?)\}\}/", $tmppage, $matches);
+            preg_match_all("/\{?\{\{(.*?)\}\}\}?/", $tmppage, $matches);
             foreach ($matches[1] as $actionname)
             {
                 if (preg_match("/^([A-Za-z0-9]+)/", trim($actionname), $matches1))
                 {
-                    if (!file_exists($this->config['action_path']."/".$matches1[1].".php"))
+                    //if (!file_exists($this->config['action_path']."/".$matches1[1].".php"))
+                    if(NULL == $this->BuildFullpathFromMultipath($matches1[1]."/".$matches1[1].".php", $this->config['action_path']))
                     {
                         $badlinks[$row['tag']." ac/{$matches1[1]}*". CL_NOSUCH_FILE] = (empty($badlinks[$row['tag']." ac/{$matches1[1]}*". CL_NOSUCH_FILE])) ? 1 : $badlinks[$row['tag']." ac/{$matches1[1]}*". CL_NOSUCH_FILE]+1;
                         $badcnts['ac'] += 1;
@@ -330,7 +330,7 @@ else
                 }
             }
             // now get rid of actions to avoid confusion
-            $tmppage = preg_replace("/\{\{(.*?)\}\}/", '', $tmppage);
+            $tmppage = preg_replace("/\{?\{\{(.*?)\}\}\}?/", '', $tmppage);
             // 3. check interwiki links
             preg_match_all("/([A-ZÄÖÜ][A-Za-zÄÖÜßäöü]+)[:](\S*)\b/", $tmppage, $matches);
             foreach ($matches[1] as $interwikiname)
@@ -348,7 +348,7 @@ else
             // now get rid of interwiki links to avoid confusion
             $tmppage = preg_replace("/([A-ZÄÖÜ][A-Za-zÄÖÜßäöü]+[:]\S*)\b/", '', $tmppage);
 
-            // now check hyperlinks; first, prevent recursive calling
+            // 4. now check hyperlinks; first, prevent recursive calling
             $page = preg_replace('/\{\{\s*checklinks\b.*?\}\}/i', '', $this->page['body']);
             // do not count twice non-existent links
             $page = preg_replace('/\{\{\s*wantedpages\s*\}\}/i', '', $page);
@@ -358,10 +358,10 @@ else
             {
                 foreach ($matches[1] as $url)
                 { // 4. check intra-wiki links
-                    if (preg_match('/'.$base_url.'([A-Za-zÄÖÜßäöü][A-Za-z0-9ÄÖÜßäöü]*)/', $url, $matches1))
+                    if (preg_match('/'.$base_url.'(.*)/', $url, $matches1))
                     {
                         $wikiname = $matches1[1];
-                        if (!$exist[trim($wikiname)])
+                        if (!$this->IsWikiName(trim($wikiname)) || !$this->existsPage(trim($wikiname)))
                         {
                             $badlinks[$row['tag']." wn/{$wikiname}*". CL_MISSING_PAGE] = (empty($badlinks[$row['tag']." wn/{$wikiname}*". CL_MISSING_PAGE])) ? 1 : $badlinks[$row['tag']." wn/{$wikiname}*". CL_MISSING_PAGE]+1;
                             $badcnts['wn'] += 1;
