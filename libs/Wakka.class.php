@@ -4514,30 +4514,6 @@ class Wakka
 		{
 			$parent_id = 'NULL';
 		}
-		if($this->GetConfigValue('dbms_type') == "sqlite"){
-			$this->Query("
-				INSERT INTO ".$this->GetConfigValue('table_prefix')."comments
-				(  page_tag, time                       , comment, parent   , user ) VALUES
-				( :page_tag, datetime('now','localtime'),:comment,:parent_id,:user )",
-				array(':page_tag' => $page_tag,
-				      ':comment' => $comment,
-					  ':parent_id' => ($parent_id == 'NULL') ? null : $parent_id,
-					  ':user' => $user)
-				);
-		} else {
-		$this->Query("
-			INSERT INTO ".$this->GetConfigValue('table_prefix')."comments
-			SET page_tag = :page_tag,
-				time = now(),
-				comment = :comment,
-				parent = :parent_id,
-				user = :user",
-			array(':page_tag' => $page_tag,
-			      ':comment' => $comment,
-				  ':parent_id' => ($parent_id == 'NULL') ? null : $parent_id,
-				  ':user' => $user)
-			);
-		}
 		$params = array(':page_tag' => $page_tag,
 		                ':comment' => $comment,
 						':parent_id' => ($parent_id == 'NULL') ? null : $parent_id,
