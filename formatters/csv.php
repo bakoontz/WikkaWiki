@@ -68,7 +68,7 @@ foreach (split("\n", $text) as $csv_n => $csv_line)
 			$total_i[$csv_nn]+= intval($i);
 			$total_d[$csv_nn]+= intval($d);
 			$nr= $i + ($d/100);
-			print "<td style=\"". (($nr <= 0) ? "background-color:#d20; " : "" ) . $style[$csv_nn] ."\">". sprintf("%.2f", $nr) ."</td>";
+			print "<td title=\"". $csv_cell ."(". $format .")\" style=\"". (($nr <= 0) ? "background-color:#d20; " : "" ) . $style[$csv_nn] ."\">". sprintf("%.2f", $nr) ."</td>";
 			print "<td style=\"text-align:right;\">". $csv_cell ."(". $format .") &nbsp;". $total_i[$csv_nn] ." ". $total_d[$csv_nn] ."</td>";
 		}
 		elseif (preg_match("/^\"?(.*)\"?$/", $csv_cell, $matches))
