@@ -29,7 +29,13 @@ foreach (split("\n", $text) as $csv_n => $csv_line)
 			elseif (preg_match("/^\"?[\s]*==\|(.*)\|==\"?$/", $csv_cell, $title))
 				$style[$csv_nn].= "text-align:center; ";
 
-			print "<th style=\"background-color:#ccc;". $style[$csv_nn] ."\">". $this->htmlspecialchars_ent($title[1]) ."</th>";
+			if (preg_match("/^\"?[\s]*==.@@TOTAL@@.==\"?$/", $csv_cell))
+				print "<th style=\"background-color:#ccc;". $style[$csv_nn] ."\">". $total[$csv_nn] ."</th>";
+			else {
+				print "<th style=\"background-color:#ccc;". $style[$csv_nn] ."\">". $this->htmlspecialchars_ent($title[1]) ."</th>";
+				$total[$csv_nn]= 0;
+			}
+
 			continue;
 		}
 
