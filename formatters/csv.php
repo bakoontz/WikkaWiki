@@ -6,6 +6,8 @@
 // Copy the code below into a file named formatters/csv.php
 // And give it the same file permissions as the other files in that directory.
 
+$DEBUG= 0;
+
 print "<table><tbody>\n";
 foreach (split("\n", $text) as $csv_n => $csv_line) 
 {
@@ -28,6 +30,11 @@ foreach (split("\n", $text) as $csv_n => $csv_line)
 				$style[$csv_nn].= "text-align:left; ";
 			elseif (preg_match("/^\"?[\s]*==\|(.*)\|==\"?$/", $csv_cell, $title))
 				$style[$csv_nn].= "text-align:center; ";
+			else if (preg_match("/^\"?[\s]*==#(.*)#==\"?$/", $csv_cell, $title))
+			{
+				$style[$csv_nn].= "text-align:right; ";
+				$DEBUG= 1;
+			}
 
 			if (preg_match("/^\"?[\s]*==.@@TOTAL@@.==\"?$/", $csv_cell))
 				print "<th style=\"background-color:#ccc;". $style[$csv_nn] ."\">". ($total_i[$csv_nn] + ($total_d[$csv_nn]/100)) ."</th>";
@@ -69,7 +76,9 @@ foreach (split("\n", $text) as $csv_n => $csv_line)
 			$total_d[$csv_nn]+= intval($d);
 			$nr= $i + ($d/100);
 			print "<td title=\"". $csv_cell ."(". $format .")\" style=\"". (($nr <= 0) ? "background-color:#d20; " : "" ) . $style[$csv_nn] ."\">". sprintf("%.2f", $nr) ."</td>";
-			print "<td style=\"text-align:right;\">". $csv_cell ."(". $format .") &nbsp;". $total_i[$csv_nn] ." ". $total_d[$csv_nn] ."</td>";
+
+			if ($DEBUG == 1)
+				print "<td style=\"text-align:right;\">". $csv_cell ."(". $format .") &nbsp;". $total_i[$csv_nn] ." ". $total_d[$csv_nn] ."</td>";
 		}
 		elseif (preg_match("/^\"?(.*)\"?$/", $csv_cell, $matches))
 			print "<td style=\"". $style[$csv_nn] ."\">". $this->htmlspecialchars_ent($matches[1]) ."</td>";
