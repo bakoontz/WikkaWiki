@@ -28,6 +28,8 @@ foreach (split("\n", $text) as $csv_n => $csv_line)
 				$style[$csv_nn].= "text-align:left; ";
 			elseif (preg_match("/^\"?[\s]*==\|(.*)\|==\"?$/", $csv_cell, $title))
 				$style[$csv_nn].= "text-align:center; ";
+			else if (preg_match("/^\"?[\s]*==(.*)==\"?$/", $csv_cell, $title))
+				$style[$csv_nn].= "";
 
 			print "<th style=\"background-color:#ccc;". $style[$csv_nn] ."\">". $this->htmlspecialchars_ent($title[1]) ."</th>";
 			continue;
