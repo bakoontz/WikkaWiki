@@ -57,7 +57,11 @@ if (isset($_POST['pagename']))
 {
 	$pagename = $this->GetSafeVar('pagename', 'post');
 
-	if(!$this->IsWikiName($pagename))
+    if(!isset($pagename) || $pagename == NULL) {
+        $this->SetRedirectMessage('Please provide a new page name to create');
+        $this->Redirect();
+    } 
+    else if(!$this->IsWikiName($pagename))
 	{
 		echo '<em class="error">'.sprintf(T_("This page name is
 		invalid. Valid page names must not contain the characters
@@ -69,8 +73,9 @@ if (isset($_POST['pagename']))
 	}
 	else
 	{
-        $this->SetRedirectMessage('Please provide a new page name to create');
-        $this->Redirect();
+        $url = $this->Href('edit', $pagename);
+        $this->Redirect($url);
+        $showform = FALSE;
 	}
 }
 
