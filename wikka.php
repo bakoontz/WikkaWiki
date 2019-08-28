@@ -241,64 +241,7 @@ else
 	$t_rewrite_mode = 0;
 }
 
-// ---------------------- DEFINE URL DOMAIN / PATH -----------------------------
-/**#@+*
- * URL or URL component, derived just once for later usage.
- */
-// first derive domain, path and base_url, as well as cookie path just once
-// so they are ready for later use.
-// detect actual scheme (might be https!)	@@@ TEST
-// please recopy modif into setup/test/test-mod-rewrite.php
-$scheme = ((isset($_SERVER['HTTPS'])) && !empty($_SERVER['HTTPS']) && 'off' != $_SERVER['HTTPS']) ? 'https://' : 'http://';
-$server_port = ':'.$_SERVER['SERVER_PORT'];
-if ((('http://' == $scheme) && (':80' == $server_port)) || (('https://' == $scheme) && (':443' == $server_port)))
-{
-	$server_port = '';
-}
-/**
- * URL fragment consisting of scheme + domain part.
- * Represents the domain URL where the current instance of Wikka is located.
- * This variable can be overriden in {@link override.config.php}
- *
- * @var string
- */
-if (!defined('WIKKA_BASE_DOMAIN_URL')) define('WIKKA_BASE_DOMAIN_URL', $scheme.$_SERVER['SERVER_NAME'].$server_port);
-/**
- * URL fragment consisting of a path component.
- * Points to the instance of Wikka within {@link WIKKA_BASE_DOMAIN_URL}.
- *
- * @var string
- */
-define('WIKKA_BASE_URL_PATH', preg_replace('/wikka\\.php/', '', $_SERVER['SCRIPT_NAME']));
-/**
- * Base URL consisting of {@link WIKKA_BASE_DOMAIN_URL} and {@link WIKKA_BASE_URL_PATH} concatenated.
- * Ready to append a relative path to a "static" file to.
- *
- * @var string
- */
-define('WIKKA_BASE_URL', WIKKA_BASE_DOMAIN_URL.WIKKA_BASE_URL_PATH);
-/**
- * Path to be used for cookies.
- * Derived from {@link WIKKA_BASE_URL_PATH}
- *
- * @var string
- */
-define('WIKKA_COOKIE_PATH', ('/' == WIKKA_BASE_URL_PATH) ? '/' : substr(WIKKA_BASE_URL_PATH, 0, -1));
-/**
- * Default number of hours after which a permanent cookie is to expire: corresponds to 90 days.
- */
-if (!defined('DEFAULT_COOKIE_EXPIRATION_HOURS')) define('DEFAULT_COOKIE_EXPIRATION_HOURS',90 * 24);
-/**
- * Path for Wikka libs
- *
- * @var string
- */
-if(!defined('WIKKA_LIBRARY_PATH')) define('WIKKA_LIBRARY_PATH', 'lib');
-
-/**#@-*/
-// ----------------------- END URL DOMAIN / PATH -------------------------------
-
-
+// ----------------------- LOAD CONFIGURATION -------------------------------
 $wakkaDefaultConfig = array(
 	'dbms_host'					=> 'localhost',
 	'dbms_database'				=> 'wikka',
@@ -311,6 +254,7 @@ $wakkaDefaultConfig = array(
 	'wakka_name'				=> 'MyWikkaSite',
 //	'base_url'					=> $t_scheme.$t_domain.$t_port.$t_request.$t_query,
 	'rewrite_mode'				=> $t_rewrite_mode,
+    'behind_reverse_proxy'      => '0',
 	'wiki_suffix'				=> '@wikka',
 	'enable_user_host_lookup'	=> '0',	#enable (1) or disable (0, default) lookup of user hostname from IP address
 
@@ -441,6 +385,78 @@ if(isset($wakkaConfig['menu_config_path']) && preg_match('/plugins\/config/', $w
 db_configOptions($wakkaDefaultConfig, $wakkaConfig);
 
 $wakkaConfig = array_merge($wakkaDefaultConfig, $wakkaConfig);	// merge defaults with config from file
+// ----------------------- END LOAD CONFIGURATION -------------------------------
+
+// ---------------------- DEFINE URL DOMAIN / PATH -----------------------------
+/**#@+*
+ * URL or URL component, derived just once for later usage.
+ */
+// first derive domain, path and base_url, as well as cookie path just once
+// so they are ready for later use.
+// detect actual scheme (might be https!)	@@@ TEST
+// please recopy modif into setup/test/test-mod-rewrite.php
+$scheme = ((isset($_SERVER['HTTPS'])) && !empty($_SERVER['HTTPS']) && 'off' != $_SERVER['HTTPS']) ? 'https://' : 'http://';
+$server_name = $_SERVER['SERVER_NAME'];
+$server_port = ':'.$_SERVER['SERVER_PORT'];
+// Check for X-Forwarded- headers (but only if this instance is configured
+// behind a reverse proxy!)
+if(isset($wakkaConfig["behind_reverse_proxy"]) && $wakkaConfig["behind_reverse_proxy"] && isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+    if(isset($_SERVER['HTTP_X_FORWARDED_PROTO'])) {
+        $scheme = $_SERVER['HTTP_X_FORWARDED_PROTO'].'://';
+    }
+    $server_name = $_SERVER['HTTP_X_FORWARDED_FOR'];
+    if(isset($_SERVER['HTTP_X_FORWARDED_PORT'])) {
+        $server_port = ':'.$_SERVER['HTTP_X_FORWARDED_PORT'];
+    }
+}
+if ((('http://' == $scheme) && (':80' == $server_port)) || (('https://' == $scheme) && (':443' == $server_port)))
+{
+	$server_port = '';
+}
+
+/**
+ * URL fragment consisting of scheme + domain part.
+ * Represents the domain URL where the current instance of Wikka is located.
+ * This variable can be overriden in {@link override.config.php}
+ *
+ * @var string
+ */
+if (!defined('WIKKA_BASE_DOMAIN_URL')) define('WIKKA_BASE_DOMAIN_URL', $scheme.$server_name.$server_port);
+/**
+ * URL fragment consisting of a path component.
+ * Points to the instance of Wikka within {@link WIKKA_BASE_DOMAIN_URL}.
+ *
+ * @var string
+ */
+define('WIKKA_BASE_URL_PATH', preg_replace('/wikka\\.php/', '', $_SERVER['SCRIPT_NAME']));
+/**
+ * Base URL consisting of {@link WIKKA_BASE_DOMAIN_URL} and {@link WIKKA_BASE_URL_PATH} concatenated.
+ * Ready to append a relative path to a "static" file to.
+ *
+ * @var string
+ */
+define('WIKKA_BASE_URL', WIKKA_BASE_DOMAIN_URL.WIKKA_BASE_URL_PATH);
+/**
+ * Path to be used for cookies.
+ * Derived from {@link WIKKA_BASE_URL_PATH}
+ *
+ * @var string
+ */
+define('WIKKA_COOKIE_PATH', ('/' == WIKKA_BASE_URL_PATH) ? '/' : substr(WIKKA_BASE_URL_PATH, 0, -1));
+/**
+ * Default number of hours after which a permanent cookie is to expire: corresponds to 90 days.
+ */
+if (!defined('DEFAULT_COOKIE_EXPIRATION_HOURS')) define('DEFAULT_COOKIE_EXPIRATION_HOURS',90 * 24);
+/**
+ * Path for Wikka libs
+ *
+ * @var string
+ */
+if(!defined('WIKKA_LIBRARY_PATH')) define('WIKKA_LIBRARY_PATH', 'lib');
+
+/**#@-*/
+// ----------------------- END URL DOMAIN / PATH -------------------------------
+
 
 // ---------------------------- LANGUAGE DEFAULTS -----------------------------
 
