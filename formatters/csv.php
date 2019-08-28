@@ -37,7 +37,7 @@ foreach (split("\n", $text) as $csv_n => $csv_line)
 			}
 
 			if (preg_match("/^\"?[\s]*==.@@TOTAL@@.==\"?$/", $csv_cell))
-				print "<th style=\"background-color:#ccc;". $style[$csv_nn] ."\">". ($total_i[$csv_nn] + ($total_d[$csv_nn]/100)) ."</th>";
+				print "<th style=\"background-color:#ccc;". $style[$csv_nn] ."\">". sprintf("%0.2f", $total_i[$csv_nn] + ($total_d[$csv_nn]/100)) ."</th>";
 			else {
 				$total_i[$csv_nn]= 0;
 				$total_d[$csv_nn]= 0;
@@ -75,7 +75,7 @@ foreach (split("\n", $text) as $csv_n => $csv_line)
 			$total_i[$csv_nn]+= intval($i);
 			$total_d[$csv_nn]+= intval($d);
 			$nr= $i + ($d/100);
-			print "<td title=\"". $csv_cell ."(". $format .")\" style=\"". (($nr <= 0) ? "background-color:#d20; " : "" ) . $style[$csv_nn] ."\">". sprintf("%.2f", $nr) ."</td>";
+			print "<td title=\"". $csv_cell ."(". $format .")\" style=\"". (($nr <= 0) ? "background-color:#d30; " : "" ) . $style[$csv_nn] ."\">". sprintf("%.2f", $nr) ."</td>";
 
 			if ($DEBUG == 1)
 				print "<td style=\"text-align:right;\">". $csv_cell ."(". $format .") &nbsp;". $total_i[$csv_nn] ." ". $total_d[$csv_nn] ."</td>";
