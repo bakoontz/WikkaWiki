@@ -35,6 +35,8 @@ foreach (split("\n", $text) as $csv_n => $csv_line)
 				$style[$csv_nn].= "text-align:right; ";
 				$DEBUG= 1;
 			}
+			else if (preg_match("/^\"?[\s]*==(.*)==\"?$/", $csv_cell, $title))
+				$style[$csv_nn].= "";
 
 			if (preg_match("/^\"?[\s]*==.@@TOTAL@@.==\"?$/", $csv_cell))
 				print "<th style=\"background-color:#ccc;". $style[$csv_nn] ."\">". sprintf("%0.2f", $total_i[$csv_nn] + ($total_d[$csv_nn]/100)) ."</th>";
