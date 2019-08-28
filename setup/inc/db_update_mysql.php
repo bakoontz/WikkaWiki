@@ -538,9 +538,9 @@ switch($version) {
 		test("Altering comments table structure...",
 			db_query("ALTER TABLE ".$config['table_prefix']."comments CHANGE time time datetime NOT NULL default '1900-01-01 00:00:00'", NULL, $dblink), "Failed. ?", 1);
 	case "1.4.0":
-		update_default_page(array(
-        'WikkaInstaller'), $dblink, $config, $lang_defaults_path, $lang_defaults_fallback_path); 
-		db_query("insert into ".$config['table_prefix']."acls set page_tag = 'WikkaInstaller', read_acl = '!*', write_acl = '!*', comment_read_acl = '!*', comment_post_acl = '!*'", NULL, $dblink);
+        print("<strong>1.4.0 to 1.4.1 changes:</strong><br />\n");
+		update_default_page(array('WikkaInstaller'), $dblink, $config, $lang_defaults_path, $lang_defaults_fallback_path); 
+		#db_query("insert into ".$config['table_prefix']."acls set page_tag = 'WikkaInstaller', read_acl = '!*', write_acl = '!*', comment_read_acl = '!*', comment_post_acl = '!*'", NULL, $dblink);
 		test("Altering users table structure (default_comment_display)...",
 			db_query("ALTER TABLE ".$config['table_prefix']."users CHANGE default_comment_display default_comment_display int NOT NULL default 3", NULL, $dblink), "Failed. ?", 1);
 		// Register WikkaInstaller user
@@ -550,8 +550,8 @@ switch($version) {
 		$email = $config['admin_email'];
 		// Delete existing WikkaInstaller user in case installer was run twice
 		db_query('delete from '.$config['table_prefix'].'users where name = :name', array(':name' => $name), $dblink);
-		test(__('Adding WikkaInstaller user').'...',
-				db_query("insert into ".$config["table_prefix"]."users set name = :name, password = :pass_val, email = :email, signuptime = now(), challenge= :challenge", array(':name' => $name, ':pass_val' => $pass_val, ':email' => $email, ':challenge' => $challenge), $dblink), "Hmm!", 0);
+		test(__('Adding WikkaInstaller user').'...', db_query("insert into ".$config["table_prefix"]."users set name = :name, password = :pass_val, email = :email, signuptime = now(), challenge= :challenge", array(':name' => $name, ':pass_val' => $pass_val, ':email' => $email, ':challenge' => $challenge), $dblink), "Hmm!", 0);
+    case "1.4.1":
     case "master":
 }
 
