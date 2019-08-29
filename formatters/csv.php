@@ -16,22 +16,28 @@ foreach (split("\n", $text) as $csv_n => $csv_line)
 
 	foreach (preg_split("/(?<!\\\\);/", $csv_line) as $csv_nn => $csv_cell) 
 	{
-#		https://www.phpliveregex.com
+		// https://www.phpliveregex.com
+		// https://www.regular-expressions.info/quickstart.html
 
-		if (preg_match("/^\"?[\s]*==.*==\"?$/", $csv_cell)) 
+		if (preg_match("/\"?\s*==(.*)==\"?$/", $csv_cell, $header)) 
 		{
-			$style[$csv_nn]= "padding: 1px 10px 1px 10px; ";
+			if ($csv_n == 0)
+				$style[$csv_nn]= "padding: 1px 10px 1px 10px; ";
 
-			if (preg_match("/^\"?[\s]*==\/(.*)\/==\"?$/", $csv_cell, $title))
-				$style[$csv_nn].= "text-align:right; ";
-			elseif (preg_match("/^\"?[\s]*==\\\\(.*)\\\\==\"?$/", $csv_cell, $title))
-				$style[$csv_nn].= "text-align:left; ";
-			elseif (preg_match("/^\"?[\s]*==\|(.*)\|==\"?$/", $csv_cell, $title))
-				$style[$csv_nn].= "text-align:center; ";
-			else if (preg_match("/^\"?[\s]*==(.*)==\"?$/", $csv_cell, $title))
-				$style[$csv_nn].= "";
+			$title[$csv_nn]= $header[1];
 
-			print "<th style=\"background-color:#ccc;". $style[$csv_nn] ."\">". $this->htmlspecialchars_ent($title[1]) ."</th>";
+			if (preg_match("/([\/\\\\|])(.*)\\1$/", $title[$csv_nn], $align)) 
+			{
+				switch ($align[1]) {
+					case "/" :	$style[$csv_nn].= "text-align:right; ";	break;
+					case "\\" :	$style[$csv_nn].= "text-align:left; ";	break;
+					case "|" :	$style[$csv_nn].= "text-align:center; "; break;
+				}
+
+				$title[$csv_nn]= $align[2];
+			}
+
+			print "<th style=\"background-color:#ccc;". $style[$csv_nn] ."\">". $this->htmlspecialchars_ent($title[$csv_nn]) ."</th>";
 			continue;
 		}
 
