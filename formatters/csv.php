@@ -107,6 +107,17 @@ foreach (split("\n", $text) as $csv_n => $csv_line)
 		elseif (preg_match("/^\"?(.*)\"?$/", $csv_cell, $matches))
 		{
 			$esc_semicolon= preg_replace('/\\\\;/', ';', $matches[1]);
+
+			if (preg_match_all("/\[\[([[:alnum:]-]+)\]\]/", $esc_semicolon, $all_links))
+			{
+				$linked= $matches[1];
+				
+				foreach ($all_links[1] as $n => $camel_link) 
+					$linked = preg_replace("/\[\[". $camel_link ."\]\]/", $this->Link($camel_link), $linked);
+
+				print "<td style=\"". $style[$csv_nn] ."\">". $linked ."</td>";
+			}		
+			else
 				print "<td style=\"". $style[$csv_nn] ."\">". $this->htmlspecialchars_ent($esc_semicolon) ."</td>";
 		}
 		else
