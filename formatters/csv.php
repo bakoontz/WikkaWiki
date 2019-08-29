@@ -1,6 +1,7 @@
 <?php
 // convert inline csv data into a table.
 // by OnegWR, may 2005, license GPL
+// by ThePLG, aug 2019, license GPL
 // http://wikkawiki.org/OnegWRCsv
 
 // Copy the code below into a file named formatters/csv.php
