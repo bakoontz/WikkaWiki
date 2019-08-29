@@ -16,7 +16,7 @@ foreach (split("\n", $text) as $csv_n => $csv_line)
 
 	print ($csv_n%2) ? "<tr bgcolor=\"#ffffee\">" : "<tr bgcolor=\"#eeeeee\">";
 
-	foreach (split(";", $csv_line) as $csv_nn => $csv_cell) 
+	foreach (preg_split("/(?<!\\\\);/", $csv_line) as $csv_nn => $csv_cell) 
 	{
 #		https://www.phpliveregex.com
 
@@ -83,8 +83,10 @@ foreach (split("\n", $text) as $csv_n => $csv_line)
 				print "<td style=\"text-align:right;\">". $csv_cell ."(". $format .") &nbsp;". $total_i[$csv_nn] ." ". $total_d[$csv_nn] ."</td>";
 		}
 		elseif (preg_match("/^\"?(.*)\"?$/", $csv_cell, $matches))
-			print "<td style=\"". $style[$csv_nn] ."\">". $this->htmlspecialchars_ent($matches[1]) ."</td>";
-		
+		{
+			$esc_semicolon= preg_replace('/\\\\;/', ';', $matches[1]);
+				print "<td style=\"". $style[$csv_nn] ."\">". $this->htmlspecialchars_ent($esc_semicolon) ."</td>";
+		}
 		else
 			print "<td>".$this->htmlspecialchars_ent($csv_cell)."</td>";
 	}
