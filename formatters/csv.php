@@ -22,14 +22,14 @@ foreach (split("\n", $text) as $csv_n => $csv_line)
 		// https://www.phpliveregex.com
 		// https://www.regular-expressions.info/quickstart.html
 
+		if ($csv_n == 0)
+		{
+			$style[$csv_nn]= "padding: 1px 10px 1px 10px; ";
+			$total[$csv_nn]= 0;
+		}
+
 		if (preg_match("/\"?\s*==(.*)==\"?$/", $csv_cell, $header)) 
 		{
-			if ($csv_n == 0)
-			{
-				$style[$csv_nn]= "padding: 1px 10px 1px 10px; ";
-				$total[$csv_nn]= 1;
-			}
-
 			$title[$csv_nn]= $header[1];
 
 			if (preg_match("/([\/\\\\|])(.*)\\1$/", $title[$csv_nn], $align)) 
