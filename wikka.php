@@ -741,44 +741,17 @@ if(0 != $wakkaConfig['enable_breadcrumbs'])
 # replace previous headers that may have been set)
 header('Content-Type: text/html; charset=utf-8');
 
-$wakka->Run($page, $handler);
-$content =  ob_get_contents();
-/**
- * Use gzip compression if possible.
- */
-/*
-if ( isset($_SERVER['HTTP_ACCEPT_ENCODING']) && strstr ($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip') && function_exists('gzencode') ) #38
-{
-	// Tell the browser the content is compressed with gzip
-	header ("Content-Encoding: gzip");
-	$page_output = gzencode($content);
-	$page_length = strlen($page_output);
-} else {
- */
-	$page_output = $content;
-	$page_length = strlen($page_output);
-//}
-
-// header("Cache-Control: pre-check=0");
+// No caching on browser side
 header("Cache-Control: no-cache");
-// header("Pragma: ");
-// header("Expires: ");
-
-$etag =  md5($content);
-header('ETag: '.$etag);
-header('Content-Length: '.$page_length);
-
-ob_end_clean();
 
 /**
- * Reset session CSRFToken for next GET/POST
+ * Reset session CSRFToken for incoming POST
  */
-$_SESSION['CSRFToken'] = $_SESSION['nextCSRFToken'];
-$_SESSION['nextCSRFToken'] = sha1(microtime());
+if($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $_SESSION['CSRFToken'] = $_SESSION['nextCSRFToken'];
+    $_SESSION['nextCSRFToken'] = sha1(microtime());
+}
 
-/**
- * Output the page.
- */
-echo $page_output;
+$wakka->Run($page, $handler);
 
 ?>

@@ -5272,58 +5272,83 @@ class Wakka
 		$this->ReadInterWikiConfig();
 		if(!($this->GetMicroTime()%3)) $this->Maintenance();
 
+        $content = '';
 		if (preg_match('/\.(xml|mm)$/', $this->GetHandler()))
 		{
 			header('Content-type: text/xml');
-			print($this->Handler($this->GetHandler()));
+			$content = $this->Handler($this->GetHandler());
 		}
 		// raw page handler
 		elseif ($this->GetHandler() == "raw")
 		{
 			header('Content-type: text/plain');
-			print($this->Handler($this->GetHandler()));
+			$content = $this->Handler($this->GetHandler());
 		}
 		// grabcode page handler
 		elseif ($this->GetHandler() == 'grabcode')
 		{
-			print($this->Handler($this->GetHandler()));
+			$content = $this->Handler($this->GetHandler());
 		}
 		elseif (preg_match('/\.(gif|jpg|png)$/', $this->GetHandler()))		# should not be necessary
 		{
 			header('Location: images/' . $this->GetHandler());
+            exit;
 		}
 		elseif (preg_match('/\.css$/', $this->GetHandler()))					# should not be necessary
 		{
 			header('Location: css/' . $this->GetHandler());
+            exit;
 		}
 		elseif(0 !== strcmp($newtag = preg_replace('/\s+/', '_', $tag), $tag))
 		{
 			header("Location: ".$this->Href('', $newtag));
+            exit;
 		}
 		elseif($this->GetHandler() == 'html')
 		{
 			header('Content-type: text/html');
-			print($this->Handler($this->GetHandler()));
+			$content = $this->Handler($this->GetHandler());
 		}
 		elseif($this->GetHandler() == 'reveal')
 		{
-			print($this->Handler($this->GetHandler()));
+			$content = $this->Handler($this->GetHandler());
 		}
 		elseif( $this->GetHandler() == 'show' && pathinfo($this->GetPageTag(), PATHINFO_EXTENSION) == 'md' && $this->page['body'] != '' )
 		{
 			$this->Handler($this->handler = 'md');
-			echo $this->Header();
-			echo $this->Handler($this->GetHandler());
-		  echo $this->Footer();
+			$content = $this->Header();
+			$content .= $this->Handler($this->GetHandler());
+		    $content .= $this->Footer();
 		}
 		else
 		{
-			//output page
-			$content_body = $this->Handler($this->GetHandler());
-			echo $this->Header();
-			echo $content_body;
-			echo $this->Footer();
+			$content = $this->Header();
+			$content .= $this->Handler($this->GetHandler());
+			$content .= $this->Footer();
 		}
+
+        /**
+         * Use gzip compression if possible.
+         */
+        /*
+        if ( isset($_SERVER['HTTP_ACCEPT_ENCODING']) && strstr ($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip') && function_exists('gzencode') ) #38
+        {
+            // Tell the browser the content is compressed with gzip
+            header ("Content-Encoding: gzip");
+            $page_output = gzencode($content);
+            $page_length = strlen($page_output);
+        } else {
+            $page_output = $content;
+            $page_length = strlen($page_output);
+        }
+        */
+
+        $etag =  md5($content);
+        header('ETag: '.$etag);
+    	$page_length = strlen($content);
+        header('Content-Length: '.$page_length);
+
+        echo $content;
 	}
 }
 ?>
