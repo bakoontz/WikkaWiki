@@ -7,20 +7,25 @@
 // Copy the code below into a file named formatters/csv.php
 // And give it the same file permissions as the other files in that directory.
 
+$comments= 0;
+
 print "<table><tbody>\n";
 foreach (split("\n", $text) as $csv_n => $csv_line) 
 {
 	if (preg_match("/^#|^\s*$/",$csv_line)) 
+	{
+		$comments++;
 		continue;
+	}
 
-	print ($csv_n%2) ? "<tr bgcolor=\"#ffffee\">" : "<tr bgcolor=\"#eeeeee\">";
+	print (($csv_n+$comments)%2) ? "<tr bgcolor=\"#ffffee\">" : "<tr bgcolor=\"#eeeeee\">";
 
 	foreach (preg_split("/(?<!\\\\);/", $csv_line) as $csv_nn => $csv_cell) 
 	{
 		// https://www.phpliveregex.com
 		// https://www.regular-expressions.info/quickstart.html
 
-		if ($csv_n == 0)
+		if ($csv_n == $comments)
 			$style[$csv_nn]= "padding: 1px 10px 1px 10px; ";
 
 		if (preg_match("/\"?\s*==(.*)==\"?$/", $csv_cell, $header)) 
