@@ -60,7 +60,8 @@ foreach (split("\n", $text) as $csv_n => $csv_line)
 				print "<td style=\"". $style[$csv_nn] ."\">". $this->htmlspecialchars_ent($esc_semicolon) ."</td>";
 		}
 		else
-			print "<td>".$this->htmlspecialchars_ent($csv_cell)."</td>";
+			print "<td style=\"background-color:#d30;". $style[$csv_nn] ."\">ERROR!</td>"; // $this->htmlspecialchars_ent($csv_cell)
+
 	}
 	print "</tr>\n";
 }
