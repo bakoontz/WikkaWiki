@@ -7,10 +7,13 @@
 // Copy the code below into a file named formatters/csv.php
 // And give it the same file permissions as the other files in that directory.
 
+$array_csv_lines= preg_split("/[\n]/", $text);
+#print_r($array_csv_lines);
+
 $comments= 0;
 
 print "<table><tbody>\n";
-foreach (preg_split("/\n/", $text) as $csv_n => $csv_line) 
+foreach ($array_csv_lines as $csv_n => $csv_line) 
 {
 	if (preg_match("/^#|^\s*$/",$csv_line)) 
 	{
