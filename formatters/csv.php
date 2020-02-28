@@ -34,11 +34,11 @@ foreach ($array_csv_lines as $csv_n => $csv_line)
 		if ($csv_n == $comments)
 			$style[$csv_nn]= "padding: 1px 10px 1px 10px; ";
 
-		if (preg_match("/\"?\s*==(.*)==\"?$/", $csv_cell, $header)) 
+		if (preg_match("/^\"?\s*==(.*)==\s*\"?$/", $csv_cell, $header)) 
 		{
 			$title[$csv_nn]= $header[1];
 
-			if (preg_match("/([\/\\\\|])(.*)\\1$/", $title[$csv_nn], $align)) 
+			if (preg_match("/([\/\\\\|])([^\/\\\\|]*)\\1$/", $title[$csv_nn], $align)) 
 			{
 				switch ($align[1]) {
 					case "/" :	$style[$csv_nn].= "text-align:right; ";	break;
@@ -59,7 +59,7 @@ foreach ($array_csv_lines as $csv_n => $csv_line)
 			print "<td>&nbsp;</td>";
 		// extract the cell out of it's quotes
 		//
-		elseif (preg_match("/^\"?(.*)\"?$/", $csv_cell, $matches))
+        elseif (preg_match("/^\s*\"?([^\"]*)\"?$/", $csv_cell, $matches))
 		{
 			$esc_semicolon= preg_replace('/\\\\;/', ';', $matches[1]);
 
