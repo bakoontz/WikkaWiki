@@ -23,6 +23,9 @@ foreach ($array_csv_lines as $csv_n => $csv_line)
 
 	print (($csv_n+$comments)%2) ? "<tr bgcolor=\"#ffffee\">" : "<tr bgcolor=\"#eeeeee\">";
 
+	// https://www.rexegg.com/regex-lookarounds.html
+	// asserts what precedes the ; is not a backslash \\\\, doesn't accoutn for \\; (escaped backslash semicolon)
+	//
 	foreach (preg_split("/(?<!\\\\);|,/", $csv_line) as $csv_nn => $csv_cell) 
 	{
 		// https://www.phpliveregex.com
@@ -50,12 +53,18 @@ foreach ($array_csv_lines as $csv_n => $csv_line)
 			continue;
 		}
 
+		// if a cell is blank, print &nbsp;
+		//
 		if (preg_match("/^\s*$/",$csv_cell))
 			print "<td>&nbsp;</td>";
+		// extract the cell out of it's quotes
+		//
 		elseif (preg_match("/^\"?(.*)\"?$/", $csv_cell, $matches))
 		{
 			$esc_semicolon= preg_replace('/\\\\;/', ';', $matches[1]);
 
+			// test for CamelLink
+			//
 			if (preg_match_all("/\[\[([[:alnum:]-]+)\]\]/", $esc_semicolon, $all_links))
 			{
 				$linked= $matches[1];
@@ -73,7 +82,8 @@ foreach ($array_csv_lines as $csv_n => $csv_line)
 
 	}
 	print "</tr>\n";
+
 }
 print "</tbody></table>\n";
-?>
 
+?>
