@@ -8,16 +8,36 @@
 
 $comments= 0;
 
+$style_header="background-color:#ccc; ";
+$style_even="background-color:#ffe; ";
+$style_odd="background-color:#eee; ";
+$style_error="background-color:#d30; ";
+
 print "<table><tbody>\n";
 foreach ($array_csv_lines= preg_split("/[\n]/", $text) as $csv_n => $csv_line) 
 {
 	if (preg_match("/^#|^\s*$/",$csv_line)) 
 	{
+		if (preg_match("/^#!\s*th\s*{\s*background-color:\s*([^\s;]*)\s*;\s*}$/", $csv_line, $color)) {
+			$style_header= "background-color:". $color[1] ."; ";
+		}
+		else
+		{
+			if (preg_match("/^#!\s*td\s*{.*background-color-even\s*:\s*([^\s;]*)\s*;.*}$/", $csv_line, $color))
+				$style_even= "background-color:". $color[1] ."; ";
+
+			if (preg_match("/^#!\s*td\s*{.*background-color-odd\s*:\s*([^\s;]*)\s*;.*}$/", $csv_line, $color))
+				$style_odd= "background-color:". $color[1] ."; ";
+
+			if (preg_match("/^#!\s*td\s*{.*background-color-error\s*:\s*([^\s;]*)\s*;.*}$/", $csv_line, $color))
+				$style_error= "background-color:". $color[1] ."; ";
+		}
+
 		$comments++;
 		continue;
 	}
 
-	print (($csv_n+$comments)%2) ? "<tr bgcolor=\"#ffffee\">" : "<tr bgcolor=\"#eeeeee\">";
+	print (($csv_n+$comments)%2) ? "<tr style=\"". $style_even ."\">" : "<tr style=\"". $style_odd ."\">";
 
 	// https://www.rexegg.com/regex-lookarounds.html
 	// asserts what precedes the ; is not a backslash \\\\, doesn't accoutn for \\; (escaped backslash semicolon)
@@ -45,14 +65,14 @@ foreach ($array_csv_lines= preg_split("/[\n]/", $text) as $csv_n => $csv_line)
 				$title[$csv_nn]= $align[2];
 			}
 
-			print "<th style=\"background-color:#ccc;". $style[$csv_nn] ."\">". $this->htmlspecialchars_ent($title[$csv_nn]) ."</th>";
+			print "<th style=\"". $style_header . $style[$csv_nn] ."\">". $this->htmlspecialchars_ent($title[$csv_nn]) ."</th>";
 			continue;
 		}
 
 		// if a cell is blank, print &nbsp;
 		//
 		if (preg_match("/^\s*$/",$csv_cell)) {
-			print "<td>&nbsp;</td>";
+			print "<td style=\"". $style[$csv_nn] ."\">&nbsp;</td>";
 		}
 		// extract the cell out of it's quotes
 		//
@@ -75,7 +95,7 @@ foreach ($array_csv_lines= preg_split("/[\n]/", $text) as $csv_n => $csv_line)
 				print "<td style=\"". $style[$csv_nn] ."\">". $this->htmlspecialchars_ent($esc_semicolon) ."</td>";
 		}
 		else
-			print "<td style=\"background-color:#d30;". $style[$csv_nn] ."\">ERROR!</td>"; // $this->htmlspecialchars_ent($csv_cell)
+			print "<td style=\"". $style_error . $style[$csv_nn] ."\">ERROR!</td>"; // $this->htmlspecialchars_ent($csv_cell)
 
 	}
 	print "</tr>\n";
