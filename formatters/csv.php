@@ -1,19 +1,15 @@
 <?php
 // convert inline csv data into a table.
-// by OnegWR, may 2005, license GPL
-// by ThePLG, aug 2019, license GPL
-// http://wikkawiki.org/OnegWRCsv
+// by OnegWR, May 2005, license GPL http://wikkawiki.org/OnegWRCsv
+// by ThePLG, Feb 2020, license GPL http://wikkawiki.org/PLG-Csv
 
 // Copy the code below into a file named formatters/csv.php
 // And give it the same file permissions as the other files in that directory.
 
-$array_csv_lines= preg_split("/[\n]/", $text);
-#print_r($array_csv_lines);
-
 $comments= 0;
 
 print "<table><tbody>\n";
-foreach ($array_csv_lines as $csv_n => $csv_line) 
+foreach ($array_csv_lines= preg_split("/[\n]/", $text) as $csv_n => $csv_line) 
 {
 	if (preg_match("/^#|^\s*$/",$csv_line)) 
 	{
@@ -31,9 +27,9 @@ foreach ($array_csv_lines as $csv_n => $csv_line)
 		// https://www.phpliveregex.com
 		// https://www.regular-expressions.info/quickstart.html
 
-		if ($csv_n == $comments)
+		if ($csv_n == $comments) {
 			$style[$csv_nn]= "padding: 1px 10px 1px 10px; ";
-
+		}
 		if (preg_match("/^\"?\s*==(.*)==\s*\"?$/", $csv_cell, $header)) 
 		{
 			$title[$csv_nn]= $header[1];
@@ -55,8 +51,9 @@ foreach ($array_csv_lines as $csv_n => $csv_line)
 
 		// if a cell is blank, print &nbsp;
 		//
-		if (preg_match("/^\s*$/",$csv_cell))
+		if (preg_match("/^\s*$/",$csv_cell)) {
 			print "<td>&nbsp;</td>";
+		}
 		// extract the cell out of it's quotes
 		//
         elseif (preg_match("/^\s*\"?([^\"]*)\"?$/", $csv_cell, $matches))
