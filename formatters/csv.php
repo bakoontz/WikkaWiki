@@ -76,23 +76,29 @@ foreach ($array_csv_lines= preg_split("/[\n]/", $text) as $csv_n => $csv_line)
 		}
 		// extract the cell out of it's quotes
 		//
-        elseif (preg_match("/^\s*\"?([^\"]*)\"?$/", $csv_cell, $matches))
+        elseif (preg_match("/^\s*(\"?)(.*)\\1\s*$/", $csv_cell, $matches))
 		{
-			$esc_semicolon= preg_replace('/\\\\;/', ';', $matches[1]);
+			if ($matches[1] == "\"")
+			{
+				$style[$csv_nn]= "white-space:pre; ". $style[$csv_nn];
+				$cell= $matches[2];
+			}
+			else
+				$cell= preg_replace('/\\\\;/', ';', $matches[2]);
 
 			// test for CamelLink
 			//
-			if (preg_match_all("/\[\[([[:alnum:]-]+)\]\]/", $esc_semicolon, $all_links))
+			if (preg_match_all("/\[\[([[:alnum:]-]+)\]\]/", $cell, $all_links))
 			{
-				$linked= $matches[1];
+				$linked= $cell;
 				
 				foreach ($all_links[1] as $n => $camel_link) 
 					$linked = preg_replace("/\[\[". $camel_link ."\]\]/", $this->Link($camel_link), $linked);
 
-				print "<td style=\"". $style[$csv_nn] ."\">". $linked ."</td>";
+				print "<td style=\"". $style[$csv_nn] ."\">". $linked ."</td>"; // no htmlspecialchars_ent()
 			}		
 			else
-				print "<td style=\"". $style[$csv_nn] ."\">". $this->htmlspecialchars_ent($esc_semicolon) ."</td>";
+				print "<td style=\"". $style[$csv_nn] ."\">". $this->htmlspecialchars_ent($cell) ."</td>";
 		}
 		else
 			print "<td style=\"". $style_error . $style[$csv_nn] ."\">ERROR!</td>"; // $this->htmlspecialchars_ent($csv_cell)
