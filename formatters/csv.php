@@ -1,7 +1,7 @@
 <?php
 // convert inline csv data into a table.
 // by OnegWR, May 2005, license GPL http://wikkawiki.org/OnegWRCsv
-// by ThePLG, Feb 2020, license GPL http://wikkawiki.org/PLG-Csv
+// by ThePLG, Mar 2020, license GPL http://wikkawiki.org/PLG-Csv
 
 // Copy the code below into a file named formatters/csv.php
 // And give it the same file permissions as the other files in that directory.
@@ -40,9 +40,10 @@ foreach ($array_csv_lines= preg_split("/[\n]/", $text) as $csv_n => $csv_line)
 	print (($csv_n+$comments)%2) ? "<tr style=\"". $style_even ."\">" : "<tr style=\"". $style_odd ."\">";
 
 	// https://www.rexegg.com/regex-lookarounds.html
-	// asserts what precedes the ; is not a backslash \\\\, doesn't accoutn for \\; (escaped backslash semicolon)
+	// asserts what precedes the ; is not a backslash \\\\, doesn't account for \\; (escaped backslash semicolon)
+	// OMFG! https://stackoverflow.com/questions/40479546/how-to-split-on-white-spaces-not-between-quotes
 	//
-	foreach (preg_split("/(?<!\\\\);|,/", $csv_line) as $csv_nn => $csv_cell) 
+	foreach (preg_split("/(?<!\\\\);(?=(?:[^\"]*([\"])[^\"]*\\1)*[^\"]*$)/", $csv_line) as $csv_nn => $csv_cell)
 	{
 		// https://www.phpliveregex.com
 		// https://www.regular-expressions.info/quickstart.html
