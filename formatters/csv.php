@@ -72,8 +72,10 @@ foreach ($array_csv_lines= preg_split("/[\n]/", $text) as $csv_n => $csv_line)
 
 		// if a cell is blank, print &nbsp;
 		//
-		if (preg_match("/^\s*$/",$csv_cell)) {
+		if (preg_match("/^\s*$/",$csv_cell)) 
+		{
 			print "<td style=\"". $style[$csv_nn] ."\">&nbsp;</td>";
+			continue;
 		}
 		// extract the cell out of it's quotes
 		//
@@ -100,9 +102,11 @@ foreach ($array_csv_lines= preg_split("/[\n]/", $text) as $csv_n => $csv_line)
 			}		
 			else
 				print "<td style=\"". $style[$csv_nn] ."\">". $this->htmlspecialchars_ent($cell) ."</td>";
+
+			continue;
 		}
-		else
-			print "<td style=\"". $style_error . $style[$csv_nn] ."\">ERROR!</td>"; // $this->htmlspecialchars_ent($csv_cell)
+
+		print "<td style=\"". $style["td"]["error"] . $style[$csv_nn] ."\">ERROR!</td>"; // $this->htmlspecialchars_ent($csv_cell)
 
 	}
 	print "</tr>\n";
