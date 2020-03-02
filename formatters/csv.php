@@ -8,36 +8,29 @@
 
 $comments= 0;
 
-$style_header="background-color:#ccc; ";
-$style_even="background-color:#ffe; ";
-$style_odd="background-color:#eee; ";
-$style_error="background-color:#d30; ";
+$style["th"][""]= "background-color:#ccc; ";
+$style["tr"]["even"]= "background-color:#ffe; ";
+$style["tr"]["odd"]= "background-color:#eee; ";
+$style["td"]["error"]= "background-color:#d30; ";
 
 print "<table><tbody>\n";
 foreach ($array_csv_lines= preg_split("/[\n]/", $text) as $csv_n => $csv_line) 
 {
 	if (preg_match("/^#|^\s*$/",$csv_line)) 
 	{
-		if (preg_match("/^#!\s*th\s*{\s*background-color:\s*([^\s;]*)\s*;\s*}$/", $csv_line, $color)) {
-			$style_header= "background-color:". $color[1] ."; ";
-		}
-		else
-		{
-			if (preg_match("/^#!\s*td\s*{.*background-color-even\s*:\s*([^\s;]*)\s*;.*}$/", $csv_line, $color))
-				$style_even= "background-color:". $color[1] ."; ";
-
-			if (preg_match("/^#!\s*td\s*{.*background-color-odd\s*:\s*([^\s;]*)\s*;.*}$/", $csv_line, $color))
-				$style_odd= "background-color:". $color[1] ."; ";
-
-			if (preg_match("/^#!\s*td\s*{.*background-color-error\s*:\s*([^\s;]*)\s*;.*}$/", $csv_line, $color))
-				$style_error= "background-color:". $color[1] ."; ";
-		}
+		if ( preg_match('/^#!\s*(t[hrd])\s*{/', $csv_line, $a_t) )
+			if ( preg_match_all('/background-color-?([\w]*)\s*:\s*(#[0-9a-fA-F]{3,6})\s*;/', $csv_line, $a_bkcolors) )
+				foreach ($a_bkcolors[0] as $n => $bkcolors) 
+				{
+					$style[ $a_t[1] ][ $a_bkcolors[1][$n] ]= "background-color:". $a_bkcolors[2][$n] ."; ";
+					// print "style[". $a_t[1] ."][". $a_bkcolors[1][$n] ."]=". $style[ $a_t[1] ][ $a_bkcolors[1][$n] ] ."<br/>";
+				}
 
 		$comments++;
 		continue;
 	}
 
-	print (($csv_n+$comments)%2) ? "<tr style=\"". $style_even ."\">" : "<tr style=\"". $style_odd ."\">";
+	print (($csv_n+$comments)%2) ? "<tr style=\"". $style["tr"]["even"] ."\">" : "<tr style=\"". $style["tr"]["odd"] ."\">";
 
 	// https://www.rexegg.com/regex-lookarounds.html
 	// asserts what precedes the ; is not a backslash \\\\, doesn't account for \\; (escaped backslash semicolon)
@@ -66,7 +59,7 @@ foreach ($array_csv_lines= preg_split("/[\n]/", $text) as $csv_n => $csv_line)
 				$title[$csv_nn]= $align[2];
 			}
 
-			print "<th style=\"". $style_header . $style[$csv_nn] ."\">". $this->htmlspecialchars_ent($title[$csv_nn]) ."</th>";
+			print "<th style=\"". $style["th"][""] . $style[$csv_nn] ."\">". $this->htmlspecialchars_ent($title[$csv_nn]) ."</th>";
 			continue;
 		}
 
