@@ -36,7 +36,7 @@ foreach ($array_csv_lines= preg_split("/[\n]/", $text) as $csv_n => $csv_line)
 	// asserts what precedes the ; is not a backslash \\\\, doesn't account for \\; (escaped backslash semicolon)
 	// OMFG! https://stackoverflow.com/questions/40479546/how-to-split-on-white-spaces-not-between-quotes
 	//
-	foreach (preg_split("/(?<!\\\\);(?=(?:[^\"]*([\"])[^\"]*\\1)*[^\"]*$)/", $csv_line) as $csv_nn => $csv_cell)
+	foreach (preg_split("/(?<!\\\\);|,(?=(?:[^\"]*([\"])[^\"]*\\1)*[^\"]*$)/", $csv_line) as $csv_nn => $csv_cell)
 	{
 		// https://www.phpliveregex.com
 		// https://www.regular-expressions.info/quickstart.html
@@ -83,16 +83,32 @@ foreach ($array_csv_lines= preg_split("/[\n]/", $text) as $csv_n => $csv_line)
 				$cell= preg_replace('/\\\\;/', ';', $matches[2]);
 
 			// test for CamelLink
-			//
-			if (preg_match_all("/\[\[([[:alnum:]-]+)\]\]/", $cell, $all_links))
+			if (preg_match_all("/\[\[([[:alnum:]]+)\]\]/", $cell, $all_links))
 			{
 				$linked= $cell;
 				
 				foreach ($all_links[1] as $n => $camel_link) 
+					echo $n;
+					echo $camel_link;
 					$linked = preg_replace("/\[\[". $camel_link ."\]\]/", $this->Link($camel_link), $linked);
-
 				print "<td style=\"". $style[$csv_nn] ."\">". $linked ."</td>"; // no htmlspecialchars_ent()
 			}		
+			// test for [[url|label]]
+			elseif (preg_match_all("/\[\[(.*?\|.*?)\]\]/", $cell, $all_links))
+			{
+				$linked= $cell;
+				
+				foreach ($all_links[1] as $n => $url_link) 
+					echo $n;
+					echo $camel_link;
+					if(preg_match("/^\s*(.*?)\s*\|\s*(.*?)\s*$/su", $url_link, $matches)) {
+						$url = $matches[1];
+						$text = $matches[2];
+						$linked = $this->Link($url, "", $text, TRUE, TRUE, '', '', FALSE);	
+					}
+				print "<td style=\"". $style[$csv_nn] ."\">". $linked ."</td>"; // no htmlspecialchars_ent()
+			}		
+
 			else
 				print "<td style=\"". $style[$csv_nn] ."\">". $this->htmlspecialchars_ent($cell) ."</td>";
 
