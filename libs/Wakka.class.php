@@ -5309,6 +5309,11 @@ class Wakka
 			header('Content-type: text/html');
 			$content = $this->Handler($this->GetHandler());
 		}
+		elseif($this->GetHandler() == 'csv')
+		{
+			header('Content-type: text/html');
+			$content = $this->Handler($this->GetHandler());
+		}
 		elseif($this->GetHandler() == 'reveal')
 		{
 			$content = $this->Handler($this->GetHandler());
