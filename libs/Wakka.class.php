@@ -5157,6 +5157,11 @@ class Wakka
 			header('Content-type: text/html');
 			print($this->handler($this->GetHandler()));
 		}
+		elseif($this->GetHandler() == 'csv')
+		{
+			header('Content-type: text/html');
+			$content = $this->Handler($this->GetHandler());
+		}
 		else
 		{
 			//output page
