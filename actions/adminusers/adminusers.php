@@ -435,13 +435,13 @@ if ($this->IsAdmin($this->GetUser()))
 				$where_comments	= "`user` = :user";
 				$numowned = $this->getCount('pages', 
 				                            $where_owned,
-											array(':owner' => $user[name]));
+											array(':owner' => $user['name']));
 				$numchanges = $this->getCount('pages', 
 											  $where_changes,
-											  array(':user' => $user[name]));
+											  array(':user' => $user['name']));
 				$numcomments = $this->getCount('comments', 
 				                               $where_comments,
-											   array(':user' => $user[name]));
+											   array(':user' => $user['name']));
 		
 				// build statistics links if needed
 				$ownedlink = ($numowned > 0)? '<a title="'.sprintf(T_("Display pages owned by %s (%d)"),$user['name'],$numowned).'" href="'.$this->Href('','','user='.$user['name'].'&amp;action=owned').'">'.$numowned.'</a>' : '0';
