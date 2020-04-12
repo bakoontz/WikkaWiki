@@ -225,12 +225,12 @@ if ($user = $this->GetUser())
 				$passerror = T_("Please fill your password or password reminder.");
 				$password_highlight = 'class="highlight"';
 				break;
-			case (($update_option == 'pw') && md5($user['challenge'].$oldpass) != $user['password']): //wrong old password
+			case (($update_option == 'pw') && md5($user['challenge'].$oldpass) != $user['md5_password']): //wrong old password
 				$passerror = T_("The old password you entered is wrong.");
 				$pw_selected = 'selected="selected"';
 				$password_highlight = 'class="highlight"';
 				break;
-			case (($update_option == 'hash') && $oldpass != $user['password']): //wrong reminder (hash)
+			case (($update_option == 'hash') && $oldpass != $user['md5_password']): //wrong reminder (hash)
 				$passerror = T_("Sorry, you entered a wrong password reminder.");
 				$hash_selected = 'selected="selected"';
 				$password_highlight = 'class="highlight"';
@@ -245,6 +245,11 @@ if ($user = $this->GetUser())
 				$password_highlight = 'class="highlight"';
 				$password_new_highlight = 'class="highlight"';
 				break;
+            case (preg_match('/\0/', $password)):
+                $passerror = T_("Sorry, null characters are not permitted in the password.");
+				$password_highlight = 'class="highlight"';
+				$password_new_highlight = 'class="highlight"';
+                break;
 			case (strlen($password) < PASSWORD_MIN_LENGTH):
 				$passerror = sprintf(T_("Sorry, the password must contain at least %d characters."), PASSWORD_MIN_LENGTH);
 				$password_highlight = 'class="highlight"';
@@ -263,19 +268,16 @@ if ($user = $this->GetUser())
 				$password_confirm_highlight = 'class="highlight"';
 				break;
 			default:
-				$challenge = dechex(crc32(time()));
-				$user['password'] = md5($challenge.$password);
-				$user['challenge'] = $challenge;
-				$this->Query("
-					UPDATE ".$this->GetConfigValue('table_prefix')."users
-					SET password = :password,
-					challenge = :challenge WHERE name = :name",
-					array(':password' => $user['password'],
-					      ':challenge' => $challenge,
-						  ':name' => $user['name'])
-					);
-				$this->SetUser($user);
-				$passsuccess = T_("Password successfully changed!");
+                # More secure PHP password hashing
+                $user['password'] = password_hash($password, PASSWORD_DEFAULT);
+                $this->Query("
+                    UPDATE ".$this->GetConfigValue('table_prefix')."users
+                    SET password = :password WHERE name = :name",
+                    array(':password' => $user['password'],
+                          ':name' => $user['name'])
+                    );
+                $this->SetUser($user);
+                $passsuccess = T_("Password successfully changed!");
 		}
 	}
 	// END *** PASSWORD UPDATE ***
@@ -378,34 +380,49 @@ else
 		{
 			// check password
 			$status = $existingUser['status'];
-			switch(TRUE){
-				case ($status=='deleted' ||
-			          $status=='suspended' ||
-					  $status=='banned'):
-					$error = T_("Sorry, this account has been suspended. Please contact an administrator for further details.");
-					break;
-				case (strlen($this->GetSafeVar('password', 'post')) == 0):
+            $authenticated = FALSE;
+            if($status == 'deleted' ||
+               $status == 'suspended' ||
+               $status == 'banned') {
+    				$error = T_("Sorry, this account has been suspended. Please contact an administrator for further details.");
+            } 
+            elseif(strlen($this->GetSafeVar('password','post')) == 0) {
 					$error = T_("Please fill in a password.");
 					$password_highlight = 'class="highlight"';
-					break;
-				case
-				(md5($existingUser['challenge'].$this->GetSafeVar('password', 'post')) != $existingUser['password']):
-					$error = T_("Sorry, you entered the wrong password.");
-					$password_highlight = 'class="highlight"';
-					break;
-				default:
-					$this->SetUser($existingUser);
-					if ((isset($_SESSION['go_back'])) && (isset($_POST['do_redirect'])))
-					{
-						$go_back = $_SESSION['go_back'];
-						unset($_SESSION['go_back']);
-						unset($_SESSION['go_back_tag']);
-						$this->Redirect($go_back);
-					}
-					else
-					{
-						$this->Redirect($url);
-					}
+            }
+            # More secure PHP hashing algorithm
+            elseif((isset($existingUser['password'])) &&
+                      $existingUser['password'] != '') {
+                  if(password_verify($this->GetSafeVar('password', 'post'), 
+                                     $existingUser['password'])) {
+                      $authenticated = TRUE;
+                  } else {
+                      $error = T_("Sorry, you entered the wrong password.");
+                      $password_highlight = 'class="highlight"';
+                  }
+            }
+            # MD5 (deprecated as of 1.4.2)
+            elseif(md5($existingUser['challenge'].$this->GetSafeVar('password', 'post')) == $existingUser['md5_password']) {
+                $authenticated = TRUE;
+            }
+            else {
+                $error = T_("Sorry, you entered the wrong password.");
+                $password_highlight = 'class="highlight"';
+            }
+
+            if($authenticated === TRUE) {
+                $this->SetUser($existingUser);
+                if ((isset($_SESSION['go_back'])) && (isset($_POST['do_redirect'])))
+                {
+                    $go_back = $_SESSION['go_back'];
+                    unset($_SESSION['go_back']);
+                    unset($_SESSION['go_back_tag']);
+                    $this->Redirect($go_back);
+                }
+                else
+                {
+                    $this->Redirect($url);
+                }
 			}
 		}
 		else
@@ -458,6 +475,10 @@ else
 				$error = T_("Sorry, blanks are not permitted in the password.");
 				$password_highlight = 'class="highlight"';
 				break;
+			case (preg_match('/\0/', $password)):
+				$error = T_("Sorry, null characters are not permitted in the password.");
+				$password_highlight = 'class="highlight"';
+				break;
 			case (strlen($password) < PASSWORD_MIN_LENGTH):
 				$error = sprintf(T_("Sorry, the password must contain at least %d characters."), PASSWORD_MIN_LENGTH);
 				$password_highlight = 'class="highlight"';
@@ -485,22 +506,19 @@ else
 				$password_confirm_highlight = 'class="highlight"';
 				break;
 			default: //valid input, create user
-				$challenge = dechex(crc32(time()));
 				$password = $this->GetSafeVar('password', 'post');
-				$password = md5($challenge.$password);
+                $password = password_hash($password, PASSWORD_DEFAULT);
 				$default_comment_display = $this->GetConfigValue('default_comment_display');
 				$this->Query("INSERT INTO
 				".$this->GetConfigValue('table_prefix')."users ( 
 					signuptime,
 					name,
 					email,
-					challenge,
 					default_comment_display,
 					password) VALUES (now(), :name, :email,
-					:challenge, :default_comment_display, :password)",
+					:default_comment_display, :password)",
 					array(':name' => $name,
 					      ':email' => $email,
-						  ':challenge' => $challenge,
 						  ':default_comment_display' => $default_comment_display,
 						  ':password' => $password));
 
