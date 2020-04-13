@@ -551,8 +551,9 @@ switch($version) {
     case "1.4.1":
 		print("<strong>1.4.1 to 1.4.2 changes:</strong><br />\n");
 		test("Altering users table structure...", true);
-		db_query("ALTER TABLE ".$config['table_prefix']."users CHANGE COLUMN password md5_password varchar(32) NOT NULL default ''", NULL, $dblink);
-		db_query("ALTER TABLE ".$config['table_prefix']."users ADD COLUMN password varchar(255) NOT NULL default ''", NULL, $dblink);
+		db_query("ALTER TABLE ".$config['table_prefix']."users CHANGE COLUMN password md5_password varchar(32) NOT NULL DEFAULT ''", NULL, $dblink);
+		db_query("ALTER TABLE ".$config['table_prefix']."users ADD COLUMN password varchar(255) NOT NULL DEFAULT ''", NULL, $dblink);
+		db_query("ALTER TABLE ".$config['table_prefix']."users ADD COLUMN force_password_reset boolean NOT NULL DEFAULT false", NULL, $dblink);
     case "1.4.2":
     case "master":
 }
