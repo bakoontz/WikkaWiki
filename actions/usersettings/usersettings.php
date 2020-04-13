@@ -22,6 +22,9 @@
  * @todo	remove useless redirections;
  * @todo	[accessibility] make logout independent of JavaScript
  * @todo	complete @uses
+ *
+ * @todo    Wow, we really need to separate presentation from logic! And
+ * the way PHP handles scope inside of functions is rather insane...
  */
 
 //initialize variables
@@ -36,19 +39,173 @@ $changescount = 0;
 $password = '';
 $oldpass = '';
 $password_confirm = '';
-$pw_selected = '';
-$hash_selected = '';
+global $pw_selected;
+global $hash_selected;
+global $passerror;
+global $passsuccess;
 
 $username_highlight = '';
 $username_temp_highlight = '';
 $password_temp_highlight = '';
 $email_highlight = '';
-$password_highlight = '';
-$password_new_highlight = '';
-$password_confirm_highlight = '';
+global $password_highlight;
+global $password_new_highlight;
+global $password_confirm_highlight;
 $revisioncount_highlight = '';
 $changescount_highlight = '';
 $invitation_code_highlight = '';
+
+function outputChangePasswordHTML() {
+    global $pw_selected;
+    global $hash_selected;
+    global $password_highlight;
+    global $password_new_highlight;
+    global $password_confirm_highlight;
+    global $passerror;
+    global $passsuccess;
+
+    $output = '<fieldset class="usersettings" id="changepassword"><legend>';
+    $output .= T_("Change your password");
+    $output .= '</legend>
+    <input type="hidden" name="action" value="changepass" />';
+    if (isset($passerror))
+    {
+        $output .= '<em class="error">'.$passerror.'</em><br />'."\n";
+    }
+    else if (isset($passsuccess))
+    {
+        $output .= '<em class="success">'.$passsuccess.'</em><br />'."\n";
+    }
+    $output .= '<select id="update_option" name="update_option">
+        <option value="pw" '.$pw_selected.'>';
+    $output .= T_("Your current password");
+    $output .= '</option>
+        <option value="hash">';
+    $output .= $hash_selected;
+    $output .= T_("Password reminder");
+    $output .= '</option>
+    </select>
+    <input ';
+    $output .= $password_highlight;
+    $output .= 'type="password" name="oldpass" size="40" />
+    <br />
+    <label for="password">';
+    $output .= T_("Your new password:");
+    $output .= '</label>
+        <input id="password" ';
+    $output .= $password_new_highlight;
+    $output .= 'type="password" name="password" size="40" />
+    <br />
+    <label for="password_confirm">';
+    $output .= T_("Confirm new password:");
+    $output .= '</label>
+        <input id="password_confirm"';
+    $output .= $password_confirm_highlight;
+    $output .= 'type="password" name="password_confirm" size="40" />
+    <br />
+    <input id="changepasswordsubmit" type="submit" value="';
+    $output .= T_("Change password");
+    $output .= '" size="40" />
+    <br />
+    </fieldset>';
+    return $output; 
+}
+
+// BEGIN *** PASSWORD UPDATE ***
+if ($this->GetSafeVar('action', 'post') == 'changepass')
+{
+    $user = $this->GetUser();
+    if($user == NULL) {
+        $user = $this->LoadUser($_SESSION['temp_username']);
+    }
+
+    // check password
+    $oldpass = $this->GetSafeVar('oldpass', 'post'); //can be current password or hash sent as password reminder
+    $password = $this->GetSafeVar('password', 'post');
+    $password_confirm = $this->GetSafeVar('password_confirm', 'post');
+    $update_option = $this->GetSafeVar('update_option', 'post');
+    $authenticated = FALSE;
+    if(strlen($oldpass) == 0) {
+        $passerror = T_("Please fill your password or password reminder.");
+        $password_highlight = 'class="highlight"';
+    }
+    elseif($update_option == 'pw' &&
+           isset($user['password']) && 
+           $user['password'] != '') {
+        if(password_verify($oldpass, $user['password'])) {
+            $authenticated = TRUE;
+         } else {
+             $passerror = T_("The old password you entered is wrong.");
+             $pw_selected = 'selected="selected"';
+             $password_highlight = 'class="highlight"';
+         }
+    }
+    # MD5 deprecated as of 1.4.2
+    elseif($update_option == 'pw') {
+        if(md5($user['challenge'].$oldpass) == $user['md5_password']) {
+            $authenticated = TRUE;
+        } else {
+            $passerror = T_("The old MD5 password you entered is wrong.");
+            $pw_selected = 'selected="selected"';
+            $password_highlight = 'class="highlight"';
+        }
+    }
+    elseif(($update_option == 'hash') && $oldpass != $user['md5_password']) { //wrong reminder (hash)
+        $passerror = T_("Sorry, you entered a wrong password reminder.");
+        $hash_selected = 'selected="selected"';
+        $password_highlight = 'class="highlight"';
+    }
+    elseif(strlen($password) == 0) {
+        $passerror = T_("You must also fill in a new password.");
+        $password_highlight = 'class="highlight"';
+        $password_new_highlight = 'class="highlight"';
+    }
+    elseif(preg_match("/ /", $password)) {
+        $passerror = T_("Sorry, blanks are not permitted in the password.");
+        $password_highlight = 'class="highlight"';
+        $password_new_highlight = 'class="highlight"';
+    }
+    elseif(preg_match('/\0/', $password)) {
+        $passerror = T_("Sorry, null characters are not permitted in the password.");
+        $password_highlight = 'class="highlight"';
+        $password_new_highlight = 'class="highlight"';
+    }
+    elseif(strlen($password) < PASSWORD_MIN_LENGTH) {
+       $passerror = sprintf(T_("Sorry, the password must contain at least %d characters."), PASSWORD_MIN_LENGTH);
+       $password_highlight = 'class="highlight"';
+       $password_new_highlight = 'class="highlight"';
+    }
+    elseif(strlen($password_confirm) == 0) {
+        $passerror = T_("Please confirm your new password in order to update your account.");
+        $password_highlight = 'class="highlight"';
+        $password_new_highlight = 'class="highlight"';
+        $password_confirm_highlight = 'class="highlight"';
+    }
+    elseif($password_confirm != $password) {
+        $passerror = T_("Passwords don't match.");
+        $password_highlight = 'class="highlight"';
+        $password_new_highlight = 'class="highlight"';
+        $password_confirm_highlight = 'class="highlight"';
+    }
+
+    if($authenticated) {
+        # More secure PHP password hashing
+        $user['password'] = password_hash($password, PASSWORD_DEFAULT);
+        $this->Query("
+            UPDATE ".$this->GetConfigValue('table_prefix')."users
+            SET password = :password, force_password_reset=false WHERE name = :name",
+            array(':password' => $user['password'],
+                  ':name' => $user['name'])
+            );
+        $this->SetUser($user);
+        $passsuccess = T_("Password successfully changed!");
+    }
+
+    if(isset($_SESSION['temp_username'])) {
+        unset($_SESSION['temp_username']);
+    }
+}
+
 
 $wikiname_expanded = '<abbr title="'.T_("A WikiName is formed by two or more capitalized words without space, e.g. JohnDoe").'">'.T_("WikiName").'</abbr>';
 
@@ -210,77 +367,6 @@ if ($user = $this->GetUser())
 			break;
 	}
 
-	// BEGIN *** PASSWORD UPDATE ***
-	if ($this->GetSafeVar('action', 'post') == 'changepass')
-	{
-		// check password
-		$oldpass = $this->GetSafeVar('oldpass', 'post'); //can be current password or hash sent as password reminder
-		$password = $this->GetSafeVar('password', 'post');
-		$password_confirm = $this->GetSafeVar('password_confirm', 'post');
-		$update_option = $this->GetSafeVar('update_option', 'post');
-
-		switch (TRUE)
-		{
-			case (strlen($oldpass) == 0):
-				$passerror = T_("Please fill your password or password reminder.");
-				$password_highlight = 'class="highlight"';
-				break;
-			case (($update_option == 'pw') && md5($user['challenge'].$oldpass) != $user['md5_password']): //wrong old password
-				$passerror = T_("The old password you entered is wrong.");
-				$pw_selected = 'selected="selected"';
-				$password_highlight = 'class="highlight"';
-				break;
-			case (($update_option == 'hash') && $oldpass != $user['md5_password']): //wrong reminder (hash)
-				$passerror = T_("Sorry, you entered a wrong password reminder.");
-				$hash_selected = 'selected="selected"';
-				$password_highlight = 'class="highlight"';
-				break;
-			case (strlen($password) == 0):
-				$passerror = T_("You must also fill in a new password.");
-				$password_highlight = 'class="highlight"';
-				$password_new_highlight = 'class="highlight"';
-				break;
-			case (preg_match("/ /", $password)):
-				$passerror = T_("Sorry, blanks are not permitted in the password.");
-				$password_highlight = 'class="highlight"';
-				$password_new_highlight = 'class="highlight"';
-				break;
-            case (preg_match('/\0/', $password)):
-                $passerror = T_("Sorry, null characters are not permitted in the password.");
-				$password_highlight = 'class="highlight"';
-				$password_new_highlight = 'class="highlight"';
-                break;
-			case (strlen($password) < PASSWORD_MIN_LENGTH):
-				$passerror = sprintf(T_("Sorry, the password must contain at least %d characters."), PASSWORD_MIN_LENGTH);
-				$password_highlight = 'class="highlight"';
-				$password_new_highlight = 'class="highlight"';
-				break;
-			case (strlen($password_confirm) == 0):
-				$passerror = T_("Please confirm your new password in order to update your account.");
-				$password_highlight = 'class="highlight"';
-				$password_new_highlight = 'class="highlight"';
-				$password_confirm_highlight = 'class="highlight"';
-				break;
-			case ($password_confirm != $password):
-				$passerror = T_("Passwords don't match.");
-				$password_highlight = 'class="highlight"';
-				$password_new_highlight = 'class="highlight"';
-				$password_confirm_highlight = 'class="highlight"';
-				break;
-			default:
-                # More secure PHP password hashing
-                $user['password'] = password_hash($password, PASSWORD_DEFAULT);
-                $this->Query("
-                    UPDATE ".$this->GetConfigValue('table_prefix')."users
-                    SET password = :password WHERE name = :name",
-                    array(':password' => $user['password'],
-                          ':name' => $user['name'])
-                    );
-                $this->SetUser($user);
-                $passsuccess = T_("Password successfully changed!");
-		}
-	}
-	// END *** PASSWORD UPDATE ***
 
 	// BEGIN *** USERSETTINGS ***
 	// @@@ replace hidden "action" by name on submit button
@@ -319,40 +405,12 @@ if ($user = $this->GetUser())
 	echo $this->FormClose();	// close logout/usersettings form
 	// END *** LOGOUT/USERSETTINGS ***
 
-	// BEGIN *** PASSWORD UPDATE ***
-	echo $this->FormOpen();	// open password update form
-	// @@@ replace hidden "action" by name on submit button
-?>
-	<fieldset class="usersettings" id="changepassword"><legend><?php echo T_("Change your password") ?></legend>
-	<input type="hidden" name="action" value="changepass" />
-<?php
-		if (isset($passerror))
-		{
-			echo '<em class="error">'.$passerror.'</em><br />'."\n";
-		}
-		else if (isset($passsuccess))
-		{
-			echo '<em class="success">'.$passsuccess.'</em><br />'."\n";
-		}
-?>
-	<select id="update_option" name="update_option">
-		<option value="pw" <?php echo $pw_selected; ?>><?php echo T_("Your current password"); ?></option>
-		<option value="hash" <?php echo $hash_selected; ?>><?php echo T_("Password reminder"); ?></option>
-	</select>
-	<input <?php echo $password_highlight; ?> type="password" name="oldpass" size="40" />
-	<br />
-	<label for="password"><?php echo T_("Your new password:") ?></label>
-	<input id="password" <?php echo $password_new_highlight; ?> type="password" name="password" size="40" />
-	<br />
-	<label for="password_confirm"><?php echo T_("Confirm new password:") ?></label>
-	<input id="password_confirm" <?php echo $password_confirm_highlight; ?> type="password" name="password_confirm" size="40" />
-	<br />
-	<input id="changepasswordsubmit" type="submit" value="<?php echo T_("Change password") ?>" size="40" />
-	<br />
-	</fieldset>
-<?php
+
+	echo $this->FormOpen();
+    echo outputChangePasswordHTML();
 	echo $this->FormClose();	// close password update form
-	// END *** PASSWORD UPDATE
+
+	// END *** PASSWORD UPDATE ***
 }
 // END *** LOGOUT/USERSETTINGS/PASSWORD UPDATE ***
 
@@ -411,6 +469,14 @@ else
             }
 
             if($authenticated === TRUE) {
+                if($existingUser['force_password_reset'] == TRUE) {
+                    $passerror = T_("The site admin is requesting that you reset your password.");
+                    $_SESSION['temp_username'] = $existingUser['name'];
+                    echo $this->FormOpen();
+                    echo outputChangePasswordHTML();
+                    echo $this->FormClose();
+                    return;
+                }
                 $this->SetUser($existingUser);
                 if ((isset($_SESSION['go_back'])) && (isset($_POST['do_redirect'])))
                 {
@@ -669,4 +735,5 @@ else
 	// END *** LOGIN PW FORGOTTEN ***
 }
 // END *** LOGOUT 2/LOGIN/REGISTER/PASSWORD UPDATE ***
+
 ?>
