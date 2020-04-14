@@ -1,0 +1,9 @@
+====Strony bez powiązań====
+
+Do poniższych stron nie prowadzą żadne odnośniki z innych stron istniejących w tej witrynie.
+
+{{OrphanedPages}}{{nocomments}}
+
+
+----
+CategoryWiki

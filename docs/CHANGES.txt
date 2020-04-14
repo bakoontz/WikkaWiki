@@ -1,0 +1,5 @@
+**Wikka Release Notes**
+
+For the latest WikkaWiki release notes, please visit
+http://docs.wikkawiki.org/WhatsNew
+

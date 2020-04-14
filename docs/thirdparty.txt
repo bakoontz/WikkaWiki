@@ -1,0 +1,4 @@
+Third-party software bundled with Wikka
+---------------------------------------
+
+Please visit http://docs.wikkawiki.org/ThirdPartyInfo
