@@ -552,6 +552,7 @@ switch($version) {
 		db_query('delete from '.$config['table_prefix'].'users where name = :name', array(':name' => $name), $dblink);
 		test(__('Adding WikkaInstaller user').'...', db_query("insert into ".$config["table_prefix"]."users set name = :name, password = :pass_val, email = :email, signuptime = now(), challenge= :challenge", array(':name' => $name, ':pass_val' => $pass_val, ':email' => $email, ':challenge' => $challenge), $dblink), "Hmm!", 0);
     case "1.4.1":
+    case "1.4.2":
     case "master":
 }
 
