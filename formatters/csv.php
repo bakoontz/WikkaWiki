@@ -25,7 +25,7 @@ foreach (split("\n", $text) as $csv_n => $csv_line)
 		// https://www.phpliveregex.com
 		// https://www.regular-expressions.info/quickstart.html
 
-		if ($csv_n == 0)
+		if ($csv_n == $comments)
 			$style[$csv_nn]= "padding: 1px 10px 1px 10px; ";
 
 		if (preg_match("/\"?\s*==(.*)==\"?$/", $csv_cell, $header)) 
