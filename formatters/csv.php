@@ -48,7 +48,7 @@ foreach ($array_csv_lines= preg_split("/[\n]/", $text) as $csv_n => $csv_line)
 		{
 			$title[$csv_nn]= $header[1];
 
-			if (preg_match("/([\/\\\\|])([^\/\\\\|]*)\\1$/", $title[$csv_nn], $align)) 
+			if (preg_match("/([\/\\\\|])(.*)\\1$/", $title[$csv_nn], $align)) 
 			{
 				switch ($align[1]) {
 					case "/" :	$style[$csv_nn].= "text-align:right; ";	break;
