@@ -89,8 +89,6 @@ foreach ($array_csv_lines= preg_split("/[\n]/", $text) as $csv_n => $csv_line)
 				$linked= $cell;
 				
 				foreach ($all_links[1] as $n => $camel_link) 
-					echo $n;
-					echo $camel_link;
 					$linked = preg_replace("/\[\[". $camel_link ."\]\]/", $this->Link($camel_link), $linked);
 				print "<td style=\"". $style[$csv_nn] ."\">". $linked ."</td>"; // no htmlspecialchars_ent()
 			}		
@@ -100,8 +98,6 @@ foreach ($array_csv_lines= preg_split("/[\n]/", $text) as $csv_n => $csv_line)
 				$linked= $cell;
 				
 				foreach ($all_links[1] as $n => $url_link) 
-					echo $n;
-					echo $camel_link;
 					if(preg_match("/^\s*(.*?)\s*\|\s*(.*?)\s*$/su", $url_link, $matches)) {
 						$url = $matches[1];
 						$text = $matches[2];
