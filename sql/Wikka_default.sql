@@ -1,6 +1,6 @@
 -- MySQL dump 10.13  Distrib 5.7.21, for Win64 (x86_64)
 --
--- Host: localhost    Database: wikkawiki_141
+-- Host: localhost    Database: wikkawiki_142
 -- ------------------------------------------------------
 -- Server version	5.7.21
 
@@ -51,7 +51,7 @@ CREATE TABLE `wikka_comments` (
   PRIMARY KEY (`id`),
   KEY `idx_page_tag` (`page_tag`),
   KEY `idx_time` (`time`)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -92,7 +92,7 @@ CREATE TABLE `wikka_pages` (
   KEY `idx_owner` (`owner`),
   KEY `idx_latest` (`latest`),
   FULLTEXT KEY `body` (`body`)
-) ENGINE=MyISAM AUTO_INCREMENT=37 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=49 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -148,7 +148,7 @@ DROP TABLE IF EXISTS `wikka_users`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `wikka_users` (
   `name` varchar(75) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
-  `password` varchar(32) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
+  `password` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `email` varchar(50) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `revisioncount` int(10) unsigned NOT NULL DEFAULT '20',
   `changescount` int(10) unsigned NOT NULL DEFAULT '50',
@@ -157,8 +157,10 @@ CREATE TABLE `wikka_users` (
   `show_comments` enum('Y','N') COLLATE utf8_unicode_ci NOT NULL DEFAULT 'N',
   `status` enum('invited','signed-up','pending','active','suspended','banned','deleted') COLLATE utf8_unicode_ci DEFAULT NULL,
   `theme` varchar(50) COLLATE utf8_unicode_ci DEFAULT '',
-  `default_comment_display` int(11) NOT NULL DEFAULT '3',
-  `challenge` varchar(8) COLLATE utf8_unicode_ci DEFAULT '',
+  `default_comment_display` int(1) NOT NULL DEFAULT '3',
+  `force_password_reset` tinyint(1) NOT NULL DEFAULT '0',
+  `md5_password` varchar(32) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
+  `challenge` varchar(8) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   PRIMARY KEY (`name`),
   KEY `idx_signuptime` (`signuptime`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -173,4 +175,4 @@ CREATE TABLE `wikka_users` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-08-28  3:13:07
+-- Dump completed on 2020-04-18 23:49:45

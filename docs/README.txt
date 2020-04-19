@@ -18,6 +18,7 @@ The Wikka Development Team
 --------------------------
 
 - Brian Koontz
+- PLG
 
 Wikka Hall of Fame
 - JsnX [Jason Tourtelotte]
