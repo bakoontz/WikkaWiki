@@ -555,6 +555,7 @@ switch($version) {
 		db_query("ALTER TABLE ".$config['table_prefix']."users ADD COLUMN password varchar(255) NOT NULL DEFAULT ''", NULL, $dblink);
 		db_query("ALTER TABLE ".$config['table_prefix']."users ADD COLUMN force_password_reset boolean NOT NULL DEFAULT false", NULL, $dblink);
     case "1.4.2":
+    case "1.4.3":
     case "master":
 }
 
