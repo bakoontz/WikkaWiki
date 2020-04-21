@@ -1,6 +1,8 @@
 Wikka: Upgrading from an earlier version
 ----------------------------------------
 
+BACK UP YOUR DATABASE! BACK UP YOUR DATABASE!
+
 Just unpack the new distribution archive wherever you need/want it; all you
 need from your old Wikka installation is wikka.config.php. You can also
 just copy the new files over the old ones, but be careful not to overwrite
@@ -19,3 +21,5 @@ file). Don't forget to remove the "locked" file once you're done with
 upgrading!
 
 More details available at <http://docs.wikkawiki.org/UpgradeNotes>.
+
+Did I mention: BACK UP YOUR DATABASE!

@@ -22,6 +22,7 @@ The Wikka Development Team
 - Chris Case
 - Tom Atwell
 - Oscar Muñoz
+- Kim Nevelsteen, PhD
 
 Wikka Hall of Fame
 - JsnX [Jason Tourtelotte]

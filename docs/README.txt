@@ -18,6 +18,7 @@ The Wikka Development Team
 --------------------------
 
 - Brian Koontz
+- Kim Nevelsteeh, PhD
 
 Wikka Hall of Fame
 - JsnX [Jason Tourtelotte]
