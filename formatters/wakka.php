@@ -672,12 +672,26 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 			elseif (isset($language) &&
 					isset($wakka->config['wikka_formatter_path']) &&
 					file_exists($wikka_hi_path.'/'.$language.'.php') && 
-					'wakka' != $language)
+					'wakka' != $language &&
+					strlen($invalid) == 0)
 			{
-				// use internal Wikka highlighter
-				$output = '<div class="code">'."\n";
-				$output .= $wakka->Format($code, $language);
+				if (preg_match('/^'.PATTERN_FILENAME.'$/u', $arg2, $match_filename)) # #34 TODO: use central regex library for filename validation
+					$filename= $match_filename[1];
+
+				// check if specified filename is valid and generate code block header
+				if (isset($filename) &&
+					strlen($filename) > 0 &&
+					strlen($invalid) == 0)
+				{
+					$valid_filename = $filename;
+					// do not output a '<div class="code_header">' here; let each formatter handle the arg[3] instead.
+				}
+
+				$output .= '<!--start internal Wikka highlighter-->'."\n";
+				$output .= '<div class="code">'."\n";
+				$output .= $wakka->Format($code, $language, $arg1.";".$arg2.";".$arg3);
 				$output .= "</div>\n";
+				$output .= '<!--end internal Wikka highlighter-->'."\n";
 			}
 			// no language defined or no formatter found: make default code block;
 			// IncludeBuffered() will complain if 'code' formatter doesn't exist!
