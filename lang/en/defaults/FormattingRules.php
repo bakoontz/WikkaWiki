@@ -556,28 +556,29 @@ printf('
 |=|C||##c##|=|C for Macs||##c_mac##|=|C#||##csharp##||
 |=|C""++""||##cpp##|=|C""++"" (+QT)||##cpp-qt##|=|CAD DCL||##caddcl##||
 |=|""CadLisp""||##cadlisp##|=|CFDG||##cfdg##|=|""ColdFusion""||##cfm##||
-|=|CSS||##css##|=|D||##d##|=|Delphi||##delphi##||
-|=|Diff-Output||##diff##|=|DIV||##div##|=|DOS||##dos##||
-|=|Dot||##dot##|=|Eiffel||##eiffel##|=|Fortran||##fortran##||
-|=|""FreeBasic""||##freebasic##|=|FOURJ\'s Genero 4GL||##genero##|=|GML||##gml##||
-|=|Groovy||##groovy##|=|Haskell||##haskell##|=|HTML||##html4strict##||
-|=|INI||##ini##|=|Inno Script||##inno##|=|Io||##io##||
-|=|Java 5||##java5##|=|Java||##java##|=|Javascript||##javascript##||
-|=|""LaTeX""||##latex##|=|Lisp||##lisp##|=|Lua||##lua##||
-|=|Matlab||##matlab##|=|mIRC Scripting||##mirc##|=|Microchip Assembler||##mpasm##||
-|=|Microsoft Registry||##reg##|=|Motorola 68k Assembler||##m68k##|=|""MySQL""||##mysql##||
-|=|NSIS||##nsis##|=|Objective C||##objc##|=|""OpenOffice"" BASIC||##oobas##||
-|=|Objective Caml||##ocaml##|=|Objective Caml (brief)||##ocaml-brief##|=|Oracle 8||##oracle8##||
-|=|Pascal||##pascal##|=|Per (FOURJ\'s Genero 4GL)||##per##|=|Perl||##perl##||
-|=|PHP||##php##|=|PHP (brief)||##php-brief##|=|PL/SQL||##plsql##||
-|=|Python||##phyton##|=|Q(uick)BASIC||##qbasic##|=|robots.txt||##robots##||
-|=|Ruby on Rails||##rails##|=|Ruby||##ruby##|=|SAS||##sas##||
-|=|Scheme||##scheme##|=|sdlBasic||##sdlbasic##|=|Smarty||##smarty##||
-|=|SQL||##sql##|=|TCL/iTCL||##tcl##|=|T-SQL||##tsql##||
-|=|Text||##text##|=|thinBasic||##thinbasic##|=|Unoidl||##idl##||
-|=|VB.NET||##vbnet##|=|VHDL||##vhdl##|=|Visual BASIC||##vb##||
-|=|Visual Fox Pro||##visualfoxpro##|=|""WinBatch""||##winbatch##|=|XML||##xml##||
-|=|X""++""||##xpp##|=|""ZiLOG"" Z80 Assembler||##z80##|=| ||
+|=|CSS||##css##|=|CSV ""<sup>†</sup""||##csv##|=|D||##d##||
+|=|Delphi||##delphi##|=|Diff-Output||##diff##|=|DIV||##div##||
+|=|DOS||##dos##|=|Dot||##dot##|=|Eiffel||##eiffel##||
+|=|Fortran||##fortran##|=|""FreeBasic""||##freebasic##|=|FOURJ\'s Genero 4GL||##genero##||
+|=|GML||##gml##|=|Groovy||##groovy##|=|Haskell||##haskell##||
+|=|HTML||##html4strict##|=|INI||##ini##|=|Inno Script||##inno##||
+|=|Io||##io##|=|Java 5||##java5##|=|Java||##java##||
+|=|Javascript||##javascript##|=|""LaTeX""||##latex##|=|Lisp||##lisp##||
+|=|Lua||##lua##|=|Matlab||##matlab##|=|mIRC Scripting||##mirc##||
+|=|Microchip Assembler||##mpasm##|=|Microsoft Registry||##reg##|=|Motorola 68k Assembler||##m68k##||
+|=|""MySQL""||##mysql##|=|NSIS||##nsis##|=|Objective C||##objc##||
+|=|""OpenOffice"" BASIC||##oobas##|=|Objective Caml||##ocaml##|=|Objective Caml (brief)||##ocaml-brief##||
+|=|Oracle 8||##oracle8##|=|Pascal||##pascal##|=|Per (FOURJ\'s Genero 4GL)||##per##||
+|=|Perl||##perl##|=|PHP||##php##|=|PHP (brief)||##php-brief##||
+|=|PL/SQL||##plsql##|=|Python||##phyton##|=|Q(uick)BASIC||##qbasic##||
+|=|robots.txt||##robots##|=|Ruby on Rails||##rails##|=|Ruby||##ruby##||
+|=|SAS||##sas##|=|Scheme||##scheme##|=|sdlBasic||##sdlbasic##||
+|=|Smarty||##smarty##|=|SQL||##sql##|=|TCL/iTCL||##tcl##||
+|=|T-SQL||##tsql##|=|Text||##text##|=|thinBasic||##thinbasic##||
+|=|Unoidl||##idl##|=|VB.NET||##vbnet##|=|VHDL||##vhdl##||
+|=|Visual BASIC||##vb##|=|Visual Fox Pro||##visualfoxpro##|=|""WinBatch""||##winbatch##||
+|=|XML||##xml##|=|X""++""||##xpp##|=|""ZiLOG"" Z80 Assembler||##z80##||
+""<sup>†</sup>"" CSV is not handled by GeSHi, but  by a Wikka handler: [[http://docs.wikkawiki.org/FormatterCSV|FormatterCSV]]
 ', T_('List of available code formatters'), T_('Language'), T_('Formatter'), T_('Language'), T_('Formatter'), T_('Language'), T_('Formatter'));
 printf('--- ---');
 printf('===%s===', T_('13. Mindmaps'));
