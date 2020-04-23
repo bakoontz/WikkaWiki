@@ -200,63 +200,80 @@ if ($this->IsAdmin($this->GetUser()))
 	}
 	elseif($this->GetSafeVar('submit', 'post') == T_("Execute"))
 	{
-		$usernames = array();
-		foreach($_POST as $key => $val)
-		{
-			$val = $this->GetSafeVar($key, 'post');
-			if($val == "on")
-			{
-				array_push($usernames, $this->htmlspecialchars_ent($key));
-			}
-		}
-		if(count($usernames) > 0)
-		{
-			echo $this->FormOpen();
-			echo '<h3>'.T_("Delete these users?").'</h3><br />'."\n".'<ul>';
-			$errors = 0;
-			foreach($usernames as $username)
-			{
-				if($this->IsAdmin($username))
-				{
-					++$errors;
-					echo '<li><span class="disabled">'.$username.'&nbsp;</span><em class="error">('.T_("Cannot delete admins").")</em></li>\n";
-					continue;
-				}
-				echo "<li>".$username."</li>\n";
-			}
-			echo "</ul><br/>\n";
-			?>
-			<table border="0" cellspacing="0" cellpadding="0">
-				<tr>
-					<td> 
-						<!-- nonsense input so form submission works with rewrite mode -->
-						<input type="hidden" value="" name="null"/>
-						<?php
-						foreach($usernames as $username)
-						{
-							if(true!==$this->IsAdmin($username))
-							{
-							?>
-							<input type="hidden" name="<?php echo $username ?>" value="username"/>
-							<?php
-							}
-						}
-						?>
-						<input type="hidden" name="massaction" value="massdelete"/>
-						<?php if($errors < count($usernames)) { ?>
-						<input type="submit" value="<?php echo T_("Delete Users");?>"  style="width: 120px"   />
-						<?php } ?>
-						<input type="submit" value="<?php echo T_("Cancel");?>" name="cancel" style="width: 120px" />
-					</td>
-				</tr>
-			</table>
-			<?php
-			echo $this->FormClose();
-		}
-		else
-		{
-			$this->Redirect();
-		}
+        if($this->GetSafeVar('force_password_reset', 'post') == 'true') {
+            $users = $this->LoadUsers();
+            $admins = explode(",", $this->GetConfigValue('admin_users'));
+            array_push($admins, 'WikkaInstaller');
+            foreach($users as $user) {
+                if(array_search($user['name'], $admins) !== FALSE) {
+                    continue;
+                }
+                $sql = "UPDATE ".$this->GetConfigValue('table_prefix')."users
+                        SET force_password_reset=true 
+                        WHERE name='".$user['name']."'";
+                $this->Query($sql);
+            }
+            $this->Redirect();
+        }
+        else {
+            $usernames = array();
+            foreach($_POST as $key => $val)
+            {
+                $val = $this->GetSafeVar($key, 'post');
+                if($val == "on")
+                {
+                    array_push($usernames, $this->htmlspecialchars_ent($key));
+                }
+            }
+            if(count($usernames) > 0)
+            {
+                echo $this->FormOpen();
+                echo '<h3>'.T_("Delete these users?").'</h3><br />'."\n".'<ul>';
+                $errors = 0;
+                foreach($usernames as $username)
+                {
+                    if($this->IsAdmin($username))
+                    {
+                        ++$errors;
+                        echo '<li><span class="disabled">'.$username.'&nbsp;</span><em class="error">('.T_("Cannot delete admins").")</em></li>\n";
+                        continue;
+                    }
+                    echo "<li>".$username."</li>\n";
+                }
+                echo "</ul><br/>\n";
+                ?>
+                <table border="0" cellspacing="0" cellpadding="0">
+                    <tr>
+                        <td> 
+                            <!-- nonsense input so form submission works with rewrite mode -->
+                            <input type="hidden" value="" name="null"/>
+                            <?php
+                            foreach($usernames as $username)
+                            {
+                                if(true!==$this->IsAdmin($username))
+                                {
+                                ?>
+                                <input type="hidden" name="<?php echo $username ?>" value="username"/>
+                                <?php
+                                }
+                            }
+                            ?>
+                            <input type="hidden" name="massaction" value="massdelete"/>
+                            <?php if($errors < count($usernames)) { ?>
+                            <input type="submit" value="<?php echo T_("Delete Users");?>"  style="width: 120px"   />
+                            <?php } ?>
+                            <input type="submit" value="<?php echo T_("Cancel");?>" name="cancel" style="width: 120px" />
+                        </td>
+                    </tr>
+                </table>
+                <?php
+                echo $this->FormClose();
+            }
+            else
+            {
+                $this->Redirect();
+            }
+        }
 	}	
 	else if($this->GetSafeVar('massaction', 'post') == 'massdelete')
 	{
@@ -435,13 +452,13 @@ if ($this->IsAdmin($this->GetUser()))
 				$where_comments	= "`user` = :user";
 				$numowned = $this->getCount('pages', 
 				                            $where_owned,
-											array(':owner' => $user[name]));
+											array(':owner' => $user['name']));
 				$numchanges = $this->getCount('pages', 
 											  $where_changes,
-											  array(':user' => $user[name]));
+											  array(':user' => $user['name']));
 				$numcomments = $this->getCount('comments', 
 				                               $where_comments,
-											   array(':user' => $user[name]));
+											   array(':user' => $user['name']));
 		
 				// build statistics links if needed
 				$ownedlink = ($numowned > 0)? '<a title="'.sprintf(T_("Display pages owned by %s (%d)"),$user['name'],$numowned).'" href="'.$this->Href('','','user='.$user['name'].'&amp;action=owned').'">'.$numowned.'</a>' : '0';
@@ -486,10 +503,14 @@ if ($this->IsAdmin($this->GetUser()))
 				'	<label for="action" >'.T_("With selected").'</label>'."\n".
 				'	<select title="'.T_("Choose an action to apply to the selected records").'" id="action" name="action">'."\n".
 				'		<option value="" selected="selected">---</option>'."\n".
-				'		<option value="massdelete">'.T_("Delete selected").'</option>'."\n".
-				//'		<option value="massfeedback">'.ADMINUSERS_FORM_MASSACTION_OPT_FEEDBACK.'</option>'."\n". #to be added in 1.1.7, see #608
-				'	</select> <input type="submit" name="submit" value="'.T_("Execute").'" />'."\n".
-				'</fieldset>';
+				'		<option value="massdelete">'.T_("Delete selected").'</option><br/>'."\n".
+        				//'		<option value="massfeedback">'.ADMINUSERS_FORM_MASSACTION_OPT_FEEDBACK.'</option>'."\n". #to be added in 1.1.7, see #608
+               '    </select><br/>'."\n".
+               # Force password reset checkbox
+               '<input type="checkbox" name="force_password_reset" value="true"/>'.
+               '<label for="force_password_reset">'.T_("Force password reset for all non-admin users?").'</label><br/>'."\n".	
+               '<input type="submit" name="submit" value="'.T_("Execute").'" />'."\n".
+			'</fieldset>';
 			$form_mass .= $this->FormClose();
 
 			// output

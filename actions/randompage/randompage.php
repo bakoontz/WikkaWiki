@@ -34,8 +34,8 @@ $title = isset($vars['title']) ? $this->htmlspecialchars_ent($vars['title']) : "
 foreach( $this->LoadAll("select distinct tag from ".$this->GetConfigValue('table_prefix')."pages") as $key => $val ){
         $all[]=$val['tag'];
 }
-$pos_list = isset($vars['pos']) ? split('[|,]', preg_replace( "/[\ ]/", '', $vars['pos'] ) ) : $all ;
-$neg_list = isset($vars['neg']) ? split('[|,]', preg_replace( "/[\ ]/", '', $vars['neg'] ) ) : $neg_list_default ;
+$pos_list = isset($vars['pos']) ? preg_split("/[|,]/", preg_replace( "/[\ ]/", '', $vars['pos'] ) ) : $all ;
+$neg_list = isset($vars['neg']) ? preg_split("/[|,]/", preg_replace( "/[\ ]/", '', $vars['neg'] ) ) : $neg_list_default ;
 
 $try = 0;
 while ( $try < 5 ) {

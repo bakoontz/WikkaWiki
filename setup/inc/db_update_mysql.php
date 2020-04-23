@@ -67,7 +67,7 @@ switch($version) {
 			db_query(
 				"CREATE TABLE ".$config['table_prefix']."users (".
 				"name varchar(75) NOT NULL default '',".
-				"password varchar(32) NOT NULL default '',".
+                "password varchar(255) NOT NULL default '',".
 				"email varchar(50) NOT NULL default '',".
 				"revisioncount int(10) unsigned NOT NULL default '20',".
 				"changescount int(10) unsigned NOT NULL default '50',".
@@ -77,7 +77,6 @@ switch($version) {
 				"status enum('invited','signed-up','pending','active','suspended','banned','deleted'),".
 				"theme varchar(50) default '',".
 				"default_comment_display int(1) NOT NULL default '3',". // threaded is default
-				"challenge varchar(8) default '',". // refs #1023
 				"PRIMARY KEY  (name),".
 				"KEY idx_signuptime (signuptime)".
 				") CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=MyISAM", NULL, $dblink), "Already exists?", 0);
@@ -163,24 +162,22 @@ switch($version) {
 		db_query("insert into ".$config['table_prefix']."acls set page_tag = 'WikkaInstaller', read_acl = '!*', write_acl = '!*', comment_read_acl = '!*', comment_post_acl = '!*'", NULL, $dblink);
 
 		// Register admin user
-		$challenge = dechex(crc32(time()));
-		$pass_val = md5($challenge.$_POST['password']);
+		$pass_val = password_hash($_POST['password'], PASSWORD_DEFAULT);
 		$name = $config['admin_users'];
 		$email = $config['admin_email'];
 		// Delete existing admin user in case installer was run twice
 		db_query('delete from '.$config['table_prefix'].'users where name = :name', array(':name' => $name), $dblink);
 		test(__('Adding admin user').'...',
-				db_query("insert into ".$config["table_prefix"]."users set name = :name, password = :pass_val, email = :email, signuptime = now(), challenge= :challenge", array(':name' => $name, ':pass_val' => $pass_val, ':email' => $email, ':challenge' => $challenge), $dblink), "Hmm!", 0);
+				db_query("insert into ".$config["table_prefix"]."users set name = :name, password = :pass_val, email = :email, signuptime = now()", array(':name' => $name, ':pass_val' => $pass_val, ':email' => $email), $dblink), "Hmm!", 0);
 
 		// Register WikkaInstaller user
-		$challenge = dechex(crc32(time()));
-		$pass_val = md5($challenge.$_POST['password']);
+		$pass_val = password_hash($_POST['password'], PASSWORD_DEFAULT);
 		$name = 'WikkaInstaller';
 		$email = $config['admin_email'];
 		// Delete existing WikkaInstaller user in case installer was run twice
 		db_query('delete from '.$config['table_prefix'].'users where name = :name', array(':name' => $name), $dblink);
 		test(__('Adding WikkaInstaller user').'...',
-				db_query("insert into ".$config["table_prefix"]."users set name = :name, password = :pass_val, email = :email, signuptime = now(), challenge= :challenge", array(':name' => $name, ':pass_val' => $pass_val, ':email' => $email, ':challenge' => $challenge), $dblink), "Hmm!", 0);
+				db_query("insert into ".$config["table_prefix"]."users set name = :name, password = :pass_val, email = :email, signuptime = now()", array(':name' => $name, ':pass_val' => $pass_val, ':email' => $email), $dblink), "Hmm!", 0);
 
 		// Auto-login wiki admin
 		// Set default cookie path
@@ -552,6 +549,11 @@ switch($version) {
 		db_query('delete from '.$config['table_prefix'].'users where name = :name', array(':name' => $name), $dblink);
 		test(__('Adding WikkaInstaller user').'...', db_query("insert into ".$config["table_prefix"]."users set name = :name, password = :pass_val, email = :email, signuptime = now(), challenge= :challenge", array(':name' => $name, ':pass_val' => $pass_val, ':email' => $email, ':challenge' => $challenge), $dblink), "Hmm!", 0);
     case "1.4.1":
+		print("<strong>1.4.1 to 1.4.2 changes:</strong><br />\n");
+		test("Altering users table structure...", true);
+		db_query("ALTER TABLE ".$config['table_prefix']."users CHANGE COLUMN password md5_password varchar(32) NOT NULL DEFAULT ''", NULL, $dblink);
+		db_query("ALTER TABLE ".$config['table_prefix']."users ADD COLUMN password varchar(255) NOT NULL DEFAULT ''", NULL, $dblink);
+		db_query("ALTER TABLE ".$config['table_prefix']."users ADD COLUMN force_password_reset boolean NOT NULL DEFAULT false", NULL, $dblink);
     case "1.4.2":
     case "master":
 }

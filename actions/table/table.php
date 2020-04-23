@@ -16,7 +16,7 @@
  */
 
 // Init:
-$delimiter=';';
+$delimiter='/;/';
 $empty_cell='###';
 $row=1;
 $cellpadding=1;
@@ -37,7 +37,7 @@ if (is_array($vars))
 			$cellpadding = $value;
 			$border = $value;
 		}
-		if ($param == 'cells') $cells = split($delimiter, $value);
+		if ($param == 'cells') $cells = preg_split($delimiter, $value);
 	}
 	$cached_output = '<table class="data" cellpadding="'.$cellpadding.'" cellspacing="'.$cellspacing.'" border="'.$border.'" style="'.$style."\">\n";
 	foreach ($cells as $cell_item)

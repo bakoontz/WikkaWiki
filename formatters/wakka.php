@@ -549,6 +549,12 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 		// escaped text
 		elseif (preg_match("/^\"\"(.*)\"\"$/su", $thing, $matches))
 		{
+            # Since post-formatter actions are dealt with after parsing, we
+            # need to handle that escape sequence in wakka4callback
+            if(preg_match("/\{\{\{.*?\}\}\}/su", $matches[1])) {
+				return "\"\"".$matches[1]."\"\"";
+            }
+
 			$ddquotes_policy = $wakka->GetConfigValue("double_doublequote_html");
 			$embedded = $matches[1];
 			if (($ddquotes_policy == 'safe') || ($ddquotes_policy == 'raw'))
@@ -906,7 +912,7 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 			return $result;
 		}
 		// Actions
-		elseif (preg_match("/^\{\{(.*?)\}\}$/su", $thing, $matches))
+		elseif (preg_match("/^(?<!\{)\{\{([^\{].*?[^\}])\}\}(?!\})$/su", $thing, $matches))
 		{
 			if ($matches[1])
 			{
@@ -1032,11 +1038,15 @@ if (isset($format_option) && preg_match(PATTERN_MATCH_PAGE_FORMATOPTION, $format
 	{
 		function wakka4callback($things)
 		{
+            $thing = $things[0];
 			global $wakka;
-			$thing = $things[1];
 
+            # This is escaped; just return the thing 
+           	if(preg_match('/\"\"(\{\{\{.*?\}\}\})\"\"/su', $thing, $matches))  {
+                return $matches[1];
+            }
 
-			if(preg_match('/^\{\{\{(.*?)\}\}\}$/su', $thing, $matches)) 
+			if(preg_match('/\{\{\{(.*?)\}\}\}/su', $thing, $matches)) 
 			{
 				if ($matches[1])
 				{
@@ -1136,7 +1146,7 @@ $text = preg_replace_callback(
 	# Simple Tables	
 	"\|(?:[^\|])?\|(?:\(.*?\))?(?:\{[^\{\}]*?\})?(?:\n)?|".
 	# action
-	"(?<!\{)\{\{[^\{|\}]*?\}\}(?!\})|".
+	"(?<!\{)\{\{.*?\}\}(?!\})|".
 	# InterWiki link (deprecated, as pagenames may now contain spaces)
 	# Use forced links with a | separator instead
 	"\b[[:upper:]][[:alpha:]]+[:](?![=_#])\S*\b|".
@@ -1165,10 +1175,13 @@ if (isset($format_option) && preg_match(PATTERN_MATCH_PAGE_FORMATOPTION, $format
 {
 	# wakka4callback
 	$idstart = getmicrotime(TRUE);
-	$this->config['text'] = $text;
+    $this->config['text'] = $text;
 	$text = preg_replace_callback(
 		"#(".
-		"\{\{\{.*?\}\}\}".
+        // escaped
+        "\"\"\{\{\{.*?\}\}\}\"\"|".
+        // not escaped
+        "\{\{\{.*?\}\}\}".
 		// other elements to be treated go here
 		')#ms','wakka4callback', $text);
 	printf('<!-- Header ID generation took %.6f seconds -->', (getmicrotime(TRUE) - $idstart));	#i18n
