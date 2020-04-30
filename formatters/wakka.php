@@ -624,8 +624,8 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 			$geshi_hi_path = isset($wakka->config['geshi_languages_path']) ? $wakka->config['geshi_languages_path'] : '/:/';
 			$wikka_hi_path = isset($wakka->config['wikka_highlighters_path']) ? $wakka->config['wikka_highlighters_path'] : '/:/';
 
-			if (preg_match('/^'.PATTERN_OPEN_BRACKET.PATTERN_FORMATTER.PATTERN_ARGUMENT.PATTERN_ARGUMENT.PATTERN_ARGUMENT.PATTERN_SPILL_GROUP.PATTERN_CLOSE_BRACKET.PATTERN_CODE.'$/su', $code, $lang_args))
-				list(, $language, $arg1, $arg2, $arg3, $invalid, $code) = $lang_args;
+			if (preg_match('/^'.PATTERN_OPEN_BRACKET.PATTERN_FORMATTER.PATTERN_ARGUMENT.PATTERN_ARGUMENT.PATTERN_ARGUMENT.PATTERN_ARGUMENT.PATTERN_SPILL_GROUP.PATTERN_CLOSE_BRACKET.PATTERN_CODE.'$/su', $code, $lang_args))
+				list(, $language, $arg1, $arg2, $arg3, $arg4, $invalid, $code) = $lang_args;
 
 			// get rid of newlines at start and end (and
 			// preceding/following whitespace) Note: unlike trim(),
@@ -683,7 +683,7 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 
 				$output .= '<!--start internal Wikka highlighter-->'."\n";
 				$output .= '<div class="code">'."\n";
-				$output .= $wakka->Format($code, $language, $arg1.";".$arg2.";".$arg3);
+				$output .= $wakka->Format($code, $language, $arg1.";".$arg2.";".$arg3.";".$arg4);
 				$output .= "</div>\n";
 				$output .= '<!--end internal Wikka highlighter-->'."\n";
 			}
