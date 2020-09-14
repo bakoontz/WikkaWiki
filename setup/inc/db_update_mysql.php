@@ -517,6 +517,10 @@ switch($version) {
 		print("<strong>1.3.2 to 1.3.3 changes:</strong><br />\n");
 		test("Adding/updating title field to users page ...",  
 		db_query("alter table `".$config["table_prefix"]."pages` ADD `title` varchar(75) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT '' AFTER `tag`", NULL, $dblink), __("Already done? OK!"), 0); // refs #529
+    case "1.3.3":
+    case "1.3.4":
+    case "1.3.4p1":
+    case "1.3.5":
 	case "1.3.6":
 		print("<strong>1.3.5 to 1.3.6 changes:</strong><br />\n");
 		test("Changing \"default\" theme references to \"classic\" theme ...",  
