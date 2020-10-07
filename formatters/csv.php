@@ -10,7 +10,7 @@
 $comments= 0;
 
 print "<table><tbody>\n";
-foreach (split("\n", $text) as $csv_n => $csv_line) 
+foreach (preg_split("/\n/", $text) as $csv_n => $csv_line) 
 {
 	if (preg_match("/^#|^\s*$/",$csv_line)) 
 	{
@@ -20,7 +20,7 @@ foreach (split("\n", $text) as $csv_n => $csv_line)
 
 	print (($csv_n+$comments)%2) ? "<tr bgcolor=\"#ffffee\">" : "<tr bgcolor=\"#eeeeee\">";
 
-	foreach (preg_split("/(?<!\\\\);/", $csv_line) as $csv_nn => $csv_cell) 
+	foreach (preg_split("/(?<!\\\\);|,/", $csv_line) as $csv_nn => $csv_cell) 
 	{
 		// https://www.phpliveregex.com
 		// https://www.regular-expressions.info/quickstart.html
