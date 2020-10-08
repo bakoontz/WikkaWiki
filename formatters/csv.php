@@ -6,20 +6,21 @@
 // Copy the code below into a file named formatters/csv.php
 // And give it the same file permissions as the other files in that directory.
 
+if (!defined('PATTERN_ARGUMENT')) define('PATTERN_ARGUMENT', '(?:;([^;\)\x01-\x1f\*\?\"<>\|]*))?');
+
+//print "PLG[".$format_option."]<br/>";
+if (preg_match('/^'.PATTERN_ARGUMENT.PATTERN_ARGUMENT.PATTERN_ARGUMENT.'$/su', ';'.$format_option, $args))
+	list(, $arg1, $arg2, $arg3) = $args;
+	//var_dump($args);
+
+$delim= ($arg1 == "semi-colon") ? ";" : ",";
+
 $comments= 0;
 
 $style["th"][""]= "background-color:#ccc; ";
 $style["tr"]["even"]= "background-color:#ffe; ";
 $style["tr"]["odd"]= "background-color:#eee; ";
 $style["td"]["error"]= "background-color:#d30; ";
-
-//BEGIN tmp until formatter arguments are implemented %%(csv;semi-colon;outputfile.csv) ... %%
-$delim=",";
-$array_csv_lines= preg_split("/[\n]/", $text);
-if ( preg_match('/#!\s*(comma|semi-colon)\s*$/', $array_csv_lines[0], $a_delim) )
-	$delim= ($a_delim[1] == "semi-colon") ? ";" : ",";
-//END tmp
-
 
 // https://www.phpliveregex.com
 // https://www.regular-expressions.info/quickstart.html
@@ -32,7 +33,7 @@ $regex_split_on_delim_not_between_quotes="/(?<!\\\\)". $delim ."(?=(?:[^\"]*([\"
 $regex_escaped_delim="/\\\\". $delim ."/";
 
 print "<table><tbody>\n";
-foreach ($array_csv_lines as $csv_n => $csv_line) 
+foreach ($array_csv_lines= preg_split("/[\n]/", $text) as $csv_n => $csv_line) 
 {
 	if (preg_match("/^#|^\s*$/",$csv_line)) 
 	{

@@ -28,8 +28,10 @@
  */
 if (!defined('PATTERN_OPEN_BRACKET')) define('PATTERN_OPEN_BRACKET', '\(');
 if (!defined('PATTERN_FORMATTER')) define('PATTERN_FORMATTER', '([^;\)]+)');
-if (!defined('PATTERN_LINE_NUMBER')) define('PATTERN_LINE_NUMBER', '(;(\d*?))?');
-if (!defined('PATTERN_FILENAME')) define('PATTERN_FILENAME', '(;([^\)\x01-\x1f\*\?\"<>\|]*)([^\)]*))?');
+if (!defined('PATTERN_ARGUMENT')) define('PATTERN_ARGUMENT', '(?:;([^;\)\x01-\x1f\*\?\"<>\|]*))?');
+if (!defined('PATTERN_SPILL_GROUP')) define('PATTERN_SPILL_GROUP', '([^\)]*)');
+if (!defined('PATTERN_LINE_NUMBER')) define('PATTERN_LINE_NUMBER', '(\d*)');
+if (!defined('PATTERN_FILENAME')) define('PATTERN_FILENAME', '([^\)\x01-\x1f\*\?\"<>\|]*)');
 if (!defined('PATTERN_CLOSE_BRACKET')) define('PATTERN_CLOSE_BRACKET', '\)');
 if (!defined('PATTERN_CODE')) define('PATTERN_CODE', '(.*)');
 /**#@-*/
@@ -627,11 +629,10 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 			// don't match anything in the home directory
 			$geshi_hi_path = isset($wakka->config['geshi_languages_path']) ? $wakka->config['geshi_languages_path'] : '/:/';
 			$wikka_hi_path = isset($wakka->config['wikka_highlighters_path']) ? $wakka->config['wikka_highlighters_path'] : '/:/';
-			// check if a language (and an optional starting line or filename) has been specified
-			if (preg_match('/^'.PATTERN_OPEN_BRACKET.PATTERN_FORMATTER.PATTERN_LINE_NUMBER.PATTERN_FILENAME.PATTERN_CLOSE_BRACKET.PATTERN_CODE.'$/su', $code, $matches))
-			{
-				list(, $language, , $start, , $filename, $invalid, $code) = $matches;
-			}
+
+			if (preg_match('/^'.PATTERN_OPEN_BRACKET.PATTERN_FORMATTER.PATTERN_ARGUMENT.PATTERN_ARGUMENT.PATTERN_ARGUMENT.PATTERN_ARGUMENT.PATTERN_SPILL_GROUP.PATTERN_CLOSE_BRACKET.PATTERN_CODE.'$/su', $code, $lang_args))
+				list(, $language, $arg1, $arg2, $arg3, $arg4, $invalid, $code) = $lang_args;
+
 			// get rid of newlines at start and end (and
 			// preceding/following whitespace) Note: unlike trim(),
 			// this preserves any tabs at the start of the first
@@ -643,10 +644,15 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 				isset($wakka->config['geshi_path']) &&
 				file_exists($geshi_hi_path.'/'.$language.'.php'))
 			{
+				if (preg_match('/^'.PATTERN_LINE_NUMBER.'$/', $arg1, $match_line_number))
+					$start= $match_line_number[1];
+				if (preg_match('/^'.PATTERN_FILENAME.'$/u', $arg2, $match_filename)) # #34 TODO: use central regex library for filename validation
+					$filename= $match_filename[1];
+
 				// check if specified filename is valid and generate code block header
 				if (isset($filename) &&
 					strlen($filename) > 0 &&
-					strlen($invalid) == 0) # #34 TODO: use central regex library for filename validation
+					strlen($invalid) == 0)
 				{
 					$valid_filename = $filename;
 					// create code block header
@@ -666,12 +672,26 @@ if (!function_exists("wakka2callback")) # DotMG [many lines] : Unclosed tags fix
 			elseif (isset($language) &&
 					isset($wakka->config['wikka_formatter_path']) &&
 					file_exists($wikka_hi_path.'/'.$language.'.php') && 
-					'wakka' != $language)
+					'wakka' != $language &&
+					strlen($invalid) == 0)
 			{
-				// use internal Wikka highlighter
-				$output = '<div class="code">'."\n";
-				$output .= $wakka->Format($code, $language);
+				if (preg_match('/^'.PATTERN_FILENAME.'$/u', $arg2, $match_filename)) # #34 TODO: use central regex library for filename validation
+					$filename= $match_filename[1];
+
+				// check if specified filename is valid and generate code block header
+				if (isset($filename) &&
+					strlen($filename) > 0 &&
+					strlen($invalid) == 0)
+				{
+					$valid_filename = $filename;
+					// do not output a '<div class="code_header">' here; let each formatter handle the arg[3] instead.
+				}
+
+				$output .= '<!--start internal Wikka highlighter-->'."\n";
+				$output .= '<div class="code">'."\n";
+				$output .= $wakka->Format($code, $language, $arg1.";".$arg2.";".$arg3.";".$arg4);
 				$output .= "</div>\n";
+				$output .= '<!--end internal Wikka highlighter-->'."\n";
 			}
 			// no language defined or no formatter found: make default code block;
 			// IncludeBuffered() will complain if 'code' formatter doesn't exist!
